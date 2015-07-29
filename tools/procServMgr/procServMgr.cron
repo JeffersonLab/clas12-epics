@@ -1,0 +1,6 @@
+Add the following lines to /etc/crontab.  This will ensure that softIOCs are up
+and running.  Startups and errors will be reported to the log file.
+
+# Added <date> by <author>
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * wmoore procServMgr check >> /usr/clas12/hps/logs/`hostname -s`.log 
+2>&1

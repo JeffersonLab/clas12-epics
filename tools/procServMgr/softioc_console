@@ -1,0 +1,263 @@
+#!/bin/ksh
+
+#@(#) softioc_console 2.60 2013/08/29 cuffe@jlab.org 
+#
+# softioc_console is desgined to provide easy access to "soft"
+# iocs.  It assume that the user has ssh access the systems
+# running the soft iocs
+#-----------------------------------------------------------------------
+# Version History
+#-----------------------------------------------------------------------
+# 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
+# 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
+# 1.00 2008/09/19 cuffe@jlab.org - inital revision
+
+
+#-----------------------------------------------------------------------
+# Debug variables
+#-----------------------------------------------------------------------
+#set -x   # Print shell commands as they are executed
+#set -n   # Run the script but don't actually execute any commands
+
+#-----------------------------------------------------------------------
+# Global Variables
+#-----------------------------------------------------------------------
+SCRIPT_NAME=softioc_console
+
+#-----------------------------------------------------------------------
+# Data File Locations
+#-----------------------------------------------------------------------
+CONFIG_DIR=/usr/clas12/hps/prod/apps/iocBoot
+
+IOC_DIR=$CONFIG_DIR
+DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR"
+
+CONFIG_FILE="$CONFIG_DIR/procServ.conf"
+FILE_LIST="$CONFIG_FILE"
+
+#-----------------------------------------------------------------------
+# Command Variables
+#-----------------------------------------------------------------------
+
+HOSTNAME='/bin/hostname'
+HOST=`hostname -s`
+ID='/usr/bin/id'
+TELNET='/usr/bin/telnet'
+SSH='/usr/bin/ssh -xt'
+APP_EXE=$APP_DIR/procServ
+
+BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
+
+#-----------------------------------------------------------------------
+# Global Functions
+#-----------------------------------------------------------------------
+function usage {
+    echo "usage: $SCRIPT_NAME [-h] iocname"
+    echo ""
+    echo "[-h] Print Help"
+    echo ""
+    echo "Examples:"
+    echo "$SCRIPT_NAME [-h]"
+    echo "$SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
+    echo ""
+    echo "CONFIGURATION FILES:"
+    echo "--------------------"
+    for FILE in $FILE_LIST     
+    do
+        echo $FILE
+    done
+    
+    echo ""
+
+    printconfig
+}
+
+function checkfile {
+    if [ ! -f $1 ];then
+        echo "Could not find file $1" 
+        exit 1
+    fi
+}
+
+function checkdir {
+    if [ ! -d $1 ];then
+        echo "Could not find directory $1" 
+        exit 1
+    fi
+}    
+
+function parseconfig {
+    i=0
+    e=0
+    d=0
+    h=0
+
+    IFS=":"
+    while read  iocname computer port status options start_options
+    do
+        if [ "`echo $iocname | cut -c1`" = "#" ] ; then
+        # Skip comments
+        continue
+        fi
+        if [ "`echo $iocname | cut -c1`" = "" ] ; then
+        # Skip blank lines
+        continue
+        fi
+          
+          #remove white space at start and end and only accept a single string
+          iocname=`echo "$iocname"   | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          port=`echo "$port"         | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          stcmd=`echo "$stcmd"       | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          status=`echo "$status"     | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          
+          #remove white space at start and end
+          options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+          start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+          
+        #print $(eval echo \$${ioc}_port) 
+        export ${iocname}_host="$computer"    
+        export ${iocname}_port="$port"
+        export ${iocname}_options="$options"
+        export ${iocname}_start_options="$start_options"
+
+        #export ${iocname}_status=$options
+
+        iocs[$i]=$iocname
+        ((i=i+1)) 
+
+        case $status in
+        enable|enabled|on)
+            iocs_enabled[$e]=$iocname  
+            ((e=e+1))
+            export ${iocname}_status=enabled
+        ;;
+        *)
+            iocs_disabled[$d]=$iocname   
+            ((d=d+1))
+            export ${iocname}_status=disabled
+        esac
+
+        if [ "$computer" = "$HOST" ] ; then
+        iocs_host[$h]=$iocname
+        ((h=h+1))
+        fi
+    done < $CONFIG_FILE
+	unset IFS
+}
+
+function printconfig {
+    echo "IOC CONFIGURATION"
+    echo "-----------------"
+    for i in ${iocs[*]}
+        do
+        #echo IOC configured STATUS to run HOST:PORT
+        echo "$i $(eval echo \$${i}_status) to run on $(eval echo \$${i}_host):$(eval echo \$${i}_port)"
+        done
+    echo ""
+}
+
+
+#-----------------------------------------------------------------------
+# Process Options
+#-----------------------------------------------------------------------
+parseconfig
+
+while getopts ":h:" opt; do
+    case $opt in
+        
+    h) usage 
+       return 0
+       ;;
+       \?) echo "Unknown Option: $opt"
+              usage
+           return 0
+           ;;
+        *) echo "Unknown Option: $opt"
+       usage
+           return 1
+                ;;      
+    esac
+done
+
+# The expression $(($OPTIND - 1)) is an arithmetic expression equal to $OPTIND minus 1. 
+# This value is used as the argument to shift. The result is that the correct number of 
+# arguments are shifted out of the way, leaving the "real" arguments as $1, $2, etc.
+shift $(($OPTIND - 1))
+
+if [ -z "$1" ]; then
+    echo "You must specify an ioc"
+    echo ""
+    usage
+    exit 1
+fi
+
+#-----------------------------------------------------------------------
+# Data File Sanity Check
+#-----------------------------------------------------------------------
+for DIR in $DIR_LIST    
+    do
+    checkdir $DIR
+    done
+    
+for FILE in $FILE_LIST     
+    do
+    checkfile $FILE
+    done        
+
+for BINARY in $BINARY_LIST     
+    do
+    checkfile $FILE
+    done
+
+#-----------------------------------------------------------------------
+# Main Routine
+#-----------------------------------------------------------------------
+ret=0
+for IOC in ${iocs_disabled[*]}
+do    
+    if [ $1 = $IOC ]; then
+        ((ret=ret+1))
+    fi
+done
+
+if [ $ret = 1 ]; then
+    echo ""
+    echo "$1 was found disabled in the configuration file" 
+    echo "     $CONFIG_FILE"
+    echo "You may need to update this file before continuing"
+    echo ""
+    printconfig
+    echo ""
+    exit 1
+fi
+
+ret=0
+for IOC in ${iocs_enabled[*]}
+do    
+    if [ $1 = $IOC ]; then                
+        ((ret=ret+1))
+    fi
+done
+
+
+if [ $ret = 0 ]; then
+    echo ""
+    echo "$1 was not found in the configuration file" 
+    echo "     $CONFIG_FILE"
+    echo "You may need to update this file before continuing"
+    echo ""
+    printconfig
+    echo ""
+    exit 1
+fi
+      
+if [ "$(eval echo \$${1}_host)" = "$HOST" ] ; then
+    echo "$TELNET localhost $(eval echo \$${1}_port)"
+    $TELNET localhost $(eval echo \$${1}_port)
+else
+    echo $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
+    $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
+fi
+
+exit 0

@@ -20,12 +20,37 @@
 # CONFIG_SITE file.
 
 TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+#EPICS_BASE=${CLAS}/R${EPICS_VER}/base
+EPICS_BASE=/usr/local/clas12/release/0.2/R3.14.12.3/base
+EPICS_SUPPORT=${CLAS}/R${EPICS_VER}/support
+#
+# Modified version of synApps_5_7
+#  Uses older mca-s55 and has dxp and xxx removed.
+#
+EPICS_SYNAPPS=/usr/clas12/R3.14.12.3/synApps/synApps_5_7/support
+EPICS_EXTENSIONS=${CLAS}/R${EPICS_VER}/extensions
 
-# If using the sequencer, point SNCSEQ at its top directory:
-#SNCSEQ=$(EPICS_BASE)/../modules/soft/seq
+## Path to data storage (autosave, etc)
+#IOCDATA=/usr/clas12/hps/DATA
+
+## synApps
+include $(EPICS_SYNAPPS)/configure/RELEASE
+
+## External modules
+#EPICS_DRIVERS=$(TOP)/../drivers
+#CAEN_HV=$(EPICS_DRIVERS)/CAEN_HV
+#HVCAENx527=$(EPICS_DRIVERS)/HVCAENx527
+#jlabVMEBoard=$(EPICS_DRIVERS)/jlabVMEBoard
+#JSCALERS=$(EPICS_DRIVERS)/jscalers
+#LVMPOD=$(EPICS_DRIVERS)/LVMPOD
+#DEVSNMP=$(EPICS_DRIVERS)/snmp-nscl-1-0-RC9
+#v450=$(EPICS_DRIVERS)/v450
+#v450_PRB=$(EPICS_DRIVERS)/v450_PRB
+#SVTDAQLIB=$(EPICS_DRIVERS)/svtDaqLib
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE=/usr/local/clas12/release/0.2/R3.14.12.3/base
+
 
 # Set RULES here if you want to take build rules from somewhere
 # other than EPICS_BASE:

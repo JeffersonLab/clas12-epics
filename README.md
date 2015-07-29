@@ -1,2 +1,2 @@
 # clas12-epics
-Place holder for CLAS12 EPICS tree
+CLAS12 EPICS tree

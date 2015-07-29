@@ -1,0 +1,126 @@
+# 
+# Prologix GPIB-Ethernet Controlle
+# 
+# Notes:
+#   [Macros]
+#   P     - standard record prefix
+#   R     - standard record prefix
+#   PORT  - asyn port name
+#
+# Author: Wesley Moore
+# Date:   July 2015
+#
+
+#######################################
+
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+    field(OEOS, "\r\n")
+    field(IEOS, "\r\n")
+}
+
+#######################################
+
+record(stringin, "$(P)$(R)VERSION") {
+    field(DTYP, "stream")
+    field(INP, "@prologix.proto getVersion $(PORT)")
+    field(VAL, "")
+    field(SCAN, "10 second")
+}
+
+record(ai, "$(P)$(R)ADDR") {
+    field(DTYP, "stream")
+    field(INP,  "@prologix.proto getAddr $(PORT)")
+    field(SCAN, "10 second")
+}
+
+record(ao, "$(P)$(R)ADDR:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto setAddr $(PORT)")
+    field(DRVL, "0")
+    field(DRVH, "30")
+    field(FLNK, "$(P)$(R)ADDR.PROC")
+}
+
+record(bi, "$(P)$(R)AUTO") {
+    field(DTYP, "stream")
+    field(INP,  "@prologix.proto getAuto $(PORT)")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(DISV, "0")
+    field(SDIS, "$(P)$(R)MODE")
+    field(SCAN, "10 second")
+}
+
+record(bo, "$(P)$(R)AUTO:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto setAuto $(PORT)")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(FLNK, "$(P)$(R)AUTO.PROC")
+}
+
+record(mbbi, "$(P)$(R)EOS") {
+    field(DTYP, "stream")
+    field(INP,  "@prologix.proto getEos $(PORT)")
+    field(ZRST, "CF+LF")
+    field(ZRVL, "0")
+    field(ONST, "CF")
+    field(ONVL, "1")
+    field(TWST, "LF")
+    field(TWVL, "2")
+    field(THST, "none")
+    field(THVL, "3")
+    field(SCAN, "10 second")
+}
+
+record(mbbo, "$(P)$(R)EOS:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto setEos $(PORT)")
+    field(ZRST, "CF+LF")
+    field(ZRVL, "0")
+    field(ONST, "CF")
+    field(ONVL, "1")
+    field(TWST, "LF")
+    field(TWVL, "2")
+    field(THST, "none")
+    field(THVL, "3")
+    field(FLNK, "$(P)$(R)EOS.PROC")
+}
+
+record(bi, "$(P)$(R)MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@prologix.proto getMode $(PORT)")
+    field(ZNAM, "Device")
+    field(ONAM, "Controller")
+    field(SCAN, "10 second")
+}
+
+record(bo, "$(P)$(R)MODE:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto setMode $(PORT)")
+    field(ZNAM, "Device")
+    field(ONAM, "Controller")
+    field(FLNK, "$(P)$(R)MODE.PROC")
+}
+
+record(bo, "$(P)$(R)RESET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto reset $(PORT)")
+}
+
+record(bi, "$(P)$(R)SAVECFG") {
+    field(DTYP, "stream")
+    field(INP,  "@prologix.proto getSavecfg $(PORT)")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(SCAN, "10 second")
+}
+
+record(bo, "$(P)$(R)SAVECFG:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@prologix.proto setSaveCfg $(PORT)")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(FLNK, "$(P)$(R)SAVECFG.PROC")
+}

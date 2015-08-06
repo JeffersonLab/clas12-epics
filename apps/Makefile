@@ -5,7 +5,7 @@ DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard *App))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocBoot))
 # Build out CSS opi links
-DIRS := $(DIRS) $(filter-out $(DIRS), css)
+#DIRS := $(DIRS) $(filter-out $(DIRS), css)
 
 define DIR_template
  $(1)_DEPEND_DIRS = configure

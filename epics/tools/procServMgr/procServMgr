@@ -1,0 +1,503 @@
+#!/bin/ksh
+
+# procServMgr is desgined to be run from the command line and the cron
+# facility.  It is intended to be a control script for running "soft" 
+# iocs with procServ
+#-----------------------------------------------------------------------
+# Version History
+#-----------------------------------------------------------------------
+# 2.62 2015/02/09 wmoore@jlab.org - added alternative path option
+# 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
+# 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
+#                                  added test option
+# 1.00 2008/09/19 cuffe@jlab.org - inital revision
+
+
+#-----------------------------------------------------------------------
+# Debug variables
+#-----------------------------------------------------------------------
+#set -x   # Print shell commands as they are executed
+#set -n   # Run the script but don't actually execute any commands
+
+#-----------------------------------------------------------------------
+# Global Variables
+#-----------------------------------------------------------------------
+SCRIPT_USER=epics
+#SCRIPT_USER=wmoore
+#SCRIPT_USER=phansson
+SCRIPT_NAME=procServMgr
+
+#-----------------------------------------------------------------------
+# Data File Locations
+#-----------------------------------------------------------------------
+CONFIG_DIR=/usr/clas12/hps/prod/apps/iocBoot
+LOG_DIR=/usr/clas12/hps/logs
+APP_DIR=/usr/local/clas12/release/0.2/R3.14.12.3/extensions/bin/linux-x86
+IOC_DIR=$CONFIG_DIR
+DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"
+
+CONFIG_FILE="$CONFIG_DIR/procServ.conf"
+FILE_LIST="$CONFIG_FILE"
+
+#-----------------------------------------------------------------------
+# Command Variables
+#-----------------------------------------------------------------------
+HOSTNAME='/bin/hostname -s'
+HOST=`$HOSTNAME`
+ID='/usr/bin/id'
+
+APP_EXE="$APP_DIR/procServ"
+
+BINARY_LIST="$HOSTNAME $ID $APP_EXE"
+
+#-----------------------------------------------------------------------
+# Global Functions
+#-----------------------------------------------------------------------
+function usage {
+    echo "usage: $SCRIPT_NAME [-h] [-p iocpath] [-c alt_config] [-i iocname] start|stop|restart|check|status|test"
+    echo ""
+    echo "[-p] Specify the iocBoot path (default: $CONFIG_DIR)."
+    echo "     Config file will come from this new path (default: procServ.conf)."
+    echo "[-i] Specify the ioc. If not specified, the script assumes all iocs"
+    echo "[-c] Specify the configuration file (default: $CONFIG_FILE)."
+    echo "[-h] Print Help"
+    echo ""
+    echo "start      - start iocs specified in config file"
+    echo "stop       - stop iocs specified in config file"
+    echo "check      - start any iocs not running that are configured to run"
+    echo "restart    - stop and start iocs specified in config file"
+    echo "status     - dump a short status screen showing current status"
+    echo "test       - show how each IOC would be invoked but don't do anything"
+    echo ""
+    echo "Examples:"
+    echo "$SCRIPT_NAME start  - start all iocs enabled in the config file"
+    echo "$SCRIPT_NAME stop   - stop all iocs enabled in the config file"
+    echo "$SCRIPT_NAME status - show status for all iocs"
+    echo "$SCRIPT_NAME -p /usr/clas12/hps/dev/apps/iocBoot status - use alternate path/config"
+    echo "$SCRIPT_NAME -c /tmp/testconfig.conf check - use alternate config file"
+    echo "$SCRIPT_NAME -i iocsofthrt start - start ioc iocsofthrt only"
+    echo "$SCRIPT_NAME -i iocsofthrt test - show  start command for iocsofthrt"
+    echo ""
+    echo "CONFIGURATION FILES:"
+    echo "--------------------"
+
+    for FILE in $FILE_LIST     
+    do
+        echo $FILE
+        done
+    
+    echo ""
+    
+    printhostconfig
+}
+
+function checkfile {
+    if [ ! -f $1 ]; then
+        echo "Could not find file: $1" 
+        exit 1
+    fi
+}
+
+function checkdir {
+    if [ ! -d $1 ]; then
+        echo "Could not find directory: $1" 
+        exit 1
+    fi
+}    
+
+
+function parseconfig {
+    i=0
+    e=0
+    d=0
+    h=0
+
+    IFS=":"
+    while read  iocname computer port status stcmd options start_options
+    do
+        if [ "`echo $iocname | cut -c1`" = "#" ] ; then
+        # Skip comments
+        continue
+        fi
+        if [ "`echo $iocname | cut -c1`" = "" ] ; then
+            # Skip blank lines
+            continue
+        fi
+          
+        #remove white space at start and end and only accept a single string
+        iocname=`echo "$iocname" | sed 's/^[ \t]*//;s/[ \t]*$//' | awk '{print $1}'`
+        computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+        port=`echo "$port" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+        status=`echo "$status" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+        stcmd=`echo "$stcmd" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          
+        #remove white space at start and end
+        options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+        start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+                    
+        export ${iocname}_host="$computer"    
+        export ${iocname}_port="$port"
+        export ${iocname}_stcmd="$stcmd"
+        export ${iocname}_options="$options"
+        export ${iocname}_start_options="$start_options"
+
+        iocs[$i]=$iocname
+        ((i=i+1)) 
+
+        case $status in
+            enable|enabled|on)
+                iocs_enabled[$e]=$iocname  
+                ((e=e+1))
+                export ${iocname}_status=enabled
+                ;;
+            *)
+                iocs_disabled[$d]=$iocname   
+                ((d=d+1))
+                export ${iocname}_status=disabled
+        esac
+
+        if [ "$computer" = "$HOST" ] ; then
+            iocs_host[$h]=$iocname
+            ((h=h+1))
+        fi
+    done < $CONFIG_FILE
+    unset IFS
+}
+
+function printconfig {
+    echo "IOC CONFIGURATION"
+    echo "-----------------"
+    for i in ${iocs[*]}
+    do
+        #echo IOC configured STATUS to run HOST:PORT
+        echo "$i $(eval echo \$${i}_status) to run on $(eval echo \$${i}_host):$(eval echo \$${i}_port)"
+        done
+    echo ""
+}
+
+function printcommands {
+    echo "IOC START COMMANDS"
+    echo "------------------"
+    for i in ${iocs[*]}
+    do
+        OPTIONS="$(eval echo \$${i}_options)"
+        START_OPTIONS="$(eval echo \$${i}_start_options)"
+        PORT="$(eval echo \$${i}_port)"
+        STCMD="$(eval echo \$${i}_stcmd)"
+        echo "$APP_EXE $OPTIONS -n $i -i^D^C -c $IOC_DIR/$i $PORT $STCMD $START_OPTIONS >/dev/null 2>&1"  
+    done
+    echo ""
+}
+
+function printhostconfig {
+    echo "IOC CONFIGURED FOR $HOST"
+    echo "--------------------------"
+    
+    if [ "${iocs_host[*]}" != "" ]; then
+        for i in ${iocs_host[*]}
+        do
+            #echo IOC configured STATUS to run HOST:PORT
+            echo "$i $(eval echo \$${i}_status) to run on $(eval echo \$${i}_host):$(eval echo \$${i}_port)"
+        done
+    else
+        echo "No iocs are configured to run on $HOST"    
+    fi
+
+    echo ""
+}
+
+function start_ioc {
+    if [ ! -d $IOC_DIR/$1 ]; then
+        echo "Could not start $1 - no directory $IOC_DIR/$1" 
+        return 1
+    fi
+     
+    STCMD="$(eval echo \$${i}_stcmd)"
+    OPTIONS="$(eval echo \$${i}_options)"
+    START_OPTIONS="$(eval echo \$${i}_start_options)"
+    processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
+    if [ "$processfound" != "" ] ; then
+        echo "Could not start $1 - $1 is already running with pid $processfound" 
+        return 1
+    fi
+    
+    $APP_EXE $OPTIONS -n $1 -i^D^C --logfile $LOG_DIR/$1.log --logstamp -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1
+ 
+    if [ $? != 0 ]; then
+        echo "Could not start $1 on port $2 of $HOST"
+        return 1
+    else 
+        echo "Started $1 on port $2 of $HOST  `date`"     
+        return 0
+    fi
+}
+
+function test_ioc {
+    STCMD="$(eval echo \$${i}_stcmd)"
+    OPTIONS="$(eval echo \$${i}_options)"
+    START_OPTIONS="$(eval echo \$${i}_start_options)"
+    echo "$APP_EXE $OPTIONS -n $1 -i^D^C -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1"           
+    return 0
+}
+
+
+function stop_ioc {
+    processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
+    
+    if [ "$processfound" != "" ]; then
+        kill -9 $processfound
+        if [ $? != 0 ]; then
+            return 1
+        else
+            echo "killed $1 on port $2 with pid $processfound"
+            return 0
+        fi
+    else
+        return 1
+    fi
+}
+
+function status_ioc {
+    if [ "$(eval echo \$${i}_status)" = "enabled" ]; then
+        processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
+        if [ "$processfound" != "" ] ; then
+            echo "$1 running on port $2 of $HOST with pid $processfound"
+        else
+            echo "$1 NOT running on port $2 of $HOST"
+        fi
+    else
+        echo "$1 is disabled from running on port $2 of $HOST"
+    fi
+}    
+
+function check_ioc {
+    processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
+    if [ "$processfound" != "" ] ; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function checkuser {
+    SCRIPT_USER_ID=`$ID -u $SCRIPT_USER`
+    USER_ID=`$ID -u`
+
+    if [ $USER_ID != $SCRIPT_USER_ID ]; then
+        echo "You must be $SCRIPT_USER to run $SCRIPT_NAME"
+           echo "Please use \"iam $SCRIPT_USER\" or \"sudo -u $SCRIPT_USER\" to run this script"
+           exit 1
+    fi
+}
+
+#-----------------------------------------------------------------------
+# Process Options
+#-----------------------------------------------------------------------
+while getopts ":hc:i:p:" opt
+do
+    case $opt in
+    c) 
+        CONFIG_FILE=$OPTARG    
+        FILE_LIST="$CONFIG_FILE"
+        for FILE in $FILE_LIST     
+        do
+            checkfile $FILE
+        done    
+        ;;   
+    i) 
+        OPT_IOC=$OPTARG
+        ;;    
+    h) 
+        OPT_HELP=1
+        ;;
+    p)  # Override default path, for usage with development directories
+        CONFIG_DIR=$OPTARG
+        IOC_DIR=$CONFIG_DIR
+        DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"
+        CONFIG_FILE="$CONFIG_DIR/procServ.conf"
+        FILE_LIST="$CONFIG_FILE"
+        ;;
+    \?)
+        OPT_UNKNOWN=$OPTARG  
+        ;;
+    *) 
+        OPT_UNKNOWN=$OPTARG
+        ;;      
+    esac
+done
+
+# The expression $(($OPTIND - 1)) is an arithmetic expression equal to $OPTIND minus 1. 
+# This value is used as the argument to shift. The result is that the correct number of 
+# arguments are shifted out of the way, leaving the "real" arguments as $1, $2, etc.
+shift $(($OPTIND - 1))
+
+#-----------------------------------------------------------------------
+# User Input Check
+#-----------------------------------------------------------------------
+parseconfig
+
+if [ "$OPT_HELP" ]; then
+    usage
+    exit 0
+fi
+
+if [ "$OPT_UNKNOWN" ]; then
+    echo "Unknown Option: $OPT_UNKNOWN"
+    usage
+    exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo "You must specify an action!"
+    echo ""
+    usage
+    exit 1
+fi
+
+if [ "$OPT_IOC" ]; then
+    ret=0
+    
+    for IOC in ${iocs_enabled[*]}                       
+    do
+        if [ $OPT_IOC = $IOC ]; then                
+        ((ret=ret+1))
+    fi
+    done
+
+    if [ $ret = 0 ]; then
+        echo ""
+        echo "$OPT_IOC is not enabled for $HOST in:" 
+        echo "     $CONFIG_FILE"
+        echo "You may need to update this file before continuing"
+        echo ""
+        printconfig
+        echo ""
+        exit 1
+    fi
+    set -A iocs_enabled $OPT_IOC
+    set -A iocs_host $OPT_IOC
+fi
+
+#-----------------------------------------------------------------------
+# Data File Sanity Check
+#-----------------------------------------------------------------------
+for DIR in $DIR_LIST    
+do
+    checkdir $DIR
+done
+    
+for FILE in $FILE_LIST     
+do
+    checkfile $FILE
+done        
+
+for BINARY in $BINARY_LIST     
+do
+    checkfile $FILE
+done
+
+#-----------------------------------------------------------------------
+# Main Routine
+#-----------------------------------------------------------------------
+if [ "$1" = "test" ]; then
+    echo ""
+    printconfig
+fi
+
+if [ "${iocs_host[*]}" != "" ]; then
+    for i in ${iocs_host[*]}
+    do
+        if [ "$(eval echo \$${i}_status)" = "enabled" ]; then
+            #See how we were called.
+            case "$1" in
+            start)
+                checkuser
+                start_ioc $i $(eval echo \$${i}_port)    
+                ;;
+            stop)
+                checkuser
+                stop_ioc $i $(eval echo \$${i}_port)
+                ;;
+            restart)
+                checkuser
+                stop_ioc  $i $(eval echo \$${i}_port)
+                start_ioc $i $(eval echo \$${i}_port)
+                ;;
+            status)
+                status_ioc  $i $(eval echo \$${i}_port)
+                ;;
+            test)
+                test_ioc  $i $(eval echo \$${i}_port)
+                ;;
+            check)
+                checkuser
+                check_ioc $i $(eval echo \$${i}_port)
+                if [ $? = 0 ]; then
+                    start_ioc $i $(eval echo \$${i}_port)
+                fi
+                ;;
+            *)
+                usage
+                exit 1
+                ;;
+            esac
+        else
+            #See how we were called.
+            case "$1" in
+            start)
+                checkuser
+                ;;
+            stop)
+                checkuser
+                stop_ioc $i $(eval echo \$${i}_port)
+                ;;
+            restart)
+                checkuser
+                ;;
+            status)
+                status_ioc  $i $(eval echo \$${i}_port)
+                stop_ioc $i $(eval echo \$${i}_port)
+                ;;
+            test)
+                test_ioc  $i $(eval echo \$${i}_port)
+                ;;
+            check)
+                checkuser
+                stop_ioc $i $(eval echo \$${i}_port)
+                ;;
+            *)
+                usage
+                exit 1
+                ;;
+            esac
+        fi
+    done
+else
+    #echo "No iocs are configured to run on $HOST"
+    case "$1" in
+    start)
+        echo "No iocs are configured to run on $HOST"
+        ;;
+    stop)
+        echo "No iocs are configured to run on $HOST"
+        ;;
+    restart)
+        echo "No iocs are configured to run on $HOST"
+        ;;
+    status)
+        echo "No iocs are configured to run on $HOST"
+        ;;
+    test)
+        echo "No iocs are configured to run on $HOST"
+        ;;
+    check)
+        continue
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+    esac    
+fi
+
+exit 0

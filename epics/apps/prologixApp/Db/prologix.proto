@@ -1,0 +1,67 @@
+#
+# Prologix GPIB-ETHERNET Controller
+# 
+# Author: Wesley Moore
+# Date:   July 2015
+#
+
+Terminator  = CR LF;
+ReadTimeout = 1500;
+ReplyTimeout = 1500;
+
+#######################################
+# Status Commands
+#######################################
+getVersion {
+    out "++ver";
+    in  "%*42c%39c";    # ignore model name, etc.
+}
+
+getAddr {
+	out "++addr";
+ 	in "%d";
+}
+
+setAddr {
+	out "++addr %d";
+}
+
+getAuto {
+	out "++auto";
+	in "%d";
+}
+
+setAuto {
+    out "++auto %d";
+}
+
+getEos {
+	out "++eos";
+	in "%d";
+}
+
+setEos {
+	out "++eos %d";
+}
+
+getMode {
+	out "++mode";
+	in "%d";
+}
+
+setMode {
+	out "++mode %d";
+}
+
+reset {
+	out "++rst";
+}
+
+getSavecfg {
+	out "++savecfg";
+	in "%d";
+}
+
+setSavecfg {
+	out "++savecfg %d";
+}

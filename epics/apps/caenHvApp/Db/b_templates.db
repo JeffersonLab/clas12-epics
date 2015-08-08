@@ -1,0 +1,85 @@
+#
+#
+#
+
+record(bigsub, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)") 
+{
+   field(PRIO,"LOW")
+   field(DESC,"$(Det)_$(Element)")
+   field(INAM,"InitChannel")
+   field(INPA,"$(Cr)")
+   field(INPB,"$(Sl)")
+   field(HIGH,"50")
+   field(INPC,"$(Ch)")
+   field(HSV,"MAJOR")
+   field(PREC,"1")
+   field(SNAM,"ScanChannel")
+   field(SCAN,"2 second")
+   alias("B_$(Sys)_$(Det)_$(Element)")
+}
+
+record(bo, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_pwonoff") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(pwonoff)")
+   field(OMSL,"supervisory")
+   field(ZNAM,"HV/OFF")
+   field(ONAM,"HV/ON")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_pwonoff")
+}
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_v0set") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(v0set)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_v0set")
+}
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_i0set") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(i0set)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_i0set")
+}
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_trip") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(trip)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_trip")   
+}
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_rampup") {
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(rampup)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_rampup")   
+}
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_rampdn") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(rampdn)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_rampdn")   
+}
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)_svmax") 
+{
+   field(DTYP,"CAEN_HV")
+   field(DESC,"binary output record")
+   field(OUT,"$(CScode) $(svmax)")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_$(Sys)_$(Det)_$(Element)_svmax")   
+}

@@ -1,0 +1,64 @@
+#
+#  startup.all test for linux ioc
+#
+Init_CAEN()
+
+# hvtest0 ###
+###Start_CAEN(0,  "129.57.167.70") 
+
+# hvftof6
+Start_CAEN(1,  "129.57.167.161")
+
+# hvftof5 ###
+Start_CAEN(2,  "129.57.167.162")
+
+# hvftof4
+Start_CAEN(3,  "129.57.167.79")
+
+# hvecal1
+Start_CAEN(4,  "129.57.167.53")
+
+# hvftof1
+Start_CAEN(5,  "129.57.167.78")
+
+# hvftof2 ###
+Start_CAEN(6,  "129.57.167.47")
+
+# hvftof3
+Start_CAEN(7,  "129.57.167.46")
+
+# hvecal5
+Start_CAEN(8,  "129.57.167.55")
+
+# hvecal6
+#Start_CAEN(9,  "129.57.167.56")
+
+# hvecal2
+#Start_CAEN(10, "129.57.167.191")
+
+# hvecal3
+Start_CAEN(11, "129.57.167.51")
+
+# hvltcc0
+Start_CAEN(12, "129.57.86.36")
+
+# hvecal4
+Start_CAEN(13, "129.57.167.190")
+
+
+dbLoadDatabase("/usr/local/clas12/release/0.1/epics/drivers/CAEN_HV/level0/IocShell/O.Common/ioccaen.dbd",0,0)
+
+ioccaen_registerRecordDeviceDriver(pdbbase)
+
+###dbLoadRecords("/usr/local/clas12/release/0.1/epics/drivers/CAEN_HV/level0/IocShell/hvprod.db")
+
+dbLoadTemplate("hv.substitutions")
+#dbLoadTemplate("hv.substitutions_smi")
+
+###dbLoadRecords("hvprod_patch_0.db")
+###dbLoadRecords("smi_records.db")
+
+#
+iocInit()
+#
+# end of linux ioc startup script

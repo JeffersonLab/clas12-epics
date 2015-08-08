@@ -1,0 +1,21 @@
+#
+#  startup.all test for linux ioc
+#
+Init_CAEN()
+
+# hvhps1
+Start_CAEN(0,  "129.57.167.100") 
+
+dbLoadDatabase("/usr/local/clas12/release/0.1/epics/drivers/CAEN_HV/level0/IocShell/O.Common/ioccaen.dbd",0,0)
+
+ioccaen_registerRecordDeviceDriver(pdbbase)
+
+#dbLoadRecords("/usr/local/clas12/release/0.1/epics/drivers/CAEN_HV/level0/IocShell/hvprod.db")
+#dbLoadTemplate("hv.substitutions")
+dbLoadRecords("hv_records_hps.db")
+#dbLoadRecords("smi_records.db")
+
+#
+iocInit()
+#
+# end of linux ioc startup script

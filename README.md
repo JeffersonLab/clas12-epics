@@ -25,6 +25,6 @@ git subtree push --prefix epics https://github.com/jeffersonlab/clas12-epics mas
 
 ## Pulling Changes from subtrees
 ```
-git pull -s subtree epics master
+git pull -s subtree https://github.com/jeffersonlab/clas12-epics master
 ```
 

@@ -22,3 +22,9 @@ git push origin master
 cd ..
 git subtree push --prefix epics https://github.com/jeffersonlab/clas12-epics master
 ```
+
+## Pulling Changes from subtrees
+```
+git pull -s subtree epics master
+```
+

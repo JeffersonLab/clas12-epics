@@ -8,7 +8,7 @@
 # Date:   Aug 2015
 #
 
-synapps=/usr/clas12/devel/R3.14.12.5/support
+synapps=/usr/clas12/R3.14.12.5/synApps_5_8
 css_tree=./css
 
 echo "[Setting up new CSS tree]"

@@ -1,5 +1,5 @@
 
-/* sy1527epics.c - EPICS driver support for CAEN SY1527 HV mainframe */
+/* sy1527epics1.c - EPICS driver support for CAEN SY1527 HV mainframe */
 /*                  (a la Lecroy)                                     */
 
 #include <stdio.h>
@@ -8,7 +8,7 @@
 #include <pthread.h>
 
 #include "sy1527.h"
-#include "sy1527epics.h"
+#include "sy1527epics1.h"
 #include <unistd.h>
 
 /* static structure to keep track of active channels */

@@ -1,4 +1,4 @@
-#!../../bin/linux-x86_64/ioccaen
+#!../../bin/linux-x86/ioccaen
 
 < envPaths
 cd ${TOP}
@@ -56,9 +56,9 @@ Start_CAEN(18,  "129.57.86.81")
 
 
 ## Load record instances
-dbLoadTemplate("hv.substitutions")
-dbLoadTemplate("ecal.substitutions")
-dbLoadTemplate("ctof.substitutions")
+dbLoadTemplate("db/hv.substitutions")
+dbLoadTemplate("db/ecal.substitutions")
+dbLoadTemplate("db/ctof.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit()

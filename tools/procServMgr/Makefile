@@ -3,7 +3,7 @@ PROGFILES   += procServMgr
 PROGFILES   += softioc_console
 
 LOGROTATE_D := /etc/logrotate.d
-LOGCONFIG   += hps_softiocs
+LOGCONFIG   += clas12_softiocs
 
 .PHONY: all clean install uninstall
 

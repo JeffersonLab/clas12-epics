@@ -1,5 +1,5 @@
 
-/* sy1527epics.h */
+/* sy1527epics1.h */
 
 #define NUM_CAEN_PROP 11
 

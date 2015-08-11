@@ -1,48 +1,44 @@
+#
+# NOTE:
+#   In configure/CONFIG_SITE, CROSS_COMPILER_TARGET_ARCHS is empty.  So only 
+#   linux target is built.
+#
+
 TOP=../..
 include $(TOP)/configure/CONFIG
-#----------------------------------------
-#  ADD MACRO DEFINITIONS AFTER THIS LINE
-#=============================
-
-#PROD_LIBS += sy1527epics
-
-LIBRARY_IOC  += sy1527epics
 
 LIB_SRCS += sy1527.c 
-LIB_SRCS += sy1527epics.c
+LIB_SRCS += sy1527epics1.c
+PROD_SRC += sy1527_test.c
 
-LIB_LIBS += caenhvwrapper 
-LIB_LIBS += hscaenet 
-LIB_LIBS += pthread
-LIB_LIBS += smi
-LIB_LIBS += smiui
-LIB_LIBS += dim
-LIB_LIBS += $(EPICS_BASE_IOC_LIBS)
+PROD_LIBS += sy1527epics1
 
-hscaenet_DIR      += $(HSCAENET_LIB)
+PROD_LIBS += caenhvwrapper 
+PROD_LIBS += hscaenet 
+PROD_LIBS += pthread
+hscaenet_DIR += $(HSCAENET_LIB)
 caenhvwrapper_DIR += $(CAENHVWRAPPER_LIB)
-pthread_DIR       += $(PTHREAD_LIB)
-smi_DIR   += $(SMIXX_LIB)
-smiui_DIR += $(SMIXX_LIB)
-dim_DIR   += $(DIM_LIB)
+pthread_DIR += $(PTHREAD_LIB)
+
+LIBRARY += sy1527epics1
+PROD += sy1527_test
 
 INC += sy1527.h
-INC += sy1527epics.h
+INC += sy1527epics1.h
+
+#===========================
+
+PROD_LIBS += smi
+PROD_LIBS += smiui
+PROD_LIBS += dim
+
+smi_DIR += $(SMIXX_LIB)
+smiui_DIR += $(SMIXX_LIB)
+dim_DIR += $(DIM_LIB)
 
 USR_INCLUDES += $(SMIXX_INCLUDE)
 USR_INCLUDES += $(DIM_INCLUDE)
 
-#=============================
-# Build test IOC
-
-PROD_IOC += sy1527_test
-
-sy1527_test_SRCS += sy1527_test.c
-
-sy1527_test_LIBS += sy1527epics
-sy1527_test_LIBS += $(EPICS_BASE_IOC_LIBS)
-
-
+#===========================
 include $(TOP)/configure/RULES
-#----------------------------------------
-#  ADD RULES AFTER THIS LINE
+

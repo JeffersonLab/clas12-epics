@@ -21,24 +21,20 @@
 
 TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 
-EPICS_BASE=/usr/clas12/devel/R3.14.12.5/base
-EPICS_SUPPORT=$(EPICS_BASE)/../support
-
-#
-# Modified version of synApps_5_7
-#  Uses older mca-s55 and has dxp and xxx removed.
-#
-EPICS_SYNAPPS=$(EPICS_BASE)/../support
+EPICS_BASE=/usr/clas12/R3.14.12.5/base
+MODULES=$(EPICS_BASE)/../modules
+SYNAPPS=$(EPICS_BASE)/../synApps_5_8
 EPICS_EXTENSIONS=$(EPICS_BASE)/../extensions
 
 ## Path to data storage (autosave, etc)
 #IOCDATA=/usr/clas12/hps/DATA
 
-## synApps
-include $(EPICS_SYNAPPS)/configure/RELEASE
+## Community modules and synApps
+include $(MODULES)/configure/RELEASE
+include $(SYNAPPS)/configure/RELEASE
 
 # EPICS_BASE usually appears last so other apps can override stuff:
-EPICS_BASE=/usr/clas12/devel/R3.14.12.5/base
+EPICS_BASE=/usr/clas12/R3.14.12.5/base
 
 
 # Set RULES here if you want to take build rules from somewhere

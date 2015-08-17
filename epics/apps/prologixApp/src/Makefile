@@ -20,6 +20,7 @@ DBD += prologix.dbd
 
 # prologix.dbd will be made up from these files:
 prologix_DBD += base.dbd
+prologix_DBD += asyn.dbd
 prologix_DBD += drvAsynIPPort.dbd
 prologix_DBD += stream.dbd
 prologix_DBD += asSupport.dbd

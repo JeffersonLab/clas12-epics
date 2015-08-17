@@ -30,7 +30,6 @@ include $(TOP)/configure/RULES
 #
 # These are the rules of how to crate PLCout, PLCin and PLCarr DB file for PLC-to-EPICS interface. 
 # 
-# FIXE: built db files on RHEL6 host with newer python and lxml (wmoore on host electron).
 ../O.Common/%_PLCout.db: ../%.L5X 
 	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -o $@
 
@@ -42,3 +41,4 @@ include $(TOP)/configure/RULES
 
 ../%_PLC.req: ../%.L5X 
 	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -s $@
+

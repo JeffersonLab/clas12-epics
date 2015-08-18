@@ -17,7 +17,7 @@ DB += HPS_SVT_Interlock_v5_PLCin.db
 DB += HPS_SVT_Interlock_v5_PLCout.db 
 
 REQ += HPS_SVT_Interlock_v5_PLC.req  # generated file
-REQ += HPS_SVT_Interlocks.req        # nested calls to generated file (inputs/outputs)
+#REQ += HPS_SVT_Interlocks.req        # nested calls to generated file (inputs/outputs)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
@@ -40,5 +40,5 @@ include $(TOP)/configure/RULES
 	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -a $@
 
 ../%_PLC.req: ../%.L5X 
-	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -s $@
+	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -s $@
 

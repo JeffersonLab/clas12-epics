@@ -31,13 +31,13 @@ include $(TOP)/configure/RULES
 # These are the rules of how to crate PLCout, PLCin and PLCarr DB file for PLC-to-EPICS interface. 
 # 
 ../O.Common/%_PLCout.db: ../%.L5X 
-	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -o $@
+	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -o $@
 
 ../O.Common/%_PLCin.db: ../%.L5X 
-	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -i $@
+	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -i $@
 
 ../O.Common/%_PLCarr.db: ../%.L5X 
-	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -a $@
+	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -a $@
 
 ../%_PLC.req: ../%.L5X 
 	$(TOP)/tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/tools/RSLogixToEPICS/convert.cfg -x $< -s $@

@@ -19,7 +19,7 @@ epics:
 	(cd apps; make)
 
 clean-epics:
-	(cd apps; make clean
+	(cd apps; make clean)
 
 distclean-epics:
 	(cd apps; make distclean)

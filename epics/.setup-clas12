@@ -1,5 +1,5 @@
 #
-# File: .setup-hps
+# File: .setup-clas12
 #
 
 setenv CLAS /usr/clas12
@@ -11,8 +11,8 @@ else
 endif
 
 setenv EPICS_VER 3.14.12.5
-setenv EPICS_BASE $CLAS/R$EPICS_VER/base
-setenv EPICS_EXTENSIONS $CLAS/R$EPICS_VER/extensions
+setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base
+setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions
 
 set -f path=($path:q "$EPICS_BASE/bin/$EPICS_HOST_ARCH")
 set -f path=($path:q "$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH")
@@ -29,16 +29,3 @@ endif
 
 setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.255 129.57.191.255 129.57.68.97 129.57.86.16 129.57.86.29 129.57.86.37 129.57.160.46 129.57.160.54"
 
-
-########################################
-# apps/CAEN_HV
-########################################
-#setenv SMIDIR /apps/smixx
-#setenv SMIRTLDIR /apps/smixx
-#setenv OS Linux
-#setenv DIM_DNS_NODE clonpc3
-#setenv DIMDIR /apps/dim
-#setenv ODIR linux
-#setenv LD_LIBRARY_PATH "$DIMDIR/$ODIR":"$SMIDIR/$ODIR":"$LD_LIBRARY_PATH"
-#setenv PATH "$PATH":"$DIMDIR"/"$ODIR"
-#setenv PATH "$PATH":"$SMIDIR"/"$ODIR"

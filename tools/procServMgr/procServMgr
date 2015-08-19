@@ -3,15 +3,6 @@
 # procServMgr is desgined to be run from the command line and the cron
 # facility.  It is intended to be a control script for running "soft" 
 # iocs with procServ
-#-----------------------------------------------------------------------
-# Version History
-#-----------------------------------------------------------------------
-# 2.62 2015/02/09 wmoore@jlab.org - added alternative path option
-# 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
-# 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
-#                                  added test option
-# 1.00 2008/09/19 cuffe@jlab.org - inital revision
-
 
 #-----------------------------------------------------------------------
 # Debug variables
@@ -30,14 +21,24 @@ SCRIPT_NAME=procServMgr
 #-----------------------------------------------------------------------
 # Data File Locations
 #-----------------------------------------------------------------------
-CONFIG_DIR=/usr/clas12/release/devel/epics/apps/iocBoot
-LOG_DIR=/usr/clas12/DATA/logs
-APP_DIR=/usr/local/bin
-IOC_DIR=$CONFIG_DIR
-DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"
+CLAS_CONFIG_DIR=/usr/clas12/release/1.0.2/epics/apps/iocBoot
+CLAS_CONFIG_FILE="$CLAS_CONFIG_DIR/procServ.conf"
+CLAS_IOC_DIR=$CLACLAS_CONFIG_DIRS_CONFIG_DIR
+CLAS_LOG_DIR=/usr/clas12/DATA/logs
 
-CONFIG_FILE="$CONFIG_DIR/procServ.conf"
-FILE_LIST="$CONFIG_FILE"
+HPS_CONFIG_DIR=/usr/clas12/hps/prod/epics/apps/iocBoot
+HPS_CONFIG_FILE="$HPS_CONFIG_DIR/procServ.conf"
+HPS_IOC_DIR=$HPS_CONFIG_DIR
+HPS_LOG_DIR=/usr/clas12/hps/DATA/logs
+
+# default to clas
+CONFIG_DIR=$CLAS_CONFIG_DIR
+CONFIG_FILE=$CLAS_CONFIG_FILE
+IOC_DIR=$CLAS_IOC_DIR
+LOG_DIR=$CLAS_LOG_DIR
+FILE_LIST=$CONFIG_FILE
+
+APP_DIR=/usr/local/bin
 
 #-----------------------------------------------------------------------
 # Command Variables
@@ -54,13 +55,13 @@ BINARY_LIST="$HOSTNAME $ID $APP_EXE"
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] [-p iocpath] [-c alt_config] [-i iocname] start|stop|restart|check|status|test"
+    echo "usage: $SCRIPT_NAME [-h] [-c config || -p iocpath] [-i iocname] start|stop|restart|check|status|test"
     echo ""
+    echo "[-c] Specify the configuration - clas or hps (default: clas)."
+    echo "[-h] Print Help"
+    echo "[-i] Specify the ioc. If not specified, the script assumes all iocs"
     echo "[-p] Specify the iocBoot path (default: $CONFIG_DIR)."
     echo "     Config file will come from this new path (default: procServ.conf)."
-    echo "[-i] Specify the ioc. If not specified, the script assumes all iocs"
-    echo "[-c] Specify the configuration file (default: $CONFIG_FILE)."
-    echo "[-h] Print Help"
     echo ""
     echo "start      - start iocs specified in config file"
     echo "stop       - stop iocs specified in config file"
@@ -236,7 +237,7 @@ function test_ioc {
     STCMD="$(eval echo \$${i}_stcmd)"
     OPTIONS="$(eval echo \$${i}_options)"
     START_OPTIONS="$(eval echo \$${i}_start_options)"
-    echo "$APP_EXE $OPTIONS -n $1 -i^D^C -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1"           
+    echo "$APP_EXE $OPTIONS -n $1 -i^D^C --logfile $LOG_DIR/$1.log --logstamp -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1"           
     return 0
 }
 
@@ -297,7 +298,27 @@ while getopts ":hc:i:p:" opt
 do
     case $opt in
     c) 
-        CONFIG_FILE=$OPTARG    
+        OPTC_USED=1
+        if [ $OPTP_USED ]; then
+            echo "Can't specify -c and -p"
+            usage
+            exit 1
+        fi
+    	if [ "$OPTARG" == "clas" ]; then
+            CONFIG_DIR=$CLAS_CONFIG_DIR
+            CONFIG_FILE=$CLAS_CONFIG_FILE
+            IOC_DIR=$CLAS_IOC_DIR
+            LOG_DIR=$CLAS_LOG_DIR
+        elif [ "$OPTARG" == "hps" ]; then
+            CONFIG_DIR=$HPS_CONFIG_DIR
+	        CONFIG_FILE=$HPS_CONFIG_FILE
+            IOC_DIR=$HPS_IOC_DIR
+            LOG_DIR=$HPS_LOG_DIR
+        else
+        	echo "Invalid argument for -c: $OPTARG"
+            usage
+            exit 1
+        fi
         FILE_LIST="$CONFIG_FILE"
         for FILE in $FILE_LIST     
         do
@@ -311,6 +332,12 @@ do
         OPT_HELP=1
         ;;
     p)  # Override default path, for usage with development directories
+        OPTP_USED=1
+        if [ $OPTC_USED ]; then
+            echo "Can't specify -c and -p"
+            usage
+            exit 1
+        fi
         CONFIG_DIR=$OPTARG
         IOC_DIR=$CONFIG_DIR
         DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"

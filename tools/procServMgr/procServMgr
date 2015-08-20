@@ -32,6 +32,7 @@ HPS_IOC_DIR=$HPS_CONFIG_DIR
 HPS_LOG_DIR=/usr/clas12/hps/DATA/logs
 
 FILE_LIST="$CLAS_CONFIG_FILE $HPS_CONFIG_FILE"
+IOC_DIR_LIST="$CLAS_IOC_DIR $HPS_IOC_DIR"
 
 APP_DIR=/usr/local/bin
 
@@ -206,8 +207,16 @@ function printhostconfig {
 }
 
 function start_ioc {
-    if [ ! -d $IOC_DIR/$1 ]; then
-        echo "Could not start $1 - no directory $IOC_DIR/$1" 
+    dir_found=0
+    for dir in $IOC_DIR_LIST
+    do
+        if [ -d $dir/$1 ]; then
+            dir_found=1
+            IOC_DIR=$dir
+        fi
+    done
+    if [ $dir_found != 1 ]; then
+        echo "Could not start $1 - no directory $1"
         return 1
     fi
      

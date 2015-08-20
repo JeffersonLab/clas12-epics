@@ -18,19 +18,21 @@ drvAsynIPPortConfigure("ETH1", "hallb-gpib01:1234")
 #asynSetTraceIOMask("ETH1",-1,0x02)
 
 ## Load record instances
-#dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
-#dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/prologix.db", "P=GPIB:,R=01:,PORT=ETH1")
 
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup
-#< save_restore.cmd
+< save_restore.cmd
 
 dbl > pv.list
 iocInit
 
 ## Handle autosave 'commands' contained in loaded databases.
-#makeAutosaveFiles()
-#create_monitor_set("info_positions.req", 5, "P=${IOC}:")
-#create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+create_monitor_set("prologix_settings.req", 30, "P=GPIB:,R=01:")
+

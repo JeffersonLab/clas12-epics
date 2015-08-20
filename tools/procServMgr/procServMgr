@@ -3,15 +3,6 @@
 # procServMgr is desgined to be run from the command line and the cron
 # facility.  It is intended to be a control script for running "soft" 
 # iocs with procServ
-#-----------------------------------------------------------------------
-# Version History
-#-----------------------------------------------------------------------
-# 2.62 2015/02/09 wmoore@jlab.org - added alternative path option
-# 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
-# 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
-#                                  added test option
-# 1.00 2008/09/19 cuffe@jlab.org - inital revision
-
 
 #-----------------------------------------------------------------------
 # Debug variables
@@ -30,14 +21,19 @@ SCRIPT_NAME=procServMgr
 #-----------------------------------------------------------------------
 # Data File Locations
 #-----------------------------------------------------------------------
-CONFIG_DIR=/usr/clas12/release/devel/epics/apps/iocBoot
-LOG_DIR=/usr/clas12/DATA/logs
-APP_DIR=/usr/local/bin
-IOC_DIR=$CONFIG_DIR
-DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"
+CLAS_CONFIG_DIR=/usr/clas12/release/devel/epics/apps/iocBoot
+CLAS_CONFIG_FILE="$CLAS_CONFIG_DIR/procServ.conf"
+CLAS_IOC_DIR=$CLAS_CONFIG_DIR
+CLAS_LOG_DIR=/usr/clas12/DATA/logs
 
-CONFIG_FILE="$CONFIG_DIR/procServ.conf"
-FILE_LIST="$CONFIG_FILE"
+HPS_CONFIG_DIR=/usr/clas12/hps/prod/apps/iocBoot
+HPS_CONFIG_FILE="$HPS_CONFIG_DIR/procServ.conf"
+HPS_IOC_DIR=$HPS_CONFIG_DIR
+HPS_LOG_DIR=/usr/clas12/hps/DATA/logs
+
+FILE_LIST="$CLAS_CONFIG_FILE $HPS_CONFIG_FILE"
+
+APP_DIR=/usr/local/bin
 
 #-----------------------------------------------------------------------
 # Command Variables
@@ -54,13 +50,13 @@ BINARY_LIST="$HOSTNAME $ID $APP_EXE"
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] [-p iocpath] [-c alt_config] [-i iocname] start|stop|restart|check|status|test"
+    echo "usage: $SCRIPT_NAME [-h] [-c config || -p iocpath] [-i iocname] start|stop|restart|check|status|test"
     echo ""
+    echo "[-c] Specify the configuration - clas or hps"
+    echo "[-h] Print Help"
+    echo "[-i] Specify the ioc. If not specified, the script assumes all iocs"
     echo "[-p] Specify the iocBoot path (default: $CONFIG_DIR)."
     echo "     Config file will come from this new path (default: procServ.conf)."
-    echo "[-i] Specify the ioc. If not specified, the script assumes all iocs"
-    echo "[-c] Specify the configuration file (default: $CONFIG_FILE)."
-    echo "[-h] Print Help"
     echo ""
     echo "start      - start iocs specified in config file"
     echo "stop       - stop iocs specified in config file"
@@ -74,7 +70,7 @@ function usage {
     echo "$SCRIPT_NAME stop   - stop all iocs enabled in the config file"
     echo "$SCRIPT_NAME status - show status for all iocs"
     echo "$SCRIPT_NAME -p /usr/clas12/hps/dev/apps/iocBoot status - use alternate path/config"
-    echo "$SCRIPT_NAME -c /tmp/testconfig.conf check - use alternate config file"
+    echo "$SCRIPT_NAME -c clas check - check clas iocs"
     echo "$SCRIPT_NAME -i iocsofthrt start - start ioc iocsofthrt only"
     echo "$SCRIPT_NAME -i iocsofthrt test - show  start command for iocsofthrt"
     echo ""
@@ -112,39 +108,41 @@ function parseconfig {
     d=0
     h=0
 
-    IFS=":"
-    while read  iocname computer port status stcmd options start_options
+    for FILE in $FILE_LIST
     do
-        if [ "`echo $iocname | cut -c1`" = "#" ] ; then
-        # Skip comments
-        continue
-        fi
-        if [ "`echo $iocname | cut -c1`" = "" ] ; then
-            # Skip blank lines
-            continue
-        fi
+        IFS=":"
+        while read  iocname computer port status stcmd options start_options
+        do
+            if [ "`echo $iocname | cut -c1`" = "#" ] ; then
+                # Skip comments
+                continue
+            fi
+            if [ "`echo $iocname | cut -c1`" = "" ] ; then
+                # Skip blank lines
+                continue
+            fi
           
-        #remove white space at start and end and only accept a single string
-        iocname=`echo "$iocname" | sed 's/^[ \t]*//;s/[ \t]*$//' | awk '{print $1}'`
-        computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-        port=`echo "$port" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-        status=`echo "$status" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-        stcmd=`echo "$stcmd" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+            #remove white space at start and end and only accept a single string
+            iocname=`echo "$iocname" | sed 's/^[ \t]*//;s/[ \t]*$//' | awk '{print $1}'`
+            computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+            port=`echo "$port" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+            status=`echo "$status" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+            stcmd=`echo "$stcmd" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
           
-        #remove white space at start and end
-        options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
-        start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+            #remove white space at start and end
+            options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+            start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
                     
-        export ${iocname}_host="$computer"    
-        export ${iocname}_port="$port"
-        export ${iocname}_stcmd="$stcmd"
-        export ${iocname}_options="$options"
-        export ${iocname}_start_options="$start_options"
+            export ${iocname}_host="$computer"    
+            export ${iocname}_port="$port"
+            export ${iocname}_stcmd="$stcmd"
+            export ${iocname}_options="$options"
+            export ${iocname}_start_options="$start_options"
+    
+            iocs[$i]=$iocname
+            ((i=i+1)) 
 
-        iocs[$i]=$iocname
-        ((i=i+1)) 
-
-        case $status in
+            case $status in
             enable|enabled|on)
                 iocs_enabled[$e]=$iocname  
                 ((e=e+1))
@@ -154,13 +152,14 @@ function parseconfig {
                 iocs_disabled[$d]=$iocname   
                 ((d=d+1))
                 export ${iocname}_status=disabled
-        esac
+            esac
 
-        if [ "$computer" = "$HOST" ] ; then
-            iocs_host[$h]=$iocname
-            ((h=h+1))
-        fi
-    done < $CONFIG_FILE
+            if [ "$computer" = "$HOST" ] ; then
+                iocs_host[$h]=$iocname
+                ((h=h+1))
+            fi
+        done < $FILE
+    done
     unset IFS
 }
 
@@ -236,7 +235,7 @@ function test_ioc {
     STCMD="$(eval echo \$${i}_stcmd)"
     OPTIONS="$(eval echo \$${i}_options)"
     START_OPTIONS="$(eval echo \$${i}_start_options)"
-    echo "$APP_EXE $OPTIONS -n $1 -i^D^C -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1"           
+    echo "$APP_EXE $OPTIONS -n $1 -i^D^C --logfile $LOG_DIR/$1.log --logstamp -c $IOC_DIR/$1 $2 $STCMD $START_OPTIONS >/dev/null 2>&1"           
     return 0
 }
 
@@ -259,11 +258,15 @@ function stop_ioc {
 
 function status_ioc {
     if [ "$(eval echo \$${i}_status)" = "enabled" ]; then
-        processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
-        if [ "$processfound" != "" ] ; then
-            echo "$1 running on port $2 of $HOST with pid $processfound"
+        if [ "$(eval echo \$${i}_host)" = $HOST ]; then
+            processfound="`ps -ef | grep -v grep | grep $1 | grep $2 | awk '{print $2}'`"
+            if [ "$processfound" != "" ] ; then
+                echo "$1 running on port $2 of $HOST with pid $processfound"
+            else
+                echo "$1 NOT running on port $2 of $HOST"
+            fi
         else
-            echo "$1 NOT running on port $2 of $HOST"
+            echo "$1 is enabled to run on $(eval echo \$${i}_host), re-run on that host"
         fi
     else
         echo "$1 is disabled from running on port $2 of $HOST"
@@ -295,9 +298,30 @@ function checkuser {
 #-----------------------------------------------------------------------
 while getopts ":hc:i:p:" opt
 do
+    OPTS="$OPTS-$opt $OPTARG"
     case $opt in
     c) 
-        CONFIG_FILE=$OPTARG    
+        OPTC_USED=1
+        if [ $OPTP_USED ]; then
+            echo "Can't specify -c and -p"
+            usage
+            exit 1
+        fi
+    	if [ "$OPTARG" == "clas" ]; then
+            CONFIG_DIR=$CLAS_CONFIG_DIR
+            CONFIG_FILE=$CLAS_CONFIG_FILE
+            IOC_DIR=$CLAS_IOC_DIR
+            LOG_DIR=$CLAS_LOG_DIR
+        elif [ "$OPTARG" == "hps" ]; then
+            CONFIG_DIR=$HPS_CONFIG_DIR
+	        CONFIG_FILE=$HPS_CONFIG_FILE
+            IOC_DIR=$HPS_IOC_DIR
+            LOG_DIR=$HPS_LOG_DIR
+        else
+        	echo "Invalid argument for -c: $OPTARG"
+            usage
+            exit 1
+        fi
         FILE_LIST="$CONFIG_FILE"
         for FILE in $FILE_LIST     
         do
@@ -311,6 +335,12 @@ do
         OPT_HELP=1
         ;;
     p)  # Override default path, for usage with development directories
+        OPTP_USED=1
+        if [ $OPTC_USED ]; then
+            echo "Can't specify -c and -p"
+            usage
+            exit 1
+        fi
         CONFIG_DIR=$OPTARG
         IOC_DIR=$CONFIG_DIR
         DIR_LIST="$APP_DIR $CONFIG_DIR $IOC_DIR $LOG_DIR"
@@ -360,10 +390,9 @@ if [ "$OPT_IOC" ]; then
     for IOC in ${iocs_enabled[*]}                       
     do
         if [ $OPT_IOC = $IOC ]; then                
-        ((ret=ret+1))
-    fi
+            ((ret=ret+1))
+        fi
     done
-
     if [ $ret = 0 ]; then
         echo ""
         echo "$OPT_IOC is not enabled for $HOST in:" 
@@ -371,6 +400,14 @@ if [ "$OPT_IOC" ]; then
         echo "You may need to update this file before continuing"
         echo ""
         printconfig
+        echo ""
+        exit 1
+    elif [[ $ret > 1 ]]; then
+        echo "$OPT_IOC was found in CLAS and HPS configuration files"
+        echo "Use:"
+        echo "  $SCRIPT_NAME -c clas $OPTS $1"
+        echo "    OR"
+        echo "  $SCRIPT_NAME -c hps $OPTS $1"
         echo ""
         exit 1
     fi

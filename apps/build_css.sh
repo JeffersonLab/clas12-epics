@@ -10,9 +10,9 @@
 
 synapps=/usr/clas12/R3.14.12.5/synApps_5_8
 css_tree=./css
+top_dir=`pwd`
 
 echo "[Setting up new CSS tree]"
-rm -rf $css_tree
 
 echo "Finding opi's in $synapps ..."
 for app in `find $synapps/ -name "opi" -type d`
@@ -45,21 +45,20 @@ sed -i 's/Gray_6\"/Gray_6\" red=\"158\" green=\"158\" blue=\"158\"/g' *
 sed -i 's/Gray_7\"/Gray_7\" red=\"145\" green=\"145\" blue=\"145\"/g' *
 sed -i 's/Gray_9\"/Gray_9\" red=\"120\" green=\"120\" blue=\"120\"/g' *
 sed -i 's/Gray_14\"/Gray_14\" red=\"0\" green=\"0\" blue=\"0\"/g' *
-cd ../../../
+cd $top_dir
 
 cwd=`pwd`
 echo "Finding opi's in $cwd ..."
 for app in `find $cwd -name "opi" -type d`
 do
-    appname=${app#$cwd/}          # strip synapps path
-    app_ver=${appname%%/*}        # get app-ver, strip sub dirs
-    appname=${appname%%App*}      # get appname, strip version
+    appname=${app#$cwd/}          # strip dir path
+    appname=${appname%%/*}        # strip sub dirs
     
     opi_dir="$css_tree/$appname"
     rm -rf $opi_dir
     mkdir -p $opi_dir
     
-    echo "  $app_ver > $opi_dir"
+    echo "  $appname > $opi_dir"
     ln -s $app/* $opi_dir/        # link files not dirs for easier navigation
 done
 

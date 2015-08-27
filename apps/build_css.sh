@@ -20,11 +20,21 @@ printheader() {
 }
 
 # parse out synApps path
-EPICS_BASE=`grep EPICS_BASE= configure/RELEASE | uniq`
-EPICS_BASE=${EPICS_BASE#EPICS_BASE=}
-SYNAPPS=`grep SYNAPPS= configure/RELEASE`
-SYNAPPS=${SYNAPPS#SYNAPPS=}
-SYNAPPS=${SYNAPPS//\$(EPICS_BASE)/$EPICS_BASE}
+if [ -f "configure/RELEASE" ]
+then
+    EPICS_BASE=`grep EPICS_BASE= configure/RELEASE | uniq`
+    EPICS_BASE=${EPICS_BASE#EPICS_BASE=}
+    SYNAPPS=`grep SYNAPPS= configure/RELEASE`
+    SYNAPPS=${SYNAPPS#SYNAPPS=}
+    SYNAPPS=${SYNAPPS//\$(EPICS_BASE)/$EPICS_BASE}
+    if [ $SYNAPPS == "" ]; then
+	printf "Error: could not parse synApps path from configure/RELEASE\n"
+	exit
+    fi
+else
+    printf "Error: configure/RELEASE not found\n"
+    exit
+fi
 
 printf "\nSetting up new CSS Share\n\n"
 printf "Finding opi's in %s\n" $SYNAPPS

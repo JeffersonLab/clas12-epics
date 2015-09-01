@@ -59,10 +59,15 @@ do
     else
         cp -r $app/* $opi_dir/ 2>/dev/null      # hide warning about empty dir
     fi
+
 done
 
+printf "\nFixing synApps dir/file permissions\n"
+find $css_share_path/synApps -type f -print0 | xargs -0 chmod 664
+find $css_share_path/synApps -type d -print0 | xargs -0 chmod 755
+
 # synApps 5-7, 5-8
-printf "\nFixing devIocStats color names (contains undefined rgb values)\n"
+printf "Fixing devIocStats color names (contains undefined rgb values)\n"
 cd $css_share_path/synApps/devIocStats
 sed -i 's/Gray_3\"/Gray_3\" red=\"200\" green=\"200\" blue=\"200\"/g' *
 sed -i 's/Gray_4\"/Gray_4\" red=\"187\" green=\"187\" blue=\"187\"/g' *

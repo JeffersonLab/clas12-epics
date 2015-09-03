@@ -62,7 +62,7 @@ asym_LIBS += mca
 asym_LIBS += std
 #asym_LIBS += stream streamSynApps
 asym_LIBS += asyn
-asym_LIBS += seqDev seq pv
+asym_LIBS += seq pv
 
 asym_LIBS += mcaSIS
 asym_LIBS += mcaCanberra

@@ -1,0 +1,45 @@
+record(bo,"beam_stop_on_axis") {
+	field(FLNK, "beam_stop_beam")
+	field(HIGH,"1")
+	field(ZNAM,"no active")
+	field(ONAM,"move started")
+}
+record(ao, "beam_stop_beam") {
+	field(VAL, "68.0")
+	field(OUT, "beam_stop.VAL")
+	field(FLNK, "beam_stop_proc")
+}
+record(bo, "beam_stop_proc") {
+	field(VAL, "1")
+	field(OUT,"beam_stop.PROC")
+	field(HIGH,"1")
+}
+record(bo,"beam_stop_go_home") {
+	field(FLNK, "beam_stop_home")
+	field(HIGH,"1")
+	field(ZNAM,"no active")
+	field(ONAM,"move started")
+}
+record(ao, "beam_stop_home") {
+	field(VAL, "-0.1")
+	field(OUT, "beam_stop.VAL")
+	field(FLNK, "beam_stop_proc")
+}
+record(calc, "beam_stop_at_home") {
+        field(INPA, "beam_stop.RBV")
+        field(SCAN, ".2 second")
+        field(CALC, "ABS(A-0.0)<0.2?1:0")
+}
+record(calc, "beam_stop_at_beam") {
+        field(INPA, "beam_stop.RBV")
+        field(SCAN, ".2 second")
+        field(CALC, "ABS(A-68.0)<0.1?1:0")
+}
+
+
+
+
+
+
+
+

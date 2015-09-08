@@ -1,0 +1,60 @@
+record(calc,"raster_sum_y")
+{
+    field(SCAN,"1 second")
+    field(FLNK,"raster_sum_y0")
+    field(CALC,"(a=d-1)?b/d:c")
+    field(INPA,"raster_sum_reset")
+    field(INPB,"raster_sum_y0")
+    field(INPC,"raster_sum_y")
+    field(INPD,"raster_sum_cycle")
+    field( LSV,"MINOR")
+    field(LLSV,"MAJOR")
+#    field( LOW,"27000")
+#    field(LOLO,"25000")
+}
+record(calc,"raster_sum_y0")
+{
+    field(SCAN,"Passive")
+    field(FLNK,"raster_sum_x")
+    field(CALC,"(a=0)?b:b+c")
+    field(INPA,"raster_sum_reset")
+    field(INPB,"sixtyHz_total_rate_15")
+    field(INPC,"raster_sum_y0")
+}
+record(calc,"raster_sum_x")
+{
+    field(SCAN,"Passive")
+    field(FLNK,"raster_sum_x0")
+    field(CALC,"(a=d-1)?b/d:c")
+    field(INPA,"raster_sum_reset")
+    field(INPB,"raster_sum_x0")
+    field(INPC,"raster_sum_x")
+    field(INPD,"raster_sum_cycle")
+    field( LSV,"MINOR")
+    field(LLSV,"MAJOR")
+#    field( LOW,"27000")
+#    field(LOLO,"25000")
+}
+record(calc,"raster_sum_x0")
+{
+    field(SCAN,"Passive")
+    field(FLNK,"raster_sum_reset")
+    field(CALC,"(a=0)?b:b+c")
+    field(INPA,"raster_sum_reset")
+    field(INPB,"sixtyHz_total_rate_14")
+    field(INPC,"raster_sum_x0")
+}
+record(calc,"raster_sum_reset")
+{
+    field(SCAN,"Passive")
+    field(CALC,"(a>=b-1)?a=0:a+1")
+    field(FLNK,"raster_sum_cycle")
+    field(INPA,"raster_sum_reset NPP NMS")
+    field(INPB,"raster_sum_cycle")
+}
+record(calc,"raster_sum_cycle")
+{
+    field(SCAN,"Passive")
+    field(CALC,"2*a")
+    field(INPA,"RASTCYCLETIME NPP NMS")
+}

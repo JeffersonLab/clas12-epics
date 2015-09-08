@@ -1,0 +1,665 @@
+
+file {
+	name="/usr/local/clas12/release/0.1/epics/apps/A6551App/iocBoot/iocA6551App/A6551.adl"
+	version=030108
+}
+display {
+	object {
+		x=492
+		y=435
+		width=270
+		height=215
+	}
+	clr=14
+	bclr=12
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+"text update" {
+	object {
+		x=81
+		y=81
+		width=70
+		height=15
+	}
+	monitor {
+		chan="LV:DC:S$(S):L$(L):GET_VOLTAGE"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+"text entry" {
+	object {
+		x=80
+		y=123
+		width=70
+		height=15
+	}
+	control {
+		chan="LV:DC:S$(S):L$(L):SET_VOLTAGE"
+		clr=14
+		bclr=0
+	}
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+"text update" {
+	object {
+		x=175
+		y=81
+		width=70
+		height=15
+	}
+	monitor {
+		chan="LV:DC:S$(S):L$(L):GET_CURRENT"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+"text entry" {
+	object {
+		x=175
+		y=123
+		width=70
+		height=15
+	}
+	control {
+		chan="LV:DC:S$(S):L$(L):SET_CURRENT"
+		clr=14
+		bclr=0
+	}
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+"choice button" {
+	object {
+		x=55
+		y=159
+		width=30
+		height=34
+	}
+	control {
+		chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+		clr=0
+		bclr=29
+	}
+}
+"text update" {
+	object {
+		x=80
+		y=102
+		width=70
+		height=15
+	}
+	monitor {
+		chan="LV:DC:S$(S):L$(L):GET_VOLTAGE_SETP"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+"text update" {
+	object {
+		x=175
+		y=102
+		width=70
+		height=15
+	}
+	monitor {
+		chan="LV:DC:S$(S):L$(L):GET_CURRENT_SETP"
+		clr=14
+		bclr=55
+	}
+	align="horiz. centered"
+	limits {
+		hoprSrc="default"
+		hoprDefault=10
+		precSrc="default"
+		precDefault=3
+	}
+}
+text {
+	object {
+		x=178
+		y=64
+		width=42
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Current (A)"
+}
+text {
+	object {
+		x=85
+		y=64
+		width=42
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Voltage (V)"
+}
+text {
+	object {
+		x=21
+		y=81
+		width=42
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Readback"
+}
+text {
+	object {
+		x=21
+		y=102
+		width=42
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Setpoint"
+}
+text {
+	object {
+		x=21
+		y=123
+		width=42
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Input"
+}
+composite {
+	object {
+		x=102
+		y=16
+		width=81
+		height=24
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=111
+				y=20
+				width=66
+				height=20
+			}
+			"basic attribute" {
+				clr=0
+			}
+			"dynamic attribute" {
+				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+			}
+			textix="DC LV S$(S) L$(L)"
+		}
+		polyline {
+			object {
+				x=103
+				y=16
+				width=79
+				height=0
+			}
+			"basic attribute" {
+				clr=0
+			}
+			"dynamic attribute" {
+				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+			}
+			points {
+				(103,16)
+				(182,16)
+			}
+		}
+		polyline {
+			object {
+				x=103
+				y=36
+				width=79
+				height=0
+			}
+			"basic attribute" {
+				clr=0
+			}
+			"dynamic attribute" {
+				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+			}
+			points {
+				(103,36)
+				(182,36)
+			}
+		}
+		polyline {
+			object {
+				x=102
+				y=16
+				width=0
+				height=20
+			}
+			"basic attribute" {
+				clr=0
+			}
+			"dynamic attribute" {
+				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+			}
+			points {
+				(102,16)
+				(102,36)
+			}
+		}
+		polyline {
+			object {
+				x=183
+				y=16
+				width=0
+				height=20
+			}
+			"basic attribute" {
+				clr=0
+			}
+			"dynamic attribute" {
+				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+			}
+			points {
+				(183,16)
+				(183,36)
+			}
+		}
+	}
+}
+oval {
+	object {
+		x=18
+		y=12
+		width=10
+		height=10
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#1"
+		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+	}
+}
+oval {
+	object {
+		x=18
+		y=12
+		width=10
+		height=10
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=1"
+		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+	}
+}
+text {
+	object {
+		x=36
+		y=11
+		width=40
+		height=17
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=1"
+		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+	}
+	textix="Pw ON"
+}
+text {
+	object {
+		x=36
+		y=11
+		width=40
+		height=12
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#1"
+		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+	}
+	textix="Pw OFF"
+}
+text {
+	object {
+		x=64
+		y=196
+		width=30
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Pw"
+}
+text {
+	object {
+		x=104
+		y=196
+		width=15
+		height=12
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="OCP"
+}
+"choice button" {
+	object {
+		x=97
+		y=159
+		width=30
+		height=34
+	}
+	control {
+		chan="LV:DC:S$(S):L$(L):SET_OCONOFF"
+		clr=0
+		bclr=29
+	}
+}
+"message button" {
+	object {
+		x=166
+		y=169
+		width=60
+		height=18
+	}
+	control {
+		chan="LV:DC:S$(S):L$(L):CLEAR_OC"
+		clr=0
+		bclr=29
+	}
+	label="Clear OC"
+	press_msg="0"
+	release_msg="1"
+}
+oval {
+	object {
+		x=18
+		y=33
+		width=10
+		height=10
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=1"
+		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+	}
+}
+oval {
+	object {
+		x=18
+		y=33
+		width=10
+		height=10
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#1"
+		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+	}
+}
+text {
+	object {
+		x=36
+		y=32
+		width=40
+		height=12
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#1"
+		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+	}
+	textix="OCP OFF"
+}
+text {
+	object {
+		x=36
+		y=32
+		width=40
+		height=12
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=1"
+		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+	}
+	textix="OCP ON"
+}
+polyline {
+	object {
+		x=11
+		y=148
+		width=245
+		height=0
+	}
+	"basic attribute" {
+		clr=0
+	}
+	"dynamic attribute" {
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+	points {
+		(11,148)
+		(256,148)
+	}
+}
+polyline {
+	object {
+		x=11
+		y=58
+		width=245
+		height=0
+	}
+	"basic attribute" {
+		clr=0
+	}
+	"dynamic attribute" {
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+	points {
+		(11,58)
+		(256,58)
+	}
+}
+oval {
+	object {
+		x=232
+		y=19
+		width=14
+		height=14
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#2"
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+}
+oval {
+	object {
+		x=232
+		y=19
+		width=14
+		height=14
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=2"
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+}
+text {
+	object {
+		x=213
+		y=20
+		width=15
+		height=12
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=2"
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+	textix="OC!"
+}
+text {
+	object {
+		x=213
+		y=20
+		width=30
+		height=12
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A#2"
+		chan="LV:DC:S$(S):L$(L):GET_OC"
+	}
+	textix="UC"
+}

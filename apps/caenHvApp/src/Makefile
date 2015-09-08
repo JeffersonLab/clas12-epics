@@ -15,7 +15,6 @@ DBD += ioccaen.dbd
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 ioccaen_SRCS += ioccaen_registerRecordDeviceDriver.cpp
 ioccaen_SRCS += bigsub.c
-ioccaen_SRCS += sub.c
 ioccaen_SRCS += devCAEN.c
 ioccaen_SRCS_DEFAULT += ioccaenMain.cpp
 ioccaen_SRCS_vxWorks += -nil-

@@ -586,7 +586,7 @@ int main(int argc, char **argv){
       if((argc>4)&&(argc-4!=nslots)){          //if more args, there needs to be nslots worth, so check
 	  cout << "ERROR: " << nslots << " slots were requested, but only " << argc-4 <<  " slot indices provided on the command line" << endl;
 	  printUsage(argv);
-	  exit;
+	  exit(1);
 	}
       else{                                    //number the slots as specified in the args.
 	for(int n=4;n<argc;n++)sscanf(argv[n],"%d,",&slots[n-4]);
@@ -661,7 +661,7 @@ char *checkSwap(char *alias, char *canonical){
       if((line[0] == '*')||(line[0] == '#')) continue;    // skip comments 
       if(sscanf(line,"%s%s%s",fstring[ORIG_CSC],fstring[ALIAS],fstring[NEW_CSC])!=3){
 	cout << "Error, not enough parameters on line " << nline << " in " << swapFile << endl;
-	exit;
+	exit(1);
       }
       cout << "Swap: " << fstring[ALIAS] << " from " << fstring[ORIG_CSC] << " to " << fstring[NEW_CSC] << endl;
       strcpy(cratename,fstring[NEW_CSC]+2);
@@ -727,7 +727,7 @@ char *checkAlias(char *name, char *alias, char *canonical){
       if((line[0] == '*')||(line[0] == '#')) continue;    // skip comments 
       if(sscanf(line,"%s%s",fstring[ORIG_CSC],fstring[ALIAS])!=2){
 	cout << "Error, not enough parameters on line " << nline << " in " << swapFile << endl;
-	exit;
+	exit(1);
       }
       cout << "Alias: " << fstring[ORIG_CSC] << " to " << fstring[ALIAS] << endl;
       
@@ -949,7 +949,7 @@ void loadStoredEpics(char *epicsFile){
     if((fp=fopen(epicsFile,"r"))==NULL){
       cout << "" << endl;
       cout << "Fatal Error: " << epicsFile << " not found." << endl;
-      exit;
+      exit(1);
     }
     
     while(fgets(line,200,fp) != NULL){		// check got a line from file
@@ -957,7 +957,7 @@ void loadStoredEpics(char *epicsFile){
       if((line[0] == '*')||(line[0] == '#')||(line[0]=='\n')) continue;    // skip comments and blank lines
       if(sscanf(line,"%s%s",fstring[ORIG_CSC],fstring[ALIAS])!=2){
 	cout << "Error, not enough parameters on line " << nline << epicsFile << endl;
-	exit;
+	exit(1);
       }
       for(int n=0;n<2;n++){
 	//	cout << " " << strlen(fstring[n]) << endl;

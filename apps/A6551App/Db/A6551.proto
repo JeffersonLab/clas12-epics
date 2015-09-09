@@ -1,0 +1,70 @@
+# This is an example protocol file
+
+OutTerminator = CR LF;
+ExtraInput = Ignore;
+
+getVoltage {
+   out "MEAS:VOLT?"; in "%f"; 
+}
+getCurrent {
+   out "MEAS:CURR?"; in "%f"; 
+}
+
+getCurrentSetpoint {
+   out "CURR?"; in "%f"; 
+}
+getVoltageSetpoint {
+   out "VOLT?"; in "%f"; 
+}
+
+setCurrent {
+    out "CURR %f";
+    @init {getCurrentSetpoint;}
+}
+setVoltage {
+    out "VOLT %f";
+    @init {getVoltageSetpoint;}
+}
+
+
+getOnOff {
+    out "OUTP?"; in "%d";
+}
+setOnOff {
+    out "OUTP %d";
+    @init {getOnOff;}
+}
+
+getOcOnOff {
+    out "CURR:PROT:STAT?"; in "%d";
+}
+setOcOnOff {
+    out "CURR:PROT:STAT %d";
+    @init {getOcOnOff;}
+}
+
+clearOC {
+#    out "OUTP OFF";
+#    wait 1000;
+    out "CURR:PROT:STAT 0";
+#    wait 1000;
+    out "OUTP:PROT:CLE";
+#    wait 1000;
+#    out "OUTP ON";
+    wait 800;
+    out "CURR:PROT:STAT 1";
+}
+
+getOcStatus {
+    out "STAT:QUES:COND?"; in "%d";
+}
+
+setOnOffFull {
+    out "CURR:PROT:STAT 0";
+    out "OUTP:PROT:CLE";
+    wait 800;
+    out "CURR:PROT:STAT 1";
+    wait 800;
+    out "OUTP %d";
+    @init {getOnOff;}
+}

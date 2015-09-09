@@ -36,9 +36,9 @@ drvAsynIPPortConfigure("ETH18", "hallb-gpib18:1234")
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadTemplate("prologix.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
+dbLoadTemplate("prologix.substitutions")
 
 ## autosave setup
 < save_restore.cmd

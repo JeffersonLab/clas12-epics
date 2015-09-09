@@ -196,7 +196,7 @@ fclose(fps);
 ///--------------------------------
     if(ret != CAENHV_OK)
     {
-     printf("CAENHVGetChParam error: %s (num. %d) id=%d \n\n", CAENHVGetError(name), ret, id);
+     printf("CAENHVGetChParam error: %s (num. %d) id=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
       mainframes_disconnect[i10]=1; /// my_n: hbeat
     ///  mainframes[i10]=-1;
     }
@@ -355,7 +355,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   char name[MAX_CAEN_NAME];
   int i, ipar, iparr, ret;
-  unsigned short Slot, ChNum, ChList[MAX_CHAN], Ch;
+  unsigned short Slot, ChNum, Ch; //ChList[MAX_CHAN];
   float fParVal;///, fparval[MAX_CHAN];
   unsigned long	tipo, lParVal;///, lparval[MAX_CHAN];
   char ParName[MAX_CAEN_NAME];
@@ -369,7 +369,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   Slot = board;
   ChNum = Demand[id].board[board].nchannels;
-  for(i = 0; i<ChNum; i++) ChList[i] = (unsigned short)i;
+  //for(i = 0; i<ChNum; i++) ChList[i] = (unsigned short)i;
 
   /* loop over parameters */
   for(iparr=0; iparr<nXXXXXparam; iparr++)

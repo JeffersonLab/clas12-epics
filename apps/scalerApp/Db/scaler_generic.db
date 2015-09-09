@@ -1,11 +1,23 @@
+#
+# scaler_generic.db
+#
+# CLAS Joerger VSC8/16 Scaler
+#
+# Macros:
+#   P  - scaler prefix
+#   C  - VME card number
+#   S  - VME slot number
+#   TP - time preset (TP field of scalerRecord)
+#
+
 record(scaler,"$(P)")
 {
 	#field(SCAN,"I/O Intr")
 	field(DTYP,"Joerger VSC8/16")
 	field(FLNK,"$(P)_calc1.PROC PP MS")
 	field(FREQ,"10000000")
-	field(OUT,"#C1 S0 @")
-	field(TP,"1")
+	field(OUT,"#C$(C) S$(S) @")
+	field(TP,"$(TP)")
 	field(PREC,"3")
 	field(G1,"1") 		# The gate 1 is a preset gate
 	field(NM1,"Clock") 	# Channel 1 : clock

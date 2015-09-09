@@ -1,0 +1,91 @@
+grecord(mca,"sixtyHz_$(CHAN)") 
+{ 
+   field(DTYP, "Struck STR7201 MCS") 
+   field(MODE, "MCS")
+   field(CHAS, "0")
+   field(DWEL, "0.002441406")
+   field(FLNK, "0")
+   field(FTVL, "6")
+   field(NMAX, "$(FIFO)")
+   field(PREC, "7")
+   field(NUSE, "$(FIFO)")
+   field(INP, "#C0 S$(CHAN) @")
+} 
+
+grecord(waveform,"sixtyHz_copy_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(FIFO)")
+   field(FTVL, "7")
+} 
+grecord(waveform,"fft_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(HALF_FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(HALF_FIFO)")
+   field(FTVL, "7")
+} 
+grecord(waveform,"fft_img_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(HALF_FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(HALF_FIFO)")
+   field(FTVL, "7")
+} 
+grecord(waveform,"power_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(HALF_FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(HALF_FIFO)")
+   field(FTVL, "7")
+} 
+grecord(waveform,"phase_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(HALF_FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(HALF_FIFO)")
+   field(FTVL, "7")
+} 
+grecord(ao, "power_0Hz_$(CHAN)"){
+   field(PREC,"4")
+}
+grecord(ao, "power_60Hz_$(CHAN)"){
+   field(PREC,"4")
+}
+grecord(ao, "power_max_$(CHAN)"){
+   field(PREC,"4")
+}
+grecord(ao, "power_max_freq_$(CHAN)"){
+   field(PREC,"1")
+}
+grecord(ao, "sixtyHz_total_rate_$(CHAN)"){
+   field(PREC,"1")
+}
+grecord(ao, "cw_to_total_ratio_$(CHAN)"){
+   field(PREC,"4")
+}
+
+grecord(waveform,"sixtyHz_raw_$(CHAN)") 
+{ 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "2048")
+   field(LOPR, "0")
+   field(HOPR, "2048")
+   field(FTVL, "3")
+} 
+grecord(ao, "peak2peak_$(CHAN)"){
+   field(PREC,"4")
+}
+grecord(ao, "sixtyHz_average_$(CHAN)"){
+   field(PREC,"4")
+}
+grecord(ao, "sixtyHz_rms_$(CHAN)"){
+   field(PREC,"4")
+}
+

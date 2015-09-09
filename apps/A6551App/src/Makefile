@@ -15,6 +15,9 @@ DBD += A6551.dbd
 
 # A6551.dbd will be made up from these files:
 A6551_DBD += base.dbd
+A6551_DBD += stream.dbd
+A6551_DBD += drvAsynIPPort.dbd
+A6551_DBD += asyn.dbd
 
 # A6551_registerRecordDeviceDriver.cpp derives from A6551.dbd
 A6551_SRCS += A6551_registerRecordDeviceDriver.cpp
@@ -23,14 +26,11 @@ A6551_SRCS += A6551_registerRecordDeviceDriver.cpp
 A6551_SRCS_DEFAULT += A6551Main.cpp
 A6551_SRCS_vxWorks += -nil-
 
-# Finally link to the EPICS Base libraries
-A6551_LIBS += $(EPICS_BASE_IOC_LIBS)
-
-#A6551_DBD += drvVxi11.dbd
-A6551_DBD += stream.dbd
-A6551_DBD += drvAsynIPPort.dbd
 A6551_LIBS += stream
 A6551_LIBS += asyn
+
+# Finally link to the EPICS Base libraries
+A6551_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================
 

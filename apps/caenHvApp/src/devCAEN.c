@@ -156,12 +156,13 @@ static long init_bo(struct boRecord  *pbo)
   
 
   char tmp[81]; /// temporal
-  int retv;
+  ///int retv;
   int first_channel=channel, chs_number=command;
   if(strstr(pbo->desc,"smi")) {
     strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
     tmp[strlen(pbo->name)-strlen("_BO")]=0;
-    retv=sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
+    //retv=sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
+    sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
     pbo->rval = 0; /// means nothing
   }
   else{
@@ -177,7 +178,8 @@ static long init_bo(struct boRecord  *pbo)
    }
    else if (command == S_HV){
      int onoff; /// my:
-     retv = CAEN_GetHv(chassis, &onoff); /// my:
+     //retv = CAEN_GetHv(chassis, &onoff); /// my:
+     CAEN_GetHv(chassis, &onoff); /// my:
      pbo->rval = onoff;
      //printf("ONOFF=%d\n", onoff); /// my:
    }
@@ -233,7 +235,7 @@ static long write_bo(struct boRecord *pbo)
 
   /* identify the type of Bo and issue a command to the desired chassis.
    */
-  int retv;
+  //int retv;
   //char tmp1[10];
   //int first_board, bds_number;
   int first_channel=channel, chs_number=command;
@@ -241,11 +243,13 @@ static long write_bo(struct boRecord *pbo)
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
 
-    retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
+    //retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
+    sy1527BoardSmiControl(pbo->name, chassis, slot,  
     first_channel, chs_number, (unsigned char)pbo->rval);
   }
   else if(strstr(pbo->desc,"crate_fsm_init")){ /// for any order of launch of ioc and fsm
-    retv=sy1527CrateSmiInit(pbo->name, chassis);
+    //retv=sy1527CrateSmiInit(pbo->name, chassis);
+    sy1527CrateSmiInit(pbo->name, chassis);
 
   }
   else{

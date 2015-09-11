@@ -1,20 +1,24 @@
 #
-# fcup.db - was in scaler.db
+# fcup_calc.db - was in scaler.db
+#
+# Faraday Cup calculation
+#
+# Macros:
+#   SCLR - scaler channel to use
 #
 
-# Faraday cup
-
-record(ao,"fcup_slope"    ) { }
-record(ao,"fcup_offset"    ) { }
-
-record(calc,"$(P)_calc1")
-{
-	field(FLNK,"$(P)_cts1.PROC PP MS")
-	field(CALC,"(b/f-d)/MAX(e,1.0)")
-	field(INPB,"$(P).S2 NPP NMS")
-	field(INPD,"fcup_offset NPP NMS")
-	field(INPE,"fcup_slope NPP NMS")
-	field(INPF,"$(P).T NPP NMS")
-	field(PREC,"3")
+# INPA - scaler count
+# INPB - offset
+# INPC - slope
+# INPD - scaler time
+record(calc,"HB:fcup") {
+	field(DESC, "FCUP Calcuation")
+    field(CALC, "(a/d-b)/MAX(c,1.0)")
+	field(INPA, "$(SCLR) NPP NMS")
+	field(INPB, "200")
+	field(INPC, "905.937")
+	field(INPD, "$(SCLR).T NPP NMS")
+	field(PREC, "3")
+	field(SCAN, ".5 second")
 }
 

@@ -15,7 +15,9 @@ scalerSupport_DBD += scalerSNC.dbd
 scalerSupport_SRCS += scaler_restart.st scaler_warning.st
 
 scalerSupport_LIBS += calc
+sclaerSupport_LIBS += sscan
 scalerSupport_LIBS += std
+scalerSupport_LIBS += vme
 scalerSupport_LIBS += seq pv
 scalerSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
@@ -25,12 +27,6 @@ scalerSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 PROD_IOC_vxWorks = scaler
 # scaler.dbd will be created and installed
 DBD += scaler.dbd
-
-# scaler.dbd will be made up from these files:
-scaler_DBD += base.dbd
-scaler_DBD += calcSupport.dbd
-scaler_DBD += stdSupport.dbd
-scaler_DBD += scalerSupport.dbd
 
 # Build the main IOC entry point on workstation OSs.
 scaler_SRCS_DEFAULT += scalerMain.cpp
@@ -42,7 +38,9 @@ scaler_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 # Link in the code from the support library
 scaler_LIBS += scalerSupport
 scaler_LIBS += calc
+scaler_LIBS += sscan
 scaler_LIBS += std
+scaler_LIBS += vme
 scaler_LIBS += seq pv 
 scaler_LIBS += $(EPICS_BASE_IOC_LIBS)
 

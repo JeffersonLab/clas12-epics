@@ -10,14 +10,11 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-##DB += dbExample1.db
-##DB += dbExample2.db
-##DB += dbSubExample.db
-##DB += user.substitutions
-##DB += userHost.substitutions
+DB += scaler16m_norm.db
+DB += fcup_calc.db
 
-DB += photon_ratio.db
-DB += scaler.db
+REQ += scaler16m_norm_settings.req
+REQ += fcup_calc_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

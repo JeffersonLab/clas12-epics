@@ -1,0 +1,69 @@
+#
+# scaler16m_norm.db
+#
+# Normalize scaler values, divide by the beam current.  Note, this is
+# to be paired with stdApps's scaler16m.db.  Use calc's transform_settings.req
+# to save the settings for each transform.
+# 
+# Example:
+#   dbLoadRecords("scaler16m.db", "P=My:,S=Scaler:")
+#   dbLoadRecords("scaler16m_normalize.db", "P=My:,S=Scaler:")
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Sept 2015
+#
+
+# Normalize scaler value, divides cts by beam current
+#   calcEnable - enable disable
+#   calc_ctrl  - counts or cts/sec
+record(transform, "$(P)$(S)_norm1") {
+    field(DESC, "Scaler Normalized")
+    field(SDIS, "$(P)$(S)_calcEnabled.VAL")
+    field(FLNK, "$(P)$(S)_norm2.PROC")
+    field(COPT, "Always")
+    field(CLCB, "(j && a>0.010)?b/a:b")
+    field(CLCC, "(j && a>0.010)?c/a:c")
+    field(CLCD, "(j && a>0.010)?d/a:d")
+    field(CLCE, "(j && a>0.010)?e/a:e")
+    field(CLCF, "(j && a>0.010)?f/a:f")
+    field(CLCG, "(j && a>0.010)?g/a:g")
+    field(CLCH, "(j && a>0.010)?h/a:h")
+    field(CLCI, "(j && a>0.010)?i/a:i")
+    field(INPA, "HLB:bta_main_cur.VAL")
+    field(INPB, "$(P)$(S)_cts1.B")
+    field(INPC, "$(P)$(S)_cts1.C")
+    field(INPD, "$(P)$(S)_cts1.D")
+    field(INPE, "$(P)$(S)_cts1.E")
+    field(INPF, "$(P)$(S)_cts1.F")
+    field(INPG, "$(P)$(S)_cts1.G")
+    field(INPH, "$(P)$(S)_cts1.H")
+    field(INPI, "$(P)$(S)_cts1.I")
+    field(INPJ, "$(P)$(S)_calc_ctrl.VAL")
+    field(PREC,"3")
+}
+
+record(transform, "$(P)$(S)_norm2") {
+    field(DESC, "Scaler Normalized")
+    field(SDIS, "$(P)$(S)_calcEnabled.VAL")
+    field(COPT, "Always")
+    field(CLCB, "(j && a>0.010)?b/a:b")
+    field(CLCC, "(j && a>0.010)?c/a:c")
+    field(CLCD, "(j && a>0.010)?d/a:d")
+    field(CLCE, "(j && a>0.010)?e/a:e")
+    field(CLCF, "(j && a>0.010)?f/a:f")
+    field(CLCG, "(j && a>0.010)?g/a:g")
+    field(CLCH, "(j && a>0.010)?h/a:h")
+    field(CLCI, "(j && a>0.010)?i/a:i")
+    field(INPA, "HLB:bta_main_cur.VAL")
+    field(INPB, "$(P)$(S)_cts2.B")
+    field(INPC, "$(P)$(S)_cts2.C")
+    field(INPD, "$(P)$(S)_cts2.D")
+    field(INPE, "$(P)$(S)_cts2.E")
+    field(INPF, "$(P)$(S)_cts2.F")
+    field(INPG, "$(P)$(S)_cts2.G")
+    field(INPH, "$(P)$(S)_cts2.H")
+    field(INPI, "$(P)$(S)_cts2.I")
+    field(INPJ, "$(P)$(S)_calc_ctrl.VAL")
+    field(PREC,"3")
+}
+

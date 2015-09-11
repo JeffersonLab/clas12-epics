@@ -1,3 +1,4 @@
+# replace w/ scaler16m.db
 grecord(scaler,"scaler")
 {
 	#field(SCAN,"I/O Intr")
@@ -11,33 +12,36 @@ grecord(scaler,"scaler")
 	field(NM1,"Clock") 	# Channel 1 : clock
 }
 
+# remove
 record(ao,"scaler_command"    ) { }
+# move or use calc1
+#   uses dbpf to set slope and offset
 record(ao,"fcup_slope"    ) { }
 record(ao,"fcup_offset"    ) { }
+# not used?
 record(ao,"slm_slope"    ) { }
 record(ao,"slm_offset"    ) { }
 
+# remove, covered by .CONT?
 grecord(bo,"scaler_mode")
 {
 	field(ZNAM,"ONESHOT")
 	field(ONAM,"CONTINUOUS")
 }
 
+# remove or create scaler16m_out.db and set OUTA-P
 grecord(ao,"scalerS2a"){}
 grecord(ao,"scalerS3a"){}
 grecord(ao,"scalerS4a"){}
 grecord(ao,"scalerS5a"){}
-
 grecord(ao,"scalerS6a"){}
 grecord(ao,"scalerS7a"){}
 grecord(ao,"scalerS8a"){}
 grecord(ao,"scalerS9a"){}
-
 grecord(ao,"scalerS10a"){}
 grecord(ao,"scalerS11a"){}
 grecord(ao,"scalerS12a"){}
 grecord(ao,"scalerS13a"){}
-
 grecord(ao,"scalerS14a"){}
 grecord(ao,"scalerS15a"){}
 grecord(ao,"scalerS16a"){}
@@ -46,22 +50,19 @@ grecord(ao,"scalerS2b"){}
 grecord(ao,"scalerS3b"){}
 grecord(ao,"scalerS4b"){}
 grecord(ao,"scalerS5b"){}
-
 grecord(ao,"scalerS6b"){}
 grecord(ao,"scalerS7b"){}
 grecord(ao,"scalerS8b"){}
 grecord(ao,"scalerS9b"){}
-
 grecord(ao,"scalerS10b"){}
 grecord(ao,"scalerS11b"){}
 grecord(ao,"scalerS12b"){}
 grecord(ao,"scalerS13b"){}
-
 grecord(ao,"scalerS14b"){}
 grecord(ao,"scalerS15b"){}
 grecord(ao,"scalerS16b"){}
 
-
+# remove, replaced by CNT/CONT?
 grecord(bo,"scaler_restart")
 {
 	field(DISV,"0")
@@ -73,6 +74,7 @@ grecord(bo,"scaler_restart")
 	field(ONAM,"COUNT")
 }
 
+# remove?
 #grecord(wait,"scaler_wait")
 grecord(calcout,"scaler_wait")
 {
@@ -85,6 +87,7 @@ grecord(calcout,"scaler_wait")
 	field(OCAL, "1")
 }
 
+# remove, replaced w/ cts1.A-* and norm1-2?
 grecord(mbbo,"display_mode")
 {
 	field(FLNK,"scaler_calc1.PROC PP MS")
@@ -99,6 +102,7 @@ grecord(mbbo,"display_mode")
 	field(TWVL,"2"  )
 }
 
+# move
 # Faraday cup
 grecord(calc,"scaler_calc1")
 {
@@ -113,7 +117,7 @@ grecord(calc,"scaler_calc1")
 }
 
 
-
+# replaced
 # Frequency 2-5
 grecord(transform,"scaler_cts1")
 {
@@ -141,6 +145,7 @@ grecord(transform,"scaler_cts1")
 	field(PREC,"3")
 }
 
+# replaced
 # Frequency 6-9
 grecord(transform,"scaler_cts2")
 {
@@ -168,6 +173,7 @@ grecord(transform,"scaler_cts2")
 	field(PREC,"3")
 }
 
+# replaced
 # Frequency 10-13
 grecord(transform,"scaler_cts3")
 {
@@ -194,6 +200,7 @@ grecord(transform,"scaler_cts3")
 	field(PREC,"3")
 }
 
+# replaced
 # Frequency 14-15
 grecord(transform,"scaler_cts4")
 {
@@ -217,6 +224,7 @@ grecord(transform,"scaler_cts4")
 	field(PREC,"3")
 }
 
+# replaced
 # Normalise 2-5
 grecord(transform,"scaler_cts5")
 {
@@ -245,6 +253,7 @@ grecord(transform,"scaler_cts5")
 	field(PREC,"3")
 }
 
+# replaced
 # Normalise 6-9
 grecord(transform,"scaler_cts6")
 {
@@ -273,6 +282,7 @@ grecord(transform,"scaler_cts6")
 	field(PREC,"3")
 }
 
+# replaced
 # Normalise 10-13
 grecord(transform,"scaler_cts7")
 {
@@ -300,7 +310,7 @@ grecord(transform,"scaler_cts7")
 	field(PREC,"3")
 }
 
-
+# replaced
 # Normalise 14-15
 grecord(transform,"scaler_cts8")
 {
@@ -324,14 +334,4 @@ grecord(transform,"scaler_cts8")
 
 	field(PREC,"3")
 }
-
-
-
-
-
-
-
-
-
-
 

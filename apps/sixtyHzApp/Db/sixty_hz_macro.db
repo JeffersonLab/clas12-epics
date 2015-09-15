@@ -1,15 +1,19 @@
 grecord(mca,"sixtyHz_$(CHAN)") 
 { 
-   field(DTYP, "Struck STR7201 MCS") 
-   field(MODE, "MCS")
-   field(CHAS, "0")
-   field(DWEL, "0.002441406")
-   field(FLNK, "0")
-   field(FTVL, "6")
+   field(DTYP, "asynMCA") 
+   field(PINI, "YES")
    field(NMAX, "$(FIFO)")
-   field(PREC, "7")
    field(NUSE, "$(FIFO)")
-   field(INP, "#C0 S$(CHAN) @")
+   field(PREC, "7")
+   field(INP, "$(INP)")
+   field(MODE, "MCS")
+   field(DWEL, "0.002441406")
+   alias("SIS:3801:mca$(CHAN)")
+# old settings
+#   field(CHAS, "0")
+#   field(FLNK, "0")
+#   field(FTVL, "6")
+#   field(INP, "#C0 S$(CHAN) @")
 } 
 
 grecord(waveform,"sixtyHz_copy_$(CHAN)") 
@@ -74,9 +78,9 @@ grecord(ao, "cw_to_total_ratio_$(CHAN)"){
 grecord(waveform,"sixtyHz_raw_$(CHAN)") 
 { 
    field(DTYP, "Soft Channel") 
-   field(NELM, "2048")
+   field(NELM, "$(HALF_FIFO)")
    field(LOPR, "0")
-   field(HOPR, "2048")
+   field(HOPR, "$(FIFO)")
    field(FTVL, "3")
 } 
 grecord(ao, "peak2peak_$(CHAN)"){

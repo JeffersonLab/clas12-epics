@@ -161,7 +161,7 @@ const char *groupNames[]  = {"EC_LTCC",      "FTOF_PC",      "DC",      NULL};
 const char *groupTitles[] = {"EC and LTCC",  "FTOF and PC",  "DC",      NULL};
 
 //The detectors involved in each grouping, when they are written as groups
-int groupDets[3][5] = { ECAL,  LTCC, -1, -1, -1,
+int groupDets[][5] = { ECAL,  LTCC, -1, -1, -1,
 			FTOF,  PCAL, -1, -1, -1,
 			DC,    -1,   -1, -1, -1};
 
@@ -252,7 +252,6 @@ int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
   
   //Detector Sector,Layer, ...
   const char *det_template   ="B_%s_%s_%s%d_%s%s_%s_E%02d";
-  const char *macro_template ="%s%d_%s%s_%s_E%02d";
 
   int maxSlot=7;
   int maxChan=23;
@@ -311,7 +310,6 @@ int LTCCGen(int crate0=1, int slot0=14, int chan0=0,int det=LTCC ){
   
   //Detector Sector,Layer, ...
   const char *det_template   ="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template ="%s%d_%s_E%02d";
 
   int maxSlot=15;
   int maxChan=17;
@@ -366,7 +364,6 @@ int PCGen(int crate0=1, int slot0=8, int chan0=0, int det=PCAL ){
   
   //Detector Sector,Layer, ...
   const char *det_template="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template="%s%d_%s_E%02d";
 
   int minSlot=8;
   int maxSlot=15;
@@ -426,7 +423,6 @@ int ECGen(int crate0=1, int slot0=0, int chan0=0, int det=ECAL  ){
   const char  *SysFull[]={ "Sector", "Layer UI,UO,VI,VO,WI,WO", "Element 1 - 36" };
   
   const char *det_template="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template="%s%d_%s_E%02d";
 
   
   int maxSlot=8;
@@ -479,7 +475,6 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
 
   //Detector Sector,SuperLayer,
   const char *det_template="B_%s_%s_%s%d_%s%d_%s%d_%s%s";
-  const char *macro_template="%s%d_%s%d_%s%d_%s%s";
 
   int maxSlot=9;
   int maxChan=23;

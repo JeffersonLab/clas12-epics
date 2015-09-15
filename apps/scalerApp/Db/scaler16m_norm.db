@@ -13,12 +13,20 @@
 # Date:   Sept 2015
 #
 
+record(bo, "$(P)$(S)_norm1_enable") {
+    field(OMSL, "closed_loop")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(UDF, "0")
+    field(STAT, "NO_ALARM")
+    field(SEVR, "NO_ALARM")
+}
+
 # Normalize scaler value, divides cts by beam current
-#   calcEnable - enable disable
 #   calc_ctrl  - counts or cts/sec
 record(transform, "$(P)$(S)_norm1") {
     field(DESC, "Scaler Normalized")
-    field(SDIS, "$(P)$(S)_calcEnabled.VAL")
+    field(SDIS, "$(P)$(S)_norm1_enable.VAL")
     field(FLNK, "$(P)$(S)_norm2.PROC")
     field(COPT, "Always")
     field(CLCB, "(j && a>0.010)?b/a:b")
@@ -42,9 +50,18 @@ record(transform, "$(P)$(S)_norm1") {
     field(PREC,"3")
 }
 
+record(bo, "$(P)$(S)_norm2_enable") {
+    field(OMSL, "closed_loop")
+    field(ZNAM, "Disable")
+    field(ONAM, "Enable")
+    field(UDF, "0")
+    field(STAT, "NO_ALARM")
+    field(SEVR, "NO_ALARM")
+}
+
 record(transform, "$(P)$(S)_norm2") {
     field(DESC, "Scaler Normalized")
-    field(SDIS, "$(P)$(S)_calcEnabled.VAL")
+    field(SDIS, "$(P)$(S)_norm2_enabled.VAL")
     field(COPT, "Always")
     field(CLCB, "(j && a>0.010)?b/a:b")
     field(CLCC, "(j && a>0.010)?c/a:c")

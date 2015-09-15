@@ -1,0 +1,64 @@
+## Register all support components
+dbLoadDatabase("../../dbd/scaler.dbd")
+scaler_registerRecordDeviceDriver(pdbbase)
+
+## Struck Scalers
+epicsEnvSet("MAX_SIGNALS",              "32")
+epicsEnvSet("MAX_CHANS",                "4096")
+epicsEnvSet("HALF_CHANS",               "2048")
+epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", "100000")
+epicsEnvSet("PORT",                     "SIS38XX_1")
+#drvSIS3801Config("Port name",
+#                  baseAddress,
+#                  interruptVector,
+#                  int interruptLevel,
+#                  channels,<st
+#                  signals)
+drvSIS3801Config($(PORT), 0x08000000, 221, 6, $(MAX_CHANS), $(MAX_SIGNALS))
+
+dbLoadRecords("../../db/sixty_hz_common.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=0, INP=@asyn($(PORT) 0)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=1, INP=@asyn($(PORT) 1)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=2, INP=@asyn($(PORT) 2)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=3, INP=@asyn($(PORT) 3)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=4, INP=@asyn($(PORT) 4)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=5, INP=@asyn($(PORT) 5)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=6, INP=@asyn($(PORT) 6)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=7, INP=@asyn($(PORT) 7)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=8, INP=@asyn($(PORT) 8)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=9, INP=@asyn($(PORT) 9)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=10, INP=@asyn($(PORT) 10)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=11, INP=@asyn($(PORT) 11)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=12, INP=@asyn($(PORT) 12)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=13, INP=@asyn($(PORT) 13)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=14, INP=@asyn($(PORT) 14)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=15, INP=@asyn($(PORT) 15)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=16, INP=@asyn($(PORT) 16)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=17, INP=@asyn($(PORT) 17)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=18, INP=@asyn($(PORT) 18)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=19, INP=@asyn($(PORT) 19)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=20, INP=@asyn($(PORT) 20)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=21, INP=@asyn($(PORT) 21)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=22, INP=@asyn($(PORT) 22)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=23, INP=@asyn($(PORT) 23)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=24, INP=@asyn($(PORT) 24)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=25, INP=@asyn($(PORT) 25)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=26, INP=@asyn($(PORT) 26)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=27, INP=@asyn($(PORT) 27)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=28, INP=@asyn($(PORT) 28)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=29, INP=@asyn($(PORT) 29)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=30, INP=@asyn($(PORT) 30)")
+dbLoadRecords("../../db/sixty_hz_macro.db", "FIFO=$(MAX_CHANS), HALF_FIFO=$(HALF_CHANS), CHAN=31, INP=@asyn($(PORT) 31)")
+
+## Joerger Scalers
+dbLoadRecords("$(STD)/stdApp/Db/scaler16m.db","P=HB:,S=SCLR,OUT=#C1 S0 @,DTYP=Joerger VSC8/16,FREQ=10000000")
+dbLoadRecords("../../db/scaler16m_norm.db", "P=HB:,S=SCLR")
+VSCSetup(2, 0x0a000000, 200)
+
+## FCUP
+dbLoadRecords("../../db/fcup_calc.db", "SCLR=HB:SCLR,CH=S2")
+
+iocInit
+
+## Start any sequence programs
+seq &sixtyHz

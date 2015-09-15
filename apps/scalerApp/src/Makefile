@@ -14,7 +14,6 @@ scalerSupport_DBD += scalerSNC.dbd
 
 scalerSupport_SRCS += scaler_restart.st scaler_warning.st
 
-scalerSupport_LIBS += calc
 sclaerSupport_LIBS += sscan
 scalerSupport_LIBS += std
 scalerSupport_LIBS += vme
@@ -37,10 +36,16 @@ scaler_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
 scaler_LIBS += scalerSupport
+scaler_LIBS += sixty_hzSupport
+scaler_LIBS += SIS38XX
+scaler_LIBS += mca
+scaler_LIBS += std
+#scaler_LIBS += autosave
+scaler_LIBS += busy
 scaler_LIBS += calc
 scaler_LIBS += sscan
-scaler_LIBS += std
 scaler_LIBS += vme
+scaler_LIBS += asyn
 scaler_LIBS += seq pv 
 scaler_LIBS += $(EPICS_BASE_IOC_LIBS)
 

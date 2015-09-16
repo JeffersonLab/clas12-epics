@@ -83,6 +83,7 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=iocscalerTest:")
 create_monitor_set("info_settings.req", 30, "P=iocscalerTest:")
 create_monitor_set("scaler16m_settings.req", 30, "P=HB:,S=SCLR")
+create_monitor_set("sixty_hz_settings.req", 30)
 
 ## Start any sequence programs
 seq &sixtyHz

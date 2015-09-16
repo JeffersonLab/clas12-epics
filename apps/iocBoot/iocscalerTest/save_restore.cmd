@@ -22,3 +22,6 @@ set_requestfile_path(std,      "stdApp/Db")
 set_pass0_restoreFile("info_positions.sav")
 set_pass0_restoreFile("info_settings.sav")
 set_pass1_restoreFile("info_settings.sav")
+set_pass1_restoreFile("scaler16m_settings.sav")
+set_pass1_restoreFile("sixty_hz_settings.sav")
+

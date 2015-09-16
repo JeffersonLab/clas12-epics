@@ -1,4 +1,6 @@
+#
 # nfsCommands
+#
 hostAdd "hallb-rtr","129.57.90.33"
 hostAdd "site-rtr","129.57.32.1"
 hostAdd "cagw","129.57.255.4"
@@ -11,3 +13,6 @@ hostAdd "classc12","129.57.160.18"
 
 routeNetAdd ("0.0.0.0","129.57.160.1")
 
+# nfs mount for $(IOCDATA), autosave, etc.
+hostAdd("clonfs1","129.57.167.16")
+nfsMount("clonfs1","/vol/clas12","/usr/clas12")

@@ -14,7 +14,7 @@ scalerSupport_DBD += scalerSNC.dbd
 
 scalerSupport_SRCS += scaler_restart.st scaler_warning.st
 
-sclaerSupport_LIBS += sscan
+scalerSupport_LIBS += sscan
 scalerSupport_LIBS += std
 scalerSupport_LIBS += vme
 scalerSupport_LIBS += seq pv
@@ -40,7 +40,7 @@ scaler_LIBS += sixty_hzSupport
 scaler_LIBS += SIS38XX
 scaler_LIBS += mca
 scaler_LIBS += std
-#scaler_LIBS += autosave
+scaler_LIBS += devIocStats autosave
 scaler_LIBS += busy
 scaler_LIBS += calc
 scaler_LIBS += sscan

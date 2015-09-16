@@ -42,10 +42,8 @@ sixty_hz_LIBS += sixty_hzSupport
 sixty_hz_LIBS += mca SIS38XX
 sixty_hz_LIBS += sscan
 sixty_hz_LIBS += autosave
-#sixty_hz_LIBS += vme
 sixty_hz_LIBS += std
 sixty_hz_LIBS += asyn
-sixty_hz_LIBS += SIS38XX
 
 # NOTE: To build SNL programs, SNCSEQ must be defined
 # in the <top>/configure/RELEASE file

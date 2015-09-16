@@ -26,7 +26,6 @@ scaler_registerRecordDeviceDriver(pdbbase)
 #                  signals)
 drvSIS3801Config("SIS38XX_1", 0x08000000, 221, 6, 4096, 32)
 
-dbLoadRecords("$(TOP)/db/sixty_hz_common.db", "FIFO=4096, HALF_FIFO=2048")
 dbLoadRecords("$(TOP)/db/sixty_hz_macro.db", "FIFO=4096, HALF_FIFO=2048, CHAN=0, INP=@asyn(SIS38XX_1 0)")
 dbLoadRecords("$(TOP)/db/sixty_hz_macro.db", "FIFO=4096, HALF_FIFO=2048, CHAN=1, INP=@asyn(SIS38XX_1 1)")
 dbLoadRecords("$(TOP)/db/sixty_hz_macro.db", "FIFO=4096, HALF_FIFO=2048, CHAN=2, INP=@asyn(SIS38XX_1 2)")

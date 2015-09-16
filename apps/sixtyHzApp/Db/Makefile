@@ -10,7 +10,6 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-DB += sixty_hz_common.db
 DB += sixty_hz.db
 DB += sixty_hz_macro.db
 

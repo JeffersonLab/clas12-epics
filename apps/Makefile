@@ -19,6 +19,7 @@ iocBoot_DEPEND_DIRS    += $(filter %App,$(DIRS))
 #
 caenHvApp_DEPEND_DIRS  += syX527App
 scalerApp_DEPEND_DIRS  += sixtyHzApp				# to be rm'd later
+classc1App_DEPEND_DIRS += bomApp  	                # vme crate
 classc4App_DEPEND_DIRS += scalerApp sixtyHzApp  	# vme crate
 
 

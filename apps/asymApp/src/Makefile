@@ -44,7 +44,6 @@ asym_LIBS += mca
 asym_LIBS += std
 asym_LIBS += asyn
 asym_LIBS += SIS38XX
-#asym_LIBS += mcaCanberra
 
 # NOTE: To build SNL progra
 # ms, SNCSEQ must be defined

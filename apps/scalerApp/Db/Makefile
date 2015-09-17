@@ -10,6 +10,7 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
+DB += joerger_scalers.substitutions
 DB += scaler16m_norm.db
 DB += fcup_calc.db
 

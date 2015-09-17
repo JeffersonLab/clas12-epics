@@ -12,6 +12,8 @@ DBD += classc4.dbd
 
 # classc4.dbd will include these files:
 classc4_DBD += base.dbd
+classc4_DBD += asSupport.dbd
+classc4_DBD += devIocStats.dbd
 classc4_DBD += scalerSupport.dbd
 classc4_DBD += sixty_hzSupport.dbd
 
@@ -26,22 +28,10 @@ classc4_SRCS_vxWorks += -nil-
 classc4_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from our support library
+classc4_LIBS += autosave
+classc4_LIBS += devIocStats
 classc4_LIBS += scalerSupport
 classc4_LIBS += sixty_hzSupport
-
-# To build SNL programs, SNCSEQ must be defined
-# in the <top>/configure/RELEASE file
-ifneq ($(SNCSEQ),)
-    # Build sncExample into classc4Support
-#    sncExample_SNCFLAGS += +r
-#    classc4_DBD += sncExample.dbd
-#    classc4Support_SRCS += sncExample.stt
-#    classc4Support_LIBS += seq pv
-#    classc4_LIBS += seq pv
-
-endif
-
-# Finally link IOC to the EPICS Base libraries
 classc4_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

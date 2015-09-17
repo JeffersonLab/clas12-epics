@@ -1,37 +1,25 @@
-grecord(mca,"asym_$(CHAN)") 
-{ 
-   field(DTYP, "Struck STR7201 MCS") 
+record(mca,"asym_$(CHAN)") { 
+   field(DTYP, "asynMCA") 
    field(MODE, "MCS")
-   field(CHAS, "0")
-   field(DWEL, "0")
-   field(FLNK, "0")
-   field(FTVL, "6")
+   field(INP, "$(INP)")
    field(NMAX, "$(FIFO)")
-   field(PREC, "0")
    field(NUSE, "$(FIFO)")
-#   field(INP, "#C0 S$(CHAN) @")
-   field(INP, "#C0 S$(CHAN)")
-} 
-grecord(ao,"q_asym_$(CHAN)")
-{
+   field(FTVL, "6")
+   field(PREC, "0")
+#   field(INP, "#C0 S$(CHAN)")
+}
+
+record(ao,"q_asym_$(CHAN)") {
    field(PREC, "4")
 }
-grecord(ao,"d_asym_$(CHAN)")
-{
+
+record(ao,"d_asym_$(CHAN)") {
    field(PREC, "6")
 }
 
 record(bi,"asym_calc_enable_$(CHAN)") {
-	field(DESC,"multibit binary input record")
 	field(SCAN,"Passive")
-	field(PINI,"NO")
-	field(PHAS,"0")
-	field(EVNT,"0")
-	field(DTYP,"Soft Channel")
 	field(DISV,"1")
-	field(SDIS,"0.000000000000000e+00")
 	field(DISS,"NO_ALARM")
-	field(PRIO,"LOW")
-	field(FLNK,"0.000000000000000e+00")
 	field(INP,"1")
 }

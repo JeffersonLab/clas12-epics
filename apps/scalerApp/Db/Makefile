@@ -10,15 +10,14 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-DB += scaler16m_addons.db
+DB += joerger.db
 DB += fcup_calc.db
+DB += photon_ratio.db
 DB += joerger_classc1.substitutions
-DB += joerger_classc4.substitutions
 
-REQ += scaler16m_addons_settings.req
-REQ += fcup_calc_settings.req
-REQ += joergerN_settings.req
 REQ += joerger_settings.req
+REQ += fcup_calc_settings.req
+REQ += joerger_classc1_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

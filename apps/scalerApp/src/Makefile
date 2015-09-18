@@ -8,15 +8,21 @@ include $(TOP)/configure/CONFIG
 # Build the IOC support library
 
 LIBRARY_IOC_vxWorks += scalerSupport
+
 DBD += scalerSupport.dbd
 
 scalerSupport_DBD += scalerSNC.dbd
-
 scalerSupport_SRCS += scaler_restart.st
 
-scalerSupport_LIBS += sscan
+##scalerSupport_LIBS += sixty_hzSupport
+scalerSupport_LIBS += SIS38XX
+##scalerSupport_LIBS += mca
 scalerSupport_LIBS += std
+scalerSupport_LIBS += busy
+scalerSupport_LIBS += calc
+scalerSupport_LIBS += sscan
 scalerSupport_LIBS += vme
+scalerSupport_LIBS += asyn
 scalerSupport_LIBS += seq pv
 scalerSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
@@ -27,6 +33,9 @@ PROD_IOC_vxWorks = scaler
 # scaler.dbd will be created and installed
 DBD += scaler.dbd
 
+scaler_DBD += base.dbd
+scaler_DBD += scalerSupport.dbd
+
 # Build the main IOC entry point on workstation OSs.
 scaler_SRCS_DEFAULT += scalerMain.cpp
 scaler_SRCS_vxWorks += scaler_registerRecordDeviceDriver.cpp
@@ -36,17 +45,7 @@ scaler_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
 scaler_LIBS += scalerSupport
-scaler_LIBS += sixty_hzSupport
-scaler_LIBS += SIS38XX
-scaler_LIBS += mca
-scaler_LIBS += std
 scaler_LIBS += devIocStats autosave
-scaler_LIBS += busy
-scaler_LIBS += calc
-scaler_LIBS += sscan
-scaler_LIBS += vme
-scaler_LIBS += asyn
-scaler_LIBS += seq pv 
 scaler_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

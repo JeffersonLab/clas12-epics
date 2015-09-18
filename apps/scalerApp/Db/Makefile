@@ -13,11 +13,9 @@ include $(TOP)/configure/CONFIG
 DB += joerger.db
 DB += fcup_calc.db
 DB += photon_ratio.db
-DB += joerger_classc1.substitutions
 
 REQ += joerger_settings.req
 REQ += fcup_calc_settings.req
-REQ += joerger_classc1_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

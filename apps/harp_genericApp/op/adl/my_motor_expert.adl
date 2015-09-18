@@ -1,0 +1,1733 @@
+
+file {
+	name="/home/freyberg/EPICS/app/harp_generic/medm/motor_expert.adl"
+	version=020305
+}
+display {
+	object {
+		x=10
+		y=10
+		width=438
+		height=625
+	}
+	clr=14
+	bclr=3
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+text {
+	object {
+		x=155
+		y=4
+		width=180
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="(epics: $(motor_name))"
+}
+text {
+	object {
+		x=3
+		y=47
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Hi limit"
+}
+text {
+	object {
+		x=1
+		y=71
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Readback"
+}
+text {
+	object {
+		x=1
+		y=126
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Lo limit"
+}
+text {
+	object {
+		x=2
+		y=99
+		width=64
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="MoveAbs"
+}
+text {
+	object {
+		x=0
+		y=187
+		width=57
+		height=19
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Tweak"
+}
+text {
+	object {
+		x=-1
+		y=161
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="MoveRel"
+}
+rectangle {
+	object {
+		x=240
+		y=183
+		width=49
+		height=24
+	}
+	"basic attribute" {
+		clr=1
+		fill="outline"
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).HOMF"
+	}
+}
+rectangle {
+	object {
+		x=189
+		y=183
+		width=49
+		height=24
+	}
+	"basic attribute" {
+		clr=1
+		fill="outline"
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).HOMR"
+	}
+}
+"message button" {
+	object {
+		x=169
+		y=187
+		width=15
+		height=20
+	}
+	control {
+		chan="$(motor_name).TWF"
+		clr=14
+		bclr=51
+	}
+	label=">"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=77
+		y=187
+		width=15
+		height=20
+	}
+	control {
+		chan="$(motor_name).TWR"
+		clr=14
+		bclr=51
+	}
+	label="<"
+	press_msg="1"
+}
+"text entry" {
+	object {
+		x=93
+		y=187
+		width=76
+		height=20
+	}
+	control {
+		chan="$(motor_name).TWV"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"message button" {
+	object {
+		x=192
+		y=160
+		width=45
+		height=20
+	}
+	control {
+		chan="$(motor_name).JOGR"
+		clr=14
+		bclr=51
+	}
+	label="JogR"
+	press_msg="1"
+	release_msg="0"
+}
+"message button" {
+	object {
+		x=242
+		y=160
+		width=45
+		height=20
+	}
+	control {
+		chan="$(motor_name).JOGF"
+		clr=14
+		bclr=51
+	}
+	label="JogF"
+	press_msg="1"
+	release_msg="0"
+}
+"text entry" {
+	object {
+		x=83
+		y=160
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).RLV"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"message button" {
+	object {
+		x=242
+		y=185
+		width=45
+		height=20
+	}
+	control {
+		chan="$(motor_name).HOMF"
+		clr=14
+		bclr=51
+	}
+	label="HomF"
+	press_msg="1"
+	release_msg="0"
+}
+"message button" {
+	object {
+		x=191
+		y=185
+		width=45
+		height=20
+	}
+	control {
+		chan="$(motor_name).HOMR"
+		clr=14
+		bclr=51
+	}
+	label="HomR"
+	press_msg="1"
+	release_msg="0"
+}
+text {
+	object {
+		x=305
+		y=315
+		width=31
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Off"
+}
+text {
+	object {
+		x=305
+		y=278
+		width=31
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Cal"
+}
+text {
+	object {
+		x=305
+		y=255
+		width=110
+		height=18
+	}
+	"basic attribute" {
+		clr=0
+		fill="outline"
+	}
+	textix="Calibration"
+}
+"choice button" {
+	object {
+		x=336
+		y=276
+		width=100
+		height=21
+	}
+	control {
+		chan="$(motor_name).SET"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+"text entry" {
+	object {
+		x=336
+		y=299
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).OFF"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+composite {
+	object {
+		x=305
+		y=350
+		width=131
+		height=21
+	}
+	"composite name"=""
+	vis="static"
+	chan=""
+	children {
+		text {
+			object {
+				x=305
+				y=353
+				width=31
+				height=18
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+			}
+			textix="Dir"
+		}
+		"choice button" {
+			object {
+				x=336
+				y=350
+				width=100
+				height=21
+			}
+			control {
+				chan="$(motor_name).DIR"
+				clr=14
+				bclr=51
+			}
+			stacking="column"
+		}
+	}
+}
+"text entry" {
+	object {
+		x=190
+		y=290
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).BACC"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=87
+		y=290
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).ACCL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=293
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Accel."
+}
+"text entry" {
+	object {
+		x=190
+		y=315
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).BDST"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=318
+		width=177
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Backlash distance"
+}
+"text entry" {
+	object {
+		x=190
+		y=340
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).FRAC"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=343
+		width=177
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Move Fraction"
+}
+text {
+	object {
+		x=98
+		y=25
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="User"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=196
+		y=25
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Dial"
+	align="horiz. centered"
+}
+"text entry" {
+	object {
+		x=87
+		y=240
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).VELO"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=243
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Speed"
+}
+text {
+	object {
+		x=101
+		y=220
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Normal"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=200
+		y=220
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Backlash"
+	align="horiz. centered"
+}
+"text entry" {
+	object {
+		x=140
+		y=400
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).MRES"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=403
+		width=125
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Motor res."
+}
+"text entry" {
+	object {
+		x=140
+		y=425
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).ERES"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=428
+		width=128
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Encoder res."
+}
+"text entry" {
+	object {
+		x=140
+		y=475
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).RDBD"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=478
+		width=127
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Retry deadband"
+}
+"text entry" {
+	object {
+		x=170
+		y=500
+		width=50
+		height=25
+	}
+	control {
+		chan="$(motor_name).RTRY"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=131
+		y=503
+		width=44
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="max:"
+}
+"text update" {
+	object {
+		x=73
+		y=503
+		width=50
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).RCNT"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=4
+		y=503
+		width=60
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Retries"
+}
+text {
+	object {
+		x=255
+		y=420
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="CurrDir"
+}
+"text update" {
+	object {
+		x=333
+		y=420
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).TDIR"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=255
+		y=440
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Moving"
+}
+"text update" {
+	object {
+		x=333
+		y=440
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).MOVN"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=333
+		y=400
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).MSTA"
+		clr=54
+		bclr=3
+	}
+	format="hexadecimal"
+	limits {
+	}
+}
+text {
+	object {
+		x=255
+		y=400
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="State  0x"
+}
+text {
+	object {
+		x=255
+		y=460
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="At Home"
+}
+text {
+	object {
+		x=255
+		y=500
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Encoder"
+}
+text {
+	object {
+		x=255
+		y=480
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="MotorPos"
+}
+text {
+	object {
+		x=255
+		y=520
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="MIP    0x"
+}
+"text update" {
+	object {
+		x=333
+		y=540
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).DIFF"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=254
+		y=540
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Err"
+}
+"text update" {
+	object {
+		x=333
+		y=460
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).ATHM"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=333
+		y=500
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).REP"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=333
+		y=480
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).RMP"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=333
+		y=520
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).MIP"
+		clr=54
+		bclr=3
+	}
+	format="hexadecimal"
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=593
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Mode"
+}
+"choice button" {
+	object {
+		x=140
+		y=525
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).UEIP"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+text {
+	object {
+		x=2
+		y=528
+		width=118
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Use Encoder"
+}
+"choice button" {
+	object {
+		x=140
+		y=550
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).URIP"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+text {
+	object {
+		x=2
+		y=553
+		width=118
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Use Readback"
+}
+"text entry" {
+	object {
+		x=140
+		y=450
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).RRES"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=453
+		width=128
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Readback res."
+}
+text {
+	object {
+		x=254
+		y=578
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="VME Card#"
+}
+"choice button" {
+	object {
+		x=35
+		y=584
+		width=100
+		height=37
+	}
+	control {
+		chan="$(motor_name).MODE"
+		clr=14
+		bclr=51
+	}
+}
+"choice button" {
+	object {
+		x=140
+		y=584
+		width=100
+		height=37
+	}
+	control {
+		chan="$(motor_name).OMSL"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=1
+		y=220
+		width=75
+		height=18
+	}
+	"basic attribute" {
+		clr=0
+		fill="outline"
+	}
+	textix="Dynamics"
+}
+text {
+	object {
+		x=340
+		y=25
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Raw"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=285
+		y=25
+		width=29
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Lim"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=2
+		y=25
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=0
+		fill="outline"
+	}
+	textix="Drive"
+}
+text {
+	object {
+		x=290
+		y=77
+		width=40
+		height=13
+	}
+	"basic attribute" {
+		clr=54
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).MOVN"
+	}
+	textix="Moving"
+}
+text {
+	object {
+		x=289
+		y=67
+		width=40
+		height=13
+	}
+	"basic attribute" {
+		clr=54
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).DMOV"
+	}
+	textix="Done"
+}
+"text update" {
+	object {
+		x=83
+		y=72
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).RBV"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=187
+		y=72
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).DRBV"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=335
+		y=71
+		width=100
+		height=19
+	}
+	monitor {
+		chan="$(motor_name).RRBV"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=83
+		y=96
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).VAL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=83
+		y=123
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).LLM"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+composite {
+	object {
+		x=83
+		y=44
+		width=204
+		height=25
+	}
+	"composite name"=""
+	vis="static"
+	chan="$(motor_name).SET"
+	children {
+		"text entry" {
+			object {
+				x=187
+				y=44
+				width=100
+				height=25
+			}
+			control {
+				chan="$(motor_name).DHLM"
+				clr=14
+				bclr=51
+			}
+			limits {
+			}
+		}
+		"text entry" {
+			object {
+				x=83
+				y=44
+				width=100
+				height=25
+			}
+			control {
+				chan="$(motor_name).HLM"
+				clr=14
+				bclr=51
+			}
+			limits {
+			}
+		}
+	}
+}
+"text entry" {
+	object {
+		x=187
+		y=96
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).DVAL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=187
+		y=123
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).DLLM"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=190
+		y=240
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).BVEL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"choice button" {
+	object {
+		x=340
+		y=130
+		width=90
+		height=80
+	}
+	control {
+		chan="$(motor_name).SPMG"
+		clr=31
+		bclr=20
+	}
+}
+oval {
+	object {
+		x=290
+		y=44
+		width=21
+		height=21
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).HLS"
+	}
+}
+oval {
+	object {
+		x=290
+		y=123
+		width=21
+		height=21
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).LLS"
+	}
+}
+text {
+	object {
+		x=2
+		y=375
+		width=75
+		height=18
+	}
+	"basic attribute" {
+		clr=0
+		fill="outline"
+	}
+	textix="Setup"
+}
+text {
+	object {
+		x=255
+		y=375
+		width=75
+		height=18
+	}
+	"basic attribute" {
+		clr=0
+		fill="outline"
+	}
+	textix="Status"
+}
+rectangle {
+	object {
+		x=81
+		y=94
+		width=356
+		height=29
+	}
+	"basic attribute" {
+		clr=30
+		width=1
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).LVIO"
+	}
+}
+text {
+	object {
+		x=83
+		y=147
+		width=204
+		height=13
+	}
+	"basic attribute" {
+		clr=30
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).LVIO"
+	}
+	textix="Soft-Limit Violation"
+	align="horiz. centered"
+}
+"text entry" {
+	object {
+		x=140
+		y=265
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).VBAS"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=2
+		y=268
+		width=80
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Base Speed"
+}
+"text entry" {
+	object {
+		x=335
+		y=96
+		width=100
+		height=25
+	}
+	control {
+		chan="$(motor_name).RVAL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=333
+		y=560
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).VERS"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=254
+		y=560
+		width=73
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+	textix="Version"
+}
+"text entry" {
+	object {
+		x=0
+		y=0
+		width=150
+		height=25
+	}
+	control {
+		chan="$(motor_name).DESC"
+		clr=14
+		bclr=3
+	}
+	limits {
+	}
+}
+composite {
+	object {
+		x=254
+		y=600
+		width=179
+		height=25
+	}
+	"composite name"=""
+	vis="static"
+	chan=""
+	children {
+		"text entry" {
+			object {
+				x=333
+				y=600
+				width=100
+				height=25
+			}
+			control {
+				chan="$(motor_name).PREC"
+				clr=14
+				bclr=51
+			}
+			limits {
+			}
+		}
+		text {
+			object {
+				x=254
+				y=603
+				width=99
+				height=18
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+			}
+			textix="Precision"
+		}
+	}
+}
+"text entry" {
+	object {
+		x=345
+		y=0
+		width=90
+		height=20
+	}
+	control {
+		chan="$(motor_name).EGU"
+		clr=14
+		bclr=3
+	}
+	limits {
+	}
+}
+composite {
+	object {
+		x=79
+		y=69
+		width=210
+		height=22
+	}
+	"composite name"=""
+	vis="static"
+	chan="$(motor_name).SET"
+	children {
+		rectangle {
+			object {
+				x=81
+				y=71
+				width=206
+				height=18
+			}
+			"basic attribute" {
+				clr=30
+				fill="outline"
+				width=2
+			}
+			"dynamic attribute" {
+				vis="if not zero"
+				chan="$(motor_name).SET"
+			}
+		}
+		rectangle {
+			object {
+				x=79
+				y=69
+				width=210
+				height=22
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+				width=2
+			}
+			"dynamic attribute" {
+				vis="if not zero"
+				chan="$(motor_name).SET"
+			}
+		}
+	}
+}
+text {
+	object {
+		x=60
+		y=85
+		width=20
+		height=13
+	}
+	"basic attribute" {
+		clr=30
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(motor_name).SET"
+	}
+	textix="SET"
+	align="horiz. centered"
+}
+"text update" {
+	object {
+		x=333
+		y=580
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name).CARD"
+		clr=54
+		bclr=3
+	}
+	limits {
+	}
+}
+menu {
+	object {
+		x=336
+		y=324
+		width=100
+		height=18
+	}
+	control {
+		chan="$(motor_name).FOFF"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=329
+		y=229
+		width=100
+		height=18
+	}
+	monitor {
+		chan="$(motor_name)_missed_steps"
+		clr=54
+		bclr=3
+	}
+	align="horiz. right"
+	limits {
+	}
+}

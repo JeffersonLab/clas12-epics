@@ -1,0 +1,99 @@
+record(calc, "radlong_at_home") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-0.0)<0.1?1:0")
+}
+record(calc, "radlong_at_1") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-114.936)<0.1?1:0")
+}
+record(calc, "radlong_at_2") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-129.668)<0.1?1:0")
+}
+record(calc, "radlong_at_3") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-144.4)<0.1?1:0")
+}
+record(calc, "radlong_at_4") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-159.132)<0.1?1:0")
+}
+record(calc, "radlong_at_5") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-173.864)<0.1?1:0")
+}
+record(calc, "radlong_at_6") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-188.596)<0.1?1:0")
+}
+record(calc, "radlong_at_7") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-203.328)<0.1?1:0")
+}
+record(calc, "radlong_at_8") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-218.06)<0.1?1:0")
+}
+record(calc, "radlong_at_9") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-232.792)<0.1?1:0")
+}
+record(calc, "radlong_at_10") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-245.524)<0.1?1:0")
+}
+record(calc, "radlong_at_11") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-260.256)<0.1?1:0")
+}
+record(calc, "radlong_at_12") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-274.988)<0.1?1:0")
+}
+record(calc, "radlong_at_13") {
+	field(INPA, "radiator_long.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-289.72)<0.1?1:0")
+}
+# These records are used to switch off
+# the beam counters in case the radiator is in.
+# This is done for TPE which will use high currents.
+# And this interlock will prevent it from damage.
+record( calcout, "cond_switch_up_top_off" )
+{
+        field(SCAN, "10 second")
+#        field(CALC, "(A>1.0)?0:1")
+        field(CALC, "(A>1.0)?0:1660")
+        field(INPA, "radiator_long.RBV")
+#        field(OUT , "B_hv_BM_US_TOP_CE PP" )
+        field(OUT , "B_hv_BM_US_TOP_DV PP" )
+	field(OOPT,"On Change")
+#	field(OOPT,"Transition to Zero")
+#	field(FLNK, "cond_switch_up_bot_off")
+}
+record( calcout, "cond_switch_up_bot_off" )
+{
+#        field(SCAN, "Passive")
+        field(SCAN, "10 second")
+#        field(CALC, "(A>1.0)?0:1")
+        field(CALC, "(A>1.0)?0:1400")
+        field(INPA, "radiator_long.RBV")
+#        field(OUT , "B_hv_BM_US_BOT_CE PP" )
+        field(OUT , "B_hv_BM_US_BOT_DV PP" )
+	field(OOPT,"On Change")
+#	field(OOPT,"Transition to Zero")
+#	field(OOPT,"Transition to Non-zero")
+}

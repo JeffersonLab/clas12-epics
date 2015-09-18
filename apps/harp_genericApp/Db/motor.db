@@ -1,0 +1,35 @@
+# harp database record
+record(stringout, "name_$(M)") 
+{
+        field(VAL,"$(M)") 
+}
+record(motor,"$(M)")
+{
+# COMMON field description
+	field(DESC,"$(M)")
+	field(DTYP,"OMS VME8/44")
+	field(OUT,"#C$(card) S$(slot) @")
+	
+# Calibration related fields
+	field(FOFF,"1"    ) #OFFset cannot change. Using the Offset cannot be a good thing to do ?
+
+# Motor resolution fields
+	field(SREV,"$(srev)" ) # Steps per revolutions 
+	field(UREV,"$(urev)"   ) # 1 revolution : .2 inchs
+
+# Motion related fields
+        field(VELO,"$(velo)")
+	field(ACCL,"$(accl)"   ) 
+	field(VBAS,"0.01" )
+	field(HLM ,"150"   )
+	field(LLM ,"-150"  )
+	field(DHLM,"150"   )
+	field(DLLM,"-150"  )
+	field(DIR,"$(direction)"  )
+
+# Other
+	field(PREC,"3"    )
+}
+record(ai, "$(M)_missed_steps") {
+    field(INP, "0")
+}

@@ -1,0 +1,430 @@
+
+file {
+	name="/home/hovanes/EPICS_ALL/app/harp_generic/medm/radiators.adl"
+	version=020306
+}
+display {
+	object {
+		x=62
+		y=374
+		width=510
+		height=100
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+composite {
+	object {
+		x=2098677258
+		y=-2147483644
+		width=1
+		height=1
+	}
+	"composite name"=""
+	children {
+	}
+}
+"text update" {
+	object {
+		x=281
+		y=55
+		width=104
+		height=18
+	}
+	monitor {
+		chan="harp_tagger.RBV"
+		clr=14
+		bclr=51
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=63
+		y=55
+		width=104
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="harp_tagger.DMOV"
+	}
+	textix="moving"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=60
+		y=55
+		width=104
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="harp_tagger.DMOV"
+	}
+	textix="done"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=10
+		y=55
+		width=86
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Motor is:"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=186
+		y=55
+		width=86
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Motor is at:"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=34
+		y=34
+		width=30
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="0.0"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=244
+		y=36
+		width=50
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="86.804"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=337
+		y=35
+		width=50
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="100.77"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=436
+		y=35
+		width=50
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="115.2"
+	align="horiz. centered"
+}
+"related display" {
+	object {
+		x=406
+		y=55
+		width=95
+		height=20
+	}
+	display[0] {
+		label="tagger harp expert"
+		name="motor_expert.adl"
+		args="motor_name=harp_tagger"
+	}
+	clr=20
+	bclr=5
+	label="expert"
+	visual="a column of buttons"
+}
+"message button" {
+	object {
+		x=221
+		y=7
+		width=85
+		height=23
+	}
+	control {
+		chan="harp_tagger.VAL"
+		clr=14
+		bclr=4
+	}
+	label="B = 2x10-5"
+	press_msg="86.804"
+	release_msg="86.804"
+}
+rectangle {
+	object {
+		x=215
+		y=5
+		width=96
+		height=27
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="rad_at_b"
+	}
+}
+composite {
+	object {
+		x=12
+		y=5
+		width=96
+		height=27
+	}
+	"composite name"=""
+	children {
+		"message button" {
+			object {
+				x=17
+				y=7
+				width=82
+				height=23
+			}
+			control {
+				chan="harp_tagger.VAL"
+				clr=14
+				bclr=4
+			}
+			label="Retract"
+			press_msg="-2"
+			release_msg="-2"
+		}
+		rectangle {
+			object {
+				x=12
+				y=5
+				width=96
+				height=27
+			}
+			"basic attribute" {
+				clr=20
+			}
+			"dynamic attribute" {
+				clr="discrete"
+				vis="if not zero"
+				chan="rad_at_home"
+			}
+		}
+	}
+}
+"message button" {
+	object {
+		x=420
+		y=7
+		width=85
+		height=23
+	}
+	control {
+		chan="harp_tagger.VAL"
+		clr=14
+		bclr=4
+	}
+	label="D = 10^-5"
+	press_msg="115.2"
+	release_msg="115.2"
+}
+rectangle {
+	object {
+		x=414
+		y=5
+		width=96
+		height=27
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="rad_at_d"
+	}
+}
+"message button" {
+	object {
+		x=321
+		y=7
+		width=85
+		height=23
+	}
+	control {
+		chan="harp_tagger.VAL"
+		clr=14
+		bclr=4
+	}
+	label="C = 10-5"
+	press_msg="100.77"
+	release_msg="100.77"
+}
+rectangle {
+	object {
+		x=315
+		y=5
+		width=96
+		height=27
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="rad_at_c"
+	}
+}
+text {
+	object {
+		x=136
+		y=35
+		width=50
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="70.485"
+	align="horiz. centered"
+}
+"message button" {
+	object {
+		x=119
+		y=7
+		width=85
+		height=23
+	}
+	control {
+		chan="harp_tagger.VAL"
+		clr=14
+		bclr=4
+	}
+	label="A = 5x10-4"
+	press_msg="70.485"
+	release_msg="70.485"
+	clrmod="discrete"
+}
+rectangle {
+	object {
+		x=114
+		y=5
+		width=96
+		height=27
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="rad_at_a"
+	}
+}

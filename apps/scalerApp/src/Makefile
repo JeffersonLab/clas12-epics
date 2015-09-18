@@ -12,7 +12,7 @@ DBD += scalerSupport.dbd
 
 scalerSupport_DBD += scalerSNC.dbd
 
-scalerSupport_SRCS += scaler_restart.st scaler_warning.st
+scalerSupport_SRCS += scaler_restart.st
 
 scalerSupport_LIBS += sscan
 scalerSupport_LIBS += std

@@ -1,0 +1,15 @@
+[Unit]
+Description=EPICS iocLogServer
+After=network.target
+Requires=network.target
+
+[Service]
+Type=simple
+User=epics
+Group=clas
+Environment=EPICS_IOC_LOG_FILE_NAME=/usr/clas12/DATA/logs/caPut.log
+ExecStart=/usr/clas12/R3.14.12.5/base/bin/linux-x86_64/iocLogServer
+
+[Install]
+WantedBy=multi-user.target
+

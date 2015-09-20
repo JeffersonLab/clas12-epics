@@ -1,0 +1,262 @@
+#
+# scaler_generic.db
+#
+# CLAS Joerger VSC8/16 Scaler
+#
+# Macros:
+#   P  - scaler prefix
+#   C  - VME card number
+#   S  - VME slot number
+#   TP - time preset (TP field of scalerRecord)
+#
+
+record(scaler,"$(P)")
+{
+	#field(SCAN,"I/O Intr")
+	field(DTYP,"Joerger VSC8/16")
+	field(FLNK,"$(P)_calc1.PROC PP MS")
+	field(FREQ,"10000000")
+	field(OUT,"#C$(C) S$(S) @")
+	field(TP,"$(TP)")
+	field(PREC,"3")
+	field(G1,"1") 		# The gate 1 is a preset gate
+	field(NM1,"Clock") 	# Channel 1 : clock
+}
+
+record(bo,"$(P)_mode")
+{
+	field(ZNAM,"ONESHOT")
+	field(ONAM,"CONTINUOUS")
+}
+
+record(ao,"$(P)S2a"){}
+record(ao,"$(P)S3a"){}
+record(ao,"$(P)S4a"){}
+record(ao,"$(P)S5a"){}
+record(ao,"$(P)S6a"){}
+record(ao,"$(P)S7a"){}
+record(ao,"$(P)S8a"){}
+record(ao,"$(P)S9a"){}
+record(ao,"$(P)S10a"){}
+record(ao,"$(P)S11a"){}
+record(ao,"$(P)S12a"){}
+record(ao,"$(P)S13a"){}
+record(ao,"$(P)S14a"){}
+record(ao,"$(P)S15a"){}
+record(ao,"$(P)S16a"){}
+
+record(ao,"$(P)S2b"){}
+record(ao,"$(P)S3b"){}
+record(ao,"$(P)S4b"){}
+record(ao,"$(P)S5b"){}
+record(ao,"$(P)S6b"){}
+record(ao,"$(P)S7b"){}
+record(ao,"$(P)S8b"){}
+record(ao,"$(P)S9b"){}
+record(ao,"$(P)S10b"){}
+record(ao,"$(P)S11b"){}
+record(ao,"$(P)S12b"){}
+record(ao,"$(P)S13b"){}
+record(ao,"$(P)S14b"){}
+record(ao,"$(P)S15b"){}
+record(ao,"$(P)S16b"){}
+
+record(bo,"$(P)_restart")
+{
+	field(DISV,"0")
+	field(SDIS,"$(P)_mode.VAL NPP NMS")
+	field(OMSL,"closed_loop")
+	field(DOL,"$(P)_mode.VAL NPP NMS")
+	field(OUT,"$(P).CNT PP MS")
+	field(ZNAM,"DONE")
+	field(ONAM,"COUNT")
+}
+
+record(calcout,"$(P)_wait")
+{
+#	field(FLNK,"$(P)_restart.PROC")
+	field(CALC, "1")
+	field(ODLY, "0.025")
+	field(OOPT, "Every Time")
+	field(DOPT, "Use OCAL")
+	field(OUT,  "$(P)_restart PP NMS")
+	field(OCAL, "1")
+}
+
+record(mbbo,"$(P)_display_mode")
+{
+	field(FLNK,"$(P)_calc1.PROC PP MS")
+	field(ZRST,"Raw"  )
+	field(ONST,"Hertz")
+	field(TWST,"Norm" )
+	field(NOBT,"3")
+	field(ZRVL,"0"  )
+	field(ONVL,"1"  )
+	field(TWVL,"2"  )
+}
+
+# Frequency 2-5
+record(transform,"$(P)_cts1")
+{
+	field(FLNK,"$(P)_cts2.PROC PP MS")
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"$(P).T NPP NMS")
+	field(INPB,"$(P).S2 NPP NMS")
+	field(INPC,"$(P).S3 NPP NMS")
+	field(INPD,"$(P).S4 NPP NMS")
+	field(INPE,"$(P).S5 NPP NMS")
+	field(OUTG,"$(P)S2a.VAL PP MS")
+	field(OUTH,"$(P)S3a.VAL PP MS")
+	field(OUTI,"$(P)S4a.VAL PP MS")
+	field(OUTJ,"$(P)S5a.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Frequency 6-9
+record(transform,"$(P)_cts2")
+{
+	field(FLNK,"$(P)_cts3.PROC PP MS")
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"$(P).T NPP NMS")
+	field(INPB,"$(P).S6 NPP NMS")
+	field(INPC,"$(P).S7 NPP NMS")
+	field(INPD,"$(P).S8 NPP NMS")
+	field(INPE,"$(P).S9 NPP NMS")
+	field(OUTG,"$(P)S6a.VAL PP MS")
+	field(OUTH,"$(P)S7a.VAL PP MS")
+	field(OUTI,"$(P)S8a.VAL PP MS")
+	field(OUTJ,"$(P)S9a.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Frequency 10-13
+record(transform,"$(P)_cts3")
+{
+	field(FLNK,"$(P)_cts4.PROC PP MS")
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"$(P).T NPP NMS")
+	field(INPB,"$(P).S10 NPP NMS")
+	field(INPC,"$(P).S11 NPP NMS")
+	field(INPD,"$(P).S12 NPP NMS")
+	field(INPE,"$(P).S13 NPP NMS")
+	field(OUTG,"$(P)S10a.VAL PP MS")
+	field(OUTH,"$(P)S11a.VAL PP MS")
+	field(OUTI,"$(P)S12a.VAL PP MS")
+	field(OUTJ,"$(P)S13a.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Frequency 14-15
+record(transform,"$(P)_cts4")
+{
+	field(FLNK,"$(P)_cts5.PROC PP MS")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/(10*f):e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"$(P).T NPP NMS")
+	field(INPC,"$(P).S14 NPP NMS")
+	field(INPD,"$(P).S15 NPP NMS")
+	field(INPE,"$(P).S16 NPP NMS")
+	field(OUTH,"$(P)S14a.VAL PP MS")
+	field(OUTI,"$(P)S15a.VAL PP MS")
+	field(OUTJ,"$(P)S16a.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Normalise 2-5
+record(transform,"$(P)_cts5")
+{
+	field(FLNK,"$(P)_cts6.PROC PP MS")
+	field(CLCG,"(a=2 && f>0.010)?b/k/f:b")
+	field(CLCH,"(a=2 && f>0.010)?c/k/f:c")
+	field(CLCI,"(a=2 && f>0.010)?d/k/f:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/k/f:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"$(P).T NPP NMS")
+	field(INPB,"$(P)S2a.VAL NPP NMS")
+	field(INPC,"$(P)S3a.VAL NPP NMS")
+	field(INPD,"$(P)S4a.VAL NPP NMS")
+	field(INPE,"$(P)S5a.VAL NPP NMS")
+	field(OUTG,"$(P)S2b.VAL PP MS")
+	field(OUTH,"$(P)S3b.VAL PP MS")
+	field(OUTI,"$(P)S4b.VAL PP MS")
+	field(OUTJ,"$(P)S5b.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Normalise 6-9
+record(transform,"$(P)_cts6")
+{
+	field(FLNK,"$(P)_cts7.PROC PP MS")
+	field(CLCG,"(a=2 && f>0.010)?b/f/k:b")
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"$(P).T NPP NMS")
+	field(INPB,"$(P)S6a.VAL NPP NMS")
+	field(INPC,"$(P)S7a.VAL NPP NMS")
+	field(INPD,"$(P)S8a.VAL NPP NMS")
+	field(INPE,"$(P)S9a.VAL NPP NMS")
+	field(OUTG,"$(P)S6b.VAL PP MS")
+	field(OUTH,"$(P)S7b.VAL PP MS")
+	field(OUTI,"$(P)S8b.VAL PP MS")
+	field(OUTJ,"$(P)S9b.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Normalise 10-13
+record(transform,"$(P)_cts7")
+{
+	field(FLNK,"$(P)_cts8.PROC PP MS")
+	field(CLCG,"(a=2 && f>0.010)?b/f/k:b")
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"$(P).T NPP NMS")
+	field(INPB,"$(P)S10a.VAL NPP NMS")
+	field(INPC,"$(P)S11a.VAL NPP NMS")
+	field(INPD,"$(P)S12a.VAL NPP NMS")
+	field(INPE,"$(P)S13a.VAL NPP NMS")
+	field(OUTG,"$(P)S10b.VAL PP MS")
+	field(OUTH,"$(P)S11b.VAL PP MS")
+	field(OUTI,"$(P)S12b.VAL PP MS")
+	field(OUTJ,"$(P)S13b.VAL PP MS")
+	field(PREC,"3")
+}
+
+# Normalise 14-15
+record(transform,"$(P)_cts8")
+{
+	field(FLNK,"$(P)_wait.PROC PP MS")
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+	field(INPA,"$(P)_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"$(P).T NPP NMS")
+	field(INPC,"$(P)S14a.VAL NPP NMS")
+	field(INPD,"$(P)S15a.VAL NPP NMS")
+	field(INPE,"$(P)S16a.VAL NPP NMS")
+	field(OUTH,"$(P)S14b.VAL PP MS")
+	field(OUTI,"$(P)S15b.VAL PP MS")
+	field(OUTJ,"$(P)S16b.VAL PP MS")
+	field(PREC,"3")
+}

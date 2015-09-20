@@ -1,0 +1,72 @@
+record(bo,"HB:Q_ONOFF") {
+        field(ASG,"MCC")
+        field(ONAM,"ON")
+        field(ZNAM,"OFF")
+}
+record(ao,"HB:Q_THRESHOLD")
+{
+	field(VAL,"1.0")
+}
+record(ao,"HB:Q_STAMP")
+{
+	field(SCAN,"Passive")
+	field(FLNK,"HB:Q_ASY")
+}
+record(calc,"HB:Q_ASY") 
+{
+	field(SCAN,"Passive")
+	field(FLNK,"HB:DQ_ASY")
+	field(INPA,"q_asym_3")
+	field(INPB,"q_asym_7")
+        field(INPC,"moller_system_status")
+	field(CALC,"C>9?A*10000.:B*10000.")
+}
+record(calc,"HB:DQ_ASY") 
+{
+	field(SCAN,"Passive")
+	field(INPA,"d_asym_3")
+	field(INPB,"d_asym_7")
+        field(INPC,"moller_status")
+	field(CALC,"C>10?A*10000.:B*10000.")
+}
+record(ao,"HB:RWP_SLOPE_IN") {
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(FLNK,"HB:RWP_SLOPE")
+}
+record(ao,"HB:RWP_SLOPE_OUT") {
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(FLNK,"HB:RWP_SLOPE")
+}
+record(calc,"HB:RWP_SLOPE")
+{
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(SCAN,"1 second")
+        field(INPA,"HB:RWP_SLOPE_IN")
+        field(INPB,"HB:RWP_SLOPE_OUT")
+        field(INPC,"IGL1I00DI24_24M.RVAL")
+        field(CALC,"C=0?A:B")
+}
+record(ao,"HB:TACO_SLOPE_IN") {
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(FLNK,"HB:TACO_SLOPE")
+}
+record(ao,"HB:TACO_SLOPE_OUT") {
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(FLNK,"HB:TACO_SLOPE")
+}
+record(calc,"HB:TACO_SLOPE")
+{
+        field(ASG,"MCC")
+	field(PREC,"3")
+	field(SCAN,"1 second")
+        field(INPA,"HB:TACO_SLOPE_IN")
+        field(INPB,"HB:TACO_SLOPE_OUT")
+        field(INPC,"IGL1I00DI24_24M.RVAL")
+        field(CALC,"C=0?A:B")
+}
+

@@ -7,14 +7,14 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC support library
 
-LIBRARY_IOC += prologixSupport
+LIBRARY_IOC_Linux += prologixSupport
 
 prologixSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
 # Build the IOC application
 
-PROD_IOC = prologix
+PROD_IOC_Linux = prologix
 # prologix.dbd will be created and installed
 DBD += prologix.dbd
 

@@ -20,8 +20,8 @@ hscaenet_DIR += $(HSCAENET_LIB)
 caenhvwrapper_DIR += $(CAENHVWRAPPER_LIB)
 pthread_DIR += $(PTHREAD_LIB)
 
-LIBRARY += sy1527epics1
-PROD += sy1527_test
+LIBRARY_Linux += sy1527epics1
+PROD_Linux += sy1527_test
 
 INC += sy1527.h
 INC += sy1527epics1.h

@@ -1,0 +1,85 @@
+grecord( calc,"$(scaler)_sum_1" )
+{
+        field(SCAN,"1 second")   
+        field(FLNK,"$(scaler)_sum_2 PP MS")
+        field(CALC,"a+b+c+d+e+f+g+h")
+        field(INPA,"$(scaler)_ai_0 NPP NMS")
+        field(INPB,"$(scaler)_ai_1 NPP NMS")
+        field(INPC,"$(scaler)_ai_2 NPP NMS")
+        field(INPD,"$(scaler)_ai_3 NPP NMS")
+        field(INPE,"$(scaler)_ai_4 NPP NMS")
+        field(INPF,"$(scaler)_ai_5 NPP NMS")
+        field(INPG,"$(scaler)_ai_6 NPP NMS")
+        field(INPH,"$(scaler)_ai_7 NPP NMS")
+	field(PREC,"0")
+}
+
+grecord( calc,"$(scaler)_sum_2" )
+{
+        field(SCAN,"Passive")   
+        field(FLNK,"$(scaler)_sum PP MS")
+        field(CALC,"a+b+c+d+e+f+g+h")
+        field(INPA,"$(scaler)_ai_8  NPP NMS")
+        field(INPB,"$(scaler)_ai_9 NPP NMS")
+        field(INPC,"$(scaler)_ai_10 NPP NMS")
+        field(INPD,"$(scaler)_ai_11 NPP NMS")
+        field(INPE,"$(scaler)_ai_12 NPP NMS")
+        field(INPF,"$(scaler)_ai_13 NPP NMS")
+        field(INPG,"$(scaler)_ai_14 NPP NMS")
+        field(INPH,"$(scaler)_ai_15 NPP NMS")
+	field(PREC,"0")
+}
+
+grecord( calc,"$(scaler)_sum" )
+{
+        field(SCAN,"Passive")   
+        field(FLNK,"$(scaler)_bta PP MS")
+        field(CALC,"a+b")
+        field(INPA,"$(scaler)_sum_1 NPP NMS")
+        field(INPB,"$(scaler)_sum_2 NPP NMS")
+	field(PREC,"1")
+}
+
+grecord( calc,"$(scaler)_bta" )
+{
+        field(SCAN,"Passive")   
+#        field(FLNK,"$(scaler)_sum_2 PP MS")
+#        field(CALC,"B>1.0e-05?(a/b):a")
+        field(CALC,"A")
+        field(INPA,"$(scaler)_sum NPP NMS")
+        field(INPB,"IPM2C21A NPP NMS")
+	field(PREC,"0")
+}
+
+grecord(ai, "$(scaler)_x0") {
+     field(PREC,"4")
+}
+
+grecord(ai, "$(scaler)_y0") {
+     field(PREC,"4")
+}
+
+grecord(ai, "$(scaler)_dpl_amp") {
+     field(PREC,"4")
+}
+
+grecord(ai, "$(scaler)_dpl_phs") {
+     field(PREC,"4")
+}
+
+grecord( mbbo, "bom_norm_flag" )
+{
+        field(SCAN, "Passive")
+        field(VAL , "1")
+
+        field(ZRST,"Raw"  )
+        field(ONST,"Hertz")
+        field(TWST,"Norm" )
+        field(NOBT,"3")
+
+        field(ZRVL,"0"  )
+        field(ONVL,"1"  )
+        field(TWVL,"2"  )
+  
+        field(DTYP, "Soft Channel")     
+}

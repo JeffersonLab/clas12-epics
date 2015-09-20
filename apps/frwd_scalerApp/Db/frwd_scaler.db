@@ -1,0 +1,330 @@
+grecord(scaler,"frwd_scaler")
+{
+	#field(SCAN,"I/O Intr")
+	field(DTYP,"Joerger VSC8/16")
+	field(FLNK,"frwd_scaler_calc1.PROC PP MS")
+	field(FREQ,"10000000")
+	field(OUT,"#C0 S0 @")
+	field(TP,"2")
+	field(PREC,"3")
+	field(G1,"1") 		# The gate 1 is a preset gate
+	field(NM1,"Clock") 	# Channel 1 : clock
+}
+
+grecord(bo,"frwd_scaler_mode")
+{
+	field(ZNAM,"ONESHOT")
+	field(ONAM,"CONTINUOUS")
+}
+
+grecord(ao,"frwd_scalerS2a"){}
+grecord(ao,"frwd_scalerS3a"){}
+grecord(ao,"frwd_scalerS4a"){}
+grecord(ao,"frwd_scalerS5a"){}
+
+grecord(ao,"frwd_scalerS6a"){}
+grecord(ao,"frwd_scalerS7a"){}
+grecord(ao,"frwd_scalerS8a"){}
+grecord(ao,"frwd_scalerS9a"){}
+
+grecord(ao,"frwd_scalerS10a"){}
+grecord(ao,"frwd_scalerS11a"){}
+grecord(ao,"frwd_scalerS12a"){}
+grecord(ao,"frwd_scalerS13a"){}
+
+grecord(ao,"frwd_scalerS14a"){}
+grecord(ao,"frwd_scalerS15a"){}
+grecord(ao,"frwd_scalerS16a"){}
+
+grecord(ao,"frwd_scalerS2b"){}
+grecord(ao,"frwd_scalerS3b"){}
+grecord(ao,"frwd_scalerS4b"){}
+grecord(ao,"frwd_scalerS5b"){}
+
+grecord(ao,"frwd_scalerS6b"){}
+grecord(ao,"frwd_scalerS7b"){}
+grecord(ao,"frwd_scalerS8b"){}
+grecord(ao,"frwd_scalerS9b"){}
+
+grecord(ao,"frwd_scalerS10b"){}
+grecord(ao,"frwd_scalerS11b"){}
+grecord(ao,"frwd_scalerS12b"){}
+grecord(ao,"frwd_scalerS13b"){}
+
+grecord(ao,"frwd_scalerS14b"){}
+grecord(ao,"frwd_scalerS15b"){}
+grecord(ao,"frwd_scalerS16b"){}
+
+
+grecord(bo,"frwd_scaler_restart")
+{
+	field(DISV,"0")
+	field(SDIS,"frwd_scaler_mode.VAL NPP NMS")
+	field(OMSL,"closed_loop")
+	field(DOL,"frwd_scaler_mode.VAL NPP NMS")
+	field(OUT,"frwd_scaler.CNT PP MS")
+	field(ZNAM,"DONE")
+	field(ONAM,"COUNT")
+}
+
+#grecord(wait,"frwd_scaler_wait")
+grecord(calcout,"frwd_scaler_wait")
+{
+#	field(FLNK,"frwd_scaler_restart.PROC")
+	field(CALC, "1")
+	field(ODLY, "0.025")
+	field(OOPT, "Every Time")
+	field(DOPT, "Use OCAL")
+	field(OUT,  "frwd_scaler_restart PP NMS")
+	field(OCAL, "1")
+}
+
+grecord(mbbo,"frwd_display_mode")
+{
+	field(FLNK,"frwd_scaler_calc1.PROC PP MS")
+	
+	field(ZRST,"Raw"  )
+	field(ONST,"Hertz")
+	field(TWST,"Norm" )
+	field(NOBT,"3")
+
+	field(ZRVL,"0"  )
+	field(ONVL,"1"  )
+	field(TWVL,"2"  )
+}
+
+# Faraday cup
+grecord(calc,"frwd_scaler_calc1")
+{
+	field(FLNK,"frwd_scaler_cts1.PROC PP MS")
+	field(CALC,"(b/f-d)/MAX(e,1.0)")
+	field(INPB,"frwd_scaler.S16 NPP NMS")
+	field(INPD,"fcup_offset NPP NMS")
+	field(INPE,"fcup_slope NPP NMS")
+	field(INPF,"frwd_scaler.T NPP NMS")
+	field(PREC,"3")
+}
+
+
+
+# Frequency 2-5
+grecord(transform,"frwd_scaler_cts1")
+{
+	field(FLNK,"frwd_scaler_cts2.PROC PP MS")
+
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scaler.S2 NPP NMS")
+	field(INPC,"frwd_scaler.S3 NPP NMS")
+	field(INPD,"frwd_scaler.S4 NPP NMS")
+	field(INPE,"frwd_scaler.S5 NPP NMS")
+
+	field(OUTG,"frwd_scalerS2a.VAL PP MS")
+	field(OUTH,"frwd_scalerS3a.VAL PP MS")
+	field(OUTI,"frwd_scalerS4a.VAL PP MS")
+	field(OUTJ,"frwd_scalerS5a.VAL PP MS")
+
+
+	field(PREC,"3")
+}
+
+# Frequency 6-9
+grecord(transform,"frwd_scaler_cts2")
+{
+	field(FLNK,"frwd_scaler_cts3.PROC PP MS")
+
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scaler.S6 NPP NMS")
+	field(INPC,"frwd_scaler.S7 NPP NMS")
+	field(INPD,"frwd_scaler.S8 NPP NMS")
+	field(INPE,"frwd_scaler.S9 NPP NMS")
+
+	field(OUTG,"frwd_scalerS6a.VAL PP MS")
+	field(OUTH,"frwd_scalerS7a.VAL PP MS")
+	field(OUTI,"frwd_scalerS8a.VAL PP MS")
+	field(OUTJ,"frwd_scalerS9a.VAL PP MS")
+
+
+	field(PREC,"3")
+}
+
+# Frequency 10-13
+grecord(transform,"frwd_scaler_cts3")
+{
+	field(FLNK,"frwd_scaler_cts4.PROC PP MS")
+
+	field(CLCG,"(a=1)?b/f:b")
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/f:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scaler.S10 NPP NMS")
+	field(INPC,"frwd_scaler.S11 NPP NMS")
+	field(INPD,"frwd_scaler.S12 NPP NMS")
+	field(INPE,"frwd_scaler.S13 NPP NMS")
+
+	field(OUTG,"frwd_scalerS10a.VAL PP MS")
+	field(OUTH,"frwd_scalerS11a.VAL PP MS")
+	field(OUTI,"frwd_scalerS12a.VAL PP MS")
+	field(OUTJ,"frwd_scalerS13a.VAL PP MS")
+
+	field(PREC,"3")
+}
+
+# Frequency 14-15
+grecord(transform,"frwd_scaler_cts4")
+{
+	field(FLNK,"frwd_scaler_cts5.PROC PP MS")
+
+	field(CLCH,"(a=1)?c/f:c")
+	field(CLCI,"(a=1)?d/f:d")
+	field(CLCJ,"(a=1)?e/(10*f):e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"frwd_scaler.T NPP NMS")
+
+	field(INPC,"frwd_scaler.S14 NPP NMS")
+	field(INPD,"frwd_scaler.S15 NPP NMS")
+	field(INPE,"frwd_scaler.S16 NPP NMS")
+
+	field(OUTH,"frwd_scalerS14a.VAL PP MS")
+	field(OUTI,"frwd_scalerS15a.VAL PP MS")
+	field(OUTJ,"frwd_scalerS16a.VAL PP MS")
+
+	field(PREC,"3")
+}
+
+# Normalise 2-5
+grecord(transform,"frwd_scaler_cts5")
+{
+	field(FLNK,"frwd_scaler_cts6.PROC PP MS")
+
+	field(CLCG,"(a=2 && f>0.010)?b/k/f:b")
+	field(CLCH,"(a=2 && f>0.010)?c/k/f:c")
+	field(CLCI,"(a=2 && f>0.010)?d/k/f:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/k/f:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scalerS2a.VAL NPP NMS")
+	field(INPC,"frwd_scalerS3a.VAL NPP NMS")
+	field(INPD,"frwd_scalerS4a.VAL NPP NMS")
+	field(INPE,"frwd_scalerS5a.VAL NPP NMS")
+
+	field(OUTG,"frwd_scalerS2b.VAL PP MS")
+	field(OUTH,"frwd_scalerS3b.VAL PP MS")
+	field(OUTI,"frwd_scalerS4b.VAL PP MS")
+	field(OUTJ,"frwd_scalerS5b.VAL PP MS")
+
+
+	field(PREC,"3")
+}
+
+# Normalise 6-9
+grecord(transform,"frwd_scaler_cts6")
+{
+	field(FLNK,"frwd_scaler_cts7.PROC PP MS")
+
+	field(CLCG,"(a=2 && f>0.010)?b/f/k:b")
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scalerS6a.VAL NPP NMS")
+	field(INPC,"frwd_scalerS7a.VAL NPP NMS")
+	field(INPD,"frwd_scalerS8a.VAL NPP NMS")
+	field(INPE,"frwd_scalerS9a.VAL NPP NMS")
+
+	field(OUTG,"frwd_scalerS6b.VAL PP MS")
+	field(OUTH,"frwd_scalerS7b.VAL PP MS")
+	field(OUTI,"frwd_scalerS8b.VAL PP MS")
+	field(OUTJ,"frwd_scalerS9b.VAL PP MS")
+
+
+	field(PREC,"3")
+}
+
+# Normalise 10-13
+grecord(transform,"frwd_scaler_cts7")
+{
+	field(FLNK,"frwd_scaler_cts8.PROC PP MS")
+
+	field(CLCG,"(a=2 && f>0.010)?b/f/k:b")
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"frwd_scaler.T NPP NMS")
+
+	field(INPB,"frwd_scalerS10a.VAL NPP NMS")
+	field(INPC,"frwd_scalerS11a.VAL NPP NMS")
+	field(INPD,"frwd_scalerS12a.VAL NPP NMS")
+	field(INPE,"frwd_scalerS13a.VAL NPP NMS")
+
+	field(OUTG,"frwd_scalerS10b.VAL PP MS")
+	field(OUTH,"frwd_scalerS11b.VAL PP MS")
+	field(OUTI,"frwd_scalerS12b.VAL PP MS")
+	field(OUTJ,"frwd_scalerS13b.VAL PP MS")
+
+	field(PREC,"3")
+}
+
+
+# Normalise 14-15
+grecord(transform,"frwd_scaler_cts8")
+{
+	field(FLNK,"frwd_scaler_wait.PROC PP MS")
+
+	field(CLCH,"(a=2 && f>0.010)?c/f/k:c")
+	field(CLCI,"(a=2 && f>0.010)?d/f/k:d")
+	field(CLCJ,"(a=2 && f>0.010)?e/f/k:e")
+
+	field(INPA,"frwd_display_mode.RVAL NPP NMS")
+	field(INPF,"HLB:bta_main_cur.VAL NPP NMS")
+	field(INPK,"frwd_scaler.T NPP NMS")
+
+	field(INPC,"frwd_scalerS14a.VAL NPP NMS")
+	field(INPD,"frwd_scalerS15a.VAL NPP NMS")
+	field(INPE,"frwd_scalerS16a.VAL NPP NMS")
+
+	field(OUTH,"frwd_scalerS14b.VAL PP MS")
+	field(OUTI,"frwd_scalerS15b.VAL PP MS")
+	field(OUTJ,"frwd_scalerS16b.VAL PP MS")
+
+	field(PREC,"3")
+}
+
+
+
+
+
+
+
+
+
+
+

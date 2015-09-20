@@ -14,6 +14,7 @@ DBD += cas.dbd
 cas_DBD += base.dbd
 cas_DBD += asSupport.dbd
 cas_DBD += devIocStats.dbd
+cas_DBD += caPutLog.dbd
 
 # cas_registerRecordDeviceDriver.cpp derives from cas.dbd
 cas_SRCS += cas_registerRecordDeviceDriver.cpp
@@ -24,6 +25,7 @@ cas_SRCS_vxWorks += -nil-
 
 # Link in the support libraries
 cas_LIBS += autosave devIocStats
+cas_LIBS += caPutLog
 cas_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

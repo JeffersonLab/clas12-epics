@@ -9,6 +9,15 @@ include $(TOP)/configure/CONFIG
 
 LIBRARY_IOC_Linux += prologixSupport
 
+DBD += prologixSupport.dbd
+
+prologixSupport_DBD += base.dbd
+prologixSupport_DBD += asyn.dbd
+prologixSupport_DBD += drvAsynIPPort.dbd
+prologixSupport_DBD += stream.dbd
+
+prologixSupport_LIBS += stream
+prologixSupport_LIBS += asyn
 prologixSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
@@ -19,10 +28,7 @@ PROD_IOC_Linux = prologix
 DBD += prologix.dbd
 
 # prologix.dbd will be made up from these files:
-prologix_DBD += base.dbd
-prologix_DBD += asyn.dbd
-prologix_DBD += drvAsynIPPort.dbd
-prologix_DBD += stream.dbd
+prologix_DBD += prologixSupport.dbd
 prologix_DBD += asSupport.dbd
 prologix_DBD += devIocStats.dbd
 
@@ -33,12 +39,11 @@ prologix_SRCS += prologix_registerRecordDeviceDriver.cpp
 prologix_SRCS_DEFAULT += prologixMain.cpp
 prologix_SRCS_vxWorks += -nil-
 
+#prologix_LIBS += prologixSupport
 prologix_LIBS += autosave
-prologix_LIBS += stream
 prologix_LIBS += devIocStats
+prologix_LIBS += stream
 prologix_LIBS += asyn
-
-# Finally link to the EPICS Base libraries
 prologix_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

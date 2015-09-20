@@ -18,16 +18,16 @@ asymSupport_DBD += stdSupport.dbd
 asymSupport_DBD += mcaSupport.dbd
 asymSupport_DBD += SIS38XXSupport.dbd
 
+asymSupport_LIBS += SIS38XX mca
+asymSupport_LIBS += std
+asymSupport_LIBS += asyn
+
 ifneq ($(SNCSEQ),)
     asymSupport_DBD += asymSNC.dbd
     asymSupport_SRCS += asym.st
     asymSupport_LIBS += seq pv
 endif
 
-asymSupport_LIBS += mca
-asymSupport_LIBS += std
-asymSupport_LIBS += asyn
-asymSupport_LIBS += SIS38XX
 asymSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
@@ -49,8 +49,16 @@ asym_SRCS_vxWorks += asym_registerRecordDeviceDriver.cpp
 asym_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
-asym_LIBS += asymSupport 
-asym_LIBS += $(EPICS_BASE_IOC_LIBS)
+asym_LIBS += asymSupport
+asym_LIBS += SIS38XX mca
+asym_LIBS += std
+asym_LIBS += asyn
+
+ifneq ($(SNCSEQ),)
+    asym_LIBS += seq pv
+endif
+
+asymSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
 

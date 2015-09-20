@@ -39,16 +39,12 @@ plc2epics_LIBS += std
 plc2epics_LIBS += asyn
 plc2epics_LIBS += devIocStats
 
-# NOTE: To build SNL programs, SNCSEQ must be defined
-# in the <top>/configure/RELEASE file
-
 ifneq ($(SNCSEQ),)
     plc2epics_DBD  += snc4plc.dbd
     plc2epics_SRCS += sncSmallTest.st
     plc2epics_LIBS += seq pv
 endif
 
-# Finally link to the EPICS Base libraries
 plc2epics_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

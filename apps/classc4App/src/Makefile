@@ -29,15 +29,17 @@ classc4_SRCS_vxWorks += -nil-
 classc4_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from our support library
-classc4_LIBS += autosave
-classc4_LIBS += devIocStats
 classc4_LIBS += harp_genericSupport
 classc4_LIBS += scalerSupport
 classc4_LIBS += sixty_hzSupport
-classc4_LIBS += mca SIS38XX
-classc4_LIBS += busy calc sscan std vme
+classc4_LIBS += SIS38XX mca
+#classc4_LIBS += busy calc sscan std vme
+classc4_LIBS += std
+classc4_LIBS += vme
 classc4_LIBS += oms
 classc4_LIBS += motor
+classc4_LIBS += autosave
+classc4_LIBS += devIocStats
 classc4_LIBS += asyn
 classc4_LIBS += seq pv
 classc4_LIBS += $(EPICS_BASE_IOC_LIBS)

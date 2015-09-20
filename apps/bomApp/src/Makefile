@@ -21,7 +21,7 @@ bomSupport_DBD += sub_funcs.dbd
 
 bomSupport_SRCS += sub_funcs.c
 
-bomSupport_LIBS += mca SIS38XX
+bomSupport_LIBS += SIS38XX mca
 bomSupport_LIBS += std
 bomSupport_LIBS += asyn
 bomSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
@@ -48,9 +48,10 @@ bom_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
 bom_LIBS += bomSupport
+bom_LIBS += SIS38XX mca
+bom_LIBS += std
 bom_LIBS += autosave
-
-# Finally link to the EPICS Base libraries
+bom_LIBS += asyn
 bom_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

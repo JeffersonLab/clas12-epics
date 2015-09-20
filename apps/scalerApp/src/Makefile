@@ -14,13 +14,10 @@ DBD += scalerSupport.dbd
 scalerSupport_DBD += scalerSNC.dbd
 scalerSupport_SRCS += scaler_restart.st
 
-##scalerSupport_LIBS += sixty_hzSupport
-scalerSupport_LIBS += SIS38XX
-##scalerSupport_LIBS += mca
 scalerSupport_LIBS += std
-scalerSupport_LIBS += busy
-scalerSupport_LIBS += calc
-scalerSupport_LIBS += sscan
+#scalerSupport_LIBS += busy
+#scalerSupport_LIBS += calc
+#scalerSupport_LIBS += sscan
 scalerSupport_LIBS += vme
 scalerSupport_LIBS += asyn
 scalerSupport_LIBS += seq pv
@@ -46,6 +43,13 @@ scaler_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 # Link in the code from the support library
 scaler_LIBS += scalerSupport
 scaler_LIBS += devIocStats autosave
+scaler_LIBS += std
+#scalerSupport_LIBS += busy
+#scalerSupport_LIBS += calc
+#scalerSupport_LIBS += sscan
+scaler_LIBS += vme
+scaler_LIBS += asyn
+scaler_LIBS += seq pv
 scaler_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

@@ -1,76 +1,76 @@
 
-grecord(bo,"$(scaler)_StartedBO") {
-	field(OUT,"$(scaler)_Start.VAL  PP MS")
+grecord(bo,"$(SCLR)_StartedBO") {
+	field(OUT,"$(SCLR)_Start.VAL  PP MS")
 }
-grecord(ai,"$(scaler)_dwel") {
+grecord(ai,"$(SCLR)_dwel") {
      field(SCAN,".2 second")
      field(VAL,"1")
-     field(FLNK,"$(scaler)_high_calc")
+     field(FLNK,"$(SCLR)_high_calc")
 }
-grecord(calc,"$(scaler)_high_calc") {
-     field(FLNK,"$(scaler)_high")
-     field(INPA,"$(scaler)_dwel")
+grecord(calc,"$(SCLR)_high_calc") {
+     field(FLNK,"$(SCLR)_high")
+     field(INPA,"$(SCLR)_dwel")
      field(CALC,"A+0.1")
 }
-grecord(ao, "$(scaler)_high") {
-     field(OUT,"$(scaler)_Start.HIGH")
-     field(DOL,"$(scaler)_high_calc")
-     field(FLNK,"$(scaler)_dwel_calc")
+grecord(ao, "$(SCLR)_high") {
+     field(OUT,"$(SCLR)_Start.HIGH")
+     field(DOL,"$(SCLR)_high_calc")
+     field(FLNK,"$(SCLR)_dwel_calc")
      field(OMSL, "closed_loop")
 }
-grecord(calc, "$(scaler)_dwel_calc")
+grecord(calc, "$(SCLR)_dwel_calc")
 {
-     field(FLNK,"$(scaler)_dwel_set")
+     field(FLNK,"$(SCLR)_dwel_set")
      field(CALC,"B>=1?A/B:A")
-     field(INPA,"$(scaler)_dwel")
-     field(INPB,"$(scaler)_0.NUSE")	
+     field(INPA,"$(SCLR)_dwel")
+     field(INPB,"$(SCLR)_0.NUSE")	
 }
-grecord(ao, "$(scaler)_dwel_set") {
-     field(DOL,"$(scaler)_dwel_calc")
-     field(OUT,"$(scaler)_0.DWEL")
+grecord(ao, "$(SCLR)_dwel_set") {
+     field(DOL,"$(SCLR)_dwel_calc")
+     field(OUT,"$(SCLR)_0.DWEL")
      field(OMSL, "closed_loop")
 }
-grecord(bo,"$(scaler)_Start") {
-     field(FLNK,"$(scaler)_StartFO.PROC  PP MS")
+grecord(bo,"$(SCLR)_Start") {
+     field(FLNK,"$(SCLR)_StartFO.PROC  PP MS")
      field(OUT,"0")
      field(ZNAM,"STOP")
      field(ONAM,"START")
 }
-grecord(bo,"$(scaler)_reStart") {
+grecord(bo,"$(SCLR)_reStart") {
      field(SCAN,".1 second")
-     field(SDIS,"$(scaler)_Start.VAL  NPP NMS")
+     field(SDIS,"$(SCLR)_Start.VAL  NPP NMS")
      field(DISV,"1")
      field(DOL,"1")
-     field(OUT,"$(scaler)_Start.VAL  CA MS")
+     field(OUT,"$(SCLR)_Start.VAL  CA MS")
      field(ZNAM,"Manual")
      field(ONAM,"Continuous")
 }
-grecord(histogram, "$(scaler)_scalers") { 
+grecord(histogram, "$(SCLR)_scalers") { 
   field(NELM, "32")
   field(LLIM, "0")
   field(ULIM, "32")
 ##  field(DTYP, "Soft Channel")
 }
 
-grecord(fanout,"$(scaler)_StartFO") {
-     field(SDIS,"$(scaler)_StartedBO.PACT  NPP NMS")
-#     field(LNK3,"$(scaler)_Start_A  PP MS")
-     field(LNK1,"$(scaler)_StopSeq_A.PROC  PP MS")
-     field(LNK2,"$(scaler)_Eras_A  PP MS")
+grecord(fanout,"$(SCLR)_StartFO") {
+     field(SDIS,"$(SCLR)_StartedBO.PACT  NPP NMS")
+#     field(LNK3,"$(SCLR)_Start_A  PP MS")
+     field(LNK1,"$(SCLR)_StopSeq_A.PROC  PP MS")
+     field(LNK2,"$(SCLR)_Eras_A  PP MS")
 }
 
-grecord(seq,"$(scaler)_Eras_A") {
+grecord(seq,"$(SCLR)_Eras_A") {
   field(DISV,"0")
-  field(SDIS,"$(scaler)_Start.VAL  NPP MS")
+  field(SDIS,"$(SCLR)_Start.VAL  NPP MS")
   field(DOL1,"1")
-  field(LNK1,"$(scaler)_0.ERST PP MS")
+  field(LNK1,"$(SCLR)_0.ERST PP MS")
 }
 
-grecord(seq,"$(scaler)_StopSeq_A") {
-  field(SDIS,"$(scaler)_Start.VAL  NPP MS")
+grecord(seq,"$(SCLR)_StopSeq_A") {
+  field(SDIS,"$(SCLR)_Start.VAL  NPP MS")
   field(DOL1,"1")
-  field(LNK1,"$(scaler)_0.STOP PP MS")
+  field(LNK1,"$(SCLR)_0.STOP PP MS")
   field(DOL2,"1")
-  field(LNK2,"$(scaler)_Read PP MS")
+  field(LNK2,"$(SCLR)_Read PP MS")
 }
 

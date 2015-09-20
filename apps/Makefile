@@ -12,8 +12,15 @@ define DIR_template
 endef
 $(foreach dir, $(filter-out configure,$(DIRS)),$(eval $(call DIR_template,$(dir))))
 
-caenHvApp_DEPEND_DIRS += syX527App
-iocBoot_DEPEND_DIRS += $(filter %App,$(DIRS))
+iocBoot_DEPEND_DIRS    += $(filter %App,$(DIRS))
+
+#
+# Set app dependencies
+#
+caenHvApp_DEPEND_DIRS  += syX527App
+classc1App_DEPEND_DIRS += bomApp  	                			# vme crate
+classc4App_DEPEND_DIRS += harp_genericApp scalerApp sixtyHzApp 	# vme crate
+
 
 include $(TOP)/configure/RULES_TOP
 

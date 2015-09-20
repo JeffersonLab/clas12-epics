@@ -18,6 +18,16 @@ asymSupport_DBD += stdSupport.dbd
 asymSupport_DBD += mcaSupport.dbd
 asymSupport_DBD += SIS38XXSupport.dbd
 
+asymSupport_LIBS += SIS38XX mca
+asymSupport_LIBS += std
+asymSupport_LIBS += asyn
+
+ifneq ($(SNCSEQ),)
+    asymSupport_DBD += asymSNC.dbd
+    asymSupport_SRCS += asym.st
+    asymSupport_LIBS += seq pv
+endif
+
 asymSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
@@ -39,27 +49,16 @@ asym_SRCS_vxWorks += asym_registerRecordDeviceDriver.cpp
 asym_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
-asym_LIBS += asymSupport 
-asym_LIBS += mca
+asym_LIBS += asymSupport
+asym_LIBS += SIS38XX mca
 asym_LIBS += std
 asym_LIBS += asyn
-asym_LIBS += SIS38XX
-#asym_LIBS += mcaCanberra
-
-# NOTE: To build SNL progra
-# ms, SNCSEQ must be defined
-# in the <top>/configure/RELEASE file
 
 ifneq ($(SNCSEQ),)
-    asymSupport_DBD += asymSNC.dbd
-    asymSupport_SRCS += asym.st
-    asym_SRCS += asym.st
-    asymSupport_LIBS += seq pv
     asym_LIBS += seq pv
 endif
 
-# Finally link to the EPICS Base libraries
-asym_LIBS += $(EPICS_BASE_IOC_LIBS)
+asymSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
 

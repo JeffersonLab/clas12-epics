@@ -1,0 +1,1033 @@
+
+file {
+	name="/home/hovanes/EPICS_ALL/app/moller_setup/medm/moller_setup.adl"
+	version=020306
+}
+display {
+	object {
+		x=316
+		y=138
+		width=400
+		height=400
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+"message button" {
+	object {
+		x=5
+		y=44
+		width=200
+		height=22
+	}
+	control {
+		chan="moller_command"
+		clr=14
+		bclr=4
+	}
+	label="Configure Moller Hardware"
+	press_msg="10"
+	release_msg="10"
+}
+"message button" {
+	object {
+		x=4
+		y=71
+		width=200
+		height=22
+	}
+	control {
+		chan="moller_command"
+		clr=14
+		bclr=4
+	}
+	label="Backout Moller Hardware"
+	press_msg="20"
+	release_msg="20"
+}
+"message button" {
+	object {
+		x=27
+		y=110
+		width=70
+		height=22
+	}
+	control {
+		chan="moller_command"
+		clr=14
+		bclr=4
+	}
+	label="Negative"
+	press_msg="14"
+	release_msg="14"
+}
+"message button" {
+	object {
+		x=111
+		y=110
+		width=70
+		height=22
+	}
+	control {
+		chan="moller_command"
+		clr=14
+		bclr=4
+	}
+	label="Positive"
+	press_msg="15"
+	release_msg="15"
+}
+text {
+	object {
+		x=14
+		y=95
+		width=175
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		chan="moller_command"
+	}
+	textix="Change Helmholtz Polarity"
+	align="horiz. centered"
+}
+rectangle {
+	object {
+		x=4
+		y=163
+		width=390
+		height=232
+	}
+	"basic attribute" {
+		clr=2
+	}
+}
+text {
+	object {
+		x=5
+		y=164
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Target"
+	align="horiz. right"
+}
+text {
+	object {
+		x=115
+		y=164
+		width=65
+		height=14
+	}
+	"basic attribute" {
+		clr=20
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="moeller_target.MOVN"
+	}
+	textix="Moving"
+}
+text {
+	object {
+		x=122
+		y=164
+		width=45
+		height=14
+	}
+	"basic attribute" {
+		clr=63
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="moeller_target.DMOV"
+	}
+	textix="Done"
+}
+text {
+	object {
+		x=7
+		y=184
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Helmholtz Magnet"
+	align="horiz. right"
+}
+rectangle {
+	object {
+		x=191
+		y=184
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="kepco_negative.VAL"
+	}
+}
+rectangle {
+	object {
+		x=342
+		y=184
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="kepco_off.VAL"
+	}
+}
+rectangle {
+	object {
+		x=270
+		y=184
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="kepco_positive.VAL"
+	}
+}
+text {
+	object {
+		x=154
+		y=185
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="NEG"
+	align="horiz. right"
+}
+text {
+	object {
+		x=305
+		y=184
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="OFF"
+	align="horiz. right"
+}
+text {
+	object {
+		x=235
+		y=184
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="POS"
+	align="horiz. right"
+}
+text {
+	object {
+		x=10
+		y=238
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Upstream Quad"
+}
+oval {
+	object {
+		x=131
+		y=238
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		chan="DYNABOFF"
+	}
+}
+oval {
+	object {
+		x=131
+		y=238
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=61
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="DYNABPSON"
+	}
+}
+"text update" {
+	object {
+		x=291
+		y=238
+		width=100
+		height=18
+	}
+	monitor {
+		chan="hallb_sf_xy560_0_14"
+		clr=1
+		bclr=53
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=287
+		y=221
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Current ReadBack"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=178
+		y=237
+		width=100
+		height=18
+	}
+	monitor {
+		chan="dynab_sug_set"
+		clr=34
+		bclr=56
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=176
+		y=220
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Suggested Current"
+	align="horiz. right"
+}
+oval {
+	object {
+		x=131
+		y=264
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		chan="DYNACOFF"
+	}
+}
+oval {
+	object {
+		x=131
+		y=264
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=61
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="DYNACPSON"
+	}
+}
+text {
+	object {
+		x=10
+		y=264
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Downstream Quad"
+}
+"text update" {
+	object {
+		x=178
+		y=264
+		width=100
+		height=18
+	}
+	monitor {
+		chan="dynac_sug_set"
+		clr=34
+		bclr=56
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=291
+		y=264
+		width=100
+		height=18
+	}
+	monitor {
+		chan="hallb_sf_xy560_0_18"
+		clr=1
+		bclr=53
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=12
+		y=289
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=54
+		style="dash"
+	}
+	textix="LEFT PMT HV"
+}
+oval {
+	object {
+		x=132
+		y=289
+		width=14
+		height=14
+	}
+	"basic attribute" {
+		clr=15
+		style="dash"
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="B_hv_BM_MOLLER_L_property.K"
+	}
+}
+oval {
+	object {
+		x=132
+		y=313
+		width=14
+		height=14
+	}
+	"basic attribute" {
+		clr=15
+		style="dash"
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="B_hv_BM_MOLLER_R_property.K"
+	}
+}
+text {
+	object {
+		x=10
+		y=313
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=54
+		style="dash"
+	}
+	textix="RIGHT PMT HV"
+}
+"text update" {
+	object {
+		x=178
+		y=289
+		width=100
+		height=18
+	}
+	monitor {
+		chan="B_hv_BM_MOLLER_L_property.F"
+		clr=0
+		bclr=53
+	}
+	clrmod="discrete"
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=178
+		y=313
+		width=100
+		height=18
+	}
+	monitor {
+		chan="B_hv_BM_MOLLER_R_property.F"
+		clr=0
+		bclr=53
+	}
+	clrmod="discrete"
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=286
+		y=293
+		width=40
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Volts"
+}
+text {
+	object {
+		x=286
+		y=317
+		width=40
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Volts"
+}
+text {
+	object {
+		x=-109
+		y=342
+		width=80
+		height=22
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="L.R trues"
+}
+text {
+	object {
+		x=9
+		y=374
+		width=130
+		height=22
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="L.R accidentals"
+}
+"text update" {
+	object {
+		x=178
+		y=342
+		width=100
+		height=22
+	}
+	monitor {
+		chan="scaler_dS7b.VAL"
+		clr=0
+		bclr=26
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=178
+		y=370
+		width=100
+		height=22
+	}
+	monitor {
+		chan="scaler_dS8b.VAL"
+		clr=0
+		bclr=26
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=8
+		y=340
+		width=130
+		height=22
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="L.R Trues"
+}
+rectangle {
+	object {
+		x=270
+		y=164
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="moller_target_right.VAL"
+	}
+}
+rectangle {
+	object {
+		x=342
+		y=164
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="moller_target_empty.VAL"
+	}
+}
+rectangle {
+	object {
+		x=191
+		y=164
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="moller_target_left.VAL"
+	}
+}
+text {
+	object {
+		x=154
+		y=164
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="LEFT"
+	align="horiz. right"
+}
+text {
+	object {
+		x=235
+		y=164
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="RIGHT"
+	align="horiz. right"
+}
+text {
+	object {
+		x=305
+		y=164
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="EMPTY"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=270
+		y=68
+		width=90
+		height=18
+	}
+	monitor {
+		chan="beam_polarization"
+		clr=14
+		bclr=51
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=270
+		y=114
+		width=90
+		height=18
+	}
+	monitor {
+		chan="beam_polarization_error"
+		clr=14
+		bclr=51
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=239
+		y=48
+		width=150
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		chan="beam_polarization"
+	}
+	textix="Beam Polarization (%)"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=238
+		y=92
+		width=150
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		chan="beam_polarization"
+	}
+	textix="Beam Polarization Error"
+	align="horiz. centered"
+}
+"message button" {
+	object {
+		x=42
+		y=139
+		width=100
+		height=16
+	}
+	control {
+		chan="moller_reset"
+		clr=14
+		bclr=35
+	}
+	label="Reset EPICS DAQ"
+	press_msg="1"
+	release_msg="0"
+}
+"text update" {
+	object {
+		x=302
+		y=139
+		width=75
+		height=14
+	}
+	monitor {
+		chan="moller_accumulate"
+		clr=14
+		bclr=50
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=194
+		y=139
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		chan="beam_polarization"
+	}
+	textix="EPICS DAQ status"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=7
+		y=7
+		width=385
+		height=18
+	}
+	monitor {
+		chan="moller_system_string_1"
+		clr=14
+		bclr=1
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=7
+		y=24
+		width=385
+		height=18
+	}
+	monitor {
+		chan="moller_system_string_2"
+		clr=14
+		bclr=1
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=7
+		y=207
+		width=100
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="OTR 1"
+	align="horiz. right"
+}
+text {
+	object {
+		x=156
+		y=204
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="IN"
+	align="horiz. right"
+}
+text {
+	object {
+		x=305
+		y=201
+		width=31
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="OUT"
+	align="horiz. right"
+}
+rectangle {
+	object {
+		x=192
+		y=205
+		width=12
+		height=12
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if not zero"
+		chan="otr1"
+	}
+}
+rectangle {
+	object {
+		x=343
+		y=203
+		width=12
+		height=12
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		clr="discrete"
+		vis="if zero"
+		chan="otr1"
+	}
+}
+"related display" {
+	object {
+		x=285
+		y=335
+		width=70
+		height=23
+	}
+	display[0] {
+		label="Moller Expert"
+		name="moller_system.adl"
+	}
+	clr=20
+	bclr=2
+	label="expert"
+	visual="a column of buttons"
+}
+"shell command" {
+	object {
+		x=360
+		y=372
+		width=30
+		height=18
+	}
+	command[0] {
+		label="Force Log Entry"
+		name="$APP/moller_setup/scripts/moller_oplog.pl"
+		args="&"
+	}
+	clr=23
+	bclr=30
+}
+text {
+	object {
+		x=289
+		y=373
+		width=65
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+	textix="Log Entry"
+	align="horiz. centered"
+}

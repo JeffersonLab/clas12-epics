@@ -10,19 +10,11 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-##DB += dbExample1.db
-##DB += dbExample2.db
-##DB += dbSubExample.db
-##DB += user.substitutions
-##DB += userHost.substitutions
-
 DB += asym_fdbk.db
 DB += asym_scaler_common.db
-DB += asym_scaler.db
 DB += asym_scaler_macro.db
 DB += asym_scaler_macro_sums.db
 DB += polarization.db
-
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

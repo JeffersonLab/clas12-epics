@@ -13,4 +13,7 @@ is not used when the run within systemd.
 ## CA Gateway Files
 * gateway.access - defines access security rules used by the gateway
 * gateway.pvlist - defines allowed PVs
+* cagwStats.opi  - opi for display gateway stats
+  * found in apps/css_share/misc
+  * fd, quitFlag, and quitServerFlag are not shown
 

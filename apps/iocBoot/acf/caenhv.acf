@@ -1,5 +1,5 @@
 
-UAG(slow) { baltzell, boirino, kliv, mckinnon, clasioc }
+UAG(slow) { baltzell, boirino, kliv, mckinnon, wmoore, clasioc }
 
 UAG(shift) { clasrun }
 
@@ -11,40 +11,32 @@ UAG(rich) { kenjo, vpk }
 UAG(ltcc) { ungaro }
 UAG(dc)   { mac }
 
-#
-# Default is Expert-only write:
-#
-# But HV:WORLDWRITE can be set by an Expert to open it for everyone in group "shift".
-# Can also break this down by detector if desired (requires work in db generator).
-#
 ASG(DEFAULT) {
+    RULE(1,READ)
+    RULE(1,WRITE,TRAPWRITE)
+    {
+        UAG(slow,ftof,pcal,ecal,ctof,ltcc,rich,dc,shift)
+    }
+}
+
+ASG(EXPERT) {
     INPA(HV:WORLDWRITE)
     RULE(1,READ)
-    RULE(1,WRITE)
+    RULE(1,WRITE,TRAPWRITE)
     {
         UAG(slow,ftof,pcal,ecal,ctof,ltcc,rich,dc)
     }
-    RULE(1,WRITE)
+    RULE(1,WRITE,TRAPWRITE)
     {
         UAG(shift)
         CALC("A=1")
     }
 }
 
-#
-# Special PVs that need write access by everyone (e.g. PwOn/Off): 
-#
-ASG(SHIFTERS) {
-    RULE(1,READ)
-    RULE(1,WRITE)
-    {
-        UAG(slow,ftof,pcal,ecal,ctof,ltcc,rich,dc,shift)
-    }
-}
 
 ASG(SLOW) {
     RULE(1,READ)
-    RULE(1,WRITE)
+    RULE(1,WRITE,TRAPWRITE)
     {
         UAG(slow)
     }

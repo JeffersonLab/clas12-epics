@@ -12,24 +12,35 @@
 // 4. The function should construct the names according to some rules, which will more or less be the 
 //    EPICS pv names and aliases.
 //
-// 5. There's the added option of baing able to make a quick test crate.
+// 5. There's the added option of being able to make a quick single, named crate for testing
 //
 // Here's how it works:
+// mkHVEpics 
+// 
+// Usage:     ./mkHVEpics -h     Print this message
 //
-// mkHVEpics() runs the functions to ceate the names and aliases in one big file (currently HV_allnames.txt).
-//             if a file of swaps (currently HVswaps.txt) is present, this will be read,
-//             and the correct name / alias created in HV_allnames.txt with swapped channels commented.
+// Usage:     ./mkHVEpics all    Generate one big ioc startup file, and related substititions files for all defined crates.
+// Usage:     ./mkHVEpics crates Generate separate ioc startup files and related substitutions files for each defined crate.
+// Usage:     ./mkHVEpics groups Generate group ioc startup files and related substitutions files for each defined group
 //
-// mkHVTestEpics() similar to above, but will create a test crate on the fly for testing and dev purposes
-//                 see https://clasweb.jlab.org/wiki/index.php/Slow_Control_HV_name_and_alias_tool
+// Usage:     ./mkHVEpics <name> <ipaddress> [nslots] [slot1, slot2, ...]
+// 
+//               Generate an ioc startup and related substitutions for a single crate with speficied name, ip and slots, where
+//               name           Name of Mainframe
+//               ipaddress      i.p. of Mainframe
+//               [nslots]:      No of slots with modules (default to all slots, and starts at slot 0 unless a list specified, see below)  
+//               [slot1,slot2, ..... slotn] specific slot numbers
 //
+// All generated startup files will go into ../../iocBoot/ioccaenhv/
+// All generated substitution files will go into ../Db/
+//
+// For the gory details see https://clasweb.jlab.org/wiki/index.php/Slow_Control_HV_name_and_alias_tool
+// 
+// 
+// To compile:
 // g++ -o mkHVEpics mkHVEpics.C
 //
 //
-// (or run as ROOT macro like this)
-// >root mkHVEpics.C
-//
-// or call specific functions in ROOT (at you own risk).
 
 
 #include <stdio.h>
@@ -40,24 +51,24 @@
 #include <fstream>
 
 using namespace std;
-void  mkHVEpics();                 //The main function which makes names, aliases, startups and substitutions for all defined systems
-void  mkHVTestEpics(char *name=NULL, char *ip=NULL, int nslots=0, int *slots=NULL); 
-void  makeStartups(int type);
-void  printUsage(char **argv);
-void  getCurrentCrate(int det, int crate);
+void  mkHVEpics();                 
+void  mkSubFiles();
+void  mkStartups(int type);
+void  mkHVSingleCrateEpics(char *name=NULL, char *ip=NULL, int nslots=0, int *slots=NULL); 
+void  markCSCUsed(int det, int crate, int sl, int ch);
 char *checkSwap(char *alias=NULL, char *canonical=NULL);
 char *checkAlias(char *name=NULL, char *alias=NULL, char *canonical=NULL);
 void  printHierarchy(int det, const char **SysFull, const char **SysAbbr, int level);
 void  printNames(char *canonicalName,char *alias);
 void  loadStoredEpics(char *epicsFile);
-void  makeStartupStart(const char *startupFile,const char *comment, char *ioc=NULL);
-void  makeStartupEnd(char *lastlines=NULL);
-void  makeStartupAddCrateFromList(int crate);
-void  makeStartupAddCrate(char *name=NULL, char *ip=NULL, int index=0);
-void  makeSubStart(const char *subFile,const char *comment);
-void  makeSubAddLine(int cr=0,char *name=NULL, char *alias=NULL, char *crname=NULL);
-void  makeSubEnd();
-void  makeLinkIoc(char *bootdir, char *iocdir, char *linkname);
+void  mkStartupStart(ofstream &stfile,const char *startupFile,const char *comment, char *ioc=NULL);
+void  mkStartupEnd(ofstream &stfile,char *lastlines=NULL);
+void  mkStartupAddCrateFromList(ofstream &stfile,int crate);
+void  mkStartupAddCrate(ofstream &stfile,char *name=NULL, char *ip=NULL, int index=0);
+void  mkSubStart(ofstream &subfile,const char *comment);
+void  mkSubAddLine(ofstream &subfile,int cr=0,char *name=NULL, char *alias=NULL, char *crname=NULL);
+void  mkLinkIoc(char *bootdir, char *iocdir, char *linkname);
+void  printUsage(char **argv);
 
 
 // Some global stuff
@@ -95,73 +106,89 @@ const char *subFileTail[]  =  {"}",
 			       NULL};
 
 
-//some default values 
-char bootDir[]= "../../iocBoot";
-char iocDir[]= "ioccaenhv";
-char dbDir[]= "../Db";
+//some default values for file and directory names
+char bootDir[]    = "../../iocBoot";
+char iocDir[]     = "ioccaenhv";
+char dbDir[]      = "../Db";
 
-char fullHVName[]="ALL";
+char fullHVName[] = "ALL";
 
-ofstream stfile;  //output file for startups
-ofstream subfile; //output file for sub files
 
-// Detector spec - add new ones before DETNULL
-enum         Detectors { DC,  ECAL,  PCAL,  FTOF,  LTCC,   TEST, DETNULL};
-const char  *DetAbbr[]={"DC","ECAL","PCAL","FTOF","LTCC", "TEST"        };    //Abbr. names used in PVs
-const char  *HVCrate[]={"DC","ECAL","FTOF","FTOF","ECAL", "TEST"        };    //Names of HV MainFrames per detector
-const char  *DetFull[]={"Drift Chambers",                                     //Full names of detectors
+// Detector spec - add new ones before NDETECTORS
+enum         Detectors   { DC,  ECAL,  PCAL,  FTOF,  LTCC,   TEST, NDETECTORS};
+const char  *DetAbbr[] = {"DC","ECAL","PCAL","FTOF","LTCC", "TEST", NULL     };    //Abbr. names used in PVs
+const char  *HVCrate[] = {"DC","ECAL","FTOF","FTOF","ECAL", "TEST", NULL     };    //Names of HV MainFrames per detector
+const char  *DetFull[] = {"Drift Chambers",                                        //Full names of detectors
 			  "Calorimiter",
 			  "Pre Calorimiter",
 			  "Forward Time of Flight",
 			  "Low Threshold Cerenkov Counter",
 			  "Test crate"};
 
-// Crate spec
+// Crate spec add new ones before NGEOG
 enum             Geography { CRATE,   CRATENAME,    SLOT,   CHANNEL, NGEOG}; 
 
-const char  *GeogMacro[]={ "Cr",    "CrName",     "SL",   "CH"     };
-const char  *GeogAbbr[] ={ "HV",    "CrName",     "SL",   "CH"     };
-const char  *GeogFull[] ={ "HV",    "CrateName",  "Slot", "Channel"};
+const char  *GeogMacro[] = { "Cr",    "CrName",     "SL",   "CH",      NULL };
+const char  *GeogAbbr[]  = { "HV",    "CrName",     "SL",   "CH",      NULL };
+const char  *GeogFull[]  = { "HV",    "CrateName",  "Slot", "Channel", NULL };
+
 
 //HV - Crate, Slot, Element = same scheme for all detector formatting for output.
-const char *hv_template="B_%s%s%d_%s%02d_%s%02d";
+const char *hv_template  = "B_%s%s%d_%s%02d_%s%02d";
 
-enum         StartupTypes {ALL,GROUPS, CRATES};
 
-int macros=1;  //set this to 0 for aliases
+const char *subnet       = "129.157.167.";  //will need to change the way this is done if the are on more than one subnet
 
-//teThis is the list of the crate names (dns names) and ip addresses in the order that they
-const char *subnet       = "129.157.167.";
-
+//This is the list of the defined crate names (dns names) and ip addresses - add new ones before NMAINFRAMES
 //                             0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,         
-enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,   HVECAL6,   HVDC1,   HVDC2,  HVDC3,   HVDC4,   HVTEST0,   HVLTCC0        };
+enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,   HVECAL6,   HVDC1,   HVDC2,  HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   NMAINFRAMES};
 const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2","HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",  NULL};
 const int  crateIP[]     = {   78,        47,         46,        79,        162,       161,       53,      191,         51,       190,       55,        56,       666,     667,    668,     669,      70,        36,         -1};
 
+
+//For diferent configurations of the ioc/startup files
+enum        StartupTypes     { ALL,  GROUPS,   CRATES , NSTARTUPTYPES  };
+const char *StartupNames[] = {"all","groups", "crates", NULL};
+
+//The crates involved in the dfferent groups
 const int EC_LTCC_Names[]  = { HVECAL1 ,  HVECAL2 ,  HVECAL3 ,  HVECAL4 ,  HVECAL5 ,  HVECAL6 ,  -1};
 const int FTOF_PC_Names[]  = { HVFTOF1 ,  HVFTOF2 ,  HVFTOF3 ,  HVFTOF4 ,  HVFTOF5 ,  HVFTOF6 ,  -1};
 const int DC_Names[]       = {   HVDC1 ,    HVDC2 ,    HVDC3 ,    HVDC4 ,   -1};
 
+//and pointers to them
 const int  *groupLists[]  = { EC_LTCC_Names,  FTOF_PC_Names,  DC_Names, NULL};
 const char *groupNames[]  = {"EC_LTCC",      "FTOF_PC",      "DC",      NULL};
 const char *groupTitles[] = {"EC and LTCC",  "FTOF and PC",  "DC",      NULL};
 
-char crName[20];    //The current values from the above arrays, 
-int crNumber=0;
+//The detectors involved in each grouping, when they are written as groups
+int groupDets[][5] = { ECAL,  LTCC, -1, -1, -1,
+			FTOF,  PCAL, -1, -1, -1,
+			DC,    -1,   -1, -1, -1};
 
-ofstream allnames;  //output file for allnames.txt
-ifstream allsaved;  //in file for allnames.txt
+//default filenename for all the names and aliases
 const char defaultAllnamesFile[] = "HV_allnames.txt";
 char allnamesFile[100];
-int haveStoredEpics=0;
-int nStored=0;
-char *allepics[10000][2];
 
+ofstream allnames;  //streams for read / write to allnamesFile
+
+int haveStoredEpics=0;    //Flag the the names and aliases are in memory
+int nStored=0;            //Number of them
+char *allepics[10000][2]; //array to hold them
+
+//Arrays and counters for the namse of substitution files
+int nSubFiles=0;
+int nSpareFiles=0;
+char startupSubFileNames[50][200];
+char startupSpareFileNames[50][200];
+
+//For each defined mainframe allow for the possibility that all it's channels are spare and available.
+enum chanState { CHAN_SPARE, CHAN_USED};
 const int defaultNChan = 24;
 const int defaultNSlot = 16;
+int CSCstatus[NMAINFRAMES][defaultNSlot][defaultNChan];
 
+//commands codes for CAEN  - Let's hope we can ditch this soon
 
-//commands codes for CAEN
 #define NoSupport 0x00    /* No device support for PV       */
 #define G_Valid   0x80    /* Get HV validity                */
 #define G_HV      0x81    /* Get HV on/off                  */
@@ -189,24 +216,26 @@ const char *command_macros[]= {"pwonoff", "v0set", "i0set", "trip", "rampup", "r
 int command_codes[]         = { S_CHHV,    S_DV,    S_TC,    S_PRD,  S_RUP,    S_RDN,   S_VMAX,  -1};
 
 //For the list of broken channels to be sapped
-enum swapFields{ORIG_CSC, ALIAS, NEW_CSC};
+enum swapFields{CSC, ALIAS, NEW_CSC};
 char *swapTable[1000][3];  //to hold strings from the swap file;
 int  nSwaps=0;
 int haveSwap=0;
 const char *defaultSwapFile="HVswaps.txt";
 char swapFile[100];
 
-//For test crates where aliases are to be provided
+//For single test crates where aliases are to be provided
 char *aliasTable[1000][2];  //to hold strings for aliases
 int  nAlias=0;
 int haveAlias=0;
 char aliasFile[100];
 
 
+
 //********************************************************************************************************
 //Now there are specific functions for each detector (so far DC,  ECAL,  PCAL,  FTOF, LTCC)
 //Based on the descriptions given by the respective detector experts
 //********************************************************************************************************
+
 // This is for the FTOF, which fills the left halves of the FTOF/PCAL Mainframes
 int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
   int cr=crate0;
@@ -223,7 +252,6 @@ int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
   
   //Detector Sector,Layer, ...
   const char *det_template   ="B_%s_%s_%s%d_%s%s_%s_E%02d";
-  const char *macro_template ="%s%d_%s%s_%s_E%02d";
 
   int maxSlot=7;
   int maxChan=23;
@@ -242,7 +270,7 @@ int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
       for(int l=1;l<=3;l++){
 	for(int e=1; e<=nInLayer[l];e++){
 	  
-	  getCurrentCrate(det,cr);
+	  markCSCUsed(det,cr,sl,ch);
 	  
 	  sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],s,SysAbbr[LAYER],layers[l],side[lr],e);
 	  sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
@@ -282,7 +310,6 @@ int LTCCGen(int crate0=1, int slot0=14, int chan0=0,int det=LTCC ){
   
   //Detector Sector,Layer, ...
   const char *det_template   ="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template ="%s%d_%s_E%02d";
 
   int maxSlot=15;
   int maxChan=17;
@@ -299,7 +326,7 @@ int LTCCGen(int crate0=1, int slot0=14, int chan0=0,int det=LTCC ){
     for(int lr=1;lr<=2;lr++){
       for(int e=1; e<=nSide;e++){
 	
-	getCurrentCrate(det,cr);
+	markCSCUsed(det,cr,sl,ch);
 	
 	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],s,side[lr],e);
 	sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
@@ -337,7 +364,6 @@ int PCGen(int crate0=1, int slot0=8, int chan0=0, int det=PCAL ){
   
   //Detector Sector,Layer, ...
   const char *det_template="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template="%s%d_%s_E%02d";
 
   int minSlot=8;
   int maxSlot=15;
@@ -355,7 +381,7 @@ int PCGen(int crate0=1, int slot0=8, int chan0=0, int det=PCAL ){
     for(int l=1;l<=3;l++){
       for(int e=1; e<=nInLayer[l];e++){
 	
-	getCurrentCrate(det,cr);
+	markCSCUsed(det,cr,sl,ch);
 	
 	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],s,layers[l],e);
 	sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
@@ -397,7 +423,6 @@ int ECGen(int crate0=1, int slot0=0, int chan0=0, int det=ECAL  ){
   const char  *SysFull[]={ "Sector", "Layer UI,UO,VI,VO,WI,WO", "Element 1 - 36" };
   
   const char *det_template="B_%s_%s_%s%d_%s_E%02d";
-  const char *macro_template="%s%d_%s_E%02d";
 
   
   int maxSlot=8;
@@ -414,7 +439,7 @@ int ECGen(int crate0=1, int slot0=0, int chan0=0, int det=ECAL  ){
     for(int l=1;l<=6;l++){
       for(int e=1; e<=nInLayer[l];e++){
 
-	getCurrentCrate(det,cr);
+       	markCSCUsed(det,cr,sl,ch);
 
 	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],s,layers[l],e);
 	sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
@@ -450,7 +475,6 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
 
   //Detector Sector,SuperLayer,
   const char *det_template="B_%s_%s_%s%d_%s%d_%s%d_%s%s";
-  const char *macro_template="%s%d_%s%d_%s%d_%s%s";
 
   int maxSlot=9;
   int maxChan=23;
@@ -473,8 +497,7 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
 	  for(int l=1;l<=2;l++){              //super Layer
 	    for(int e=1;e<=nElem[t];e++){;       //elements
 
-	      //now fill the crate, slot, channel
-	      getCurrentCrate(det,cr);  //Set the variables crName and crIndex for the current crate
+	      markCSCUsed(det,cr,sl,ch);
 	      
 	      if(t==3) sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],l,type[t],guardLabel[e]);
 	      else     sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],l,type[t],wiresLabel[e]);
@@ -509,8 +532,8 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
 }
 
 
-
-int TestGen(char *name=NULL, int chans=24, int nslots=16, int *slotlist=NULL){
+//This generates a single named ioc 
+int SingleCrateGen(char *name=NULL, int chans=24, int nslots=16, int *slotlist=NULL){
 
   char canonicalName[64];
   char alias[64];
@@ -527,17 +550,14 @@ int TestGen(char *name=NULL, int chans=24, int nslots=16, int *slotlist=NULL){
   const char *can_template="B_%s_%s%02d_%s%02d";
   const char *alias_template="B_HV_%s_%s%02d_%s%02d";
 
-
   int maxChan=chans;
-
-
 
   for(int sl=0;sl<nslots;sl++){
     s=slotlist[sl];
-    for(int e=0;e<maxChan;e++){       //elements
+    for(int ch=0;ch<maxChan;ch++){       //elements
       
-      sprintf(alias, alias_template,name,SysAbbr[SYSSLOT],s,SysAbbr[ELEMENT],e);
-      sprintf(canonicalName, can_template,name,SysAbbr[SYSSLOT],s,SysAbbr[ELEMENT],e);
+      sprintf(alias, alias_template,name,SysAbbr[SYSSLOT],s,SysAbbr[ELEMENT],ch);
+      sprintf(canonicalName, can_template,name,SysAbbr[SYSSLOT],s,SysAbbr[ELEMENT],ch);
       swappedAlias=checkAlias(name,alias,canonicalName);
       if(swappedAlias){
 	allnames << canonicalName  << "    " << swappedAlias << "   // aliased " << endl;
@@ -545,7 +565,6 @@ int TestGen(char *name=NULL, int chans=24, int nslots=16, int *slotlist=NULL){
       else{
 	allnames << canonicalName  << "    " << alias << endl;
       }
-      
     }
   }
   
@@ -565,27 +584,21 @@ int main(int argc, char **argv){
   char *name;
   char *ip;
   
-  if(argc==2) {
-    if(!strcmp(argv[1],"all")){
-      mkHVEpics();
-      makeStartups(ALL);
+  if(argc==2) {                                        //Should be an arg for specific set of startups 
+    for(int stType=0;stType<NSTARTUPTYPES;stType++){   //figure out if arg is "all", "crates" ....etc
+      if(!strcmp(argv[1],StartupNames[stType])){
+	mkHVEpics();                                   //make all the names and aliases
+	mkSubFiles();                                  //make all the substitutions files
+	mkStartups(stType);                            //make the relevant startup files
+	return 0;
+      }
     }
-    else if(!strcmp(argv[1],"groups")){
-      mkHVEpics();
-      makeStartups(GROUPS);
-    }
-    else if(!strcmp(argv[1],"crates")){
-      mkHVEpics();
-      makeStartups(CRATES);
-    }
-    else{
-      printUsage(argv);
-    }
+    printUsage(argv);
     return 0;
   }
   
-  else if(argc >= 3) {                         //name and ip fo a crate, at least
-    name=argv[1];
+  else if(argc >= 3) {                         //Should be arg for setting up ioc for single crate specified on command line
+    name=argv[1];                              
     ip=argv[2];
     if(argc==3){                               //if only 3 args, no of slots is not provided, use default and number from 0
       nslots = defaultNSlot;
@@ -605,11 +618,13 @@ int main(int argc, char **argv){
 	for(int n=4;n<argc;n++)sscanf(argv[n],"%d,",&slots[n-4]);
       }
     }
-    mkHVTestEpics(name, ip, nslots, slots);
+    mkHVSingleCrateEpics(name, ip, nslots, slots);
   }
   else printUsage(argv);
   return 0; 
 }
+
+
 
 void printUsage(char **argv){
   cout << endl;
@@ -632,24 +647,22 @@ void printUsage(char **argv){
   cout << "For the gory details see https://clasweb.jlab.org/wiki/index.php/Slow_Control_HV_name_and_alias_tool"  << endl  << endl;;
 }
 
-void getCurrentCrate(int det, int crate){
+//Flag that the crate,slot,channel is used, and nolonger spare (the default)
+void markCSCUsed(int det, int crate, int sl, int ch){
+  int cr=0;
+  char crName[100];
   
-  //crIndex and crName are global
-  crNumber=0;
-  
-  sprintf(crName,"HV%s%d",HVCrate[det],crate);  //work out the name of the crate
-  while(crateName[crNumber]){
-    if(strcmp(crName,crateName[crNumber++])==0){
+  sprintf(crName,"HV%s%d",HVCrate[det],crate);  //work out the name of the crate 
+  while(crateName[cr]){                         //find the index
+    if(strcmp(crName,crateName[cr])==0){
+      CSCstatus[cr][sl][ch]=CHAN_USED;          //mark the cr,sl,ch as used
       return;
     }
+    cr++;
   }
-  cout << "Warning: can't find crate called " << crName << ", defined in \"const char *crateName[] = .....\"" << endl;
-  crNumber=666;   //set this to 666
-  return;
 }
 
-
-//Called to check whether the element has been swapped to anothe channel 
+//Called to check whether the element has been swapped to another channel 
 char *checkSwap(char *alias, char *canonical){
   
   FILE *fp;
@@ -671,20 +684,20 @@ char *checkSwap(char *alias, char *canonical){
       cout << "Found swap file " << swapFile << endl;
     }
     cout << endl<<endl;
-
+    
     cout << "The following swaps will be implemented:" << endl;
     
     while(fgets(line,200,fp) != NULL){		// check got a line from file
       nline++;
       if((line[0] == '*')||(line[0] == '#')) continue;    // skip comments 
-      if(sscanf(line,"%s%s%s",fstring[ORIG_CSC],fstring[ALIAS],fstring[NEW_CSC])!=3){
+      if(sscanf(line,"%s%s%s",fstring[CSC],fstring[ALIAS],fstring[NEW_CSC])!=3){
 	cout << "Error, not enough parameters on line " << nline << " in " << swapFile << endl;
 	exit(1);
       }
-      cout << "Swap: " << fstring[ALIAS] << " from " << fstring[ORIG_CSC] << " to " << fstring[NEW_CSC] << endl;
+      cout << "Swap: " << fstring[ALIAS] << " from " << fstring[CSC] << " to " << fstring[NEW_CSC] << endl;
       strcpy(cratename,fstring[NEW_CSC]+2);
       sprintf(strstr(cratename,"_SL"),"");
-      strcpy(origcratename,fstring[ORIG_CSC]+2);
+      strcpy(origcratename,fstring[CSC]+2);
       sprintf(strstr(origcratename,"_SL"),"");
       cout << "      Checking crate " << cratename <<": ";
       if(strcmp(cratename,origcratename)){
@@ -743,11 +756,11 @@ char *checkAlias(char *name, char *alias, char *canonical){
     while(fgets(line,200,fp) != NULL){		// check got a line from file
       nline++;
       if((line[0] == '*')||(line[0] == '#')) continue;    // skip comments 
-      if(sscanf(line,"%s%s",fstring[ORIG_CSC],fstring[ALIAS])!=2){
+      if(sscanf(line,"%s%s",fstring[CSC],fstring[ALIAS])!=2){
 	cout << "Error, not enough parameters on line " << nline << " in " << swapFile << endl;
 	exit(1);
       }
-      cout << "Alias: " << fstring[ORIG_CSC] << " to " << fstring[ALIAS] << endl;
+      cout << "Alias: " << fstring[CSC] << " to " << fstring[ALIAS] << endl;
       
       for(int n=0;n<2;n++){
 	aliasTable[nAlias][n]= new char[strlen(fstring[n])+1];   strcpy(aliasTable[nAlias][n],fstring[n]);
@@ -761,7 +774,7 @@ char *checkAlias(char *name, char *alias, char *canonical){
   if((!nAlias)||(!canonical))return NULL;
   
   for(int n=0;n<nAlias;n++){
-    if(strcmp(aliasTable[n][ORIG_CSC],canonical)==0){     //found a line in the alias table
+    if(strcmp(aliasTable[n][CSC],canonical)==0){     //found a line in the alias table
       return aliasTable[n][ALIAS];
     }
   }
@@ -774,7 +787,20 @@ char *checkAlias(char *name, char *alias, char *canonical){
 void mkHVEpics(){
   time_t rawtime;    //to timestame auto generated files
   time (&rawtime);
+  char canonicalName[64];
+  char alias[64];
 
+  //flag all crates,slots and channels as spare to start with. 
+  for(int cr=0;cr<NMAINFRAMES;cr++){
+    for(int sl=0;sl<defaultNSlot;sl++){
+      for(int ch=0;ch<defaultNChan;ch++){
+	CSCstatus[cr][sl][ch]=CHAN_SPARE;
+      }
+    }
+  }
+
+  
+  
   strcpy(swapFile,defaultSwapFile);
   strcpy(allnamesFile,defaultAllnamesFile);
   
@@ -784,14 +810,36 @@ void mkHVEpics(){
   allnames << "#" << endl << "#This file was autogenerated by mkHVEpics on: " << ctime (&rawtime) << endl << "#" << endl;
   
   ECGen();  LTCCGen(); FTOFGen(); PCGen(); DCGen();  //call all the generators
+
+  //Go over all the defined crates and assume all channels in all slots which have not been taken are alive:
+  allnames << endl;
+  allnames << "################################################################################" << endl << "#" << endl;
+  allnames << "# Below here are the names and aliases for unused slots and elements in each MF " << endl << "#" << endl;
+  allnames << "# To see if they are populated and available, look on the HV GUI " <<  endl << "#" << endl;
+
+  cout << "Doing spare channels ..." << endl;
+  
+  for(int cr=0;cr<NMAINFRAMES;cr++){
+    allnames << "# " << crateName[cr] << endl;
+    for(int sl=0;sl<defaultNSlot;sl++){
+      for(int ch=0;ch<defaultNChan;ch++){
+	if(CSCstatus[cr][sl][ch]==CHAN_SPARE){
+	  sprintf(alias, "B_HV_%s_SPARE_SL%02d_CH%02d",crateName[cr],sl,ch);
+	  sprintf(canonicalName, "B_%s_SL%02d_CH%02d",crateName[cr],sl,ch);
+	  allnames << canonicalName  << "    " << alias << endl;
+	}
+      }
+    }
+  }
+  
   allnames.close();            //close output file
   //now  written all the names and aliases, taking account of any swap
-  cout << "Saved in " << allnamesFile << endl << endl;
+  cout << endl <<  "All names and aliases saved in " << allnamesFile << endl << endl;
 }
 
-//generate startup file, names and aliases for a single ioc (usually for testing), specifcied on the commannd line,
+//generate startup file, names and aliases for a single ioc (usually for testing), specifcied on the command line,
 //and with an optional file of aliases
-void mkHVTestEpics(char *name, char *ip, int nslots, int *slots){
+void mkHVSingleCrateEpics(char *name, char *ip, int nslots, int *slots){
  
   time_t rawtime;     //to timestame auto generated files
   time (&rawtime);
@@ -801,6 +849,9 @@ void mkHVTestEpics(char *name, char *ip, int nslots, int *slots){
   char subName[200];  //subst filenames
   char dumpLine[200]; 
   char iocName[200]; 
+  ofstream subfile;
+  ofstream stfile;
+  int line=0;
   
   sprintf(allnamesFile,"HV_allnames_%s.txt",name);
 
@@ -808,7 +859,7 @@ void mkHVTestEpics(char *name, char *ip, int nslots, int *slots){
   allnames.open(allnamesFile); //open output file
   allnames << "#" << endl << "#This file was autogenerated by mkHVEpics on: " << ctime (&rawtime) << endl << "#" << endl;
   
-  TestGen(name, defaultNChan, nslots, slots);
+  SingleCrateGen(name, defaultNChan, nslots, slots);
   
   allnames.close();            //close output file
 
@@ -819,145 +870,195 @@ void mkHVTestEpics(char *name, char *ip, int nslots, int *slots){
   
   if(!haveStoredEpics) loadStoredEpics(allnamesFile); //load all the names and aliases from file if required.
 
-  cout << endl << "Generating "<< stName << " and " << subName <<  " for HV system: " << name  << endl << endl; 
+  cout << endl << "Generating "<< stName <<  " for HV system: " << name  << endl << endl; 
 
   sprintf(comment,"IOC for single mainframe:  %s",name);
-  makeStartupStart(stName,comment,iocName);                 // Make the startup first lines:
+  stfile.open(stName);
+  mkStartupStart(stfile,stName,comment,iocName);                 // Make the startup first lines:
   
   sprintf(comment,"Substitutions for IOC for single mainframe:  %s", name);
-  makeSubStart(subName,comment);                    // Make the substitution file first lines:
+  subfile.open(subName);
+  mkSubStart(subfile,comment);                           // Make the substitution file first lines:
   
-  makeStartupAddCrate(name,ip,0);
+  mkStartupAddCrate(stfile,name,ip,0);
   for(int n=0;n<nStored;n++){
-    makeSubAddLine(0,allepics[n][ORIG_CSC],allepics[n][ALIAS],name);
+    mkSubAddLine(subfile,0,allepics[n][CSC],allepics[n][ALIAS],name);
   }
-  stfile <<  "## Load record instances" << endl << "dbLoadTemplate(\"db/" << fullHVName << ".hv_substitutions\")" << endl;
+  stfile <<  "## Load record instances" << endl << "dbLoadTemplate(\"db/" << name << ".hv_substitutions\")" << endl;
   
-  makeStartupEnd(dumpLine);
-  makeSubEnd();
+  mkStartupEnd(stfile,dumpLine);
+  stfile.close();
 
-  makeLinkIoc(bootDir,iocDir,iocName);
+  while(subFileTail[line]){
+    subfile << subFileTail[line++] << endl;
+  }
+  subfile.close();
+  
+  mkLinkIoc(bootDir,iocDir,iocName);
   
   return;
   
 }
 
-//generate ioc startup files and substitution files for the detectors with special algorithms specified in this code.
-void makeStartups(int type){
+//generate ioc startup files
+void mkStartups(int type){
   char cratename[100];
   char comment[100];
   int stCrateId=0;
   int stGroupId=0;
+  int stDetId=0;
   char stName[200];  //startup files
   char subName[200];  //subst filenames
   char dumpLine[200]; 
   char iocName[200]; 
-
-  if(!haveStoredEpics) loadStoredEpics(allnamesFile); //load all the names and aliases from file if required.
+  char longDetName[200];
+  int line=0;
+  int det=0;
+  ofstream stfile;                                   //output file for startups
+  ofstream crateDetStream[NMAINFRAMES][NDETECTORS];  //output file for startups
   
-  //Generate startup files for each different way of running:
-
-  if(type==ALL){
-    //**** All together in a biggie ****
-    sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,fullHVName);
+  
+  if(type==ALL){                                                        //All together in a biggie in one ioc/startup file
+    sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,fullHVName);        //make some file name strings etc
     sprintf(subName,"%s/%s.hv_substitutions",dbDir,fullHVName);
     sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",fullHVName); 
     sprintf(iocName,"%s_%s",iocDir,fullHVName); 
     
-    cout << endl << "Generating "<< stName << " and " << subName <<  " for full HV system ....." << endl << endl; 
+    cout << endl << "Generating "<< stName <<   " for full HV system ....." << endl << endl; 
     
-    makeStartupStart(stName,"All HV crates in single IOC", iocName);        // Make the startup first lines:
-    makeSubStart(subName,"Substitutions for all HV crates in single IOC");  // Make the substitution file first lines:
+    stfile.open(stName);                                                         //open the ioc startup file and
+    mkStartupStart(stfile,stName,"All HV crates in single IOC", iocName);        //write the startup first lines
     
     stCrateId=0;           
-    while(crateName[stCrateId]){      // loop over all crates    
-      makeStartupAddCrateFromList(stCrateId);
-      for(int n=0;n<nStored;n++){
-	if(strstr(allepics[n][ORIG_CSC],crateName[stCrateId])){
-	  makeSubAddLine(stCrateId,allepics[n][ORIG_CSC],allepics[n][ALIAS]);
-	}
-      }
+    while(crateName[stCrateId]){                                 //loop over all crates    
+      mkStartupAddCrateFromList(stfile,stCrateId);               //add the startup file lines for this crate
       stCrateId++;
     }
-    stfile <<  "## Load record instances" << endl;
-    stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl;
-    stfile << "dbLoadTemplate(\"db/" << fullHVName << ".hv_substitutions\")" << endl;
     
-    makeStartupEnd(dumpLine);
-    makeSubEnd();
+    stfile <<  "## Load record instances" << endl << endl;       //add some proforma stuff to the ioc
+    stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl<< endl;
 
-    makeLinkIoc(bootDir,iocDir,iocName);
+    for(int n=0;n<nSubFiles;n++){                     //add the lines to load all the templates
+      stfile << "dbLoadTemplate(\"" << startupSubFileNames[n] << "\")" << endl;
+    }
+
+    stfile << endl << "#PVs for unused slots, channels which may be available in the above crates" << endl;
+    stfile << "#Comment in as required" << endl << endl;
+      
+    for(int n=0;n<nSpareFiles;n++){                   //add commented lines to load the spare channels for each crate
+      stfile << "#dbLoadTemplate(\"" << startupSpareFileNames[n] << "\")" << endl;
+    }
+    
+    mkStartupEnd(stfile,dumpLine);
+    stfile.close();
+    mkLinkIoc(bootDir,iocDir,iocName);
 
   }
-  else if(type==CRATES){
-    //**** one per crate ****//  
+  else if(type==CRATES){                                                       //All together in a biggie in one ioc/startup file
     stCrateId=0;
-    cout << endl << "Generating startups and  substitutions for each Mainframe:" << endl;
-    while(crateName[stCrateId]){
-      sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,crateName[stCrateId]);
+    cout << endl << "Generating startups for each Mainframe:" << endl;
+    while(crateName[stCrateId]){                                               //for each crate in the list
+      sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,crateName[stCrateId]);   //make some file name strings etc
       sprintf(subName,"%s/%s.hv_substitutions",dbDir,crateName[stCrateId]);
       sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",crateName[stCrateId]); 
       sprintf(iocName,"%s_%s",iocDir,crateName[stCrateId]); 
       
       cout << "   " << stName << " and " << subName <<  " ....." << endl ; 
       
-      sprintf(comment,"Crate name: %s",crateName[stCrateId]);
-      makeStartupStart(stName,comment,iocName);                                                 // Make the startup first lines:
-      sprintf(comment,"Substitutions for single crate: %s",crateName[stCrateId]);
-      makeSubStart(subName,comment);                                                    // Make the substitution file first lines:
-      
-      makeStartupAddCrateFromList(stCrateId);
-      for(int n=0;n<nStored;n++){
-	if(strstr(allepics[n][ORIG_CSC],crateName[stCrateId])){
-	  makeSubAddLine(stCrateId,allepics[n][ORIG_CSC],allepics[n][ALIAS]);
+      sprintf(comment,"Crate name: %s",crateName[stCrateId]);                  //make crate specific comment
+      stfile.open(stName);                                                     //open the ioc startup file and
+      mkStartupStart(stfile,stName,comment,iocName);                           //write the startup first lines
+       
+      mkStartupAddCrateFromList(stfile,stCrateId);                  //add the startup file lines for this crate
+
+      stfile <<  "## Load record instances" << endl << endl;       //add some proforma stuff to the ioc
+      stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl<< endl;
+
+      sprintf(longDetName,"%s_",crateName[stCrateId]);   // Make the "this_crate" -> "this_crate_" for string uniqueness  
+      for(int n=0;n<nSubFiles;n++){                      // find all substitution files with "this_crate_" string in name
+	if(strstr(startupSubFileNames[n],longDetName)){
+	  stfile << "dbLoadTemplate(\"" << startupSubFileNames[n] << "\")" << endl; //and add a line in the startup to load them.
 	}
       }
-      stfile <<  "## Load record instances" << endl;
-      stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl;
-      stfile   << "dbLoadTemplate(\"db/" << crateName[stCrateId] << ".hv_substitutions\")" << endl;
-      makeStartupEnd(dumpLine);
-      makeSubEnd();
+
+      stfile << endl << "#PVs for unused slots, channels which may be available in the above crates" << endl;
+      stfile << "#Comment in as required" << endl << endl;
       
-      makeLinkIoc(bootDir,iocDir,iocName);
+      for(int n=0;n<nSpareFiles;n++){                    //as above, but for all "this_crate_SPARES" substitutions
+	sprintf(longDetName,"%s_SPARES",crateName[stCrateId]);
+	if(strstr(startupSpareFileNames[n],longDetName)){
+	  stfile << "#dbLoadTemplate(\"" << startupSpareFileNames[n] << "\")" << endl; //add a commented out line for each
+	}
+      }
+      
+      mkStartupEnd(stfile,dumpLine);                     //write end lines and close the ioc startup file
+      stfile.close();
+
+      mkLinkIoc(bootDir,iocDir,iocName);                 //link the file to make a unique ioc directory.
       
       stCrateId++;
     }
   }
   
-  else if(type==GROUPS){
-    //**** one per group **** //
+  else if(type==GROUPS){     //An ioc for each group where detectors share crates.
     
-    cout << endl << "Generating startups and substitutions for each systems sharing Mainframes:" << endl;
-    while(groupLists[stGroupId]){
+    cout << endl << "Generating startups each of the systems sharing Mainframes:" << endl;
+    
+    while(groupLists[stGroupId]){                                                 //for each defined group
       stCrateId=0;
-      sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,groupNames[stGroupId]);
+      sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,groupNames[stGroupId]);     //make some file name strings etc
       sprintf(subName,"%s/%s.hv_substitutions",dbDir,groupNames[stGroupId]);
       sprintf(dumpLine,"dbDumpRecord > st.%s.dump",groupNames[stGroupId]); 
       sprintf(iocName,"%s_%s",iocDir,groupNames[stGroupId]); 
       
       sprintf(comment,"Group name: %s (all crates for %s)",groupNames[stGroupId],groupTitles[stGroupId]);
-      makeStartupStart(stName,comment, iocName);                                                 // Make the startup first lines:
-      sprintf(comment,"Substitutions for group of crates for %s",groupTitles[stGroupId]);
+      stfile.open(stName);                                                        //open the ioc startup file and
+      mkStartupStart(stfile,stName,comment, iocName);                             //write the startup first lines                           
       
-      cout << "   " << stName << " and " << subName <<  " ....." << endl ; 
+      cout << "   " << stName <<  " ....." << endl ; 
       
-      makeSubStart(subName,comment);                                                    // Make the substitution file fi2rst lines:
-      while(groupLists[stGroupId][stCrateId]!=-1){
-	makeStartupAddCrateFromList(groupLists[stGroupId][stCrateId]);
-	for(int n=0;n<nStored;n++){
-	  if(strstr(allepics[n][ORIG_CSC],crateName[groupLists[stGroupId][stCrateId]])){
-	    makeSubAddLine(groupLists[stGroupId][stCrateId],allepics[n][ORIG_CSC],allepics[n][ALIAS]);
+      while(groupLists[stGroupId][stCrateId] != -1){                                //go over all the crates in the group
+	mkStartupAddCrateFromList(stfile,groupLists[stGroupId][stCrateId]);       //add the startup file lines for this crate 
+	stCrateId++;
+      }
+      
+      stfile <<  "## Load record instances" << endl << endl;       //add some proforma stuff to the ioc
+      stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl<< endl;
+
+      stCrateId=0;
+      while(groupLists[stGroupId][stCrateId]!=-1){                      //go over all the crates in the group
+	det=0;
+	while(groupDets[stGroupId][det] !=-1){	                                        //for each detector in the group, make name
+	  sprintf(longDetName,"%s_%s",crateName[groupLists[stGroupId][stCrateId]],DetAbbr[groupDets[stGroupId][det]]);
+	  for(int n=0;n<nSubFiles;n++){                                                 //and find subst. file
+	    if(strstr(startupSubFileNames[n],longDetName)){                             //by comparing with list
+	      stfile << "dbLoadTemplate(\"" << startupSubFileNames[n] << "\")" << endl; //add a line in the startup to load subst. file
+	    }
+	  }
+	  det++;
+	}
+	stCrateId++;
+      }
+
+      stfile << endl << "#PVs for unused slots, channels which may be available in the above crates" << endl;
+      stfile << "#Comment in as required" << endl << endl;
+      
+
+      stCrateId=0;
+      while(groupLists[stGroupId][stCrateId]!=-1){                      //go over all the crates in the group
+	sprintf(longDetName,"%s_SPARES",crateName[groupLists[stGroupId][stCrateId]]);
+	for(int n=0;n<nSpareFiles;n++){                                 //as above, but for all "this_crate_SPARES" substitutions
+	  if(strstr(startupSpareFileNames[n],longDetName)){
+	    stfile << "#dbLoadTemplate(\"" << startupSpareFileNames[n] << "\")" << endl; //add a commented out line for each
 	  }
 	}
 	stCrateId++;
       }
-      stfile <<  "## Load record instances" << endl;
-      stfile << "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\", \"IOC=$(IOC)\")" << endl;
-      stfile << "dbLoadTemplate(\"db/" << groupNames[stGroupId] << ".hv_substitutions\")" << endl;
-      makeStartupEnd(dumpLine);
-      makeSubEnd();
-
-      makeLinkIoc(bootDir,iocDir,iocName);
+      
+      mkStartupEnd(stfile,dumpLine);
+      stfile.close();
+      
+      mkLinkIoc(bootDir,iocDir,iocName);
 
       stGroupId++;
     }
@@ -998,7 +1099,7 @@ void loadStoredEpics(char *epicsFile){
     while(fgets(line,200,fp) != NULL){		// check got a line from file
       nline++;
       if((line[0] == '*')||(line[0] == '#')||(line[0]=='\n')) continue;    // skip comments and blank lines
-      if(sscanf(line,"%s%s",fstring[ORIG_CSC],fstring[ALIAS])!=2){
+      if(sscanf(line,"%s%s",fstring[CSC],fstring[ALIAS])!=2){
 	cout << "Error, not enough parameters on line " << nline << epicsFile << endl;
 	exit(1);
       }
@@ -1015,13 +1116,12 @@ void loadStoredEpics(char *epicsFile){
 }
 
 
-void makeStartupStart(const char *startupFile,const char *comment, char *ioc){
+void mkStartupStart(ofstream &stfile,const char *startupFile,const char *comment, char *ioc){
   int n=0;
   time_t rawtime;
   time (&rawtime);
   char iocline[100];
   
-  stfile.open(startupFile);
   while(stFileHeading[n]){
     stfile << stFileHeading[n++] << endl;
     if(n==1) stfile << "#" << endl << "#This file was autogenerated by mkHVEpics on: " << ctime (&rawtime) << "#" << comment << endl << "#" << endl;
@@ -1034,38 +1134,128 @@ void makeStartupStart(const char *startupFile,const char *comment, char *ioc){
   }
 }
 
-void makeStartupEnd(char *lastlines){
+void mkStartupEnd(ofstream &stfile,char *lastlines){
   int n=0;
   while(stFileTail[n]){
     stfile << stFileTail[n++] << endl;
   }
   if(lastlines) stfile << lastlines << endl;
-  stfile.close();
 }
 
-void makeStartupAddCrateFromList(int crate){
+void mkStartupAddCrateFromList(ofstream &stfile,int crate){
   stfile << "# " << crateName[crate] << " ###" << endl;
   stfile << "Start_CAEN(" << crate << ", \"" << subnet << crateIP[crate] << "\")" << endl << endl;
 
 }
-void makeStartupAddCrate(char *name, char *ip, int index){
+
+void mkStartupAddCrate(ofstream &stfile,char *name, char *ip, int index){
   stfile << "# " << name << " ###" << endl;
   stfile << "Start_CAEN(" << index << ", \"" << ip << "\")" << endl << endl;
 }
 
-void makeSubStart(const char *subFile,const char *comment){
+
+
+void mkSubFiles(){
+  char cratename[100];
+  char comment[100];
+  int stCrateId=0;
+  int stGroupId=0;
+  int stDetId=0;
+  char stName[200];  //startup files
+  char subName[200];  //subst filenames
+  char dumpLine[200]; 
+  char iocName[200]; 
+  char longDetName[200];
+  int line=0;
+  int g=0;
+  ofstream stfile;                                   //output file for startups
+  ofstream crateDetStream[NMAINFRAMES][NDETECTORS];  //output file for startups
+  ofstream crateSpareStream[NMAINFRAMES];
+  
+
+  
+  if(!haveStoredEpics) loadStoredEpics(allnamesFile); //load all the names and aliases from file if required.
+  //make all the substitution files
+
+  cout << "Generating substitution (ie macro) files for all system:" << endl;
+  cout << "Note: *_SPARES.hv_substitutions files will be commented out in ioc startup files for optional inclusion"  << endl;
+  
+  stCrateId=0;
+  //loop over all the Mainframes
+  while(crateName[stCrateId]){         // loop over all crates
+    for(int n=0;n<nStored;n++){
+      if((strstr(allepics[n][CSC],crateName[stCrateId]))&&(strstr(allepics[n][ALIAS],"SPARE"))){ //if this crate, and the alias has the word SPARE
+	if(!crateSpareStream[stCrateId].is_open()){                                              //if the files not open yet	    
+	  sprintf(subName,"%s/%s_SPARES.hv_substitutions",dbDir,crateName[stCrateId]);                     //make the name and
+	  crateSpareStream[stCrateId].open(subName);                                                       //open the file
+	  cout << "Writing " << subName << endl;
+	  sprintf(comment,"Substitutions for crate: %s SPARES",crateName[stCrateId]);                      //make the comment
+	  mkSubStart(crateSpareStream[stCrateId],comment);                                                 //write the start lines to the file
+	  sprintf(startupSpareFileNames[nSpareFiles++],"db/%s_SPARES.hv_substitutions",crateName[stCrateId]);  //make the name for the line in startup files to load the subs
+	}
+	mkSubAddLine(crateSpareStream[stCrateId],stCrateId,allepics[n][CSC],allepics[n][ALIAS]);  //add the macros for this line
+      }
+    }
+    stDetId=0;
+    while(DetAbbr[stDetId]){             // loop over all detectors    
+      for(int n=0;n<nStored;n++){
+	sprintf(longDetName,"_%s_",DetAbbr[stDetId]);
+	if(strstr(allepics[n][CSC],crateName[stCrateId]) && strstr(allepics[n][ALIAS],longDetName)){	//if name contains crate name and alias contains detector name
+	  if(!crateDetStream[stCrateId][stDetId].is_open()){                                            //if the files not open yet
+	    sprintf(subName,"%s/%s_%s.hv_substitutions",dbDir,crateName[stCrateId],DetAbbr[stDetId]);   //make the name and
+	    cout << "Writing " << subName << endl;
+	    crateDetStream[stCrateId][stDetId].open(subName);                                                          //open the file
+	    sprintf(comment,"Substitutions for crate: %s,  detector: %s",crateName[stCrateId],DetAbbr[stDetId]);       //make the comment
+	    mkSubStart(crateDetStream[stCrateId][stDetId],comment);                                                  //write the start lines to the file
+	    sprintf(startupSubFileNames[nSubFiles++],"db/%s_%s.hv_substitutions",crateName[stCrateId],DetAbbr[stDetId]);  //make the name for the line in startup files to load the subs
+	  }
+	  mkSubAddLine(crateDetStream[stCrateId][stDetId],stCrateId,allepics[n][CSC],allepics[n][ALIAS]);  //add the macros for this line
+	}
+      }
+      stDetId++;
+    }
+    stCrateId++;
+  }
+  stCrateId=0;
+  
+  while(crateName[stCrateId]){         // loop over all crates, and detectors, print endings and close open files
+    if(crateSpareStream[stCrateId].is_open()){
+      line=0;
+      while(subFileTail[line]){
+	crateSpareStream[stCrateId] << subFileTail[line++] << endl;
+      }
+      crateSpareStream[stCrateId].close();
+    }
+    stDetId=0;
+    while(DetAbbr[stDetId]){    
+      if(crateDetStream[stCrateId][stDetId].is_open()){
+	line=0;
+	while(subFileTail[line]){
+	  crateDetStream[stCrateId][stDetId] << subFileTail[line++] << endl;
+	}
+	crateDetStream[stCrateId][stDetId].close();
+      }
+      stDetId++; 
+    }
+    stCrateId++;
+  }
+  
+}
+
+
+
+void mkSubStart(ofstream &subfile,const char *comment){
   int n=0;
   time_t rawtime;
   time (&rawtime);
   
-  subfile.open(subFile);
   subfile << "#" << endl << "#This file was autogenerated by mkHVEpics.C on: " << ctime (&rawtime) << "#" << comment << endl << "#" << endl;
   while(subFileHeading[n]){
     subfile << subFileHeading[n++] << endl;
   }
 }
 
-void makeSubAddLine(int cr,char *name, char *alias, char *crname){
+void mkSubAddLine(ofstream &subfile,int cr,char *name, char *alias, char *crname){
   char subline[200];
   int slot,chan;
   char detabbr[50];
@@ -1096,13 +1286,6 @@ void makeSubAddLine(int cr,char *name, char *alias, char *crname){
   subfile << "}"<< endl;
 }
 
-void makeSubEnd(){
-  int n=0;
-  while(subFileTail[n]){
-    subfile << subFileTail[n++] << endl;
-  }
-  subfile.close();
-}
 
 void printHierarchy(int det, const char **SysFull, const char **SysAbbr, int level){
   //print out the heirarchy so we understand
@@ -1125,7 +1308,7 @@ void printHierarchy(int det, const char **SysFull, const char **SysAbbr, int lev
 }
 
 
-void makeLinkIoc(char *bootdir, char *iocdir, char *linkname){
+void mkLinkIoc(char *bootdir, char *iocdir, char *linkname){
   char linkCommand[200]; 
 
   cout << "Linking " << bootdir << "/" << iocdir << " as " <<  bootdir << "/" << linkname << endl;
@@ -1133,4 +1316,3 @@ void makeLinkIoc(char *bootdir, char *iocdir, char *linkname){
   system(linkCommand);
   cout << endl;
 }
-

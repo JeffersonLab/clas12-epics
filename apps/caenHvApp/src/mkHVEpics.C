@@ -92,9 +92,12 @@ const char *stFileHeading[] = {"#!../../bin/linux-x86/ioccaen",
 
 const char *stFileTail[]=   {  "",
 			       "cd ${TOP}/iocBoot/${IOC}",
+			       "",
+                               "asSetFilename(\"caenhv.acf\")",
+                               "",
 			       "iocInit()",
 			       "",
-			       "asSetFilename(\"caenhv.acf\")",
+                               "caPutLogInit(\"clonioc2:7011\")",
 			       "",
 			       NULL};
 

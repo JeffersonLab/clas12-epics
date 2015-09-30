@@ -16,6 +16,14 @@ DB += HPS_SVT_Interlock_v5_PLCarr.db
 DB += HPS_SVT_Interlock_v5_PLCin.db 
 DB += HPS_SVT_Interlock_v5_PLCout.db 
 
+DB += Bit_v_Bool_PLCarr.db
+DB += Bit_v_Bool_PLCin.db
+DB += Bit_v_Bool_PLCout.db
+
+DB += TestLogic_v2_PLCarr.db
+DB += TestLogic_v2_PLCin.db
+DB += TestLogic_v2_PLCout.db
+
 REQ += HPS_SVT_Interlock_v5_PLC.req  # generated file
 #REQ += HPS_SVT_Interlocks.req        # nested calls to generated file (inputs/outputs)
 

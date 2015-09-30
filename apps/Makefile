@@ -26,8 +26,8 @@ include $(TOP)/configure/RULES_TOP
 
 .PHONY: css cssclean
 css:
-	@./build_css.sh
+	@./css_builder.sh
 
 cssclean:
-	$(RMDIR) ./css
+	$(RMDIR) ./css_share
 

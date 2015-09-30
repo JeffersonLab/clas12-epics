@@ -1,0 +1,15 @@
+[Unit]
+Description=EPICS CA Gateway
+After=network.target
+Requires=network.target
+
+[Service]
+Type=simple
+User=epics
+Group=clas
+EnvironmentFile=/etc/sysconfig/gateway
+ExecStart=/usr/clas12/R3.14.12.5/extensions/bin/linux-x86_64/gateway -home $HOME_DIR -log $LOG_FILE -report $REPORT_FILE -sip $SERVER_IP -cip $CA_ADDR_LIST -prefix $PREFIX
+
+[Install]
+WantedBy=multi-user.target
+

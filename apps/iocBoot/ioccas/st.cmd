@@ -12,12 +12,13 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords "db/cas.db", "P=B_,R=CAS:"
 
 cd "${TOP}/iocBoot/${IOC}"
-#asSetFilename("${TOP}/iocBoot/acf/ca_security.acf")
+asSetFilename("${TOP}/iocBoot/acf/cas.acf")
 
 ## autosave setup
 # < save_restore.cmd
 
 iocInit
+caPutLogInit "clonioc2:7011"
 
 create_monitor_set("cas_settings.req", 30, "P=B_,R=CAS:")
 

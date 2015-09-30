@@ -8,7 +8,7 @@
 # Date:   Aug 2015
 #
 
-css_share_path=./css
+css_share_path=./css_share
 top_dir=`pwd -P`
 cols=`tput cols`
 

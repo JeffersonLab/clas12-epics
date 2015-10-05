@@ -11,6 +11,7 @@
 #include        <alarm.h>
 #include        <cvtTable.h>
 #include        <dbDefs.h>
+#include        <recGbl.h>
 #include        <dbAccess.h>
 #include        <recSup.h>
 #include        <devSup.h>
@@ -21,6 +22,9 @@
 #include        <dbScan.h>
 #include        <vxLib.h>
 #include        <vme.h>
+
+extern int init_DVME628();
+extern int write_DVME628(unsigned short, long*);
 
 /* Create the dset for devAoDVME628 */
 static long init();

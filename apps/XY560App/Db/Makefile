@@ -10,7 +10,11 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-#DB += xxx.db
+DB += XY560.db
+DB += XY560_1ch.db
+
+REQ += XY560_settings.req
+REQ += XY560_chN_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

@@ -95,7 +95,7 @@ iocInit "../resource.def"
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=iocscalerTest:")
 create_monitor_set("info_settings.req", 30, "P=iocscalerTest:")
-create_monitor_set("joerger_classc1_settings.req", 30)
+create_monitor_set("joerger_classc1_settings.req", 60)
 
 ## Start any sequence programs
 

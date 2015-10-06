@@ -105,7 +105,7 @@ iocInit "../resource.def"
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=iocclassc4:")
 create_monitor_set("info_settings.req", 30, "P=iocclassc4:")
-create_monitor_set("joerger_classc4_settings.req", 30)
+create_monitor_set("joerger_classc4_settings.req", 60)
 create_monitor_set("sixty_hz_settings.req", 30)
 
 ## Start any sequence programs

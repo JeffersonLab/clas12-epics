@@ -66,15 +66,21 @@ dbLoadRecords("$(TOP)/db/bom_sum.db",          "SCLR=bom_sc")
 ## Joerger Scalers
 # NOTE: this function is not defined in iocsh, only vxworks shell
 VSCSetup(3, 0x0a000000, 200)
-# scaler_c
-#dbLoadRecords("$(STD)/stdApp/Db/scaler16m.db","P=HB:,S=SCLR1,OUT=#C0 S0 @,DTYP=Joerger VSC8/16,FREQ=10000000")
-#dbLoadRecords("$(TOP)/db/scaler16m_norm.db", "P=HB:,S=SCLR1")
-# scaler_d
-#dbLoadRecords("$(STD)/stdApp/Db/scaler16m.db","P=HB:,S=SCLR3,OUT=#C2 S0 @,DTYP=Joerger VSC8/16,FREQ=10000000")
-#dbLoadRecords("$(TOP)/db/scaler16m_norm.db", "P=HB:,S=SCLR2")
-# scaler_e
-#dbLoadRecords("$(STD)/stdApp/Db/scaler16m.db","P=HB:,S=SCLR2,OUT=#C1 S0 @,DTYP=Joerger VSC8/16,FREQ=10000000")
-#dbLoadRecords("$(TOP)/db/scaler16m_norm.db", "P=HB:,S=SCLR3")
+# scaler_c, d, e
+dbLoadTemplate("joerger_classc1.substitions")
+
+## harp_generic
+# OMS VME driver setup parameters: 
+#     (1)cards, (2)base address(short, 16-byte boundary), 
+#     (3)interrupt vector (0=disable or  64 - 255), (4)interrupt level (1 - 6),
+#     (5)motor task polling rate (min=1Hz,max=60Hz)
+omsSetup(2, 0x8000, 180, 5, 10)
+dbLoadRecords("$(TOP)/db/motor.db","motor_name=harp_2c21, card=0, slot=2, srev=2000, urev=2.54, direction=Neg, velo=5.0, accl=0.1")
+dbLoadRecords("$(TOP)/db/scan.db","motor_name=harp_2c21, start_at=25, end_at=60.0, start_speed=5.0, scan_speed=0.5, acq_time=0.1")
+#
+dbLoadRecords("$(TOP)/db/motor.db","motor_name=harp_tagger, card=0, slot=1, srev=2000, urev=2.54, direction=Neg, velo=0.5, accl=0.01")
+dbLoadRecords("$(TOP)/db/scan.db","motor_name=harp_tagger, start_at=18, end_at=58.0, start_speed=5.0, scan_speed=0.5, acq_time=0.07")
+dbLoadRecords("$(TOP)/db/radiators.db")
 
 ## IOC monitoring, etc
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminVxWorks.db", "IOC=iocclassc1")
@@ -89,9 +95,7 @@ iocInit "../resource.def"
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=iocscalerTest:")
 create_monitor_set("info_settings.req", 30, "P=iocscalerTest:")
-#create_monitor_set("scaler16m_settings.req", 30, "P=HB:,S=SCLR")
-#create_monitor_set("sixty_hz_settings.req", 30)
+create_monitor_set("joerger_classc1_settings.req", 30)
 
 ## Start any sequence programs
-#seq &sixtyHz
 

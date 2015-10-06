@@ -67,7 +67,10 @@ VSCSetup(2, 0x0a000000, 200)
 dbLoadTemplate("joerger_classc4.substitutions")
 
 ## FCUP
+# from scalerApp
 dbLoadRecords("$(TOP)/db/fcup_calc.db", "P=HB:,R=fcup,SCLR=scaler,CH=S2")
+# from fcup_gainApp - DVME628, base address is hardcoded into the driver
+dbLoadDatabase("$(TOP)/db/fcup_cal.db")
 
 ## harp_generic
 # OMS VME driver setup parameters: 

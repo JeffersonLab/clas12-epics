@@ -1,0 +1,1754 @@
+
+file {
+	name="/u/home/bruhwel/epics/app/minitorus/medm/tagger.adl"
+	version=020306
+}
+display {
+	object {
+		x=26
+		y=154
+		width=1100
+		height=528
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+oval {
+	object {
+		x=972
+		y=103
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=20
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="TMCMDMODE"
+	}
+}
+oval {
+	object {
+		x=972
+		y=103
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMCMDMODE"
+	}
+}
+oval {
+	object {
+		x=127
+		y=112
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+}
+oval {
+	object {
+		x=127
+		y=112
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=61
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMPSONRBCK"
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=1200
+		height=25
+	}
+	"basic attribute" {
+		clr=34
+	}
+}
+text {
+	object {
+		x=354
+		y=2
+		width=230
+		height=24
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Tagger Magnet Controls"
+	align="horiz. centered"
+}
+"message button" {
+	object {
+		x=20
+		y=136
+		width=100
+		height=20
+	}
+	control {
+		chan="TMRESET"
+		clr=14
+		bclr=51
+	}
+	label="PS RESET"
+	release_msg="1"
+}
+"text entry" {
+	object {
+		x=130
+		y=167
+		width=100
+		height=18
+	}
+	control {
+		chan="TMSETI"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=20
+		y=171
+		width=80
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Current Set"
+}
+text {
+	object {
+		x=232
+		y=171
+		width=33
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Amps"
+}
+text {
+	object {
+		x=68
+		y=41
+		width=310
+		height=34
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Power Supply Controls"
+}
+rectangle {
+	object {
+		x=1
+		y=23
+		width=455
+		height=503
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=10
+	}
+}
+text {
+	object {
+		x=650
+		y=40
+		width=297
+		height=32
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Interlocks and Alarms"
+}
+composite {
+	object {
+		x=20
+		y=239
+		width=245
+		height=18
+	}
+	"composite name"=""
+	children {
+		"text update" {
+			object {
+				x=130
+				y=239
+				width=100
+				height=18
+			}
+			monitor {
+				chan="TMIRBCK"
+				clr=1
+				bclr=53
+			}
+			limits {
+			}
+		}
+		text {
+			object {
+				x=232
+				y=243
+				width=33
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Amps"
+		}
+		text {
+			object {
+				x=20
+				y=243
+				width=104
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Current ReadBack"
+		}
+	}
+}
+composite {
+	object {
+		x=19
+		y=290
+		width=247
+		height=18
+	}
+	"composite name"=""
+	children {
+		"text update" {
+			object {
+				x=129
+				y=290
+				width=100
+				height=18
+			}
+			monitor {
+				chan="TMISETRBCK"
+				clr=1
+				bclr=53
+			}
+			limits {
+			}
+		}
+		text {
+			object {
+				x=233
+				y=294
+				width=33
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Amps"
+		}
+		text {
+			object {
+				x=19
+				y=294
+				width=104
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Setpoint ReadBack"
+		}
+	}
+}
+composite {
+	object {
+		x=17
+		y=317
+		width=238
+		height=18
+	}
+	"composite name"=""
+	children {
+		"text update" {
+			object {
+				x=129
+				y=317
+				width=100
+				height=18
+			}
+			monitor {
+				chan="TMVRBCK"
+				clr=1
+				bclr=53
+			}
+			limits {
+			}
+		}
+		text {
+			object {
+				x=239
+				y=321
+				width=16
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="V"
+		}
+		text {
+			object {
+				x=17
+				y=321
+				width=104
+				height=14
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Voltage ReadBack"
+		}
+	}
+}
+text {
+	object {
+		x=277
+		y=239
+		width=151
+		height=24
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMMISMATCHALARM"
+	}
+	textix="Magnet Mismatch"
+}
+text {
+	object {
+		x=250
+		y=350
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Polarity ReadBack"
+}
+text {
+	object {
+		x=362
+		y=350
+		width=47
+		height=14
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMPOLARRBCK"
+	}
+	textix="Positive"
+}
+text {
+	object {
+		x=362
+		y=350
+		width=47
+		height=14
+	}
+	"basic attribute" {
+		clr=62
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="TMPOLARRBCK"
+	}
+	textix="Negative"
+}
+"choice button" {
+	object {
+		x=20
+		y=92
+		width=100
+		height=39
+	}
+	control {
+		chan="TMPSONSET"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=167
+		y=116
+		width=277
+		height=16
+	}
+	monitor {
+		chan="TMMSTATUS"
+		clr=1
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=168
+		y=92
+		width=205
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Power Supply Status"
+}
+rectangle {
+	object {
+		x=446
+		y=23
+		width=654
+		height=503
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=10
+	}
+}
+text {
+	object {
+		x=770
+		y=103
+		width=89
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Remote Mode"
+}
+text {
+	object {
+		x=770
+		y=84
+		width=97
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="M1 Aux"
+}
+text {
+	object {
+		x=483
+		y=86
+		width=105
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="ZFCT Fault"
+}
+text {
+	object {
+		x=483
+		y=106
+		width=124
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Firing Circuit Fault"
+}
+text {
+	object {
+		x=483
+		y=126
+		width=124
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="SCR OverTemp"
+}
+text {
+	object {
+		x=483
+		y=146
+		width=150
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Trans. OverTemp (Delta)"
+}
+text {
+	object {
+		x=483
+		y=166
+		width=88
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Trans. OverTemp (WYE)"
+}
+text {
+	object {
+		x=483
+		y=186
+		width=71
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Auto Trans. OverTemp"
+}
+text {
+	object {
+		x=483
+		y=206
+		width=89
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Choke OverTemp"
+}
+text {
+	object {
+		x=483
+		y=226
+		width=150
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Emergency Stop Button"
+}
+text {
+	object {
+		x=483
+		y=246
+		width=120
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="DC Over Current"
+}
+text {
+	object {
+		x=483
+		y=266
+		width=117
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Over Voltage"
+}
+text {
+	object {
+		x=483
+		y=286
+		width=157
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Reverser OverTemp"
+}
+text {
+	object {
+		x=483
+		y=306
+		width=153
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Coolant Leak"
+}
+text {
+	object {
+		x=483
+		y=326
+		width=145
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Door Open Fault"
+}
+oval {
+	object {
+		x=672
+		y=86
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMZFCT"
+	}
+}
+oval {
+	object {
+		x=672
+		y=106
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMFCIRCUIT"
+	}
+}
+oval {
+	object {
+		x=672
+		y=126
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMSCROVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=146
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMDELTAOVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=166
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMWYEOVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=186
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMATOVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=206
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMCHOKEOVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=226
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMESTOP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=246
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMOVERCURRENT"
+	}
+}
+oval {
+	object {
+		x=672
+		y=266
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMOVERVOLTAGE"
+	}
+}
+oval {
+	object {
+		x=672
+		y=286
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMROVERTEMP"
+	}
+}
+oval {
+	object {
+		x=672
+		y=306
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMCOOLANTLEAK"
+	}
+}
+oval {
+	object {
+		x=672
+		y=326
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMDOOROPEN"
+	}
+}
+text {
+	object {
+		x=483
+		y=346
+		width=152
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="AC Current Inbalance"
+}
+text {
+	object {
+		x=483
+		y=366
+		width=90
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Phase Sequence Fault"
+}
+text {
+	object {
+		x=483
+		y=386
+		width=97
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Serial Communication Status"
+}
+oval {
+	object {
+		x=672
+		y=345
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMACIBAL"
+	}
+}
+oval {
+	object {
+		x=672
+		y=365
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMPHASESEQ"
+	}
+}
+oval {
+	object {
+		x=672
+		y=385
+		width=14
+		height=12
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="TMSERIALSTAT"
+	}
+}
+"choice button" {
+	object {
+		x=137
+		y=440
+		width=89
+		height=17
+	}
+	control {
+		chan="TMTESTMODE"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+text {
+	object {
+		x=21
+		y=443
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Test Mode"
+}
+text {
+	object {
+		x=272
+		y=169
+		width=40
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=10
+	}
+	textix="Wait"
+}
+"text update" {
+	object {
+		x=316
+		y=169
+		width=48
+		height=15
+	}
+	monitor {
+		chan="TMCOUNTER"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=372
+		y=169
+		width=24
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=10
+	}
+	textix="sec"
+}
+text {
+	object {
+		x=286
+		y=265
+		width=151
+		height=24
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMBEAMON"
+	}
+	textix="BEAMON"
+}
+"choice button" {
+	object {
+		x=137
+		y=396
+		width=89
+		height=17
+	}
+	control {
+		chan="TMDEGAUSS"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+text {
+	object {
+		x=21
+		y=399
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Degauss Magnet"
+}
+text {
+	object {
+		x=21
+		y=349
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Set Neg. Polarity"
+}
+"message button" {
+	object {
+		x=129
+		y=347
+		width=100
+		height=20
+	}
+	control {
+		chan="TMSETNEG"
+		clr=14
+		bclr=51
+	}
+	label="Set Neg. Polarity"
+	press_msg="0"
+	release_msg="1"
+}
+"message button" {
+	object {
+		x=129
+		y=371
+		width=100
+		height=20
+	}
+	control {
+		chan="TMFORCEHYST"
+		clr=14
+		bclr=51
+	}
+	label="Force Hysteresis"
+	press_msg="0"
+	release_msg="1"
+}
+text {
+	object {
+		x=21
+		y=373
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Force Hysteresis"
+}
+"text entry" {
+	object {
+		x=131
+		y=417
+		width=100
+		height=18
+	}
+	control {
+		chan="TMDEGPARAM"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=21
+		y=421
+		width=80
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Set Degauss Param"
+}
+text {
+	object {
+		x=233
+		y=421
+		width=33
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Amps"
+}
+"message button" {
+	object {
+		x=225
+		y=139
+		width=100
+		height=20
+	}
+	control {
+		chan="TMCONFIRM"
+		clr=14
+		bclr=51
+	}
+	label="CONFIRM"
+	press_msg="0"
+	release_msg="2"
+}
+"message button" {
+	object {
+		x=333
+		y=139
+		width=100
+		height=20
+	}
+	control {
+		chan="TMCONFIRM"
+		clr=14
+		bclr=51
+	}
+	label="CANCEL"
+	press_msg="0"
+	release_msg="1"
+}
+"text update" {
+	object {
+		x=235
+		y=398
+		width=48
+		height=15
+	}
+	monitor {
+		chan="TMDEGAUSS_STATE"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=290
+		y=396
+		width=151
+		height=24
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMDEGAUSS"
+	}
+	textix="DEGAUSSING"
+}
+text {
+	object {
+		x=292
+		y=419
+		width=151
+		height=24
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMTESTMODE"
+	}
+	textix="TEST MODE"
+}
+"text update" {
+	object {
+		x=131
+		y=463
+		width=100
+		height=18
+	}
+	monitor {
+		chan="TMSUGGESTISET"
+		clr=1
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=233
+		y=467
+		width=33
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Amps"
+}
+text {
+	object {
+		x=21
+		y=467
+		width=106
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Suggested Setpoint"
+}
+"text update" {
+	object {
+		x=131
+		y=489
+		width=100
+		height=18
+	}
+	monitor {
+		chan="MBSY2C_energy"
+		clr=1
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=21
+		y=489
+		width=106
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="HallB Box's energy"
+}
+valuator {
+	object {
+		x=22
+		y=192
+		width=208
+		height=36
+	}
+	control {
+		chan="TMSETI"
+		clr=14
+		bclr=51
+	}
+	label="limits"
+	dPrecision=0.100000
+	limits {
+	}
+}
+text {
+	object {
+		x=234
+		y=195
+		width=33
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Amps"
+}
+text {
+	object {
+		x=476
+		y=420
+		width=586
+		height=34
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMSETALARM"
+	}
+	textix="CAUTION: CHECK TAGGER SETPOINT"
+}
+text {
+	object {
+		x=476
+		y=468
+		width=586
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		chan="TMSETALARM"
+	}
+	textix="Please:  DO NOT Leave Tagger ON at Zero Output, "
+}
+text {
+	object {
+		x=545
+		y=490
+		width=400
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		chan="TMSETALARM"
+	}
+	textix="Turn Supply OFF After Degaussing."
+}
+text {
+	object {
+		x=980
+		y=500
+		width=100
+		height=10
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="(Higgins, 07/27/04)"
+}
+composite {
+	object {
+		x=286
+		y=444
+		width=128
+		height=67
+	}
+	"composite name"=""
+	children {
+		rectangle {
+			object {
+				x=293
+				y=488
+				width=116
+				height=16
+			}
+			"basic attribute" {
+				clr=30
+			}
+			"dynamic attribute" {
+				vis="if not zero"
+				chan="ISD2H002NA.B4"
+			}
+		}
+		text {
+			object {
+				x=328
+				y=490
+				width=45
+				height=12
+			}
+			"basic attribute" {
+				clr=14
+			}
+			"dynamic attribute" {
+				vis="if not zero"
+				chan="ISD2H002NA.B4"
+			}
+			textix="Tagger Magnet Masked"
+			align="horiz. centered"
+		}
+		"message button" {
+			object {
+				x=329
+				y=465
+				width=20
+				height=20
+			}
+			control {
+				chan="ISD2H002L.E"
+				clr=14
+				bclr=51
+			}
+			label="U"
+			press_msg="0"
+		}
+		"message button" {
+			object {
+				x=349
+				y=465
+				width=20
+				height=20
+			}
+			control {
+				chan="ISD2H002L.E"
+				clr=14
+				bclr=51
+			}
+			label="M"
+			press_msg="1"
+		}
+		text {
+			object {
+				x=293
+				y=450
+				width=116
+				height=13
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Tagger Magnet Masking"
+			align="horiz. centered"
+		}
+		rectangle {
+			object {
+				x=286
+				y=444
+				width=128
+				height=67
+			}
+			"basic attribute" {
+				clr=14
+				fill="outline"
+				width=5
+			}
+		}
+	}
+}
+text {
+	object {
+		x=970
+		y=85
+		width=23
+		height=14
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="TMPSONRBCK"
+	}
+	textix="OFF"
+}
+text {
+	object {
+		x=970
+		y=85
+		width=23
+		height=14
+	}
+	"basic attribute" {
+		clr=19
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMPSONRBCK"
+	}
+	textix="ON"
+}
+oval {
+	object {
+		x=127
+		y=138
+		width=16
+		height=15
+	}
+	"basic attribute" {
+		clr=61
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMSTATUS2.B2"
+	}
+}
+"text update" {
+	object {
+		x=130
+		y=265
+		width=100
+		height=18
+	}
+	monitor {
+		chan="TMREDIRBCK"
+		clr=1
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=232
+		y=269
+		width=33
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Amps"
+}
+text {
+	object {
+		x=20
+		y=269
+		width=104
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="2nd Cur. ReadBack"
+}
+text {
+	object {
+		x=770
+		y=121
+		width=97
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="Ground Fault Switch Status"
+}
+text {
+	object {
+		x=970
+		y=122
+		width=23
+		height=14
+	}
+	"basic attribute" {
+		clr=16
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="TMGROUNDFAULTON"
+	}
+	textix="OFF"
+}
+text {
+	object {
+		x=970
+		y=122
+		width=23
+		height=14
+	}
+	"basic attribute" {
+		clr=19
+		fill="outline"
+		width=10
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="TMGROUNDFAULTON"
+	}
+	textix="ON"
+}
+"shell command" {
+	object {
+		x=1074
+		y=1
+		width=20
+		height=20
+	}
+	command[0] {
+		label="Tagger User Guide"
+		name="/usr/bin/X11/xterm -geometry 99 -n taggerUserGuide -T 'Tagger User Guide: <q> or <:q> to quit, up/down arrows to scroll' -e less /usr/user4/mccops/medm/magnets/help/taggerUserGuide &"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=958
+		y=3
+		width=105
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+		width=10
+	}
+	textix="USER GUIDE"
+}
+"related display" {
+	object {
+		x=340
+		y=201
+		width=100
+		height=25
+	}
+	display[0] {
+		label="Hall Probes"
+		name="Hac_PS_LS450.adl"
+		args="MAG=TGR"
+	}
+	clr=22
+	bclr=30
+	label="Hall Probe"
+}

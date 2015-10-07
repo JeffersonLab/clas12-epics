@@ -12,7 +12,11 @@ DBD += classc1.dbd
 
 # classc1.dbd will include these files:
 classc1_DBD += base.dbd
+classc1_DBD += asSupport.dbd
 classc1_DBD += bomSupport.dbd
+classc1_DBD += devIocStats.dbd
+classc1_DBD += harp_genericSupport.dbd
+classc1_DBD += scalerSupport.dbd
 
 # classc1_registerRecordDeviceDriver.cpp derives from classc1.dbd
 classc1_SRCS += classc1_registerRecordDeviceDriver.cpp
@@ -26,6 +30,21 @@ classc1_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from our support library
 classc1_LIBS += bomSupport
+classc1_LIBS += harp_genericSupport
+classc1_LIBS += scalerSupport
+classc1_LIBS += SIS38XX
+classc1_LIBS += mca
+classc1_LIBS += calc
+classc1_LIBS += busy
+classc1_LIBS += sscan
+classc1_LIBS += std
+classc1_LIBS += oms
+classc1_LIBS += motor
+classc1_LIBS += vme
+classc1_LIBS += autosave
+classc1_LIBS += devIocStats
+classc1_LIBS += asyn
+classc1_LIBS += seq pv
 classc1_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

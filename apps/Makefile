@@ -21,6 +21,8 @@ caenHvApp_DEPEND_DIRS  += syX527App
 classc1App_DEPEND_DIRS += bomApp kepcoApp              			# vme crate
 classc4App_DEPEND_DIRS += harp_genericApp scalerApp sixtyHzApp 	# vme crate
 kepcoApp_DEPEND_DIRS   += DVME628App
+dynabcApp_DEPEND_DIRS  += XY240App
+taggerTempApp_DEPEND_DIRS += XY560App
 
 include $(TOP)/configure/RULES_TOP
 

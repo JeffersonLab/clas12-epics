@@ -1,12 +1,12 @@
 # harp database record
-record(stringout, "name_$(M)") 
+record(stringout, "name_$(motor_name)") 
 {
-        field(VAL,"$(M)") 
+        field(VAL,"$(motor_name)") 
 }
-record(motor,"$(M)")
+record(motor,"$(motor_name)")
 {
 # COMMON field description
-	field(DESC,"$(M)")
+	field(DESC,"$(motor_name)")
 	field(DTYP,"OMS VME8/44")
 	field(OUT,"#C$(card) S$(slot) @")
 	
@@ -30,6 +30,6 @@ record(motor,"$(M)")
 # Other
 	field(PREC,"3"    )
 }
-record(ai, "$(M)_missed_steps") {
+record(ai, "$(motor_name)_missed_steps") {
     field(INP, "0")
 }

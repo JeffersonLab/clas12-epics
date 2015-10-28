@@ -867,7 +867,7 @@ void mkHVSingleCrateEpics(char *name, char *ip, int nslots, int *slots){
   allnames.close();            //close output file
 
   sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,name);
-  sprintf(subName,"%s/%s.hv_substitutions",dbDir,name);
+  sprintf(subName,"%s/%s.substitutions",dbDir,name);
   sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",name); 
   sprintf(iocName,"%s_%s",iocDir,name); 
   
@@ -887,7 +887,7 @@ void mkHVSingleCrateEpics(char *name, char *ip, int nslots, int *slots){
   for(int n=0;n<nStored;n++){
     mkSubAddLine(subfile,0,allepics[n][CSC],allepics[n][ALIAS],name);
   }
-  stfile <<  "## Load record instances" << endl << "dbLoadTemplate(\"db/" << name << ".hv_substitutions\")" << endl;
+  stfile <<  "## Load record instances" << endl << "dbLoadTemplate(\"db/" << name << ".substitutions\")" << endl;
   
   mkStartupEnd(stfile,dumpLine);
   stfile.close();
@@ -923,7 +923,7 @@ void mkStartups(int type){
   
   if(type==ALL){                                                        //All together in a biggie in one ioc/startup file
     sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,fullHVName);        //make some file name strings etc
-    sprintf(subName,"%s/%s.hv_substitutions",dbDir,fullHVName);
+    sprintf(subName,"%s/%s.substitutions",dbDir,fullHVName);
     sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",fullHVName); 
     sprintf(iocName,"%s_%s",iocDir,fullHVName); 
     
@@ -962,7 +962,7 @@ void mkStartups(int type){
     cout << endl << "Generating startups for each Mainframe:" << endl;
     while(crateName[stCrateId]){                                               //for each crate in the list
       sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,crateName[stCrateId]);   //make some file name strings etc
-      sprintf(subName,"%s/%s.hv_substitutions",dbDir,crateName[stCrateId]);
+      sprintf(subName,"%s/%s.substitutions",dbDir,crateName[stCrateId]);
       sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",crateName[stCrateId]); 
       sprintf(iocName,"%s_%s",iocDir,crateName[stCrateId]); 
       
@@ -1010,7 +1010,7 @@ void mkStartups(int type){
     while(groupLists[stGroupId]){                                                 //for each defined group
       stCrateId=0;
       sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,groupNames[stGroupId]);     //make some file name strings etc
-      sprintf(subName,"%s/%s.hv_substitutions",dbDir,groupNames[stGroupId]);
+      sprintf(subName,"%s/%s.substitutions",dbDir,groupNames[stGroupId]);
       sprintf(dumpLine,"dbDumpRecord > st.%s.dump",groupNames[stGroupId]); 
       sprintf(iocName,"%s_%s",iocDir,groupNames[stGroupId]); 
       
@@ -1181,7 +1181,7 @@ void mkSubFiles(){
   //make all the substitution files
 
   cout << "Generating substitution (ie macro) files for all system:" << endl;
-  cout << "Note: *_SPARES.hv_substitutions files will be commented out in ioc startup files for optional inclusion"  << endl;
+  cout << "Note: *_SPARES.substitutions files will be commented out in ioc startup files for optional inclusion"  << endl;
   
   stCrateId=0;
   //loop over all the Mainframes
@@ -1189,12 +1189,12 @@ void mkSubFiles(){
     for(int n=0;n<nStored;n++){
       if((strstr(allepics[n][CSC],crateName[stCrateId]))&&(strstr(allepics[n][ALIAS],"SPARE"))){ //if this crate, and the alias has the word SPARE
 	if(!crateSpareStream[stCrateId].is_open()){                                              //if the files not open yet	    
-	  sprintf(subName,"%s/%s_SPARES.hv_substitutions",dbDir,crateName[stCrateId]);                     //make the name and
+	  sprintf(subName,"%s/%s_SPARES.substitutions",dbDir,crateName[stCrateId]);                     //make the name and
 	  crateSpareStream[stCrateId].open(subName);                                                       //open the file
 	  cout << "Writing " << subName << endl;
 	  sprintf(comment,"Substitutions for crate: %s SPARES",crateName[stCrateId]);                      //make the comment
 	  mkSubStart(crateSpareStream[stCrateId],comment);                                                 //write the start lines to the file
-	  sprintf(startupSpareFileNames[nSpareFiles++],"db/%s_SPARES.hv_substitutions",crateName[stCrateId]);  //make the name for the line in startup files to load the subs
+	  sprintf(startupSpareFileNames[nSpareFiles++],"db/%s_SPARES.substitutions",crateName[stCrateId]);  //make the name for the line in startup files to load the subs
 	}
 	mkSubAddLine(crateSpareStream[stCrateId],stCrateId,allepics[n][CSC],allepics[n][ALIAS]);  //add the macros for this line
       }
@@ -1205,12 +1205,12 @@ void mkSubFiles(){
 	sprintf(longDetName,"_%s_",DetAbbr[stDetId]);
 	if(strstr(allepics[n][CSC],crateName[stCrateId]) && strstr(allepics[n][ALIAS],longDetName)){	//if name contains crate name and alias contains detector name
 	  if(!crateDetStream[stCrateId][stDetId].is_open()){                                            //if the files not open yet
-	    sprintf(subName,"%s/%s_%s.hv_substitutions",dbDir,crateName[stCrateId],DetAbbr[stDetId]);   //make the name and
+	    sprintf(subName,"%s/%s_%s.substitutions",dbDir,crateName[stCrateId],DetAbbr[stDetId]);   //make the name and
 	    cout << "Writing " << subName << endl;
 	    crateDetStream[stCrateId][stDetId].open(subName);                                                          //open the file
 	    sprintf(comment,"Substitutions for crate: %s,  detector: %s",crateName[stCrateId],DetAbbr[stDetId]);       //make the comment
 	    mkSubStart(crateDetStream[stCrateId][stDetId],comment);                                                  //write the start lines to the file
-	    sprintf(startupSubFileNames[nSubFiles++],"db/%s_%s.hv_substitutions",crateName[stCrateId],DetAbbr[stDetId]);  //make the name for the line in startup files to load the subs
+	    sprintf(startupSubFileNames[nSubFiles++],"db/%s_%s.substitutions",crateName[stCrateId],DetAbbr[stDetId]);  //make the name for the line in startup files to load the subs
 	  }
 	  mkSubAddLine(crateDetStream[stCrateId][stDetId],stCrateId,allepics[n][CSC],allepics[n][ALIAS]);  //add the macros for this line
 	}

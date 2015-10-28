@@ -1,0 +1,64 @@
+#Marcos are as follows:
+#D   = Depth              
+#SNC = SubNodeCount       
+#EC  = ElementCount
+#ERC = ElementRecordCount
+#NRC = NodeRecordCount
+#NRN = NodeRecordNames
+
+#All strings are waveforms to allow over 40chars, and therefore we also need to know for each, hwo long the string is
+#PNL  = ParentName  String length       
+#SNNL = SubNodeNames String length
+#ENL  = ElementNames String length
+#ERNL = ElementRecordNames String length
+#ERTL = ElementRecordTypes String length
+#NRNL = NodeRecordNames String length
+#NRTL  = NodeRecordTypes String length
+
+
+record(waveform, "$(P):ParentName"){
+          field(NELM, "$(PNL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):SubNodeNames"){
+          field(NELM, "$(SNNL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):ElementNames"){
+          field(NELM, "$(ENL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):ElementRecordNames"){
+          field(NELM, "$(ERNL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):ElementRecordTypes"){
+          field(NELM, "$(ERTL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):NodeRecordNames"){
+          field(NELM, "$(NRNL)")
+          field(FTVL, "CHAR")
+}
+record(waveform, "$(P):NodeRecordTypes"){
+          field(NELM, "$(NRTL)")
+          field(FTVL, "CHAR")
+}
+
+
+record(ai,$(P):Depth){
+	  field(VAL, "$(D)")
+}
+record(ai,$(P):SubNodeCount){
+	  field(VAL, "$(SNC)")
+}
+record(ai,$(P):ElementCount){
+	  field(VAL, "$(EC)")
+}
+record(ai,$(P):ElementRecordCount){
+	  field(VAL, "$(ERC)")
+}
+record(ai,$(P):NodeRecordCount){
+	  field(VAL, "$(NRC)")
+}
+

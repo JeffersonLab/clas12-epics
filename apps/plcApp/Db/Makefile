@@ -24,6 +24,10 @@ DB += TestLogic_v2_PLCarr.db
 DB += TestLogic_v2_PLCin.db
 DB += TestLogic_v2_PLCout.db
 
+DB += Torus_v0_PLCarr.db
+DB += Torus_v0_PLCin.db
+DB += Torus_v0_PLCout.db
+
 REQ += HPS_SVT_Interlock_v5_PLC.req  # generated file
 #REQ += HPS_SVT_Interlocks.req        # nested calls to generated file (inputs/outputs)
 

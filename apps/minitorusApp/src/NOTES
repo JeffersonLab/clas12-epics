@@ -1,0 +1,43 @@
+## PORT CONFIG
+9600, OPT_RAW
+
+## PROTOCOL
+<STX><4-digit len><MSG><5-digit CRC (len and msg)><ETX>
+
+## WRITE
+POWER_OFF
+POWER_ON
+RESET
+SET_IMMEDIATE,value,ramprate # sprintf(tbuf,"%s%.2f,%d","SET_IMMEDIATE,",value,ramprate);
+
+## READ
+GET_DATA?,CURRENT
+GET_DATA?,SETPOINT
+GET_DATA?,VOLTAGE
+GET_DATA?,DAC
+GET_DATA?,INTERLOCKS
+
+
+
+
+
+#define STX	2
+#define ETX	3
+#define EOS	'\0'
+#define ACK 	'\006'
+#define NACK 	'\021'
+#define MAXLEN	1023
+
+/* Command Defines */
+
+#define POWER_OFF       0
+#define POWER_ON        1
+#define RESET           2
+#define SET_IMMEDIATE   3
+
+#define CURRENT         0
+#define SETPOINT        1
+#define VOLTAGE         2
+#define DAC             3
+#define INTERLOCKS      4
+

@@ -4,20 +4,14 @@
 # Faraday Cup calculation
 #
 # Macros:
-#   SCLR - scaler channel to use
+#   SCLR - scaler channel to use (counts/sec)
 #
 
-# INPA - scaler count
-# INPB - offset
-# INPC - slope
-# INPD - scaler time
+# INPA - scaler counts/sec
 record(calc,"$(P)$(R)") {
 	field(DESC, "FCUP Calcuation")
-    field(CALC, "(a/b-c)/max(d,1.0)")
-	field(INPA, "$(SCLR).$(CH)")
-    field(INPB, "$(SCLR).T")
-    field(C, "200")
-	field(D, "905.937")
+    field(CALC, "(a-200)/905.937")
+	field(INPA, "$(SCLR)")
 	field(PREC, "3")
 	field(SCAN, ".5 second")
 }

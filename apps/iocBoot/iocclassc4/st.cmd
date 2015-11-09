@@ -68,7 +68,7 @@ dbLoadTemplate("joerger_classc4.substitutions")
 
 ## FCUP
 # from scalerApp
-dbLoadRecords("$(TOP)/db/fcup_calc.db", "P=HB:,R=fcup,SCLR=scaler,CH=S2")
+dbLoadRecords("$(TOP)/db/fcup_calc.db", "P=HB:,R=fcup,SCLR=scalerS2b")
 # from fcup_gainApp - DVME628, base address is hardcoded into the driver
 dbLoadDatabase("$(TOP)/db/fcup_cal.db")
 

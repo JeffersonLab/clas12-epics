@@ -29,8 +29,8 @@ def PLCBasicTypes2InputEPICS( typeName ):
         elif ( typeName == "SINT" or typeName == "INT" or typeName == "DINT" or typeName == "REAL" ):
             return 'ai'
         elif ( typeName == "STRING" ):
-#            return 'stringin'
-            return None
+            return 'stringin'
+#            return None
         else:
             return None
     else:

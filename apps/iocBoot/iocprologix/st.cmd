@@ -10,7 +10,26 @@ prologix_registerRecordDeviceDriver(pdbbase)
 
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
-drvAsynIPPortConfigure("ETH1", "hallb-gpib01:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib01:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib02:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib03:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib04:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib05:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib06:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib07:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib08:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib09:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib10:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib11:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib12:1234")
+drvAsynIPPortConfigure("ETH1", "hallb-gpib13:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib14:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib15:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib16:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib17:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib18:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib19:1234")
+#drvAsynIPPortConfigure("ETH1", "hallb-gpib20:1234")
 
 ## debugging...
 # GPIB:01

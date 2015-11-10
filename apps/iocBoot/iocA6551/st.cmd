@@ -1,4 +1,4 @@
-#!../../bin/linux-x86/A6551
+#!../../bin/linux-x86_64/A6551
 
 ## You may have to change A6551 to something else
 ## everywhere it appears in this file
@@ -14,7 +14,9 @@ A6551_registerRecordDeviceDriver pdbbase
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
 ## Configure devices
-drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
+#drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
+
+drvAsynIPPortConfigure("L0",129.57.160.108:1234,0,0,0)
 
 #asynSetTraceMask("L0",-1,0x09)
 #asynSetTraceIOMask("L0",-1,0x02)

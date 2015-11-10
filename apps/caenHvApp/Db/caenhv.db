@@ -15,8 +15,73 @@ record(bigsub, "B_$(CrName)_Sl$(Sl)_Ch$(Ch)")
    field(PREC,"1")
    field(SNAM,"ScanChannel")
    field(SCAN,"2 second")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element)")
 }
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):Vmon")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).F CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):Vmon")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):Imon")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).E CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):Imon")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):Vsetrbk")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).G CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):Vsetrbk")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):Vmax")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).O CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):Vmax")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rup")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).H CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):rup")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rdwn")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).I CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):rdwn")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).T CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):stat")
+}   
+
+record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+{
+   field(DOL, "B_$(CrName)_Sl$(Sl)_Ch$(Ch).L CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_$(Sys)_$(Det)_$(Element):comms")
+}   
 
 record(bo, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff") 
 {
@@ -37,6 +102,7 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):v0set")
    field(OUT,"$(CScode) $(v0set)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):v0set")
 }
 record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):i0set") 
@@ -46,6 +112,7 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):i0set")
    field(OUT,"$(CScode) $(i0set)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):i0set")
 }
 record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):trip") 
@@ -54,6 +121,7 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):trip")
    field(OUT,"$(CScode) $(trip)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):trip")   
 }
 record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rampup") {
@@ -62,6 +130,7 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rampup") {
    field(OUT,"$(CScode) $(rampup)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):rampup")   
 }
 record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rampdn") 
@@ -71,6 +140,7 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):rampdn")
    field(OUT,"$(CScode) $(rampdn)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):rampdn")   
 }
 record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):svmax") 
@@ -79,5 +149,6 @@ record(ao, "B_$(CrName)_Sl$(Sl)_Ch$(Ch):svmax")
    field(OUT,"$(CScode) $(svmax)")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
+   field(ASG,"EXPERT")
    alias("B_$(Sys)_$(Det)_$(Element):svmax")   
 }

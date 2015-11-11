@@ -140,7 +140,7 @@ const char  *GeogFull[]  = { "HV",    "CrateName",  "Slot", "Channel", NULL };
 const char *hv_template  = "B_%s%s%d_%s%02d_%s%02d";
 
 
-const char *subnet       = "129.157.167.";  //will need to change the way this is done if the are on more than one subnet
+const char *subnet       = "129.57.167.";  //will need to change the way this is done if the are on more than one subnet
 
 //This is the list of the defined crate names (dns names) and ip addresses - add new ones before NMAINFRAMES
 //                             0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,         

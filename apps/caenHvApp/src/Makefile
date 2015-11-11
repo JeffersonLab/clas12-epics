@@ -26,8 +26,10 @@ ioccaen_LIBS += sy1527epics1
 ioccaen_LIBS += caenhvwrapper 
 ioccaen_LIBS += hscaenet 
 ioccaen_LIBS += devIocStats
+ioccaen_LIBS += caPutLog
 ioccaen_LIBS += $(EPICS_BASE_IOC_LIBS)
 
+sy1527epics1_DIR  += $(TOP)/lib/$(T_A)
 caenhvwrapper_DIR += $(CAENHVWRAPPER_LIB)
 hscaenet_DIR      += $(HSCAENET_LIB)
 

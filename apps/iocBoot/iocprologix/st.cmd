@@ -29,7 +29,6 @@ drvAsynIPPortConfigure("ETH17", "hallb-gpib17:1234")
 drvAsynIPPortConfigure("ETH18", "hallb-gpib18:1234")
 
 ## debugging...
-# GPIB:01
 #asynSetTraceMask("ETH1",-1,0x09)
 #asynSetTraceIOMask("ETH1",-1,0x02)
 

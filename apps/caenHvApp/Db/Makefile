@@ -13,7 +13,7 @@ include $(TOP)/configure/CONFIG
 #DB    += ecal.substitutions
 #DB    += hv.substitutions
 DB    += caenhv.db
-DB    += $(wildcard *.hv_substitutions)
+DB    += $(wildcard ../*.substitutions)
 
 
 #----------------------------------------------------

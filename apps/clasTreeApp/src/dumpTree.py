@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 from clas12NodesDict import *
 import argparse
 
@@ -16,7 +16,7 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("top", help="top node")
+    parser.add_argument("top", help="Top node of tree. If in doubt try B")
     args   = parser.parse_args()
     topnode = args.top
 

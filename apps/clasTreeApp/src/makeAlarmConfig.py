@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 from clas12NodesDict import *
 import argparse
 import datetime
@@ -14,15 +14,20 @@ import datetime
 #do_unto_element():  called for every element
 #end_node():         called for every node after do_unto_elememt()  is applied to all its elements    
 
+topName=""
+
 #This makes the .xml for setting up an alarm
 
 def main():
+    global topName
     parser = argparse.ArgumentParser()
-    parser.add_argument("top", help="top node")
-    parser.add_argument("confname", help="Name of Alarm configuration")
-    args   = parser.parse_args()
-    topnode = args.top
-    configName = args.confname
+    parser.add_argument("top", help="Top node (eg B_HV). To see all nodes do ./dumpTree.py B")
+    parser.add_argument("topname", help="Top node name - a nice name in quotes (eg \"High voltage\")")
+    parser.add_argument("confname", help="Name of Alarm configuration - almost certainly HallB")
+    args        = parser.parse_args()
+    topnode     = args.top
+    topName = args.topname
+    configName  = args.confname
 
     now = datetime.datetime.now()
     print "<!--"
@@ -36,7 +41,11 @@ def main():
     print"</config>"
 
 def start_node(node,parent,depth,indent):
-    print indent+"   <component name=\""+node+"\">"
+    global topName
+    if(depth==0):
+        print indent+"  <component name=\""+topName+"\">"
+    else:
+        print indent+"  <component name=\""+node+"\">"
     return
 
 def end_node(node,parent,depth,indent):
@@ -44,7 +53,7 @@ def end_node(node,parent,depth,indent):
     return
 
 def do_unto_element(element,parent,depth,indent):
-    print indent+"   <pv name=\""+parent+" "+element+":trip\">"
+    print indent+"   <pv name=\""+parent+"_"+element+".STAT\">"
     print indent+"      <description>High Voltage alarm for "+parent+"_"+element+"</description>"
     print indent+"      <latching>true</latching>"
     print indent+"      <annunciating>true</annunciating>"
@@ -56,7 +65,7 @@ def do_unto_element(element,parent,depth,indent):
     print indent+"      </guidance>"
     print indent+"      <display>"
     print indent+"         <title>Open HV GUI</title>"
-    print indent+"         <details>HV.opi   &quot;node="+parent+"&quot;</details>"
+    print indent+"         <details>/CSS/HV2/ntree.opi   &quot;node="+parent+"&quot;</details>"
     print indent+"      </display>"
     print indent+"   </pv>"
 
@@ -79,10 +88,10 @@ def doNode( node, parent, depth, indent):
     start_node( node, parent, depth, indent)
 
     for s in subnodes:
-        doNode( s, thisnode, depth+1,indent+"   ")        
+        doNode( s, thisnode, depth+1,indent+"  ")        
                
     for e in elements:
-        do_unto_element(e, thisnode, depth, indent+"   ")
+        do_unto_element(e, thisnode, depth, indent+"  ")
 
     end_node ( node, parent, depth, indent )
         

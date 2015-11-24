@@ -1,6 +1,15 @@
 #!/bin/sh
 
-css_share_path=`pwd`/../css_share
+if [ -e $1 ]
+then
+    css_share_path=$1
+else
+    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    css_share_path=$DIR/../css_share
+fi
+
+
+echo Running css ...
 
 css \
     -pluginCustomization $css_share_path/common/prefs/plugin_customization.ini \

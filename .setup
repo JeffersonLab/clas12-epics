@@ -1,35 +1,34 @@
 #
 # File: .setup
 #
+# EPICS Environment
+#
 
-setenv CLAS /usr/clas12
+setenv EPICS_VER 3.14.12.5
+setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base
+setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions
 
+# set EPICS host architecture
+setenv OSTYPE `uname`
+setenv MACHINE `uname -m`
 if ( ($OSTYPE == "Linux") && ($MACHINE == "i686" || $MACHINE == "x86") ) then
   setenv EPICS_HOST_ARCH linux-x86
 else
   setenv EPICS_HOST_ARCH linux-x86_64
 endif
 
-setenv EPICS_VER 3.14.12.5
-setenv EPICS_BASE $CLAS/R$EPICS_VER/base
-setenv EPICS_EXTENSIONS $CLAS/R$EPICS_VER/extensions
-
-set -f path=($path:q "$EPICS_BASE/bin/$EPICS_HOST_ARCH")
-set -f path=($path:q "$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH")
-set -f path=($path:q "/apps/root/5.34.21/bin")
+## caget/caput/etc, medm/striptool/etc...
+set -f path=("$EPICS_BASE/bin/$EPICS_HOST_ARCH" $path:q)
+set -f path=("$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH" $path:q)
 ## EPICS tools and utils
-set -f path=($path:q "$CLAS/release/pro/epics/bin")
+set -f path=("/usr/clas12/release/pro/epics/bin" $path:q)
 ## CSS, alarm tools, etc
-set -f path=($path:q "$CLAS/css/pro/$EPICS_HOST_ARCH/bin")
+set -f path=("/usr/clas12/css/pro/$EPICS_HOST_ARCH/bin" $path:q)
 ## acctools rsync'd from Cebaf (MyaViewer, etc)
-set -f path=($path:q "/usr/csite/certified/bin")
-set -f path=($path:q ".")
+set -f path=("/usr/csite/certified/bin" $path:q)
 
-if ( ! $?LD_LIBRARY_PATH ) then
-  setenv LD_LIBRARY_PATH "$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH":"/apps/root/5.34.21/lib"
-else
-  setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH":"/apps/root/5.34.21/lib"
-endif
+if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH 
+setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH"
 
 setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.255 129.57.191.255 129.57.68.97 129.57.86.16 129.57.86.29 129.57.86.37 129.57.160.46 129.57.160.54"
 

@@ -1,0 +1,104 @@
+#asyn is useful for debugging the communication
+record(asyn,"LV:DC:S$(S):L$(L):ASYN")
+{
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+    field(ADDR,"$(ADDR)")
+    field(OMAX,"$(OMAX)")
+    field(IMAX,"$(IMAX)")
+}
+
+record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE")
+{
+    field (DESC, "Get Voltage")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getVoltage $(PORT)")
+}
+
+record (ao, "LV:DC:S$(S):L$(L):SET_VOLTAGE")
+{
+    field (DESC, "Set voltage")
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setVoltage $(PORT)")
+}
+
+record (ai, "LV:DC:S$(S):L$(L):GET_CURRENT")
+{
+    field (DESC, "Get current of PS1")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getCurrent $(PORT)")
+}
+
+record (ai, "LV:DC:S$(S):L$(L):GET_CURRENT_SETP")
+{
+    field (DESC, "Get Current Setpoint")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getCurrentSetpoint $(PORT)")
+}
+record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE_SETP")
+{
+    field (DESC, "Get Voltage Setpoint")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getVoltageSetpoint $(PORT)")
+}
+
+record (ao, "LV:DC:S$(S):L$(L):SET_CURRENT")
+{
+    field (DESC, "Set current of PS1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setCurrent $(PORT)")
+}
+
+record (bi, "LV:DC:S$(S):L$(L):GET_ONOFF")
+{
+    field (DESC, "Get PW ON/OFF Status")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getOnOff $(PORT)")
+}
+record (bo, "LV:DC:S$(S):L$(L):SET_ONOFF")
+{
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setOnOff $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (bo, "LV:DC:S$(S):L$(L):SET_ONOFFFULL")
+{
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setOnOffFull $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (bo, "LV:DC:S$(S):L$(L):SET_OCONOFF")
+{
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (bi, "LV:DC:S$(S):L$(L):GET_OCONOFF")
+{
+    field (DESC, "Get OC ON/OFF Status")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getOcOnOff $(PORT)")
+}
+record (ao, "LV:DC:S$(S):L$(L):CLEAR_OC")
+{
+    field (DESC, "Clear OC")
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto clearOC $(PORT)")
+}
+
+record (ai, "LV:DC:S$(S):L$(L):GET_OC")
+{
+    field (DESC, "Get OC Status")
+    field (DTYP, "stream")
+    field (SCAN, "1 second")
+    field (INP,  "@A6551.proto getOcStatus $(PORT)")
+}

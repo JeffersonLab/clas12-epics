@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# run css with an on-the-fly generated workspace
+#   - to avoid duplicate conflicting workspaces
+#   - to guarantee standard startup user interface
+
+share=$CLAS/epics/css_share
+plugin_profile=$share/common/prefs/plugin_customization.ini
+workspace=$share/common/workspace
+
+# generate a temporary css workspace:
+mkdir -p /tmp/CSS-Workspaces
+wsp=`mktemp -d -p /tmp/CSS-Workspaces`
+cp -rf $workspace/*    $wsp
+cp -rf $workspace/.*   $wsp
+cp -rf $plugin_profile $wsp
+
+# we want to run *everything* from the wsp workspace:
+css -nosplash \
+    -data $wsp \
+    -pluginCustomization $wsp/plugin_customization.ini \
+    -share_link $share=/CLAS12_Share
+
+# delete the wsp workspace:
+#rm -rf $wsp
+

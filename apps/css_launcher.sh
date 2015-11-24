@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -e $1 ]
+if [ ! -z $1 ]
 then
     css_share_path=$1
 else

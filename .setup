@@ -9,6 +9,8 @@ setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base
 setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions
 
 # set EPICS host architecture
+setenv OSTYPE `uname`
+setenv MACHINE `uname -m`
 if ( ($OSTYPE == "Linux") && ($MACHINE == "i686" || $MACHINE == "x86") ) then
   setenv EPICS_HOST_ARCH linux-x86
 else

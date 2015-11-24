@@ -3,6 +3,7 @@
 # run css with an on-the-fly generated workspace
 #   - to avoid duplicate conflicting workspaces
 #   - to guarantee standard startup user interface
+#   - to avoid users modifying the configuration
 
 share=$CLAS/epics/css_share
 plugin_profile=$share/common/prefs/plugin_customization.ini
@@ -11,8 +12,8 @@ workspace=$share/common/workspace
 # generate a temporary css workspace:
 mkdir -p /tmp/CSS-Workspaces
 wsp=`mktemp -d -p /tmp/CSS-Workspaces`
-cp -rf $workspace/*    $wsp
-cp -rf $workspace/.*   $wsp
+cp -rf $workspace/*    $wsp >& /dev/null
+cp -rf $workspace/.*   $wsp >& /dev/null
 cp -rf $plugin_profile $wsp
 
 # we want to run *everything* from the wsp workspace:

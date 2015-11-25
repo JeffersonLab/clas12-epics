@@ -16,8 +16,8 @@ for (var cc=c0; cc<=c1; cc++)
   var ccc;
   if (cc<10) { ccc = "0" + cc; }
   else       { ccc = cc; }
-  pvU = prefix + "U" + ccc + "_pwonoff";
-  pvD = prefix + "D" + ccc + "_pwonoff";
+  pvU = prefix + "U" + ccc + ":pwonoff";
+  pvD = prefix + "D" + ccc + ":pwonoff";
   if (updown == "UP") {
     //PVUtil.writePV(pv,onoff);
   } else if (updown == "DOWN") {

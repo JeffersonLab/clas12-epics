@@ -9,13 +9,15 @@ UAG(ecal) { lcsmith, carman }
 UAG(ctof) { lcsmith, carman }
 UAG(rich) { kenjo, vpk }
 UAG(ltcc) { ungaro }
+UAG(ltcc) { markov }
 UAG(dc)   { mac }
-
+UAG(ft)   { battagli }
+    
 ASG(DEFAULT) {
     RULE(1,READ)
     RULE(1,WRITE,TRAPWRITE)
     {
-        UAG(slow,ftof,pcal,ecal,ctof,ltcc,rich,dc,shift)
+        UAG(slow,ftof,pcal,ecal,ctof,ltcc,htcc,rich,dc,ft,shift)
     }
 }
 
@@ -24,7 +26,7 @@ ASG(EXPERT) {
     RULE(1,READ)
     RULE(1,WRITE,TRAPWRITE)
     {
-        UAG(slow,ftof,pcal,ecal,ctof,ltcc,rich,dc)
+        UAG(slow,ftof,pcal,ecal,ctof,ltcc,htcc,rich,ft,dc)
     }
     RULE(1,WRITE,TRAPWRITE)
     {

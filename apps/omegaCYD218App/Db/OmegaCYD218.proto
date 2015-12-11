@@ -1,0 +1,118 @@
+#
+# Omega CYD218 Series, 8-channel Cyrogenic Thermometers
+#
+# Parameters:
+#   $1 = input channel number [1-8]
+#
+# Author: Wesley Moore
+# Date:   April 2012
+#
+
+OutTerminator = CR LF;
+InTerminator = CR LF;
+writetimeout = 100;
+readtimeout = 300;     # milliseconds
+replytimeout = 1000;
+ExtraInput = Ignore;
+
+# Reset Instrument
+reset {
+	out "*RST";
+}
+
+# Query Celsius Reading
+getCelsius {
+	out "CRDG? \$1";
+	in "%f";
+}
+
+# Query Kelvin Reading
+getKelvin {
+	out "KRDG? \$1";
+	in "%f";
+}
+
+# Query Sensor Units
+getUnits {
+	out "SRDG? \$1";
+	in "%f";
+}
+
+# Input Control (Disable/Enable input.  0=Off,1=On)
+getInput {
+	out "INPUT? \$1";
+	in "%d";
+}
+
+setInput {
+	out "INPUT \$1,%d";
+	@init { getInput; }
+}
+
+
+getCurve {
+	out "INCRV? \$1";
+	in "%d";
+}
+
+# Configure input curve
+#   INCRV <input>,<curve number>
+#     curve number: 0=none, 
+#                   1-5=standard diode curves,
+#                   6-9=standard platinum curves
+#                   21-28=user curves
+setCurve {
+	out "INCRV \$1,%d";
+	@init { getCurve; }
+}
+
+getInputTypeA {
+	out "INTYPE? A";
+	in "%d";
+}
+
+# Configure input type
+#   INTYPE <input group>,<sensor type>
+#     input group: A=1-4, B=5-8
+#     sensor type: 0=2.5V Diode, 1=7.5V Diode, 2=250ohm Platinum, 
+#                  3=500ohm Platium, 4=5kohm Platinum, 5=Cernox
+setInputTypeA {
+	out "INTYPE A %d";
+	@init { getInputTypeA; }
+}
+
+getInputTypeB {
+	out "INTYPE? B";
+	in "%d";
+}
+
+setInputTypeB {
+	out "INTYPE B %d";
+	@init { getInputTypeB; }
+}
+
+getMode {
+	out "MODE?";
+	in "%d";
+}
+
+# Local/Remote 
+#   MODE <mode>
+#     mode: 0=local, 1=remote, 2=remote w/ local lockout
+setMode {
+	out "MODE %d";
+	@init { getMode };
+}
+
+###############################
+# Serial Configuration
+###############################
+getBaud {
+	out "BAUD?";
+	in "%d";
+}
+
+setBaud {
+	out "BAUD %{300|1200|9600}";
+	@init { getBaud };
+}

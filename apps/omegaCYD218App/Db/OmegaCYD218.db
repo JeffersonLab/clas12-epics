@@ -1,0 +1,97 @@
+# 
+# Omega CYD218 Series, 8-channel Cyrogenic Digital Thermometers
+#
+# Macros:
+#   P    = prefix
+#   R    = prefix
+#   PORT = asyn port name
+#
+# Author: Wesley Moore
+# Date:   April 2012
+#
+
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+    field(OEOS, "\r\n")
+    field(IEOS, "\r\n")
+}
+
+record(stringin, "$(P)$(R)desc") {
+	field(DESC, "Unit description/location")
+    field(VAL,  "")
+}
+
+record(mbbo, "$(P)$(R)modeSet") {
+	field(DESC, "Local/Remote/Lockout select")
+	field(DTYP, "stream")
+	field(OUT,  "@OmegaCYD218.proto setMode $(PORT)")
+	field(ZRST, "Local")
+	field(ONST, "Remote")
+}
+
+record(ai, "$(P)$(R)mode") {
+	field(DESC, "Local/Remote/Local Lockout")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getMode $(PORT)")
+}
+
+record(mbbi, "$(P)$(R)baud") {
+	field(DESC, "baud rate")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getBaud $(PORT)")
+	field(ZRST, "300")
+	field(ZRVL, "0")
+ 	field(ONST, "1200")
+	field(ONVL, "1")
+	field(TWST, "9600")
+	field(TWVL, "2")
+}
+
+record(ai, "$(P)$(R)typeA") {
+	field(DESC, "Sensor Type Channels 1-4")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getInputTypeA $(PORT)")
+}
+
+record(ai, "$(P)$(R)typeB") {
+	field(DESC, "Sensor Type Channels 1-4")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getInputTypeB $(PORT)")
+}
+
+record(mbbo, "$(P)$(R)typeASet") {
+	field(DESC, "Sensor Type for channels 1-4")
+	field(DTYP, "stream")
+	field(OUT,  "@OmegaCYD218.proto setInputTypeA $(PORT)")
+	field(ZRST, "2.5V Silicon")
+	field(ONST, "7.5V GaAIAs")
+	field(TWST, "100ohm <675K")
+	field(THST, "100ohm >675K")
+	field(FRST, "1000ohm")
+	field(FVST, "NTC <7500ohm")
+}
+
+record(mbbo, "$(P)$(R)typeBSet") {
+	field(DESC, "Sensor Type for channels 1-4")
+	field(DTYP, "stream")
+	field(OUT,  "@OmegaCYD218.proto setInputTypeB $(PORT)")
+	field(ZRST, "2.5V Silicon")
+	field(ONST, "7.5V GaAIAs")
+	field(TWST, "100ohm <675K")
+	field(THST, "100ohm >675K")
+	field(FRST, "1000ohm")
+	field(FVST, "NTC <7500ohm")
+}
+
+record(bo, "$(P)$(R)reset") {
+	field(DESC, "reset the unit")
+	field(DTYP, "stream")
+	field(OUT,  "@OmegaCYD218.proto reset $(PORT)")
+	field(ZNAM, "disabled")
+	field(ONAM, "enabled")
+}
+

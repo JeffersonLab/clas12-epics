@@ -10,6 +10,7 @@ record(stringin, "$(PORT):name")
   field(DTYP, "Snmp")
   field(SCAN, "$(SCAN)")
   field(INP,  "@$(HOST) guru %(WO)Name.u$(CH) STRING: 100")
+  alias("$(DETALIAS):name")
 }
 
 
@@ -19,6 +20,7 @@ record(longin, "$(PORT):group")
   field(DTYP, "Snmp")
   field(SCAN, "$(SCAN)")
   field(INP,  "@$(HOST) guru %(WO)Group.u$(CH) INTEGER: 100")
+  alias("$(DETALIAS):group")
 }
 
 record(longout, "$(PORT):switch")
@@ -29,6 +31,7 @@ record(longout, "$(PORT):switch")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
   field(ADEL, "1")
+  alias("$(DETALIAS):switch")
 }
 record(longin, "$(PORT):switch:fbk")
 {
@@ -37,6 +40,7 @@ record(longin, "$(PORT):switch:fbk")
   field(SCAN, "$(SCAN)")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
+  alias("$(DETALIAS):switch:fbk")
 }
 
 record(longin, "$(PORT):stat")
@@ -47,6 +51,7 @@ record(longin, "$(PORT):stat")
 #  field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
 #  field(ADEL, "1")
+  alias("$(DETALIAS):stat")
 }
 
 record(stringin, "$(PORT):stat_string")
@@ -57,6 +62,7 @@ record(stringin, "$(PORT):stat_string")
 #  field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
 #  field(ADEL, "1")
+  alias("$(DETALIAS):stat_string")
 }
 
 record(ai, "$(PORT):i_rd")
@@ -68,6 +74,7 @@ record(ai, "$(PORT):i_rd")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)MeasurementCurrent.u$(CH) Float: 100")
   field(ADEL, "1.0")  
+  alias("$(DETALIAS):i_rd")
 }
 
 record(ao, "$(PORT):i_set")
@@ -79,6 +86,7 @@ record(ao, "$(PORT):i_set")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)Current.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):i_set")
 }
 record(ai, "$(PORT):i_set:fbk")
 {
@@ -88,6 +96,7 @@ record(ai, "$(PORT):i_set:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)Current.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_set:fbk")
 }
 
 
@@ -100,6 +109,7 @@ record(ao, "$(PORT):i_max_sup")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):i_max_sup")
 }
 record(ai, "$(PORT):i_max_sup:fbk")
 {
@@ -109,6 +119,7 @@ record(ai, "$(PORT):i_max_sup:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_max_sup:fbk")
 }
 
 record(ao, "$(PORT):i_max_cfg")
@@ -120,6 +131,7 @@ record(ao, "$(PORT):i_max_cfg")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):i_max_cfg")
 }
 record(ai, "$(PORT):i_max_cfg:fbk")
 {
@@ -129,6 +141,7 @@ record(ai, "$(PORT):i_max_cfg:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_max_cfg:fbk")
 }
 
 #record(ai, "$(PORT):i_lim_hw")
@@ -140,6 +153,7 @@ record(ai, "$(PORT):i_max_cfg:fbk")
 #  field(EGU,  "")
 #  field(INP,  "@$(HOST) guru %(WO)HardwareLimitCurrent.u$(CH) Float: 100")
 #  field(ADEL, "1.0")
+#  alias("$(DETALIAS):i_lim_hw")
 #}
 
 
@@ -151,6 +165,7 @@ record(longout, "$(PORT):i_trip_time")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)TripTimeMaxCurrent.u$(CH) INTEGER: 100 i")
   field(ADEL, "1")
+  alias("$(DETALIAS):i_trip_time")
 }
 record(longin, "$(PORT):i_trip_time:fbk")
 {
@@ -159,6 +174,7 @@ record(longin, "$(PORT):i_trip_time:fbk")
   field(SCAN, "$(SCAN)")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)TripTimeMaxCurrent.u$(CH) INTEGER: 100 i")
+  alias("$(DETALIAS):i_trip_time:fbk")
 }
 
 
@@ -171,6 +187,7 @@ record(ao, "$(PORT):vrise")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)VoltageRiseRate.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):vrise")
 }
 record(ai, "$(PORT):vrise:fbk")
 {
@@ -180,6 +197,7 @@ record(ai, "$(PORT):vrise:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)VoltageRiseRate.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):vrise:fbk")
 }
 
 
@@ -192,6 +210,7 @@ record(ao, "$(PORT):vfall")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)VoltageFallRate.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):vfall")
 }
 record(ai, "$(PORT):vfall:fbk")
 {
@@ -201,6 +220,7 @@ record(ai, "$(PORT):vfall:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)VoltageFallRate.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):vfall:fbk")
 }
 
 
@@ -213,6 +233,7 @@ record(ai, "$(PORT):v_sens")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)MeasurementSenseVoltage.u$(CH) Float: 100")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_sens")
 }
 
 record(ai, "$(PORT):v_term")
@@ -224,6 +245,7 @@ record(ai, "$(PORT):v_term")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)MeasurementTerminalVoltage.u$(CH) Float: 100")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_term")
 }
 
 record(ao, "$(PORT):v_set")
@@ -235,6 +257,7 @@ record(ao, "$(PORT):v_set")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)Voltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_set")
 }
 record(ai, "$(PORT):v_set:fbk")
 {
@@ -244,6 +267,7 @@ record(ai, "$(PORT):v_set:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)Voltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_set:fbk")
 }
 
 
@@ -256,6 +280,7 @@ record(ao, "$(PORT):v_min_sens_sup")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMinSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_min_sens_sup")
 }
 record(ai, "$(PORT):v_min_sens_sup:fbk")
 {
@@ -265,6 +290,7 @@ record(ai, "$(PORT):v_min_sens_sup:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMinSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_min_sens_sup:fbk")
 }
 
 
@@ -277,6 +303,7 @@ record(ao, "$(PORT):v_max_sens_sup")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_sens_sup")
 }
 record(ai, "$(PORT):v_max_sens_sup:fbk")
 {
@@ -286,6 +313,7 @@ record(ai, "$(PORT):v_max_sens_sup:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMaxSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_sens_sup:fbk")
 }
 
 
@@ -298,6 +326,7 @@ record(ao, "$(PORT):v_max_term_sup")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_term_sup")
 }
 record(ai, "$(PORT):v_max_term_sup:fbk")
 {
@@ -307,6 +336,7 @@ record(ai, "$(PORT):v_max_term_sup:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_term_sup:fbk")
 }
 
 record(ao, "$(PORT):v_max_sens_cfg")
@@ -318,6 +348,7 @@ record(ao, "$(PORT):v_max_sens_cfg")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS)v_max_sens_cfg")
 }
 record(ai, "$(PORT):v_max_sens_cfg:fbk")
 {
@@ -327,6 +358,7 @@ record(ai, "$(PORT):v_max_sens_cfg:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)ConfigMaxSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_sens_cfg:fbk")
 }
 
 
@@ -339,6 +371,7 @@ record(ao, "$(PORT):v_max_term_cfg")
   field(EGU,  "")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxTerminalVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_term_cfg")
 }
 record(ai, "$(PORT):v_max_term_cfg:fbk")
 {
@@ -348,6 +381,7 @@ record(ai, "$(PORT):v_max_term_cfg:fbk")
   field(PREC, "3")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)ConfigMaxTerminalVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_term_cfg:fbk")
 }
 
 
@@ -360,6 +394,7 @@ record(ai, "$(PORT):v_max_term_cfg:fbk")
 #  field(EGU,  "")
 #  field(INP,  "@$(HOST) guru %(WO)HardwareLimitVoltage.u$(CH) Float: 100")
 #  field(ADEL, "1.0")
+#  alias("$(DETALIAS):v_lim_hw")
 #}
 
 
@@ -369,6 +404,7 @@ record(longin, "$(PORT):temp")
   field(DTYP, "Snmp")
   field(SCAN, "$(SCAN)")
   field(INP,  "@$(HOST) guru %(WO)MeasurementTemperature.u$(CH) INTEGER: 100")
+  alias("$(DETALIAS):temp")
 }
 
 #record(longin, "$(PORT):max_temp_cfg")
@@ -377,6 +413,7 @@ record(longin, "$(PORT):temp")
 #  field(DTYP, "Snmp")
 #  field(SCAN, "$(SCAN)")
 #  field(INP,  "@$(HOST) guru %(WO)ConfigMaxTemperature.u$(CH) INTEGER: 100")
+#  alias("$(DETALIAS):max_temp_cfg")
 #}
 
 
@@ -389,6 +426,7 @@ record(longin, "$(PORT):temp")
 #  field(EGU,  "")
 #  field(OUT,  "@$(HOST) guru %(WO)RegulationMode.u$(CH) ( 100 i")
 #  field(ADEL, "1")
+#  alias("$(DETALIAS):regul")
 #}
 
 
@@ -401,6 +439,7 @@ record(longout, "$(PORT):sup_behavior")
   field(ADEL, "1")
   field(VAL,  "21780")
   field(PINI, "YES")
+  alias("$(DETALIAS):sup_behavior")
 }
 
 record(longin, "$(PORT):sup_behavior:fbk")
@@ -411,4 +450,5 @@ record(longin, "$(PORT):sup_behavior:fbk")
   field(EGU,  "")
   field(INP,  "@$(HOST) guru %(WO)SupervisionBehavior.u$(CH) INTEGER: 100 i")
   field(PINI, "YES")
+  alias("$(DETALIAS):sup_behavior:fbk")
 }

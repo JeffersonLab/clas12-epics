@@ -39,7 +39,7 @@ if (type == "527")
 	widget.setPropertyValue("text",sstatus);
 		
 	if (sstatus == "OFF") { 
-	  widget.setPropertyValue("background_color","Header_Background");
+	  widget.setPropertyValue("background_color","Off");
 	  widget.setPropertyValue("foreground_color","Header_Foreground");
 	}
 	else
@@ -74,7 +74,7 @@ else if (type == "1527" || type == "4527")
 		  } 
 		}
 		if (istatus == 0) { 
-		  widget.setPropertyValue("background_color","Header_Background");
+		  widget.setPropertyValue("background_color","Off");
 		  widget.setPropertyValue("foreground_color","Header_Foreground");
 		}
 		else

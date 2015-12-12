@@ -51,7 +51,12 @@ widg1='''
     </line_color>
     <wuid>6ed2d5b9:150f8592e9f:-7e38</wuid>
     <rotation_angle>0.0</rotation_angle>
-    <scripts />
+    <scripts>
+      <path pathString="../../apps/caenHvApp/set_status_color.js" checkConnect="true" sfe="false" seoe="false">
+        <pv trig="true">$(P).L</pv>
+        <pv trig="true">$(P).T</pv>
+      </path>
+    </scripts>
     <anti_alias>true</anti_alias>
     <name>Polygon</name>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -67,9 +72,9 @@ widgpt='''    <point x="aaaXPOSaaa" y="aaaYPOSaaa" />'''
 widg2='''
     </points>
     <transparent>false</transparent>
-    <pv_name></pv_name>
+    <pv_name>$(P)_Q$(Q)GaaaGROUPaaa:switch:fbk</pv_name>
     <background_color>
-      <color red="30" green="144" blue="255" />
+      <color name="Off" red="60" green="100" blue="60" />
     </background_color>
     <foreground_color>
       <color red="255" green="0" blue="0" />
@@ -118,12 +123,11 @@ polygons=[
 
 print head
 
+group=1
 for points in polygons:
   print widg1
   ymin,xmin=99999,99999
   ymax,xmax=-99999,-99999
-  xpos=scale*points[0][0]
-  ypos=scale*points[0][1]
   for point in points:
     xx=scale*point[0]
     yy=scale*point[1]
@@ -142,6 +146,9 @@ for points in polygons:
   asdf=asdf.replace('aaaWIDTHaaa','%d'%(width))
   asdf=asdf.replace('aaaXPOSaaa','%d'%(globoff[0]+xmin))
   asdf=asdf.replace('aaaYPOSaaa','%d'%(globoff[1]+ymin))
+  asdf=asdf.replace('aaaGROUPaaa','%d'%(group))
   print asdf
+  group += 1
 
 print tail
+

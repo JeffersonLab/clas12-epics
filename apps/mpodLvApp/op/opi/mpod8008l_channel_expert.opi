@@ -9,7 +9,7 @@
   <height>600</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
-    <P>B_HVECAL4_Sl0_Ch0</P>
+    <P>B_HW_LVFTAG_Sl0_Ch0</P>
     <C>0</C>
   </macros>
   <boy_version>4.0.103.201511111440</boy_version>
@@ -101,7 +101,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).DESC</pv_name>
+    <pv_name>$(P):name.DESC</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -153,7 +153,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).F</pv_name>
+    <pv_name>$(P):v_sens</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -205,7 +205,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).E</pv_name>
+    <pv_name>$(P):i_rd</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -257,7 +257,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).G</pv_name>
+    <pv_name>$(P):v_set:fbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -309,7 +309,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).J</pv_name>
+    <pv_name>$(P):i_set:fbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -350,7 +350,7 @@ $(pv_value)</tooltip>
     <multiline_input>false</multiline_input>
     <border_width>4</border_width>
     <visible>true</visible>
-    <pv_name>$(P):i0set</pv_name>
+    <pv_name>$(P):i_set</pv_name>
     <selector_type>0</selector_type>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -407,7 +407,7 @@ $(pv_value)</tooltip>
     <multiline_input>false</multiline_input>
     <border_width>4</border_width>
     <visible>true</visible>
-    <pv_name>$(P):v0set</pv_name>
+    <pv_name>$(P):v_set</pv_name>
     <selector_type>0</selector_type>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -464,7 +464,7 @@ $(pv_value)</tooltip>
     <multiline_input>false</multiline_input>
     <border_width>4</border_width>
     <visible>true</visible>
-    <pv_name>$(P):rampup</pv_name>
+    <pv_name>$(P):vrise</pv_name>
     <selector_type>0</selector_type>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -532,7 +532,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).H</pv_name>
+    <pv_name>$(P):vrise:fbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -584,7 +584,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).I</pv_name>
+    <pv_name>$(P):vfall:fbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -625,7 +625,7 @@ $(pv_value)</tooltip>
     <multiline_input>false</multiline_input>
     <border_width>4</border_width>
     <visible>true</visible>
-    <pv_name>$(P):rampdn</pv_name>
+    <pv_name>$(P):vfall</pv_name>
     <selector_type>0</selector_type>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -683,7 +683,7 @@ $(pv_value)</tooltip>
     <border_width>1</border_width>
     <align_to_nearest_second>false</align_to_nearest_second>
     <visible>true</visible>
-    <pv_name>$(P):pwonoff</pv_name>
+    <pv_name>$(P):switch</pv_name>
     <border_color>
       <color red="150" green="150" blue="150" />
     </border_color>
@@ -725,51 +725,6 @@ $(pv_value)</tooltip>
     </font>
     <off_label>   OFF</off_label>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>1</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>5d8af81f:14ee08f3481:-7c6d</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>STATUS</text>
-    <scripts>
-      <path pathString="set_status.js" checkConnect="true" sfe="false" seoe="false">
-        <pv trig="true">$(P).L</pv>
-        <pv trig="true">$(P).T</pv>
-      </path>
-    </scripts>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="150" green="150" blue="150" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color name="Header_Background" red="50" green="50" blue="50" />
-    </background_color>
-    <width>67</width>
-    <x>360</x>
-    <name>Label_1</name>
-    <y>0</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>1</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -797,7 +752,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P).O</pv_name>
+    <pv_name>$(P):v_max_sens_cfg:fbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -838,7 +793,7 @@ $(pv_value)</tooltip>
     <multiline_input>false</multiline_input>
     <border_width>4</border_width>
     <visible>true</visible>
-    <pv_name>$(P):svmax</pv_name>
+    <pv_name>$(P):v_max_sens_cfg</pv_name>
     <selector_type>0</selector_type>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -875,6 +830,58 @@ $(pv_value)</tooltip>
       <color name="Text_ForeGround" red="0" green="0" blue="0" />
     </foreground_color>
     <minimum>-1.7976931348623157E308</minimum>
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>1</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>5b069078:151978bb50b:-7fdb</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>STATUS</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <show_units>true</show_units>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P):stat_string</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="150" green="150" blue="150" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="Header_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>67</width>
+    <x>360</x>
+    <name>Text Update_12</name>
+    <y>0</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>

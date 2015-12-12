@@ -13,8 +13,6 @@ for (var slot=0; slot<=4; slot+=2)
   {
     var pvprefix = "B_HW_" + crate + "_Sl" + slot + "_Ch" + chan;
 
-    java.lang.System.err.println(novice + "   " + pvprefix);
-
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
     if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
     else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }

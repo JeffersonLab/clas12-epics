@@ -4,7 +4,7 @@
 # Records for board MPV.8008l
 #
 
-record(stringin, "$(PORT):$(CH):name")
+record(stringin, "$(PORT):name")
 {
   field(DESC, "Channel Name")
   field(DTYP, "Snmp")
@@ -13,7 +13,7 @@ record(stringin, "$(PORT):$(CH):name")
 }
 
 
-record(longin, "$(PORT):$(CH):group")
+record(longin, "$(PORT):group")
 {
   field(DESC, "Channel Group Number")
   field(DTYP, "Snmp")
@@ -21,7 +21,7 @@ record(longin, "$(PORT):$(CH):group")
   field(INP,  "@$(HOST) guru %(WO)Group.u$(CH) INTEGER: 100")
 }
 
-record(longout, "$(PORT):$(CH):switch")
+record(longout, "$(PORT):switch")
 {
   field(DESC, "Turn ON and OFF switch")
   field(DTYP, "Snmp")
@@ -30,7 +30,7 @@ record(longout, "$(PORT):$(CH):switch")
   field(OUT,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
   field(ADEL, "1")
 }
-record(longin, "$(PORT):$(CH):switch:fbk")
+record(longin, "$(PORT):switch:fbk")
 {
   field(DESC, "Turn ON and OFF switch")
   field(DTYP, "Snmp")
@@ -39,7 +39,7 @@ record(longin, "$(PORT):$(CH):switch:fbk")
   field(INP,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
 }
 
-record(longin, "$(PORT):$(CH):stat")
+record(longin, "$(PORT):stat")
 {
   field(DESC, "Channel Status")
   field(DTYP, "Snmp")
@@ -49,7 +49,7 @@ record(longin, "$(PORT):$(CH):stat")
 #  field(ADEL, "1")
 }
 
-record(stringin, "$(PORT):$(CH):stat_string")
+record(stringin, "$(PORT):stat_string")
 {
   field(DESC, "Channel Status in String")
   field(DTYP, "Snmp")
@@ -59,7 +59,7 @@ record(stringin, "$(PORT):$(CH):stat_string")
 #  field(ADEL, "1")
 }
 
-record(ai, "$(PORT):$(CH):i_rd")
+record(ai, "$(PORT):i_rd")
 {
   field(DESC, "Current Readback")
   field(DTYP, "Snmp")
@@ -70,7 +70,7 @@ record(ai, "$(PORT):$(CH):i_rd")
   field(ADEL, "1.0")  
 }
 
-record(ao, "$(PORT):$(CH):i_set")
+record(ao, "$(PORT):i_set")
 {
   field(DESC, "Current Setpoint")
   field(DTYP, "Snmp")
@@ -80,7 +80,7 @@ record(ao, "$(PORT):$(CH):i_set")
   field(OUT,  "@$(HOST) guru %(WO)Current.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):i_set:fbk")
+record(ai, "$(PORT):i_set:fbk")
 {
   field(DESC, "Current Setpoint")
   field(DTYP, "Snmp")
@@ -91,7 +91,7 @@ record(ai, "$(PORT):$(CH):i_set:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):i_max_sup")
+record(ao, "$(PORT):i_max_sup")
 {
   field(DESC, "Supervision Maximum Currrent")
   field(DTYP, "Snmp")
@@ -101,7 +101,7 @@ record(ao, "$(PORT):$(CH):i_max_sup")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):i_max_sup:fbk")
+record(ai, "$(PORT):i_max_sup:fbk")
 {
   field(DESC, "Supervision Maximum Currrent")
   field(DTYP, "Snmp")
@@ -111,7 +111,7 @@ record(ai, "$(PORT):$(CH):i_max_sup:fbk")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
 }
 
-record(ao, "$(PORT):$(CH):i_max_cfg")
+record(ao, "$(PORT):i_max_cfg")
 {
   field(DESC, "Config Maximum Currrent")
   field(DTYP, "Snmp")
@@ -121,7 +121,7 @@ record(ao, "$(PORT):$(CH):i_max_cfg")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):i_max_cfg:fbk")
+record(ai, "$(PORT):i_max_cfg:fbk")
 {
   field(DESC, "Config Maximum Currrent")
   field(DTYP, "Snmp")
@@ -131,7 +131,7 @@ record(ai, "$(PORT):$(CH):i_max_cfg:fbk")
   field(INP,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
 }
 
-#record(ai, "$(PORT):$(CH):i_lim_hw")
+#record(ai, "$(PORT):i_lim_hw")
 #{
 #  field(DESC, "Hardware Limit for Currrent")
 #  field(DTYP, "Snmp")
@@ -143,7 +143,7 @@ record(ai, "$(PORT):$(CH):i_max_cfg:fbk")
 #}
 
 
-record(longout, "$(PORT):$(CH):i_trip_time")
+record(longout, "$(PORT):i_trip_time")
 {
   field(DESC, "Span for Time out Function.")
   field(DTYP, "Snmp")
@@ -152,7 +152,7 @@ record(longout, "$(PORT):$(CH):i_trip_time")
   field(OUT,  "@$(HOST) guru %(WO)TripTimeMaxCurrent.u$(CH) INTEGER: 100 i")
   field(ADEL, "1")
 }
-record(longin, "$(PORT):$(CH):i_trip_time:fbk")
+record(longin, "$(PORT):i_trip_time:fbk")
 {
   field(DESC, "Span for Time out Function.")
   field(DTYP, "Snmp")
@@ -162,7 +162,7 @@ record(longin, "$(PORT):$(CH):i_trip_time:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):vrise")
+record(ao, "$(PORT):vrise")
 {
   field(DESC, "Voltage  RampUp Rate")
   field(DTYP, "Snmp")
@@ -172,7 +172,7 @@ record(ao, "$(PORT):$(CH):vrise")
   field(OUT,  "@$(HOST) guru %(WO)VoltageRiseRate.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):vrise:fbk")
+record(ai, "$(PORT):vrise:fbk")
 {
   field(DESC, "Voltage  RampUp Rate")
   field(DTYP, "Snmp")
@@ -183,7 +183,7 @@ record(ai, "$(PORT):$(CH):vrise:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):vfall")
+record(ao, "$(PORT):vfall")
 {
   field(DESC, "Voltage RampDown Rate")
   field(DTYP, "Snmp")
@@ -193,7 +193,7 @@ record(ao, "$(PORT):$(CH):vfall")
   field(OUT,  "@$(HOST) guru %(WO)VoltageFallRate.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):vfall:fbk")
+record(ai, "$(PORT):vfall:fbk")
 {
   field(DESC, "Voltage RampDown Rate")
   field(DTYP, "Snmp")
@@ -204,7 +204,7 @@ record(ai, "$(PORT):$(CH):vfall:fbk")
 }
 
 
-record(ai, "$(PORT):$(CH):v_sens")
+record(ai, "$(PORT):v_sens")
 {
   field(DESC, "Voltage Sensor Readback")
   field(DTYP, "Snmp")
@@ -215,7 +215,7 @@ record(ai, "$(PORT):$(CH):v_sens")
   field(ADEL, "1.0")
 }
 
-record(ai, "$(PORT):$(CH):v_term")
+record(ai, "$(PORT):v_term")
 {
   field(DESC, "Voltage Terminal Readback")
   field(DTYP, "Snmp")
@@ -226,7 +226,7 @@ record(ai, "$(PORT):$(CH):v_term")
   field(ADEL, "1.0")
 }
 
-record(ao, "$(PORT):$(CH):v_set")
+record(ao, "$(PORT):v_set")
 {
   field(DESC, "Voltage Setpoint")
   field(DTYP, "Snmp")
@@ -236,7 +236,7 @@ record(ao, "$(PORT):$(CH):v_set")
   field(OUT,  "@$(HOST) guru %(WO)Voltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_set:fbk")
+record(ai, "$(PORT):v_set:fbk")
 {
   field(DESC, "Voltage Setpoint")
   field(DTYP, "Snmp")
@@ -247,7 +247,7 @@ record(ai, "$(PORT):$(CH):v_set:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):v_min_sens_sup")
+record(ao, "$(PORT):v_min_sens_sup")
 {
   field(DESC, "Supervision Minimum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -257,7 +257,7 @@ record(ao, "$(PORT):$(CH):v_min_sens_sup")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMinSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_min_sens_sup:fbk")
+record(ai, "$(PORT):v_min_sens_sup:fbk")
 {
   field(DESC, "Supervision Minimum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -268,7 +268,7 @@ record(ai, "$(PORT):$(CH):v_min_sens_sup:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):v_max_sens_sup")
+record(ao, "$(PORT):v_max_sens_sup")
 {
   field(DESC, "Supervision Maximum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -278,7 +278,7 @@ record(ao, "$(PORT):$(CH):v_max_sens_sup")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_max_sens_sup:fbk")
+record(ai, "$(PORT):v_max_sens_sup:fbk")
 {
   field(DESC, "Supervision Maximum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -289,7 +289,7 @@ record(ai, "$(PORT):$(CH):v_max_sens_sup:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):v_max_term_sup")
+record(ao, "$(PORT):v_max_term_sup")
 {
   field(DESC, "Supervision Maximum Terminal Voltage")
   field(DTYP, "Snmp")
@@ -299,7 +299,7 @@ record(ao, "$(PORT):$(CH):v_max_term_sup")
   field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_max_term_sup:fbk")
+record(ai, "$(PORT):v_max_term_sup:fbk")
 {
   field(DESC, "Supervision Maximum Terminal Voltage")
   field(DTYP, "Snmp")
@@ -309,7 +309,7 @@ record(ai, "$(PORT):$(CH):v_max_term_sup:fbk")
   field(INP,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
 }
 
-record(ao, "$(PORT):$(CH):v_max_sens_cfg")
+record(ao, "$(PORT):v_max_sens_cfg")
 {
   field(DESC, "Config Maximum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -319,7 +319,7 @@ record(ao, "$(PORT):$(CH):v_max_sens_cfg")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxSenseVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_max_sens_cfg:fbk")
+record(ai, "$(PORT):v_max_sens_cfg:fbk")
 {
   field(DESC, "Config Maximum Sensor Voltage")
   field(DTYP, "Snmp")
@@ -330,7 +330,7 @@ record(ai, "$(PORT):$(CH):v_max_sens_cfg:fbk")
 }
 
 
-record(ao, "$(PORT):$(CH):v_max_term_cfg")
+record(ao, "$(PORT):v_max_term_cfg")
 {
   field(DESC, "Config Maximum Terminal Voltage")
   field(DTYP, "Snmp")
@@ -340,7 +340,7 @@ record(ao, "$(PORT):$(CH):v_max_term_cfg")
   field(OUT,  "@$(HOST) guru %(WO)ConfigMaxTerminalVoltage.u$(CH) Float: 100 F")
   field(ADEL, "1.0")
 }
-record(ai, "$(PORT):$(CH):v_max_term_cfg:fbk")
+record(ai, "$(PORT):v_max_term_cfg:fbk")
 {
   field(DESC, "Config Maximum Terminal Voltage")
   field(DTYP, "Snmp")
@@ -351,7 +351,7 @@ record(ai, "$(PORT):$(CH):v_max_term_cfg:fbk")
 }
 
 
-#record(ai, "$(PORT):$(CH):v_lim_hw")
+#record(ai, "$(PORT):v_lim_hw")
 #{
 #  field(DESC, "Hardware Limit for Voltage")
 #  field(DTYP, "Snmp")
@@ -363,7 +363,7 @@ record(ai, "$(PORT):$(CH):v_max_term_cfg:fbk")
 #}
 
 
-record(longin, "$(PORT):$(CH):temp")
+record(longin, "$(PORT):temp")
 {
   field(DESC, "Hotspot Temperature")
   field(DTYP, "Snmp")
@@ -371,7 +371,7 @@ record(longin, "$(PORT):$(CH):temp")
   field(INP,  "@$(HOST) guru %(WO)MeasurementTemperature.u$(CH) INTEGER: 100")
 }
 
-#record(longin, "$(PORT):$(CH):max_temp_cfg")
+#record(longin, "$(PORT):max_temp_cfg")
 #{
 #  field(DESC, "Config Maximum Temperature")
 #  field(DTYP, "Snmp")
@@ -381,7 +381,7 @@ record(longin, "$(PORT):$(CH):temp")
 
 
 
-#record(longout, "$(PORT):$(CH):regul")
+#record(longout, "$(PORT):regul")
 #{
 #  field(DESC, "Turn ON and OFF switch")
 #  field(DTYP, "Snmp")
@@ -392,7 +392,7 @@ record(longin, "$(PORT):$(CH):temp")
 #}
 
 
-record(longout, "$(PORT):$(CH):sup_behavior")
+record(longout, "$(PORT):sup_behavior")
 {
   field(DESC, "Supervision Behavior")
   field(DTYP, "Snmp")
@@ -403,7 +403,7 @@ record(longout, "$(PORT):$(CH):sup_behavior")
   field(PINI, "YES")
 }
 
-record(longin, "$(PORT):$(CH):sup_behavior:fbk")
+record(longin, "$(PORT):sup_behavior:fbk")
 {
   field(DESC, "Supervision Behavior readback")
   field(DTYP, "Snmp")

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-import math
+import math,sys
 
-head='''<?xml version="1.0" encoding="UTF-8"?>
+HEAD='''<?xml version="1.0" encoding="UTF-8"?>
 <display typeId="org.csstudio.opibuilder.Display" version="1.0.0">
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <macros>
     <include_parent_macros>true</include_parent_macros>
+    <P>B_DET_FT_HV</P>
   </macros>
   <wuid>6ed2d5b9:150f8592e9f:-7fc7</wuid>
   <boy_version>3.2.16.20140409</boy_version>
@@ -32,16 +33,15 @@ head='''<?xml version="1.0" encoding="UTF-8"?>
     <min_width>-1</min_width>
     <min_height>-1</min_height>
   </auto_scale_widgets>
-  <actions hook="false" hook_all="false" />
   <y>0</y>
   <x>0</x>
 '''
 
-tail='''
+TAIL='''
 </display>
 '''
 
-widg1='''
+WIDGHEAD='''
   <widget typeId="org.csstudio.opibuilder.widgets.polygon" version="1.0.0">
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <visible>true</visible>
@@ -68,11 +68,38 @@ widg1='''
     </scale_options>
     <points>
 '''
-widgpt='''    <point x="aaaXPOSaaa" y="aaaYPOSaaa" />'''
-widg2='''
+WIDGPT='''    <point x="aaaXPOSaaa" y="aaaYPOSaaa" />'''
+WIDGTAIL='''
     </points>
+
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/apps/caenHvApp/det_channel_novice_withheader.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <P>$(P)_QaaaQUADRANTaaaGaaaGROUPaaa</P>
+        </macros>
+        <replace>2</replace>
+        <description>Open Controls</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(P)_QaaaQUADRANTaaaGaaaGROUPaaa:switch</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Turn On</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(P)_QaaaQUADRANTaaaGaaaGROUPaaa:switch</pv_name>
+        <value>0</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Turn Off</description>
+      </action>
+    </actions>
+
     <transparent>false</transparent>
-    <pv_name>$(P)_Q$(Q)GaaaGROUPaaa:switch:fbk</pv_name>
+    <pv_name>$(P)_QaaaQUADRANTaaaGaaaGROUPaaa:switch:fbk</pv_name>
     <background_color>
       <color name="Off" red="60" green="100" blue="60" />
     </background_color>
@@ -97,7 +124,6 @@ widg2='''
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <actions hook="false" hook_all="false" />
     <y>aaaYPOSaaa</y>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
@@ -121,34 +147,44 @@ polygons=[
     [ [9+off,0+off],[11-off,0+off],[11-off,3-off],[10-off,3-off],[10-off,6-off],[9+off,6-off]]
 ]
 
-print head
+def genQuadrant(quadrant):
+  if quadrant%2==0:  group=1
+  else:              group=9
+  for points in polygons:
+    print WIDGHEAD
+    ymin,xmin=99999,99999
+    ymax,xmax=-99999,-99999
+    for point in points:
 
-group=1
-for points in polygons:
-  print widg1
-  ymin,xmin=99999,99999
-  ymax,xmax=-99999,-99999
-  for point in points:
-    xx=scale*point[0]
-    yy=scale*point[1]
-    pt=widgpt
-    pt=pt.replace('aaaXPOSaaa','%d'%(xx))
-    pt=pt.replace('aaaYPOSaaa','%d'%(yy))
-    if xx>xmax: xmax=xx
-    if xx<xmin: xmin=xx
-    if yy>ymax: ymax=yy
-    if yy<ymin: ymin=yy
-    print pt,
-  height=ymax-ymin
-  width=xmax-xmin
-  asdf=widg2
-  asdf=asdf.replace('aaaHEIGHTaaa','%d'%(height))
-  asdf=asdf.replace('aaaWIDTHaaa','%d'%(width))
-  asdf=asdf.replace('aaaXPOSaaa','%d'%(globoff[0]+xmin))
-  asdf=asdf.replace('aaaYPOSaaa','%d'%(globoff[1]+ymin))
-  asdf=asdf.replace('aaaGROUPaaa','%d'%(group))
-  print asdf
-  group += 1
+      xx=scale*point[0]
+      yy=scale*point[1]
+      if quadrant==3 or quadrant==2: xx *= -1
+      if quadrant==1 or quadrant==2: yy *= -1
 
-print tail
+      pt=WIDGPT
+      pt=pt.replace('aaaXPOSaaa','%d'%(xx))
+      pt=pt.replace('aaaYPOSaaa','%d'%(yy))
+      if xx>xmax: xmax=xx
+      if xx<xmin: xmin=xx
+      if yy>ymax: ymax=yy
+      if yy<ymin: ymin=yy
+      print pt,
+    height=ymax-ymin
+    width=xmax-xmin
+    asdf=WIDGTAIL
+    asdf=asdf.replace('aaaHEIGHTaaa','%d'%(height))
+    asdf=asdf.replace('aaaWIDTHaaa','%d'%(width))
+    asdf=asdf.replace('aaaXPOSaaa','%d'%(globoff[0]+xmin))
+    asdf=asdf.replace('aaaYPOSaaa','%d'%(globoff[1]+ymin))
+    asdf=asdf.replace('aaaGROUPaaa','%d'%(group))
+    asdf=asdf.replace('aaaQUADRANTaaa','%d'%(quadrant))
+    print asdf
+    if quadrant%2==0: group += 1
+    else:             group -= 1
+
+
+print HEAD
+for qq in range(1,5):
+  genQuadrant(qq)
+print TAIL
 

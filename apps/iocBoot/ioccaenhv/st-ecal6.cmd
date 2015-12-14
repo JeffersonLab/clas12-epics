@@ -2,6 +2,7 @@
 
 < envPaths
 cd ${TOP}
+epicsEnvSet("IOC","iochvecal6")
 
 ## Register all support components
 dbLoadDatabase("dbd/ioccaen.dbd")
@@ -17,9 +18,15 @@ Start_CAEN(9,  "129.57.167.56")
 
 
 ## Load record instances
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadTemplate("db/ecal6.substitutions")
 dbLoadTemplate("db/ltcc6.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
+
+asSetFileName("caenhv.acf")
+
 iocInit()
+
+caPutLogInit("clonioc2:7011")
 

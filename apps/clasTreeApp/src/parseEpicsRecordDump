@@ -42,14 +42,11 @@
 #NodeName:            B_HV_DC_Sec6_R3_SL1
 #ParentName:          B_HV_DC_Sec6_R3
 #Depth:               5
-#SubNodeCount:        0
 #SubNodeNames:            
-#ElementCount:        18
-#ElementNames:        F01-08 F09-16 F17-24 F25-32 F33-48 F49-64 F65-80 F81-112 G01-32 G33-112 S01-08 S09-16 S17-24 S25-32 S33-48 S49-64 S65-80 S81-112
-#ElementRecordCount:  6
-#ElementRecordNames:  i0set rampdn rampup trip v0set pwonoff
-#ElementRecordTypes:  ao ao ao ao ao bo
-#NodeRecordCount:     0
+#ElementNames:        F01-08,F09-16,F17-24,F25-32,F33-48,F49-64,F65-80,F81-112,G01-32,G33-112,S01-08,S09-16,S17-24,S25-32,S33-48,S49-64,S65-80,S81-112
+#ElementRecordNames:  i0set,rampdn,rampup,trip,v0set,pwonoff
+#ElementRecordTypes:  ao,ao,ao,ao,ao,bo
+#ElementRecordFlags:  G,,D,D,U,,G,B
 #NodeRecordNames:         
 #NodeRecordTypes:         
 
@@ -73,68 +70,59 @@ BEGIN{
 	    system(str);
 	}
     }
+    #to be moved to input variable later
+    nodeGraphString["BSIM_SYS_HV"]="BSIM_SYS_HV";
+    nodeGraphString["BSIM_HW"]="BSIM_HW_HV";
+
+    #some types for waveforms from different kinds of record.
+    rTypes["ai"]="DOUBLE";  rTypes["ao"]="DOUBLE"; rTypes["bi"]="SHORT";  rTypes["bo"]="SHORT"; 
+    
 }
 
 #This is the main loop, which is called for every line in the .dump files.
 #See the awk manual. $0 is the string containing the current line.
 #                    $1, $2 ... are the fields within $0 separated by whitespace.
 {
-    if(($0~"record")&&($0~"{")){         #Parses records (eg. starting like this: record(ao,"B_HVDC1_Sl2_Ch23:rampup") {
-	gsub(/[(,):\"]/," ");            #sub the ()," with spaces ->             record ao  B_HVDC1_Sl2_Ch23 rampup
+    if($0~"record"){                     #Parses records (eg. starting like this: record(ao,"B_HVDC1_Sl2_Ch23:rampup") {
+	gsub(/[(,):{}\"]/," ");            #sub the ()," with spaces ->             record ao  B_HVDC1_Sl2_Ch23 rampup
 	                                 #                                           $1  $2      $3	    $4
 	type=$2; name=$3; rec=$4;        #give them decent names                        type    name        rec
 
-
-	allcount[name] += addToStringInArray(allrecords,name,rec," ",0);
-	addToStringInArray(alltypes,name,type," ",0);
+	allcount[name] += addToStringInArray(allrecords,name,rec,",",0);
+	addToStringInArray(alltypes,name,type,",",0);
 	
+	flag="";                         #Set default flag
+	al=0;                            #count aliases
 	while($0!~"}"){                  #loop over the remainder of the record def
 	    getline;                     #and do anything special if required
-	    #nothing yet...
+	    
+	    if(($0~"DESC,") && ($0~"#")){            #grab any #tag from the DESC field
+		gsub(/[(,):{}\"]/," ");             #eg. field(DESC,"#GR") ->   field  DESC  GR
+                                                     #                                        $3
+		flag=$3;
+	    }
+	    if($0~"alias") aliasline[al++]=$0    #keep alias line for this record 
 	}
-    }
-
-    if($0~"alias"){                      #parse the alias 
-                                         #eg.        alias("B_HVDC1_2_23:rampup","B_HV_DC_Sec1_R1_SL1_F81-112:rampup")
-	gsub(/[(,):\"]/," ");	         #sub to     alias  B_HVDC1_2_23 rampup   B_HV_DC_Sec1_R1_SL1_F81-112 rampup
-	                                 #           $1         $2         $3              $4
-	real=$2; name=$4;                #give decent names    real                       alias                                
-	allrecords[name]=allrecords[real];     #copy info from real name to aliased name as new recrord.
-	alltypes[name] = alltypes[real];    
-    }
-
-    #work down the chain making nodes etc as required
-    nr=split(name,nodes,"_");            #split the name into nodes
-    nodename="";                         #init to ""
-    for(n=1;n<=nr;n++){                  #for all the nodes in the record name
-	parent=nodename;                 #save the old nodename as the parent
-	if(n==1) nodename = nodes[n];    #if first one, start the nodename
-	else nodename=sprintf("%s_%s",nodename,nodes[n]);  #else append to the nodename
+	addToStringInArray(allflags,name,flag,",",0);#add flag
+	parseRecord(name);
 	
-	if(n==nr){                       #it's an element - ie the last bit with the :record on it
-	    RecordNames[nodename] = allrecords[nodename]; #copy the record etc to the element array
-	    RecordTypes[nodename] = alltypes[nodename];
-	    RecordCount[nodename] = allcount[nodename];
-	}
-	else{                            #its a subnode
-	    if(SubNodeNames[nodename]){  #if list is started
-		havesn=0;                #counter for  matches with existing subnodes in the list
-		nsn=split(SubNodeNames[nodename],snodes," "); #split into list
-		for(sn=1;sn<=nsn;sn++){
-		    if(snodes[sn]==nodes[n+1]) havesn++;      #if match, inc counter
-		}
-		if(havesn==0){
-		    SubNodeNames[nodename]= sprintf("%s %s",SubNodeNames[nodename],nodes[n+1]);
-		    SubNodeCount[nodename]++;
-		}
-	    }
-	    else{
-		SubNodeNames[nodename] = nodes[n+1];
-		SubNodeCount[nodename]++;
+	for (al in aliasline){
+	    if((aliasline[al]~"alias")&&(aliasline[al]!~"SPARE")){   #parse the alias, but no aliases for SPARE channels
+		#eg.        alias("B_HV_DC_Sec1_R1_SL1_F81-112:rampup")
+		gsub(/[(,)\"]/," ",aliasline[al]);               #sub to     alias  B_HV_DC_Sec1_R1_SL1_F81-112:rampup
+		#             $1     $2                        
+		split(aliasline[al],a);
+		saveAlias(a[2],name);              #Save the alias etc
 	    }
 	}
-	parents[nodename]=parent;        #save the node and it's parent
-	depth[nodename]=n-1;             #save the depth
+    }
+    
+    #alias may also be outside record
+    if(($0~"alias")&&($0!~"SPARE")){     #parse the alias, but no aliases for SPARE channels
+                                         #eg.        alias("B_HVDC1_2_23:rampup","B_HV_DC_Sec1_R1_SL1_F81-112:rampup")
+	gsub(/[(,)\"]/," ");	         #sub to     alias  B_HVDC1_2_23:rampup   B_HV_DC_Sec1_R1_SL1_F81-112:rampup
+	                                 #           $1     $2                    $3
+	saveAlias($3,$2);                #Save the alias as if it is real
     }
 }
         
@@ -165,7 +153,7 @@ END{
 	ANodeRecordCount[nodename]   = 0;
 	
 	if(SubNodeCount[nodename]>=1){                    #if some subnodes
-	    nsn=split(SubNodeNames[nodename],snodes," "); #split into list
+	    nsn=split(SubNodeNames[nodename],snodes,","); #split into list
 	    for(sn=1;sn<=nsn;sn++){                        
 		subname=sprintf("%s_%s",nodename,snodes[sn]); #make the full name of the subnode
 		if(RecordNames[subname]){                 #if the subnode is also an element (has a record list)
@@ -186,17 +174,18 @@ END{
 		    if(RecordNames[subname]==elemrec){     #if this is a subnode containing the recordlist required
 			AElementRecordNames[nodename] = RecordNames[subname];
 			AElementRecordTypes[nodename] = RecordTypes[subname];
+			AElementRecordFlags[nodename] = RecordFlags[subname];
 			AElementRecordCount[nodename] = RecordCount[subname];
 			
-			ElementCount[nodename] += addToStringInArray(ElementNames,nodename,snodes[sn]," ",1);
+			ElementCount[nodename] += addToStringInArray(ElementNames,nodename,snodes[sn],",",1);
 
 			if(SubNodeCount[subname]){        #if the element has a further subnoode
-			    ASubNodeCount[nodename] += addToStringInArray(ASubNodeNames,nodename,snodes[sn]," ",1);
+			    ASubNodeCount[nodename] += addToStringInArray(ASubNodeNames,nodename,snodes[sn],",",1);
 			}
 		    }
 
 		    else{
-			ASubNodeCount[nodename] += addToStringInArray(ASubNodeNames,nodename,snodes[sn]," ",1);
+			ASubNodeCount[nodename] += addToStringInArray(ASubNodeNames,nodename,snodes[sn],",",1);
 		    }
 		}
 		
@@ -209,12 +198,12 @@ END{
 		if(SubNodeCount[subname]){                    #if there is a further subnode
 		    if(ASubNodeNames[nodename]){              #if there's already a subnode list
 			havesn=0;
-			na=split(ASubNodeNames[nodename],a," ");
+			na=split(ASubNodeNames[nodename],a,",");
 			for(s=1;s<=na;s++){
 			    if(a[s]==snodes[sn]) havesn++;
 			}
 			if(havesn==0){
-			    ASubNodeNames[nodename]=sprintf("%s %s",ASubNodeNames[nodename],snodes[sn]);
+			    ASubNodeNames[nodename]=sprintf("%s,%s",ASubNodeNames[nodename],snodes[sn]);
 			    ASubNodeCount[nodename]++; 
 		    	}
 		    }
@@ -237,195 +226,203 @@ END{
 	}
     }	
 
-    nNodes=asorti(AParentNames,ANodeNames);        # sort all into a new tidy arrays of ordered node names
 
+    nNodes=asorti(AParentNames,ANodeNames);        # sort all into a new tidy arrays of ordered node names
+    for(n=1;n<=nNodes;n++){
+      name = ANodeNames[n];                          #get the node name for simplicity
+ 
+      nsubs=split(ASubNodeNames[name],subarray,",")    #sort the subnodes
+      if(nsubs>1){
+	asort(subarray);
+	ordered=sprintf("%s",subarray[1]);
+	for(x=2;x<nsubs;x++){
+	  ordered=sprintf("%s,%s",ordered,subarray[x]);
+	}
+	ordered=sprintf("%s,%s",ordered,subarray[nsubs]);
+	ASubNodeNames[name]=ordered;
+      }
+      	
+      nsubs=split(AElementNames[name],subarray,",")    #sort the elements
+      if(nsubs>1){
+	asort(subarray);
+	ordered=sprintf("%s",subarray[1]);
+	for(x=2;x<nsubs;x++){
+	  ordered=sprintf("%s,%s",ordered,subarray[x]);
+	}
+	ordered=sprintf("%s,%s",ordered,subarray[nsubs]);
+	AElementNames[name]=ordered;
+      }             
+    }
+
+    #find the range of elements under each subnode - tricky.
+    for(n=1;n<=nNodes;n++){
+      name = ANodeNames[n];                          #get the node name for simplicity
+      #print "Name = " , name
+      for (ng in nodeGraphString){                     #go over all the listed names for graphing
+	if((name ~ nodeGraphString[ng])||(name==ng)){                    #check if current node is part of graph
+	  if(name==ng){                                  #if it's the actual top node
+	    etot=0;                                      #zero the counter
+	    #print "Zeroing",name, ADepth[name];
+	  }
+	  nodeGraphLow[name]=etot;
+	  #print name, nodeGraphLow[name];
+	  if (length(ElementNames[name])>0){
+	    enum=split(ElementNames[name],ea,",");
+	    etot+=enum;
+	    sname=name;                                    #copy the name
+	    sub(ng,"",sname);                              #remove the listed name prefix
+	    sub("_","",sname);                             #and 1st undercore
+	    l=split(sname,sparts,"_");                     #split the remaining fields
+	    str=nodeGraphString[ng];
+	    nodeGraphHigh[str]+=enum;
+	    #print str,nodeGraphHigh[str];
+	    for(m=1;m<=l;m++){
+	      str=sprintf("%s_%s",str,sparts[m]);
+	      nodeGraphHigh[str]+=enum;
+	      print str,nodeGraphHigh[str];
+	    }
+	  }
+	}
+      }
+    }
+        
     "date"|getline;ldate=$0;                       #get the date to timestamp outputfiles 
     
-    printAll("/dev/stdout");                       #print to stdout
+    #printAll("/dev/stdout");                       #print to stdout
     if(topdir) makeDirTree(topdir);                #make the directory tree if required
     
-    pythonfile=sprintf("%sNodesDict.py",outname); #print the dictionary for python
-    printDict(pythonfile);                         
-#    printDict("clas12-nodesDict.py");
-    
-    dbfile=sprintf("../Db/%sNodes",outname);            #print the db files
-    printDb(dbfile);
-#    printDb("clas12-nodesEpics");
+    pythonfile=sprintf("../op/scripts/%sNodesDict.py",outname);     #print the dictionary for python
+    printDict(pythonfile);                             
+    subfile=sprintf("../Db/%sNodes.substitutions",outname); #print the dictionary for python
+    printRecords(subfile);                             
 }		
-
-
 
 ### Functions used in the BEGIN{}, {} and END{} are defined below here
 
 function printAll(outfile){
-    printTopComments(outfile);          #print some comments at the top of file 
+  printTopComments(outfile);          #print some comments at the top of file 
     for(n=1;n<=nNodes;n++){
-	name = ANodeNames[n];           #get the node name for simplicity
-	printNode(name, outfile);
+      name = ANodeNames[n];           #get the node name for simplicity
+      printNode(name, outfile);
     }
 }
 
 function makeDirTree(topdir){
-
-    for(n=1;n<=nNodes;n++){
-	name = ANodeNames[n];           #get the node name for simplicity
-	fullname=name;
-	gsub("_","/",fullname);
-	fullname=sprintf("%s/%s",topdir,fullname);
-	if(ADepth[name]==0){
-	    command=sprintf("mkdir %s; cd %s; mkdir -p %s",fullname,fullname,ASubNodeNames[name]);
-	    system(command);
+  
+  for(n=1;n<=nNodes;n++){
+    name = ANodeNames[n];           #get the node name for simplicity
+    fullname=name;
+    gsub("_","/",fullname);
+    fullname=sprintf("%s/%s",topdir,fullname);
+    if(ADepth[name]==0){
+      command=sprintf("mkdir %s; cd %s; mkdir -p %s",fullname,fullname,ASubNodeNames[name]);
+      system(command);
 	    print command;
-	}
-	else{
-	    if(ASubNodeCount[name]>0){          #if the children are subnodes make directories
-		#command=sprintf("mkdir -p %s; cd %s; mkdir -p %s",fullname,fullname,ASubNodeNames[name]);
-		command=sprintf("cd %s; mkdir %s",fullname,ASubNodeNames[name]);
-		system(command);
-		print command;
-	    }
-	}
-	nodedata=sprintf("%s/nodeInfo.txt",fullname);
-	#print name,nodedata;
-	printTopComments(nodedata); #print some comments at the top of each file 
-	printNode(name, nodedata);  #print the node
     }
+    else{
+      if(ASubNodeCount[name]>0){          #if the children are subnodes make directories
+	#command=sprintf("mkdir -p %s; cd %s; mkdir -p %s",fullname,fullname,ASubNodeNames[name]);
+	command=sprintf("cd %s; mkdir %s",fullname,ASubNodeNames[name]);
+	system(command);
+	print command;
+      }
+    }
+    nodedata=sprintf("%s/nodeInfo.txt",fullname);
+    #print name,nodedata;
+    printTopComments(nodedata); #print some comments at the top of each file 
+    printNode(name, nodedata);  #print the node
+  }
 }
 	
 function printNode(name, outfile){
-    
-    print "NodeName:           ", name                         >> outfile;
-    print "ParentName:         ", AParentNames[name]           >> outfile;
-    print "Depth:              ", ADepth[name]                 >> outfile;
-    print "SubNodeCount:       ", ASubNodeCount[name]          >> outfile;
-    print "SubNodeNames:       ", ASubNodeNames[name]          >> outfile;
-    print "ElementCount:       ", AElementCount[name]          >> outfile;
-    print "ElementNames:       ", AElementNames[name]          >> outfile;
-    print "ElementRecordCount: ", AElementRecordCount[name]    >> outfile;
-    print "ElementRecordNames: ", AElementRecordNames[name]    >> outfile;
-    print "ElementRecordTypes: ", AElementRecordTypes[name]    >> outfile;
-    print "NodeRecordCount:    ", ANodeRecordCount[name]       >> outfile;
-    print "NodeRecordNames:    ", ANodeRecordNames[name]       >> outfile;
-    print "NodeRecordTypes:    ", ANodeRecordTypes[name]       >> outfile;
-    print ""                                                   >> outfile;
+  
+  print "NodeName:           ", name                         >> outfile;
+#    print "ParentName:         ", AParentNames[name]           >> outfile;
+#    print "Depth:              ", ADepth[name]                 >> outfile;
+  print "SubNodeNames:       ", ASubNodeNames[name]          >> outfile;
+  print "ElementNames:       ", AElementNames[name]          >> outfile;
+  print "ElementRecordNames: ", AElementRecordNames[name]    >> outfile;
+  print "ElementRecordTypes: ", AElementRecordTypes[name]    >> outfile;
+  print "ElementRecordFlags: ", AElementRecordFlags[name]    >> outfile;
+  print "NodeRecordNames:    ", ANodeRecordNames[name]       >> outfile;
+  print "NodeRecordTypes:    ", ANodeRecordTypes[name]       >> outfile;
+  print ""                                                   >> outfile;
 }
 
 
-function printDb(outfile){
 
-
-    initfile=sprintf("%s.init",outfile);  #start file for initislising the waveform strings
-    subfile=sprintf("%s.substitutions",outfile);    #start file for substitutions
-
-    #put comments that the top of the substitutions file
-    print "#This file was autogenerated by the parseEpicsRecordDump command on:",ldate > subfile;
-    print "" >> subfile;   
+function printDict(dict){    #Print python dictionaries and lists for the benefit of css or other python things.
     
-    print "#To create the wave form (these are the names with with an L appended)" >> subfile;
-    print "#"
-    print "#P    = Prefix" >> subfile;
-    print "#PNL  = String length of $(P):ParentName" >> subfile;     
-    print "#D    = Depth" >> subfile;
-    print "#SNC  = SubNodeCount" >> subfile;
-    print "#SNNL = String length of $(P):SubNodeNames" >> subfile;
-    print "#EC   = ElementCount" >> subfile;
-    print "#ENL  = String length of $(P):ElementNames" >> subfile;
-    print "#ERC  = ElementRecordCount" >> subfile;
-    print "#ERNL = String length of $(P):ElementRecordNames" >> subfile;
-    print "#ERTL = String length of $(P):ElementRecordTypes" >> subfile;
-    print "#NRC  = NodeRecordCount" >> subfile;
-    print "#NRNL = String length of $(P):NodeRecordNames" >> subfile;
-    print "#NRTL = String length of $(P):NodeRecordTypes" >> subfile;
-    print "" >> subfile;
-    print "file \"db/nodes.db\" {" >> subfile;
-    print " pattern  {	                      P,    PNL,      D,    SNC,   SNNL,    EC,     ENL,    ERC,   ERNL,   ERTL,    NRC,   NRNL,   NRTL}" >> subfile;
-
-
-    #put comments that the top of the init file
-    print "# This file was autogenerated by the parseEpicsRecordDump command on:",ldate > initfile;
-    print "" >> initfile;   
-    
-    print  "# All strings are waveforms to allow over 40chars, so need to know, for each, how long the string is to create the PV" >> subfile;
-    print  "# The wavefore cannot be initialised until after iocInit(), so the dbpb() commands to do this are in a partner" >> subfile;
-    printf "# initialisation file: %s\n",initfile  >> subfile;
-    printf "# This gets piped in to the ioc after the iocInit command is run ( <  %s )\n",initfile >> subfile; 
-	
-
-    for(n=1;n<=nNodes;n++){
-	name = ANodeNames[n];           #get the node name for simplicity
-	#give things their macro names and put quotes round them to make it easier,
-	#and make waveform arrays 2 chars bigger than the string length.
-
-	P   = sprintf("\"%s\",",name); #comma appended to make the printout of the sub file tidy
-	PNL = sprintf("\"%s\",",length(AParentNames[name])+2);          PN  = sprintf("\"%s\",", AParentNames[name]); 
-	D   = sprintf("\"%s\",",ADepth[name]);
-	SNC = sprintf("\"%s\",",ASubNodeCount[name]);
-	SNNL= sprintf("\"%s\",",length(ASubNodeNames[name])+2);         SNN = sprintf("\"%s\"", ASubNodeNames[name]);
-	EC  = sprintf("\"%s\",",AElementCount[name]);
-	ENL = sprintf("\"%s\",",length(AElementNames[name])+2);          EN = sprintf("\"%s\"", AElementNames[name]);
-	ERC = sprintf("\"%s\",",AElementRecordCount[name]);
-	ERNL= sprintf("\"%s\",",length(AElementRecordNames[name])+2);   ERN = sprintf("\"%s\"", AElementRecordNames[name]);
-	ERTL= sprintf("\"%s\",",length(AElementRecordTypes[name])+2);   ERT = sprintf("\"%s\"", AElementRecordTypes[name]); 
-	NRC = sprintf("\"%s\",",ANodeRecordCount[name]);
-	NRNL = sprintf("\"%s\",",length(ANodeRecordNames[name])+2);     NRN = sprintf("\"%s\"", ANodeRecordNames[name]);
-	NRNT = sprintf("\"%s\"}",length(ANodeRecordTypes[name])+2);     NRT = sprintf("\"%s\"", ANodeRecordTypes[name]);
-
-	printf"{%40s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s%8s\n",P,PNL,D,SNC,SNNL,EC,ENL,ERC,ERNL,ERTL,NRC,NRNL,NRNT >> subfile;
-	
-	printf"dbpf(\"%s:ParentName\",\"%s\")\n",        name, AParentNames[name]        >> initfile;
-	printf"dbpf(\"%s:SubNodeNames\",\"%s\")\n",      name, ASubNodeNames[name]       >> initfile;
-	printf"dbpf(\"%s:ElementNames\",\"%s\")\n",      name, AElementNames[name]       >> initfile;
-	printf"dbpf(\"%s:ElementRecordNames\",\"%s\")\n",name, AElementRecordNames[name] >> initfile;
-	printf"dbpf(\"%s:ElementRecordTypes\",\"%s\")\n",name, AElementRecordTypes[name] >> initfile;
-	printf"dbpf(\"%s:NodeRecordNames\",\"%s\")\n",   name, ANodeRecordNames[name]    >> initfile;
-	printf"dbpf(\"%s:NodeRecordTypes\",\"%s\")\n",   name, ANodeRecordTypes[name]    >> initfile;
+  printTopComments(dict);
+  
+  print "" >> dict;
+  print "#Create the dictionaries to describe the nodes" >> dict;
+  print "NodeIndex              = {}" >> dict;
+  print "SubNodeNames           = []" >> dict;
+  print "ElementNames           = []" >> dict;
+  print "ElementRecordNames     = []" >> dict;
+  print "ElementRecordTypes     = []" >> dict;
+  print "ElementRecordFlags     = []" >> dict;
+  print "NodeRecordNames        = []" >> dict;
+  print "NodeRecordTypes        = []" >> dict;
+  print "ElementRange           = []" >> dict;
+  print "" >> dict;
+  
+  print "#Populate the dictionaries with the info for all the nodes" >> dict; 
+  print "" >> dict;
+  
+  for(n=1;n<=nNodes;n++){
+    name = ANodeNames[n];           #get the node name for simplicity
+    printf("NodeIndex['%s'] = %d\n",name,n-1) >> dict;
+    printf("SubNodeNames.append('%s')\n",      ASubNodeNames[name])       >> dict;
+    printf("ElementNames.append('%s')\n",      AElementNames[name])       >> dict;
+    printf("ElementRecordNames.append('%s')\n",AElementRecordNames[name]) >> dict;
+    printf("ElementRecordTypes.append('%s')\n",AElementRecordTypes[name]) >> dict;
+    printf("ElementRecordFlags.append('%s')\n",AElementRecordFlags[name]) >> dict;
+    printf("NodeRecordNames.append('%s')\n",   ANodeRecordNames[name])    >> dict;
+    printf("NodeRecordTypes.append('%s')\n",   ANodeRecordTypes[name])    >> dict;
+    string="";
+    if(name in nodeGraphLow){
+      string=sprintf("%s,%s",nodeGraphLow[name],nodeGraphLow[name]+nodeGraphHigh[name]-1);	  
     }
-    printf"}\n" >> subfile;	    #close the bracket for the list of macro lines in the sub file.
+    printf("ElementRange.append('%s')\n",   string)    >> dict;
+    print "" >> dict;
+  }
 }
 
-
-
-function printDict(dict){    #Print python dictionaries for the benefit of css or other python things.
-    
-    printTopComments(dict);
-
-    print "" >> dict;
-    print "#Create the dictionaries to describe the nodes" >> dict; 
-    print "ParentName             = {}" >> dict;
-    print "Depth                  = {}" >> dict;
-    print "SubNodeCount           = {}" >> dict;
-    print "SubNodeNames           = {}" >> dict;
-    print "ElementCount           = {}" >> dict;
-    print "ElementNames           = {}" >> dict;
-    print "ElementRecordCount     = {}" >> dict;
-    print "ElementRecordNames     = {}" >> dict;
-    print "ElementRecordTypes     = {}" >> dict;
-    print "NodeRecordCount        = {}" >> dict;
-    print "NodeRecordNames        = {}" >> dict;
-    print "NodeRecordTypes        = {}" >> dict;
-    print "" >> dict;
-    
-    print "#Populate the dictionaries with the info for all the nodes" >> dict; 
-    print "" >> dict;
-    
+function printRecords(subfile){    #Print .substitution file for graphs etc
+  #Now check all the graphed element records
+  
+  printTopComments(subfile);
+  print "file \"db/nodegraph.db\" {" >> subfile;
+  printf"               pattern { P,\t\t\tNPT,\tTYPE }\n" >> subfile;
+  
+  for(ng in nodeGraphString){                     #go over all the listed names for graphing
     for(n=1;n<=nNodes;n++){
-	name = ANodeNames[n];           #get the node name for simplicity
-	
-	printf("ParentName['%s']             = \"%s\"\n",name,AParentNames[name]) >> dict;
-	printf("Depth['%s']                  = \"%s\"\n",name,ADepth[name]) >> dict;
-	printf("SubNodeCount['%s']           = \"%s\"\n",name,ASubNodeCount[name]) >> dict;
-	printf("SubNodeNames['%s']           = \"%s\"\n",name,ASubNodeNames[name]) >> dict;
-	printf("ElementCount['%s']           = \"%s\"\n",name,AElementCount[name]) >> dict;
-	printf("ElementNames['%s']           = \"%s\"\n",name,AElementNames[name]) >> dict;
-	printf("ElementRecordCount['%s']     = \"%s\"\n",name,AElementRecordCount[name]) >> dict;
-	printf("ElementRecordNames['%s']     = \"%s\"\n",name,AElementRecordNames[name]) >> dict;
-	printf("ElementRecordTypes['%s']     = \"%s\"\n",name,AElementNodeRecordTypes[name]) >> dict;
-	printf("NodeRecordCount['%s']        = \"%s\"\n",name,ANodeRecordCount[name]) >> dict;
-	printf("NodeRecordNames['%s']        = \"%s\"\n",name,ANodeRecordNames[name]) >> dict;
-	printf("NodeRecordTypes['%s']        = \"%s\"\n",name,ANodeRecordTypes[name]) >> dict;	
-	print "" >> dict;
+      name = ANodeNames[n];                          #get the node name for simplicity
+      if((name ~ nodeGraphString[ng])&&(length(ElementNames[name])>0)){ #fine the 1st with elements
+	enames=AElementRecordNames[name];                             #and assume it's representative 
+	etypes=AElementRecordTypes[name];
+	eflags=AElementRecordFlags[name];
+	break;
+      }
     }
+    #split these into arrays:
+    n=split(enames,enarr,",");
+    n=split(etypes,etarr,",");
+    n=split(eflags,efarr,",");
+    #loop over all the records and check the flags, make records as appropriate.
+    #print ng,enames,etypes,eflags;
+    for(f=1;f<=n;f++){
+      if((efarr[f]~"#GR")||(efarr[f]~"#PU")||(efarr[f]~"#PB")){      #make the relevant lines in the sub file
+	printf"                       {\"%s:%s\",\t\"%d\",\t\"%s\"}\n",nodeGraphString[ng],enarr[f], nodeGraphHigh[nodeGraphString[ng]], rTypes[etarr[f]] >> subfile;
+      }
+    }        
+  }
+  print "}" >> subfile;
 }
+
+
 
 function promptMe(myLine,   yn){     #Get user response to a question
 
@@ -463,4 +460,63 @@ function addToStringInArray(array, ind, str, sep, unique){
 
     array[ind] = sprintf("%s%s%s",array[ind],sep,str); #append
     return 1;
+}
+
+
+function parseRecord(record){
+    #work down the chain making nodes etc as required
+    nr=split(record,nodes,"_");            #split the record into nodes
+    nodename="";                         #init to ""
+    for(n=1;n<=nr;n++){                  #for all the nodes in the record name
+	parent=nodename;                 #save the old nodename as the parent
+	if(n==1) nodename = nodes[n];    #if first one, start the nodename
+	else nodename=sprintf("%s_%s",nodename,nodes[n]);  #else append to the nodename
+	
+	if(n==nr){                       #it's an element - ie the last bit with the :record on it
+	    RecordNames[nodename] = allrecords[nodename]; #copy the record etc to the element array
+	    RecordTypes[nodename] = alltypes[nodename];
+	    RecordFlags[nodename] = allflags[nodename];
+	    RecordCount[nodename] = allcount[nodename];
+	}
+	else{                            #its a subnode
+	    if(SubNodeNames[nodename]){  #if list is started
+		havesn=0;                #counter for  matches with existing subnodes in the list
+		nsn=split(SubNodeNames[nodename],snodes,","); #split into list
+		for(sn=1;sn<=nsn;sn++){
+		    if(snodes[sn]==nodes[n+1]) havesn++;      #if match, inc counter
+		}
+		if(havesn==0){
+		    SubNodeNames[nodename]= sprintf("%s,%s",SubNodeNames[nodename],nodes[n+1]);
+		    SubNodeCount[nodename]++;
+		}
+	    }
+	    else{
+		SubNodeNames[nodename] = nodes[n+1];
+		SubNodeCount[nodename]++;
+	    }
+	}
+	parents[nodename]=parent;        #save the node and it's parent
+	depth[nodename]=n-1;             #save the depth
+    }
+}
+
+function saveAlias(aliasname,realname){
+    
+  alias=aliasname; real=realname;
+  #print alias, real
+  #If there's a ":", strip it off and anything after it
+  if(aliasname~":"){
+      split(aliasname,a,":");
+      alias=a[1];
+  }
+  if(realname~":"){
+      split(realname,a,":");
+      real=a[1];
+  }
+      
+  allrecords[alias] = allrecords[real];     #copy info from real name to aliased name as new recrord.
+  alltypes[alias]   = alltypes[real];    
+  allflags[alias]   = allflags[real];    
+  allcount[alias]   = allcount[real];
+  parseRecord(alias); 
 }

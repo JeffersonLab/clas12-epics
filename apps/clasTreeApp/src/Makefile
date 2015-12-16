@@ -80,10 +80,11 @@ clasTree_LIBS += $(EPICS_BASE_IOC_LIBS)
 IOCDIR = ../../iocBoot/iocclasTree
 
 OUTNAME = clas12
-DBDIR = ../Db
-SUBFILE = $(DBDIR)/$(OUTNAME)-nodes.substitutions
+SCRIPTDIR = ../op/scripts
+DICTFILE=$(OUTNAME)NodesDict.py
+RECDUMP = ./sub2dump.sh
 PARSER = ./parseEpicsRecordDump
-IOC_DUMPS = ../../iocBoot/ioccaenhv/st.cmd.ALL.dump
+
 
 
 #=============================
@@ -92,7 +93,7 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-nodes:		$(SUBFILE)	
+nodes:			
+		$(RECDUMP) | $(PARSER) -v outname=$(OUTNAME)
+		cd $(SCRIPTDIR); ln -sf $(OUTNAME) NodesDict.py
 
-$(SUBFILE): 	$(IOC_DUMPS)
-		$(PARSER) -v outname=$(OUTNAME) $(IOC_DUMPS)

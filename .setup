@@ -35,3 +35,20 @@ setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$E
 
 setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.255 129.57.191.255 129.57.68.97 129.57.86.16 129.57.86.29 129.57.86.37 129.57.160.46 129.57.160.54"
 
+#find the directory of this sourced .setup file and set up relevant path and python path
+#let's see how robust this is
+
+set this=`/usr/sbin/lsof +p $$ | grep ".setup" | awk '{print $9}'`
+set clas12epics=`dirname ${this}`
+set script_dir="${clas12epics}/apps/scripts"
+set css_script_dir="${clas12epics}/css_share/common/scripts"
+
+set -f path=($path:q "${script_dir}")
+
+if ( ! $?PYTHONPATH ) then
+   setenv PYTHONPATH "${script_dir}:${css_script_dir}"
+else
+   setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}"
+endif
+
+setenv EPICS_SCRIPTS "${script_dir}"

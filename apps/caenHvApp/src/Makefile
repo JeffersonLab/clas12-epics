@@ -62,7 +62,7 @@ $(GENERATOR): $(GENERATOR).C
 gen_clean:
 	/bin/rm -r $(GENERATOR)
 
-iocs:    	
+iocs:    $(GENERATOR)	
 	./$(GENERATOR) all
 	./$(GENERATOR) crates
 	./$(GENERATOR) groups

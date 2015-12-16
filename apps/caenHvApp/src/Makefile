@@ -66,7 +66,7 @@ iocs:    $(GENERATOR)
 	./$(GENERATOR) all
 	./$(GENERATOR) crates
 	./$(GENERATOR) groups
-	chmod og+x ../../iocBoot/ioccaenhv/st.cmd*
+	chmod +x ../../iocBoot/ioccaenhv/st.cmd*
 
 ioc_clean:
 	/bin/rm -f ../../iocBoot/ioccaenhv_*

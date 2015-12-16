@@ -96,5 +96,5 @@ include $(TOP)/configure/RULES
 nodes:			
 		ln -s ../../db ./
 		$(RECDUMP) | $(PARSER) -v outname=$(OUTNAME)
-		cd $(SCRIPTDIR); ln -sf $(OUTNAME) NodesDict.py
+		cd $(SCRIPTDIR); ln -sf $(OUTNAME)NodesDict.py NodesDict.py
 

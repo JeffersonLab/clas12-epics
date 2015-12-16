@@ -963,7 +963,7 @@ void mkStartups(int type){
     while(crateName[stCrateId]){                                               //for each crate in the list
       sprintf(stName,"%s/%s/st.cmd.%s",bootDir,iocDir,crateName[stCrateId]);   //make some file name strings etc
       sprintf(subName,"%s/%s.substitutions",dbDir,crateName[stCrateId]);
-      sprintf(dumpLine,"dbDumpRecord > st.cmd.%s.dump",crateName[stCrateId]); 
+      sprintf(dumpLine,"#dbDumpRecord > st.cmd.%s.dump",crateName[stCrateId]); 
       sprintf(iocName,"%s_%s",iocDir,crateName[stCrateId]); 
       
       cout << "   " << stName << " and " << subName <<  " ....." << endl ; 

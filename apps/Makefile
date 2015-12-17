@@ -33,3 +33,5 @@ css:
 cssclean:
 	$(RMDIR) ./css_share
 
+scripts:
+	cd scripts;ln -sf ../*/op/scripts/* ./

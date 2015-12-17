@@ -26,7 +26,7 @@ taggerTempApp_DEPEND_DIRS += XY560App
 
 include $(TOP)/configure/RULES_TOP
 
-.PHONY: css cssclean
+.PHONY: css cssclean scripts
 css:
 	@./css_builder.sh
 

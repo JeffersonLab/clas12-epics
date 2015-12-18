@@ -36,8 +36,9 @@ def default_node(node,depth,mode='elem',result=None):
     if mode == 'init':                                        #if start of node
         index=NodeIndex[node]                                #Get index from dict
         if verbose:                                                 #if verbose
-            erange=ElementRange[index].split(",")
-            print '  '*depth+"#Node:"+node+"      Erange:  "+erange[0]+" - "+erange[1]      #print the indented node name
+            if ElementRange[index] != "":
+                erange=ElementRange[index].split(",")
+                print '  '*depth+"#Node:"+node+"      Erange:  "+erange[0]+" - "+erange[1]      #print the indented node name
         
         if verbose > 1:                                             #if very verbose mode, print record details if any.
             nrnames=NodeRecordNames[index].split(",")

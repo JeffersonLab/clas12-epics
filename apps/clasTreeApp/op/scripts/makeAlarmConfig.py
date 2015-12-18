@@ -1,7 +1,9 @@
 #!/usr/bin/python
-from clas12NodesDict import *
+from NodesDict import *
+import doNode
 import argparse
 import datetime
+
 
 
 #This is a template for how to a run a command on the whole hierarchy of nodes from a starting point downwards.
@@ -24,10 +26,12 @@ def main():
     parser.add_argument("top", help="Top node (eg B_HV). To see all nodes do ./dumpTree.py B")
     parser.add_argument("topname", help="Top node name - a nice name in quotes (eg \"High voltage\")")
     parser.add_argument("confname", help="Name of Alarm configuration - almost certainly HallB")
+    parser.add_argument("-v", "--verbosity",   help="increase verbosity", nargs='?', const=0, default=0)
     args        = parser.parse_args()
-    topnode     = args.top
-    topName = args.topname
+    topName     = args.topname
     configName  = args.confname
+    global verbose
+    verbose = args.verbosity
 
     now = datetime.datetime.now()
     print "<!--"
@@ -36,66 +40,51 @@ def main():
     print "<config name=\""+configName+"\">"
     
     #This is the function that works recursively through the tree and calls do_unto_element start_node end_node
-    doNode(topnode, "", 0, "")
+    doNode.doNode(args.top,do_node=my_node, v=verbose)
 
     print"</config>"
 
-def start_node(node,parent,depth,indent):
-    global topName
-    if(depth==0):
-        print indent+"  <component name=\""+topName+"\">"
-    else:
-        print indent+"  <component name=\""+node+"\">"
-    return
+def my_node(node,depth,mode='elem',result=None):
+    #This must have the args defined here, and must have a section for each of the 3 modes:
+    
+    #mode='init': Do something before porcessing a node
+    #mode='elem': Called for each element in the node. Can return a value which will be added to the result[] list.
+    #mode='end':  Called at the end to process the result[] list for the node
 
-def end_node(node,parent,depth,indent):
-    print indent+"   </component>"
-    return
+    shortname=node.split("_")[len(node.split("_"))-1];
+    parent=node.replace("_"+shortname,"")
 
-def do_unto_element(element,parent,depth,indent):
-    print indent+"   <pv name=\""+parent+"_"+element+".STAT\">"
-    print indent+"      <description>High Voltage alarm for "+parent+"_"+element+"</description>"
-    print indent+"      <latching>true</latching>"
-    print indent+"      <annunciating>true</annunciating>"
-    print indent+"      <delay>2.0</delay>"
-    print indent+"      <count>0</count>"
-    print indent+"      <guidance>"
-    print indent+"         <title>Guidance</title>"
-    print indent+"         <details>Try to reset the voltage channel using the GUI. If problem persists, contact the expert.</details>"
-    print indent+"      </guidance>"
-    print indent+"      <display>"
-    print indent+"         <title>Open HV GUI</title>"
-    print indent+"         <details>/CSS/HV2/ntree.opi   &quot;node="+parent+"&quot;</details>"
-    print indent+"      </display>"
-    print indent+"   </pv>"
+    if mode == 'init':                                        #if start of node
+        global topName
+        if(depth==0):
+            print '  '*depth+"  <component name=\""+topName+"\">"
+        else:
+            print '  '*depth+"  <component name=\""+shortname+"\">"
+        return
 
-    return
+    if mode == 'end':                                        #ifend of node
+        print '  '*depth+"   </component>"
+        return
 
-
-#########################################################################################
-# Recursion begins here
-# Do not edit below here unless you know are prepared to disappear up your own arse     #
-# Kenneth
-#########################################################################################
-
-def doNode( node, parent, depth, indent):
-    thisnode = node
-    if(depth>0):
-        thisnode = parent+"_"+node
-    subnodes = SubNodeNames[thisnode].split()
-    elements = ElementNames[thisnode].split()
+    
+    if mode == 'elem':                                        #if element
+        print '  '*depth+"   <pv name=\""+node+".STAT\">"
+        print '  '*depth+"      <description>High Voltage alarm for "+node+"</description>"
+        print '  '*depth+"      <latching>true</latching>"
+        print '  '*depth+"      <annunciating>true</annunciating>"
+        print '  '*depth+"      <delay>2.0</delay>"
+        print '  '*depth+"      <count>0</count>"
+        print '  '*depth+"      <guidance>"
+        print '  '*depth+"         <title>Guidance</title>"
+        print '  '*depth+"         <details>Try to reset the voltage channel using the GUI. If problem persists, contact the expert.</details>"
+        print '  '*depth+"      </guidance>"
+        print '  '*depth+"      <display>"
+        print '  '*depth+"         <title>Open HV GUI</title>"
+        print '  '*depth+"         <details>/CSS/HV2/ntree.opi   &quot;node="+parent+"&quot;</details>"
+        print '  '*depth+"      </display>"
+        print '  '*depth+"   </pv>"
         
-    start_node( node, parent, depth, indent)
-
-    for s in subnodes:
-        doNode( s, thisnode, depth+1,indent+"  ")        
-               
-    for e in elements:
-        do_unto_element(e, thisnode, depth, indent+"  ")
-
-    end_node ( node, parent, depth, indent )
-        
-    return
+        return
     
 if __name__ == "__main__": main()
 

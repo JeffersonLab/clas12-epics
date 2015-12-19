@@ -1,4 +1,4 @@
-// mkHVEpics.C   Ken Livingston
+ // mkHVEpics.C   Ken Livingston
 // see https://clasweb.jlab.org/wiki/index.php/Slow_Control_HV_name_and_alias_tool
 //
 // Here's the general procedure:
@@ -102,7 +102,7 @@ const char *stFileTail[]=   {  "",
 			       NULL};
 
 const char *subFileHeading[]= {"file \"db/caenhv.db\" {",
-			       "        pattern { Cr,     CrName,        Sl,     Ch,    Sys,     Det,    Element,                CScode, pwonoff, v0set, i0set, trip,  rampup, rampdn, svmax}",
+			       "        pattern { Cr,     CrName,        CrType,     Sl,     Ch,    Sys,     Det,    Element,                CScode, pwonoff, v0set, i0set, trip,  rampup, rampdn, svmax}",
 			       NULL};
 
 const char *subFileTail[]  =  {"}",
@@ -144,9 +144,10 @@ const char *subnet       = "129.57.167.";  //will need to change the way this is
 
 //This is the list of the defined crate names (dns names) and ip addresses - add new ones before NMAINFRAMES
 //                             0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,         
-enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,   HVECAL6,   HVDC1,   HVDC2,  HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   NMAINFRAMES};
-const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2","HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",  NULL};
-const int  crateIP[]     = {   78,        47,         46,        79,        162,       161,       53,      191,         51,       190,       55,        56,       666,     667,    668,     669,      70,        36,         -1};
+enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,    HVECAL6,   HVDC1,   HVDC2,   HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   NMAINFRAMES};
+const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2", "HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",          NULL};
+const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,            -1};
+const int  crateIP[]     = {       78,        47,         46,        79,        162,       161,       53,      191,         51,       190,       55,        56,       666,     667,    668,     669,      70,          36,            -1};
 
 
 //For diferent configurations of the ioc/startup files
@@ -1275,8 +1276,8 @@ void mkSubAddLine(ofstream &subfile,int cr,char *name, char *alias, char *crname
   strcpy(element,strstr(detabbr,"_")+1);    //copy this part to element:  "SEC1_UI_E01"
   sprintf(strstr(detabbr,"_"),"");          //Terminate after the "ECAL" part
   
-  if(crname) sprintf(subline,"\t\t{\"%02d\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"HV\",\t\"%s\",\t\"%s\"",cr,crname,slot,chan,detabbr,element);
-  else sprintf(subline,"\t\t{\"%02d\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"HV\",\t\"%s\",\t\"%s\"",cr,crateName[cr],slot,chan,detabbr,element);
+  if(crname) sprintf(subline,"\t\t{\"%02d\",\t\"%s\",\t\"%d\",\t\"%02d\",\t\"%02d\",\t\"HV\",\t\"%s\",\t\"%s\"",cr,crname,4527,slot,chan,detabbr,element);
+  else sprintf(subline,"\t\t{\"%02d\",\t\"%s\",\t\"%d\",\t\"%02d\",\t\"%02d\",\t\"HV\",\t\"%s\",\t\"%s\"",cr,crateName[cr],crateType[cr],slot,chan,detabbr,element);
   subfile << subline;
 
   cs = cr + (slot<<8);

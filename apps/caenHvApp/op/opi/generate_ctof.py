@@ -6,7 +6,7 @@ head='''<?xml version="1.0" encoding="UTF-8"?>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <macros>
     <include_parent_macros>true</include_parent_macros>
-    <DET>B_HV_CTOF</DET>
+    <DET>B_SYS_HV_CTOF</DET>
     <TYPE>4527</TYPE>
   </macros>
   <wuid>-1440ecc8:14f850aa82a:-67a8</wuid>

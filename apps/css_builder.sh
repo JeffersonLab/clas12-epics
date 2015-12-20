@@ -103,3 +103,8 @@ printf "=%.0s" $(seq 1 $cols)
 printf "\nInstalled %10d opis\n" `find $css_share_path/synApps/ -name "*.opi" | wc -l`
 printf "Linked    %10d opis\n" `find $css_share_path/*App/ -name "*.opi" | wc -l`
 
+
+#link any scripts in any of the op/scripts direcrories
+echo
+echo "Linking scripts into ../css_share/common_scripts/"
+ln -sf ${top_dir}/*/op/scripts/* ../css_share/common/scripts/

@@ -1,6 +1,6 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var prefix = "B_HV_CTOF_";
+var prefix = "B_SYS_HV_CTOF_";
 
 var onoff  = widget.getMacroValue("ONOFF");
 var updown = widget.getMacroValue("UPDOWN");
@@ -18,13 +18,17 @@ for (var cc=c0; cc<=c1; cc++)
   else       { ccc = cc; }
   pvU = prefix + "U" + ccc + ":pwonoff";
   pvD = prefix + "D" + ccc + ":pwonoff";
-  if (updown == "UP") {
-    //PVUtil.writePV(pv,onoff);
-  } else if (updown == "DOWN") {
-    //PVUtil.writePV(pv,onoff);
+  if (updown == "UP") 
+  {
+    PVUtil.writePV(pvU,onoff);
+  } 
+  else if (updown == "DOWN") 
+  {
+    PVUtil.writePV(pvD,onoff);
   }
-  else {
-    //PVUtil.writePV(pv,onoff);
-    //PVUtil.writePV(pv,onoff);
+  else
+  {
+    PVUtil.writePV(pvU,onoff);
+    PVUtil.writePV(pvD,onoff);
   }
 }

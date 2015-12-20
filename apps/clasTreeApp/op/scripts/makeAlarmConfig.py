@@ -8,13 +8,8 @@ import datetime
 
 #This is a template for how to a run a command on the whole hierarchy of nodes from a starting point downwards.
 #The doNode() function does the work
-#It calls functions here as apropriate:
+#It calls my_node() defined here, as apropriate:
 
-#The following 4 functions need to be defined.
-#main():             to do any initialisation
-#start_node():       called for every node before do_unto_elememt() is applied to all its elements    
-#do_unto_element():  called for every element
-#end_node():         called for every node after do_unto_elememt()  is applied to all its elements    
 
 topName=""
 
@@ -23,7 +18,7 @@ topName=""
 def main():
     global topName
     parser = argparse.ArgumentParser()
-    parser.add_argument("top", help="Top node (eg B_HV). To see all nodes do ./dumpTree.py B")
+    parser.add_argument("top", help="Top node (eg B_SYS_HV)")
     parser.add_argument("topname", help="Top node name - a nice name in quotes (eg \"High voltage\")")
     parser.add_argument("confname", help="Name of Alarm configuration - almost certainly HallB")
     parser.add_argument("-v", "--verbosity",   help="increase verbosity", nargs='?', const=0, default=0)

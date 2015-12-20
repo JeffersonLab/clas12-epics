@@ -126,7 +126,7 @@ linkingContainer.setPropertyValue("border_style", 0)
 
 if len(elements) > 1:
         widgetElementHeader.addChildToBottom(linkingContainer)
-
+        c=0
         for e in elements:
                 if e != "":
                         ConsoleUtil.writeInfo("elements = "+e)
@@ -134,8 +134,9 @@ if len(elements) > 1:
                         linkingContainer.setPropertyValue("opi_file", "ntree_element.opi")
                         linkingContainer.addMacro("P", node+"_"+e)
                         linkingContainer.addMacro("S", e)
+                        linkingContainer.addMacro("C", str(c))
                         linkingContainer.setPropertyValue("resize_behaviour", 1)
                         linkingContainer.setPropertyValue("border_style", 0)
                         widgetElements.addChildToBottom(linkingContainer)
-                        
+                        c+=1
 exit

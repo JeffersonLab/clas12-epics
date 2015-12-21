@@ -5,7 +5,7 @@ var crate = widget.getMacroValue("CRATE");
 var slot  = widget.getMacroValue("SLOT");
 var nchan = widget.getMacroValue("NCHAN");
 
-java.lang.System.out.println(argh + " " + crate + " " + slot + " " + nchan);
+//java.lang.System.out.println(argh + " " + crate + " " + slot + " " + nchan);
 
 var head = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
 head.setWidth(50);

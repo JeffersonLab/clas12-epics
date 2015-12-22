@@ -148,7 +148,7 @@ const char *subnet       = "129.57.";  //will need to change the way this is don
 //                              0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,          18,   
 enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,    HVECAL6,   HVDC1,   HVDC2,   HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   HVCTOF0,   HVFTAG, NMAINFRAMES};
 const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2", "HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",  "HVCTOF0", "HVFTAG",       NULL};
-const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,       1527,     4527,         -1};
+const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,       1527,     1527,         -1};
 const int  crateSubnet[] = {      167,        167,       167,       167,       167,       167,       167,       167,       167,      167,       167,         67,     167,     167,     167,     167,       167,       167,         86,       86,         -1};
 const int  crateIP[]     = {       78,         47,        46,        79,       162,       161,        53,       191,        51,      190,        55,         56,     666,     667,     668,     669,        70,        36,         81,      108,         -1};
 
@@ -189,7 +189,7 @@ char startupSubFileNames[50][200];
 char startupSpareFileNames[50][200];
 
 //For each defined mainframe allow for the possibility that all it's channels are spare and available.
-enum chanState { CHAN_SPARE, CHAN_USED};
+enum chanState { CHAN_UNDEFINED, CHAN_SPARE, CHAN_USED};
 const int defaultNChan = 24;
 const int defaultNSlot = 16;
 int CSCstatus[NMAINFRAMES][defaultNSlot][defaultNChan];
@@ -382,7 +382,7 @@ int FTCGen(int crate0=0, int slot0=0, int chan0=0,int det=FTC ){
   for(int q=1;q<=4;q++){
     for(int e=1; e<=9; e++){
 	
-      markCSCUsed(det,cr,sl,ch);
+      markCSCUsed(det,-1,sl,ch);
       
       sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],q,e);
       sprintf(canonicalName, "B_%s%s_%s%02d_%s%02d",GeogAbbr[CRATE],HVCrate[det],GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
@@ -761,9 +761,14 @@ void printUsage(char **argv){
 void markCSCUsed(int det, int crate, int sl, int ch){
   int cr=0;
   char crName[100];
-  
-  sprintf(crName,"HV%s%d",HVCrate[det],crate);  //work out the name of the crate 
-  while(crateName[cr]){                         //find the index
+
+  if(crate < 0){
+    sprintf(crName,"HV%s",HVCrate[det]);  //work out the name of the crate 
+  }
+  else{
+    sprintf(crName,"HV%s%d",HVCrate[det],crate);  //work out the name of the crate
+  } 
+  while(crateName[cr]){                         //find the index  
     if(strcmp(crName,crateName[cr])==0){
       CSCstatus[cr][sl][ch]=CHAN_USED;          //mark the cr,sl,ch as used
       return;
@@ -899,16 +904,19 @@ void mkHVEpics(){
   time (&rawtime);
   char canonicalName[64];
   char alias[64];
+  int inc=1;
 
   //flag all crates,slots and channels as spare to start with. 
   for(int cr=0;cr<NMAINFRAMES;cr++){
-    for(int sl=0;sl<defaultNSlot;sl++){
+    if(cr==HVFTAG) inc=2;
+    else inc=1;
+    for(int sl=0;sl<defaultNSlot;sl+=inc){
       for(int ch=0;ch<defaultNChan;ch++){
 	CSCstatus[cr][sl][ch]=CHAN_SPARE;
       }
     }
   }
-
+  
   
   
   strcpy(swapFile,defaultSwapFile);

@@ -118,13 +118,15 @@ char fullHVName[] = "ALL";
 
 
 // Detector spec - add new ones before NDETECTORS
-enum         Detectors   { DC,  ECAL,  PCAL,  FTOF,  LTCC,   TEST, NDETECTORS};
-const char  *DetAbbr[] = {"DC","ECAL","PCAL","FTOF","LTCC", "TEST", NULL     };    //Abbr. names used in PVs
-const char  *HVCrate[] = {"DC","ECAL","FTOF","FTOF","ECAL", "TEST", NULL     };    //Names of HV MainFrames per detector
+enum         Detectors   { DC,  ECAL,  PCAL,  FTOF,  CTOF,   FTC,    LTCC,   TEST, NDETECTORS};
+const char  *DetAbbr[] = {"DC","ECAL","PCAL","FTOF","CTOF", "FTC",  "LTCC", "TEST", NULL     };    //Abbr. names used in PVs
+const char  *HVCrate[] = {"DC","ECAL","FTOF","FTOF","CTOF", "FTAG", "ECAL", "TEST", NULL     };    //Names of HV MainFrames per detector
 const char  *DetFull[] = {"Drift Chambers",                                        //Full names of detectors
 			  "Calorimiter",
 			  "Pre Calorimiter",
 			  "Forward Time of Flight",
+			  "Central Time of Flight",
+			  "Forward Tagger Calorimiter",
 			  "Low Threshold Cerenkov Counter",
 			  "Test crate"};
 
@@ -136,18 +138,19 @@ const char  *GeogAbbr[]  = { "HV",    "CrName",     "SL",   "CH",      NULL };
 const char  *GeogFull[]  = { "HV",    "CrateName",  "Slot", "Channel", NULL };
 
 
-//HV - Crate, Slot, Element = same scheme for all detector formatting for output.
+//HV - Crate, Slot, Element = same scheme for (almost) all detector formatting for output.
 const char *hv_template  = "B_%s%s%d_%s%02d_%s%02d";
 
 
-const char *subnet       = "129.57.167.";  //will need to change the way this is done if the are on more than one subnet
+const char *subnet       = "129.57.";  //will need to change the way this is done if the are on more than one subnet
 
 //This is the list of the defined crate names (dns names) and ip addresses - add new ones before NMAINFRAMES
-//                             0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,         
-enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,    HVECAL6,   HVDC1,   HVDC2,   HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   NMAINFRAMES};
-const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2", "HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",          NULL};
-const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,            -1};
-const int  crateIP[]     = {       78,        47,         46,        79,        162,       161,       53,      191,         51,       190,       55,        56,       666,     667,    668,     669,      70,          36,            -1};
+//                              0,         1,          2,         3,         4,         5,        6,           7,        8,        9,          10,       11,      12,      13,      14,      15,      16,        17,          18,   
+enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,    HVECAL6,   HVDC1,   HVDC2,   HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   HVCTOF0,   HVFTAG, NMAINFRAMES};
+const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2", "HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",  "HVCTOF0", "HVFTAG",       NULL};
+const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,       1527,     4527,         -1};
+const int  crateSubnet[] = {      167,        167,       167,       167,       167,       167,       167,       167,       167,      167,       167,         67,     167,     167,     167,     167,       167,       167,         86,       86,         -1};
+const int  crateIP[]     = {       78,         47,        46,        79,       162,       161,        53,       191,        51,      190,        55,         56,     666,     667,     668,     669,        70,        36,         81,      108,         -1};
 
 
 //For diferent configurations of the ioc/startup files
@@ -155,9 +158,9 @@ enum        StartupTypes     { ALL,  GROUPS,   CRATES , NSTARTUPTYPES  };
 const char *StartupNames[] = {"all","groups", "crates", NULL};
 
 //The crates involved in the dfferent groups
-const int EC_LTCC_Names[]  = { HVECAL1 ,  HVECAL2 ,  HVECAL3 ,  HVECAL4 ,  HVECAL5 ,  HVECAL6 ,  -1};
-const int FTOF_PC_Names[]  = { HVFTOF1 ,  HVFTOF2 ,  HVFTOF3 ,  HVFTOF4 ,  HVFTOF5 ,  HVFTOF6 ,  -1};
-const int DC_Names[]       = {   HVDC1 ,    HVDC2 ,    HVDC3 ,    HVDC4 ,   -1};
+const int EC_LTCC_Names[]  = { HVECAL1,  HVECAL2,  HVECAL3,  HVECAL4,  HVECAL5,  HVECAL6,  -1};
+const int FTOF_PC_Names[]  = { HVFTOF1,  HVFTOF2,  HVFTOF3,  HVFTOF4,  HVFTOF5,  HVFTOF6,  -1};
+const int DC_Names[]       = {   HVDC1,    HVDC2,    HVDC3,    HVDC4,   -1};
 
 //and pointers to them
 const int  *groupLists[]  = { EC_LTCC_Names,  FTOF_PC_Names,  DC_Names, NULL};
@@ -166,8 +169,8 @@ const char *groupTitles[] = {"EC and LTCC",  "FTOF and PC",  "DC",      NULL};
 
 //The detectors involved in each grouping, when they are written as groups
 int groupDets[][5] = { ECAL,  LTCC, -1, -1, -1,
-			FTOF,  PCAL, -1, -1, -1,
-			DC,    -1,   -1, -1, -1};
+		       FTOF,  PCAL, -1, -1, -1,
+		       DC,    -1,   -1, -1, -1,};
 
 //default filenename for all the names and aliases
 const char defaultAllnamesFile[] = "HV_allnames.txt";
@@ -290,6 +293,109 @@ int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
 	      sl=0;cr++;
 	    }
 	  }
+	}
+      }
+    }
+  }
+  return 0;
+}
+// This is for the CTOF, which is a single crate to itself
+int CTOFGen(int crate0=0, int slot0=0, int chan0=0,int det=CTOF ){
+  int cr=crate0;
+  int sl=slot0;
+  int ch=chan0;
+  char canonicalName[64];
+  char alias[64];
+  char macro[64];
+  int n;
+
+
+  enum                SYS{ SIDE,              ELEMENT        };
+  const char  *SysAbbr[]={ "U/D",            "E"             };
+  const char  *SysFull[]={ "Up/Down stream",  "Element 1-62" };
+  
+  //Detector Sector,Layer, ...
+  const char *det_template   ="B_%s_%s_E%02d%s";
+
+  int maxSlot=4;
+  int maxChan=23;
+
+
+  printHierarchy(det,SysFull,SysAbbr,ELEMENT);
+
+
+  const char *sideNames[]={"U","D"};
+
+  //Detector Sector,Layer, ...
+  for(int b=0;b<48;b+=8){
+    for(int s=0;s<2;s++){
+      for(int e=1; e<=8; e++){
+	
+	markCSCUsed(det,cr,sl,ch);
+	
+	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],b+e,sideNames[s]);
+	sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
+	printNames(canonicalName,alias);
+	
+	ch++;
+	  
+	if(ch>maxChan){
+	  allnames << endl;
+	  ch=0; sl++;
+	  if(sl>maxSlot){
+	    allnames << endl;
+	    sl=0;cr++;
+	  }
+	}
+      }
+    }
+  }
+  return 0;
+}
+// This is for the CTOF, which is a single crate to itself
+int FTCGen(int crate0=0, int slot0=0, int chan0=0,int det=FTC ){
+  int cr=crate0;
+  int sl=slot0;
+  int ch=chan0;
+  char canonicalName[64];
+  char alias[64];
+  char macro[64];
+  int n;
+
+
+  enum                SYS{ QUADRANT,          ELEMENT        };
+  const char  *SysAbbr[]={ "Q",               "G"             };
+  const char  *SysFull[]={ "Quadrant",        "Group"        };
+  
+  //Detector Sector,Layer, ...
+  const char *det_template   ="B_%s_%s_Q%dG%d";
+
+  int maxSlot=4;
+  int maxChan=11;
+
+
+  printHierarchy(det,SysFull,SysAbbr,ELEMENT);
+
+
+
+  //Detector Sector,Layer, ...
+  for(int q=1;q<=4;q++){
+    for(int e=1; e<=9; e++){
+	
+      markCSCUsed(det,cr,sl,ch);
+      
+      sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],q,e);
+      sprintf(canonicalName, "B_%s%s_%s%02d_%s%02d",GeogAbbr[CRATE],HVCrate[det],GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
+      printNames(canonicalName,alias);
+      
+      ch++;
+	
+      if(ch>maxChan){
+	allnames << endl;
+	ch=0; sl+=2;
+	if(sl>maxSlot){
+	  allnames << endl;
+	  sl=0;cr++;
 	}
       }
     }
@@ -812,8 +918,7 @@ void mkHVEpics(){
   cout << "Generating names and aliases: "  << endl;
   allnames.open(allnamesFile); //open output file
   allnames << "#" << endl << "#This file was autogenerated by mkHVEpics on: " << ctime (&rawtime) << endl << "#" << endl;
-  
-  ECGen();  LTCCGen(); FTOFGen(); PCGen(); DCGen();  //call all the generators
+  FTCGen(); CTOFGen(); ECGen();  LTCCGen(); FTOFGen(); PCGen(); DCGen();  //call all the generators
 
   //Go over all the defined crates and assume all channels in all slots which have not been taken are alive:
   allnames << endl;
@@ -1148,7 +1253,7 @@ void mkStartupEnd(ofstream &stfile,char *lastlines){
 
 void mkStartupAddCrateFromList(ofstream &stfile,int crate){
   stfile << "# " << crateName[crate] << " ###" << endl;
-  stfile << "Start_CAEN(" << crate << ", \"" << subnet << crateIP[crate] << "\")" << endl << endl;
+  stfile << "Start_CAEN(" << crate << ", \"" << subnet << crateSubnet[crate] << "." << crateIP[crate] << "\")" << endl << endl;
 
 }
 

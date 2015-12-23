@@ -39,15 +39,19 @@ if (type == "527")
 	widget.setPropertyValue("text",sstatus);
 		
 	if (sstatus == "OFF") { 
-	  widget.setPropertyValue("on_color","Header_Background");
+	  widget.setPropertyValue("on_color","Off");
+	  widget.setPropertyValue("off_color","Off");
+	  
 	}
 	else
 	{
 	  if (sstatus == "ON") {
 	    widget.setPropertyValue("on_color","On");
+	    widget.setPropertyValue("off_color","On");
 	  }
 	  else {
 	  	  widget.setPropertyValue("on_color","Major");
+  	  	  widget.setPropertyValue("off_color","Major");
 	  }
 	}
 }
@@ -72,16 +76,19 @@ else if (type == "1527" || type == "4527")
 		  } 
 		}
 		if (istatus == 0) { 
-		  widget.setPropertyValue("on_color","Header_Background");
+		  widget.setPropertyValue("on_color","Off");
+		  widget.setPropertyValue("off_color","Off");
 		}
 		else
 		{
-		  widget.setPropertyValue("on_color",bgcolors[theStatus]);		  
+		  widget.setPropertyValue("on_color",bgcolors[theStatus]);	
+		  widget.setPropertyValue("off_color",bgcolors[theStatus]);		  	  
 		}
      }
      else
      {
        widget.setPropertyValue("on_color","Major");
+       widget.setPropertyValue("off_color","Major");
      }
 
 }

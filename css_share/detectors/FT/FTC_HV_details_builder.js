@@ -7,10 +7,15 @@ var novice = PVUtil.getDouble(pvs[0]);
 var crate = "HVFTAG";
 var nchan = 12;
 
-for (var slot=0; slot<=4; slot+=2)
+var slots=["00","02","04"];
+
+for (var islot=0; islot<3; islot++)
 {
+  var slot=slots[islot];
+  
   for (var chan=0; chan<nchan; chan++)
   {
+    if (chan<10) chan="0"+chan;
     var pvprefix = "B_HW_" + crate + "_Sl" + slot + "_Ch" + chan;
 
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");

@@ -1,6 +1,6 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var prefix = "B_DET_FT_HV";
+var prefix = "B_DET_FTC_HV";
 
 var onoff  = widget.getMacroValue("ONOFF");
 

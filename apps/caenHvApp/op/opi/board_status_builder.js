@@ -44,6 +44,9 @@ for (var chan=0; chan<nchan; chan++)
   lc.setPropertyValue("zoom_to_fit",false);
   */
   
+  lc.setPropertyValue("resize_behaviour",2);
+  
+  
   lc.setPropertyValue("border_style",0);
   
   lc.addMacro("P",pvprefix);

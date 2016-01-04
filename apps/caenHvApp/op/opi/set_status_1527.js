@@ -1,6 +1,8 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var istatus = PVUtil.getDouble(pvs[0]) | 0;
+var istatus;
+try { istatus = PVUtil.getDouble(pvs[0]) | 0; }
+catch (ee) {}
 
 var statuses=["ON","RUP",  "RDN",  "OVC",  "OVV",  "UNV",  "ExTrip","MAXV", "ExDis",       "InTrip","CalEr","ChUn"];
 var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Disconnected","Major","Major","Disconnected"];

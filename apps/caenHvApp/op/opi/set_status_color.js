@@ -1,6 +1,9 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var istatus = PVUtil.getDouble(pvs[0]) | 0;
+var istatus;
+try { istatus = PVUtil.getDouble(pvs[0]) | 0; }
+catch (ee) {}
+
 var type = widget.getMacroValue("TYPE");
 
 // copied this logic from hv_control Qt GUI code.
@@ -57,7 +60,9 @@ if (type == "527")
 
 else if (type == "1527" || type == "4527")
 {	
-	var istatus2 = PVUtil.getDouble(pvs[1]);
+	var istatus2;
+	try { istatus2 = PVUtil.getDouble(pvs[1]); }
+	catch (ee) {}
 		
 	if (istatus2==0)
 	{

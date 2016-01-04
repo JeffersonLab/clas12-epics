@@ -5,7 +5,9 @@ if (widget.getMacroValue("TYPE") != "527")
    exit();
 }
 
-var istatus = PVUtil.getDouble(pvs[0]) | 0;
+var istatus;
+try { istatus = PVUtil.getDouble(pvs[0]) | 0; }
+catch (ee) {}
 
 var statuses=["ON","RUP",  "RDN",  "OVC",  "UNV",  "OVV",  "ExTrip","MAXV", "    ", "Kill", "InTrip"];
 var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Major","Major"];

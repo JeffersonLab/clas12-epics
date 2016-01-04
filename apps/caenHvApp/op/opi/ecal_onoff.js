@@ -5,7 +5,7 @@ var onoff = widget.getMacroValue("ONOFF");
 var io = ["I","O"];
 var uvw = ["U","V","W"];
 
-for (var sec=1; sec<=6; sec++
+for (var sec=1; sec<=6; sec++)
 {
   for (var iuvw=0; iuvw<uvw.length; iuvw++)
   {

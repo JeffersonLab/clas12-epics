@@ -34,7 +34,8 @@ for (var iSec=1; iSec<=nSectors; iSec++)
                  "_PANEL"+panels[iPan]+
                  "_"+sides[iSide]+
                  "_E"+thisChan;
-        
+
+        PVUtil.writePV(prefix+suff+":pwonoff",0);
         java.lang.System.err.println(suff);
         
         

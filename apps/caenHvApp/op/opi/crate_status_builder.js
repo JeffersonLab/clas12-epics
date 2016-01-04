@@ -37,6 +37,8 @@ for (var slot=0; slot<nslot; slot++)
   //catch (err) { lc.setPropertyValue("auto_size",true); }
   lc.setPropertyValue("auto_size",false);
   lc.setPropertyValue("zoom_to_fit",false);
+  lc.setPropertyValue("resize_behaviour",2);
+  
   //lc.setWidth(56);
   lc.setWidth(56);
   lc.setHeight(560);

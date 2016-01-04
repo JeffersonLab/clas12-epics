@@ -15,7 +15,7 @@ for (var chan=0; chan < 24+1; chan++)
 
 	var head = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
 	head.setWidth(50);
-	head.setHeight(21);
+	head.setHeight(20);
 	head.setPropertyValue("border_style",0);
 	if (chan==0) head.setText("");
 	else         head.setText(chan-1);

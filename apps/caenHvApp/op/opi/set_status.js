@@ -52,6 +52,7 @@ if (type == "527")
 	    widget.setPropertyValue("background_color","On");
 	  }
 	  else {
+	  	  widget.setPropertyValue("foreground_color","Header_Foreground");
 	  	  widget.setPropertyValue("background_color","Major");
 	  }
 	}
@@ -88,6 +89,9 @@ else if (type == "1527" || type == "4527")
             widget.setPropertyValue("text",statuses[theStatus]);
             widget.setPropertyValue("foreground_color","Text_Foreground");
             widget.setPropertyValue("background_color",bgcolors[theStatus]);		  
+	  
+            if (bgcolors[theStatus]=="Major")
+                widget.setPropertyValue("foreground_color","Header_Foreground");
         }
     }
     else

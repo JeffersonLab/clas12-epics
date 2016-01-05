@@ -5,7 +5,10 @@
 #   - to guarantee standard startup user interface
 #   - to avoid users modifying the configuration
 
-share=$CLAS/epics/css_share
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+share=$DIR/../css_share
+
 plugin_profile=$share/common/prefs/plugin_customization.ini
 #plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
 workspace=$share/common/workspace
@@ -18,10 +21,10 @@ cp -rf $workspace/.*   $wsp >& /dev/null
 cp -rf $plugin_profile $wsp
 
 # we want to run *everything* from the wsp workspace:
-css -nosplash \
-    -data $wsp \
+css -data $wsp \
     -pluginCustomization $wsp/plugin_customization.ini \
-    -share_link $share=/CLAS12_Share
+    -share_link $share=/CLAS12_Share \
+    -nosplash
 
 # delete the wsp workspace:
 #rm -rf $wsp

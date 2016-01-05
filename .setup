@@ -38,7 +38,9 @@ setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.2
 #find the directory of this sourced .setup file and set up relevant path and python path
 #let's see how robust this is
 
+# this creates nuisance warnings:
 set this=`/usr/sbin/lsof +p $$ | grep ".setup" | awk '{print $9}'`
+
 set clas12epics=`dirname ${this}`
 set script_dir="${clas12epics}/apps/scripts"
 set css_script_dir="${clas12epics}/css_share/common/scripts"

@@ -1,4 +1,4 @@
-# WARNING: DO NOT EDIT. This file was geneated at Sun Dec 20 10:34:39 EST 2015 by the a command like this:
+# WARNING: DO NOT EDIT. This file was geneated at Sun Dec 20 13:24:36 EST 2015 by the a command like this:
 # ./parseEpicsRecordDump [options] ioc1.dump ioc2.dump .... 
 # See the CLAS12 Slow Controls wiki for manuals, or the README in this directory
 #

@@ -92,8 +92,19 @@ else if (type == "1527" || type == "4527")
      }
      else
      {
-       widget.setPropertyValue("background_color","Major");
-       widget.setPropertyValue("background_color","Major");
+         if (istatus2==1) {
+           widget.setPropertyValue("background_color","Warning");
+           widget.setPropertyValue("foreground_color","Warning");
+         }
+         else if (istatus2==2) {
+           widget.setPropertyValue("background_color","Warning");
+           widget.setPropertyValue("foreground_color","Warning");
+         }
+         else if (istatus2==3) {
+           widget.setPropertyValue("background_color","Warning");
+           widget.setPropertyValue("foreground_color","Warning");
+         }
+
      }
 
 }

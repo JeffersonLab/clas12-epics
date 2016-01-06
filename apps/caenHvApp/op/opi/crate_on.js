@@ -12,8 +12,8 @@ for (var slot=0; slot<nslot; slot++)
   {
     if (chan<10) chan="0"+chan;
     var pv;
-    if (argh == 1) { pv = "B_" + crate + "_HV000_" + slot + "_" + chan + ":pwonoff"; }
-    else           { pv = "B_" + crate + "_Sl" + slot + "_Ch" + chan + ":pwonoff"; }
+    if (argh == 1) { pv = "B_HW_" + crate + "_HV000_" + slot + "_" + chan + ":pwonoff"; }
+    else           { pv = "B_HW_" + crate + "_Sl" + slot + "_Ch" + chan + ":pwonoff"; }
     //var pv = "B_" + crate + "_Sl" + slot + "_Ch" + chan + ":pwonoff";
     PVUtil.writePV(pv,1);
   }

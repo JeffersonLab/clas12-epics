@@ -36,7 +36,7 @@ for (var iSec=1; iSec<=nSectors; iSec++)
                  "_E"+thisChan;
 
         PVUtil.writePV(prefix+suff+":pwonoff",0);
-        java.lang.System.err.println(suff);
+        //java.lang.System.err.println(suff);
         
         
       }

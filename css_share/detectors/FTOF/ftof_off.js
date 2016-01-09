@@ -2,7 +2,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var panel  = widget.getMacroValue("PANEL");
 var sector = widget.getMacroValue("SECTOR");
-var side   = 0;//widget.getMacroValue("SIDE");
+var side   = widget.getMacroValue("SIDE");
 
 var nSectors=6;
 var sides=["L","R"];
@@ -13,7 +13,6 @@ var prefix="B_DET_FTOF_HV";
 
 for (var iSec=1; iSec<=nSectors; iSec++)
 {
-
   if (sector!=0 && iSec!=sector) continue;
   
   for (var iPan=0; iPan<panels.length; iPan++)

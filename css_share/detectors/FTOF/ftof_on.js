@@ -2,7 +2,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var panel  = widget.getMacroValue("PANEL");
 var sector = widget.getMacroValue("SECTOR");
-var side   = 0;//widget.getMacroValue("SIDE");
+var side   = widget.getMacroValue("SIDE");
 
 var nSectors=6;
 var sides=["L","R"];

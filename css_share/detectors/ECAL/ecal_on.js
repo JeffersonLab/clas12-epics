@@ -39,8 +39,7 @@ for (var isec=1; isec<=nsectors; isec++)
 
                         PVUtil.writePV(prefix+suff+":pwonoff",1);
                 
-                //java.lang.System.err.println(isec+" "+ipio+" "+pios[ipio]+" "+iuvw+" "+uvws[iuvw]+" "+ichan);
-                java.lang.System.err.println(prefix+suff);
+                //java.lang.System.err.println(prefix+suff);
 
 
             }

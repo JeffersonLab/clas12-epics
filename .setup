@@ -48,9 +48,9 @@ set css_script_dir="${clas12epics}/css_share/common/scripts"
 set -f path=($path:q "${script_dir}")
 
 if ( ! $?PYTHONPATH ) then
-   setenv PYTHONPATH "${script_dir}:${css_script_dir}"
+   setenv PYTHONPATH "${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics"
 else
-   setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}"
+   setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics"
 endif
 
 setenv EPICS_SCRIPTS "${script_dir}"

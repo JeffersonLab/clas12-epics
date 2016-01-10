@@ -43,8 +43,8 @@ for (var isec=1; isec<=nsectors; isec++)
                     "_"+uvws[iuvw]+thispio+
                     "_E"+thischan;
 
-                  //PVUtil.writePV(prefix+suff+":pwonoff",0);
-                  java.lang.System.err.println(prefix+suff);
+                  PVUtil.writePV(prefix+suff+":pwonoff",0);
+                  //java.lang.System.err.println(prefix+suff);
             }
         }
     }

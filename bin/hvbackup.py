@@ -143,8 +143,6 @@ class SaveRestore:
       frac=float(len(lines))/len(prefixes)
       self.progressBar.set_fraction(frac)
       self.progressBar.set_text('%d%%'%(round(frac*100)))
-#      self.progressBar.get_fraction()
-#      self.progressBar.pulse()
       gtk.main_iteration()
       #print line
 
@@ -155,30 +153,35 @@ class SaveRestore:
     exit('BACKEDUP VOLTAGES TO:\n\n'+filename)
 
   def restore(self,filename):
-    return
     caputs=[]
     lines=open(filename,'r').readlines()
-    for line in lines:
+    for iline in range(len(lines)):
+      line=lines[iline]
       cols = line.rstrip().split()
       prefix=cols.pop(0)
       for col in cols:
         keyval=col.split('=')
         if len(keyval)!=2:
-          exit('INVALID FILE:\n\n'+filename+'\n\nNOT RESTORING.')
+          exit('INVALID FILE:\n\n'+filename+'\n\n(line #'+str(iline+1)+': '+col+')\n\nNOT RESTORING.')
         field=keyval[0]
         if field=='.NAME': continue
-        try: val = float(col[1])
-        except ValueError: exit('INVALID FILE:\n\n'+filename+'\n\nNOT RESTORING.')
+        try: val = float(keyval[1])
+        except ValueError: exit('INVALID FILE:\n\n'+filename+' \n\n(line #'+str(iline+1)+': '+col+')\n\nNOT RESTORING.')
         pv=prefix+field
         caputs.append((pv,val))
         print pv,val
-#      epics.caput(pv,val)
+#      frac=float(len(lines))/len(lines)
+#      self.progressBar.set_fraction(frac)
+#      self.progressBar.set_text('%d%%'%(round(frac*100)))
+#      gtk.main_iteration()
+    #for xx in caputs:
+      #epics.caput(xx[0],xx[1])
     exit('RESTORED '+str(len(lines))+' VOLTAGES FROM:\n\n'+filename)
 
 def main():
 
   scriptName=sys.argv.pop(0)
-  usage=scriptName+' [options] det=detectorName save/restore'
+  usage=scriptName+' [sector=#] det=detectorName save/restore'
 
   det=None
   sector=None

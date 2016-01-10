@@ -21,7 +21,13 @@ for (var isec=1; isec<=nsectors; isec++)
 
     for (var ipio=0; ipio<pios.length; ipio++)
     {
-        if (pio!="0" && pios[ipio]!=pio) continue;
+        if (pio!="0") {
+            if (pio=="I" || pio=="O" || pio=="IO") {
+                if (ipio==0) continue;
+                if (pio.toString().indexOf(pios[ipio])<0) continue;
+            }
+            else if (ipio!=0)  continue;
+        }
 
         var prefix;
         if (pios[ipio]=="") prefix="B_DET_PCAL_HV";

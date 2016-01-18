@@ -26,6 +26,7 @@ for (var islot=0; islot<3; islot++)
     lc.setPropertyValue("auto_size",true);
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);
+    lc.setPropertyValue("background_color","Header_Background");
     lc.addMacro("C",chan);
     lc.addMacro("P",pvprefix);
     widget.addChildToBottom(lc);

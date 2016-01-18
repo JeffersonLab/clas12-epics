@@ -45,6 +45,8 @@ for (var iPan=0; iPan<panels.length; iPan++)
             lc.setPropertyValue("auto_size",true);
             lc.setPropertyValue("zoom_to_fit",false);
             lc.setPropertyValue("border_style",0);
+            lc.setPropertyValue("background_color","Header_Background");
+            
             lc.addMacro("C",iChan);
             lc.addMacro("P",pv);
             widget.addChildToBottom(lc);

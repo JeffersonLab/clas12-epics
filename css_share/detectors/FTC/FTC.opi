@@ -2485,10 +2485,16 @@ $(pv_value)</tooltip>
           <description>Reboot HV IOC</description>
         </action>
         <action type="EXECUTE_CMD">
-          <command>hvbackup.py save det=FTC</command>
+          <command>hvbackup.py save det=FTC_HV</command>
           <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>Save Settings</description>
+          <wait_time>1</wait_time>
+          <description>Save HV Settings</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>hvbackup.py restore det=FTC_HV</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>1</wait_time>
+          <description>Restore HV Settings</description>
         </action>
       </actions>
       <font>

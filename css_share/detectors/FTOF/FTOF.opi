@@ -48752,53 +48752,56 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>0</border_style>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
     <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
+    <tooltip></tooltip>
     <rules />
     <enabled>true</enabled>
-    <wuid>5c03f28a:1522d7bc2be:-7149</wuid>
+    <wuid>2a1b25d0:152415b7c79:-3f46</wuid>
+    <transparent>false</transparent>
     <pv_value />
-    <text>[]</text>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>24</height>
+    <height>20</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <image></image>
     <visible>true</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <widget_type>Action Button</widget_type>
+    <label>[]</label>
+    <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
       <color red="240" green="240" blue="240" />
     </background_color>
-    <width>24</width>
-    <x>735</x>
-    <name>Action Button</name>
-    <y>26</y>
-    <style>0</style>
+    <width>20</width>
+    <x>762</x>
+    <name>Menu Button</name>
+    <y>16</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="EXECUTE_CMD">
-        <command>hvbackup.py save det=FTOF</command>
+        <command>hvbackup.py det=FTOF_HV save</command>
         <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
+        <wait_time>1</wait_time>
         <description>Save Settings</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py det=FTOF_HV restore</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>1</wait_time>
+        <description>Restore Settings</description>
       </action>
     </actions>
     <font>

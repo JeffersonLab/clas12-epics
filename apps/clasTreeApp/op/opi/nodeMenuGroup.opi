@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0.0">
+  <show_close_button>true</show_close_button>
+  <rules />
+  <wuid>2da4dada:138bb0b2666:-7ff6</wuid>
+  <show_grid>false</show_grid>
+  <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
+  <scripts />
+  <height>800</height>
+  <macros>
+    <include_parent_macros>true</include_parent_macros>
+  </macros>
+  <boy_version>4.0.104.201508111620</boy_version>
+  <show_edit_range>true</show_edit_range>
+  <widget_type>Display</widget_type>
+  <auto_scale_widgets>
+    <auto_scale_widgets>false</auto_scale_widgets>
+    <min_width>-1</min_width>
+    <min_height>-1</min_height>
+  </auto_scale_widgets>
+  <background_color>
+    <color name="OPI_Background" red="50" green="50" blue="50" />
+  </background_color>
+  <width>904</width>
+  <x>-1</x>
+  <name>Display</name>
+  <grid_space>1</grid_space>
+  <show_ruler>true</show_ruler>
+  <y>-1</y>
+  <snap_to_geometry>true</snap_to_geometry>
+  <foreground_color>
+    <color red="192" green="192" blue="192" />
+  </foreground_color>
+  <actions hook="false" hook_all="false" />
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-389bc5b0:151de356ca3:1ddf</wuid>
+    <transparent>true</transparent>
+    <lock_children>true</lock_children>
+    <scripts>
+      <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>SetupNodeSelector</scriptName>
+        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+
+NTOT = int(widget.getMacroValue("NTOT"))   #the no of menus to create
+for n in range(1, NTOT+1):
+    linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer")
+    linkingContainer.setPropertyValue("opi_file", "nodeCombo2.opi")
+    linkingContainer.addMacro("N", str(n))
+    linkingContainer.setPropertyValue("resize_behaviour", 1)
+    linkingContainer.setPropertyValue("border_style", 0)
+    linkingContainer.setPropertyValue("background_color", "OPI_Background")
+    widget.addChildToRight(linkingContainer)
+#Transfer the to the local NODE pv
+pvArray[0].setValue(widget.getMacroValue("P"))
+]]></scriptText>
+        <pv trig="false">loc://$(LCID)_NODE</pv>
+        <pv trig="true">loc://$(LCID)_DUMMY(0)</pv>
+      </path>
+    </scripts>
+    <height>48</height>
+    <border_width>0</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <visible>true</visible>
+    <border_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </border_color>
+    <widget_type>Grouping Container</widget_type>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>884</width>
+    <x>20</x>
+    <name>EPICS Browser</name>
+    <y>40</y>
+    <foreground_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <fc>true</fc>
+    <show_scrollbar>true</show_scrollbar>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>850bb9c:151ed501514:-72f2</wuid>
+    <transparent>true</transparent>
+    <lock_children>false</lock_children>
+    <scripts />
+    <height>96</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <visible>true</visible>
+    <border_color>
+      <color name="Black" red="0" green="0" blue="0" />
+    </border_color>
+    <widget_type>Grouping Container</widget_type>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>876</width>
+    <x>20</x>
+    <name>Group Name</name>
+    <y>81</y>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <fc>false</fc>
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+    </font>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <horizontal_alignment>0</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-1a42caf2:151e2d48ce6:-42f4</wuid>
+      <transparent>true</transparent>
+      <auto_size>false</auto_size>
+      <text>Selected Node</text>
+      <scripts />
+      <height>27</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>true</wrap_words>
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <width>117</width>
+      <x>7</x>
+      <name>Label</name>
+      <y>-2</y>
+      <foreground_color>
+        <color name="Write_Background" red="250" green="250" blue="205" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="2.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <precision>0</precision>
+      <tooltip></tooltip>
+      <horizontal_alignment>0</horizontal_alignment>
+      <rules />
+      <pv_value />
+      <auto_size>false</auto_size>
+      <text></text>
+      <rotation_angle>0.0</rotation_angle>
+      <show_units>true</show_units>
+      <height>27</height>
+      <multiline_input>false</multiline_input>
+      <border_width>2</border_width>
+      <visible>true</visible>
+      <pv_name>loc://$(LCID)_SEARCH</pv_name>
+      <selector_type>0</selector_type>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <precision_from_pv>true</precision_from_pv>
+      <widget_type>Text Input</widget_type>
+      <confirm_message></confirm_message>
+      <name>Text Input</name>
+      <style>0</style>
+      <actions hook="false" hook_all="false" />
+      <border_style>3</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>5daf9764:152130c58c7:-777b</wuid>
+      <transparent>false</transparent>
+      <scripts>
+        <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+          <scriptName>makeWildcard</scriptName>
+          <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+node = PVUtil.getString(pvArray[0])
+pvArray[1].setValue(node+"*")
+
+]]></scriptText>
+          <pv trig="true">loc://$(LCID)_NODE</pv>
+          <pv trig="false">loc://$(LCID)_SEARCH</pv>
+        </path>
+      </scripts>
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <format_type>0</format_type>
+      <limits_from_pv>false</limits_from_pv>
+      <background_color>
+        <color name="OPI_Background" red="50" green="50" blue="50" />
+      </background_color>
+      <width>341</width>
+      <x>506</x>
+      <y>24</y>
+      <maximum>1.7976931348623157E308</maximum>
+      <foreground_color>
+        <color red="144" green="238" blue="144" />
+      </foreground_color>
+      <minimum>-1.7976931348623157E308</minimum>
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.combo" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip></tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>5daf9764:152130c58c7:-7952</wuid>
+      <pv_value />
+      <scripts>
+        <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+          <scriptName>nodeSearch</scriptName>
+          <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+import fnmatch
+import nodeLoader
+from java.util import Arrays
+
+nodeLoader.readTree()                                    #Read in the node tree
+
+topnode=widget.getMacroValue("TOP")
+node = PVUtil.getString(pvArray[0])
+
+nlist=fnmatch.filter(nodeLoader.NodeNames,node)       #filter on the node search
+nlist.sort()                                                                         #make a sorted list of them
+widget.setPropertyValue("items",Arrays.asList(nlist) )   #set the choice list
+#pvArray[1].setValue(nlist[0])
+]]></scriptText>
+          <pv trig="true">loc://$(LCID)_SEARCH</pv>
+          <pv trig="false">loc://$(LCID)_NODE</pv>
+        </path>
+      </scripts>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>29</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>false</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <items_from_pv>false</items_from_pv>
+      <visible>true</visible>
+      <pv_name>loc://$(LCID)_NODE</pv_name>
+      <border_color>
+        <color name="Write_Background" red="250" green="250" blue="205" />
+      </border_color>
+      <widget_type>Combo</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <width>341</width>
+      <x>506</x>
+      <name>Combo</name>
+      <y>50</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <items />
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+      <border_style>3</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <precision>0</precision>
+      <tooltip></tooltip>
+      <horizontal_alignment>0</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-1a42caf2:151e2d48ce6:-7825</wuid>
+      <transparent>true</transparent>
+      <pv_value />
+      <auto_size>false</auto_size>
+      <text>##.###</text>
+      <rotation_angle>0.0</rotation_angle>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <show_units>true</show_units>
+      <height>55</height>
+      <border_width>2</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name>loc://$(LCID)_NODE</pv_name>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <precision_from_pv>true</precision_from_pv>
+      <widget_type>Text Update</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <wrap_words>false</wrap_words>
+      <format_type>0</format_type>
+      <background_color>
+        <color name="Read_Background" red="77" green="77" blue="77" />
+      </background_color>
+      <width>491</width>
+      <x>1</x>
+      <name>Text Update</name>
+      <y>24</y>
+      <foreground_color>
+        <color red="144" green="238" blue="144" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <opifont.name fontName="Cantarell" height="15" style="1">Header 2</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip>Search for nodes with wildcard and unix patterns.
+Choose from the results in the drop down menu.</tooltip>
+      <horizontal_alignment>0</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>2b973bb7:152179fd0aa:-7f1a</wuid>
+      <transparent>true</transparent>
+      <auto_size>false</auto_size>
+      <text>Node search</text>
+      <scripts />
+      <height>27</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>true</wrap_words>
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <width>117</width>
+      <x>514</x>
+      <name>Label_1</name>
+      <y>-2</y>
+      <foreground_color>
+        <color name="Write_Background" red="250" green="250" blue="205" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip>Select a node using the drop down menus.
+There are 3 levels at the top:
+HW - Hardware, CrateName, Slot
+SYS - System (HV, LV,...), Detector (DC, ECAL,...), subsys......
+DET - Detector (DC, ECAL,...), System (HV, LV,...), subsys......</tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>850bb9c:151ed501514:-1a57</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>CLAS12 EPICS Tree - Node selector</text>
+    <scripts />
+    <height>29</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>469</width>
+    <x>20</x>
+    <name>Label</name>
+    <y>3</y>
+    <foreground_color>
+      <color name="Write_Background" red="250" green="250" blue="205" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.tab" version="1.0.0">
+    <active_tab>1</active_tab>
+    <tooltip></tooltip>
+    <height>511</height>
+    <border_width>1</border_width>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <tab_0_foreground_color>
+      <color red="0" green="0" blue="0" />
+    </tab_0_foreground_color>
+    <actions hook="false" hook_all="false" />
+    <tab_1_enabled>true</tab_1_enabled>
+    <border_style>0</border_style>
+    <enabled>true</enabled>
+    <wuid>2b973bb7:152179fd0aa:-42a2</wuid>
+    <tab_1_background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </tab_1_background_color>
+    <tab_1_icon_path></tab_1_icon_path>
+    <tab_1_font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </tab_1_font>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>851</width>
+    <x>20</x>
+    <horizontal_tabs>true</horizontal_tabs>
+    <y>184</y>
+    <rules />
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <visible>true</visible>
+    <tab_0_background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </tab_0_background_color>
+    <widget_type>Tabbed Container</widget_type>
+    <name>Tabbed Container</name>
+    <minimum_tab_height>10</minimum_tab_height>
+    <tab_0_font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </tab_0_font>
+    <tab_0_title>Element Info</tab_0_title>
+    <tab_1_foreground_color>
+      <color red="0" green="0" blue="0" />
+    </tab_1_foreground_color>
+    <tab_1_title>Node Info</tab_1_title>
+    <scripts />
+    <tab_count>2</tab_count>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <tab_0_icon_path></tab_0_icon_path>
+    <tab_0_enabled>true</tab_0_enabled>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>2b973bb7:152179fd0aa:-42a1</wuid>
+      <transparent>true</transparent>
+      <lock_children>false</lock_children>
+      <scripts />
+      <height>476</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <macros>
+        <include_parent_macros>true</include_parent_macros>
+      </macros>
+      <visible>true</visible>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Grouping Container</widget_type>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>849</width>
+      <x>1</x>
+      <name>Element Info</name>
+      <y>1</y>
+      <foreground_color>
+        <color red="192" green="192" blue="192" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <fc>false</fc>
+      <show_scrollbar>true</show_scrollbar>
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+      <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+        <border_style>0</border_style>
+        <tooltip></tooltip>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>2b973bb7:152179fd0aa:-402b</wuid>
+        <transparent>true</transparent>
+        <lock_children>false</lock_children>
+        <scripts>
+          <path pathString="EmbeddedPy" checkConnect="true" sfe="true" seoe="false">
+            <scriptName>Element script</scriptName>
+            <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+import nodeLoader
+import os
+
+nodeLoader.readTree()                                    #Read in the node tree
+
+topnode=widget.getMacroValue("TOP") 
+node = PVUtil.getString(pvArray[0])
+
+if not node in nodeLoader.NodeIndex:             # check node defined, or try parent, or force to top node
+	if node.find("_"):
+		parent = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+		ConsoleUtil.writeInfo("Update: parent="+parent)
+		if parent in nodeLoader.NodeIndex:
+			esel=node.split("_")[len(node.split("_"))-1]
+			node=parent
+		else:
+		        node=topnode
+	else:
+		node=topnode
+
+
+ConsoleUtil.writeInfo("thisnode = "+node)
+index=int(nodeLoader.NodeIndex[node])                          #find the index of the node for the lists
+
+dir = os.environ["CSS_SHARE_DIR"]
+#ConsoleUtil.writeInfo("share_dir = "+dir)
+
+
+#Now do the same for ..._element.opi. This will make a widget for every element
+opi_element=dir+"/apps/clasTreeApp/"+topnode+"_element.opi"          #Default to top
+
+opi_node=node                                                     #default to node
+while not opi_node == topnode:                          #if not at top node yet
+	if  not "_" in opi_node:                                  
+		break
+	filename=dir+"/apps/clasTreeApp/"+opi_node+"_element.opi" #make a filename
+	#ConsoleUtil.writeInfo("looking for "+filename) 
+	if os.path.isfile(filename):                               #test to see if it exists
+		opi_element=filename
+		break                                                       #if so, keep it and break
+	else:                                                                #otherwise, try the parent 
+		opi_node=opi_node[:-1]
+		#nlist=opi_node.split("_")                    
+		#opi_node=opi_node.split("_"+nlist[len(nlist)-1])[0]
+#ConsoleUtil.writeInfo("OpiElement="+opi_element)
+
+if node.find("_"): 
+        parent = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+else:
+        parent = node
+pindex =  int(nodeLoader.NodeIndex[parent])  
+
+elements = nodeLoader.ElementNames[index].rstrip("'").lstrip("'").split(",")
+elements.sort()
+
+widget.removeAllChildren()
+
+if len(elements) > 1:
+	c=0
+        for e in elements:
+                if e != "":
+                        ConsoleUtil.writeInfo("elements = "+e)
+                        linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer") 
+                        linkingContainer.setPropertyValue("opi_file", opi_element)
+                        linkingContainer.addMacro("P", node+"_"+e)
+                        linkingContainer.addMacro("S", e)
+                        linkingContainer.addMacro("C", str(c))
+                        linkingContainer.setPropertyValue("resize_behaviour", 1)
+                        linkingContainer.setPropertyValue("border_style", 0)
+                        widget.addChildToBottom(linkingContainer)
+
+                        #linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer") 
+                        #linkingContainer.setPropertyValue("opi_file", "toggleViewButton.opi")
+                        #linkingContainer.addMacro("P", node+"_"+e)
+                        #linkingContainer.addMacro("S", e)
+                        #linkingContainer.addMacro("C", str(c))
+                        #linkingContainer.setPropertyValue("resize_behaviour", 1)
+                        #linkingContainer.setPropertyValue("border_style", 0)
+                        #widget.addChildToRight(linkingContainer)
+
+                        c+=1
+]]></scriptText>
+            <pv trig="true">loc://$(LCID)_NODE</pv>
+          </path>
+        </scripts>
+        <height>417</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <visible>true</visible>
+        <border_color>
+          <color name="Black" red="0" green="0" blue="0" />
+        </border_color>
+        <widget_type>Grouping Container</widget_type>
+        <background_color>
+          <color name="OPI_Background" red="50" green="50" blue="50" />
+        </background_color>
+        <width>834</width>
+        <x>6</x>
+        <name>Element Group</name>
+        <y>35</y>
+        <foreground_color>
+          <color red="192" green="192" blue="192" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <fc>false</fc>
+        <show_scrollbar>true</show_scrollbar>
+        <font>
+          <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+        </font>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+        <border_style>0</border_style>
+        <tooltip></tooltip>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-6d1c067c:1521dddb691:-6b5a</wuid>
+        <transparent>true</transparent>
+        <lock_children>false</lock_children>
+        <scripts>
+          <path pathString="EmbeddedPy" checkConnect="true" sfe="true" seoe="false">
+            <scriptName>Element Header script</scriptName>
+            <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+import nodeLoader
+import os
+
+nodeLoader.readTree()                                    #Read in the node tree
+
+topnode=widget.getMacroValue("TOP") 
+node = PVUtil.getString(pvArray[0])
+
+if not node in nodeLoader.NodeIndex:                      # check node defined, or print error and ret  
+        print "Error: There is no Key for \""+node+"\" in NodeIndex[]" 
+        exit
+ConsoleUtil.writeInfo("thisnode = "+node)
+index=int(nodeLoader.NodeIndex[node])                          #find the index of the node for the lists
+
+dir = os.environ["CSS_SHARE_DIR"]
+#ConsoleUtil.writeInfo("share_dir = "+dir)
+
+#look for and ...elementHeader.opi file corresponding to this node, if it doesn't exist, look for the parent one etc.
+opi_header=dir+"/apps/clasTreeApp/"+topnode+"_elementHeader.opi"          #Default to top
+
+opi_node=node                                                     #default to node
+while not opi_node == topnode:                          #if not at top node yet
+	if  not "_" in opi_node:                                  
+		break
+	filename=dir+"/apps/clasTreeApp/"+opi_node+"_elementHeader.opi" #make a filename
+	#ConsoleUtil.writeInfo("looking for "+filename) 
+	if os.path.isfile(filename):                               #test to see if it exists
+		opi_header=filename
+		break                                                       #if so, keep it and break
+	else:                                                                #otherwise, try the parent 
+		opi_node=opi_node[:-1]
+		#nlist=opi_node.split("_")                    
+		#opi_node=opi_node.split("_"+nlist[len(nlist)-1])[0]
+#ConsoleUtil.writeInfo("OpiElementHeader="+opi_header)
+
+if node.find("_"): 
+        parent = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+else:
+        parent = node
+pindex =  int(nodeLoader.NodeIndex[parent])  
+
+elements = nodeLoader.ElementNames[index].rstrip("'").lstrip("'").split(",")
+
+widget.removeAllChildren()
+# Fill the Elemements group container with relevant .opi files
+# header first
+linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer") 
+linkingContainer.setPropertyValue("opi_file", opi_header )
+linkingContainer.addMacro("P", parent)
+linkingContainer.setPropertyValue("resize_behaviour", 1)
+linkingContainer.setPropertyValue("border_style", 0)
+
+if len(elements) > 1:
+        widget.addChildToBottom(linkingContainer)
+]]></scriptText>
+            <pv trig="true">loc://$(LCID)_NODE</pv>
+          </path>
+        </scripts>
+        <height>28</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <visible>true</visible>
+        <border_color>
+          <color name="Black" red="0" green="0" blue="0" />
+        </border_color>
+        <widget_type>Grouping Container</widget_type>
+        <background_color>
+          <color name="OPI_Background" red="50" green="50" blue="50" />
+        </background_color>
+        <width>834</width>
+        <x>6</x>
+        <name>Element Header Group</name>
+        <y>8</y>
+        <foreground_color>
+          <color red="192" green="192" blue="192" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <fc>false</fc>
+        <show_scrollbar>true</show_scrollbar>
+        <font>
+          <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+        </font>
+      </widget>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>2b973bb7:152179fd0aa:-42a0</wuid>
+      <transparent>true</transparent>
+      <lock_children>false</lock_children>
+      <scripts />
+      <height>476</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <macros>
+        <include_parent_macros>true</include_parent_macros>
+      </macros>
+      <visible>false</visible>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Grouping Container</widget_type>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>849</width>
+      <x>1</x>
+      <name>Node Info</name>
+      <y>1</y>
+      <foreground_color>
+        <color red="192" green="192" blue="192" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <fc>false</fc>
+      <show_scrollbar>true</show_scrollbar>
+      <font>
+        <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      </font>
+      <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+        <border_style>0</border_style>
+        <tooltip></tooltip>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-4e556fb6:1521bba9215:-7f91</wuid>
+        <transparent>true</transparent>
+        <lock_children>false</lock_children>
+        <scripts>
+          <path pathString="/CLAS12_Share/common/scripts/doNodeCSS.py" checkConnect="true" sfe="false" seoe="false">
+            <pv trig="true">loc://$(LCID)_NODE</pv>
+            <pv trig="false">loc://dummy</pv>
+          </path>
+        </scripts>
+        <height>461</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <visible>true</visible>
+        <border_color>
+          <color name="Black" red="0" green="0" blue="0" />
+        </border_color>
+        <widget_type>Grouping Container</widget_type>
+        <background_color>
+          <color name="OPI_Background" red="50" green="50" blue="50" />
+        </background_color>
+        <width>834</width>
+        <x>7</x>
+        <name>Node Group</name>
+        <y>8</y>
+        <foreground_color>
+          <color red="192" green="192" blue="192" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <fc>false</fc>
+        <show_scrollbar>true</show_scrollbar>
+        <font>
+          <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+        </font>
+      </widget>
+    </widget>
+  </widget>
+</display>

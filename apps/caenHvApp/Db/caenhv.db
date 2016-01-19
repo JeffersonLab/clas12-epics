@@ -1,6 +1,20 @@
 #
 #
 #
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Name") 
+{
+   field(DESC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Name")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Name")
+}
+
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Alias") 
+{
+   field(DESC, "B_DET_$(Det)_$(Sys)_$(Element)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Alias")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Alias")
+}
+
 
 record(bigsub, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") 
 {

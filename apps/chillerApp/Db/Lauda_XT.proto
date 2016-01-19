@@ -1,0 +1,51 @@
+#
+# Lauda Integral XT Series process thermostats
+#
+# Parameters:
+#   $1 = input channel number [1-8]
+#
+# Author: Wesley Moore
+# Date:   December 2015
+#
+
+OutTerminator = CR LF;
+InTerminator = CR LF;
+writetimeout = 100;
+readtimeout = 300;     # milliseconds
+replytimeout = 1000;
+ExtraInput = Ignore;
+
+###################################
+# INPUTS
+###################################
+getAi {
+	out "\$1";
+    in "%f";
+}
+
+getBi {
+    out "\$1";
+    in "%d";
+}
+
+getMbbi {
+    out "\$1";
+    in "%b";
+}
+
+getStringin {
+    out "\$1";
+    in "%s";
+}
+
+###################################
+# OUTPUTS
+###################################
+setAi {
+	out "\$1_%f";
+    in "OK";
+}
+
+setStr {
+    out "%s";
+}

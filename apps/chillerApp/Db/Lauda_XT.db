@@ -1,0 +1,191 @@
+#
+# Lauda Integral XT Series process thermostats
+#
+# Macros:
+#   P = prefix
+#   R = prefix
+#   PORT = asyn port name
+#
+# Author: Wesley Moore
+# Date:   December 2015
+#
+
+record(asyn, "$(P)$(R)asyn") {
+    field(PORT, "$(PORT)")
+    field(OEOS, "\r\n")
+    field(IEOS, "\r\n")
+}
+
+###################################
+# INPUTS
+###################################
+record(ai, "$(P)$(R)outflow_temp") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_PV_00) $(PORT)")
+    field(SCAN, "5 second")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(ai, "$(P)$(R)outflow_mbar") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_PV_02) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+    field(EGU,  "mbar")
+}
+
+record(ai, "$(P)$(R)bath_level") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_PV_05) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+    field(EGU,  "")
+}
+
+record(ai, "$(P)$(R)outflow_temp_set") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_SP_00) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+# returns double, passed to mbbi for state string
+record(ai, "$(P)$(R)cooling_mode_raw") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_SP_02) $(PORT)")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)$(R)cooling_mode.PROC")
+}
+
+record(mbbi, "$(P)$(R)cooling_mode") {
+    field(INP, "$(P)$(R)cooling_mode_raw")
+    field(ZRST, "Off")
+    field(ONST, "On")
+    field(TWST, "Auto")
+}
+
+record(ai, "$(P)$(R)outflow_temp_lim_hi") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_SP_04) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(ai, "$(P)$(R)outflow_temp_lim_low") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(IN_SP_05) $(PORT)")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(mbbi, "$(P)$(R)onoff") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getBi(IN_MODE_02) $(PORT)")
+    field(ZRST, "On")
+    field(ONST, "Off")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)status") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getAi(STATUS) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+# Response:
+#   XXXXXXX  - X=0 no error, X=1 error
+#   1st char - error
+#   2nd char - alarm
+#   3rd char - warning
+#   4th char - over temperature
+#   5th char - low level error
+#   6th char - high level error
+#   7th char - no external control variable
+record(mbbiDirect, "$(P)$(R)stat_code") {
+    field(DTYP, "stream")
+    field(INP,  "@Lauda_XT.proto getMbbi(STAT) $(PORT)")
+    field(NOBT, "7")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)$(R)stat_error.PROC")
+}
+
+record(bi, "$(P)$(R)error") {
+    field(INP,  "$(P)$(R)stat_code.B6")
+    field(FLNK, "$(P)$(R)alarm")
+}
+
+record(bi, "$(P)$(R)alarm") {
+    field(INP,  "$(P)$(R)stat_code.B5")
+    field(FLNK, "$(P)$(R)warning")
+}
+
+record(bi, "$(P)$(R)warning") {
+    field(INP,  "$(P)$(R)stat_code.B4")
+    field(FLNK, "$(P)$(R)over_temp_error")
+}
+
+record(bi, "$(P)$(R)over_temp_error") {
+    field(INP,  "$(P)$(R)stat_code.B3")
+    field(FLNK, "$(P)$(R)low_level_error")
+}
+
+record(bi, "$(P)$(R)low_level_error") {
+    field(INP,  "$(P)$(R)stat_code.B2")
+    field(FLNK, "$(P)$(R)high_level_error")
+}
+
+record(bi, "$(P)$(R)high_level_error") {
+    field(INP,  "$(P)$(R)stat_code.B1")
+    field(FLNK, "$(P)$(R)ext_ctrl_error")
+}
+
+record(bi, "$(P)$(R)ext_ctrl_error") {
+    field(INP,  "$(P)$(R)stat_code.B0")
+}
+
+###################################
+# OUTPUTS
+###################################
+record(ao, "$(P)$(R)outflow_temp:set") {
+    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_00) $(PORT)")
+    field(PREC, "2")
+    field(EGU,  "C")
+}
+
+record(ao, "$(P)$(R)pump_power") {
+    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_01) $(PORT)")
+    field(DRVL, "1")
+    field(DRVH, "8")
+}
+
+record(mbbo, "$(P)$(R)cooling_mode:set") {
+    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_02) $(PORT)")
+    field(ZRST, "Off")
+    field(ONST, "On")
+    field(TWST, "Auto")
+}
+
+record(ao, "$(P)$(R)outflow_temp_lim_hi:set") {
+    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_04) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "C")
+}
+
+record(ao, "$(P)$(R)outflow_temp_lim_low:set") {
+    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_05) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "C")
+}
+
+record(bo, "$(P)$(R)start") {
+    field(OUT,  "@Lauda_XT.proto setAi(START) $(PORT)")
+}
+
+record(bo, "$(P)$(R)stop") {
+    field(OUT,  "@Lauda_XT.proto setAi(STOP) $(PORT)")
+}
+

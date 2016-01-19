@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# force java version
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
 if [ ! -z $1 ]
 then
     css_share_path=$1

@@ -21,7 +21,7 @@ dbLoadRecords("db/Lauda_XT.db", "P=B_DET_FT:,R=CHILLER:,PORT=SER3")
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup
-# < save_restore.cmd
+< save_restore.cmd
 
 dbl > pv.list
 iocInit
@@ -30,4 +30,5 @@ iocInit
 # makeAutosaveFiles()
 # create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 # create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+create_monitor_set("Lauda_XT_settings.req", 30, "P=B_DET_FT:,R=CHILLER:")
 

@@ -17,6 +17,9 @@ drvAsynIPPortConfigure("SER3", "hallb-moxa2:4003")
 
 ## Load record instances
 dbLoadRecords("db/Lauda_XT.db", "P=B_DET_FTC:,R=CHILLER:,PORT=SER3")
+#
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -27,8 +30,8 @@ dbl > pv.list
 iocInit
 
 ## Handle autosave 'commands' contained in loaded databases.
-# makeAutosaveFiles()
-# create_monitor_set("info_positions.req", 5, "P=${IOC}:")
-# create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 create_monitor_set("Lauda_XT_settings.req", 30, "P=B_DET_FTC:,R=CHILLER:")
 

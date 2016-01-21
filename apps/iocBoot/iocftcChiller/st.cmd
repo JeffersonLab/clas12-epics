@@ -16,7 +16,7 @@ drvAsynIPPortConfigure("SER3", "hallb-moxa2:4003")
 #asynSetTraceIOMask("SER3",-1,0x02)
 
 ## Load record instances
-dbLoadRecords("db/Lauda_XT.db", "P=B_DET_FT:,R=CHILLER:,PORT=SER3")
+dbLoadRecords("db/Lauda_XT.db", "P=B_DET_FTC:,R=CHILLER:,PORT=SER3")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -30,5 +30,5 @@ iocInit
 # makeAutosaveFiles()
 # create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 # create_monitor_set("info_settings.req", 30, "P=${IOC}:")
-create_monitor_set("Lauda_XT_settings.req", 30, "P=B_DET_FT:,R=CHILLER:")
+create_monitor_set("Lauda_XT_settings.req", 30, "P=B_DET_FTC:,R=CHILLER:")
 

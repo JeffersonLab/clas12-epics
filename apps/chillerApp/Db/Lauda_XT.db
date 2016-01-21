@@ -19,7 +19,7 @@ record(asyn, "$(P)$(R)asyn") {
 ###################################
 # INPUTS
 ###################################
-record(ai, "$(P)$(R)outflow_temp") {
+record(ai, "$(P)$(R)temp") {
     field(DTYP, "stream")
     field(INP,  "@Lauda_XT.proto getAi(IN_PV_00) $(PORT)")
     field(SCAN, "5 second")
@@ -27,7 +27,7 @@ record(ai, "$(P)$(R)outflow_temp") {
     field(EGU,  "C")
 }
 
-record(ai, "$(P)$(R)outflow_mbar") {
+record(ai, "$(P)$(R)pressure") {
     field(DTYP, "stream")
     field(INP,  "@Lauda_XT.proto getAi(IN_PV_02) $(PORT)")
     field(SCAN, "1 second")
@@ -43,7 +43,7 @@ record(ai, "$(P)$(R)bath_level") {
     field(EGU,  "")
 }
 
-record(ai, "$(P)$(R)outflow_temp_set") {
+record(ai, "$(P)$(R)temp_setrbk") {
     field(DTYP, "stream")
     field(INP,  "@Lauda_XT.proto getAi(IN_SP_00) $(PORT)")
     field(SCAN, "1 second")
@@ -66,7 +66,7 @@ record(mbbi, "$(P)$(R)cooling_mode") {
     field(TWST, "Auto")
 }
 
-record(ai, "$(P)$(R)outflow_temp_lim_hi") {
+record(ai, "$(P)$(R)temp_lim_hi") {
     field(DTYP, "stream")
     field(INP,  "@Lauda_XT.proto getAi(IN_SP_04) $(PORT)")
     field(SCAN, "1 second")
@@ -74,7 +74,7 @@ record(ai, "$(P)$(R)outflow_temp_lim_hi") {
     field(EGU,  "C")
 }
 
-record(ai, "$(P)$(R)outflow_temp_lim_low") {
+record(ai, "$(P)$(R)temp_lim_low") {
     field(DTYP, "stream")
     field(INP,  "@Lauda_XT.proto getAi(IN_SP_05) $(PORT)")
     field(SCAN, "1 second")
@@ -150,42 +150,49 @@ record(bi, "$(P)$(R)ext_ctrl_error") {
 ###################################
 # OUTPUTS
 ###################################
-record(ao, "$(P)$(R)outflow_temp:set") {
-    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_00) $(PORT)")
+record(ao, "$(P)$(R)temp:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_00) $(PORT)")
     field(PREC, "2")
     field(EGU,  "C")
 }
 
-record(ao, "$(P)$(R)pump_power") {
+record(ao, "$(P)$(R)pump_power:set") {
+    field(DTYP, "stream")
     field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_01) $(PORT)")
     field(DRVL, "1")
     field(DRVH, "8")
 }
 
 record(mbbo, "$(P)$(R)cooling_mode:set") {
-    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_02) $(PORT)")
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto setMbbo(OUT_SP_02) $(PORT)")
     field(ZRST, "Off")
     field(ONST, "On")
     field(TWST, "Auto")
 }
 
-record(ao, "$(P)$(R)outflow_temp_lim_hi:set") {
-    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_04) $(PORT)")
+record(ao, "$(P)$(R)temp_lim_hi:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_04) $(PORT)")
     field(PREC, "1")
     field(EGU,  "C")
 }
 
-record(ao, "$(P)$(R)outflow_temp_lim_low:set") {
-    field(OUT,  "@Lauda_XT.proto setAi(OUT_SP_05) $(PORT)")
+record(ao, "$(P)$(R)temp_lim_low:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto setAo(OUT_SP_05) $(PORT)")
     field(PREC, "1")
     field(EGU,  "C")
 }
 
 record(bo, "$(P)$(R)start") {
-    field(OUT,  "@Lauda_XT.proto setAi(START) $(PORT)")
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto writeStr(START) $(PORT)")
 }
 
 record(bo, "$(P)$(R)stop") {
-    field(OUT,  "@Lauda_XT.proto setAi(STOP) $(PORT)")
+    field(DTYP, "stream")
+    field(OUT,  "@Lauda_XT.proto writeStr(STOP) $(PORT)")
 }
 

@@ -40,11 +40,11 @@ if (type == "527")
 		
 	if (sstatus == "OFF") { 
 	  widget.setPropertyValue("background_color","Header_Background");
-	  widget.setPropertyValue("foreground_color","Header_ForeGround");
+	  widget.setPropertyValue("foreground_color","Header_Foreground");
 	}
 	else
 	{
-	  widget.setPropertyValue("foreground_color","Text_ForeGround");
+	  widget.setPropertyValue("foreground_color","Text_Foreground");
 	  if (sstatus == "ON") {
 	    widget.setPropertyValue("background_color","On");
 	  }
@@ -76,12 +76,12 @@ else if (type == "1527" || type == "4527")
 		if (istatus == 0) { 
 		  widget.setPropertyValue("text","OFF");
 		  widget.setPropertyValue("background_color","Header_Background");
-		  widget.setPropertyValue("foreground_color","Header_ForeGround");
+		  widget.setPropertyValue("foreground_color","Header_Foreground");
 		}
 		else
 		{
 		  widget.setPropertyValue("text",statuses[theStatus]);
-		  widget.setPropertyValue("foreground_color","Text_ForeGround");
+		  widget.setPropertyValue("foreground_color","Text_Foreground");
 		  widget.setPropertyValue("background_color",bgcolors[theStatus]);		  
 		}
      }
@@ -89,7 +89,7 @@ else if (type == "1527" || type == "4527")
      {
        widget.setPropertyValue("text","COMMS");
        widget.setPropertyValue("background_color","Major");
-       widget.setPropertyValue("foreground_color","Text_ForeGround");   
+       widget.setPropertyValue("foreground_color","Text_Foreground");   
      }
 
 }

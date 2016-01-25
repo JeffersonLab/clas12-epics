@@ -1,0 +1,30 @@
+record (longout,"$(HOST):sysMainSwitch")
+{
+	field (DTYP,"Snmp")
+        field (OUT,"@$(IP) guru %(MIB)sysMainSwitch.0 ( 100 i")
+	field (SCAN,"Passive")
+	field (DESC,"Try to switch crate on/off. OFF=0, ON=1")
+}
+record (longout,"$(HOST):sysVmeSysReset")
+{
+	field (DTYP,"Snmp")
+	field (OUT,"@$(IP) guru %(MIB)sysVmeSysReset.0 INTEGER: 100 i" )
+	field (SCAN,"Passive")
+	field (DESC,"Trigger generation of VME SYSRESET on 1")
+}
+
+record (longout,"$(HOST):fanSwitchOffDelay")
+{
+        field (DTYP,"Snmp")
+        field (OUT,"@$(IP) guru %(MIB)fanSwitchOffDelay.0 INTEGER: 100 i")
+        field (SCAN,"Passive")
+        field (DESC,"Time in seconds fans run after poweroff")
+}
+record (longout,"$(HOST):fanNominalSpeed")
+{ 
+        field (DTYP,"Snmp")
+        field (OUT,"@$(IP) guru %(MIB)fanNominalSpeed.0 INTEGER: 100 i")
+        field (SCAN,"Passive")
+        field (DESC,"Nominal fan speed in RPM")
+}
+

@@ -1,0 +1,1161 @@
+# Values pulled straight from the WIENER-CRATE-MIB file. 
+record (stringin, "$(HOST):sysDesc")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public SNMPv2-MIB::system.sysDescr.0 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"System Description")
+}
+record (longin,"$(HOST):sysMainSwitchR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(MIB)sysMainSwitch.0 ( 100 i")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"State of main switch. OFF=0, ON=1")
+}
+record (longin,"$(HOST):CrateStatRaw")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(MIB)sysStatus.0 BITS: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Raw 8-Bit field showing crate health")
+	field (FLNK,"$(HOST):CrateStat.PROC")
+}
+record (mbbiDirect,"$(HOST):CrateStat")
+{
+	field (SCAN,"Passive")
+	field (DTYP,"Soft Channel")
+	field (INP,"$(HOST):CrateStatRaw.VAL")
+	field (DESC,"Binary fanout of crate health")
+	field (FLNK,"$(HOST):mainOn.PROC") 
+}
+record (bi,"$(HOST):mainOn") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B0")
+	field (DESC,"System is switched on=1/off=0")
+	field (FLNK,"$(HOST):mainInhibit.PROC") 
+}
+record (bi,"$(HOST):mainInhibit") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B1")
+	field (DESC,"1=External Hardware system inhibit")
+	field (FLNK,"$(HOST):localControlOnly.PROC") 
+}
+record (bi,"$(HOST):localControlOnly") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B2")
+	field (DESC,"1=Local control only allowed (no CANBUS)")
+	field (FLNK,"$(HOST):inputFailure.PROC") 
+}
+record (bi,"$(HOST):inputFailure") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B3")
+	field (DESC,"1=any input failure (eg power fail)")
+	field (FLNK,"$(HOST):outFailure.PROC") 
+}
+record (bi,"$(HOST):outFailure") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B4")
+	field (DESC,"1=any output failure (see outputTable)")
+	field (FLNK,"$(HOST):fantrayFailure.PROC") 
+}
+record (bi,"$(HOST):fantrayFailure") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B5")
+	field (DESC,"1=fantray failure")
+	field (FLNK,"$(HOST):sensFailure.PROC") 
+}
+record (bi,"$(HOST):sensFailure") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B6")
+	field (DESC,"1=temperature external sensors too high")
+	field (FLNK,"$(HOST):vmeSysfail.PROC") 
+}
+record (bi,"$(HOST):vmeSysfail") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B7")
+	field (DESC,"1=VME SYSFAIL signal is active")
+	field (FLNK,"$(HOST):plugAndPlayIncompatible.PROC") 
+}
+record (bi,"$(HOST):plugAndPlayIncompatible") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):CrateStat.B8")
+	field (DESC,"1=wrong power supply and rack connected")
+}
+#Output channels (4 on Hall D  models: 1, 2, 4, 6)
+record (longin,"$(HOST):outNumber")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Number.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Number of output channels on crate")
+}
+
+# ------------------------------------------
+record (stringin,"$(HOST):out1Name")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Name.1 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Name of output channel")
+}
+record (stringin,"$(HOST):out2Name")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Name.2 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Name of output channel")
+}
+record (stringin,"$(HOST):out4Name")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Name.4 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Name of output channel")
+}
+record (stringin,"$(HOST):out6Name")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Name.6 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Name of output channel")
+}
+
+
+record (longin,"$(HOST):out1Group")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Group.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Group number of output channel")
+}
+record (longin,"$(HOST):out2Group")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Group.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Group number of output channel")
+}
+record (longin,"$(HOST):out4Group")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Group.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Group number of output channel")
+}
+record (longin,"$(HOST):out6Group")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Group.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Group number of output channel")
+}
+
+
+
+# Output status channel #1
+record (longin,"$(HOST):Output1StatRaw")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Status.1 BITS: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Raw 8-Bit field showing channel health")
+	field (FLNK,"$(HOST):Output1Stat.PROC")
+}
+record (mbbiDirect,"$(HOST):Output1Stat")
+{
+	field (SCAN,"Passive")
+	field (DTYP,"Soft Channel")
+	field (INP,"$(HOST):Output1StatRaw.VAL")
+	field (DESC,"Binary fanout of channel health")
+	field (FLNK,"$(HOST):out1on.PROC") 
+}
+record (bi,"$(HOST):out1on") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B0")
+	field (DESC,"1=Output channel is on")
+	field (FLNK,"$(HOST):out1inhibit.PROC") 
+}
+record (bi,"$(HOST):out1inhibit") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B1")
+	field (DESC,"1=external hardware inhibit output")
+	field (FLNK,"$(HOST):out1minSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out1minSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B2")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out1maxSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out1maxSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B3")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out1maxTermVolt.PROC") 
+}
+record (bi,"$(HOST):out1maxTermVolt") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B4")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out1maxCurrent.PROC") 
+}
+record (bi,"$(HOST):out1maxCurrent") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B5")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out1maxTemp.PROC") 
+}
+record (bi,"$(HOST):out1maxTemp") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output1Stat.B6")
+	field (DESC,"1=Failure, supervision limit")
+}
+
+# Output status channel #2
+record (longin,"$(HOST):Output2StatRaw")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Status.2 BITS: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Raw 8-Bit field showing channel health")
+	field (FLNK,"$(HOST):Output2Stat.PROC")
+}
+record (mbbiDirect,"$(HOST):Output2Stat")
+{
+	field (SCAN,"Passive")
+	field (DTYP,"Soft Channel")
+	field (INP,"$(HOST):Output2StatRaw.VAL")
+	field (DESC,"Binary fanout of channel health")
+	field (FLNK,"$(HOST):out2on.PROC") 
+}
+record (bi,"$(HOST):out2on") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B0")
+	field (DESC,"1=Output channel is on")
+	field (FLNK,"$(HOST):out2inhibit.PROC") 
+}
+record (bi,"$(HOST):out2inhibit") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B1")
+	field (DESC,"1=external hardware inhibit output")
+	field (FLNK,"$(HOST):out2minSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out2minSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B2")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out2maxSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out2maxSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B3")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out2maxTermVolt.PROC") 
+}
+record (bi,"$(HOST):out2maxTermVolt") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B4")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out2maxCurrent.PROC") 
+}
+record (bi,"$(HOST):out2maxCurrent") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B5")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out2maxTemp.PROC") 
+}
+record (bi,"$(HOST):out2maxTemp") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output2Stat.B6")
+	field (DESC,"1=Failure, supervision limit")
+}
+
+
+
+# Output status channel #4
+record (longin,"$(HOST):Output4StatRaw")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Status.4 BITS: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Raw 8-Bit field showing channel health")
+	field (FLNK,"$(HOST):Output4Stat.PROC")
+}
+record (mbbiDirect,"$(HOST):Output4Stat")
+{
+	field (SCAN,"Passive")
+	field (DTYP,"Soft Channel")
+	field (INP,"$(HOST):Output4StatRaw.VAL")
+	field (DESC,"Binary fanout of channel health")
+	field (FLNK,"$(HOST):out4on.PROC") 
+}
+record (bi,"$(HOST):out4on") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B0")
+	field (DESC,"1=Output channel is on")
+	field (FLNK,"$(HOST):out4inhibit.PROC") 
+}
+record (bi,"$(HOST):out4inhibit") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B1")
+	field (DESC,"1=external hardware inhibit output")
+	field (FLNK,"$(HOST):out4minSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out4minSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B2")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out4maxSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out4maxSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B3")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out4maxTermVolt.PROC") 
+}
+record (bi,"$(HOST):out4maxTermVolt") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B4")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out4maxCurrent.PROC") 
+}
+record (bi,"$(HOST):out4maxCurrent") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B5")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out4maxTemp.PROC") 
+}
+record (bi,"$(HOST):out4maxTemp") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output4Stat.B6")
+	field (DESC,"1=Failure, supervision limit")
+}
+
+
+# Output status channel #6
+record (longin,"$(HOST):Output6StatRaw")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Status.6 BITS: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Raw 8-Bit field showing channel health")
+	field (FLNK,"$(HOST):Output6Stat.PROC")
+}
+record (mbbiDirect,"$(HOST):Output6Stat")
+{
+	field (SCAN,"Passive")
+	field (DTYP,"Soft Channel")
+	field (INP,"$(HOST):Output6StatRaw.VAL")
+	field (DESC,"Binary fanout of channel health")
+	field (FLNK,"$(HOST):out6on.PROC") 
+}
+record (bi,"$(HOST):out6on") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B0")
+	field (DESC,"1=Output channel is on")
+	field (FLNK,"$(HOST):out6inhibit.PROC") 
+}
+record (bi,"$(HOST):out6inhibit") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B1")
+	field (DESC,"1=external hardware inhibit output")
+	field (FLNK,"$(HOST):out6minSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out6minSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B2")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out6maxSenseVoltage.PROC") 
+}
+record (bi,"$(HOST):out6maxSenseVoltage") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B3")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out6maxTermVolt.PROC") 
+}
+record (bi,"$(HOST):out6maxTermVolt") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B4")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out6maxCurrent.PROC") 
+}
+record (bi,"$(HOST):out6maxCurrent") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B5")
+	field (DESC,"1=Failure, supervision limit")
+	field (FLNK,"$(HOST):out6maxTemp.PROC") 
+}
+record (bi,"$(HOST):out6maxTemp") {
+	field (SCAN,"Passive")
+	field (INP,"$(HOST):Output6Stat.B6")
+	field (DESC,"1=Failure, supervision limit")
+}
+
+
+# more output channel stuff
+record (ai,"$(HOST):out1measureSenseVolt")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)SenseVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured voltage at sense input lines")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out2measureSenseVolt")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)SenseVoltage.2 Float: 100 ")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured voltage at sense input lines")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out4measureSenseVolt")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)SenseVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured voltage at sense input lines")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out6measureSenseVolt")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)SenseVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured voltage at sense input lines")
+	field (PREC,"6")
+}
+
+record (ai,"$(HOST):out1measuredCurrent")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)Current.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured current")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out2measuredCurrent")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)Current.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured current")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out4measuredCurrent")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)Current.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured current")
+	field (PREC,"6")
+}
+record (ai,"$(HOST):out6measuredCurrent")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WOM)Current.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured current")
+	field (PREC,"6")
+}
+
+
+#record (longin,"$(HOST):out1measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.1 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out2measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.2 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out3measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.3 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out4measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.4 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out5measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.5 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out6measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.6 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out7measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.7 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+#record (longin,"$(HOST):out8measuredTemp")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WOM)Temperature.8 ( 100 i")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Measured temperature (-128=OK,127=FAIL)")
+#}
+
+
+
+
+record (longin,"$(HOST):out1switchR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Switch.1 ( 100 i")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Channel switch 1=ENABLED,0=DISABLED")
+}
+record (longin,"$(HOST):out2switchR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Switch.2 ( 100 i")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Channel switch 1=ENABLED,0=DISABLED")
+}
+record (longin,"$(HOST):out4switchR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Switch.4 ( 100 i")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Channel switch 1=ENABLED,0=DISABLED")
+}
+record (longin,"$(HOST):out6switchR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Switch.6 ( 100 i")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Channel switch 1=ENABLED,0=DISABLED")
+}
+
+
+record (ai,"$(HOST):out1voltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Voltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Nominal output voltage")
+}
+record (ai,"$(HOST):out2voltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Voltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Nominal output voltage")
+}
+record (ai,"$(HOST):out4voltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Voltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Nominal output voltage")
+}
+record (ai,"$(HOST):out6voltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Voltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Nominal output voltage")
+}
+
+record (longin,"$(HOST):out1adjustVoltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)AdjustVoltage.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Make small changes to output voltage")
+}
+record (longin,"$(HOST):out2adjustVoltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)AdjustVoltage.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Make small changes to output voltage")
+}
+record (longin,"$(HOST):out4adjustVoltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)AdjustVoltage.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Make small changes to output voltage")
+}
+record (longin,"$(HOST):out6adjustVoltageR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)AdjustVoltage.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Make small changes to output voltage")
+}
+
+
+record (ai,"$(HOST):out1currentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Current.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Current limit of channel")
+}
+record (ai,"$(HOST):out2currentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Current.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Current limit of channel")
+}
+record (ai,"$(HOST):out4currentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Current.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Current limit of channel")
+}
+record (ai,"$(HOST):out6currentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)Current.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Current limit of channel")
+}
+
+
+
+# The following comes from the MIB and is too big to fit into the
+# DESC field outputSupervisionBehavior:
+#
+# A bit field packed into an integer which define the behavior
+# of the pourput channel / power supply
+# after failures.
+# For each supervision value, a two-bit field exists.
+# The enumeration of this value (..L+..H*2) is:
+# 0			ignore the failure
+# 1			switch off this channel
+# 2			switch off all channels with the same group number
+# 3			switch off the complete crate.
+# The position of the bit fields in the integer value are:
+# Bit 0, 1:	outputFailureMinSenseVoltage
+# Bit 2, 3:	outputFailureMaxSenseVoltage
+# Bit 4, 5:	outputFailureMaxTerminalVoltage
+# Bit 6, 7:	outputFailureMaxCurrent
+# Bit 8, 9:	outputFailureMaxTemperature
+record (longin,"$(HOST):out1SupervisionR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionBehavior.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Bitfield Failure Behavior - see .db file")
+}
+record (longin,"$(HOST):out2SupervisionR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionBehavior.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Bitfield Failure Behavior - see .db file")
+}
+record (longin,"$(HOST):out4SupervisionR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionBehavior.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Bitfield Failure Behavior - see .db file")
+}
+record (longin,"$(HOST):out6SupervisionR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionBehavior.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Bitfield Failure Behavior - see .db file")
+}
+
+
+record (ai,"$(HOST):out1superMinVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMinSenseVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V<limit... see Super")
+}
+record (ai,"$(HOST):out2superMinVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMinSenseVoltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V<limit... see Super")
+}
+record (ai,"$(HOST):out4superMinVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMinSenseVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V<limit... see Super")
+}
+record (ai,"$(HOST):out6superMinVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMinSenseVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V<limit... see Super")
+}
+
+
+record (ai,"$(HOST):out1superMaxVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxSenseVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V>limit... see Super")
+}
+record (ai,"$(HOST):out2superMaxVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxSenseVoltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V>limit... see Super")
+}
+record (ai,"$(HOST):out4superMaxVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxSenseVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V>limit... see Super")
+}
+record (ai,"$(HOST):out6superMaxVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxSenseVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured sense V>limit... see Super")
+}
+
+
+
+record (ai,"$(HOST):out1superMaxTermVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxTerminalVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured terminal V>lim... see Super")
+}
+record (ai,"$(HOST):out2superMaxTermVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxTerminalVoltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured terminal V>lim... see Super")
+}
+record (ai,"$(HOST):out4superMaxTermVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxTerminalVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured terminal V>lim... see Super")
+}
+record (ai,"$(HOST):out6superMaxTermVoltR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxTerminalVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured terminal V>lim... see Super")
+}
+
+
+
+record (ai,"$(HOST):out1superMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxCurrent.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured current>lim... see Super")
+}
+record (ai,"$(HOST):out2superMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxCurrent.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured current>lim... see Super")
+}
+record (ai,"$(HOST):out4superMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxCurrent.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured current>lim... see Super")
+}
+record (ai,"$(HOST):out6superMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)SupervisionMaxCurrent.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If measured current>lim... see Super")
+}
+
+
+record (ai,"$(HOST):out1confMaxSenseVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxSenseVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of sense voltage")
+}
+record (ai,"$(HOST):out2confMaxSenseVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxSenseVoltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of sense voltage")
+}
+record (ai,"$(HOST):out4confMaxSenseVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxSenseVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of sense voltage")
+}
+record (ai,"$(HOST):out6confMaxSenseVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxSenseVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of sense voltage")
+}
+
+record (ai,"$(HOST):out1confMaxTermVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxTerminalVoltage.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of terminal voltage")
+}
+record (ai,"$(HOST):out2confMaxTermVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxTerminalVoltage.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of terminal voltage")
+}
+record (ai,"$(HOST):out4confMaxTermVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxTerminalVoltage.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of terminal voltage")
+}
+record (ai,"$(HOST):out6confMaxTermVR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxTerminalVoltage.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of terminal voltage")
+}
+
+
+record (ai,"$(HOST):out1confMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxCurrent.1 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of current")
+}
+record (ai,"$(HOST):out2confMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxCurrent.2 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of current")
+}
+record (ai,"$(HOST):out4confMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxCurrent.4 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of current")
+}
+record (ai,"$(HOST):out6confMaxCurrentR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WO)ConfigMaxCurrent.6 Float: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Max possible val of current")
+}
+
+
+
+record (longin,"$(HOST):sensNumber")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Number.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Number of temperature sensors")
+}
+# 8 sensors max
+record (longin,"$(HOST):sens1Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens2Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens3Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.3 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens4Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens5Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.5 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens6Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens7Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.7 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+record (longin,"$(HOST):sens8Temp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)Temperature.8 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Measured sensor temp in C. -128=unused")
+}
+#
+record (longin,"$(HOST):sens1WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens2WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens3WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.3 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens4WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens5WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.5 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens6WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens7WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.7 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+record (longin,"$(HOST):sens8WarnThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)WarningThreshold.8 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim fan speed increases")
+}
+#
+record (longin,"$(HOST):sens1FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens2FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens3FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.3 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens4FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.4 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens5FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.5 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens6FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.6 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens7FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.7 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (longin,"$(HOST):sens8FailThreshR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WS)FailureThreshold.8 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"If sensor temp>lim power switches off")
+}
+record (stringin,"$(HOST):psSerialNumber")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(MIB)psSerialNumber.0 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Serial Number of power supply")
+}
+record (longin,"$(HOST):psOperatingTime")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(MIB)psOperatingTime.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Number of seconds this ps has been on")
+}
+record (stringin,"$(HOST):fanSerialNumber")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)SerialNumber.0 STRING: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Serial number of fan tray")
+}
+record (longin,"$(HOST):fanOperatingTime")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)OperatingTime.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Number of seconds this fan has been on")
+}
+record (longin,"$(HOST):fanAirTemp")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)AirTemperature.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Temperature in C of fan tray inlet air")
+}
+record (longin,"$(HOST):fanSwitchOffDelayR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)SwitchOffDelay.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Time in seconds fans run after poweroff")
+}
+record (longin,"$(HOST):fanNominalSpeedR")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)NominalSpeed.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Nominal fan speed in RPM")
+}
+record (longin,"$(HOST):fanNumberOfFans")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)NumberOfFans.0 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Number of installed fans")
+}
+record (longin,"$(HOST):fan1speed")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)Speed.1 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Fan rotation speed in RPM")
+}
+record (longin,"$(HOST):fan2speed")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)Speed.2 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Fan rotation speed in RPM")
+}
+record (longin,"$(HOST):fan3speed")
+{
+	field (DTYP,"Snmp")
+	field (INP,"@$(IP) public %(WF)Speed.3 INTEGER: 100")
+	field (SCAN,"$(SCAN)")
+	field (DESC,"Fan rotation speed in RPM")
+}
+
+
+#	field (DESC,"123456789A123456789B123456789C123456789D")

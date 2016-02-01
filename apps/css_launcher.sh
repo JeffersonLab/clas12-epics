@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# force java version
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
 if [ ! -z $1 ]
 then
     css_share_path=$1
@@ -9,10 +13,18 @@ else
 fi
 
 
-echo Running css ...
+css=`which css 2> /dev/null`
 
+if ! [ -e "$css" ]
+then
+    echo 'No css found in $PATH'
+    exit
+fi
+
+echo Running css ...
 css \
     -pluginCustomization $css_share_path/common/prefs/plugin_customization.ini \
-	-share_link $css_share_path=/CLAS12_Share \
-	-nosplash &
+	-share_link $css_share_path=/CLAS12_Share
+#\
+#	-nosplash &
 

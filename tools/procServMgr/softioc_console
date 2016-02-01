@@ -1,8 +1,17 @@
 #!/bin/ksh
 
+#@(#) softioc_console 2.60 2013/08/29 cuffe@jlab.org 
+#
 # softioc_console is desgined to provide easy access to "soft"
 # iocs.  It assume that the user has ssh access the systems
 # running the soft iocs
+#-----------------------------------------------------------------------
+# Version History
+#-----------------------------------------------------------------------
+# 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
+# 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
+# 1.00 2008/09/19 cuffe@jlab.org - inital revision
+
 
 #-----------------------------------------------------------------------
 # Debug variables
@@ -18,18 +27,17 @@ SCRIPT_NAME=softioc_console
 #-----------------------------------------------------------------------
 # Data File Locations
 #-----------------------------------------------------------------------
-CLAS_CONFIG_DIR=/usr/clas12/release/devel/epics/apps/iocBoot
-CLAS_CONFIG_FILE="$CLAS_CONFIG_DIR/procServ.conf"
+CONFIG_DIR=/usr/clas12/release/pro/epics/apps/iocBoot
+APP_DIR=/usr/local/bin
+IOC_DIR=$CONFIG_DIR
+DIR_LIST="$CONFIG_DIR $IOC_DIR"
 
-HPS_CONFIG_DIR=/usr/clas12/hps/prod/apps/iocBoot
-HPS_CONFIG_FILE="$HPS_CONFIG_DIR/procServ.conf"
-
-FILE_LIST="$CLAS_CONFIG_FILE $HPS_CONFIG_FILE"
+CONFIG_FILE="$CONFIG_DIR/procServ.conf"
+FILE_LIST="$CONFIG_FILE"
 
 #-----------------------------------------------------------------------
 # Command Variables
 #-----------------------------------------------------------------------
-
 HOSTNAME='/bin/hostname'
 HOST=`hostname -s`
 ID='/usr/bin/id'
@@ -43,15 +51,13 @@ BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] [-c config] iocname"
+    echo "usage: $SCRIPT_NAME [-h] iocname"
     echo ""
-    echo "[-c] Specify the configuration - clas or hps"
     echo "[-h] Print Help"
     echo ""
     echo "Examples:"
     echo "$SCRIPT_NAME [-h]"
     echo "$SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
-    echo "$SCRIPT_NAME -c clas iocsofthrt - start a console on CLAS12 iocsofthrt"
     echo ""
     echo "CONFIGURATION FILES:"
     echo "--------------------"
@@ -85,60 +91,57 @@ function parseconfig {
     d=0
     h=0
 
-    for FILE in $FILE_LIST
+    IFS=":"
+    while read  iocname computer port status options start_options
     do
-        IFS=":"
-        while read  iocname computer port status options start_options
-        do
-            if [ "`echo $iocname | cut -c1`" = "#" ] ; then
-                # Skip comments
-                continue
-            fi
-            if [ "`echo $iocname | cut -c1`" = "" ] ; then
-                # Skip blank lines
-                continue
-            fi
-              
-            #remove white space at start and end and only accept a single string
-            iocname=`echo "$iocname"   | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-            computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-            port=`echo "$port"         | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-            stcmd=`echo "$stcmd"       | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
-            status=`echo "$status"     | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+        if [ "`echo $iocname | cut -c1`" = "#" ] ; then
+        # Skip comments
+        continue
+        fi
+        if [ "`echo $iocname | cut -c1`" = "" ] ; then
+        # Skip blank lines
+        continue
+        fi
           
-            #remove white space at start and end
-            options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
-            start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+          #remove white space at start and end and only accept a single string
+          iocname=`echo "$iocname"   | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          computer=`echo "$computer" | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          port=`echo "$port"         | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          stcmd=`echo "$stcmd"       | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
+          status=`echo "$status"     | sed 's/^[ \t]*//;s/[ \t]*$//'| awk '{print $1}'`
           
-            #print $(eval echo \$${ioc}_port) 
-            export ${iocname}_host="$computer"    
-            export ${iocname}_port="$port"
-            export ${iocname}_options="$options"
-            export ${iocname}_start_options="$start_options"
+          #remove white space at start and end
+          options=`echo "$options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+          start_options=`echo "$start_options" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+          
+        #print $(eval echo \$${ioc}_port) 
+        export ${iocname}_host="$computer"    
+        export ${iocname}_port="$port"
+        export ${iocname}_options="$options"
+        export ${iocname}_start_options="$start_options"
 
-            #export ${iocname}_status=$options
+        #export ${iocname}_status=$options
 
-            iocs[$i]=$iocname
-            ((i=i+1)) 
+        iocs[$i]=$iocname
+        ((i=i+1)) 
 
-            case $status in
-            enable|enabled|on)
-                iocs_enabled[$e]=$iocname  
-                ((e=e+1))
-                export ${iocname}_status=enabled
-                ;;
-            *)
-                iocs_disabled[$d]=$iocname   
-                ((d=d+1))
-                export ${iocname}_status=disabled
-            esac
+        case $status in
+        enable|enabled|on)
+            iocs_enabled[$e]=$iocname  
+            ((e=e+1))
+            export ${iocname}_status=enabled
+        ;;
+        *)
+            iocs_disabled[$d]=$iocname   
+            ((d=d+1))
+            export ${iocname}_status=disabled
+        esac
 
-            if [ "$computer" = "$HOST" ] ; then
-                iocs_host[$h]=$iocname
-                ((h=h+1))
-            fi
-        done < $FILE
-    done
+        if [ "$computer" = "$HOST" ] ; then
+        iocs_host[$h]=$iocname
+        ((h=h+1))
+        fi
+    done < $CONFIG_FILE
 	unset IFS
 }
 
@@ -157,21 +160,11 @@ function printconfig {
 #-----------------------------------------------------------------------
 # Process Options
 #-----------------------------------------------------------------------
-#parseconfig
+parseconfig
 
-while getopts "c:h" opt; do
+while getopts ":h:" opt; do
     case $opt in
-    c) 
-    	if [ "$OPTARG" == "clas" ]; then
-            FILE_LIST=$CLAS_CONFIG_FILE
-        elif [ "$OPTARG" == "hps" ]; then
-            FILE_LIST=$HPS_CONFIG_FILE
-        else
-        	echo "Invalid argument for -c: $OPTARG"
-            usage
-            exit 1
-        fi
-        ;;
+        
     h) usage 
        return 0
        ;;
@@ -198,11 +191,14 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-parseconfig
-
 #-----------------------------------------------------------------------
 # Data File Sanity Check
 #-----------------------------------------------------------------------
+for DIR in $DIR_LIST    
+    do
+    checkdir $DIR
+    done
+    
 for FILE in $FILE_LIST     
     do
     checkfile $FILE
@@ -244,20 +240,13 @@ do
 done
 
 
-if [[ $ret = 0 ]]; then
+if [ $ret = 0 ]; then
+    echo ""
     echo "$1 was not found in the configuration file" 
     echo "     $CONFIG_FILE"
     echo "You may need to update this file before continuing"
     echo ""
     printconfig
-    echo ""
-    exit 1
-elif [[ $ret > 1 ]]; then
-    echo "$1 was found in CLAS and HPS configuration files"
-    echo "Use:"
-    echo "  $SCRIPT_NAME -c clas $1"
-    echo "    OR"
-    echo "  $SCRIPT_NAME -c hps $1"
     echo ""
     exit 1
 fi

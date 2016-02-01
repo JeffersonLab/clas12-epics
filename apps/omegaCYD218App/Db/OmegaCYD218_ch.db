@@ -1,0 +1,99 @@
+# 
+# Omega CYD218 Series, 8-channel Cyrogenic Digital Thermometers
+#
+# Macros:
+#   P    = prefix
+#   R    = prefix
+#   CH   = channel number [1-8]
+#   PORT = asyn port name
+#
+# Author: Wesley Moore
+# Date:   April 2012
+#
+
+record(stringin, "$(P)$(R)desc") {
+	field(DESC, "Channel description")
+    field(VAL,  "")
+}
+
+record(ai, "$(P)$(R)C") {
+	field(DESC, "Temp rdbk C")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getCelsius($(CH)) $(PORT)")
+	field(PREC, "3")
+	field(EGU,  "C")
+}
+
+record(ai, "$(P)$(R)K") {
+	field(DESC, "Temp rdbk K")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getKelvin($(CH)) $(PORT)")
+	field(PREC, "3")
+	field(EGU,  "K")
+}
+
+record(ai, "$(P)$(R)units") {
+	field(DESC, "Sensor units")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getUnits($(CH)) $(PORT)")
+	field(PREC, "3")
+	field(EGU,  "volts or ohms")
+}
+
+record(bi, "$(P)$(R)input") {
+	field(DESC, "Input off/on")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getInput($(CH)) $(PORT)")
+	field(ZNAM, "Off")
+	field(ONAM, "On")
+}
+
+record(bo, "$(P)$(R)inputSet") {
+	field(DESC, "Turn input off/on")
+		field(DTYP, "stream")
+		field(OUT,  "@OmegaCYD218.proto setInput($(CH)) $(PORT)")
+		field(ZNAM, "Off")
+		field(ONAM, "On")
+}
+
+record(mbbi, "$(P)$(R)curve") {
+	field(DESC, "Curve select")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getCurve($(CH)) $(PORT)")
+	field(ZRST, "None")
+	field(ZRVL, "0")
+	field(ONST, "CY7-SD Silicon")
+	field(ONVL, "1")
+	field(TWST, "DT-500 Silicon")
+	field(TWVL, "2")
+	field(THST, "CTI Silicon")
+	field(THVL, "3")
+	field(FRST, "PT-100 RTD")
+	field(FRVL, "6")
+	field(FVST, "PT-1000 RTD")
+	field(FVVL, "7")
+}
+
+record(mbbo, "$(P)$(R)curveSet") {
+	field(DESC, "Temp conversion curve")
+	field(DTYP, "stream")
+	field(OUT,  "@OmegaCYD218.proto setCurve($(CH)) $(PORT)")
+	field(ZRST, "None")
+    field(ZRVL, "0")
+	field(ONST, "CY7-SD Silicon")
+	field(ONVL, "1")
+	field(TWST, "DT-500 Silicon")
+	field(TWVL, "2")
+	field(THST, "CTI Silicon")
+	field(THVL, "3")
+	field(FRST, "PT-100 RTD")
+	field(FRVL, "6")
+	field(FVST, "PT-1000 RTD")
+	field(FVVL, "7")
+}
+

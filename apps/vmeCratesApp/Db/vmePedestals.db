@@ -1,0 +1,568 @@
+grecord( ai, "$(HOST):meanped" ) {
+	 field( SCAN, "Passive")
+	 field( DESC, "Mead pedestal for $(HOST)" )
+	 field( PREC, "1")
+}
+
+grecord( ai, "$(HOST):t_avg" ) {
+	 field(DESC, "Average temp. for $(HOST)")
+	 field(SCAN, "Passive")
+	 field(EGU , "")
+	 field(PREC, "1" )
+}
+
+grecord( calcout, "$(HOST):t_avg_calc" ) {
+	 field(DESC, "Average temp. calc for $(HOST)")
+  	 field(SCAN, "Passive")
+  	 field(CALC, "ABS(I)>0.1?((A+B+C+D+E+F+G+H)/I):128")
+  	 field(INPA, "$(HOST):t1clean CPP")
+  	 field(INPB, "$(HOST):t2clean CPP")
+  	 field(INPC, "$(HOST):t3clean CPP")
+  	 field(INPD, "$(HOST):t4clean CPP")
+  	 field(INPE, "$(HOST):t5clean CPP")
+  	 field(INPF, "$(HOST):t6clean CPP")
+  	 field(INPG, "$(HOST):t7clean CPP")
+  	 field(INPH, "$(HOST):t8clean CPP")
+  	 field(INPI, "$(HOST):n4avg CPP")
+  	 field(OUT,  "$(HOST):t_avg PP")
+	 field(OOPT, "Every Time")
+ 	 field(DOPT, "Use CALC")
+}
+grecord( calc, "$(HOST):n4avg" ) {
+	 field(DESC, "N for averaging for $(HOST)")
+  	 field(SCAN, "Passive")
+  	 field(CALC, "A+B+C+D+E+F+G+H")
+  	 field(INPA, "$(HOST):t1weight CPP")
+  	 field(INPB, "$(HOST):t2weight CPP")
+  	 field(INPC, "$(HOST):t3weight CPP")
+  	 field(INPD, "$(HOST):t4weight CPP")
+  	 field(INPE, "$(HOST):t5weight CPP")
+  	 field(INPF, "$(HOST):t6weight CPP")
+  	 field(INPG, "$(HOST):t7weight CPP")
+  	 field(INPH, "$(HOST):t8weight CPP")
+}
+
+grecord( calc, "$(HOST):t1clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens1Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t2clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens2Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t3clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens3Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t4clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens4Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t5clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens5Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t6clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens6Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t7clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens7Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+grecord( calc, "$(HOST):t8clean" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens8Temp CPP" )
+	 field( CALC, "A>15?A:0" )
+}
+
+grecord( calc, "$(HOST):t1weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens1Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t2weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens2Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t3weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens3Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t4weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens4Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t5weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens5Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t6weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens6Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t7weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens7Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+grecord( calc, "$(HOST):t8weight" ){
+	 field( SCAN, "Passive" )
+	 field( INPA, "$(HOST):sens8Temp CPP" )
+	 field( CALC, "A>15?1:0" )
+}
+
+#grecord( cpid,  "$(HOST):cpid" ) {
+#	 field( DESC, "CPID loop for $(HOST)" )
+#	 field( SCAN, "10 second" )
+#	 field( DISV, "1" )
+#	 field( SDIS, "$(HOST):cpid_dsbl_sel" )
+#	 field( VAL , "25.0" )
+#	 field( CVL , "$(HOST):t_avg" )
+##	 field( MDT , "1.0" )
+#	 field( OUT , "$(HOST):fanNominalSpeed PP" )
+#	 field( ORBL, "$(HOST):fanNominalSpeedR" )
+#	 field( OMOD, "1" )
+#	 field( DMIN , "-500" ) 
+#	 field( DMAX , "500" )
+#	 field( EGU , "degC" )
+#	 field( PREC, "3" )
+#	 field( KP  , "-150" )
+##	 field( KI  , "-2" )
+#	 field( KI  , "0" )
+#	 field( KD  , "0" )
+#	 field( LOC , "$(HOST):cpid_loc_sel")
+#	 field( MMOD, "0" )
+#	 field( SMOD, "0" )
+#	 field( MVAL, "3000")
+#	 field( SVAL, "3000")
+#}
+#
+#
+#grecord( ai, "$(HOST):t_set" ) {
+#	 field( DESC, "T-Setpoint for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( EGU , "degC" )
+#	 field( PREC, "3" )
+#	 field( VAL , "33" )
+#	 field( PINI, "YES" )
+#}
+#
+#grecord( mbbi, "$(HOST):t_set_mbbi" ) {
+#	 field( DESC, "Setpoint for CPID for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):t_set_sel PP" )
+#}
+#grecord( sel, "$(HOST):t_set_sel" ) {
+#	 field(DESC, "Setpoint select for CPID for $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):t_set_mbbi" )
+#	 field(INPA, "$(HOST):t_set CPP" )
+#	 field(INPB, "glob:t_set CPP" )
+#	 field(INPC, "bcal:t_set CPP" )
+#	 field(INPD, "cdc:t_set CPP" )
+#	 field(INPE, "ctrls:t_set CPP" )
+#	 field(INPF, "discr:t_set CPP" )
+#	 field(INPG, "fcal:t_set CPP" )
+#	 field(INPH, "fdc:t_set CPP" )
+#	 field(INPI, "psst:t_set CPP" )
+#	 field(INPJ, "tagger:t_set CPP" )
+#	 field(INPK, "tof:t_set CPP" )
+#	 field(INPL, "trig:t_set CPP" )
+#	 field(EGU , "degC" )
+#}
+#grecord( ao, "$(HOST):t_set_loop" ) {
+#	 field( DESC, "Setpoint for CPID loop for $(HOST)" )
+#	 field( SCAN, "1 second" )
+#	 field( EGU , "degC" )
+#	 field( PREC, "3" )
+#	 field( DOL , "$(HOST):t_set_sel" ) 
+#	 field( OUT , "$(HOST):cpid.VAL" )
+#	 field( OMSL,  "closed_loop" )
+#}
+#
+#grecord( mbbi, "$(HOST):man_set_mbbi" ) {
+#	 field( DESC, "Manual setpoint selection for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):man_set_sel PP" )
+#}
+#grecord( sel, "$(HOST):man_set_sel" ) {
+#	 field(DESC, "Manual setpoint select for $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):man_set_mbbi" )
+#	 field(INPA, "$(HOST):cpid.MVAL CPP" )
+#	 field(INPB, "glob:man_set CPP" )
+#	 field(INPC, "bcal:man_set CPP" )
+#	 field(INPD, "cdc:man_set CPP" )
+#	 field(INPE, "ctrls:man_set CPP" )
+#	 field(INPF, "discr:man_set CPP" )
+#	 field(INPG, "fcal:man_set CPP" )
+#	 field(INPH, "fdc:man_set CPP" )
+#	 field(INPI, "psst:man_set CPP" )
+#	 field(INPJ, "tagger:man_set CPP" )
+#	 field(INPK, "tof:man_set CPP" )
+#	 field(INPL, "trig:man_set CPP" )
+#	 field(EGU , "degC" )
+#}
+#grecord( calcout, "$(HOST):man_set_loop" ) {
+#	 field( DESC, "Force manual setpoint 4 $(HOST)" )
+#	 field( SCAN, "1 second" )
+#	 field( OUT , "$(HOST):cpid.MVAL" )
+#  	 field( CALC, "B#0?1:0")
+# 	 field( INPA, "$(HOST):man_set_sel")
+# 	 field( INPB, "$(HOST):man_set_mbbi")
+#	 field( OOPT, "When Non-zero")
+# 	 field( DOPT, "Use OCAL")
+#	 field( OCAL, "A" )
+#	 field( PINI, "YES" )
+#}
+#
+#grecord( bi,  "$(HOST):cpid_dsbl" ) {
+#	 field( DESC, "DISABLE for $(HOST) PID" )
+#	 field( SCAN, "Passive" )
+#	 field( ONAM, "DISABLE" )
+#	 field( ZNAM, "ENABLE")
+#	 field( PINI, "YES")
+#	 field( VAL , "0" )
+#}
+#grecord( mbbi, "$(HOST):cpid_dsbl_mbbi" ) {
+#	 field( DESC, "DISABLE select for CPID for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):cpid_dsbl_sel PP" )
+#}
+#grecord( sel, "$(HOST):cpid_dsbl_sel" ) {
+#	 field(DESC, "DISABLE select for $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_dsbl_mbbi" )
+#	 field(INPA, "$(HOST):cpid_dsbl CPP" )
+#	 field(INPB, "glob:cpid_dsbl CPP" )
+#	 field(INPC, "bcal:cpid_dsbl CPP" )
+#	 field(INPD, "cdc:cpid_dsbl CPP" )
+#	 field(INPE, "ctrls:cpid_dsbl CPP" )
+#	 field(INPF, "discr:cpid_dsbl CPP" )
+#	 field(INPG, "fcal:cpid_dsbl CPP" )
+#	 field(INPH, "fdc:cpid_dsbl CPP" )
+#	 field(INPI, "psst:cpid_dsbl CPP" )
+#	 field(INPJ, "tagger:cpid_dsbl CPP" )
+#	 field(INPK, "tof:cpid_dsbl CPP" )
+#	 field(INPL, "trig:cpid_dsbl CPP" )
+#}
+#
+#
+#grecord( bi,  "$(HOST):cpid_loc_mod" ) {
+#	 field( DESC, "LOCAL mode for $(HOST) PID" )
+#	 field( SCAN, "Passive" )
+#	 field( ONAM, "EPICS PID CONTROL" )
+#	 field( ZNAM, "LOCAL CONTROL")
+#	 field( PINI, "YES")
+#	 field( VAL , "0" )
+#}
+#grecord( mbbi, "$(HOST):cpid_loc_mbbi" ) {
+#	 field( DESC, "LOCAL select for CPID for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):cpid_loc_sel PP" )
+#}
+#grecord( sel, "$(HOST):cpid_loc_sel" ) {
+#	 field(DESC, "LOC select for CPID loop for $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_loc_mbbi" )
+#	 field(INPA, "$(HOST):cpid_loc_mod CPP" )
+#	 field(INPB, "glob:cpid_loc_mod CPP" )
+#	 field(INPC, "bcal:cpid_loc_mod CPP" )
+#	 field(INPD, "cdc:cpid_loc_mod CPP" )
+#	 field(INPE, "ctrls:cpid_loc_mod CPP" )
+#	 field(INPF, "discr:cpid_loc_mod CPP" )
+#	 field(INPG, "fcal:cpid_loc_mod CPP" )
+#	 field(INPH, "fdc:cpid_loc_mod CPP" )
+#	 field(INPI, "psst:cpid_loc_mod CPP" )
+#	 field(INPJ, "tagger:cpid_loc_mod CPP" )
+#	 field(INPK, "tof:cpid_loc_mod CPP" )
+#	 field(INPL, "trig:cpid_loc_mod CPP" )
+#}
+#
+#grecord( bi,  "$(HOST):cpid_man_mod" ) {
+#	 field( DESC, "MANUAL mode for $(HOST) PID" )
+#	 field( SCAN, "Passive" )
+#	 field( ONAM, "YES" )
+#	 field( ZNAM, "NO")
+#	 field( PINI, "NO")
+#	 field( VAL , "0" )
+#}
+#grecord( mbbi, "$(HOST):cpid_man_mbbi" ) {
+#	 field( DESC, "MANUAL select for CPID for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):cpid_man_sel PP" )
+#}
+#grecord( sel, "$(HOST):cpid_man_sel" ) {
+#	 field(DESC, "MANUAL select 4 loop 4 $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_man_mbbi" )
+#	 field(INPA, "$(HOST):cpid_man_mod CPP" )
+#	 field(INPB, "glob:cpid_man_mod CPP" )
+#	 field(INPC, "bcal:cpid_man_mod CPP" )
+#	 field(INPD, "cdc:cpid_man_mod CPP" )
+#	 field(INPE, "ctrls:cpid_man_mod CPP" )
+#	 field(INPF, "discr:cpid_man_mod CPP" )
+#	 field(INPG, "fcal:cpid_man_mod CPP" )
+#	 field(INPH, "fdc:cpid_man_mod CPP" )
+#	 field(INPI, "psst:cpid_man_mod CPP" )
+#	 field(INPJ, "tagger:cpid_man_mod CPP" )
+#	 field(INPK, "tof:cpid_man_mod CPP" )
+#	 field(INPL, "trig:cpid_man_mod CPP" )
+#}
+#grecord( calcout, "$(HOST):cpid_man_loop" ) {
+#	 field( DESC, "Force MANUAL 4 loop 4 $(HOST)" )
+#	 field( SCAN, "1 second" )
+#	 field( OUT , "$(HOST):cpid.MMOD" )
+#  	 field( CALC, "B#0?1:0")
+# 	 field( INPA, "$(HOST):cpid_man_sel")
+# 	 field( INPB, "$(HOST):cpid_man_mbbi")
+#	 field( OOPT, "When Non-zero")
+# 	 field( DOPT, "Use OCAL")
+#	 field( OCAL, "A" )
+#	 field( PINI, "YES" )
+#}
+#
+#
+#grecord( mbbi, "$(HOST):cpid_param_mbbi" ) {
+#	 field( DESC, "Param select for CPID for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( NOBT, "12" )
+#	 field( ZRST, "CRATE SPECIFIC" )
+#	 field( ONST, "GLOBAL" )
+#	 field( TWST, "BCAL" )
+#	 field( THST, "CDC" )
+#	 field( FRST, "CONTROLS" )
+#	 field( FVST, "DISCRIMINATORS" )
+#	 field( SXST, "FCAL" )
+#	 field( SVST, "FDC" )
+#	 field( EIST, "PS/PSC/ST" )
+#	 field( NIST, "TAGM/TAGH" )
+#	 field( TEST, "TOF" )
+#	 field( ELST, "TRIGGER" )
+#	 field( VAL , "1" )
+#	 field( PINI, "YES" )
+#	 field( FLNK, "$(HOST):cpid_kp_sel PP" )
+#}
+#grecord( sel, "$(HOST):cpid_kp_sel" ) {
+#	 field(DESC, "KP select 4 loop 4 $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_param_mbbi" )
+#	 field(INPA, "$(HOST):cpid.KP CPP" )
+#	 field(INPB, "glob:cpid_kp CPP" )
+#	 field(INPC, "bcal:cpid_kp CPP" )
+#	 field(INPD, "cdc:cpid_kp CPP" )
+#	 field(INPE, "ctrls:cpid_kp CPP" )
+#	 field(INPF, "discr:cpid_kp CPP" )
+#	 field(INPG, "fcal:cpid_kp CPP" )
+#	 field(INPH, "fdc:cpid_kp CPP" )
+#	 field(INPI, "psst:cpid_kp CPP" )
+#	 field(INPJ, "tagger:cpid_kp CPP" )
+#	 field(INPK, "tof:cpid_kp CPP" )
+#	 field(INPL, "trig:cpid_kp CPP" )
+#
+#}
+#grecord( sel, "$(HOST):cpid_ki_sel" ) {
+#	 field(DESC, "KI select 4 loop 4 $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_param_mbbi" )
+#	 field(INPA, "$(HOST):cpid.KI CPP" )
+#	 field(INPB, "glob:cpid_ki CPP" )
+#	 field(INPC, "bcal:cpid_ki CPP" )
+#	 field(INPD, "cdc:cpid_ki CPP" )
+#	 field(INPE, "ctrls:cpid_ki CPP" )
+#	 field(INPF, "discr:cpid_ki CPP" )
+#	 field(INPG, "fcal:cpid_ki CPP" )
+#	 field(INPH, "fdc:cpid_ki CPP" )
+#	 field(INPI, "psst:cpid_ki CPP" )
+#	 field(INPJ, "tagger:cpid_ki CPP" )
+#	 field(INPK, "tof:cpid_ki CPP" )
+#	 field(INPL, "trig:cpid_ki CPP" )
+#}
+#grecord( sel, "$(HOST):cpid_kd_sel" ) {
+#	 field(DESC, "KD select 4 loop 4 $(HOST)")
+#  	 field(SCAN, "Passive")
+#	 field(SELM, "Specified")
+#	 field(NVL , "$(HOST):cpid_param_mbbi" )
+#	 field(INPA, "$(HOST):cpid.KD CPP" )
+#	 field(INPB, "glob:cpid_kd CPP" )
+#	 field(INPC,  "bcal:cpid_kd CPP" )
+#	 field(INPD,  "cdc:cpid_kd CPP" )
+#	 field(INPE,  "ctrls:cpid_kd CPP" )
+#	 field(INPF,  "discr:cpid_kd CPP" )
+#	 field(INPG,  "fcal:cpid_kd CPP" )
+#	 field(INPH,  "fdc:cpid_kd CPP" )
+#	 field(INPI,  "psst:cpid_kd CPP" )
+#	 field(INPJ,  "tagger:cpid_kd CPP" )
+#	 field(INPK,  "tof:cpid_kd CPP" )
+#	 field(INPL,  "trig:cpid_kd CPP" )
+#
+#}
+#grecord( calcout, "$(HOST):cpid_param_calc" ) {
+#	 field( DESC, "Decide 2 force KP 4 loop 4 $(HOST)" )
+#	 field( SCAN, "1 second" )
+#	 field( OUT , "$(HOST):cpid_param_seq PP" )
+#  	 field( CALC, "B#0?1:0")
+# 	 field( INPB, "$(HOST):cpid_param_mbbi")
+#	 field( OOPT, "When Non-zero")
+# 	 field( DOPT, "Use OCAL")
+#	 field( OCAL, "0" )
+#	 field( PINI, "YES" )
+#}
+#grecord( seq, "$(HOST):cpid_param_seq" ) {
+#	 field( DESC, "Force params 4 loop 4 $(HOST)" )
+#  	 field( SCAN, "Passive")
+#	 field( SELM, "All" )
+#	 field( DOL1, "$(HOST):cpid_kp_sel" )
+#	 field( LNK1, "$(HOST):cpid.KP" )
+#	 field( DOL2, "$(HOST):cpid_ki_sel" )
+#	 field( LNK2, "$(HOST):cpid.KI" )
+#	 field( DOL3, "$(HOST):cpid_kd_sel" )
+#	 field( LNK3, "$(HOST):cpid.KD" )
+#}
+#
+#
+#grecord( calcout, "$(HOST):min_rpm_vme" ) {
+#	 field( DESC, "Min RPM for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( EGU , "RPM" )
+#	 field( OUT , "$(HOST):min_rpm_vme_fo" )
+#  	 field( CALC, "C#0?B:A")
+# 	 field( INPA, "glob:min_rpm_vme CPP")
+#  	 field( INPB, "glob:min_rpm_vxs CPP")
+#  	 field( INPC, "$(VXS_FLAG)")
+#	 field( OOPT, "Every Time")
+# 	 field( DOPT, "Use CALC")
+#	 field( PINI, "YES" )
+#}
+#grecord( calcout, "$(HOST):max_rpm_vme" ) {
+#	 field( DESC, "Max RPM for $(HOST)" )
+#	 field( SCAN, "Passive" )
+#	 field( EGU , "RPM" )
+#	 field( OUT , "$(HOST):max_rpm_vme_fo" )
+#  	 field( CALC, "C#0?B:A")
+# 	 field( INPA, "glob:max_rpm_vme CPP")
+#  	 field( INPB, "glob:max_rpm_vxs CPP")
+#  	 field( INPC, "$(VXS_FLAG)")
+#	 field( OOPT, "Every Time")
+# 	 field( DOPT, "Use CALC")
+#	 field( PINI, "YES" )
+#}
+#grecord( dfanout, "$(HOST):min_rpm_vme_fo") {
+#	 field( DESC, "Min RPM fanout for $(HOST)" )
+#	 field( SCAN, "2 second" )
+#	 field( EGU , "RPM" )
+#	 field( DOL ,  "$(HOST):min_rpm_vme" )
+#	 field( OMSL,  "closed_loop" )
+#	 field( PINI, "YES" )
+#	 field( SELM, "All" )
+#	 field( OUTA, "$(HOST):fanNominalSpeed.DRVL" )
+#	 field( OUTB, "$(HOST):fanNominalSpeed.LOPR" )
+#	 field( OUTC, "$(HOST):cpid.MIN" )	 
+#}
+#grecord( dfanout, "$(HOST):max_rpm_vme_fo") {
+#	 field( DESC, "Max RPM fanout for $(HOST)" )
+#	 field( SCAN, "2 second" )
+#	 field( EGU , "RPM" )
+#	 field( DOL ,  "$(HOST):max_rpm_vme PP" )
+#	 field( OMSL,  "closed_loop" )
+#	 field( PINI, "YES" )
+#	 field( SELM, "All" )
+#	 field( OUTA, "$(HOST):fanNominalSpeed.DRVH" )
+#	 field( OUTB, "$(HOST):fanNominalSpeed.HOPR" )
+#	 field( OUTC, "$(HOST):cpid.MAX" )	 
+#}

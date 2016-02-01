@@ -62,12 +62,13 @@ $(GENERATOR): $(GENERATOR).C
 gen_clean:
 	/bin/rm -r $(GENERATOR)
 
-iocs:    	
+iocs:    $(GENERATOR)	
 	./$(GENERATOR) all
 	./$(GENERATOR) crates
 	./$(GENERATOR) groups
+	chmod +x ../../iocBoot/ioccaenhv/st.cmd*
 
 ioc_clean:
 	/bin/rm -f ../../iocBoot/ioccaenhv_*
-	/bin/rm -f ../../st.cmd.*
+	/bin/rm -f ../../iocBoot/ioccaenhv/st.cmd*
 	/bin/rm -r ../Db/HV*.substitutions

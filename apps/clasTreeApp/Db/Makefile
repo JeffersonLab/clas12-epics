@@ -2,7 +2,6 @@ TOP=../..
 include $(TOP)/configure/CONFIG
 #----------------------------------------
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
-TREENAME = clas12
 #----------------------------------------------------
 #  Optimization of db files using dbst (DEFAULT: NO)
 #DB_OPT = YES
@@ -10,7 +9,7 @@ TREENAME = clas12
 #----------------------------------------------------
 # Create and install (or just install)
 # databases, templates, substitutions like this
-#DB += nodes.db
+DB += nodegraph.db
 DB += $(wildcard ../*.substitutions) $(wildcard ../*.db)
 
 #----------------------------------------------------

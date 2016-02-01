@@ -1,6 +1,9 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var istatus = PVUtil.getDouble(pvs[0]) | 0;
+var istatus;
+try { istatus = PVUtil.getDouble(pvs[0]) | 0; }
+catch (err) { }
+
 var type = widget.getMacroValue("TYPE");
 
 // copied this logic from hv_control Qt GUI code.
@@ -49,6 +52,7 @@ if (type == "527")
 	    widget.setPropertyValue("background_color","On");
 	  }
 	  else {
+	  	  widget.setPropertyValue("foreground_color","Header_Foreground");
 	  	  widget.setPropertyValue("background_color","Major");
 	  }
 	}
@@ -57,40 +61,58 @@ if (type == "527")
 
 else if (type == "1527" || type == "4527")
 {	
-	var istatus2 = PVUtil.getDouble(pvs[1]);
-		
-	if (istatus2==0)
-	{
-		var statuses=["ON","RUP",  "RDN",  "OVC",  "OVV",  "UNV",  "ExTrip","MAXV", "ExDis",       "InTrip","CalEr","ChUn"];
-		var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Disconnected","Major","Major","Disconnected"];
-		
-		var theStatus=-1;
-		
-		for (var ii=0; ii<12; ii++)
-		{
-		  if ((1<<ii) & istatus)
-		  {
-		    theStatus=ii;
-		  } 
-		}
-		if (istatus == 0) { 
-		  widget.setPropertyValue("text","OFF");
-		  widget.setPropertyValue("background_color","Header_Background");
-		  widget.setPropertyValue("foreground_color","Header_Foreground");
-		}
-		else
-		{
-		  widget.setPropertyValue("text",statuses[theStatus]);
-		  widget.setPropertyValue("foreground_color","Text_Foreground");
-		  widget.setPropertyValue("background_color",bgcolors[theStatus]);		  
-		}
-     }
-     else
-     {
-       widget.setPropertyValue("text","COMMS");
-       widget.setPropertyValue("background_color","Major");
-       widget.setPropertyValue("foreground_color","Text_Foreground");   
-     }
+    var istatus2;
+    try { istatus2 = PVUtil.getDouble(pvs[1]); }
+    catch (ee) {}
+
+    if (istatus2==0)
+    {
+        var statuses=["ON","RUP",  "RDN",  "OVC",  "OVV",  "UNV",  "ExTrip","MAXV", "ExDis",       "InTrip","CalEr","ChUn"];
+        var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Disconnected","Major","Major","Disconnected"];
+
+        var theStatus=-1;
+
+        for (var ii=0; ii<12; ii++)
+        {
+            if ((1<<ii) & istatus)
+            {
+                theStatus=ii;
+            } 
+        }
+        if (istatus == 0) { 
+            widget.setPropertyValue("text","OFF");
+            widget.setPropertyValue("background_color","Header_Background");
+            widget.setPropertyValue("foreground_color","Header_Foreground");
+        }
+        else
+        {
+            widget.setPropertyValue("text",statuses[theStatus]);
+            widget.setPropertyValue("foreground_color","Text_Foreground");
+            widget.setPropertyValue("background_color",bgcolors[theStatus]);		  
+	  
+            if (bgcolors[theStatus]=="Major")
+                widget.setPropertyValue("foreground_color","Header_Foreground");
+        }
+    }
+    else
+    {
+        widget.setPropertyValue("text","COMMS");
+        
+        if (istatus2==1) {
+            widget.setPropertyValue("background_color","Warning");
+            widget.setPropertyValue("foreground_color","Text_Foreground");
+        }
+        else if (istatus2==2) {
+            widget.setPropertyValue("background_color","Attention");
+            widget.setPropertyValue("foreground_color","Text_Foreground");   
+        }
+        else if (istatus2==3) {
+            widget.setPropertyValue("background_color","Major");
+            widget.setPropertyValue("foreground_color","Header_Foreground");
+        }
+
+//        widget.setPropertyValue("tooltip_text",
+    }
 
 }
 

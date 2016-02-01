@@ -1,0 +1,69 @@
+# 
+#  EPICS records for various vme crate groups
+# 
+grecord( ai, "$(PREF):t_set" ) {
+	 field( DESC, "T set-point for crates" )
+	 field( SCAN, "Passive" )
+	 field( EGU , "degC" )
+	 field( PREC, "3" )
+	 field( VAL , "33" )
+	 field( PINI, "YES")
+}
+
+grecord( ai, "$(PREF):man_set" ) {
+	 field( DESC, "Manual T set-point for crates" )
+	 field( SCAN, "Passive" )
+	 field( EGU , "RPM" )
+	 field( PREC, "3" )
+	 field( VAL , "3000" )
+	 field( PINI, "YES")
+}
+
+grecord( bi,  "$(PREF):cpid_loc_mod" ) {
+	 field( DESC, "Local mode for PID" )
+	 field( SCAN, "Passive" )
+	 field( ONAM, "EPICS PID CONTROL" )
+	 field( ZNAM, "LOCAL CONTROL")
+	 field( VAL , "1")
+	 field( PINI, "YES")
+}
+
+grecord( bi,  "$(PREF):cpid_man_mod" ) {
+	 field( DESC, "Local mode for PID" )
+	 field( SCAN, "Passive" )
+	 field( ONAM, "YES" )
+	 field( ZNAM, "NO")
+	 field( VAL , "0")
+	 field( PINI, "YES")
+}
+
+grecord( bi,  "$(PREF):cpid_dsbl" ) {
+	 field( DESC, "DISABLE for PID" )
+	 field( SCAN, "Passive" )
+	 field( ONAM, "DISABLE" )
+	 field( ZNAM, "ENABLE")
+	 field( PINI, "YES")
+	 field( VAL , "0" )
+}
+
+record( ai, "$(PREF):cpid_kp" ) {
+	 field( DESC, "KP for all crates" )
+	 field( SCAN, "Passive" )
+	 field( VAL , "-150" )
+	 field( PINI, "YES")
+	 field( PREC, "3")
+}
+record( ai, "$(PREF):cpid_ki" ) {
+	 field( DESC, "KI for all crates" )
+	 field( SCAN, "Passive" )
+	 field( VAL , "-2" )
+	 field( PINI, "YES")
+	 field( PREC, "3")
+}
+record( ai, "$(PREF):cpid_kd" ) {
+	 field( DESC, "KD for all crates" )
+	 field( SCAN, "Passive" )
+	 field( VAL , "0" )
+	 field( PINI, "YES")
+	 field( PREC, "3")
+}

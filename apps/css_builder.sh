@@ -8,8 +8,10 @@
 # Date:   Aug 2015
 #
 
-css_share_path=../css_share/apps
-top_dir=`pwd -P`
+top_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+css_share_path=$top_dir/../css_share/apps
+
 cols=`tput cols`
 
 printheader() {
@@ -20,19 +22,20 @@ printheader() {
 }
 
 # parse out synApps path
-if [ -f "configure/RELEASE" ]
+RELEASEFILE=$top_dir/configure/RELEASE
+if [ -f "$RELEASEFILE" ]
 then
-    EPICS_BASE=`grep EPICS_BASE= configure/RELEASE | uniq`
+    EPICS_BASE=`grep EPICS_BASE= $RELEASEFILE | uniq`
     EPICS_BASE=${EPICS_BASE#EPICS_BASE=}
-    SYNAPPS=`grep SYNAPPS= configure/RELEASE`
+    SYNAPPS=`grep SYNAPPS= $RELEASEFILE`
     SYNAPPS=${SYNAPPS#SYNAPPS=}
     SYNAPPS=${SYNAPPS//\$(EPICS_BASE)/$EPICS_BASE}
     if [ $SYNAPPS == "" ]; then
-	printf "Error: could not parse synApps path from configure/RELEASE\n"
+	printf "Error: could not parse synApps path from $RELEASEFILE\n"
 	exit
     fi
 else
-    printf "Error: configure/RELEASE not found\n"
+    printf "Error: $RELEASEFILE not found\n"
     exit
 fi
 
@@ -100,3 +103,8 @@ printf "=%.0s" $(seq 1 $cols)
 printf "\nInstalled %10d opis\n" `find $css_share_path/synApps/ -name "*.opi" | wc -l`
 printf "Linked    %10d opis\n" `find $css_share_path/*App/ -name "*.opi" | wc -l`
 
+
+#link any scripts in any of the op/scripts direcrories
+echo
+echo "Linking scripts into ../css_share/common_scripts/"
+ln -sf ${top_dir}/*/op/scripts/* ../css_share/common/scripts/

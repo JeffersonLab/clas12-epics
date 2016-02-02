@@ -1,0 +1,705 @@
+#These records are for a whole board
+#See ftcFlasherchan.template 
+#For those which are for single channels on the board.
+# % macro, PORT, Asyn port name
+# % macro, P   , prefix eg. B_FT_FLASHER
+# % macro, NCHAN, highest channel ID number
+#This one for debugging using asyn
+#run something like this:
+#
+#medm -x -macro P=B_FT_FLASHER,R=:asyn /home/epics/clas/clas12/R3.14.12.3/synApps_5_5/support/asyn-4-13/medm/asynRecord.adl
+#
+#In the GUI select the "more" menu : asynOctet Interface option
+#This pops up a GUI where we can write and read strings directly to the device.
+ 
+record(asyn,"$(P):asyn"){
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+}
+#Now these are the records for the board (as opposed to the individual channels)
+#Approximately in the order written in the wiki at:
+#wiki.ge.infn.it/g3wiki/index.php/Monitoring_system
+
+#We select a channel for certain actions to refer to
+#Forward links all to make sure all relevant records get processed.
+
+#Set the selected channel
+record(ao, "$(P):SELECTED_CHANNEL"){
+ field(LOPR,"0")
+  field(HOPR,"$(NCHAN)")
+  field(VAL,"0")
+  field(FLNK, "$(P):GET_SELECTED_WIDTH")  
+}
+
+#Set the selected channel
+record(ao, "$(P):SET_SELECTED_WIDTH"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(HOPR,"4095")
+  field(OUT,  "@ftcFlasher.proto setWidthSel($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_WIDTH")
+}
+
+#Set the selected channel
+record(ai, "$(P):GET_SELECTED_WIDTH"){
+  field(DTYP, "stream")
+  field(INP,  "@ftcFlasher.proto getWidthSel($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_WIDTH_ALL") 
+}
+
+#Set the selected channel
+record(ao, "$(P):SET_SELECTED_AMP"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(HOPR,"4095")
+  field(OUT,  "@ftcFlasher.proto setAmplSel($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_AMP")
+}
+
+#Set the selected channel
+record(ai, "$(P):GET_SELECTED_AMP"){
+  field(DTYP, "stream")
+  field(INP,  "@ftcFlasher.proto getAmplSel($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_AMP_ALL")    
+}
+
+#Set all widths to same value
+record(ao, "$(P):SET_WIDTH_ALL"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(HOPR,"4095")
+  field(OUT,  "@ftcFlasher.proto setWidthAll $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_WIDTH")
+}
+
+record(waveform, "$(P):GET_WIDTH_ALL"){
+        field(DTYP, "stream")
+        field(DESC, "Width of All Channels")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "USHORT")
+        field(PINI, "YES")
+ 	field(INP, "@ftcFlasher.proto getWidthAll($(NCHAN)) $(PORT)")
+        field(FLNK, "$(P):GET_SELECTED_AMP")
+}
+
+record(waveform, "$(P):GET_AMP_ALL"){
+        field(DTYP, "stream")
+        field(DESC, "Width of All Channels")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "USHORT")
+        field(PINI, "YES")
+ 	field(INP, "@ftcFlasher.proto getAmplAll($(NCHAN)) $(PORT)")
+        field(FLNK, "$(P):SELECTED_LED_STATUS")
+}
+
+#Set all amplitudes to same value
+record(ao, "$(P):SET_AMP_ALL"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(HOPR,"4095")
+  field(OUT,  "@ftcFlasher.proto setAmpAll $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_AMP")
+}
+
+##Basic configuration commands
+record(stringout, "$(P):SET_IP") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setIP $(PORT)")
+  field(FLNK, "$(P):GET_IP")
+}
+
+##Basic configuration commands
+record(stringout, "$(P):COMMAND") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto sendCommand($(P)) $(PORT)")
+}
+record(stringin, "$(P):RESPONSE") {
+}
+
+
+
+##Basic configuration commands
+record(stringout, "$(P):SET_IP") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setIP $(PORT)")
+  field(FLNK, "$(P):GET_IP")
+}
+
+record(stringin, "$(P):GET_IP") {
+  field(DESC, "IP for $(P)")
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getIP $(PORT)")
+}
+
+record(stringout, "$(P):SET_MASK") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setMask $(PORT)")
+  field(FLNK, "$(P):GET_MASK")
+}
+
+record(stringin, "$(P):GET_MASK") {
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getMask $(PORT)")
+}
+
+record(stringout, "$(P):SET_GATEWAY") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setGateway $(PORT)")
+  field(FLNK, "$(P):GET_GATEWAY")
+}
+
+record(stringin, "$(P):GET_GATEWAY") {
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getGateway $(PORT)")
+}
+
+record(stringout, "$(P):RESET") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto sendReset $(PORT)")
+}
+
+#set and get driver status ON or OFF
+##NEEDS CHECKING
+#record(stringout, "$(P):SET_DRIVER_STATUS") {
+#  field(DTYP, "stream")
+#  field(OUT, "@ftcFlasher.proto setDriverStatus $(PORT)")
+#  field(FLNK, "$(P):GET_DRIVER_STATUS")
+#}
+
+record(bo, "$(P):SET_DRIVER_STATUS") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setDriverStatus $(PORT)")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  
+  field(FLNK, "$(P):GET_DRIVER_STATUS")
+}
+
+#record(stringin, "$(P):GET_DRIVER_STATUS") {
+record(bi, "$(P):GET_DRIVER_STATUS") {
+#  field(SCAN, "passive")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(PINI, "YES")
+  field(DTYP, "stream")
+  field(INP, "@ftcFlasher.proto getDriverStatus $(PORT)")
+}
+
+record(bi, "$(P):GET_SEQUENCE") {
+#  field(SCAN, "passive")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(PINI, "YES")
+  field(DTYP, "stream")
+  field(INP, "@ftcFlasher.proto getSequence $(PORT)")
+  field(FLNK, "$(P):GET_LEDS")
+}
+
+
+
+
+#set and get OWR to OFF or ON
+#record(stringout, "$(P):SET_OWR") {
+#  field(DTYP, "stream")
+#  field(OUT, "@ftcFlasher.proto setOwr $(PORT)")
+#  field(FLNK, "$(P):GET_OWR")
+#}
+#set and get OWR to OFF or ON
+record(bo, "$(P):SET_OWR") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setOwr $(PORT)")
+  field(ZNAM, "0")
+  field(ONAM, "1")
+  
+  field(FLNK, "$(P):GET_OWR")
+}
+
+record(bi, "$(P):GET_OWR") {
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(PINI, "YES")
+  field(DTYP, "stream")
+  field(INP, "@ftcFlasher.proto getOwr $(PORT)")
+}
+
+##set and get clock to EXT or INT
+#record(stringout, "$(P):SET_CLOCK") {
+#  field(DTYP, "stream")
+#  field(OUT, "@ftcFlasher.proto setClock $(PORT)")
+#  field(FLNK, "$(P):GET_CLOCK")
+#}
+#set and get clock to EXT or INT
+record(bo, "$(P):SET_CLOCK") {
+  field(ZNAM, "INT")
+  field(ONAM, "EXT")
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setClock($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_CLOCK")
+}
+
+record(bi, "$(P):GET_CLOCK") {
+  field(ZNAM, "INT")
+  field(ONAM, "EXT")
+  field(PINI, "YES")
+  field(DTYP, "stream")
+  field(INP, "@ftcFlasher.proto getClock $(PORT)")
+}
+
+#Get and set frequency
+record(ao, "$(P):SET_FREQ"){
+  field(DTYP, "stream")
+  field(OUT,  "@ftcFlasher.proto setFreq $(PORT)")
+  field(FLNK, "$(P):GET_FREQ"  )
+}
+record(ai, "$(P):GET_FREQ"){
+  field(EGU, "Hz")
+  field(PINI, "YES")
+  field(DTYP, "stream")
+  field(INP,  "@ftcFlasher.proto getFreq $(PORT)")
+}
+
+record(mbbo, "$(P):SET_FREQ_MENU") {
+	field(DTYP, "stream")
+	field(OUT, "@ftcFlasher.proto setFreq $(PORT)")
+	field(FLNK, "$(P):GET_FREQ")
+	field(ZRST, "8 kHz")
+	field(ONST, "4 kHz")
+	field(TWST, "2 kHz")
+	field(THST, "1 kHz")
+	field(FRST, "500 Hz")
+	field(FVST, "250 Hz")
+	field(SXST, "125 Hz")
+	field(SVST, "62.5 Hz")
+}
+
+##Advanced Configuration commands
+record(stringout, "$(P):SET_SERVER_IP") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setServerIP $(PORT)")
+  field(FLNK, "$(P):GET_SERVER_IP")
+}
+
+record(stringin, "$(P):GET_SERVER_IP") {
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getServerIP $(PORT)")
+}
+
+record(stringout, "$(P):SET_DATA_FILE") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setDataFile $(PORT)")
+  field(FLNK, "$(P):GET_DATA_FILE")
+}
+
+record(stringin, "$(P):GET_DATA_FILE") {
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getDataFile $(PORT)")
+}
+
+record(stringout, "$(P):SET_SEQ_FILE") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setSeqFile $(PORT)")
+  field(FLNK, "$(P):GET_SEQ_FILE")
+}
+
+record(stringin, "$(P):GET_SEQ_FILE") {
+  field(DTYP, "stream")
+  field(PINI, "YES")
+  field(INP, "@ftcFlasher.proto getSeqFile $(PORT)")
+}
+
+record(stringout, "$(P):LOAD_DATA") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto loadData $(PORT)")
+}
+
+record(stringout, "$(P):LOAD_SEQ") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto loadSeq $(PORT)")
+}
+
+#record(stringout, "$(P):SEQ_START") {
+#  field(DTYP, "stream")
+#  field(OUT, "@ftcFlasher.proto seqStart $(PORT)")
+#}
+record(bo, "$(P):SEQ_START") {
+  field(DTYP, "stream")
+  field(ZNAM, "STOP")
+  field(ONAM, "START")
+  field(OUT, "@ftcFlasher.proto seqStart $(PORT)")
+  field(FLNK, "$(P):GET_SEQUENCE")
+}
+
+#record(bi, "$(P):GET_COLOR") {
+#  field(DTYP, "stream")
+#  field(PINI, "YES")
+#  field(ZNAM, "Red")
+#  field(ONAM, "Blue")
+#  field(INP, "@ftcFlasher.proto getCol $(PORT)")
+#}
+
+#record(bo, "$(P):SET_COLOR") {
+#  field(DTYP, "stream")
+#  field(ZNAM, "Red")
+#  field(ONAM, "Blue")
+#  field(OUT, "@ftcFlasher.proto setCol $(PORT)")
+#  field(FLNK, "$(P):GET_COLOR")
+#}
+
+record(ai, "$(P):LED_ID1"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID2"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID3"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID4"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID5"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID6"){
+  field(VAL,"-99")
+}
+
+record(ai, "$(P):LED_ID_SCALER_1"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID_SCALER_2"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID_SCALER_3"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID_SCALER_4"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID_SCALER_5"){
+  field(VAL,"-99")
+}
+record(ai, "$(P):LED_ID_SCALER_6"){
+  field(VAL,"-99")
+}
+
+record(ai, "$(P):GET_LEDS"){
+  field(DTYP, "stream")
+  field(INP,  "@ftcFlasher.proto getLeds($(P)) $(PORT)")
+  #field(SCAN, "2 second")
+  field(FLNK, "$(P):LEDS_FANOUT")    
+}
+
+record(fanout,$(P):LEDS_FANOUT){
+  field(LNK1,"$(P):LED1_FANOUT")
+  field(LNK2,"$(P):LED2_FANOUT")
+  field(LNK3,"$(P):LED3_FANOUT")
+  field(LNK4,"$(P):LED4_FANOUT")
+  field(LNK5,"$(P):LED5_FANOUT")
+  field(LNK6,"$(P):LED6_FANOUT")
+}
+
+#Scaler range - initial value for scale for scaler color levels
+record(ao, "$(P):SCALER_MAX_RANGE"){
+  field(VAL,"100")
+}
+
+#Scaler log lin initiall set to linear
+record(ao, "$(P):SCALER_LIN_LOG"){
+  field(VAL,"0")
+}
+
+record(stringout, "$(P):SET_AMP_AS_SELECTED"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setAllAmpAsSelected($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_AMP")    
+}
+record(stringout, "$(P):SET_WIDTH_AS_SELECTED"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setAllWidthAsSelected($(P)) $(PORT)")
+  field(FLNK, "$(P):GET_SELECTED_WIDTH")    
+}
+
+record(waveform, "$(P):DATA_FILE_SAVE"){
+        field(DESC, "File to save Width and Amps")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+record(waveform, "$(P):DATA_FILE_LOAD"){
+        field(DESC, "File to load Width and Amps")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+
+record(waveform, "$(P):SEQ_FILE"){
+        field(DESC, "Sequence file")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+
+record(waveform, "$(P):SET_DATA"){
+  field(DTYP, "stream")
+  field(DESC, "All channel and width data")
+  field(NELM, "61")
+  field(FTVL, "USHORT")
+  field(INP, "@ftcFlasher.proto setData $(PORT)")
+#  field(FLNK,"$(P):SELECTED_CHANNEL")
+}
+
+
+record(bo, "$(P):SWITCH_SELECTED_LED") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto switchLED($(P)) $(PORT)")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(FLNK, "$(P):SELECTED_LED_STATUS")
+}
+record(bi, "$(P):SELECTED_LED_STATUS") {
+  field(DTYP, "stream")
+  field(INP, "@ftcFlasher.proto statusLED($(P)) $(PORT)")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(FLNK, "$(P):GET_LEDS")
+  #field(SCAN, ".5 second")
+}
+
+record(ao, "$(P):SET_N_SEQUENCE_REPETITIONS"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setNSeqRep $(PORT)")
+}
+
+record(ao, "$(P):SET_N_SEQUENCE_STEPS"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setNSeqSteps $(PORT)")
+}
+
+record(ao, "$(P):SET_SEQUENCE_DONE"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setSeqDone $(PORT)")
+}
+
+record(stringout, "$(P):SET_SEQUENCE_STEP"){
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto setSeqStep $(PORT)")
+}
+
+
+#lookup tables to get x and y from LED index
+record(waveform, "$(P):X_TABLE"){
+        field(DESC, "LED x coord")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "SHORT")
+}
+record(waveform, "$(P):Y_TABLE"){
+        field(DESC, "LED y coord")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "SHORT")
+#	field(SCAN, ".5 second")
+}
+record(waveform, "$(P):ID_TABLE"){
+        field(DESC, "LED y coord")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "SHORT")
+#	field(SCAN, ".5 second")
+}
+record(waveform, "$(P):NEXT_TABLE"){
+        field(DESC, "adjacent element")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "SHORT")
+#	field(SCAN, ".5 second")
+}
+record(waveform, "$(P):PREV_TABLE"){
+        field(DESC, "adjacent")
+        field(NELM, "$(NCHAN)")
+        field(FTVL, "SHORT")
+#	field(SCAN, ".5 second")
+}
+
+record(subArray, "$(P):SELECTED_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):SELECTED_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):SELECTED_ID"){
+        field(INP, "$(P):ID_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):NEXT_ID"){
+        field(INP, "$(P):NEXT_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):PREV_ID"){
+        field(INP, "$(P):PREV_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+
+record(dfanout,"$(P):SELECTED_FANOUT"){
+        field(DOL, "$(P):SELECTED_CHANNEL CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):SELECTED_X.INDX CA")
+   	field(OUTB,"$(P):SELECTED_Y.INDX CA")
+   	field(OUTC,"$(P):NEXT_ID.INDX CA")
+   	field(OUTD,"$(P):PREV_ID.INDX CA")
+#	field(SCAN, ".5 second")	
+}
+
+
+record(bo, "$(P):IOC_INIT") {
+        field(ZNAM, "0")
+        field(ONAM, "1")
+	field(VAL,"0")
+}
+record(subArray, "$(P):LED1_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED1_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED2_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED2_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED3_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED3_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED4_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED4_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED5_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED5_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED6_X"){
+        field(INP, "$(P):X_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+record(subArray, "$(P):LED6_Y"){
+        field(INP, "$(P):Y_TABLE")
+        field(MALM, "$(NCHAN)")
+        field(NELM, "1")
+#	field(SCAN, ".5 second")
+}
+
+record(dfanout,"$(P):LED1_FANOUT"){
+        field(DOL, "$(P):LED_ID1 CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED1_X.INDX CA")
+   	field(OUTB,"$(P):LED1_Y.INDX CA")
+}
+record(dfanout,"$(P):LED2_FANOUT"){
+        field(DOL, "$(P):LED_ID2 CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED2_X.INDX CA")
+   	field(OUTB,"$(P):LED2_Y.INDX CA")
+}
+record(dfanout,"$(P):LED3_FANOUT"){
+        field(DOL, "$(P):LED_ID3  CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED3_X.INDX CA")
+   	field(OUTB,"$(P):LED3_Y.INDX CA")
+}
+record(dfanout,"$(P):LED4_FANOUT"){
+        field(DOL, "$(P):LED_ID4  CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED4_X.INDX CA")
+   	field(OUTB,"$(P):LED4_Y.INDX CA")
+}
+record(dfanout,"$(P):LED5_FANOUT"){
+        field(DOL, "$(P):LED_ID5  CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED5_X.INDX CA")
+   	field(OUTB,"$(P):LED5_Y.INDX CA")
+}
+record(dfanout,"$(P):LED6_FANOUT"){
+        field(DOL, "$(P):LED_ID6  CPP NMS")
+	field(OMSL, "closed_loop")
+   	field(OUTA,"$(P):LED6_X.INDX CA")
+   	field(OUTB,"$(P):LED6_Y.INDX CA")
+}
+
+
+#pvs for running scan
+record(ao, "$(P):SCAN_TON"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(OUT,  "@ftcFlasher.proto setScanTon $(PORT)")
+}
+
+record(ao, "$(P):SCAN_TOFF"){
+  field(DTYP, "stream")
+  field(LOPR,"0")
+  field(OUT,  "@ftcFlasher.proto setScanToff $(PORT)")
+}
+
+
+record(stringout,"$(P):SET_SCAN_LED"){
+  field(DTYP, "stream")
+  field(OUT,  "@ftcFlasher.proto setScanLed $(PORT)")
+}
+
+record(bo, "$(P):START_SCAN") {
+  field(DTYP, "stream")
+  field(OUT, "@ftcFlasher.proto scanStart $(PORT)")
+  field(ZNAM, "STOP")
+  field(ONAM, "START")
+}

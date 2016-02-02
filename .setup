@@ -4,9 +4,26 @@
 # EPICS Environment
 #
 
-setenv EPICS_VER 3.14.12.5
-setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base
-setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions
+if ($?CLAS) then
+  setenv EPICS $CLAS/epics
+endif
+
+## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
+set rhel_vers = `awk '{print substr($7,0,1)}' /etc/redhat-release`
+if ( $rhel_vers == "5" ) then
+  setenv EPICS_VER 3.14.12.3
+  set RHEL_VER = "_RHEL5"
+else if ( $rhel_vers == "6" ) then
+  setenv EPICS_VER 3.14.12.5
+  set RHEL_VER = "_RHEL6"
+else
+  setenv EPICS_VER 3.14.12.5
+  set RHEL_VER = ""
+endif
+
+#setenv EPICS_VER 3.14.12.5
+setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base$RHEL_VER
+setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions$RHEL_VER
 
 setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs
 setenv MIBS ALL
@@ -31,10 +48,14 @@ set -f path=("/usr/clas12/css/pro/$EPICS_HOST_ARCH/bin" $path:q)
 set -f path=("/usr/csite/certified/bin" $path:q)
 
 if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH"
+setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$EPICS_BASE/lib/$EPICS_HOST_ARCH":"$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH":"/usr/clas12/third-party-libs/net-snmp-5.8.dev/x86_64/lib"
 
 setenv EPICS_CA_AUTO_ADDR_LIST no
 setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.255 129.57.191.255 129.57.68.97 129.57.86.16 129.57.86.29 129.57.86.37 129.57.160.46 129.57.160.54"
+
+## Pezca
+if ( ! $?PERL5LIB ) setenv PERL5LIB
+setenv PERL5LIB "${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86_64-linux-thread-multi"
 
 #find the directory of this sourced .setup file and set up relevant path and python path
 #let's see how robust this is
@@ -50,10 +71,7 @@ setenv CSS_SHARE_DIR "${clas12epics}/css_share"
 
 set -f path=($path:q "${script_dir}")
 
-if ( ! $?PYTHONPATH ) then
-   setenv PYTHONPATH "${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
-else
-   setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
-endif
+if ( ! $?PYTHONPATH ) setenv PYTHONPATH 
+setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
 
 setenv EPICS_SCRIPTS "${script_dir}"

@@ -1,6 +1,6 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var prefix = "B_DET_FT_LV_";
+var prefix = "B_DET_FTC_LV_";
 var qg=["Q1Q4","Q2Q3"];
 var pn=["P","N"];
 

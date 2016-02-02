@@ -149,8 +149,10 @@ polygons=[
 ]
 
 def genQuadrant(quadrant):
-  if quadrant%2: group=1
-  else:          group=9
+
+  if quadrant%2: group=9
+  else:          group=1
+
   for points in polygons:
     print WIDGHEAD
     ymin,xmin=99999,99999
@@ -182,8 +184,9 @@ def genQuadrant(quadrant):
     asdf=asdf.replace('^^^QUADRANT^^^','%d'%(quadrant))
     asdf=asdf.replace('^^^PREFIX^^^',PREFIX)
     print asdf
-    if quadrant%2: group += 1
-    else:          group -= 1
+
+    if quadrant%2: group -= 1
+    else:          group += 1
 
 
 print HEAD

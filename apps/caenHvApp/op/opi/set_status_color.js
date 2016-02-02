@@ -39,7 +39,7 @@ if (type == "527")
 	if ( ((1<<13) & istatus)) { sstatus="RDN"; }
 	if (!((1<<0)  & istatus)) { sstatus=("NotPrt"); }
 	
-	widget.setPropertyValue("text",sstatus);
+//	widget.setPropertyValue("text",sstatus);
 		
 	if (sstatus == "OFF") { 
 	  widget.setPropertyValue("background_color","Off");
@@ -90,7 +90,7 @@ else if (type == "1527" || type == "4527")
      }
      else
      {
-       widget.setPropertyValue("text","COMMS");
+//       widget.setPropertyValue("text","COMMS");
        widget.setPropertyValue("background_color","Major");
        widget.setPropertyValue("foreground_color","Text_Foreground");   
      }

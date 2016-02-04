@@ -102,7 +102,7 @@ const char *stFileTail[]=   {  "",
 			       NULL};
 
 const char *subFileHeading[]= {"file \"db/caenhv.db\" {",
-			       "        pattern { Cr,     CrName,        CrType,     Sl,     Ch,    Sys,     Det,    Element,                CScode, pwonoff, v0set, i0set, trip,  rampup, rampdn, svmax}",
+			       "        pattern { Cr,    CrName,         CrType, Sl,     Ch,    Sys,     Det,    Element,                CScode, pwonoff, v0set,  i0set,   trip,    rampup,  rampdn, svmax,   enable}",
 			       NULL};
 
 const char *subFileTail[]  =  {"}",
@@ -219,8 +219,8 @@ int CSCstatus[NMAINFRAMES][defaultNSlot][defaultNChan];
 
 //to skip these uncomment this one.
 //int command_codes[] = {-1};
-const char *command_macros[]= {"pwonoff", "v0set", "i0set", "trip", "rampup", "rampdn","svmax", NULL}; /// val_piece : const
-int command_codes[]         = { S_CHHV,    S_DV,    S_TC,    S_PRD,  S_RUP,    S_RDN,   S_VMAX,  -1};
+const char *command_macros[]= {"pwonoff", "v0set", "i0set", "trip", "rampup", "rampdn","svmax", "enable", NULL}; /// val_piece : const
+int command_codes[]         = { S_CHHV,    S_DV,    S_TC,    S_PRD,  S_RUP,    S_RDN,   S_VMAX,  S_CE,      -1};
 
 //For the list of broken channels to be sapped
 enum swapFields{CSC, ALIAS, NEW_CSC};

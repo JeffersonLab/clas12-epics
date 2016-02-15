@@ -11,21 +11,20 @@ endif
 ## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
 set rhel_vers = `awk '{print substr($7,0,1)}' /etc/redhat-release`
 if ( $rhel_vers == "5" ) then
-  setenv EPICS_VER 3.14.12.3
+  setenv EPICS_VER R3.14.12.3
   set RHEL_VER = "_RHEL5"
 else if ( $rhel_vers == "6" ) then
-  setenv EPICS_VER 3.14.12.5
+  setenv EPICS_VER R3.14.12.5
   set RHEL_VER = "_RHEL6"
 else
-  setenv EPICS_VER 3.14.12.5
+  setenv EPICS_VER R3.14.12.5
   set RHEL_VER = ""
 endif
 
-#setenv EPICS_VER 3.14.12.5
-setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base$RHEL_VER
-setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions$RHEL_VER
+setenv EPICS_BASE /usr/clas12/${EPICS_VER}/base$RHEL_VER
+setenv EPICS_EXTENSIONS /usr/clas12/${EPICS_VER}/extensions$RHEL_VER
 
-setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs
+setenv MIBDIRS /usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs
 setenv MIBS ALL
 
 # set EPICS host architecture
@@ -38,12 +37,12 @@ else
 endif
 
 ## caget/caput/etc, medm/striptool/etc...
-set -f path=("$EPICS_BASE/bin/$EPICS_HOST_ARCH" $path:q)
-set -f path=("$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH" $path:q)
+set -f path=("${EPICS_BASE}/bin/${EPICS_HOST_ARCH}" $path:q)
+set -f path=("${EPICS_EXTENSIONS}/bin/${EPICS_HOST_ARCH}" $path:q)
 ## EPICS tools and utils
 set -f path=("/usr/clas12/release/pro/epics/bin" $path:q)
 ## CSS, alarm tools, etc
-set -f path=("/usr/clas12/css/pro/$EPICS_HOST_ARCH/bin" $path:q)
+set -f path=("/usr/clas12/css/pro/${EPICS_HOST_ARCH}/bin" $path:q)
 ## acctools rsync'd from Cebaf (MyaViewer, etc)
 set -f path=("/usr/csite/certified/bin" $path:q)
 

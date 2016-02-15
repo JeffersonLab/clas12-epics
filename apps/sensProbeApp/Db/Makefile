@@ -4,7 +4,8 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Install databases, templates & substitutions like this
-DB  += sensProbe.db
+DB  += sensorProbe_temperature.db
+DB  += sensorProbe_humidity.db
 
 MIB += akcp.mib
 

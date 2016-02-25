@@ -5,9 +5,6 @@
 # Date:   Feb 2015
 #
 
-#
-# READBACKS
-#
 record(stringout, "$(P)$(R)man_cmd") {
     field(DESC, "Manual Command")
     field(DTYP, "EtherIP")
@@ -23,14 +20,14 @@ record(stringin, "$(P)$(R)man_cmd") {
     field(FLNK, "$(P)$(R)man_cmd_resp")
 }
 
-record(waveform, "$(P)$(R)adc_vals") {
-    field(DESC, "ADC array")
-    field(DTYP, "EtherIP")
-    field(NELM, "32")
-    field(FTVL, "DOUBLE")
-    field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.ADC_Values")
-}
+#record(waveform, "$(P)$(R)adc_vals") {
+#    field(DESC, "ADC array")
+#    field(DTYP, "EtherIP")
+#    field(NELM, "32")
+#    field(FTVL, "DOUBLE")
+#    field(SCAN, "1 second")
+#    field(INP,  "@$(PLCID) Torus_MPS.ADC_Values")
+#}
 
 record(waveform, "$(P)$(R)adc_scales") {
     field(DESC, "ADC scale factor array")
@@ -65,13 +62,13 @@ record(ai, "$(P)$(R)I") {
     field(PREC, "2")
 }
 
-#record(ai, "$(P)$(R)I") {
-#    field(DTYP, "EtherIP")
-#    field(SCAN, "1 second")
-#    field(INP,  "@$(PLCID) Torus_MPS.I_fromZFCT")
-#    field(EGU,  "A")
-#    field(PREC, "2")
-#}
+record(ai, "$(P)$(R)I_ZFCT") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.I_fromZFCT")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
 
 record(ai, "$(P)$(R)Iset_rdbk") {
     field(DTYP, "EtherIP")
@@ -127,7 +124,7 @@ record(waveform, "$(P)$(R)status_trips") {
 record(waveform, "$(P)$(R)active_flags") {
     field(DESC, "Flags array")
     field(DTYP, "EtherIP")
-    field(NELM, "32")
+    field(NELM, "64")
     field(FTVL, "LONG")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.Active_Flags")
@@ -154,6 +151,13 @@ record(bi, "$(P)$(R)mode") {
     field(ONAM, "LOCAL")
 }
 
+record(bo, "$(P)$(R)mode_set") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Torus_MPS.LocalFlag")
+    field(ZNAM, "REMOTE")
+    field(ONAM, "LOCAL")
+}
+
 record(bi, "$(P)$(R)polarity") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
@@ -162,3 +166,14 @@ record(bi, "$(P)$(R)polarity") {
     field(ONAM, "POSITIVE")
 }
 
+record(bo, "$(P)$(R)contactor_set") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Torus.MPS.Contactor_SW")
+    field(ZNAM, "")
+    field(ONAM, "")
+}
+
+record(bo, "$(P)$(R)intlock_reset") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Torus.MPS.interlockReset_SW")
+}

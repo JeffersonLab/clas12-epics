@@ -1,90 +1,118 @@
 #
 #
 #
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Name") 
+{
+   field(DESC, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Name")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Name")
+}
 
-record(bo, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff") 
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Alias") 
+{
+   field(DESC,"B_DET_$(Det)_$(Sys)_$(Element)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Alias")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Alias")
+}
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmon")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmon")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):imon")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):imon")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vsetrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vsetrbk")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):isetrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):isetrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):isetrbk")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmaxrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmaxrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmaxrbk")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):ruprbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):ruprbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):ruprbk")
+}   
+
+record(bo, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff") 
 {
    field(DESC,"#PB")
    field(OMSL,"supervisory")
    field(ZNAM,"OFF")
    field(ONAM,"ON")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):pwonoff")
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):pwonoff")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):pwonoff")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):pwonoff")
 }
 
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):v0set") 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset") 
 {
    field(DESC,"#GR")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):v0set")
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):v0set")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vset")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vset")
 }
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):i0set") 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):iset") 
 {
    field(DESC,"#GR")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):i0set")
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):i0set")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):iset")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):iset")
 }
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):trip") 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):trip") 
 {
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):trip")   
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):trip")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):trip")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):trip")   
 }
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rampup") {
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rampup") {
    field(DESC,"#PD")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):rampup")   
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):rampup")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):rampup")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):rampup")   
 }
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rampdn") 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rampdn") 
 {
    field(DESC,"#PD")
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):rampdn")   
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):rampdn")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):rampdn")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):rampdn")   
 }
-record(ao, "BSIM_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):svmax") 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmax") 
 {
    field(OMSL,"supervisory")
    field(SCAN,"Passive")
-   alias("BSIM_SYS_$(Sys)_$(Det)_$(Element):svmax")   
-   alias("BSIM_DET_$(Det)_$(Sys)_$(Element):svmax")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmax")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmax")   
 }
-ecord(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Vmon")
-{
-   field(PREC,"2")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):Vmon")
-   alias("B_SYS_$(Sys)_$(Det)_$(Element):Vmon")
-}   
-
-record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Imon")
-{
-   field(PREC,"2")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):Imon")
-   alias("B_SYS_$(Sys)_$(Det)_$(Element):Imon")
-}   
-
-record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Vsetrbk")
-{
-   field(PREC,"2")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):Vsetrbk")
-   alias("B_SYS_$(Sys)_$(Det)_$(Element):Vsetrbk")
-}   
-
-record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Vmax")
-{
-   field(PREC,"2")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):Vmax")
-   alias("B_SYS_$(Sys)_$(Det)_$(Element):Vmax")
-}   
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rup")
 {
@@ -106,3 +134,17 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
    alias("B_DET_$(Det)_$(Sys)_$(Element):stat")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):stat")
 }   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):comms")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):comms")
+}   
+
+record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
+{
+   field(VAL,"$(CrType)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):type")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):type")   
+}

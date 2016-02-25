@@ -34,54 +34,72 @@ record (bi,"$(HOST):mainOn") {
 	field (INP,"$(HOST):CrateStat.B0")
 	field (DESC,"System is switched on=1/off=0")
 	field (FLNK,"$(HOST):mainInhibit.PROC") 
+        field (ZNAM,"ON")
+        field (ONAM,"OFF")
 }
 record (bi,"$(HOST):mainInhibit") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B1")
 	field (DESC,"1=External Hardware system inhibit")
-	field (FLNK,"$(HOST):localControlOnly.PROC") 
+	field (FLNK,"$(HOST):localControlOnly.PROC")
+        field (ZNAM,"NO")
+        field (ONAM,"YES")
 }
 record (bi,"$(HOST):localControlOnly") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B2")
 	field (DESC,"1=Local control only allowed (no CANBUS)")
-	field (FLNK,"$(HOST):inputFailure.PROC") 
+	field (FLNK,"$(HOST):inputFailure.PROC")
+        field (ZNAM,"NO")
+        field (ONAM,"YES")
 }
 record (bi,"$(HOST):inputFailure") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B3")
 	field (DESC,"1=any input failure (eg power fail)")
 	field (FLNK,"$(HOST):outFailure.PROC") 
+        field (ZNAM,"OK")
+        field (ONAM,"FAIL")
 }
 record (bi,"$(HOST):outFailure") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B4")
 	field (DESC,"1=any output failure (see outputTable)")
-	field (FLNK,"$(HOST):fantrayFailure.PROC") 
+	field (FLNK,"$(HOST):fantrayFailure.PROC")
+        field (ZNAM,"OK")
+        field (ONAM,"FAIL")
 }
 record (bi,"$(HOST):fantrayFailure") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B5")
 	field (DESC,"1=fantray failure")
-	field (FLNK,"$(HOST):sensFailure.PROC") 
+	field (FLNK,"$(HOST):sensFailure.PROC")
+        field (ZNAM,"OK")
+        field (ONAM,"FAIL")
 }
 record (bi,"$(HOST):sensFailure") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B6")
 	field (DESC,"1=temperature external sensors too high")
-	field (FLNK,"$(HOST):vmeSysfail.PROC") 
+	field (FLNK,"$(HOST):vmeSysfail.PROC")
+        field (ZNAM,"OK")
+        field (ONAM,"FAIL")
 }
 record (bi,"$(HOST):vmeSysfail") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B7")
 	field (DESC,"1=VME SYSFAIL signal is active")
-	field (FLNK,"$(HOST):plugAndPlayIncompatible.PROC") 
+	field (FLNK,"$(HOST):plugAndPlayIncompatible.PROC")
+        field (ZNAM,"OK")
+        field (ONAM,"FAIL")
 }
 record (bi,"$(HOST):plugAndPlayIncompatible") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B8")
 	field (DESC,"1=wrong power supply and rack connected")
+	field (FLNK,"$(HOST):anyFailure.PROC")
 }
+
 #Output channels (4 on Hall D  models: 1, 2, 4, 6)
 record (longin,"$(HOST):outNumber")
 {

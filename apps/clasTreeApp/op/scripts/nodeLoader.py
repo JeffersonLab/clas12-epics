@@ -22,6 +22,7 @@ ElementRecordFlags     = []
 NodeRecordNames        = []
 NodeRecordTypes        = []
 ElementRange           = []
+NodeNames              = []
 
 def readTree():
     #Fill the dictionaries.
@@ -46,6 +47,7 @@ def readTree():
                 ind = line.split()[2]                 #get the index
                 #print node, ind
                 NodeIndex[node] = ind                 #fill the dictionary
+                NodeNames.append(node)                #and list of names
                 
             elif "append" in line:                    #This kind of line: ElementNames.append('HVDC1,HV,HVDC2,.....')
                 l = line.split(".")[0]                    #get the listname

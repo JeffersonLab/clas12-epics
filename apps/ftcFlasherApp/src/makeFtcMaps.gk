@@ -1,0 +1,71 @@
+#!/bin/awk
+BEGIN{
+    for(n=0;n<336;n++){
+	id[n]=999;
+	x[n]=999;
+	y[n]=999;
+    }
+    for(n=0;n<500;n++){
+	chan[n]=999;
+    }
+    getline
+}
+{
+    id[$1]=int($4);
+    x[$1]=int($2);
+    y[$1]=int($3);
+    chan[$4]=int($1);
+    #print $1,$2,$3,$4, "Arr", $1, x[$1],y[$1],id[$1]
+}
+
+END{
+    print "#Paste these lines into initFtcFlasher.sh"
+    printf "caput -a ${Prefix}:X_TABLE 336"
+    for(n=0;n<336;n++){
+	printf " %d",x[n];
+    }
+    print""
+    printf "caput -a ${Prefix}:Y_TABLE 336"
+    for(n=0;n<336;n++){
+	printf " %d",y[n];
+    }
+    print""
+    printf "caput -a ${Prefix}:ID_TABLE 336"
+    for(n=0;n<336;n++){
+	printf " %d",id[n];
+    }
+    print""
+    printf "caput -a ${Prefix}:NEXT_TABLE 336"
+    for(n=0;n<336;n++){
+	tnid=id[n]+1;
+	if(id[n]==999)tnid=id[n+1]+1
+	
+	#print "this=",id[n];	
+	for(nid=tnid;nid<480;nid++){
+	    #print "next=",nid
+	    if(chan[nid]!=999) break;
+	}
+	if(nid>475) nid=8;
+	printf " %d", chan[nid];
+    }
+    print"";
+    
+    printf "caput -a ${Prefix}:PREV_TABLE 336 3 3 3"
+    for(n=3;n<336;n++){
+	tnid=id[n]-1;
+	if(id[n]==999)tnid=id[n-1]-1
+	
+	#print "this=",id[n];	
+	for(nid=tnid;nid>1;nid--){
+	    #print "next=",nid
+	    if(chan[nid]!=999) break;
+	}
+	if(nid<8) nid=475;
+	printf " %d", chan[nid];
+    }
+    print"";
+    
+
+
+
+}

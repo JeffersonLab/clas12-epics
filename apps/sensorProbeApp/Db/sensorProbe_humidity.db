@@ -1,0 +1,49 @@
+#
+# sensorProbe_humidity.db
+#
+# AKCP sensorProbe - Humidity Sensor
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   2015-09-04
+#
+
+record(stringin, “$(P)$(R)$(CHAN)HumidityDesc”) {
+    field(DTYP, "Snmp")
+    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN)")
+}
+
+record(stringout, “$(P)$(R)$(CHAN)HumidityDesc”) {
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) s”)
+}
+
+record(ai, “$(P)$(R)$(CHAN)Humidity”) {
+    field(DTYP, "Snmp")
+    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDegree.$(CHAN)")
+    field(EGU, “%”)
+    field(SCAN, "10 second")
+}
+
+record(bi, “$(P)$(R)$(CHAN)HumidityOnline”) {
+    field(DESC, “online/offline status”)
+    field(DTYP, "Snmp")
+    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOnline.$(CHAN)")
+}
+
+record(bo, “$(P)$(R)$(CHAN)HumidityOnlineSet”) {
+    field(DESC, “online/offline status”)
+    field(DTYP, "Snmp")
+    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempGoOnline.$(CHAN) i”)
+}
+
+record(ai, “$(P)$(R)$(CHAN)HumidityOffset”) {
+    field(DTYP, "Snmp")
+    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN)”)
+
+}
+
+record(ao, “$(P)$(R)$(CHAN)HumidityOffset”) {
+    field(DTYP, "Snmp")
+    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN) i”)
+
+}

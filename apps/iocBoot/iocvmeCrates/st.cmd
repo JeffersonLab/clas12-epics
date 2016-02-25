@@ -19,7 +19,8 @@ cd "${TOP}"
 dbLoadDatabase ("dbd/vmeCrates.dbd")
 vmeCrates_registerRecordDeviceDriver(pdbbase)
 
-devSnmpSetParam(DebugLevel,10)
+#devSnmpSetParam(DebugLevel,10)
+devSnmpSetParam(DebugLevel,0)
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 

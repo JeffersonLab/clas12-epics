@@ -37,6 +37,10 @@ static HV Demand[MAX_HVPS];
 HV Measure[MAX_HVPS];
 int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before reading by driver
 
+// we're going to restart the connection if we hit this error too many times consecutively:
+static const int MAXCFEDOWNERR=100;
+int NCFEDOWNERR[MAX_HVPS];
+
 /* board-dependent parameter sets */
 
 #define V0Set   0
@@ -56,6 +60,7 @@ int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before 
 #define TripExt 14
 #define PDwn  15   // my: PDwn replaced Tdrift
 
+static int  nA1536param = 16;
 static int  nA1520param = 16; // my: 16
 static int  nA1535param = 16;
 
@@ -68,6 +73,9 @@ static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
 static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
+static char A1536param[MAX_PARAM][MAX_CAEN_NAME] = {
+                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
+                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
 ///----------------- for HV parameters finding ------------------- 
 
 #include <linux/limits.h>
@@ -194,11 +202,73 @@ if(!strcmp(name,"B_HV009"))
 fclose(fps);
 */
 ///--------------------------------
+
+/*
+     int ret1,ret2;
+     int retA=CAENHVGetSysProp(Measure[id].name,"FanStat",&ret1);
+     int retB=CAENHVGetSysProp(Measure[id].name,"HvPwSM",&ret2);
+     printf("NABO2:  FAN=%d/%d PW=%d/%d\n",ret1,retA,ret2,retB);
+
+     // Note:  
+     //    FanStat returned 0/-1
+    //     HvPwSM  returned 976304689/0 
+
+*/
+/*
+   // Note: THIS WORKED!
+          if (++NCFEDOWNERR[id] > 1000)//MAXCFEDOWNERR)
+          {
+              NCFEDOWNERR[id]=0;
+              printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
+              sy1527Stop(id);
+              
+              if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+              {
+                  printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 30s and RETRYING.\n");
+                  sleep(35);
+                  if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+                  {
+                      printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
+                      exit(1);
+                  }
+              }
+              sy1527GetMap(id);
+              sy1527PrintMap(id);
+          }
+*/
     if(ret != CAENHV_OK)
     {
-     printf("CAENHVGetChParam error: %s (num. %d) id=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
+     printf("CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
       mainframes_disconnect[i10]=1; /// my_n: hbeat
     ///  mainframes[i10]=-1;
+
+
+      // restart the connection:
+      if (ret==5)
+      {
+          if (++NCFEDOWNERR[id] > MAXCFEDOWNERR)
+          {
+              printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
+              sy1527Stop(id);
+              sleep(10);
+              
+              if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+              {
+                  printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 45s and RETRYING.\n");
+                  sleep(45);
+                  if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+                  {
+                      printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
+                      exit(1);
+                  }
+              }
+              sy1527GetMap(id);
+              sy1527PrintMap(id);
+          }
+      }
+      // only count consecutive errors:
+      else NCFEDOWNERR[id]=0;
+    
     }
     else
     {
@@ -674,6 +744,33 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
+        else if( !strcmp(Measure[id].board[i].modelname,"A1536HDM")) // my: was A1520
+        {
+          printf("---> found board %s\n",Measure[id].board[i].modelname);
+          Measure[id].board[i].nparams = nA1536param;
+          Demand[id].board[i].nparams = nA1536param;
+          for(j=0; j<Measure[id].board[i].nparams; j++)
+          {
+            strcpy(Measure[id].board[i].parnames[j],A1536param[j]);
+            strcpy(Demand[id].board[i].parnames[j],A1536param[j]);
+
+            strcpy(ParName,Measure[id].board[i].parnames[j]);
+            ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
+            if(ret != CAENHV_OK)
+            {
+              printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
+                     CAENHVGetError(name),ret,ParName);
+              Measure[id].board[i].nchannels = 0;
+              Demand[id].board[i].nchannels = 0;
+	          return(CAENHV_SYSERR);
+            }
+            else
+            {
+              Measure[id].board[i].partypes[j] = tipo;
+              Demand[id].board[i].partypes[j] = tipo;
+            }
+          }
+        }
         else
         {
           printf("Unknown board =%s\n",Measure[id].board[i].modelname);
@@ -910,6 +1007,10 @@ sy1527Start(unsigned id_nowused, char *ip_address)
 
   printf("my: id_index=%d id=%d name=%s", id, ret, name );
   printf("\nCAENHVInitSystem error: %s (num. %d)\n\n", CAENHVGetError(name),ret);
+
+  NCFEDOWNERR[id]=0;
+
+  printf("\n\nRUNNING MODIFIED FOR CFE FIX.!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 
   if(ret == CAENHV_OK)
   {

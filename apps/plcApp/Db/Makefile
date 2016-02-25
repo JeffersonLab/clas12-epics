@@ -36,14 +36,10 @@ include $(TOP)/configure/CONFIG
 #DB += Solenoid_PLCout.db
 
 # Torus
+DB  += torus_mps.db
+REQ += torus_mps_settings.req
 DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
-#DB += Torus_PLCarr.db
-#DB += Torus_PLCin.db
-#DB += Torus_PLCout.db
-
-#REQ += HPS_SVT_Interlock_v5_PLC.req  # generated file
-#REQ += HPS_SVT_Interlocks.req        # nested calls to generated file (inputs/outputs)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

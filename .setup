@@ -19,7 +19,11 @@ endif
 
 ## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
 set rhel_vers = `awk '{print substr($7,0,1)}' /etc/redhat-release`
+set cent_vers = `awk '{print substr($3,0,1)}' /etc/redhat-release`
 if ( $rhel_vers == "5" ) then
+  setenv EPICS_VER 3.14.12.3
+  set RHEL_VER = "_RHEL5"
+else if ( $cent_vers == "5" ) then
   setenv EPICS_VER 3.14.12.3
   set RHEL_VER = "_RHEL5"
 else if ( $rhel_vers == "6" ) then
@@ -34,7 +38,8 @@ endif
 setenv EPICS_BASE /usr/clas12/R$EPICS_VER/base$RHEL_VER
 setenv EPICS_EXTENSIONS /usr/clas12/R$EPICS_VER/extensions$RHEL_VER
 
-setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs
+# sergey: added /usr/local/share/snmp/mibs, it exist on VME controllers and /usr/share/snmp/mibs exist on RHELs
+setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 setenv MIBS ALL
 
 # set EPICS host architecture

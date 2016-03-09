@@ -41,6 +41,9 @@ REQ += torus_mps_settings.req
 DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
 
+# Fast DAQ - Quench Detection
+DB  += torus_qd.db
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

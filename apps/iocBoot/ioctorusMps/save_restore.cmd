@@ -1,6 +1,5 @@
   ## General settings
   save_restoreSet_status_prefix("$(IOC):")
-  
   save_restoreSet_Debug(0)
   save_restoreSet_IncompleteSetsOk(1)
   save_restoreSet_DatedBackupFiles(1)

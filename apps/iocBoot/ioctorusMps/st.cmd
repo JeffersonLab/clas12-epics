@@ -1,26 +1,21 @@
-#!../../bin/linux-x86/plc2epics
-
+#!../../bin/linux-x86_64/plc2epics
+############################################################################
 < envPaths
-
-# This is a prefix for all PVs on this IOC in case we want a second instance
-epicsEnvSet("PLC","TORUS_PLC")
-
-cd ${TOP}
+############################################################################
+cd "${TOP}"
 
 ## Register all support components
 dbLoadDatabase("dbd/plc2epics.dbd")
 plc2epics_registerRecordDeviceDriver(pdbbase)
 
-# Initialize EtherIP driver, define PLCs
-#EIP_buffer_limit(450)
+## Initialize EtherIP driver, define PLCs
 drvEtherIP_init()
-#drvEtherIP_define_PLC("${PLC}", "129.57.36.159", 0)
-drvEtherIP_define_PLC("${PLC}", "129.57.96.15", 0)
+drvEtherIP_define_PLC("TORUS_PLC", "129.57.96.15", 0)
 
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/torus_mps.db","P=TORUS:,R=MPS:,PLCID=${PLC}")
+dbLoadRecords("db/torus_mps.db","P=TORUS:,R=MPS:,PLCID=TORUS_PLC")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -5,43 +5,33 @@
 # Date:   Feb 2015
 #
 
-record(stringout, "$(P)$(R)man_cmd") {
-    field(DESC, "Manual Command")
-    field(DTYP, "EtherIP")
-    field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Man_Cmd")
-    field(FLNK, "$(P)$(R)man_cmd_resp")
-}
-record(stringin, "$(P)$(R)man_cmd") {
-    field(DESC, "Manual Command")
-    field(DTYP, "EtherIP")
-    field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Man_Cmd")
-    field(FLNK, "$(P)$(R)man_cmd_resp")
-}
-
-#record(waveform, "$(P)$(R)adc_vals") {
-#    field(DESC, "ADC array")
+#record(stringout, "$(P)$(R)ManCmd") {
+#    field(DESC, "Manual Command")
 #    field(DTYP, "EtherIP")
-#    field(NELM, "32")
-#    field(FTVL, "DOUBLE")
 #    field(SCAN, "1 second")
-#    field(INP,  "@$(PLCID) Torus_MPS.ADC_Values")
+#    field(OUT,  "@$(PLCID) Torus_MPS.Man_Cmd")
+#    field(FLNK, "$(P)$(R)ManCmdResp")
+#}
+#record(stringin, "$(P)$(R)ManCmdResp") {
+#    field(DESC, "Manual Command")
+#    field(DTYP, "EtherIP")
+#    field(SCAN, "1 second")
+#    field(INP,  "@$(PLCID) Torus_MPS.Man_Response")
 #}
 
-record(waveform, "$(P)$(R)adc_scales") {
+record(waveform, "$(P)$(R)ADCScales") {
     field(DESC, "ADC scale factor array")
     field(DTYP, "EtherIP")
     field(NELM, "32")
-    field(FTVL, "LONG")
+    field(FTVL, "DOUBLE")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.ADC_Values")
 }
 
-record(ao, "$(P)$(R)slew") {
+record(ao, "$(P)$(R)Slew") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Slew_fromHMI")
+    field(OUT,  "@$(PLCID) Torus_MPS.Slew_fromHMI")
     field(EGU,  "mA/s")
     field(PREC, "0")
 }
@@ -49,12 +39,12 @@ record(ao, "$(P)$(R)slew") {
 record(ao, "$(P)$(R)Iset") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.I_fromHMI")
+    field(OUT,  "@$(PLCID) Torus_MPS.I_fromHMI")
     field(EGU,  "A")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)I") {
+record(ai, "$(P)$(R)I_MPS") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.I_fromMPS")
@@ -70,7 +60,7 @@ record(ai, "$(P)$(R)I_ZFCT") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)Iset_rdbk") {
+record(ai, "$(P)$(R)IsetRdbk") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.I_setting")
@@ -78,7 +68,7 @@ record(ai, "$(P)$(R)Iset_rdbk") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)Imax") {
+record(ai, "$(P)$(R)ImaxHW") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.I_Capacity")
@@ -86,15 +76,15 @@ record(ai, "$(P)$(R)Imax") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)slew_rdbk") {
+record(ai, "$(P)$(R)SlewRdbk") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.SlewRate")
-    field(EGU,  "A")
-    field(PREC, "2")
+    field(EGU,  "mA/s")
+    field(PREC, "0")
 }
 
-record(ai, "$(P)$(R)Imax_sftlmt") {
+record(ai, "$(P)$(R)ImaxSW") {
     field(DESC, "User current limit")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
@@ -103,47 +93,84 @@ record(ai, "$(P)$(R)Imax_sftlmt") {
     field(PREC, "2")
 }
 
-record(waveform, "$(P)$(R)status") {
-    field(DESC, "Status array")
+record(mbbiDirect, "$(P)$(R)Status") {
     field(DTYP, "EtherIP")
-    field(NELM, "32")
-    field(FTVL, "LONG")
+    field(NOBT, "16")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Status1_BOOLS")
+    field(INP,  "@$(PLCID) Torus_MPS.Status1_BOOLS[0]")
 }
 
-record(waveform, "$(P)$(R)status_trips") {
+record(mbbiDirect, "$(P)$(R)Status2") {
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Status1_BOOLS[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)StatusTrips") {
     field(DESC, "Status array, 1st trip")
     field(DTYP, "EtherIP")
-    field(NELM, "32")
-    field(FTVL, "LONG")
+    field(NOBT, "16")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Status1_1st_BOOLS")
+    field(INP,  "@$(PLCID) Torus_MPS.Status1_1st_BOOLS[0]")
 }
 
-record(waveform, "$(P)$(R)active_flags") {
+record(mbbiDirect, "$(P)$(R)StatusTrips2") {
+    field(DESC, "Status array, 1st trip")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Status1_1st_BOOLS[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags") {
     field(DESC, "Flags array")
     field(DTYP, "EtherIP")
-    field(NELM, "64")
-    field(FTVL, "LONG")
+    field(NOBT, "16")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Torus_MPS.Active_Flags")
+    field(INP,  "@$(PLCID) Torus_MPS.Active_Flags[0]")
 }
 
-record(bi, "$(P)$(R)comm_error") {
+record(mbbiDirect, "$(P)$(R)ActiveFlags2") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Active_Flags[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags3") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Active_Flags[32]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags4") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Active_Flags[48]")
+}
+
+record(bi, "$(P)$(R)CommError") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.CommError")
+    field(ZNAM, "OK")
+    field(ONAM, "ERROR")
     field(ZSV,  "NO_ALARM")
-    field(OSV, "MAJOR")
+    field(OSV,  "MAJOR")
 }
 
-record(bo, "$(P)$(R)comm_reset") {
+record(bo, "$(P)$(R)CommReset") {
     field(DTYP, "EtherIP")
-    field(INP,  "@$(PLCID) Torus_MPS.Reset_sw")
+    field(OUT,  "@$(PLCID) Torus_MPS.Reset_sw")
 }
 
-record(bi, "$(P)$(R)mode") {
+record(bi, "$(P)$(R)Mode") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.LocalFlag")
@@ -151,14 +178,14 @@ record(bi, "$(P)$(R)mode") {
     field(ONAM, "LOCAL")
 }
 
-record(bo, "$(P)$(R)mode_set") {
+record(bo, "$(P)$(R)ModeSet") {
     field(DTYP, "EtherIP")
     field(OUT,  "@$(PLCID) Torus_MPS.LocalFlag")
-    field(ZNAM, "REMOTE")
-    field(ONAM, "LOCAL")
+    field(ZNAM, "Remote")
+    field(ONAM, "Local")
 }
 
-record(bi, "$(P)$(R)polarity") {
+record(bi, "$(P)$(R)Polarity") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.Polarity")
@@ -166,14 +193,36 @@ record(bi, "$(P)$(R)polarity") {
     field(ONAM, "POSITIVE")
 }
 
-record(bo, "$(P)$(R)contactor_set") {
+record(bo, "$(P)$(R)OnOffSet") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus.MPS.Contactor_SW")
-    field(ZNAM, "")
-    field(ONAM, "")
+    field(OUT,  "@$(PLCID) Torus_MPS.Contactor_SW")
+    field(ZNAM, "Turn Off")
+    field(ONAM, "Turn On")
 }
 
-record(bo, "$(P)$(R)intlock_reset") {
+record(bo, "$(P)$(R)IntlockReset") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus.MPS.interlockReset_SW")
+    field(OUT,  "@$(PLCID) Torus_MPS.InterlockReset_SW")
+}
+
+record(ai, "$(P)$(R)V") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.V_fromMPS")
+    field(EGU,  "V")
+    field(PREC, "2")
+}
+
+# 0=On, 1=Off - matches Danfysik logic...
+record(bi, "$(P)$(R)OnOff") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Main_Power_Status")
+    field(ZNAM, "ON")
+    field(ONAM, "OFF")
+}
+
+record(bo, "$(P)$(R)FastDump") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) EPICS_Fast_Dump_sw")
 }

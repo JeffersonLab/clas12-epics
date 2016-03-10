@@ -8,8 +8,10 @@
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
 export PATH=$JAVA_HOME/bin:$PATH
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# path hold generated workspaces
+tmp_path=/tmp/CSS-Workspaces
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 share=$DIR/../css_share
 
 plugin_profile=$share/common/prefs/plugin_customization.ini
@@ -17,8 +19,11 @@ plugin_profile=$share/common/prefs/plugin_customization.ini
 workspace=$share/common/workspace
 
 # generate a temporary css workspace:
-mkdir -p /tmp/CSS-Workspaces
-wsp=`mktemp -d -p /tmp/CSS-Workspaces`
+#   Note: needs rw from all groups onliners, clas, etc.
+if [[ ! -e $tmp_path ]]; then
+    mkdir -p $tmp_path -m 777
+fi
+wsp=`mktemp -d -p $tmp_path`
 cp -rf $workspace/*    $wsp >& /dev/null
 cp -rf $workspace/.*   $wsp >& /dev/null
 cp -rf $plugin_profile $wsp
@@ -28,7 +33,4 @@ css -data $wsp \
     -pluginCustomization $wsp/plugin_customization.ini \
     -share_link $share=/CLAS12_Share \
     -nosplash
-
-# delete the wsp workspace:
-#rm -rf $wsp
 

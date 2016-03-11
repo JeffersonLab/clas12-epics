@@ -18,7 +18,7 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/cRioTest.db",         "P=B_SVT_,R=N2_")
 dbLoadRecords("db/gas_cRIO_DC.db",      "P=B_DET_,R=DC_")
 dbLoadRecords("db/gas_cRIO_FTC.db",     "P=B_DET_,R=FTC_")
-dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_,R=HTCC_")
+# dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_,R=HTCC_")
 dbLoadRecords("db/gas_cRIO_LTCC.db",    "P=B_DET_,R=LTCC_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_,SEC=S1_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_,SEC=S2_")
@@ -27,7 +27,7 @@ dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_,SEC=S4_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_,SEC=S5_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_,SEC=S6_")
 dbLoadRecords("db/gas_cRIO_RICH.db",    "P=B_DET_,R=RICH_")
-dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_,R=SVT_")
+# dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_,R=SVT_")
 
 cd "${TOP}/iocBoot/${IOC}"
 

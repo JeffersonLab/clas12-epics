@@ -10,9 +10,9 @@ def exit(text):
   mess.set_markup(text)
   mess.run()
   mess.destroy()
-#  sys.exit(text)
+  sys.exit(text)
 
-DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV']
+DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV']
 FIELDS=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 DATADIR='/usr/clas12/DATA/burt'
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
@@ -55,6 +55,11 @@ def getChannels(det,sector=None):
     for qq in range(4):
       for gg in range(9):
         prefixes.append('B_DET_FTC_HV_Q%dG%d'%(qq+1,gg+1))
+  elif det=='LTCC_HV':
+    for ss in sectors:
+      for lr in ['L','R']:
+        for ii in range(18):
+          prefixes.append('B_DET_LTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
   return prefixes
 
 def printPVs(det,sector=None):

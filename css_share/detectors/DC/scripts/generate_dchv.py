@@ -137,6 +137,7 @@ TAIL='''
 SWIRES=['01-08','09-16','17-24','25-32','33-48','49-64','65-80','81-112']
 FWIRES=['01-08','09-16','17-24','25-32','33-48','49-64','65-80','81-112']
 GWIRES=['01-32','33-112']
+SLAYERS={1:[1,2],2:[3,4],3:[5,6]}
 WIRES={'S':SWIRES,'F':FWIRES,'G':GWIRES}
 WIDTH=10
 HEIGHT=20
@@ -145,7 +146,8 @@ GAP=2
 def genSector(sector,x0,y0):
   xx=x0
   for reg in [1,2,3]:
-    for slay in [1,2]:
+    for slay in SLAYERS[reg]:
+    #for slay in [1,2]:
       for sfg in ['S','F','G']:
         if sector>3:  yy=y0
         else:

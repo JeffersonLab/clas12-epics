@@ -67,6 +67,180 @@ for(var index = 0; index<24; index++){
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
   <actions hook="false" hook_all="false" />
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+    <toggle_button>true</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>MPS Power Switch</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules>
+      <rule name="visible" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+      <rule name="disable" prop_id="enabled" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+    </rules>
+    <effect_3d>true</effect_3d>
+    <bit>-1</bit>
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-7285</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <show_confirm_dialog>1</show_confirm_dialog>
+    <password></password>
+    <pv_value />
+    <released_action_index>0</released_action_index>
+    <square_button>true</square_button>
+    <show_led>false</show_led>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>55</height>
+    <on_label>Turning OFF</on_label>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)OnOffSet</pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Boolean Button</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <confirm_message>Are your sure you want to do this?</confirm_message>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>150</width>
+    <x>25</x>
+    <name>MPS Power OFF_1</name>
+    <data_type>0</data_type>
+    <y>50</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <show_boolean_label>true</show_boolean_label>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+    <off_label>Turn OFF MPS</off_label>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+    <toggle_button>true</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>MPS Power Switch</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules>
+      <rule name="visible" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>false</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+      <rule name="disable" prop_id="enabled" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>false</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+    </rules>
+    <effect_3d>true</effect_3d>
+    <bit>-1</bit>
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-7284</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <show_confirm_dialog>1</show_confirm_dialog>
+    <password></password>
+    <pv_value />
+    <released_action_index>0</released_action_index>
+    <square_button>true</square_button>
+    <show_led>false</show_led>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>55</height>
+    <on_label>Turning ON</on_label>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)OnOffSet</pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Boolean Button</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <confirm_message>Are your sure you want to do this?</confirm_message>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>150</width>
+    <x>25</x>
+    <name>MPS Power ON_1</name>
+    <data_type>0</data_type>
+    <y>50</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <show_boolean_label>true</show_boolean_label>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+    <off_label>Turn ON MPS</off_label>
+  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>14</border_style>
     <tooltip></tooltip>
@@ -918,113 +1092,6 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.radioBox" version="1.0.0">
-    <border_style>13</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-4b759146:152f9e60eab:-4594</wuid>
-    <selected_color>
-      <color red="0" green="0" blue="0" />
-    </selected_color>
-    <horizontal>false</horizontal>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <height>86</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <items_from_pv>true</items_from_pv>
-    <visible>true</visible>
-    <pv_name>$(P)ModeSet</pv_name>
-    <border_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </border_color>
-    <widget_type>Radio Box</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
-    </background_color>
-    <width>246</width>
-    <x>260</x>
-    <name>Mode</name>
-    <y>365</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
-    <toggle_button>true</toggle_button>
-    <border_style>14</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <effect_3d>true</effect_3d>
-    <bit>-1</bit>
-    <enabled>true</enabled>
-    <wuid>-4b759146:152f9e60eab:-440f</wuid>
-    <on_color>
-      <color red="0" green="255" blue="0" />
-    </on_color>
-    <show_confirm_dialog>1</show_confirm_dialog>
-    <password></password>
-    <pv_value />
-    <released_action_index>0</released_action_index>
-    <square_button>true</square_button>
-    <show_led>true</show_led>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>50</height>
-    <on_label>On</on_label>
-    <border_width>2</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name>$(P)OnOffSet</pv_name>
-    <border_color>
-      <color red="120" green="120" blue="120" />
-    </border_color>
-    <widget_type>Boolean Button</widget_type>
-    <off_color>
-      <color red="0" green="100" blue="0" />
-    </off_color>
-    <confirm_message>Are your sure you want to do this?</confirm_message>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="Button" red="240" green="240" blue="240" />
-    </background_color>
-    <width>125</width>
-    <x>35</x>
-    <name>Choice Button</name>
-    <data_type>0</data_type>
-    <y>55</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_boolean_label>true</show_boolean_label>
-    <font>
-      <opifont.name fontName="Cantarell" height="13" style="1">Header 3</opifont.name>
-    </font>
-    <off_label>Off</off_label>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -1065,9 +1132,9 @@ $(pv_value)</tooltip>
       <color name="Read_Background" red="77" green="77" blue="77" />
     </background_color>
     <width>100</width>
-    <x>389</x>
+    <x>395</x>
     <name>_2</name>
-    <y>395</y>
+    <y>415</y>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -1207,8 +1274,8 @@ $(pv_value)</tooltip>
     <background_color>
       <color name="Read_Background" red="77" green="77" blue="77" />
     </background_color>
-    <width>40</width>
-    <x>120</x>
+    <width>65</width>
+    <x>110</x>
     <name>Text Update_66</name>
     <y>110</y>
     <foreground_color>
@@ -1248,7 +1315,7 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>88</width>
-    <x>35</x>
+    <x>25</x>
     <name>Label_138</name>
     <y>110</y>
     <foreground_color>
@@ -1309,7 +1376,7 @@ $(pv_value)</tooltip>
     <x>270</x>
     <name>Choice Button_1</name>
     <data_type>0</data_type>
-    <y>275</y>
+    <y>285</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -1370,7 +1437,7 @@ $(pv_value)</tooltip>
     <x>270</x>
     <name>Choice Button_2</name>
     <data_type>0</data_type>
-    <y>305</y>
+    <y>315</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -1431,7 +1498,7 @@ $(pv_value)</tooltip>
     <x>270</x>
     <name>Choice Button_3</name>
     <data_type>0</data_type>
-    <y>335</y>
+    <y>345</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -1547,7 +1614,7 @@ $(pv_value)</tooltip>
       <enabled>true</enabled>
       <wuid>-d9a74b1:1535801a551:-77a5</wuid>
       <on_color>
-        <color name="On" red="0" green="255" blue="0" />
+        <color name="Off" red="60" green="100" blue="60" />
       </on_color>
       <horizontal>false</horizontal>
       <pv_value />
@@ -1572,7 +1639,7 @@ $(pv_value)</tooltip>
       </label>
       <widget_type>Byte Monitor</widget_type>
       <off_color>
-        <color name="Off" red="60" green="100" blue="60" />
+        <color name="On" red="0" green="255" blue="0" />
       </off_color>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
@@ -1624,7 +1691,7 @@ $(pv_value)</tooltip>
       </border_color>
       <bitReverse>true</bitReverse>
       <label>
-        <s>Polarity (-)</s>
+        <s>Polarity (+)</s>
       </label>
       <widget_type>Byte Monitor</widget_type>
       <off_color>
@@ -1680,7 +1747,7 @@ $(pv_value)</tooltip>
       </border_color>
       <bitReverse>true</bitReverse>
       <label>
-        <s>Polarity (+)</s>
+        <s>Polarity (-)</s>
       </label>
       <widget_type>Byte Monitor</widget_type>
       <off_color>
@@ -2880,5 +2947,219 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Cantarell" height="9" style="0">Fine Print</opifont.name>
       </font>
     </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+    <toggle_button>true</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip></tooltip>
+    <push_action_index>0</push_action_index>
+    <rules>
+      <rule name="visible" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Mode</pv>
+      </rule>
+      <rule name="disable" prop_id="enabled" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Mode</pv>
+      </rule>
+    </rules>
+    <effect_3d>true</effect_3d>
+    <bit>-1</bit>
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-6fca</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <show_confirm_dialog>0</show_confirm_dialog>
+    <password></password>
+    <pv_value />
+    <released_action_index>0</released_action_index>
+    <square_button>true</square_button>
+    <show_led>false</show_led>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>25</height>
+    <on_label>Setting...</on_label>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)ModeSet</pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Boolean Button</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <confirm_message></confirm_message>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>120</width>
+    <x>270</x>
+    <name>MPS Mode</name>
+    <data_type>0</data_type>
+    <y>415</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <show_boolean_label>true</show_boolean_label>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+    <off_label>Set to Local</off_label>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+    <toggle_button>true</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip></tooltip>
+    <push_action_index>0</push_action_index>
+    <rules>
+      <rule name="visible" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>false</value>
+        </exp>
+        <pv trig="true">$(P)Mode</pv>
+      </rule>
+      <rule name="disable" prop_id="enabled" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>false</value>
+        </exp>
+        <pv trig="true">$(P)Mode</pv>
+      </rule>
+    </rules>
+    <effect_3d>true</effect_3d>
+    <bit>-1</bit>
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-6fc9</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <show_confirm_dialog>0</show_confirm_dialog>
+    <password></password>
+    <pv_value />
+    <released_action_index>0</released_action_index>
+    <square_button>true</square_button>
+    <show_led>false</show_led>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>25</height>
+    <on_label>Setting...</on_label>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)ModeSet</pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Boolean Button</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <confirm_message></confirm_message>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>120</width>
+    <x>270</x>
+    <name>MPS Mode</name>
+    <data_type>0</data_type>
+    <y>415</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <show_boolean_label>true</show_boolean_label>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+    <off_label>Set to Remote</off_label>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-6f64</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>Local/Remote</text>
+    <scripts />
+    <height>25</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>false</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>100</width>
+    <x>270</x>
+    <name>Label_139</name>
+    <y>391</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="1">Default Bold</opifont.name>
+    </font>
   </widget>
 </display>

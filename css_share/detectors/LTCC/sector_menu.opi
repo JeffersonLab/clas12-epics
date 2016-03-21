@@ -37,8 +37,7 @@
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <actions_from_pv>false</actions_from_pv>
     <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
+    <tooltip>Sector #$(SECTOR) Menu</tooltip>
     <rules />
     <enabled>true</enabled>
     <wuid>7cea7ca4:1537c8a0bab:-71c7</wuid>
@@ -62,7 +61,7 @@ $(pv_value)</tooltip>
     <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
+      <color name="Read_Background" red="77" green="77" blue="77" />
     </background_color>
     <width>25</width>
     <x>0</x>
@@ -78,21 +77,21 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Channel Controls</description>
+        <description>Sector #$(SECTOR) - Controls</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/LTCC/scripts/ltcc_off.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Turn Sector OFF</description>
+        <description>Sector #$(SECTOR) - All OFF</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/LTCC/scripts/ltcc_on.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Turn Sector ON</description>
+        <description>Sector #$(SECTOR) - All ON</description>
       </action>
     </actions>
     <font>

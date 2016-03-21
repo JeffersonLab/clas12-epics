@@ -137,8 +137,9 @@ $(pv_value)</tooltip>
 D2R=4*math.atan(1)/180
 globoff=[400,500]
 off=0.1
-scale=20
-slope = 0.57735
+scale=16
+
+slope=0.57735
 
 def transformPoint(pt,xoff,yoff,angle):
   xx,yy=pt[0],pt[1]

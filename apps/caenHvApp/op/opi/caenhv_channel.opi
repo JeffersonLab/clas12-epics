@@ -672,7 +672,21 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <push_action_index>0</push_action_index>
-    <rules />
+    <rules>
+      <rule name="Rule" prop_id="foreground_color" out_exp="false">
+        <exp bool_exp="pv0==0">
+          <value>
+            <color name="Read_Foreground" red="255" green="255" blue="255" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0==1">
+          <value>
+            <color name="Write_Foreground" red="0" green="0" blue="0" />
+          </value>
+        </exp>
+        <pv trig="true">$(P):pwonoff</pv>
+      </rule>
+    </rules>
     <bit>-1</bit>
     <show_confirm_dialog>0</show_confirm_dialog>
     <password></password>
@@ -717,7 +731,7 @@ $(pv_value)</tooltip>
     <data_type>0</data_type>
     <y>0</y>
     <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <stretch_to_fit>true</stretch_to_fit>
     <font>

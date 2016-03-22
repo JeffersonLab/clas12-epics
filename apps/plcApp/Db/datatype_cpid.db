@@ -1,0 +1,233 @@
+#
+# datatype_cpid.db - (PLC cPID Record)
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Mar 2016
+#
+
+#record(stringout, "$(P)$(R)$(TAG)NAME") {
+#    field(DESC, "Name of controlled value")
+#    field(DTYP, "EtherIP")
+#    field(OUT,  "@$(PLCID) $(TAG).CvalName")
+#}
+
+record(ai, "$(P)$(R)$(TAG):CVAL") {
+    field(DESC, "controlled value")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).CVAL")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):CVAL:SET") {
+    field(DESC, "controlled value")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).CVAL S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):OVAL") {
+    field(DESC, "output value")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).OVAL")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):OVAL:SET") {
+    field(DESC, "output value")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).OVAL S 1")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):MIN") {
+    field(DESC, "min output value")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).MIN")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):MIN:SET") {
+    field(DESC, "min output value")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).MIN S 1")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):MAX") {
+    field(DESC, "max output value")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).MAX")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):MAX:SET") {
+    field(DESC, "max output value")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).MAX S 1")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):DMIN") {
+    field(DESC, "min output change")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).DMIN")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):DMIN:SET") {
+    field(DESC, "min output change")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).DMIN S 1")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):DMAX") {
+    field(DESC, "max output change")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).DMAX")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):DMAX:SET") {
+    field(DESC, "max output change")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).DMAX S 1")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):VAL") {
+    field(DESC, "PID Setpoint")
+    field(INP,  "@$(PLCID) $(TAG).VAL")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):VAL:SET") {
+    field(DESC, "PID Setpoint")
+    field(OUT,  "@$(PLCID) $(TAG).VAL S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):KP") {
+    field(DESC, "proportional gain")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).KP")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):KP:SET") {
+    field(DESC, "proportional gain")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).KP S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):KI") {
+    field(DESC, "integral gain")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).KI")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):KI:SET") {
+    field(DESC, "integral gain")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).KI S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):KD") {
+    field(DESC, "differential gain")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).KD")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):KD:SET") {
+    field(DESC, "differential gain")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).KD S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):MDT") {
+    field(DESC, "PID sample time")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).MDt")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):MDT:SET") {
+    field(DESC, "PID sample time")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).MDt S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(stringin, "$(P)$(R)$(TAG):MODE") {
+    field(DESC, "manual/normal")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).MODE_String")
+#    field(ZNAM, "Normal")
+#    field(ONAM, "Manual")
+    field(SCAN, "1 second")
+}
+
+#record(bo, "$(P)$(R)$(TAG):MODE:SET") {
+#    field(DESC, "manual/normal")
+#    field(DTYP, "EtherIP")
+#    field(OUT,  "@$(PLCID) $(TAG).MODE_String S 1")
+#    field(ZNAM, "Normal")
+#    field(ONAM, "Manual")
+#    field(SCAN, "Passive")
+#}
+
+record(bi, "$(P)$(R)$(TAG):MMOD") {
+    field(DESC, "manual mode request")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).mmod")
+    field(ZNAM, "Normal")
+    field(ONAM, "Manual")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)$(TAG):MMOD:SET") {
+    field(DESC, "manual mode request")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).mmod S 1")
+    field(ZNAM, "NORMAL")
+    field(ONAM, "MANUAL")
+    field(SCAN, "Passive")
+}
+

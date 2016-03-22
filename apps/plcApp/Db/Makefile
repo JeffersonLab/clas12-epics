@@ -12,37 +12,22 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install)
 # databases, templates, substitutions like this
 
-# HPS
-#DB += HPS_SVT_Interlock_v5_PLCarr.db 
-#DB += HPS_SVT_Interlock_v5_PLCin.db 
-#DB += HPS_SVT_Interlock_v5_PLCout.db 
-
-# Test L5X's
-#DB += Bit_v_Bool_PLCarr.db
-#DB += Bit_v_Bool_PLCin.db
-#DB += Bit_v_Bool_PLCout.db
-#DB += TestLogic_v2_PLCarr.db
-#DB += TestLogic_v2_PLCin.db
-#DB += TestLogic_v2_PLCout.db
-
-# Cryo Distribution Box
-#DB += Cryo_DBox_PLCarr.db
-#DB += Cryo_DBox_PLCin.db
-#DB += Cryo_DBox_PLCout.db
-
-# Solenoid
-#DB += Solenoid_PLCarr.db
-#DB += Solenoid_PLCin.db
-#DB += Solenoid_PLCout.db
-
-# Torus
+## Torus
+DB  += cryodbox_torus_LHe.substitutions
+DB  += cryodbox_torus_LN2.db
+DB  += cryodbox_torus_LN2.substitutions
+DB  += datatype_ccm_cernox.db
+DB  += datatype_ccm_pt100.db
+DB  += datatype_cpid.db
+DB  += datatype_hexbeam.db
+DB  += torus_LHe.db
+DB  += torus_LHe.substitutions
+DB  += torus_LN2.db
+DB  += torus_LN2.substitutions
 DB  += torus_mps.db
-REQ += torus_mps_settings.req
+DB  += torus_qd.db
 DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
-
-# Fast DAQ - Quench Detection
-DB  += torus_qd.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

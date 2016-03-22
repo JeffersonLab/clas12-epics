@@ -1,0 +1,53 @@
+#
+# datatype_ccm_pt100.db - (PLC CCM Record)
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PLCID - PLC ID set in startup
+#   CCM   - PLC tag (CCM_[A-F])
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Mar 2016
+#
+
+record(ai, "$(P)$(R)$(CCM):PT100_1") {
+    field(DESC, "CCM $(CCM) Front Heat Shield 1")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(CCM).PT100[1]")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(CCM):PT100_2") {
+    field(DESC, "CCM $(CCM) Front Heat Shield 2")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(CCM).PT100[2]")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(CCM):PT100_3") {
+    field(DESC, "CCM $(CCM) Front Heat Shield 3")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(CCM).PT100[3]")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(CCM):PT100_4") {
+    field(DESC, "CCM $(CCM) Front Heat Shield 4")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(CCM).PT100[4]")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(CCM):PT100_5") {
+    field(DESC, "CCM $(CCM) Back Heat Shield")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(CCM).PT100[5]")
+    field(SCAN, "1 second")
+    field(PREC, "2")
+}
+

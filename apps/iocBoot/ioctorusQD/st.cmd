@@ -10,12 +10,12 @@ plc2epics_registerRecordDeviceDriver(pdbbase)
 
 ## Initialize EtherIP driver, defined PLCs
 drvEtherIP_init()
-drvEtherIP_define_PLC("FASTDAQ_PLC", "129.57.96.15", 0)
+drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/torus_qd.db","P=TORUS:,R=QD:,PLCID=FASTDAQ_PLC")
+dbLoadRecords("db/torus_qd.db","P=B_TORUS:,R=QD:,PLCID=PLC_TORUS")
 
 cd "${TOP}/iocBoot/${IOC}"
 

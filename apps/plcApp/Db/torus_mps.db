@@ -30,18 +30,23 @@ record(waveform, "$(P)$(R)ADCScales") {
 
 record(ao, "$(P)$(R)Slew") {
     field(DTYP, "EtherIP")
-    field(SCAN, "1 second")
-    field(OUT,  "@$(PLCID) Torus_MPS.Slew_fromHMI")
+    field(OUT,  "@$(PLCID) Torus_MPS.Slew_fromHMI S 1")
     field(EGU,  "mA/s")
     field(PREC, "0")
 }
 
 record(ao, "$(P)$(R)Iset") {
     field(DTYP, "EtherIP")
-    field(SCAN, "1 second")
-    field(OUT,  "@$(PLCID) Torus_MPS.I_fromHMI")
+    field(OUT,  "@$(PLCID) Torus_MPS.I_fromHMI S 1")
     field(EGU,  "A")
     field(PREC, "2")
+}
+
+# Using SW limit, set DRVH for Iset
+record(ao, "$(P)$(R)Iset:DRVH") {
+    field(DOL,  "$(P)$(R)ImaxSW CPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)Iset.DRVH PP")
 }
 
 record(ai, "$(P)$(R)I_MPS") {
@@ -167,7 +172,7 @@ record(bi, "$(P)$(R)CommError") {
 
 record(bo, "$(P)$(R)CommReset") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus_MPS.Reset_sw")
+    field(OUT,  "@$(PLCID) Torus_MPS.Reset_sw S 1")
 }
 
 record(bi, "$(P)$(R)Mode") {
@@ -180,7 +185,7 @@ record(bi, "$(P)$(R)Mode") {
 
 record(bo, "$(P)$(R)ModeSet") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus_MPS.LocalFlag")
+    field(OUT,  "@$(PLCID) Torus_MPS.LocalRemote_SW S 1")
     field(ZNAM, "Remote")
     field(ONAM, "Local")
 }
@@ -195,14 +200,14 @@ record(bi, "$(P)$(R)Polarity") {
 
 record(bo, "$(P)$(R)OnOffSet") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus_MPS.Contactor_SW")
+    field(OUT,  "@$(PLCID) Torus_MPS.Contactor_SW S 1")
     field(ZNAM, "Turn Off")
     field(ONAM, "Turn On")
 }
 
 record(bo, "$(P)$(R)IntlockReset") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) Torus_MPS.InterlockReset_SW")
+    field(OUT,  "@$(PLCID) Torus_MPS.InterlockReset_SW S 1")
 }
 
 record(ai, "$(P)$(R)V") {
@@ -224,5 +229,5 @@ record(bi, "$(P)$(R)OnOff") {
 
 record(bo, "$(P)$(R)FastDump") {
     field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) EPICS_Fast_Dump_sw")
+    field(OUT,  "@$(PLCID) EPICS_Fast_Dump_sw S 1")
 }

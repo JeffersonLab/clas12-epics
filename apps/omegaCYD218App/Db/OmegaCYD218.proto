@@ -20,6 +20,24 @@ reset {
 	out "*RST";
 }
 
+# Query Ohms Reading
+getOhms {
+	out "SRDG? \$1";
+	in "%f";
+}
+
+# Query Linear Reading
+getLinear {
+	out "LRDG? \$1";
+	in "%f";
+}
+
+# Query Linear Equation
+getEquation {
+        out "LINEAR? \$1";
+        in "%s";
+}
+
 # Query Celsius Reading
 getCelsius {
 	out "CRDG? \$1";
@@ -70,6 +88,10 @@ getInputTypeA {
 	out "INTYPE? A";
 	in "%d";
 }
+
+#setEquation {
+#        out "LINEAR \$1,%s";
+#}
 
 # Configure input type
 #   INTYPE <input group>,<sensor type>

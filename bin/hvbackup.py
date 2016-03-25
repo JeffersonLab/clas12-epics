@@ -12,7 +12,7 @@ def exit(text):
   mess.destroy()
   sys.exit(text)
 
-DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','DC_HV']
+DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
 FIELDS=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 DATADIR='/usr/clas12/DATA/burt'
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
@@ -60,6 +60,11 @@ def getChannels(det,sector=None):
       for lr in ['L','R']:
         for ii in range(18):
           prefixes.append('B_DET_LTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
+  elif det=='HTCC_HV':
+    for ss in sectors:
+      for lr in ['L','R']:
+        for ii in range(4):
+          prefixes.append('B_DET_HTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
   elif det=='DC_HV':
     SLAYERS={1:[1,2],2:[3,4],3:[5,6]}
     SFWIRES=['01-08','09-16','17-24','25-32','33-48','49-64','65-80','81-112']

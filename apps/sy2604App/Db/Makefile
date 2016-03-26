@@ -14,6 +14,7 @@ DB_INSTALLS += $(ASYN)/db/asynRecord.db
 
 DB += sy2604.db
 PROTO += sy2604.proto
+REQ += sy2604_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

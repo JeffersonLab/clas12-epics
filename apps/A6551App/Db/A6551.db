@@ -1,5 +1,5 @@
 #asyn is useful for debugging the communication
-record(asyn,"LV:DC:S$(S):L$(L):ASYN")
+record(asyn,"B_DET_DC_LV_SEC$(S)_SL$(L):ASYN")
 {
     field(DTYP,"asynRecordDevice")
     field(PORT,"$(PORT)")
@@ -8,7 +8,7 @@ record(asyn,"LV:DC:S$(S):L$(L):ASYN")
     field(IMAX,"$(IMAX)")
 }
 
-record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE")
+record (ai, "B_DET_DC_LV_SEC$(S)_SL$(L):vmon")
 {
     field (DESC, "Get Voltage")
     field (DTYP, "stream")
@@ -16,14 +16,14 @@ record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE")
     field (INP,  "@A6551.proto getVoltage $(PORT)")
 }
 
-record (ao, "LV:DC:S$(S):L$(L):SET_VOLTAGE")
+record (ao, "B_DET_DC_LV_SEC$(S)_SL$(L):vset")
 {
     field (DESC, "Set voltage")
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto setVoltage $(PORT)")
 }
 
-record (ai, "LV:DC:S$(S):L$(L):GET_CURRENT")
+record (ai, "B_DET_DC_LV_SEC$(S)_SL$(L):imon")
 {
     field (DESC, "Get current of PS1")
     field (DTYP, "stream")
@@ -31,14 +31,14 @@ record (ai, "LV:DC:S$(S):L$(L):GET_CURRENT")
     field (INP,  "@A6551.proto getCurrent $(PORT)")
 }
 
-record (ai, "LV:DC:S$(S):L$(L):GET_CURRENT_SETP")
+record (ai, "B_DET_DC_LV_SEC$(S)_SL$(L):isetrbk")
 {
     field (DESC, "Get Current Setpoint")
     field (DTYP, "stream")
     field (SCAN, "1 second")
     field (INP,  "@A6551.proto getCurrentSetpoint $(PORT)")
 }
-record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE_SETP")
+record (ai, "B_DET_DC_LV_SEC$(S)_SL$(L):vsetrbk")
 {
     field (DESC, "Get Voltage Setpoint")
     field (DTYP, "stream")
@@ -46,56 +46,56 @@ record (ai, "LV:DC:S$(S):L$(L):GET_VOLTAGE_SETP")
     field (INP,  "@A6551.proto getVoltageSetpoint $(PORT)")
 }
 
-record (ao, "LV:DC:S$(S):L$(L):SET_CURRENT")
+record (ao, "B_DET_DC_LV_SEC$(S)_SL$(L):iset")
 {
     field (DESC, "Set current of PS1")
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto setCurrent $(PORT)")
 }
 
-record (bi, "LV:DC:S$(S):L$(L):GET_ONOFF")
+record (bi, "B_DET_DC_LV_SEC$(S)_SL$(L):pwrbk")
 {
     field (DESC, "Get PW ON/OFF Status")
     field (DTYP, "stream")
     field (SCAN, "1 second")
     field (INP,  "@A6551.proto getOnOff $(PORT)")
 }
-record (bo, "LV:DC:S$(S):L$(L):SET_ONOFF")
+record (bo, "B_DET_DC_LV_SEC$(S)_SL$(L):pwset")
 {
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto setOnOff $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
 }
-record (bo, "LV:DC:S$(S):L$(L):SET_ONOFFFULL")
+record (bo, "B_DET_DC_LV_SEC$(S)_SL$(L):pwsetfull")
 {
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto setOnOffFull $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
 }
-record (bo, "LV:DC:S$(S):L$(L):SET_OCONOFF")
+record (bo, "B_DET_DC_LV_SEC$(S)_SL$(L):ocset")
 {
     field (DTYP, "stream")
-    field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
+    field (OUT,  "@A6551.proto ocsetOnOff $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
 }
-record (bi, "LV:DC:S$(S):L$(L):GET_OCONOFF")
+record (bi, "B_DET_DC_LV_SEC$(S)_SL$(L):ocrbk")
 {
     field (DESC, "Get OC ON/OFF Status")
     field (DTYP, "stream")
     field (SCAN, "1 second")
     field (INP,  "@A6551.proto getOcOnOff $(PORT)")
 }
-record (ao, "LV:DC:S$(S):L$(L):CLEAR_OC")
+record (ao, "B_DET_DC_LV_SEC$(S)_SL$(L):ocreset")
 {
     field (DESC, "Clear OC")
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto clearOC $(PORT)")
 }
 
-record (ai, "LV:DC:S$(S):L$(L):GET_OC")
+record (ai, "B_DET_DC_LV_SEC$(S)_SL$(L):ocstat")
 {
     field (DESC, "Get OC Status")
     field (DTYP, "stream")

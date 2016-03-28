@@ -47,25 +47,7 @@ dbLoadRecords("db/A6551.db","S=1,L=1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
 ##drvAsynIPPortConfigure("19",129.57.160.114:1234,0,0,0)
 ##drvAsynIPPortConfigure("20",129.57.160.115:1234,0,0,0)
 
-
-#dbLoadRecords("db/A6551.db","S=1,L=1,PORT=00,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=1,L=2,PORT=01,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=1,L=3,PORT=02,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=2,L=1,PORT=03,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=2,L=2,PORT=04,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=2,L=3,PORT=05,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=3,L=1,PORT=06,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=3,L=2,PORT=07,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=3,L=3,PORT=08,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=4,L=1,PORT=09,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=4,L=2,PORT=10,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=4,L=3,PORT=11,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=5,L=1,PORT=12,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=5,L=2,PORT=13,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=5,L=3,PORT=14,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=6,L=1,PORT=15,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=6,L=2,PORT=16,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/A6551.db","S=6,L=3,PORT=17,ADDR=24,IMAX=2000,OMAX=2000")
+#dbLoadTemplate("db/dclv.substitutions")
 
 #dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 #dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
@@ -75,5 +57,7 @@ cd ${TOP}/iocBoot/${IOC}
 iocInit();
 
 #makeAutosaveFiles()
-#create_monitor_set("A6551_settings.req",30,"P=HPSECALLV")
+#create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+#create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+#create_monitor_set("dclv_settings.req",30,"P=HPSECALLV")
 

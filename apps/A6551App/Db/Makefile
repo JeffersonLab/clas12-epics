@@ -15,8 +15,10 @@ DB_INSTALLS += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
 
 DB += A6551.db
 PROTO += A6551.proto
-
 REQ += A6551_settings.req
+
+DB += dclv.substitutions
+REQ += dclv_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

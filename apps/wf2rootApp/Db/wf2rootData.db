@@ -1,0 +1,57 @@
+#
+# wf2rootData.db - waveform record written to root binary file
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   WF    - waveform label
+#   WF_FTVL - FTVL of remote waveform
+#   WF_NELM - NELM of remote waveform
+#   WF_PV   - full pv name of remote waveform
+#
+# Author: Wesley Moore (wmoore@jlab.org), Yi Qiang
+# Date:   Mar 2016, 2014
+#
+
+# Record that carries output tree name
+record(stringin,"$(P)$(R)$(WF):tree") {
+	field(VAL ,"$(WF)")
+	field(PINI,"1") 
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# aSub record to get the values of the array from WF2 CaServer
+record(aSub,"$(P)$(R)$(WF)") {
+    field(INAM,"wf2rootDataInit")
+    field(SNAM,"wf2rootDataProcess")
+    field(SCAN,"Passive")
+    field(EFLG,"ALWAYS")
+    field(TSEL,"$(WF_PV).TIME")
+#
+    field(FTA ,"$(WF_FTVL)")
+    field(FTVA,"$(WF_FTVL)")
+    field(NOA ,"$(WF_NELM)")
+    field(NOVA,"$(WF_NELM)")
+    field(INPA,"$(WF_PV) CPP")
+#
+	field(FTB ,"STRING")
+    field(NOB ,"1")
+	field(INPB,"$(P)$(R)$(WF):tree NPP")
+#
+    field(FTC ,"ENUM")
+    field(NOC ,"1")
+    field(INPC,"$(P)$(R)ctrl:daq_state NPP")
+#
+	field(FTD ,"STRING")
+	field(FTVD,"STRING")
+	field(NOVD,"1")
+	field(INPD,"")
+	field(OUTD,"$(P)$(R)ctrl:file_name PP")
+#
+	field(FTE ,"LONG")
+	field(FTVE,"LONG")
+	field(NOVE,"1")
+    field(INPE,"")
+    field(OUTE,"$(P)$(R)ctrl:file_size PP")
+}

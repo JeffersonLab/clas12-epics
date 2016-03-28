@@ -11,10 +11,11 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install)
 # databases, templates, substitutions like this
 
-DB += wf2rootData.db
-DB += wf2rootCtrl.db
+DB += wf2root_ctrl.db
+DB += wf2root_data.db
+DB += wf2root_test.db
 
-DB += wf2rootDataTest.db
+REQ += wf2root_settings.req
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

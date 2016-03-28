@@ -18,6 +18,7 @@ DBD += wf2root.dbd
 
 # wf2root.dbd will be made up from these files:
 wf2root_DBD += base.dbd
+wf2root_DBD += asSupport.dbd
 wf2root_DBD += devIocStats.dbd
 wf2root_DBD += wf2rootSub.dbd
 
@@ -33,6 +34,7 @@ wf2root_SRCS_vxWorks += -nil-
 
 
 # Link in the code from the support library
+wf2root_LIBS += autosave
 wf2root_LIBS += devIocStats
 
 wf2root_LDFLAGS += $(shell $(ROOT_CONFIG) --cflags)

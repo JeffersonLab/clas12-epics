@@ -28,12 +28,22 @@ record (ai, "$(P):imon")
     field (SCAN, "2 second")
     field (INP,  "@sy2604.proto vout $(PORT)")
 }
-record (stringin, "$(P):status")
+record (stringin, "$(P):stat")
 {
     field (DESC, "Status")
     field (DTYP, "stream")
     field (SCAN, "2 second")
     field (INP,  "@sy2604.proto status $(PORT)")
+}
+record (mbbiDirect, "$(P):stat2")
+{
+    field (DESC, "Status")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto status2 $(PORT)")
+#    field (ZNAM, "Pw ON/OFF")
+#    field (ONAM, "DUNNO")
+#    field (FLNK, "$(P):pwrbk")
 }
 record (bo, "$(P):pwoff")
 {

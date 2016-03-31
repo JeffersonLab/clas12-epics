@@ -1,15 +1,22 @@
 TOP=../..
 include $(TOP)/configure/CONFIG
 #----------------------------------------
-#  ADD MACRO DEFINITIONS BELOW HERE
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
 
-# Install databases, templates & substitutions like this
-#DB += dbExample1.db
+#----------------------------------------------------
+#  Optimization of db files using dbst (DEFAULT: NO)
+#DB_OPT = YES
 
+#----------------------------------------------------
+# Create and install (or just install)
+# databases, templates, substitutions like this
+
+
+#----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 
 include $(TOP)/configure/RULES
 #----------------------------------------
-#  ADD EXTRA GNUMAKE RULES BELOW HERE
+#  ADD RULES AFTER THIS LINE
 

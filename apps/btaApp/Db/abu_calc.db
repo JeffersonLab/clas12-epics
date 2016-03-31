@@ -1,0 +1,191 @@
+#Minimum value for the Faraday cup current
+grecord(calc,"scaler_calc1_min")
+{
+	field(SCAN,"Passive")	
+	field(CALC,"0.1")
+	field(PINI, "1")
+}
+#Reset every time a new hour starts using unixtime
+grecord(calc,"bta_master_reset")
+{
+	field(SCAN,".5 second")	
+	field(PHAS, "0")
+	field(CALC,"((a%30)=0)?1:0")
+	field(INPA,"classc1:unixtime  NPP NMS")
+}
+#Reset by SNL code 
+grecord(calc,"abu_time_reset")
+{
+	field(SCAN,"Passive")	
+	field(PHAS, "0")
+	field(CALC,"((a%200)=0)?1:0")
+	field(INPA,"classc1:unixtime  NPP NMS")
+}
+#Record to check if the beam is used
+grecord(calc,"abu_beam_used")
+{
+	field(SCAN,"Passive")	
+	field(PINI, "1")
+	field(CALC,"(((a=1)||(b=0))&&(c=6))?1:0")
+	field(INPA,"ts_status_ttl  NPP NMS")
+	field(INPB,"moller_accumulate NPP NMS") 
+        field(INPC,"PLC_HLB NPP NMS")
+	field(PREC,"4")
+}
+# Available beam used time in counts
+grecord(calc,"abu_count_calc")
+{
+	field(SCAN,".5 second")	
+	field(PHAS, "2")
+	field(FLNK,"abu_perc_calc PP MS")
+#	field(CALC,"(g=0)?((a>b)&&((c=1)||(d=0))&&(e=6)?f+1:f):0")
+	field(CALC,"(g=0)?((a>b)&&(h=1)?f+1:f):0")
+	field(INPA,"scaler_calc1  NPP NMS")
+	field(INPB,"scaler_calc1_min  NPP NMS")
+	field(INPC,"ts_status_ttl  NPP NMS")
+	field(INPD,"moller_accumulate NPP NMS") 
+        field(INPE,"PLC_HLB NPP NMS")
+        field(INPF,"abu_count_calc NPP NMS")
+        field(INPG,"abu_time_reset NPP NMS")
+        field(INPH,"abu_beam_used PP MS")      
+	field(PREC,"1")
+}
+# Available beam unused in counts  
+grecord(calc,"abn_count_calc")
+{
+	field(SCAN,".5 second")	
+	field(PHAS, "2")
+	field(FLNK,"abn_perc_calc PP MS")
+#        field(CALC,"(g=0)?((a>b)&&((c=0)&&(d=1))&&(e=6)?f+1:f):0")
+        field(CALC,"(g=0)?((a>b)&&(h=0)?f+1:f):0")
+        field(INPA,"scaler_calc1  NPP NMS")
+        field(INPB,"scaler_calc1_min  NPP NMS")
+        field(INPC,"ts_status_ttl  NPP NMS")
+        field(INPD,"moller_accumulate NPP NMS")
+        field(INPE,"PLC_HLB NPP NMS")
+        field(INPF,"abn_count_calc NPP NMS")
+        field(INPG,"abu_time_reset NPP NMS")
+        field(INPH,"abu_beam_used PP MS")      
+        field(PREC,"1")
+}
+# Unvailable beam  in counts
+grecord(calc,"nob_count_calc")
+{
+	field(SCAN,".5 second")	
+	field(PHAS, "2")
+	field(FLNK,"nob_perc_calc PP MS")
+        field(CALC,"(g=0)?((a<b)?f+1:f):0")
+        field(INPA,"scaler_calc1  NPP NMS")
+        field(INPB,"scaler_calc1_min  NPP NMS")
+        field(INPC,"ts_status_ttl  NPP NMS")
+        field(INPD,"moller_accumulate NPP NMS")
+        field(INPE,"PLC_HLB NPP NMS")
+        field(INPF,"nob_count_calc NPP NMS")
+        field(INPG,"abu_time_reset NPP NMS")
+#        field(INPH,"abu_beam_used PP MS")      
+        field(PREC,"1")
+}
+# Total  counts
+grecord(calc,"tot_count_calc")
+{
+	field(SCAN,".5 second")	
+	field(PHAS, "1")
+	field(FLNK,"tot_perc_calc PP MS")
+        field(CALC,"(g=0)?(f+1):0")
+        field(INPA,"scaler_calc1  NPP NMS")
+        field(INPB,"scaler_calc1_min  NPP NMS")
+        field(INPC,"ts_status_ttl  NPP NMS")
+        field(INPD,"moller_accumulate NPP NMS")
+        field(INPE,"PLC_HLB NPP NMS")
+        field(INPF,"tot_count_calc NPP NMS")
+        field(INPG,"abu_time_reset NPP NMS")
+#        field(INPH,"abu_beam_used PP MS")      
+        field(PREC,"1")
+}
+
+#
+#
+#Available beam used in percent
+grecord(calc,"abu_perc_calc")
+{
+	field(SCAN,"Passive")	
+	field(FLNK,"abu_prrl_calc PP MS")
+	field(CALC,"(b>0)?(100*a/b):c")
+	field(INPA,"abu_count_calc  NPP NMS")
+	field(INPB,"tot_count_calc  NPP NMS")
+	field(INPC,"abu_perc_calc  NPP NMS")
+	field(PREC,"1")
+}
+#Available beam not used in percent
+grecord(calc,"abn_perc_calc")
+{
+	field(SCAN,"Passive")	
+	field(FLNK,"abn_prrl_calc PP MS")
+	field(CALC,"(b>0)?(100*a/b):c")
+	field(INPA,"abn_count_calc  NPP NMS")
+	field(INPB,"tot_count_calc  NPP NMS")
+	field(INPC,"abn_perc_calc  NPP NMS")
+	field(PREC,"1")
+}
+#No beam in precent
+grecord(calc,"nob_perc_calc")
+{
+	field(SCAN,"Passive")	
+	field(CALC,"(b>0)?(100*a/b):c")
+	field(INPA,"nob_count_calc  NPP NMS")
+	field(INPB,"tot_count_calc  NPP NMS")
+	field(INPC,"nob_perc_calc  NPP NMS")
+	field(PREC,"1")
+}
+
+#Total in counts; resetting
+grecord(calc,"tot_perc_calc")
+{
+	field(FLNK,"bta_unreset PP MS")
+	field(SCAN,"Passive")	
+	field(CALC,"(b>0)?(100*a/b):c")
+	field(INPA,"tot_count_calc  NPP NMS")
+	field(INPB,"tot_count_calc  NPP NMS")
+	field(INPC,"tot_perc_calc  NPP NMS")
+	field(PREC,"1")
+}
+
+
+#Available beam used in percent of available beam
+grecord(calc,"abu_prrl_calc")
+{
+	field(SCAN,"Passive")	
+	field(CALC,"((a+b)>0)?(100*a/(a+b)):c")
+	field(INPA,"abu_count_calc  NPP NMS")
+	field(INPB,"abn_count_calc  NPP NMS")
+	field(INPC,"abu_prrl_calc  NPP NMS")
+	field(PREC,"1")
+}
+#Available beam not used in percent of available beam
+grecord(calc,"abn_prrl_calc")
+{
+	field(SCAN,"Passive")	
+	field(CALC,"((a+b)>0)?(100*b/(a+b)):c")
+	field(INPA,"abu_count_calc  NPP NMS")
+	field(INPB,"abn_count_calc  NPP NMS")
+	field(INPC,"abn_prrl_calc  NPP NMS")
+	field(PREC,"1")
+}
+
+grecord( bo, "bta_unreset")
+{
+  field( SCAN, "Passive" )
+#  field( VAL,  "0" )
+  field( OUT, "abu_time_reset") 
+  field( DTYP, "Soft Channel") 
+  field( ZNAM, "ALIVE" )
+  field( ONAM, "SKREWED" )
+}
+
+grecord(waveform, "total_count_hist") 
+{ 
+  field( NELM, "24")
+#  field( LLIM, "1")
+#  field( ULIM, "24")
+  field( DTYP, "Soft Channel")
+}

@@ -1,0 +1,22 @@
+TOP=../..
+include $(TOP)/configure/CONFIG
+#----------------------------------------
+#  ADD MACRO DEFINITIONS BELOW HERE
+
+# Install databases, templates & substitutions like this
+DB += cRioTest.db
+
+DB += gas_cRIO_DC.db
+DB += gas_cRIO_FTC.db
+DB += gas_cRIO_HTCC.db
+DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db
+DB += gas_cRIO_RICH.db
+DB += gas_cRIO_SVT.db
+
+# If <anyname>.db template is not named <anyname>*.template add
+# <anyname>_TEMPLATE = <templatename>
+
+include $(TOP)/configure/RULES
+#----------------------------------------
+#  ADD EXTRA GNUMAKE RULES BELOW HERE
+

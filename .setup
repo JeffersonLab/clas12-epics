@@ -1,17 +1,30 @@
+#!/bin/csh
 #
 # File: .setup
 #
 # EPICS Environment
 #
+set sourced=($_)
 
+# If $CLAS is set from .cshrc or by sourcing top-level .setup, use it.
+# Otherwise, define $EPICS relative to this .setup file.  $curdir is 
+# used so this file can be sourced from anywhere and still work.  
 if ($?CLAS) then
-  setenv EPICS $CLAS/epics
+    setenv EPICS $CLAS/epics
+else
+    set curdir=`/usr/bin/readlink -f $sourced[2]`
+    set curdir=`/usr/bin/dirname $curdir`
+    setenv EPICS $curdir
 endif
 
 ## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
 set rhel_vers = `awk '{print substr($7,0,1)}' /etc/redhat-release`
+set cent_vers = `awk '{print substr($3,0,1)}' /etc/redhat-release`
 if ( $rhel_vers == "5" ) then
   setenv EPICS_VER R3.14.12.3
+  set RHEL_VER = "_RHEL5"
+else if ( $cent_vers == "5" ) then
+  setenv EPICS_VER 3.14.12.3
   set RHEL_VER = "_RHEL5"
 else if ( $rhel_vers == "6" ) then
   setenv EPICS_VER R3.14.12.5
@@ -24,7 +37,8 @@ endif
 setenv EPICS_BASE /usr/clas12/${EPICS_VER}/base$RHEL_VER
 setenv EPICS_EXTENSIONS /usr/clas12/${EPICS_VER}/extensions$RHEL_VER
 
-setenv MIBDIRS /usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs
+# sergey: added /usr/local/share/snmp/mibs, it exist on VME controllers and /usr/share/snmp/mibs exist on RHELs
+setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 setenv MIBS ALL
 
 # set EPICS host architecture
@@ -36,11 +50,12 @@ else
   setenv EPICS_HOST_ARCH linux-x86_64
 endif
 
+
 ## caget/caput/etc, medm/striptool/etc...
 set -f path=("${EPICS_BASE}/bin/${EPICS_HOST_ARCH}" $path:q)
 set -f path=("${EPICS_EXTENSIONS}/bin/${EPICS_HOST_ARCH}" $path:q)
 ## EPICS tools and utils
-set -f path=("/usr/clas12/release/pro/epics/bin" $path:q)
+set -f path=("$EPICS/bin" $path:q)
 ## CSS, alarm tools, etc
 set -f path=("/usr/clas12/css/pro/${EPICS_HOST_ARCH}/bin" $path:q)
 ## acctools rsync'd from Cebaf (MyaViewer, etc)
@@ -56,21 +71,13 @@ setenv EPICS_CA_ADDR_LIST "129.57.255.4 129.57.163.255 129.57.57.188 129.57.99.2
 if ( ! $?PERL5LIB ) setenv PERL5LIB
 setenv PERL5LIB "${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86_64-linux-thread-multi"
 
-#find the directory of this sourced .setup file and set up relevant path and python path
-#let's see how robust this is
+set script_dir="${EPICS}/apps/scripts"
+set css_script_dir="${EPICS}/css_share/common/scripts"
 
-# this creates nuisance warnings:
-set this=`/usr/sbin/lsof +p $$ | grep ".setup" | awk '{print $9}'`
-
-set clas12epics=`dirname ${this}`
-set script_dir="${clas12epics}/apps/scripts"
-set css_script_dir="${clas12epics}/css_share/common/scripts"
-setenv CSS_SHARE_DIR "${clas12epics}/css_share"
-
-
-set -f path=($path:q "${script_dir}")
+set -f path=("${script_dir}" $path:q)
 
 if ( ! $?PYTHONPATH ) setenv PYTHONPATH 
 setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
 
 setenv EPICS_SCRIPTS "${script_dir}"
+

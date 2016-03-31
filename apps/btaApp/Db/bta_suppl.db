@@ -1,0 +1,285 @@
+#
+# These records are workaround the problem of
+#  limited # of characters in the CALC records.
+#
+#
+
+#
+#
+#Record to check if the beam is present for regular 
+#  data taking conditions
+#
+grecord( calc,"HL$(hall):bta_reg_bm")
+{
+	field(SCAN,".5 second")	
+	field(PINI, "1")
+	field(PREC, "4")
+	field(CALC,"a>g&&b<h?1:0")
+#
+#   Actual value records
+#
+	field(INPA,"scaler_calc1  NPP NMS")
+        field(INPB,"scaler_sum NPP NMS")
+        field(INPC,"beam_polarization NPP NMS")
+        field(INPD,"")
+        field(INPE,"")
+        field(INPF,"")
+#
+#  Limit settings
+#
+	field(INPG,"HL$(hall):bta_min_crnt  NPP NMS")
+	field(INPH,"600  NPP NMS")
+        field(INPI,"10 NPP NMS")
+        field(INPJ,"")
+        field(INPK,"")
+        field(INPL,"")
+}
+
+#
+#
+#Record to check if the beam is present for moller  
+#  data taking conditions
+#
+grecord( calc,"HL$(hall):bta_mol_bm")
+{
+	field(SCAN,".5 second")	
+	field(PINI, "1")
+	field(PREC, "4")
+	field(CALC,"a>g&&b>h?1:0")
+#
+#  Actual values
+#
+	field(INPA,"scaler_calc2  NPP NMS")
+        field(INPB,"moller_system_status NPP NMS")
+        field(INPC,"")
+        field(INPD,"")
+        field(INPE,"")
+        field(INPF,"")
+#
+#  Limit Settings
+#
+	field(INPG,"0.1 NPP NMS")
+	field(INPH,"9  NPP NMS")
+        field(INPI,"")
+        field(INPJ,"")
+        field(INPK,"")
+        field(INPL,"")
+}
+
+#
+#
+#Record to check if the beam is present for general  
+#  data taking conditions
+#
+grecord( calc,"HL$(hall):bta_charge_asym")
+{
+	field(SCAN,".5 second")	
+	field(PINI, "1")
+	field(PREC, "4")
+	field(CALC,"G=2?B:A")
+#
+#  Actual values
+#
+        field(INPA,"q_asym_3  NPP NMS")
+        field(INPB,"q_asym_7  NPP NMS")
+	field(INPC,"")
+        field(INPD,"")
+	field(INPE,"")
+        field(INPF,"")
+#
+#  Control channels
+#
+	field(INPG,"HLB:bta_cur_stor.RVAL")
+	field(INPH,"")
+        field(INPI,"")
+        field(INPJ,"")
+        field(INPK,"")
+        field(INPL,"")
+}
+
+
+#
+#
+#Record to check if the beam is present for general  
+#  data taking conditions
+#
+grecord( calc,"HL$(hall):bta_gen_bm")
+{
+	field(SCAN,".5 second")	
+	field(PINI, "1")
+	field(PREC, "4")
+	field(CALC,"C=I&&A<G&&B<H")
+#
+#  Actual values
+#
+	field(INPA,"power_60Hz_1  NPP NMS")
+        field(INPB,"HL$(hall):bta_charge_asym  NPP NMS")
+	field(INPC,"PLC_HLB  NPP NMS")
+        field(INPD,"")
+	field(INPE,"")
+        field(INPF,"")
+#
+#  Limit Settings
+#
+	field(INPG,"5")
+	field(INPH,"0.002")
+        field(INPI,"6")
+        field(INPJ,"10")
+        field(INPK,"10")
+        field(INPL,"10")
+}
+
+
+
+#
+#
+# Records to calculate the sixty Hz RMS 
+# with statistical fluctuations subtracted
+#
+grecord( calc,"HL$(hall):bta_60hz_rms0")
+{
+	field(SCAN,".5 second")
+	field(FLNK, "HL$(hall):bta_60hz_rms" )	
+	field(PREC, "4")
+	field(CALC,"A>8192?SQR(MAX(B^2-10^4/(A*C),D^2)):D")
+#
+#  Initial values
+#
+	field(INPA,"sixtyHz_total_rate_3  NPP NMS")
+        field(INPB,"sixtyHz_rms_3  NPP NMS")
+        field(INPC,"sixtyHz_0.DWEL  NPP NMS")
+        field(INPD,"sixtyHz_rms_1.VAL  NPP NMS")
+}
+
+grecord( calc,"HL$(hall):bta_60hz_rms")
+{
+	field(SCAN,"Passive")	
+	field(PREC, "4")
+	field(CALC,"A>12288?SQR(MAX(B^2-10^4/(A*C),D^2)):D")
+#
+#  Initial values
+#
+	field(INPA,"sixtyHz_total_rate_7  NPP NMS")
+        field(INPB,"sixtyHz_rms_7  NPP NMS")
+        field(INPC,"sixtyHz_0.DWEL  NPP NMS")
+        field(INPD,"HL$(hall):bta_60hz_rms0.VAL  NPP NMS")
+}
+
+
+#
+# CALC record for the duty factor in percents
+#
+#
+
+grecord( calc,"HL$(hall):bta_dty_fctr" )
+{
+	field(SCAN,".5 second")	
+	field(PREC, "4")
+#	field(CALC,"100./(1.+0.01*A)")
+	field(CALC,"100./(1.+(A/100.)^2)")
+
+	field(INPA,"HL$(hall):bta_60hz_rms NPP NMS")
+}
+
+
+
+#
+# CALC record to determine the time of the last Moeller run
+#
+#
+
+grecord( calc,"HL$(hall):bta_last_mlr" )
+{
+	field(SCAN,".5 second")	
+	field(PREC, "8")
+	field(CALC,"A>9?B:C")
+
+	field(INPA,"moller_system_status NPP NMS")
+	field(INPB,"$(ioc):unixtime")
+	field(INPC,"HL$(hall):bta_last_mlr NPP NMS")
+}
+
+
+
+#
+# CALC record to determine the scaled
+# value for upstram counters
+# based on the time interval from 
+# the last Moeller run 
+#
+#
+grecord( calc,"HL$(hall):bta_upst_scld" )
+{
+	field(SCAN,".5 second")	
+	field(PREC, "5")
+	field(CALC,"(1.+D*EXP(-1.*ABS(A-B)/C))*E")
+
+	field(INPA,"$(ioc):unixtime")
+	field(INPB,"HL$(hall):bta_last_mlr NPP NMS")
+	field(INPC,"2000.")
+	field(INPD,"100.")
+	field(INPE,"scaler_sum NPP NMS")
+}
+
+#
+# Record to indicate the type of the beam 
+#  expected by Hall B experiment
+#
+grecord( bi, "HL$(hall):bta_bm_type" )
+{
+        field(SCAN,"Passive")
+        field(VAL , "0")
+        field(PINI, "1")
+        field(ZNAM, "ELECTRON" )
+        field(ONAM, "PHOTON")   
+        field(DTYP, "Soft Channel")     
+}
+
+grecord( calc, "HL$(hall):bta_type_alrm" )
+{
+	field(SCAN,"1 second")	
+	field(CALC,"A=0&&ABS(C)>100||A=1&&ABS(B)<500?1:0")
+
+	field(INPA,"HL$(hall):bta_bm_type NPP NMS")
+	field(INPB,"TMIRBCK NPP NMS")
+	field(INPC,"PSPECIRBCK NPP NMS")
+	field(HIGH,"0.1")
+	field(HSV,"MAJOR")
+}
+
+
+
+grecord( mbbo, "HL$(hall):bta_cur_stor" )
+{
+        field(SCAN, "Passive")
+        field(VAL , "1")
+        field(PINI, "1")
+ 
+        field(ZRST,"SLM"  )
+        field(ONST,"2C21")
+        field(TWST,"FCUP" )
+        field(NOBT,"3")    
+
+        field(ZRVL,"0"  )
+        field(ONVL,"1"  )
+        field(TWVL,"2"  )
+
+        field(DTYP,"Soft Channel")
+}
+
+
+grecord( calc, "HL$(hall):bta_main_cur" ) 
+{
+        field(SCAN, "1 second")
+	
+	field(CALC,"D=0?A:(D=1?B:C)")
+
+#	field(INPA,"scaler_calc2 NPP NMS") # No SLM based beam PV is available, so replacing with FCUP one temporarly. Nerses
+	field(INPA,"scaler_calc1 NPP NMS")
+	field(INPB,"IPM2C21A NPP NMS")
+	field(INPC,"scaler_calc1 NPP NMS")
+	field(INPD,"HL$(hall):bta_cur_stor NPP NMS")
+
+	field(PREC,"4"  )
+}
+	

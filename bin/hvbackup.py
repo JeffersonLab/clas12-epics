@@ -10,9 +10,9 @@ def exit(text):
   mess.set_markup(text)
   mess.run()
   mess.destroy()
-#  sys.exit(text)
+  sys.exit(text)
 
-DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV']
+DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','DC_HV']
 FIELDS=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 DATADIR='/usr/clas12/DATA/burt'
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
@@ -55,6 +55,23 @@ def getChannels(det,sector=None):
     for qq in range(4):
       for gg in range(9):
         prefixes.append('B_DET_FTC_HV_Q%dG%d'%(qq+1,gg+1))
+  elif det=='LTCC_HV':
+    for ss in sectors:
+      for lr in ['L','R']:
+        for ii in range(18):
+          prefixes.append('B_DET_LTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
+  elif det=='DC_HV':
+    SLAYERS={1:[1,2],2:[3,4],3:[5,6]}
+    SFWIRES=['01-08','09-16','17-24','25-32','33-48','49-64','65-80','81-112']
+    GWIRES= ['01-32','33-112']
+    WIRES={'S':SFWIRES,'F':SFWIRES,'G':GWIRES}
+    for ss in sectors:
+      for rr in range(1,4):
+        for ll in SLAYERS[rr]:
+          for gg in ['S','F','G']:
+            for ww in WIRES[gg]:
+              prefixes.append('B_DET_DC_HV_SEC%d_R%d_SL%d_%s%s'%(ss,rr,ll,gg,ww))
+
   return prefixes
 
 def printPVs(det,sector=None):

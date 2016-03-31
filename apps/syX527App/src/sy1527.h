@@ -85,6 +85,8 @@ int  CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
 int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
                       const char *ParName, const char *PropName, void *retval);
 
+int  CAENHVGetSysProp(const char *SystemName, const char *PropName, void *Result);
+
 ///==============================================================================
 
 

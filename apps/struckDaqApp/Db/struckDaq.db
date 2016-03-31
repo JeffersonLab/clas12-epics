@@ -1,0 +1,27 @@
+grecord(mca, "struckDaq_$(CHAN)") { 
+   field(DTYP, "asynMCA") 
+   field(INP,  "@asyn($(PORT) $(CHAN))") 
+   field(PINI, "YES")
+   field(MODE, "MCS")
+   field(CHAS, "0")
+   field(DWEL, "0.000015")
+   field(NMAX, "$(FIFO)")
+   field(NUSE, "$(FIFO)") 
+   field(PREC, "7")
+} 
+
+grecord(waveform, "struckDaq_copy_$(CHAN)") { 
+   field(DTYP, "Soft Channel") 
+   field(NELM, "$(FIFO)")
+   field(LOPR, "0")
+   field(HOPR, "$(FIFO)")
+   field(FTVL, "7")
+} 
+
+grecord(ao, "struckDaq_total_rate_$(CHAN)"){
+   field(PREC,"1")
+}
+
+grecord(ao, "struckDaq_rms_$(CHAN)"){
+   field(PREC,"4")
+}

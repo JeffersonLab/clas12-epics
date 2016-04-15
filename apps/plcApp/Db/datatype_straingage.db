@@ -1,0 +1,62 @@
+#
+# datatype_straingage.db
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PLCID - PLC ID set in startup
+#   ELM   - PLC base tag (ex. CCM_A, HB_US_S1)
+#   N     - Strain Gage Index
+# 
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Apr 2016
+#
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N)") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].dV_by_V")
+    field(SCAN, "1 second")
+    field(EGU,  "dV/V")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N):Total") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].total_strain")
+    field(SCAN, "1 second")
+    field(EGU,  "")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N):Apparent") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].apparent_strain")
+    field(SCAN, "1 second")
+    field(EGU,  "")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N):Applied") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].applied_strain")
+    field(SCAN, "1 second")
+    field(EGU,  "")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N):Force") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].applied_force")
+    field(SCAN, "1 second")
+    field(EGU,  "")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)$(ELM):Strain_$(N):Compensated") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].Compensated")
+    field(SCAN, "1 second")
+    field(EGU,  "")
+    field(PREC, "2")
+}
+

@@ -12,9 +12,12 @@ def exit(text):
   mess.destroy()
   sys.exit(text)
 
-DETS=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
-FIELDS=[':vset',':vmax',':iset',':trip',':rup',':rdn']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
+DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
+DETS=DETSHV+DETSLV
+FIELDSHV=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 DATADIR='/usr/clas12/DATA/burt'
+
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
 RELEASEPATH=re.search('(^.*/release/\d[\.\d]+)',SCRIPTPATH)
 if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path')
@@ -81,7 +84,7 @@ def getChannels(det,sector=None):
 
 def printPVs(det,sector=None):
   for channel in getChannels(det,sector):
-    for field in FIELDS:
+    for field in FIELDSHV:
       print channel+field
 
 def saveBurt(snpFilename,det,sector=None):
@@ -151,10 +154,6 @@ class SaveRestore:
     self.progressBar=gtk.ProgressBar(adjustment=None)
     self.progressBar.show()
     box.pack_start(self.progressBar)
-#    text3 = gtk.Label()
-#    text3.set_markup('\n(May take a minute after clicking OK)')
-#    text3.show()
-#    box.pack_start(text3)
     self.filename = None
     win.show()
     gtk.main()
@@ -172,28 +171,6 @@ class SaveRestore:
     self.filename = self.entry.get_text()
     gtk.main_quit()
 
-  def save(self,filename,det,sector):
-    lines=[]
-    prefixes=getChannels(det,sector)
-    for prefix in prefixes:
-      line = prefix+' '
-      for field in FIELDS:
-        pv = prefix+field
-        val = epics.caget(pv)
-        line += field+'='+str(val)+' '
-      lines.append(line)
-      frac=float(len(lines))/len(prefixes)
-      self.progressBar.set_fraction(frac)
-      self.progressBar.set_text('%d%%'%(round(frac*100)))
-      gtk.main_iteration()
-      #print line
-
-    file=open(filename,'w')
-    for xx in lines: print >> file, xx
-    file.close()
-    os.chmod(filename,0444) # set it unwriteable
-    exit('BACKEDUP SETTINGS TO:\n\n'+filename)
-
   def saveBurt(self,snpFilename,det,sector):
     [out,err]=saveBurt(snpFilename,det,sector)
     exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename)
@@ -201,32 +178,6 @@ class SaveRestore:
   def restoreBurt(self,snpFilename):
     [out,err]=restoreBurt(snpFilename)
     exit('RESTORED SETTINGS FROM\n\n'+snpFilename)
-
-  def restore(self,filename):
-    caputs=[]
-    lines=open(filename,'r').readlines()
-    for iline in range(len(lines)):
-      line=lines[iline]
-      cols = line.rstrip().split()
-      prefix=cols.pop(0)
-      for col in cols:
-        keyval=col.split('=')
-        if len(keyval)!=2:
-          exit('INVALID FILE:\n\n'+filename+'\n\n(line #'+str(iline+1)+': '+col+')\n\nNOT RESTORING.')
-        field=keyval[0]
-        if field=='.NAME': continue
-        try: val = float(keyval[1])
-        except ValueError: exit('INVALID FILE:\n\n'+filename+' \n\n(line #'+str(iline+1)+': '+col+')\n\nNOT RESTORING.')
-        pv=prefix+field
-        caputs.append((pv,val))
-        print pv,val
-#      frac=float(len(lines))/len(lines)
-#      self.progressBar.set_fraction(frac)
-#      self.progressBar.set_text('%d%%'%(round(frac*100)))
-#      gtk.main_iteration()
-    #for xx in caputs:
-      #epics.caput(xx[0],xx[1])
-    exit('RESTORED '+str(len(lines))+' SETTINGS FROM:\n\n'+filename)
 
 def main():
 

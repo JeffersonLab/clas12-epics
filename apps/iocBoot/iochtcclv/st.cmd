@@ -41,7 +41,7 @@ dbLoadRecords("db/sy2604.db","P=htcclv1,PORT=1,ADDR=24,IMAX=2000,OMAX=2000")
 
 
 #dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
-#dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
 
 cd ${TOP}/iocBoot/${IOC}
@@ -50,6 +50,7 @@ cd ${TOP}/iocBoot/${IOC}
 
 iocInit();
 
+# Why is IOC looking for iochtcclv.sav?
 #makeAutosaveFiles()
-#create_monitor_set("sy2604_settings.req",30,"P=HPSECALLV")
+#create_monitor_set("sy2604_settings.req",30,"P=htcclv1")
 

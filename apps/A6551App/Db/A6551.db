@@ -12,7 +12,7 @@ record (ai, "$(P):vmon")
 {
     field (DESC, "Get Voltage")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getVoltage $(PORT)")
 }
 
@@ -27,7 +27,7 @@ record (ai, "$(P):imon")
 {
     field (DESC, "Get current of PS1")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getCurrent $(PORT)")
 }
 
@@ -35,14 +35,14 @@ record (ai, "$(P):isetrbk")
 {
     field (DESC, "Get Current Setpoint")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getCurrentSetpoint $(PORT)")
 }
 record (ai, "$(P):vsetrbk")
 {
     field (DESC, "Get Voltage Setpoint")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getVoltageSetpoint $(PORT)")
 }
 
@@ -57,7 +57,7 @@ record (bi, "$(P):pwrbk")
 {
     field (DESC, "Get PW ON/OFF Status")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getOnOff $(PORT)")
 }
 record (bo, "$(P):pwset")
@@ -77,7 +77,7 @@ record (bo, "$(P):pwsetfull")
 record (bo, "$(P):ocset")
 {
     field (DTYP, "stream")
-    field (OUT,  "@A6551.proto ocsetOnOff $(PORT)")
+    field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
 }
@@ -85,7 +85,7 @@ record (bi, "$(P):ocrbk")
 {
     field (DESC, "Get OC ON/OFF Status")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getOcOnOff $(PORT)")
 }
 record (ao, "$(P):ocreset")
@@ -99,6 +99,6 @@ record (ai, "$(P):ocstat")
 {
     field (DESC, "Get OC Status")
     field (DTYP, "stream")
-    field (SCAN, "1 second")
+    field (SCAN, "2 second")
     field (INP,  "@A6551.proto getOcStatus $(PORT)")
 }

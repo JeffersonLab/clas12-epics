@@ -11,16 +11,23 @@ A6551_registerRecordDeviceDriver pdbbase
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
 ## Configure devices
-#drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
-drvAsynIPPortConfigure("L0",129.57.160.108:1234,0,0,0)
 
+
+#OLD:
+#drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
+#drvAsynIPPortConfigure("L0",129.57.160.108:1234,0,0,0)
 #asynSetTraceMask("L0",-1,0x09)
 #asynSetTraceIOMask("L0",-1,0x02)
 #asynOctetSetOutputEos("L0",0,"\r\n")
 #asynOctetSetInputEos("L0",0,"\n")
+#dbLoadRecords("db/A6551.db","S=1,L=1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
 
-dbLoadRecords("db/A6551.db","S=1,L=1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
 
+# TEMPORARY in EEL125:
+drvAsynIPPortConfigure("L0",129.57.86.140:1234,0,0,0)
+dbLoadRecords("db/A6551.db","P=B_DET_DC_LV_SEC5_R1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
+asynOctetSetOutputEos("L0",0,"\r\n")
+asynOctetSetInputEos("L0",0,"\n")
 
 
 

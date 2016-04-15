@@ -34,11 +34,13 @@ for (var isec=1; isec<=NSECTORS; isec++) {
           var wires=WSFG[sfg][iwire];
 
             var suffix = "_SEC"+isec+"_R"+ireg+"_SL"+slay+"_"+sfg+wires;
-            java.lang.System.err.println(suffix);
+            //java.lang.System.err.println(suffix);
 
             var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-            if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
-            else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
+            lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi");
+            
+            //if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
+            //else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
             //try   { lc.setPropertyValue("resize_behaviour",1); }
             //catch (err) { lc.setPropertyValue("auto_size",true); }
             //    lc.setPropertyValue("resize_behavior",2);

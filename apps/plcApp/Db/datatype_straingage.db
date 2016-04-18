@@ -17,14 +17,14 @@ record(ai, "$(P)$(R)$(ELM):Strain_$(N)") {
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].dV_by_V")
     field(SCAN, "1 second")
     field(EGU,  "dV/V")
-    field(PREC, "2")
+    field(PREC, "0")
 }
 
 record(ai, "$(P)$(R)$(ELM):Strain_$(N):Total") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].total_strain")
     field(SCAN, "1 second")
-    field(EGU,  "")
+    field(EGU,  "ustrain")
     field(PREC, "2")
 }
 
@@ -32,7 +32,7 @@ record(ai, "$(P)$(R)$(ELM):Strain_$(N):Apparent") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].apparent_strain")
     field(SCAN, "1 second")
-    field(EGU,  "")
+    field(EGU,  "ustrain")
     field(PREC, "2")
 }
 
@@ -40,7 +40,7 @@ record(ai, "$(P)$(R)$(ELM):Strain_$(N):Applied") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].applied_strain")
     field(SCAN, "1 second")
-    field(EGU,  "")
+    field(EGU,  "ustrain")
     field(PREC, "2")
 }
 
@@ -48,15 +48,14 @@ record(ai, "$(P)$(R)$(ELM):Strain_$(N):Force") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].applied_force")
     field(SCAN, "1 second")
-    field(EGU,  "")
+    field(EGU,  "lb")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)$(ELM):Strain_$(N):Compensated") {
+record(bo, "$(P)$(R)$(ELM):Strain_$(N):Compensated") {
     field(DTYP, "EtherIP")
-    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].Compensated")
-    field(SCAN, "1 second")
-    field(EGU,  "")
-    field(PREC, "2")
+    field(OUT,  "@$(PLCID) $(ELM).StrainGage[$(N)].Compensated S 1")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
 }
 

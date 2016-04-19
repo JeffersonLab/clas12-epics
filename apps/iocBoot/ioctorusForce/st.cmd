@@ -20,7 +20,7 @@ drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadTemplate("db/torus_mag.substitutions")
+dbLoadTemplate("db/torus_force.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

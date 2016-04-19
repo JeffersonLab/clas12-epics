@@ -1,0 +1,16 @@
+
+file "db/c370.template" { pattern
+{           P,     R,    PORT,   OFFSET,    DATA_TYPE,   LOPR,  HOPR,  PREC,        SCAN}
+{B_SACLAYTGT:,  TT_T,    C370,        0,   FLOAT32_LE,   -1e6,   1e6,     5,  "I/O Intr"}
+}
+
+file "db/c370_asyn.template" { pattern
+{           P,          R,    PORT,   ADDR, TMOD,  IFACE}
+{B_SACLAYTGT:,  Asyn:C370,    C370,      0, Read,  asynInt32}
+}
+
+file "db/asynRecord.db" { pattern
+{           P,     R,    PORT,   ADDR, IMAX, OMAX}
+{B_SACLAYTGT:,  Asyn,    C370,      0,   80,   80} 
+}
+

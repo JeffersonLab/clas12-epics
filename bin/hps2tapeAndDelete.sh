@@ -1,0 +1,1 @@
+/home/hpsrun/scripts/hps2tapeAndDelete.sh

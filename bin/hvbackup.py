@@ -10,7 +10,7 @@ def exit(text):
   mess.set_markup(text)
   mess.run()
   mess.destroy()
-  sys.exit(text)
+  #sys.exit(text)
 
 DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']

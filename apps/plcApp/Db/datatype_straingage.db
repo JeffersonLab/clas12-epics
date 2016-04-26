@@ -17,7 +17,7 @@ record(ai, "$(P)$(R)$(ELM):SG817$(ID)$(N)") {
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].dV_by_V")
     field(SCAN, "1 second")
     field(EGU,  "dV/V")
-    field(PREC, "0")
+    field(PREC, "6")
 }
 
 record(ai, "$(P)$(R)$(ELM):SG817$(ID)$(N):Total") {
@@ -44,6 +44,23 @@ record(ai, "$(P)$(R)$(ELM):SG817$(ID)$(N):Appl") {
     field(PREC, "2")
 }
 
+record(ao, "$(P)$(R)$(ELM):SG817$(ID)$(N):Appl_NAvg") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(ELM).StrainGage[$(N)].N S 1")
+    field(EGU,  "")
+    field(PREC, "0")
+    field(DRVL, "1")
+    field(DRVH, "10")
+}
+
+record(ai, "$(P)$(R)$(ELM):SG817$(ID)$(N):Appl_Avg") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].MAVG")
+    field(SCAN, "1 second")
+    field(EGU,  "ustrain")
+    field(PREC, "2")
+}
+
 record(ai, "$(P)$(R)$(ELM):SG817$(ID)$(N):Force") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(ELM).StrainGage[$(N)].applied_force")
@@ -64,5 +81,12 @@ record(ao, "$(P)$(R)$(ELM):SG817$(ID)$(N):Base") {
     field(OUT,  "@$(PLCID) $(ELM).StrainGage[$(N)].baseline_volts S 1")
     field(EGU,  "V")
     field(PREC, "2")
+}
+
+record(ao, "$(P)$(R)$(ELM):SG817$(ID)$(N):Offset") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(ELM).StrainGage[$(N)].offset_strain S 1")
+    field(EGU,  "ustrain")
+    field(PREC, "6")
 }
 

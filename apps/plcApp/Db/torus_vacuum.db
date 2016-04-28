@@ -199,3 +199,49 @@ record(bi, "$(P)$(R)UPS_OnBatt") {
     field(OSV,  "NO_ALARM")
 }
 
+#
+# ESR
+#
+record(bi, "$(P)$(R)ESR") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) ESR_Live_Out")
+    field(ZNAM, "Down")
+    field(ONAM, "Ok")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# Temporary for faking signal
+record(bo, "$(P)$(R)ESR_CTRL") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) ESR_Live_Out S 1")
+    field(ZNAM, "Down")
+    field(ONAM, "Ok")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+#
+# Transfer Switch
+#
+record(bi, "$(P)$(R)XFER_SW") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Txfr_Switch_Out")
+    field(ZNAM, "Generator PWR")
+    field(ONAM, "Utility PWR")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# Temporary for faking signal
+record(bo, "$(P)$(R)XFER_SW_CTRL") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Txfr_Switch_Out S 1")
+    field(ZNAM, "Generator PWR")
+    field(ONAM, "Utility PWR")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+

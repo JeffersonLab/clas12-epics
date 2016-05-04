@@ -23,7 +23,7 @@ drvAsynIPPortConfigure("L1","ftflash:9764",0,0,0)
 #asynSetTraceIOTruncateSize("L1", 0, 1000)
 
 ## Load record instances
-#dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
 dbLoadRecords("db/ftcFlasher.db","P=B_DET_FTC_FLASHER,R=:asyn,PORT=L1,NCHAN=336");
 
 

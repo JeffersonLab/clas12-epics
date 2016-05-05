@@ -485,7 +485,7 @@ int CNDGen(int crate0=0, int slot0=0, int chan0=0,int det=CND ){
   int maxChan=15;
 
   int   nRing=3;
-  int   nSeg=48;
+  int   nSeg=24;
   const  char *ring[] = {"","Inner","Middle","Outer"}; 
 
   printHierarchy(det,SysFull,SysAbbr,ELEMENT);
@@ -493,8 +493,8 @@ int CNDGen(int crate0=0, int slot0=0, int chan0=0,int det=CND ){
   
   //Detector Sector,Layer, ...
       
-  for(int r=1;r<=3;r++){
-    for(int s=1;s<=48;s++){
+  for(int r=1;r<=nRing;r++){
+    for(int s=1;s<=nSeg;s++){
       for(int e=1; e<=2;e++){
 	
 	markCSCUsed(det,cr,sl,ch);

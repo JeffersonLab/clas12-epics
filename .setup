@@ -4,15 +4,15 @@
 #
 # EPICS Environment
 #
-set sourced=($_)
-
+set sourced=`/usr/sbin/lsof +p $$ | &  grep .setup | awk '{print $9}'`
+#echo "sourced=$sourced"
 # If $CLAS is set from .cshrc or by sourcing top-level .setup, use it.
 # Otherwise, define $EPICS relative to this .setup file.  $curdir is 
 # used so this file can be sourced from anywhere and still work.  
 if ($?CLAS) then
     setenv EPICS $CLAS/epics
 else
-    set curdir=`/usr/bin/readlink -f $sourced[2]`
+    set curdir=`/usr/bin/readlink -f $sourced`
     set curdir=`/usr/bin/dirname $curdir`
     setenv EPICS $curdir
 endif

@@ -1,0 +1,111 @@
+#Protocols to implement the functions for FLASHER controller for the FT flasher
+#see flasher.template and flasherChan.template
+#Now these are the records for the board (as opposed to the individual channels)
+#Approximately in the order written in the wiki at:
+#wiki.ge.infn.it/g3wiki/index.php/Monitoring_system
+
+#OutTerminator = CR LF;
+Terminator = LF;
+ReplyTimeout = 3000;
+ExtraInput = Ignore;
+
+sendCommand { out "%s"; in "%(\$1:RESPONSE.VAL)s"; wait 10; };
+
+#These ones are for the whole board commands.
+#basic first
+getIP { out "GET IP"; in "%s";wait 10; };
+setIP { out "SET IP %s";wait 10;};
+
+getMask { out "GET NETMASK"; in "%s";wait 10; };
+setMask { out "SET MASK %s";wait 10;};
+
+getGateway { out "GET GATEWAY"; in "%s"; wait 10;};
+setGateway { out "SET GATEWAY %s";wait 10;};
+
+sendReset { out "RESET"; disconnect; wait 1000; connect 2000; };
+
+##NEEDS CHECKING
+#getDriverStatus {  out "GET STATUS"; in "%s";wait 10; };
+getDriverStatus { out "GET STATUS"; in "%{OFF|ON}";wait 10; };
+setDriverStatus { out "TURN %{OFF|ON}";wait 2000;};
+
+getSequence { out "GET SEQUENCE"; in "%{SEQUENCE OFF|SEQUENCE ON}";wait 100; };
+
+setAmpAll { out "SET AMPL_ALL %d";wait 10; }; 
+
+setWidthAll { out "SET WIDTH_ALL %d";wait 10; }; 
+
+getClock {out "GET CLOCK"; in "%{INTERNAL|EXTERNAL} CLOCK";wait 10;};
+setClock {out "SET CLOCK %{INT|EXT}";wait 10;};
+
+getCol {out "GET COLOR"; in "%{RED|BLUE}";wait 10;};  
+setCol {out "SET COLOR %{R|B}";wait 10;};  
+
+getFreq { out "GET FREQ"; in "%g Hz";wait 10; }
+setFreq { out "SET FREQ %d";wait 10; };
+
+#getOwr { out "GET OWR"; in "%{OFF|ON}";wait 10; };
+getOwr { out "GET OWR"; in "%d";wait 10; };
+setOwr { out "SET OWR %s";wait 10; };
+
+
+#advanced
+getServerIP { out "GET DATA_SERVER_IP"; in "%s"; wait 10;};
+setServerIP { out "SET DATA_SERVER_IP %s";wait 10;};
+
+getDataFile { out "GET DATA_FILE_NAME"; in "%s";wait 10; };
+setDataFile { out "SET DATA_FILE_NAME %s";wait 10;};
+
+getSeqFile { out "GET SEQUENCE_FILE_NAME"; in "%s";wait 10; };
+setSeqFile { out "SET SEQUENCE_FILE_NAME %s";wait 10;};
+
+loadData { out "LOAD_DATA";wait 10; };
+
+loadSeq { out "LOAD_SEQUENCE";wait 10; };
+
+#seqStart{ out "%s_SEQUENCE";wait 10; };
+seqStart{ out "%{STOP_SEQUENCE|START_SEQUENCE}";wait 500; };
+
+#Channel commands, where channel passes as arg
+getAmpChan { out "GET AMPL \$1"; in "%g"; wait 10;};
+setAmpChan { out "SET AMPL \$1 %d"; wait 10;};
+
+#Channel commands, where channel passes as arg
+getWidthChan { out "GET WIDTH \$1"; in "%g";wait 10;};
+setWidthChan { out "SET WIDTH \$1 %d";wait 10;};
+getWidthAll { out "GET WIDTH_ALL"; in "\$1 %d";};
+
+getAmplAll { out "GET AMPL_ALL"; in "\$1 %d";};
+
+#Read which 6 LEDs are on
+getLeds { out "GET LED_STATUS_ALL"; in "%(\$1:LED_ID1.VAL)g %(\$1:LED_ID2.VAL)g %(\$1:LED_ID3.VAL)g %(\$1:LED_ID4.VAL)g %(\$1:LED_ID5.VAL)g %(\$1:LED_ID6.VAL)g ";wait 10;};
+#getLeds { out "GET LED_STATUS_ALL"; in "%(\$1:LED_ID1.VAL)g %(\$1:LED_ID2.VAL)g %(\$1:LED_ID3.VAL)g %(\$1:LED_ID4.VAL)g ";wait 10;};
+
+#Write to the selected channel
+setWidthSel { out "SET WIDTH %(\$1:SELECTED_CHANNEL.VAL)s %d"; wait 10;};
+setAmplSel { out "SET AMPL %(\$1:SELECTED_CHANNEL.VAL)s %d"; wait 10;};
+
+#Read to the selected channel
+getWidthSel { out "GET WIDTH %(\$1:SELECTED_CHANNEL.VAL)s"; in "%g"; wait 10;};
+getAmplSel { out "GET AMPL %(\$1:SELECTED_CHANNEL.VAL)s"; in "%g";  wait 10;};
+
+setAllAmpAsSelected { out "SET AMPL_ALL %(\$1:SET_SELECTED_AMP.VAL)s"; wait 10; }; 
+setAllWidthAsSelected { out "SET WIDTH_ALL %(\$1:SET_SELECTED_WIDTH.VAL)s"; wait 10; };
+
+#setData { separator=" "; out "SET DATA% i"; wait 100;}; 
+setData { separator=""; out "SET DATA% i"; wait 100;}; 
+
+switchLED{ out "SWITCH %{OFF|ON} %(\$1:SELECTED_CHANNEL.VAL)s"; wait 10;};
+statusLED{ out "GET LED_STATUS %(\$1:SELECTED_CHANNEL.VAL)s"; in "%{0|1}"; wait 10;};
+
+#sequence stuff
+setNSeqRep{ out "SET N_SEQUENCE_REPETITIONS %d";  wait 10;};
+setNSeqSteps{ out "SET N_SEQUENCE_STEPS %d";  wait 10;};
+setSeqDone{ out "SET SEQUENCE_DONE";  wait 10;};
+
+setSeqStep{ out "SET SEQUENCE_STEP %s";  wait 10;};
+
+setScanTon{ out "SET SCAN_TON %d"; wait 10;};
+setScanToff{ out "SET SCAN_TOFF %d"; wait 10;};
+setScanLed{out "SET SCAN_LED %s"; wait 10;};
+scanStart{out "%{STOP_SCAN|START_SCAN}"; wait 10;};

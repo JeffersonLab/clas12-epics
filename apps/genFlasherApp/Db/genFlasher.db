@@ -1,0 +1,390 @@
+# % macro, PORT, Asyn port name
+# % macro, P   , prefix eg. B_FT_FLASHER
+# See the documentation here:
+
+#This one for debugging using asyn
+#run something like this:
+#
+#medm -x -macro P=B_FT_FLASHER,R=:asyn /home/epics/clas/clas12/R3.14.12.3/synApps_5_5/support/asyn-4-13/medm/asynRecord.adl
+#
+#In the GUI select the "more" menu : asynOctet Interface option
+#This pops up a GUI where we can write and read strings directly to the device.
+ 
+record(asyn,"$(P):asyn"){
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+}
+
+#Inputs and outputs from reading the udp packet
+#Header (should always be 0x5a5a)
+record(longin, "$(P):HI"){
+}
+record(longout, "$(P):HO"){
+    field(VAL,"0x5a5a")
+}
+
+#Param for what follows: 
+#See manual
+record(longin, "$(P):PI"){
+}
+record(longout, "$(P):PO"){
+    field(VAL,"0x010003")
+}
+
+#Config regs in
+record(longin, "$(P):RI0"){
+}
+record(longin, "$(P):RI1"){
+}
+record(longin, "$(P):RI2"){
+}
+record(longin, "$(P):RI3"){
+}
+record(longin, "$(P):RI4"){
+}
+record(longin, "$(P):RI5"){
+}
+record(longin, "$(P):RI6"){
+}
+record(longin, "$(P):RI7"){
+}
+record(longin, "$(P):RI8"){
+}
+record(longin, "$(P):RI9"){
+}
+record(longin, "$(P):RI10"){
+}
+record(longin, "$(P):RI11"){
+      #unused register, when it changes from 999 we know the ioc is initialised see REG_CALC below.
+      field(VAL,"999")
+}
+#Config regs out
+#Mostly the FLINK to REG_CALC which checks that init is done, then writes the whole udp packet of register values
+#Reg 0-5 voltages
+record(longout, "$(P):RO0"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO1"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO2"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO3"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO4"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO5"){
+     field(FLNK,"$(P):REG_CALC")
+}
+#timing - these are 2 register entities, the 2nd reg has 3MSB (18,17,16), of 19 bit time value, plus enable and mode bits.
+#the low reg has  bits 0-15 of time value
+#A change to R07 should trigger calculation of RO6 before doing a write.
+record(longout, "$(P):RO6"){
+    field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO7"){
+     field(FLNK,"$(P):J4_CALC_LO")
+}
+record(longout, "$(P):RO8"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO9"){
+     field(FLNK,"$(P):J3_CALC_LO")
+}
+record(longout, "$(P):RO10"){
+     field(FLNK,"$(P):REG_CALC")
+}
+record(longout, "$(P):RO11"){
+     #unused register when, it changes from 999 we know the ioc is initialised see REG_CALC below.
+     field(VAL,"999")
+     field(FLNK,"$(P):REG_CALC")
+}
+
+
+#status regs
+record(longin, "$(P):S0"){
+}
+record(longin, "$(P):S1"){
+}
+record(longin, "$(P):S2"){
+}
+record(longin, "$(P):S3"){
+}
+record(longin, "$(P):S4"){
+}
+record(longin, "$(P):S5"){
+}
+record(longin, "$(P):S6"){
+}
+record(longin, "$(P):S7"){
+}
+record(longin, "$(P):S8"){
+}
+record(longin, "$(P):S9"){
+}
+record(longin, "$(P):S10"){
+}
+record(longin, "$(P):S11"){
+}
+record(longin, "$(P):S12"){
+}
+record(longin, "$(P):S13"){
+}
+record(longin, "$(P):S14"){
+}
+
+#checks that the ioc is initialised. If so, trigger the writing of the udp packet
+record(calcout,"$(P):REG_CALC"){
+	field(INPA,"$(P):RO11 CPP NMS")
+	field(OOPT,"When Non-zero")
+	field(OUT,"$(P):SET_ALL_REGISTERS.PROC CPP NMS")
+	field(CALC,"A<999")
+}
+
+record(longin, "$(P):J4_FREQ"){
+}
+record(longin, "$(P):J3_FREQ"){
+}
+
+
+
+#Get the high and low bytes of the time from the input frequency.
+#Time is 19 bits of a longint. The 15-0bits go in the low byte, and bytes 18,17,16 go into bits 13,12,11 of this high byte.
+#We also need to preserve the state of bits 15 and 14 in the high byte!
+
+#High byte
+#Ths CALC field does the following in a hard to read one liner:
+#time = 1/freq*20ns
+#get only bits 18,17,16 (AND with 458752 =     0x1110000000000000000)
+#shift 5 bits to the right  (>> 5  =              0x0011100000000000) 1
+#get bits 15,14 of the current setting (A&49152 = 0x1100000000000000) 2
+#Get the OR of 1 and 2
+
+record(calcout,"$(P):J4_CALC_HI"){
+	field(INPA,"$(P):RI7")
+	field(INPB,"$(P):J4_FREQ CPP")
+	field(OOPT,"Every Time")
+	field(OUT,"$(P):RO7 CPP")
+	field(CALC,"(((5e7/B)&458752)>>5)|(A&49152)")
+}
+
+#low bytes
+#bits 0-15 of the 18bits 
+record(calcout,"$(P):J4_CALC_LO"){
+	field(INPA,"$(P):J4_FREQ" )
+	field(OOPT,"Every Time")
+	field(OUT,"$(P):RO6 CPP")
+	field(CALC,"(((5e7/A)&65535))")
+}
+#
+record(calcout,"$(P):J3_CALC_HI"){
+	field(INPA,"$(P):RI9")
+	field(INPB,"$(P):J3_FREQ CPP")
+	field(OOPT,"Every Time")
+	field(OUT,"$(P):RO9 CPP")
+	field(CALC,"(((5e7/B)&458752)>>5)|(A&49152)")
+}
+
+#low bytes
+#bits 0-15 of the 18bits 
+record(calcout,"$(P):J3_CALC_LO"){
+	field(INPA,"$(P):J3_FREQ" )
+	field(OOPT,"Every Time")
+	field(OUT,"$(P):RO8 CPP")
+	field(CALC,"(((5e7/A)&65535))")
+}
+
+#
+
+#Reads the udp packet and sets the ROxx into the records defined above to be the current values from the module
+record(ai, "$(P):INIT_REGISTERS"){
+        field(DTYP, "stream")
+        field(PINI, "YES")
+ 	field(INP, "@genFlasher.proto initReg($(P)) $(PORT)")
+#        field(FLNK, "$(P):GET_ALL_REGISTERS")
+}
+
+#Reads the udp packet into the records defined above.
+record(ai, "$(P):GET_ALL_REGISTERS"){
+        field(DTYP, "stream")
+        field(SCAN, "1 second")
+ 	field(INP, "@genFlasher.proto getAllReg($(P)) $(PORT)")
+}
+
+#Reads the udp packet into the records defined above.
+record(ao, "$(P):SET_ALL_REGISTERS"){
+        field(DTYP, "stream")
+ 	field(OUT, "@genFlasher.proto setAllReg($(P)) $(PORT)")
+        field(FLNK, "$(P):GET_ALL_REGISTERS")
+}
+
+#Records for setting and reading back the physical quantities - get set from the calcouts below
+record(ao,"$(P):J4_V1_SET"){
+}
+record(ai,"$(P):J4_V1_RBK"){
+}
+record(ao,"$(P):J4_V2_SET"){
+}
+record(ai,"$(P):J4_V2_RBK"){
+}
+record(ao,"$(P):J4_LED_SET"){
+}
+record(ai,"$(P):J4_LED_RBK"){
+}
+
+record(ao,"$(P):J3_V1_SET"){
+}
+record(ai,"$(P):J3_V1_RBK"){
+}
+record(ao,"$(P):J3_V2_SET"){
+}
+record(ai,"$(P):J3_V2_RBK"){
+}
+record(ao,"$(P):J3_LED_SET"){
+}
+record(ai,"$(P):J3_LED_RBK"){
+}
+
+
+
+record(calcout,"$(P):J4_V1_SET_CALC"){
+}
+record(calcout,"$(P):J4_V2_SET_CALC"){
+}
+record(calcout,"$(P):J4_LED_SET_CALC"){
+}
+#J4
+#bits 8-15 of S6 (right shift 8 bits)
+record(calcout,"$(P):J4_V1_RBK_CALC"){
+	field(INPA,"$(P):S6 CPP ")
+	field(OUT,"$(P):J4_V1_RBK CPP ")
+	field(CALC,"(A>>8)*5.5/256")
+}
+#bits 0-7 of S6 (and with 0x00ff, = 255)
+record(calcout,"$(P):J4_V2_RBK_CALC"){
+	field(INPA,"$(P):S6 CPP ")
+	field(OUT,"$(P):J4_V2_RBK CPP ")
+	field(CALC,"(A&255)*5.5/256")
+}
+#bits 8-15 of S7 (right shift 8 bits)
+record(calcout,"$(P):J4_LED_RBK_CALC"){
+	field(INPA,"$(P):S7 CPP ")
+	field(OUT,"$(P):J4_LED_RBK CPP ")
+	field(CALC,"(A>>8)*8/256")
+}
+
+#J3
+#bits 0-7 of S7 (and with 0x00ff, = 255)
+record(calcout,"$(P):J3_V1_RBK_CALC"){
+	field(INPA,"$(P):S7 CPP ")
+	field(OUT,"$(P):J3_V1_RBK CPP ")
+	field(CALC,"(A&255)*5.5/256")
+}
+#bits 0-7 of S8 (and with 0x00ff, = 255)
+record(calcout,"$(P):J3_V2_RBK_CALC"){
+	field(INPA,"$(P):S8 CPP ")
+	field(OUT,"$(P):J3_V2_RBK CPP ")
+	field(CALC,"(A&255)*5.5/256")
+}
+#bits 8-15 of S8 (right shift 8 bits)
+record(calcout,"$(P):J3_LED_RBK_CALC"){
+	field(INPA,"$(P):S8 CPP ")
+	field(OUT,"$(P):J3_LED_RBK CPP ")
+	field(CALC,"(A>>8)*8/256")
+}
+
+
+record(ai,"$(P):J4_FREQ_RBK"){
+}
+
+#int tig (R07 bit 15=0) show set value, if ext trig, show that value
+record(calcout,"$(P):J4_FREQ_RBK_CALC"){
+	field(INPA,"$(P):S10 CPP ")
+	field(INPB,"$(P):RO7 CPP ")
+	field(INPC,"$(P):J4_FREQ CPP")
+	field(OUT,"$(P):J4_FREQ_RBK CPP ")
+	field(CALC,"(B&32768)?A*10:C")
+}
+
+record(ai,"$(P):J3_FREQ_RBK"){
+}
+
+record(calcout,"$(P):J3_FREQ_RBK_CALC"){
+	field(INPA,"$(P):S11 CPP ")
+	field(INPB,"$(P):RO9 CPP ")
+	field(INPC,"$(P):J3_FREQ CPP")
+	field(OUT,"$(P):J3_FREQ_RBK CPP ")
+	field(CALC,"(B&32768)?A*10:C")
+}
+
+record(waveform, "$(P):DATA_FILE_SAVE"){
+        field(DESC, "File to save settings")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+record(waveform, "$(P):DATA_FILE_LOAD"){
+        field(DESC, "File to load settings")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+
+record(ao,"$(P):J3_V1_SET"){
+}
+record(ao,"$(P):J3_V2_SET"){
+}
+record(ao,"$(P):J3_VLED_SET"){
+}
+record(ao,"$(P):J4_V1_SET"){
+}
+record(ao,"$(P):J4_V2_SET"){
+}
+record(ao,"$(P):J4_VLED_SET"){
+}
+
+
+
+record(calcout, "$(P):J3_V1_SET_CALC"){
+	field(INPA,"$(P):RO3 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"19.53125")
+	field(OUT,"$(P):J3_V1_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}
+record(calcout, "$(P):J3_V2_SET_CALC"){
+	field(INPA,"$(P):RO5 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"19.53125")
+	field(OUT,"$(P):J3_V2_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}
+record(calcout, "$(P):J3_VLED_SET_CALC"){
+	field(INPA,"$(P):RO4 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"39.0625")
+	field(OUT,"$(P):J3_VLED_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}
+record(calcout, "$(P):J4_V1_SET_CALC"){
+	field(INPA,"$(P):RO0 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"19.53125")
+	field(OUT,"$(P):J4_V1_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}
+record(calcout, "$(P):J4_V2_SET_CALC"){
+	field(INPA,"$(P):RO1 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"19.53125")
+	field(OUT,"$(P):J4_V2_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}
+record(calcout, "$(P):J4_VLED_SET_CALC"){
+	field(INPA,"$(P):RO2 CPP")
+	field(INPB,"2.1e+3")
+	field(INPC,"39.0625")
+	field(OUT,"$(P):J4_VLED_SET CPP")
+	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
+}

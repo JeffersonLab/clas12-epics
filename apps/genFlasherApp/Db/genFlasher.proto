@@ -1,0 +1,24 @@
+#Protocols to implement the functions for general FLASHER controller
+#See tha manual at http.... slow controls for details of the modules and regs.
+ReplyTimeout = 1000;
+ExtraInput = Ignore;
+
+#There are basically only 2 udp commands:
+#1 write all regs.
+#2 read all regs.
+
+#Hence any write commands must contain the proper values of ALL the registers, not just the one of interest.
+#R0-10 are the used controll registers, with I or O incicating whether they're input(read from module) or output (write to module).
+#R11 is misused to indicate when initiaisation has occured. It's initted to 999 and overwritten by 0 on this init.
+#S0-14 are the status registers. THey can only be read.
+
+#init reg gets the values af all the regs makes them the default for subsequent writes (ROxx). ie sets all the initial ROxx values to the values read from the box
+#Also reads all the Sxx values.
+
+initReg { out "\x5a\x5a\x02\x03"; in "%(\$1:HI)02r%(\$1:PI)02r%(\$1:RO0)02r%(\$1:RO1)02r%(\$1:RO2)02r%(\$1:RO3)02r%(\$1:RO4)02r%(\$1:RO5)02r%(\$1:RO6)02r%(\$1:RO7)02r%(\$1:RO8)02r%(\$1:RO9)02r%(\$1:RO10)02r%(\$1:RO11)02r%*18r%(\$1:S0)02r%(\$1:S1)02r%(\$1:S2)02r%(\$1:S3)02r%(\$1:S4)02r%(\$1:S5)02r%(\$1:S6)02r%(\$1:S7)02r%(\$1:S8)02r%(\$1:S9)02r%(\$1:S10)02r%(\$1:S11)02r%(\$1:S12)02r%(\$1:S13)02r%(\$1:S14)02r"; wait 100;};
+
+#gets the values of all regs into RIxx and Sxx
+getAllReg { out "\x5a\x5a\x02\x03"; in "%(\$1:HI)02r%(\$1:PI)02r%(\$1:RI0)02r%(\$1:RI1)02r%(\$1:RI2)02r%(\$1:RI3)02r%(\$1:RI4)02r%(\$1:RI5)02r%(\$1:RI6)02r%(\$1:RI7)02r%(\$1:RI8)02r%(\$1:RI9)02r%(\$1:RI10)02r%(\$1:RI11)02r%*18r%(\$1:S0)02r%(\$1:S1)02r%(\$1:S2)02r%(\$1:S3)02r%(\$1:S4)02r%(\$1:S5)02r%(\$1:S6)02r%(\$1:S7)02r%(\$1:S8)02r%(\$1:S9)02r%(\$1:S10)02r%(\$1:S11)02r%(\$1:S12)02r%(\$1:S13)02r%(\$1:S14)02r"; wait 100;};
+
+#writes all the registers ROxx, and padds the remaining unused regs with zeros.
+setAllReg { out "%(\$1:HO).2r%(\$1:PO).3r%(\$1:RO0).2r%(\$1:RO1).2r%(\$1:RO2).2r%(\$1:RO3).2r%(\$1:RO4).2r%(\$1:RO5).2r%(\$1:RO6).2r%(\$1:RO7).2r%(\$1:RO8).2r%(\$1:RO9).2r%(\$1:RO10).2r\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"; wait 100;};

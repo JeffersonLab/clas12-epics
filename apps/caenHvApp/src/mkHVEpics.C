@@ -3,7 +3,7 @@
 //
 // Here's the general procedure:
 // 1. Get a description from the Detector expert - eg algorithm. spreadsheet etc.
-// 2. Make this into a specific function. (See below, eg ECGen() ). This needs to have
+// 2. Make this into a specific function. (See below, eg ECGen() ). This needs to haves
 //    nested loops going through the specific heirarchy of systems for that detector
 //    At the innermost level, we'll be incrementing element numbers. 
 // 3. As the element number is incremented, we need to incrememt the channel, slot, crate
@@ -110,9 +110,9 @@ const char *subFileTail[]  =  {"}",
 
 
 //some default values for file and directory names
-char bootDir[]    = "../../iocBoot";
+char bootDir[]    = "../../../iocBoot";
 char iocDir[]     = "ioccaenhv";
-char dbDir[]      = "../Db";
+char dbDir[]      = "../../Db";
 
 char fullHVName[] = "ALL";
 
@@ -180,7 +180,7 @@ int groupDets[][5] = { ECAL,  LTCC, -1, -1, -1,
 		       CND,  -1,   -1, -1, -1};
 
 //default filenename for all the names and aliases
-const char defaultAllnamesFile[] = "HV_allnames.txt";
+const char defaultAllnamesFile[] = "../HV_allnames.txt";
 char allnamesFile[100];
 
 ofstream allnames;  //streams for read / write to allnamesFile
@@ -234,7 +234,7 @@ enum swapFields{CSC, ALIAS, NEW_CSC};
 char *swapTable[1000][3];  //to hold strings from the swap file;
 int  nSwaps=0;
 int haveSwap=0;
-const char *defaultSwapFile="HVswaps.txt";
+const char *defaultSwapFile="../HVswaps.txt";
 char swapFile[100];
 
 //For single test crates where aliases are to be provided
@@ -257,8 +257,7 @@ int FTOFGen(int crate0=1, int slot0=0, int chan0=0,int det=FTOF ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                SYS{ SECTOR,   LAYER,           SIDE,          ELEMENT        };
   const char  *SysAbbr[]={ "SEC",    "PANEL",         "",             ""            };
@@ -313,8 +312,7 @@ int CTOFGen(int crate0=0, int slot0=0, int chan0=0,int det=CTOF ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
 
   enum                SYS{ SIDE,              ELEMENT        };
@@ -366,8 +364,7 @@ int FTCGen(int crate0=0, int slot0=0, int chan0=0,int det=FTC ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
 
   enum                SYS{ QUADRANT,          ELEMENT        };
@@ -418,8 +415,7 @@ int LTCCGen(int crate0=1, int slot0=14, int chan0=0,int det=LTCC ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                  SYS{ SECTOR,   SIDE,          ELEMENT        };
   const char  *SysAbbr[]={ "SEC",    "",            ""             };
@@ -471,8 +467,7 @@ int CNDGen(int crate0=0, int slot0=0, int chan0=0,int det=CND ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                  SYS{ RING,         SEGMENT,            ELEMENT         };
   const char  *SysAbbr[]={ "",              "Seg",             "E"            };
@@ -500,7 +495,6 @@ int CNDGen(int crate0=0, int slot0=0, int chan0=0,int det=CND ){
 	markCSCUsed(det,cr,sl,ch);
 	
 	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[RING],ring[r],SysAbbr[SEGMENT],s,SysAbbr[ELEMENT],e);
-	cout << alias <<endl;
 	//sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
 	sprintf(canonicalName, "B_%s%s_%s%02d_%s%02d",GeogAbbr[CRATE],HVCrate[det],GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
 	printNames(canonicalName,alias);
@@ -527,8 +521,7 @@ int HTCCGen(int crate0=0, int slot0=8, int chan0=0,int det=HTCC ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                SYS{  SECTOR,   SIDE,          ELEMENT       };
   const char  *SysAbbr[]={ "SEC",    "",            ""             };
@@ -582,8 +575,7 @@ int PCGen(int crate0=1, int slot0=8, int chan0=0, int det=PCAL ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                  SYS{ SECTOR,   LAYER,         ELEMENT     };
   const char  *SysAbbr[]={ "SEC",    "",            ""           };
@@ -642,8 +634,7 @@ int ECGen(int crate0=1, int slot0=0, int chan0=0, int det=ECAL  ){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
+
 
   enum                SYS{ SECTOR,   LAYER,                      ELEMENT         };
   const char  *SysAbbr[]={ "SEC",    "",                        ""               };
@@ -693,8 +684,6 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
   int ch=chan0;
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n;
 
   enum                  SYS{ SECTOR, REGION,     LAYER,          TYPE,    ELEMENT,     };
   const char  *SysAbbr[]={ "SEC",    "R",      "SL",           "",      ""           };
@@ -764,9 +753,8 @@ int SingleCrateGen(char *name=NULL, int chans=24, int nslots=16, int *slotlist=N
 
   char canonicalName[64];
   char alias[64];
-  char macro[64];
-  int n,s;
-  int cr=0;
+
+  int s;
   char  *swappedAlias=NULL;
   
   
@@ -887,7 +875,7 @@ void markCSCUsed(int det, int crate, int sl, int ch){
   } 
   while(crateName[cr]){                         //find the index  
     if(strcmp(crName,crateName[cr])==0){
-      CSCstatus[cr][sl][ch]=CHAN_USED;          //mark the cr,sl,ch as used
+      CSCstatus[cr][sl][ch]=CHAN_USED;            //mark the cr,sl,ch as used
       return;
     }
     cr++;
@@ -1022,13 +1010,22 @@ void mkHVEpics(){
   char canonicalName[64];
   char alias[64];
   int inc=1;
+  int nSlot=defaultNSlot;
+  int nChan=defaultNChan;
 
   //flag all crates,slots and channels as spare to start with. 
   for(int cr=0;cr<NMAINFRAMES;cr++){
-    if(cr==HVFTAG) inc=2;
+
+    //some hacked specials
+    if(cr==HVFTAG) inc=2;             //there are 2 slots wide (calorimiter ones)
     else inc=1;
-    for(int sl=0;sl<defaultNSlot;sl+=inc){
-      for(int ch=0;ch<defaultNChan;ch++){
+
+    if(crateType[cr]==527) nSlot==10; //sy527s only have 10 slots
+    if(cr==HVCND) nChan=16;           //
+
+
+    for(int sl=0;sl<nSlot;sl+=inc){
+      for(int ch=0;ch<nChan;ch++){
 	CSCstatus[cr][sl][ch]=CHAN_SPARE;
       }
     }
@@ -1546,7 +1543,7 @@ void mkLinkIoc(char *bootdir, char *iocdir, char *linkname){
   char linkCommand[200]; 
 
   cout << "Linking " << bootdir << "/" << iocdir << " as " <<  bootdir << "/" << linkname << endl;
-  sprintf(linkCommand,"cd %s; ln -T -s %s %s",bootdir,iocdir,linkname);
+  sprintf(linkCommand,"cd %s; ln -f -T -s %s %s",bootdir,iocdir,linkname);
   system(linkCommand);
   cout << endl;
 }

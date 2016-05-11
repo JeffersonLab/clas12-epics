@@ -8,13 +8,8 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-#DB    += b_templates.db
-#DB    += ctof.substitutions
-#DB    += ecal.substitutions
-#DB    += hv.substitutions
 DB    += caenhv.db
 DB    += $(wildcard ../*.substitutions)
-
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
@@ -23,4 +18,5 @@ DB    += $(wildcard ../*.substitutions)
 include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
+
 

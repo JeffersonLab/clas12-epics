@@ -46,29 +46,29 @@ dim_DIR   += $(DIM_LIB)
 USR_INCLUDES += $(SMIXX_INCLUDE)
 USR_INCLUDES += $(DIM_INCLUDE)
 
+
+mkHV = $(EPICS)/apps/bin/$(EPICS_HOST_ARCH)/mkHVEpics
+HVLIST = ../HV_allnames.txt 
+
+#Note this target gets built from inside all the O.<ostype> subdirs
+#Howevers, the deps are set up so that only the 1st in the lsit really builds
+TARGETS += $(HVLIST)
+
 #===========================
 include $(TOP)/configure/RULES
 
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-GENERATOR = mkHVEpics
+mkHV = $(EPICS)/apps/bin/$(EPICS_HOST_ARCH)/mkHVEpics
 
-gen:	$(GENERATOR)
+HVLIST = ../HV_allnames.txt 
 
-$(GENERATOR): $(GENERATOR).C
-	g++ -o $(GENERATOR) $(GENERATOR).C
+$(HVLIST): 	 $(mkHV) ../HVswaps.txt ../../Db/caenhv.db
+		echo "Generating HV names, substitutions and iocs. See mkHVEpics.log and HV_allnames.txt"
+		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics crates > ../mkHVEpics.log 
+		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics groups >> ../mkHVEpics.log
+		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics all >> ../mkHVEpics.log
 
-gen_clean:
-	/bin/rm -r $(GENERATOR)
-
-iocs:    $(GENERATOR)	
-	./$(GENERATOR) all
-	./$(GENERATOR) crates
-	./$(GENERATOR) groups
-	chmod +x ../../iocBoot/ioccaenhv/st.cmd*
-
-ioc_clean:
-	/bin/rm -f ../../iocBoot/ioccaenhv_*
-	/bin/rm -f ../../iocBoot/ioccaenhv/st.cmd*
-	/bin/rm -r ../Db/HV*.substitutions
+$(mkHV):	../mkHVEpics.C
+		g++ -o $@ $^

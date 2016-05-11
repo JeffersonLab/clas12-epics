@@ -79,13 +79,14 @@ clasTree_LIBS += $(EPICS_BASE_IOC_LIBS)
 # make the ioc db substitutions and init files for the tree
 IOCDIR = ../../iocBoot/iocclasTree
 
+#define variables to make extra targets
 OUTNAME = clas12
-SCRIPTDIR = ../op/scripts
-DICTFILE=$(OUTNAME)NodesDict.py
+SCRIPTDIR = ../../op/scripts
+DICTFILE=$(SCRIPTDIR)/$(OUTNAME)NodesDict.py
 RECDUMP = ./sub2dump.sh
 PARSER = ./parseEpicsRecordDump
 
-
+TARGETS += $(DICTFILE)
 
 #=============================
 
@@ -93,8 +94,11 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-nodes:			
-		ln -sf ../../db ./
-		$(RECDUMP) | $(PARSER) -v outname=$(OUTNAME)
+DICTDEPS =  ../sub2dump.sh ../parseEpicsRecordDump 
+DICTDEPS += $(EPICS)/apps/caenHvApp/src/HV_allnames.txt
+
+# need deps from other apps whos .sub or .db files are to be parsed.
+$(DICTFILE):	$(DICTDEPS)
+		cd ../; ln -sf ../../db ../; $(RECDUMP) | $(PARSER) -v outname=$(OUTNAME)
 		cd $(SCRIPTDIR); ln -sf $(OUTNAME)NodesDict.py NodesDict.py
 

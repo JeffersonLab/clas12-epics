@@ -9,6 +9,9 @@ dbLoadDatabase("dbd/cRio.dbd")
 cRio_registerRecordDeviceDriver(pdbbase)
 
 ## Load record instances
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
+## Detector Systems 
 dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_,R=HTCC_")
 dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_,R=SVT_")
 

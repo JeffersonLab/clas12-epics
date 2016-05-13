@@ -34,4 +34,5 @@ iocInit
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
+create_monitor_set("torus_force_settings.req", 30, "P=B_TORUS:,R=FOR:")
 

@@ -1,3 +1,5 @@
+![alt tag](https://github.com/JeffersonLab/clas12-epics/blob/master/css_share/common/images/clas12_color.svg)
+
 # clas12-epics
 CLAS12 EPICS 
 

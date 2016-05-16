@@ -47,12 +47,7 @@ USR_INCLUDES += $(SMIXX_INCLUDE)
 USR_INCLUDES += $(DIM_INCLUDE)
 
 
-mkHV = $(EPICS)/apps/bin/$(EPICS_HOST_ARCH)/mkHVEpics
-HVLIST = ../HV_allnames.txt 
-
-#Note this target gets built from inside all the O.<ostype> subdirs
-#Howevers, the deps are set up so that only the 1st in the lsit really builds
-TARGETS += $(HVLIST)
+TARGETS += mkHVEpics ../HV_allnames.txt 
 
 #===========================
 include $(TOP)/configure/RULES
@@ -60,15 +55,12 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-mkHV = $(EPICS)/apps/bin/$(EPICS_HOST_ARCH)/mkHVEpics
+mkHVEpics:	mkHVEpics.C
+	g++ -o $@ $^
 
-HVLIST = ../HV_allnames.txt 
+../HV_allnames.txt:	mkHVEpics ../HVswaps.txt ../../Db/caenhv.db
+	echo "Generating HV names, substitutions and iocs. See mkHVEpics.log and HV_allnames.txt"
+	./mkHVEpics crates > ../mkHVEpics.log 
+	./mkHVEpics groups >> ../mkHVEpics.log
+	./mkHVEpics all >> ../mkHVEpics.log
 
-$(HVLIST): 	 $(mkHV) ../HVswaps.txt ../../Db/caenhv.db
-		echo "Generating HV names, substitutions and iocs. See mkHVEpics.log and HV_allnames.txt"
-		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics crates > ../mkHVEpics.log 
-		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics groups >> ../mkHVEpics.log
-		../../../bin/$(EPICS_HOST_ARCH)/mkHVEpics all >> ../mkHVEpics.log
-
-$(mkHV):	../mkHVEpics.C
-		g++ -o $@ $^

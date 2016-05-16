@@ -1,0 +1,25 @@
+# This is an example protocol file
+
+OutTerminator = CR;
+InTerminator = CR;
+ExtraInput = Ignore;
+writetimeout = 100;
+readtimeout = 300;     # milliseconds
+replytimeout = 1000;
+
+
+pwoff   { out "MOFF"; }
+pwon    { out "MON";  }
+reset   { out "MRESET"; }
+iset    { out "MRM:%f"; }
+isetnow { out "MWI:%f"; }
+imon    { out "MRI";  in "#MRI:%f"; }
+vin     { out "MRP";  in "#MRP:%f"; }
+vout    { out "MRV";  in "#MRV:%f"; }
+tsink   { out "MRT";  in "#MRT:%f"; }
+tshunt  { out "MRTS"; in "#MRTS:%f"; }
+status  { out "MST";  in "#MST:%s"; }
+status2 { out "MST";  in "#MST:%d"; }
+version { out "MVER"; in "#MVER:%s"; }
+id      { out "MRID"; in "#MRID%s"; }
+ 

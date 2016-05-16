@@ -1,0 +1,11 @@
+#
+# This folder contains the lists of PV's to be archived by Mya.  Each archive 
+# group is listed in it's own text file.
+#
+
+# Check if all PV's in file are archived (shows channels not archived):
+archive @<filename> | grep not
+
+# Show deadbands (Note: deadbands of 0 will not show):
+archive @<filename> | grep deadband | awk '{print $1,"\t",$7}'
+

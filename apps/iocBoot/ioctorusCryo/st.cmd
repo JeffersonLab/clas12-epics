@@ -8,18 +8,23 @@ cd ${TOP}
 dbLoadDatabase("dbd/plc2epics.dbd")
 plc2epics_registerRecordDeviceDriver(pdbbase)
 
-# Initialize EtherIP driver, define PLCs
+## Initialize EtherIP driver, define PLCs
+## NOTE: if buffer limit is left at 500, read errors will occur.
+EIP_buffer_limit(450)
 drvEtherIP_init()
 drvEtherIP_define_PLC("PLC_CRYO",  "129.57.96.17", 0)
 drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 
+## Debugging [7-10]
+#EIP_verbosity(7)
+
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-# PLC_CRYO
+## PLC_CRYO
 dbLoadTemplate("db/cryodbox_torus_LHe.substitutions")
 dbLoadTemplate("db/cryodbox_torus_LN2.substitutions")
-# PLC_TORUS
+## PLC_TORUS
 dbLoadTemplate("db/torus_LHe.substitutions")
 dbLoadTemplate("db/torus_LN2.substitutions")
 

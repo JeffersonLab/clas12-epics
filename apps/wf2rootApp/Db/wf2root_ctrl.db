@@ -1,0 +1,119 @@
+#
+# wf2root_ctrl.db - waveform record written to root binary file
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#
+# Author: Wesley Moore (wmoore@jlab.org), Yi Qiang
+# Date:   Mar 2016, 2014
+#
+
+
+# Record for DAQ control
+record(aSub,"$(P)$(R)ctrl:daq")
+{
+	field(PINI,"0")
+	field(PHAS,"2")
+	field(INAM,"wf2rootDAQInit")
+	field(SNAM,"wf2rootDAQProcess")
+#
+	field(NOA ,"1")
+	field(FTA ,"ENUM")
+	field(INPA,"$(P)$(R)ctrl:daq_state CPP")
+#
+	field(NOB ,"1")
+	field(FTB ,"STRING")
+	field(INPB,"$(P)$(R)ctrl:file_dir NPP") 
+#
+	field(NOC ,"1")
+	field(FTC ,"STRING")	
+	field(FTVC,"STRING")	
+	field(INPC,"")
+	field(OUTC,"$(P)$(R)ctrl:file_name PP")
+#
+	field(NOD ,"1")
+	field(FTD ,"LONG")
+	field(INPD,"$(P)$(R)ctrl:file_limit NPP") 	
+#
+#    field(NOE, "1")
+#    field(FTE,"STRING")
+#    field(FTVE,"STRING")
+#    field(INPE,"$(P)$(R)ctrl:file_prfx PP)
+}
+
+# Record to enable or disable writing data to the disk
+record(mbbi,"$(P)$(R)ctrl:daq_state")
+{
+	field(VAL ,"1")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(NOBT,"2")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(ZRST,"WRITING")
+	field(ONST,"STOPPED")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MAJOR")
+	field(SCAN,"Passive")
+}
+
+# Record that carries output file directory
+record(stringin,"$(P)$(R)ctrl:file_dir")
+{
+	field(VAL ,"/usr/clas12/DATA/wf2root/")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record that carries full output file name
+record(stringin,"$(P)$(R)ctrl:file_name")
+{
+	field(VAL ,"nofile")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record that carries output filesize
+record(longin,"$(P)$(R)ctrl:file_size")
+{
+	field(VAL ,"0")
+	field(PINI,"1") 
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+    field(FLNK, "$(P)$(R)ctrl:file_progress")
+}
+
+# Record that carries output file size limit
+record(longin,"$(P)$(R)ctrl:file_limit")
+{
+	field(VAL ,"2000000000")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+    field(FLNK, "$(P)$(R)ctrl:file_progress")
+}
+
+record(calc,"$(P)$(R)ctrl:file_progress")
+{
+    field(CALC, "MIN((A/B)*100,100)")
+    field(INPA, "$(P)$(R)ctrl:file_size")
+    field(INPB, "$(P)$(R)ctrl:file_limit")
+    field(PREC, "1")
+    field(EGU,  "%")
+}
+
+# TODO: is INPA pv name a typo?
+# Record to kill the IOC
+#record(aSub,"$(P)$(R)ctrl:kill")
+#{
+#	field(PINI,"1")
+#	field(PHAS,"2")
+#	field(INAM,"wf2rootKillInit")
+#	field(SNAM,"wf2rootKillProcess")
+#	field(NOA ,"1")
+#	field(FTA ,"ENUM")
+#	field(INPA,"$(P)$(R)wf2:kill CPP")
+#}

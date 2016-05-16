@@ -1,7 +1,7 @@
 
 file {
-	name="/usr/local/clas12/release/0.1/epics/apps/A6551App/iocBoot/iocA6551App/A6551.adl"
-	version=030108
+	name="/usr/clas12/release/1.3.0/epics/apps/./A6551App/op/medm/A6551.adl"
+	version=030109
 }
 display {
 	object {
@@ -95,7 +95,7 @@ display {
 		height=15
 	}
 	monitor {
-		chan="LV:DC:S$(S):L$(L):GET_VOLTAGE"
+		chan="$(P):vmon"
 		clr=14
 		bclr=55
 	}
@@ -115,7 +115,7 @@ display {
 		height=15
 	}
 	control {
-		chan="LV:DC:S$(S):L$(L):SET_VOLTAGE"
+		chan="$(P):vset"
 		clr=14
 		bclr=0
 	}
@@ -134,7 +134,7 @@ display {
 		height=15
 	}
 	monitor {
-		chan="LV:DC:S$(S):L$(L):GET_CURRENT"
+		chan="$(P):imon"
 		clr=14
 		bclr=55
 	}
@@ -154,7 +154,7 @@ display {
 		height=15
 	}
 	control {
-		chan="LV:DC:S$(S):L$(L):SET_CURRENT"
+		chan="$(P):iset"
 		clr=14
 		bclr=0
 	}
@@ -173,7 +173,7 @@ display {
 		height=34
 	}
 	control {
-		chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+		chan="$(P):pwset"
 		clr=0
 		bclr=29
 	}
@@ -186,7 +186,7 @@ display {
 		height=15
 	}
 	monitor {
-		chan="LV:DC:S$(S):L$(L):GET_VOLTAGE_SETP"
+		chan="$(P):vsetrbk"
 		clr=14
 		bclr=55
 	}
@@ -206,7 +206,7 @@ display {
 		height=15
 	}
 	monitor {
-		chan="LV:DC:S$(S):L$(L):GET_CURRENT_SETP"
+		chan="$(P):isetrbk"
 		clr=14
 		bclr=55
 	}
@@ -298,9 +298,9 @@ composite {
 				clr=0
 			}
 			"dynamic attribute" {
-				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+				chan="$(P):pwset"
 			}
-			textix="DC LV S$(S) L$(L)"
+			textix="$(P)"
 		}
 		polyline {
 			object {
@@ -313,7 +313,7 @@ composite {
 				clr=0
 			}
 			"dynamic attribute" {
-				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+				chan="$(P):pwset"
 			}
 			points {
 				(103,16)
@@ -331,7 +331,7 @@ composite {
 				clr=0
 			}
 			"dynamic attribute" {
-				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+				chan="$(P):pwset"
 			}
 			points {
 				(103,36)
@@ -349,7 +349,7 @@ composite {
 				clr=0
 			}
 			"dynamic attribute" {
-				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+				chan="$(P):pwset"
 			}
 			points {
 				(102,16)
@@ -367,7 +367,7 @@ composite {
 				clr=0
 			}
 			"dynamic attribute" {
-				chan="LV:DC:S$(S):L$(L):SET_ONOFF"
+				chan="$(P):pwset"
 			}
 			points {
 				(183,16)
@@ -389,7 +389,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#1"
-		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+		chan="$(P):pwrbk"
 	}
 }
 oval {
@@ -405,7 +405,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=1"
-		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+		chan="$(P):pwrbk"
 	}
 }
 text {
@@ -421,7 +421,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=1"
-		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+		chan="$(P):pwrbk"
 	}
 	textix="Pw ON"
 }
@@ -438,7 +438,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#1"
-		chan="LV:DC:S$(S):L$(L):GET_ONOFF"
+		chan="$(P):pwrbk"
 	}
 	textix="Pw OFF"
 }
@@ -474,7 +474,7 @@ text {
 		height=34
 	}
 	control {
-		chan="LV:DC:S$(S):L$(L):SET_OCONOFF"
+		chan="$(P):ocset"
 		clr=0
 		bclr=29
 	}
@@ -487,7 +487,7 @@ text {
 		height=18
 	}
 	control {
-		chan="LV:DC:S$(S):L$(L):CLEAR_OC"
+		chan="$(P):ocreset"
 		clr=0
 		bclr=29
 	}
@@ -508,7 +508,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=1"
-		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+		chan="$(P):ocrbk"
 	}
 }
 oval {
@@ -524,7 +524,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#1"
-		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+		chan="$(P):ocrbk"
 	}
 }
 text {
@@ -540,7 +540,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#1"
-		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+		chan="$(P):ocrbk"
 	}
 	textix="OCP OFF"
 }
@@ -557,7 +557,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=1"
-		chan="LV:DC:S$(S):L$(L):GET_OCONOFF"
+		chan="$(P):ocrbk"
 	}
 	textix="OCP ON"
 }
@@ -572,7 +572,7 @@ polyline {
 		clr=0
 	}
 	"dynamic attribute" {
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 	points {
 		(11,148)
@@ -590,7 +590,7 @@ polyline {
 		clr=0
 	}
 	"dynamic attribute" {
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 	points {
 		(11,58)
@@ -610,7 +610,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#2"
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 }
 oval {
@@ -626,7 +626,7 @@ oval {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=2"
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 }
 text {
@@ -642,7 +642,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A=2"
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 	textix="OC!"
 }
@@ -659,7 +659,7 @@ text {
 	"dynamic attribute" {
 		vis="calc"
 		calc="A#2"
-		chan="LV:DC:S$(S):L$(L):GET_OC"
+		chan="$(P):ocstat"
 	}
 	textix="UC"
 }

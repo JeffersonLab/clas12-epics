@@ -1,0 +1,87 @@
+#asyn is useful for debugging the communication
+record(asyn,"$(P):ASYN")
+{
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+    field(ADDR,"$(ADDR)")
+    field(OMAX,"$(OMAX)")
+    field(IMAX,"$(IMAX)")
+}
+record (ai, "$(P):vin")
+{
+    field (DESC, "Measured Voltage at Input Terminal")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto vin $(PORT)")
+}
+record (ai, "$(P):vout")
+{
+    field (DESC, "Measured Voltage at Output Terminal")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto vout $(PORT)")
+}
+record (ai, "$(P):imon")
+{
+    field (DESC, "Measured Current")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto vout $(PORT)")
+}
+record (stringin, "$(P):stat")
+{
+    field (DESC, "Status")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto status $(PORT)")
+}
+record (mbbiDirect, "$(P):stat2")
+{
+    field (DESC, "Status")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto status2 $(PORT)")
+#    field (ZNAM, "Pw ON/OFF")
+#    field (ONAM, "DUNNO")
+#    field (FLNK, "$(P):pwrbk")
+}
+record (bo, "$(P):pwoff")
+{
+    field (DESC, "Power OFF")
+    field (DTYP, "stream")
+    field (OUT,  "@sy2604.proto pwoff $(PORT)")
+}
+record (bo, "$(P):pwon")
+{
+    field (DESC, "Power ON")
+    field (DTYP, "stream")
+    field (OUT,  "@sy2604.proto pwon $(PORT)")
+}
+record (ao, "$(P):iset")
+{
+    field (DESC, "Set Current")
+    field (DTYP, "stream")
+    field (OUT,  "@sy2604.proto iset $(PORT)")
+}
+record (bo, "$(P):reset")
+{
+    field (DESC, "Reset Faults")
+    field (DTYP, "stream")
+    field (OUT,  "@sy2604.proto reset $(PORT)")
+}
+record (ai, "$(P):tsink")
+{
+    field (DESC, "Heat Sink Temp")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto tsink $(PORT)")
+    field (EGU,  "C")
+}
+record (ai, "$(P):tshunt") {
+    field (DESC, "Shunt Temp")
+    field (DTYP, "stream")
+    field (SCAN, "2 second")
+    field (INP,  "@sy2604.proto tshunt $(PORT)")
+    field (EGU,  "C")
+}
+

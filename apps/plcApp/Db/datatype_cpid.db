@@ -5,11 +5,12 @@
 # Date:   Mar 2016
 #
 
-#record(stringout, "$(P)$(R)$(TAG)NAME") {
-#    field(DESC, "Name of controlled value")
-#    field(DTYP, "EtherIP")
-#    field(OUT,  "@$(PLCID) $(TAG).CvalName")
-#}
+record(stringout, "$(P)$(R)$(TAG):NAME") {
+    field(DESC, "Name of controlled value")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).CValName S 1")
+    field(SCAN, "Passive")
+}
 
 record(ai, "$(P)$(R)$(TAG):CVAL") {
     field(DESC, "controlled value")

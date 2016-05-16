@@ -15,7 +15,7 @@ record(ai, "$(P)$(R)PT8111") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) PT8111")
-    field(EGU,  "atm")
+    field(EGU,  "psia")
     field(PREC, "2")
 }
 
@@ -24,7 +24,7 @@ record(ai, "$(P)$(R)PT8115") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) PT8115")
-    field(EGU,  "atm")
+    field(EGU,  "psia")
     field(PREC, "2")
 }
 
@@ -33,7 +33,7 @@ record(ai, "$(P)$(R)PT8120") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) PT8120")
-    field(EGU,  "atm")
+    field(EGU,  "psia")
     field(PREC, "2")
 }
 
@@ -46,11 +46,11 @@ record(ai, "$(P)$(R)LL8120DP") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)LL8120CP") {
+record(ai, "$(P)$(R)LL8120SC") {
     field(DESC, "Liquid Level (from probe)")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) LL8120CP")
+    field(INP,  "@$(PLCID) LL8120SC")
     field(EGU,  "%")
     field(PREC, "2")
 }
@@ -68,7 +68,7 @@ record(ai, "$(P)$(R)TD8115") {
     field(DESC, "Magnet Ret Temp (TST)")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) TP8115")
+    field(INP,  "@$(PLCID) TD8115")
     field(EGU,  "K")
     field(PREC, "2")
 }
@@ -127,20 +127,20 @@ record(ai, "$(P)$(R)TD8111SC") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)TD8114R") {
+record(ai, "$(P)$(R)TR8114R") {
     field(DESC, "DS Hex Ring Ret Temp (chimney)")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) TD8114R")
+    field(INP,  "@$(PLCID) TR8114R")
     field(EGU,  "K")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)TD8114S") {
+record(ai, "$(P)$(R)TR8114S") {
     field(DESC, "DS Hex Ring Sup Temp (chimney)")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) TD8114S")
+    field(INP,  "@$(PLCID) TR8114S")
     field(EGU,  "K")
     field(PREC, "2")
 }
@@ -154,25 +154,25 @@ record(ai, "$(P)$(R)TD8114DSHR") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)FI8121A") {
+record(ai, "$(P)$(R)FV8121A_OUT") {
     field(DESC, "Lead A Mass Flow")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) FI8121A")
+    field(INP,  "@$(PLCID) FV8121A_OUT")
     field(EGU,  "SLPM")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)FI8121B") {
+record(ai, "$(P)$(R)FV8121B_OUT") {
     field(DESC, "Lead B Mass Flow")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) FI8121B")
+    field(INP,  "@$(PLCID) FV8121B_OUT")
     field(EGU,  "SLPM")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_1") {
+record(ai, "$(P)$(R)HB_DS_S1:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
@@ -181,47 +181,47 @@ record(ai, "$(P)$(R)HB_DS_S1:TEMP_1") {
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_2") {
+record(ai, "$(P)$(R)HB_DS_S2:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) HB_DS_S1.Temp[2]")
+    field(INP,  "@$(PLCID) HB_DS_S2.Temp[1]")
     field(EGU,  "K")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_3") {
+record(ai, "$(P)$(R)HB_DS_S3:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) HB_DS_S1.Temp[3]")
+    field(INP,  "@$(PLCID) HB_DS_S3.Temp[1]")
     field(EGU,  "K")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_4") {
+record(ai, "$(P)$(R)HB_DS_S4:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) HB_DS_S1.Temp[4]")
+    field(INP,  "@$(PLCID) HB_DS_S4.Temp[1]")
     field(EGU,  "K")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_5") {
+record(ai, "$(P)$(R)HB_DS_S5:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) HB_DS_S1.Temp[5]")
+    field(INP,  "@$(PLCID) HB_DS_S5.Temp[1]")
     field(EGU,  "K")
     field(PREC, "2")
 }
 
-record(ai, "$(P)$(R)HB_DS_S1:TEMP_6") {
+record(ai, "$(P)$(R)HB_DS_S6:TEMP") {
     field(DESC, "DS Hex Beam Cernox")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) HB_DS_S1.Temp[6]")
+    field(INP,  "@$(PLCID) HB_DS_S6.Temp[1]")
     field(EGU,  "K")
     field(PREC, "2")
 }

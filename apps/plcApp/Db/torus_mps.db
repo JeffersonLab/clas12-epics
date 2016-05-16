@@ -47,6 +47,14 @@ record(ao, "$(P)$(R)Iset:DRVH") {
     field(DOL,  "$(P)$(R)ImaxSW CPP")
     field(OMSL, "closed_loop")
     field(OUT,  "$(P)$(R)Iset.DRVH PP")
+    field(FLNK, "$(P)$(R)Iset:DRVL")
+}
+
+# Using SW limit, set DRVL for Iset
+record(calcout, "$(P)$(R)Iset:DRVL") {
+    field(INPA, "$(P)$(R)Iset:DRVH")
+    field(CALC, "-A")
+    field(OUT,  "$(P)$(R)Iset.DRVL")
 }
 
 record(ai, "$(P)$(R)I_MPS") {

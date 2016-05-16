@@ -15,6 +15,29 @@ record(stringin, "$(P)$(R)desc") {
 	field(DESC, "Channel description")
     field(VAL,  "")
 }
+record(ai, "$(P)$(R)O") {
+	field(DESC, "Temp rdbk O")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getOhms($(CH)) $(PORT)")
+	field(PREC, "3")
+	field(EGU,  "Ohms")
+}
+
+record(ai, "$(P)$(R)L") {
+	field(DESC, "Temp rdbk L")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getLinear($(CH)) $(PORT)")
+	field(PREC, "3")
+	field(EGU,  "C")
+}
+record(stringin, "$(P)$(R)E") {
+	field(DESC, "Equantion rdbk")
+	field(SCAN, "1 second")
+	field(DTYP, "stream")
+	field(INP,  "@OmegaCYD218.proto getEquation($(CH)) $(PORT)")
+}
 
 record(ai, "$(P)$(R)C") {
 	field(DESC, "Temp rdbk C")

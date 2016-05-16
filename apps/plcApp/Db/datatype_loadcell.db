@@ -1,0 +1,46 @@
+#
+# datatype_loadcell.db
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PLCID - PLC ID set in startup
+#   ELM   - PLC base tag (ex. CCM_A, HB_US_S1)
+#   ID    - Sensor identifier
+#   N     - Sensor number/Load cell index
+# 
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Apr 2016
+#
+
+record(ai, "$(P)$(R)$(ELM):LC817$(ID)$(N)") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).LoadCell[$(N)].value")
+    field(SCAN, "1 second")
+    field(EGU,  "lb")
+    field(PREC, "0")
+}
+
+record(ai, "$(P)$(R)$(ELM):LC817$(ID)$(N):Limit") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).LoadCell[$(N)].limit")
+    field(SCAN, "1 second")
+    field(EGU,  "lb")
+    field(PREC, "0")
+}
+
+record(bo, "$(P)$(R)$(ELM):LC817$(ID)$(N):EnableIntlk") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(ELM).LoadCell[$(N)].EnableInterlock S 1")
+}
+
+record(bi, "$(P)$(R)$(ELM):LC817$(ID)$(N):Intlk") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(ELM).LoadCell[$(N)].Interlock")
+    field(SCAN, "1 second")
+    field(ZNAM, "OK")
+    field(ONAM, "ERROR")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
+}
+

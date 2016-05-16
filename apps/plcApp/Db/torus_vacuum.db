@@ -39,6 +39,19 @@ record(ai, "$(P)$(R)TC8103") {
     field(HHSV, "MAJOR")
 }
 
+record(ai, "$(P)$(R)TC8103_RATE") {
+    field(DESC, "Upper Torus Pirani Rate")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) TC8103_rate_hr")
+    field(EGU,  "torr/hr")
+    field(PREC, "2")
+    field(HIGH, "")
+    field(HIHI, "")
+    field(HSV,  "MINOR")
+    field(HHSV, "MAJOR")
+}
+
 record(ai, "$(P)$(R)CG8100") {
     field(DESC, "Main Vac CC")
     field(DTYP, "EtherIP")
@@ -179,7 +192,7 @@ record(bi, "$(P)$(R)PV8105RB") {
     field(DESC, "Roots Gate Valve")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) PV8101")
+    field(INP,  "@$(PLCID) PV8105RB")
     field(ZNAM, "Closed")
     field(ONAM, "Open")
     field(ZSV,  "MAJOR")
@@ -193,8 +206,54 @@ record(bi, "$(P)$(R)UPS_OnBatt") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) VacChassis_OnBatt")
-    field(ZNAM, "True")
-    field(ONAM, "False")
+    field(ZNAM, "False")
+    field(ONAM, "True")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
+}
+
+#
+# ESR
+#
+record(bi, "$(P)$(R)ESR") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) ESR_Live_Out")
+    field(ZNAM, "Down")
+    field(ONAM, "Ok")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# Temporary for faking signal
+record(bo, "$(P)$(R)ESR_CTRL") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) ESR_Live_Override S 1")
+    field(ZNAM, "Down")
+    field(ONAM, "Ok")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+#
+# Transfer Switch
+#
+record(bi, "$(P)$(R)XFER_SW") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Txfr_Switch_Out")
+    field(ZNAM, "Generator PWR")
+    field(ONAM, "Utility PWR")
+    field(ZSV,  "MAJOR")
+    field(OSV,  "NO_ALARM")
+}
+
+# Temporary for faking signal
+record(bo, "$(P)$(R)XFER_SW_CTRL") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Txfr_Switch_Override S 1")
+    field(ZNAM, "Generator PWR")
+    field(ONAM, "Utility PWR")
     field(ZSV,  "MAJOR")
     field(OSV,  "NO_ALARM")
 }

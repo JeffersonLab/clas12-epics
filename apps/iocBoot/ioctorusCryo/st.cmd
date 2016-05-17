@@ -24,9 +24,11 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 ## PLC_CRYO
 dbLoadTemplate("db/cryodbox_torus_LHe.substitutions")
 dbLoadTemplate("db/cryodbox_torus_LN2.substitutions")
+dbLoadRecords("db/cryodbox_torus_cryocon.db", "P=B_TORUS:,R=DBX:,PLCID=PLC_CRYO")
 ## PLC_TORUS
 dbLoadTemplate("db/torus_LHe.substitutions")
 dbLoadTemplate("db/torus_LN2.substitutions")
+dbLoadRecords("db/torus_cryocon.db", "P=B_TORUS:,R=PLC:,PLCID=PLC_TORUS")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -9,12 +9,19 @@ c370_registerRecordDeviceDriver pdbbase
 
 drvAsynIPPortConfigure("ETH1","hallb-moxa3:4001",0,0,1)
 
+#asynSetOption("ETH1",0,"baud","9600")
+#asynSetOption("ETH1",0,"parity","none")
+#asynSetOption("ETH1",0,"bits","8")
+#asynSetOption("ETH1",0,"stop","1")
+
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
-modbusInterposeConfig("ETH1",0,5000,0)
+#modbusInterposeConfig("ETH1",2,5000,0)
+modbusInterposeConfig("ETH1",1,5000,0)
+#modbusInterposeConfig("ETH1",0,5000,0)
 
 # Debugging...
-#asynSetTraceMask("ETH1",0,9)
-#asynSetTraceIOMask("ETH1",0,2)
+asynSetTraceMask("ETH1",0,9)
+asynSetTraceIOMask("ETH1",0,4)
 
 #drvModbusAsynConfigure(
 #  "portName", "tcpPortName", slaveAddress, modbusFunction,
@@ -22,13 +29,8 @@ modbusInterposeConfig("ETH1",0,5000,0)
 
 # 32-bit integers (Function code = 3)
 
-drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3800,  20, 0, 1000, "C370")
-#drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3300,  20, 0, 1000, "C370")
-#drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 4300,  20, 0, 1000, "C370")
+drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3800, 20, 0, 1000, "C370")
 
-#drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3800,  40, 0, 1000, "C370")
-#drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3300,  40, 0, 1000, "C370")
-#drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 4300,  40, 0, 1000, "C370")
 
 #drvModbusAsynConfigure("DS_360_IN",  "ETH1", 1, 3, 360,  9, 0, 1000, "WATLOW")
 

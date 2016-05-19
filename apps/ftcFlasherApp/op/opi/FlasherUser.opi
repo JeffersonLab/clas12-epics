@@ -584,9 +584,9 @@ else:
 	widget.setPropertyValue("visible","true")	
 
 ]]></scriptText>
-          <pv trig="true">$(P):LED6_X</pv>
-          <pv trig="true">$(P):LED6_Y</pv>
-          <pv trig="true">$(P):LED_ID6</pv>
+          <pv trig="true">$(P):LED5_X</pv>
+          <pv trig="true">$(P):LED5_Y</pv>
+          <pv trig="true">$(P):LED_ID5</pv>
         </path>
       </scripts>
       <border_alarm_sensitive>false</border_alarm_sensitive>
@@ -664,9 +664,9 @@ else:
 	widget.setPropertyValue("visible","true")	
 
 ]]></scriptText>
-          <pv trig="true">$(P):LED5_X</pv>
-          <pv trig="true">$(P):LED5_Y</pv>
-          <pv trig="true">$(P):LED_ID5</pv>
+          <pv trig="true">$(P):LED6_X</pv>
+          <pv trig="true">$(P):LED6_Y</pv>
+          <pv trig="true">$(P):LED_ID6</pv>
         </path>
       </scripts>
       <border_alarm_sensitive>false</border_alarm_sensitive>
@@ -792,7 +792,7 @@ $(pv_value)</tooltip>
           <color red="0" green="128" blue="255" />
         </background_color>
         <width>15</width>
-        <x>1</x>
+        <x>0</x>
         <name>Rectangle_8</name>
         <y>34</y>
         <fill_level>0.0</fill_level>
@@ -1982,81 +1982,6 @@ $(pv_value)</tooltip>
         <border_style>0</border_style>
         <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
         <alarm_pulsing>false</alarm_pulsing>
-        <tooltip>Start the loaded sequence (Drivers must be ON)</tooltip>
-        <push_action_index>0</push_action_index>
-        <rules>
-          <rule name="Rule" prop_id="enabled" out_exp="false">
-            <exp bool_exp="pv0==0||pv1==0">
-              <value>true</value>
-            </exp>
-            <pv trig="true">$(P):GET_SEQUENCE</pv>
-            <pv trig="true">$(P):SEQ_START</pv>
-          </rule>
-        </rules>
-        <enabled>true</enabled>
-        <wuid>77fb229f:152a1502397:3c95</wuid>
-        <pv_value />
-        <text>START</text>
-        <scripts />
-        <border_alarm_sensitive>false</border_alarm_sensitive>
-        <height>22</height>
-        <border_width>1</border_width>
-        <scale_options>
-          <width_scalable>true</width_scalable>
-          <height_scalable>true</height_scalable>
-          <keep_wh_ratio>false</keep_wh_ratio>
-        </scale_options>
-        <image></image>
-        <visible>true</visible>
-        <pv_name>$(P):GET_SEQUENCE</pv_name>
-        <border_color>
-          <color red="0" green="128" blue="255" />
-        </border_color>
-        <widget_type>Action Button</widget_type>
-        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-        <background_color>
-          <color red="144" green="238" blue="144" />
-        </background_color>
-        <width>96</width>
-        <x>0</x>
-        <name>Action Button</name>
-        <y>0</y>
-        <style>0</style>
-        <foreground_color>
-          <color red="0" green="0" blue="0" />
-        </foreground_color>
-        <actions hook="false" hook_all="true">
-          <action type="WRITE_PV">
-            <pv_name>$(P):SEQ_START</pv_name>
-            <value>1</value>
-            <timeout>10</timeout>
-            <confirm_message></confirm_message>
-            <description></description>
-          </action>
-          <action type="WRITE_PV">
-            <pv_name>$(P):GET_LEDS.SCAN</pv_name>
-            <value>.5 second</value>
-            <timeout>10</timeout>
-            <confirm_message></confirm_message>
-            <description></description>
-          </action>
-          <action type="WRITE_PV">
-            <pv_name>$(P):GET_SEQUENCE.SCAN</pv_name>
-            <value>.5 second</value>
-            <timeout>10</timeout>
-            <confirm_message></confirm_message>
-            <description></description>
-          </action>
-        </actions>
-        <font>
-          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-        </font>
-      </widget>
-      <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-        <toggle_button>false</toggle_button>
-        <border_style>0</border_style>
-        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-        <alarm_pulsing>false</alarm_pulsing>
         <tooltip>Stop the running sequence (Drivers must be ON)</tooltip>
         <push_action_index>0</push_action_index>
         <rules>
@@ -2118,6 +2043,88 @@ $(pv_value)</tooltip>
           <action type="WRITE_PV">
             <pv_name>$(P):GET_SEQUENCE.SCAN</pv_name>
             <value>Passive</value>
+            <timeout>10</timeout>
+            <confirm_message></confirm_message>
+            <description></description>
+          </action>
+        </actions>
+        <font>
+          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+        </font>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+        <toggle_button>false</toggle_button>
+        <border_style>0</border_style>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <alarm_pulsing>false</alarm_pulsing>
+        <tooltip>Start the loaded sequence (Drivers must be ON)</tooltip>
+        <push_action_index>0</push_action_index>
+        <rules>
+          <rule name="Rule" prop_id="enabled" out_exp="false">
+            <exp bool_exp="pv0==0||pv1==0">
+              <value>true</value>
+            </exp>
+            <pv trig="true">$(P):GET_SEQUENCE</pv>
+            <pv trig="true">$(P):SEQ_START</pv>
+          </rule>
+        </rules>
+        <enabled>true</enabled>
+        <wuid>-6e628bdb:1533963484a:-7a99</wuid>
+        <pv_value />
+        <text>START</text>
+        <scripts />
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <height>22</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <image></image>
+        <visible>true</visible>
+        <pv_name>$(P):GET_SEQUENCE</pv_name>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <widget_type>Action Button</widget_type>
+        <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+        <background_color>
+          <color red="144" green="238" blue="144" />
+        </background_color>
+        <width>96</width>
+        <x>3</x>
+        <name>Action Button</name>
+        <y>0</y>
+        <style>0</style>
+        <foreground_color>
+          <color red="0" green="0" blue="0" />
+        </foreground_color>
+        <actions hook="false" hook_all="true">
+          <action type="WRITE_PV">
+            <pv_name>$(P):SET_CLOCK</pv_name>
+            <value>INT</value>
+            <timeout>10</timeout>
+            <confirm_message></confirm_message>
+            <description></description>
+          </action>
+          <action type="WRITE_PV">
+            <pv_name>$(P):SEQ_START</pv_name>
+            <value>1</value>
+            <timeout>10</timeout>
+            <confirm_message></confirm_message>
+            <description></description>
+          </action>
+          <action type="WRITE_PV">
+            <pv_name>$(P):GET_LEDS.SCAN</pv_name>
+            <value>.5 second</value>
+            <timeout>10</timeout>
+            <confirm_message></confirm_message>
+            <description></description>
+          </action>
+          <action type="WRITE_PV">
+            <pv_name>$(P):GET_SEQUENCE.SCAN</pv_name>
+            <value>.5 second</value>
             <timeout>10</timeout>
             <confirm_message></confirm_message>
             <description></description>

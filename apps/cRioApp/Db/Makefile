@@ -13,6 +13,8 @@ DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db
 DB += gas_cRIO_RICH.db
 DB += gas_cRIO_SVT.db
 
+REQ += gas_cRIO_SVT.req
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 

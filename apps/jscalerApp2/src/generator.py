@@ -1,0 +1,238 @@
+#!/usr/bin/env python
+import sys,os,stat,re
+
+# N.Baltzell
+# TODO: mkChannels* --> read from ccdb
+
+DBFILE='db/jscaler_channel.db'
+KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
+
+def fadcslot2discslot(fadcslot):
+  if   fadcslot<7:  return fadcslot-1
+  elif fadcslot<11: return fadcslot
+  elif fadcslot<17: return fadcslot-1
+  else:             return fadcslot
+
+STARTUP='''#!../../bin/linux-x86_64/iocscalers
+< envPaths
+cd ${TOP}
+
+Init_SCALERS()
+
+STARTCRATE
+
+## Register all support components
+dbLoadDatabase("dbd/iocscalers.dbd")
+iocscalers_registerRecordDeviceDriver(pdbbase)
+
+## Load record instances
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+
+LOADRECORDS
+
+cd ${TOP}/iocBoot/${IOC}
+
+iocInit
+'''
+
+def printSubstitutions(channels,fileName=None):
+  if fileName!=None: file=open(fileName,'w')
+  else:              file=sys.stdout
+  print >>file, 'file "'+DBFILE+'" {'
+  print >>file, 'pattern {',','.join(KEYS),'}'
+  for cc in channels:
+    row=','.join(KEYS)
+    for kk in KEYS: row=row.replace(kk,'"%s"'%(cc[kk]))
+    print >>file, '{',row,'}'
+  print >>file, '}'
+
+def printStartup(crates,fileName=None):
+  if fileName!=None: file=open(fileName,'w')
+  else:              file=sys.stdout
+  startCrates,loadRecords='',''
+  for crate in crates:
+    startCrates += 'Start_SCALERS_CRATE("%d","%s")\n'%(int(crate['CrNo']),crate['CrName'])
+  for crate in crates:
+    subFileName=re.sub('.*/','',crate['subFileName'])
+    loadRecords += 'dbLoadTemplate("db/%s")\n'%(subFileName)
+  contents= STARTUP.replace('STARTCRATE',startCrates)
+  contents=contents.replace('LOADRECORDS',loadRecords)
+  print >>file,contents
+  if fileName!=None:
+    file.close()
+    st=os.stat(fileName)
+    os.chmod(fileName,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+def setCodes(crateNumber,channel):
+  channel['CrNo']='%.2d'%(crateNumber)
+  channel['CScode']=int(channel['CrNo'])+(int(channel['Sl'])<<8)
+  channel['Thresh']=int(channel['Ch'])+(0<<8)
+  channel['Counts']=int(channel['Ch'])+(0<<8)
+  channel['Mode']  =int(channel['Ch'])+(1<<8)
+
+def mkChannelsECAL(crateNumber,sector,system):
+  if system=='FADC': crate='ADCECAL'+str(sector)
+  else:              crate='TDCECAL'+str(sector)
+  layers=['UI','VI','WI','UO','VO','WO']
+  nPerLayer,iChan,channels=36,0,[]
+  for slot in [3,4,5,6,7,8,9,10,13,14,15,16,17,18]:
+    if system!='FADC': slot=fadcslot2discslot(slot)
+    for chan in range(16):
+      if slot==9 and chan>11: break
+      if iChan%nPerLayer==0:
+        if len(layers)==0: break
+        else:              layer=layers.pop(0)
+      channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'Layer':layer,'CrName':crate,'Det':'ECAL','Sys':system}
+      channel['Element']='SEC%d_%s_E%.2d'%(sector,layer,iChan%nPerLayer+1)
+      setCodes(crateNumber,channel)
+      channels.append(channel)
+      iChan += 1
+  return channels
+
+def mkChannelsPCAL(crateNumber,sector,system):
+  if system=='FADC': crate='ADCPCAL'+str(sector)
+  else:              crate='TDCPCAL'+str(sector)
+  layers=['U','V','W']
+  nPerLayers={'U':68,'V':62,'W':62}
+  iChan,channels=0,[]
+  for slot in [3,4,5,6,7,8,9,10,13,14,15,16]:
+    if system!='FADC': slot=fadcslot2discslot(slot)
+    for chan in range(16):
+      if iChan==0 or iChan%nPerLayers[layer]==0:
+        iChan=0
+        if len(layers)==0: break
+        else:              layer=layers.pop(0)
+      channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'Layer':layer,'CrName':crate,'Det':'PCAL','Sys':system}
+      channel['Element']='SEC%d_%s_E%.2d'%(sector,layer,iChan%nPerLayers[layer]+1)
+      setCodes(crateNumber,channel)
+      channels.append(channel)
+      iChan += 1
+  return channels
+
+def mkChannelsFTOF(crateNumber,sector,system):
+  if system=='FADC': crate='ADCFTOF'+str(sector)
+  else:              crate='TDCFTOF'+str(sector)
+  _layers={2:'1A',1:'1B',3:'2'}
+  _lrs={1:'L',2:'R'}
+  layers=[
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 0, 3, 0,
+  2, 2, 2, 2, 2, 0, 2, 0, 3, 3, 3, 3, 0, 0, 0, 0,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  ]
+  slabs=[
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 3, 1, 3, 5, 7, 5, 7, 9,11, 9,11,13,15,13,15,
+  2, 4, 2, 4, 6, 8, 6, 8,10,12,10,12,14,16,14,16,
+ 17,19,17,19,21,23,21,23, 1, 3, 1, 3, 5, 0, 5, 0,
+ 18,20,18,20,22, 0,22, 0, 2, 4, 2, 4, 0, 0, 0, 0,
+  1, 3, 1, 3, 5, 7, 5, 7, 9,11, 9,11,13,15,13,15,
+  2, 4, 2, 4, 6, 8, 6, 8,10,12,10,12,14,16,14,16,
+ 17,19,17,19,21,23,21,23,25,27,25,27,29,31,29,31,
+ 18,20,18,20,22,24,22,24,26,28,26,28,30,32,30,32,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 33,35,33,35,37,39,37,39,41,43,41,43,45,47,45,47,
+ 34,36,34,36,38,40,38,40,42,44,42,44,46,48,46,48,
+ 49,51,49,51,53,55,53,55,57,59,57,59,61, 0,61, 0,
+ 50,52,50,52,54,56,54,56,58,60,58,60,62, 0,62, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  ]
+  lrs=[
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 0, 2, 0,
+  1, 1, 2, 2, 1, 0, 2, 0, 1, 1, 2, 2, 0, 0, 0, 0,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 0, 2, 0,
+  1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 0, 2, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  ]
+  channels=[]
+  for ii in range(17*16):
+    if layers[ii]==0: continue
+    slot=ii/16
+    if system!='FADC': slot=fadcslot2discslot(slot)
+    channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(ii%16),'CrName':crate,'Det':'FTOF','Sys':system}
+    channel['Element']='SEC%d_PANEL%s_%s_E%.2d'%(
+        sector,_layers[layers[ii]],_lrs[lrs[ii]],slabs[ii])
+    setCodes(crateNumber,channel)
+    channels.append(channel)
+  return channels
+
+def mkCrates(channels,subfileName):
+  crates=[]
+  for channel in channels:
+    oldCrate=False
+    for crate in crates:
+      if crate['CrNo']!=channel['CrNo']: continue
+      if crate['CrName']!=channel['CrName']: continue
+      oldCrate=True
+    if not oldCrate:
+      crate={}
+      crate['CrNo']=channel['CrNo']
+      crate['CrName']=channel['CrName']
+      crate['subFileName']=subfileName
+      crates.append(crate)
+  return crates
+
+def mkChannels(detector,crateNumber,sector,system):
+  if   detector=='ECAL': return mkChannelsECAL(crateNumber,sector,system)
+  elif detector=='PCAL': return mkChannelsPCAL(crateNumber,sector,system)
+  elif detector=='FTOF': return mkChannelsFTOF(crateNumber,sector,system)
+  else: sys.exit('Invalid detector:  ',detector)
+
+# make substution files and one startup per sector:
+def mkSector(sector):
+  iCrate,crates=0,[]
+  for system in ['FADC','DISC']:
+    for detector in ['ECAL','PCAL','FTOF']:
+      channels=mkChannels(detector,iCrate,sector,system)
+      subFileName='../Db/jscalers_S%d_%s_%s.sub'%(sector,detector,system)
+      printSubstitutions(channels,subFileName)
+      crates.extend(mkCrates(channels,subFileName))
+      iCrate += 1
+  printStartup(crates,'jscalers_S%d.cmd'%(sector))
+
+
+for sector in range(6): mkSector(sector+1)
+
+

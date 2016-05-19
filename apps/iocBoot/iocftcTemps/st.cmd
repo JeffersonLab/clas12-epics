@@ -21,6 +21,9 @@ drvAsynIPPortConfigure("SER2", "hallb-moxa2:4002")
 cd "${TOP}/iocBoot/${IOC}"
 
 ## Load record instances
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
+#
 dbLoadTemplate("OmegaCYD218.substitutions")
 
 ## autosave setup

@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 
 ## Torus
+DB  += cryodbox_torus_cryocon.db
 DB  += cryodbox_torus_LHe.substitutions
 DB  += cryodbox_torus_LN2.db
 DB  += cryodbox_torus_LN2.substitutions
@@ -24,6 +25,7 @@ DB  += datatype_loadcell.db
 REQ += datatype_loadcell.req
 DB  += datatype_straingage.db
 REQ += datatype_straingage.req
+DB  += torus_cryocon.db
 DB  += torus_force.substitutions
 REQ += torus_force_settings.req
 DB  += torus_LHe.db

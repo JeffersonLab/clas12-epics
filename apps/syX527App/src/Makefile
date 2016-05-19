@@ -9,13 +9,22 @@ include $(TOP)/configure/CONFIG
 
 LIB_SRCS += sy1527.c 
 LIB_SRCS += sy1527epics1.c
+
 PROD_SRC += sy1527_test.c
 
+#v288_test_SRC += v288_test.c
+#v288_test_OBJS += v288_test.o
+#sy527_test_SRC += sy527_test.c
+#sy527_test_OBJS += sy527_test.o
+
 PROD_LIBS += sy1527epics1
+
+
 
 PROD_LIBS += caenhvwrapper 
 PROD_LIBS += hscaenet 
 PROD_LIBS += pthread
+
 hscaenet_DIR += $(HSCAENET_LIB)
 caenhvwrapper_DIR += $(CAENHVWRAPPER_LIB)
 pthread_DIR += $(PTHREAD_LIB)

@@ -3902,7 +3902,7 @@ else:
       </background_color>
       <width>16</width>
       <x>383</x>
-      <name>Rectangle_6</name>
+      <name>Rectangle_5</name>
       <y>269</y>
       <fill_level>0.0</fill_level>
       <foreground_color>
@@ -4201,6 +4201,86 @@ $(pv_value)</tooltip>
       <x>376</x>
       <name>Rectangle</name>
       <y>153</y>
+      <fill_level>0.0</fill_level>
+      <foreground_color>
+        <color red="255" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <line_color>
+        <color red="128" green="0" blue="255" />
+      </line_color>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <line_width>0</line_width>
+      <horizontal_fill>true</horizontal_fill>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-e10121f:1531992f189:-766a</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <alpha>255</alpha>
+      <bg_gradient_color>
+        <color red="255" green="255" blue="255" />
+      </bg_gradient_color>
+      <scripts>
+        <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+          <scriptName>EmbeddedScript</scriptName>
+          <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,ConsoleUtil
+
+
+x=int(PVUtil.getString(pvs[0]))
+y=int(PVUtil.getString(pvs[1]))
+id=int(PVUtil.getString(pvs[2]))
+#ConsoleUtil.writeInfo("x=" + x)
+if id==-1:
+	widget.setPropertyValue("visible","false")
+else:	
+	widget.setPropertyValue("x",str(198-15*x))
+	widget.setPropertyValue("y",str(198-15*y))
+	widget.setPropertyValue("visible","true")	
+
+]]></scriptText>
+          <pv trig="true">$(P):LED6_X</pv>
+          <pv trig="true">$(P):LED6_Y</pv>
+          <pv trig="true">$(P):LED_ID6</pv>
+        </path>
+      </scripts>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>16</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <gradient>false</gradient>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <anti_alias>true</anti_alias>
+      <line_style>0</line_style>
+      <widget_type>Rectangle</widget_type>
+      <fg_gradient_color>
+        <color red="255" green="255" blue="255" />
+      </fg_gradient_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="0" green="128" blue="255" />
+      </background_color>
+      <width>16</width>
+      <x>349</x>
+      <name>Rectangle_6</name>
+      <y>327</y>
       <fill_level>0.0</fill_level>
       <foreground_color>
         <color red="255" green="0" blue="0" />
@@ -4746,7 +4826,7 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="EXECUTE_CMD">
-        <command> ftcFlasherDefaultSeq.sh $(P)</command>
+        <command>ftcFlasherDefaultSeq.sh $(P)</command>
         <command_directory>$(user.dir)</command_directory>
         <wait_time>10</wait_time>
         <description></description>
@@ -5238,6 +5318,13 @@ $(pv_value)</tooltip>
         <color red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>$(P):SET_CLOCK</pv_name>
+          <value>INT</value>
+          <timeout>10</timeout>
+          <confirm_message></confirm_message>
+          <description></description>
+        </action>
         <action type="WRITE_PV">
           <pv_name>$(P):SEQ_START</pv_name>
           <value>1</value>

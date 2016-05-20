@@ -488,8 +488,8 @@ int CNDGen(int crate0=0, int slot0=0, int chan0=0,int det=CND ){
   
   //Detector Sector,Layer, ...
       
-  for(int r=1;r<=nRing;r++){
-    for(int s=1;s<=nSeg;s++){
+  for(int s=1;s<=nSeg;s++){
+    for(int r=1;r<=nRing;r++){
       for(int e=1; e<=2;e++){
 	
 	markCSCUsed(det,cr,sl,ch);

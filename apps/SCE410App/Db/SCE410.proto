@@ -1,0 +1,33 @@
+#
+# SCE410.proto - SC Electronics 410 Power Supply
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   May 2016
+#
+# Based on work by Gary Croke (JLab)
+#
+
+Terminator = LF;
+
+getFloat {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%f";
+}
+
+getInt {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%d";
+}
+
+setFloat {
+    out "#\$1@\$2%f";
+}
+
+setInt {
+    out "#\$1@\$2%d";
+}
+
+# write only the command, no parameter
+setCmd {
+    out "#\$1@\$2";
+}

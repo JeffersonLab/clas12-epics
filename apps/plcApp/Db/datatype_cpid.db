@@ -20,13 +20,13 @@ record(ai, "$(P)$(R)$(TAG):CVAL") {
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)$(R)$(TAG):CVAL:SET") {
-    field(DESC, "controlled value")
-    field(DTYP, "EtherIP")
-    field(OUT,  "@$(PLCID) $(TAG).CVAL S 1")
-    field(PREC, "2")
-    field(SCAN, "Passive")
-}
+#record(ao, "$(P)$(R)$(TAG):CVAL:SET") {
+#    field(DESC, "controlled value")
+#    field(DTYP, "EtherIP")
+#    field(OUT,  "@$(PLCID) $(TAG).CVAL S 1")
+#    field(PREC, "2")
+#    field(SCAN, "Passive")
+#}
 
 record(ai, "$(P)$(R)$(TAG):OVAL") {
     field(DESC, "output value")
@@ -120,6 +120,7 @@ record(ao, "$(P)$(R)$(TAG):DMAX:SET") {
 
 record(ai, "$(P)$(R)$(TAG):VAL") {
     field(DESC, "PID Setpoint")
+    field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(TAG).VAL")
     field(PREC, "2")
     field(SCAN, "1 second")
@@ -127,6 +128,7 @@ record(ai, "$(P)$(R)$(TAG):VAL") {
 
 record(ao, "$(P)$(R)$(TAG):VAL:SET") {
     field(DESC, "PID Setpoint")
+    field(DTYP, "EtherIP")
     field(OUT,  "@$(PLCID) $(TAG).VAL S 1")
     field(PREC, "2")
     field(SCAN, "Passive")
@@ -185,6 +187,7 @@ record(ai, "$(P)$(R)$(TAG):MDT") {
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(TAG).MDt")
     field(PREC, "2")
+    field(EGU,  "s")
     field(SCAN, "1 second")
 }
 
@@ -193,6 +196,7 @@ record(ao, "$(P)$(R)$(TAG):MDT:SET") {
     field(DTYP, "EtherIP")
     field(OUT,  "@$(PLCID) $(TAG).MDt S 1")
     field(PREC, "2")
+    field(EGU,  "s")
     field(SCAN, "Passive")
 }
 
@@ -200,8 +204,6 @@ record(stringin, "$(P)$(R)$(TAG):MODE") {
     field(DESC, "manual/normal")
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(TAG).MODE_String")
-#    field(ZNAM, "Normal")
-#    field(ONAM, "Manual")
     field(SCAN, "1 second")
 }
 
@@ -218,8 +220,10 @@ record(bi, "$(P)$(R)$(TAG):MMOD") {
     field(DESC, "manual mode request")
     field(DTYP, "EtherIP")
     field(INP,  "@$(PLCID) $(TAG).mmod")
-    field(ZNAM, "Normal")
-    field(ONAM, "Manual")
+    field(ZNAM, "NORMAL")
+    field(ONAM, "MANUAL")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
     field(SCAN, "1 second")
 }
 
@@ -230,5 +234,31 @@ record(bo, "$(P)$(R)$(TAG):MMOD:SET") {
     field(ZNAM, "NORMAL")
     field(ONAM, "MANUAL")
     field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):MVAL") {
+    field(DESC, "manual output")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).MVAL")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P)$(R)$(TAG):MVAL:SET") {
+    field(DESC, "manual output")
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(TAG).MVAL S 1")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P)$(R)$(TAG):ORBV") {
+    field(DESC, "$(TAG)")
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(TAG).ORBV")
+    field(PREC, "2")
+    field(EGU,  "%")
+    field(SCAN, "1 second")
+    alias("$(P)$(R)$(TAG)")
 }
 

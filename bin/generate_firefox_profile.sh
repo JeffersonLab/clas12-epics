@@ -1,10 +1,25 @@
 #!/bin/sh
-template=/home/baltzell/.mozilla/firefox/0jaik1kf.default
+#template=/home/baltzell/.mozilla/firefox/0jaik1kf.default
+template=/usr/clas12/release/pro/epics/css_share/common/workspaces/firefox
+
 dir=$HOME/.mozilla/firefox
 list=$dir/profiles.ini
 
-name=$1
-profile=`mktemp -u XXXXXXXX.${name%%.*}`
+myHostname=`hostname`
+
+while [ 1 ]
+do
+    tmpString=`mktemp -u XXXX`
+    tmpDir=`mktemp -d -p $dir XXXXXXXX.$tmpString${name%%.*}`
+
+    if ! [ -e $dir/$profile ]
+    then
+    fi
+    
+
+done
+
+
 if [ -e $dir/$profile ]
 then
   profile=`mktemp -u XXXXXXXX.${name%%.*}`

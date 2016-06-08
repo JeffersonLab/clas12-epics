@@ -2,5 +2,5 @@
 
 aa=`hostname`
 
-exec firefox -P ${aa%%.*} $@
+exec /usr/bin/firefox -P ${aa%%.*} $@
 

@@ -20,7 +20,6 @@ DB  += cryodbox_torus_LN2.substitutions
 DB  += datatype_ccm_cernox.db
 DB  += datatype_ccm_pt100.db
 DB  += datatype_cpid.db
-DB  += datatype_hexbeam.db
 DB  += datatype_loadcell.db
 REQ += datatype_loadcell.req
 DB  += datatype_straingage.db

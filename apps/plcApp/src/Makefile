@@ -38,13 +38,6 @@ plc2epics_LIBS += autosave
 plc2epics_LIBS += std
 plc2epics_LIBS += asyn
 plc2epics_LIBS += devIocStats
-
-ifneq ($(SNCSEQ),)
-    plc2epics_DBD  += snc4plc.dbd
-    plc2epics_SRCS += sncSmallTest.st
-    plc2epics_LIBS += seq pv
-endif
-
 plc2epics_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================

@@ -12549,7 +12549,7 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="false" />
     <crop_top>0</crop_top>
     <crop_right>0</crop_right>
     <stretch_to_fit>true</stretch_to_fit>
@@ -12681,7 +12681,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P)LN2:HTR8559:OVAL</pv_name>
+    <pv_name>$(P)LHe:HTR8120</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="120" green="120" blue="120" />
@@ -12701,7 +12701,17 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color name="Read_ForeGround" red="255" green="255" blue="255" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>datatype_cpid.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <PV>$(pv_name)</PV>
+        </macros>
+        <replace>2</replace>
+        <description>cPID Settings</description>
+      </action>
+    </actions>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>

@@ -34,7 +34,7 @@ for (var i=0; i<CCM.length; i++) {
 // cPIDs
 //
 var PID = ["EV8555T", "EV8556T", "HTR8559"];
-var SFX = ["", ":CVAL", ":ORBV", ":VAL"];
+var SFX = ["", ":CVAL", ":VAL"];
 
 for (var i=0; i<PID.length; i++) {
 	for (var j=0; j<SFX.length; j++) {

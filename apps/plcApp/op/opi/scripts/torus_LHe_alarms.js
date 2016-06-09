@@ -52,3 +52,15 @@ for (var j=1; j<=6; j++) {
 	createAlarmRow(PV_NAME);
 }
 
+//
+// cPIDs
+//
+var PID = ["EV8111BY", "EV8111CD", "EV8115JT"];
+var SFX = ["", ":CVAL", ":VAL"];
+
+for (var i=0; i<PID.length; i++) {
+	for (var j=0; j<SFX.length; j++) {
+		PV_NAME	= P + R + PID[i] + SFX[j];
+		createAlarmRow(PV_NAME);
+	}
+}

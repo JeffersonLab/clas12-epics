@@ -10,6 +10,7 @@ from java.util import Arrays
 nodeLoader.readTree()                        #make sure the node tree is made
 
 nodefull = PVUtil.getString(pvArray[0])      #Full name of the node Eg. B_SYS_HV_ECAL_SEC1
+nodetot  = PVUtil.getLong(pvArray[1])        #Total no of nodes clicked on
 topnode  = widget.getMacroValue("TOP")       #Name of the top node  Eg. B_SYS_HV
 ntop     = len(topnode.split("_"))           #Work out the no of levels in the top node (eg. 3 here)
 
@@ -21,11 +22,22 @@ node     = topnode                           #Start off the node that this combo
        
 itemlist = []                                #start off the itemlist
 
-for t in range(ntop,len(nlist)):             #Construct it's node name
-    itemlist.append(node)                    #Append to the item list
-    node = node+"_"+str(nlist[t])
+if nodefull == topnode:
+    parent = topnode
+    itemlist.append(topnode)                    #Append to the item list
+else:
+    for t in range(ntop,len(nlist)):             #Construct it's node name
+        itemlist.append(node)                    #Append to the item list
+        parent = node
+        node = node+"_"+str(nlist[t])
 
-itemlist.append(nodefull)                    #now add the node again
+        #These are the siblings
+        subnodes = nodeLoader.SubNodeNames[int(nodeLoader.NodeIndex[parent])].rstrip("'").lstrip("'").split(",")
+    if len(subnodes[0]):                         #if there are subnodes
+        for i in range(len(subnodes)):           #make a list, sort it and start it with this node
+            subnodes[i]=parent+"_"+subnodes[i]
+        subnodes.sort()
+    itemlist=itemlist+subnodes;
 
 index =  int(nodeLoader.NodeIndex[node])     #get subnodes
 subnodes = nodeLoader.SubNodeNames[index].rstrip("'").lstrip("'").split(",")
@@ -40,5 +52,6 @@ widget.setPropertyValue("items",Arrays.asList(itemlist) ) #set the relevant prop
 widget.setPropertyValue("height",24*len(subnodes) )
 widget.setPropertyValue("pv_value",node )
 
-
+nodetot+=1
+pvArray[1].setValue(str(nodetot))
         

@@ -6,11 +6,12 @@
   <show_grid>true</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>200</height>
+  <height>300</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
     <P>B_SYS_HV_ECAL</P>
     <TOP>B_SYS_HV</TOP>
+    <SCALE>Part</SCALE>
   </macros>
   <boy_version>4.0.103.201511111440</boy_version>
   <show_edit_range>true</show_edit_range>
@@ -23,7 +24,7 @@
   <background_color>
     <color name="OPI_Background" red="50" green="50" blue="50" />
   </background_color>
-  <width>580</width>
+  <width>800</width>
   <x>-1</x>
   <name>Display</name>
   <grid_space>6</grid_space>
@@ -41,6 +42,7 @@
     <trace_0_concatenate_data>false</trace_0_concatenate_data>
     <trace_0_trace_type>4</trace_0_trace_type>
     <border_width>3</border_width>
+    <trace_1_x_axis_index>0</trace_1_x_axis_index>
     <border_style>4</border_style>
     <axis_0_grid_color>
       <color red="200" green="200" blue="200" />
@@ -49,8 +51,10 @@
     <trace_0_name></trace_0_name>
     <axis_2_minimum>0.0</axis_2_minimum>
     <trace_0_update_mode>0</trace_0_update_mode>
+    <trace_1_x_pv>loc://$(DID)_ELEMENT_X(-1000,-1000)</trace_1_x_pv>
     <wuid>-75eec4f1:1543cfd4e15:-7f05</wuid>
     <transparent>false</transparent>
+    <trace_1_update_mode>0</trace_1_update_mode>
     <axis_0_title_font>
       <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
     </axis_0_title_font>
@@ -61,6 +65,8 @@
     <y>0</y>
     <trace_0_x_axis_index>0</trace_0_x_axis_index>
     <axis_count>3</axis_count>
+    <trace_1_point_size>4</trace_1_point_size>
+    <trace_1_anti_alias>true</trace_1_anti_alias>
     <pv_value />
     <axis_2_grid_color>
       <color red="200" green="200" blue="200" />
@@ -68,17 +74,19 @@
     <trace_0_buffer_size>8</trace_0_buffer_size>
     <axis_1_maximum>100.0</axis_1_maximum>
     <axis_0_scale_font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </axis_0_scale_font>
     <trigger_pv></trigger_pv>
     <widget_type>XY Graph</widget_type>
     <axis_1_axis_color>
       <color red="0" green="0" blue="0" />
     </axis_1_axis_color>
-    <axis_0_scale_format></axis_0_scale_format>
+    <axis_0_scale_format>#</axis_0_scale_format>
     <axis_1_log_scale>false</axis_1_log_scale>
     <title>Title here</title>
     <trace_0_visible>true</trace_0_visible>
+    <trace_1_name></trace_1_name>
+    <trace_1_y_pv_value />
     <axis_2_auto_scale>false</axis_2_auto_scale>
     <show_legend>true</show_legend>
     <axis_0_axis_title></axis_0_axis_title>
@@ -90,24 +98,27 @@
     </axis_2_scale_font>
     <axis_0_dash_grid_line>false</axis_0_dash_grid_line>
     <trace_0_point_style>0</trace_0_point_style>
+    <trace_1_point_style>0</trace_1_point_style>
     <trace_0_line_width>1</trace_0_line_width>
     <axis_2_y_axis>true</axis_2_y_axis>
     <axis_0_time_format>0</axis_0_time_format>
-    <trace_count>1</trace_count>
+    <trace_count>2</trace_count>
     <axis_1_show_grid>false</axis_1_show_grid>
     <axis_1_dash_grid_line>true</axis_1_dash_grid_line>
     <show_toolbar>false</show_toolbar>
     <axis_0_visible>true</axis_0_visible>
-    <axis_0_show_grid>true</axis_0_show_grid>
+    <axis_0_show_grid>false</axis_0_show_grid>
     <trace_0_y_axis_index>2</trace_0_y_axis_index>
     <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
+      <width_scalable>false</width_scalable>
+      <height_scalable>false</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
+    <trace_1_y_pv>loc://$(DID)_ELEMENT_Y(-5000,5000)</trace_1_y_pv>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <axis_0_maximum>100.0</axis_0_maximum>
-    <height>325</height>
+    <trace_1_y_axis_index>2</trace_1_y_axis_index>
+    <height>300</height>
     <trigger_pv_value />
     <axis_1_grid_color>
       <color red="200" green="200" blue="200" />
@@ -119,19 +130,34 @@
     <axis_0_log_scale>false</axis_0_log_scale>
     <trace_0_x_pv_value />
     <axis_0_auto_scale_threshold>0.0</axis_0_auto_scale_threshold>
-    <rules />
+    <rules>
+      <rule name="Rule" prop_id="axis_1_auto_scale" out_exp="false">
+        <exp bool_exp="pv0&gt;1.0">
+          <value>false</value>
+        </exp>
+        <pv trig="true">loc://$(DID)_TOTAL(0)</pv>
+      </rule>
+    </rules>
     <axis_1_visible>true</axis_1_visible>
     <axis_2_show_grid>false</axis_2_show_grid>
     <trace_0_update_delay>100</trace_0_update_delay>
+    <trace_1_concatenate_data>false</trace_1_concatenate_data>
+    <trace_1_trace_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </trace_1_trace_color>
     <pv_name>loc://$(DID)_NODE("$(P)")</pv_name>
     <axis_2_log_scale>false</axis_2_log_scale>
-    <axis_2_auto_scale_threshold>0.5</axis_2_auto_scale_threshold>
+    <axis_2_auto_scale_threshold>0.1</axis_2_auto_scale_threshold>
     <name>XYGraph$(SCALE)</name>
+    <trace_1_trace_type>0</trace_1_trace_type>
     <axis_0_auto_scale>false</axis_0_auto_scale>
     <axis_0_minimum>0.0</axis_0_minimum>
+    <trace_1_update_delay>100</trace_1_update_delay>
     <axis_2_dash_grid_line>true</axis_2_dash_grid_line>
     <axis_1_axis_title></axis_1_axis_title>
     <axis_1_auto_scale>true</axis_1_auto_scale>
+    <trace_1_line_width>1</trace_1_line_width>
+    <trace_1_plot_mode>0</trace_1_plot_mode>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
@@ -151,12 +177,14 @@
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <axis_2_maximum>100.0</axis_2_maximum>
     <show_plot_area_border>false</show_plot_area_border>
-    <width>577</width>
+    <width>800</width>
+    <trace_1_x_pv_value />
     <axis_1_minimum>0.0</axis_1_minimum>
     <title_font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="14" style="1">Header 2</opifont.name>
     </title_font>
     <trace_0_y_pv_value />
+    <trace_1_visible>true</trace_1_visible>
     <plot_area_background_color>
       <color name="Write_Background" red="250" green="250" blue="205" />
     </plot_area_background_color>
@@ -165,13 +193,19 @@
     </axis_1_title_font>
     <visible>true</visible>
     <axis_2_axis_title>Secondary Axis (2)</axis_2_axis_title>
+    <trace_1_buffer_size>2</trace_1_buffer_size>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <axis_2_scale_format></axis_2_scale_format>
     <scripts>
       <path pathString="MonitorWaveform_0.py" checkConnect="true" sfe="false" seoe="false">
         <pv trig="true">loc://$(DID)_NODE("$(P)")</pv>
         <pv trig="false">loc://$(DID)_RANGEX(100,0,0,0,0,0,0,0)</pv>
-        <pv trig="false">loc://$(DID)_test(66)</pv>
+        <pv trig="false">loc://$(DID)_ELEMENT_X(-1000,-1000)</pv>
+        <pv trig="false">loc://$(DID)_ELEMENT</pv>
+      </path>
+      <path pathString="MonitorWaveform_1.py" checkConnect="true" sfe="false" seoe="false">
+        <pv trig="true">loc://$(DID)_ELEMENT</pv>
+        <pv trig="false">loc://$(DID)_ELEMENT_X(-1000,-1000)</pv>
       </path>
     </scripts>
     <trace_0_point_size>4</trace_0_point_size>
@@ -179,7 +213,7 @@
       <color red="66" green="121" blue="175" />
     </trace_0_trace_color>
     <trace_0_anti_alias>true</trace_0_anti_alias>
-    <axis_1_auto_scale_threshold>0.5</axis_1_auto_scale_threshold>
+    <axis_1_auto_scale_threshold>0.1</axis_1_auto_scale_threshold>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>

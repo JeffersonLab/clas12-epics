@@ -95,6 +95,7 @@ include $(TOP)/configure/RULES
 #  ADD RULES AFTER THIS LINE
 
 DICTDEPS =  ../sub2dump.sh ../parseEpicsRecordDump 
+DICTDEPS += $(EPICS)/apps/db/caenhv.db
 DICTDEPS += $(EPICS)/apps/caenHvApp/src/HV_allnames.txt
 
 # need deps from other apps whos .sub or .db files are to be parsed.

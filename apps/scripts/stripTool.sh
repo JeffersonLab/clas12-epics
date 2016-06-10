@@ -1,9 +1,9 @@
 #!/bin/sh
-if [ -z "$1" ]
-then
-    echo 'Usage: stripTool.sh pv1 [pv2 [pv3 [...]]]'
-    exit
-fi
+#if [ -z "$1" ]
+#then
+#    StripTool >& /dev/null &
+#    exit
+#fi
 
 tmpdir=/tmp/StripTool
 if [[ ! -e $tmpdir ]]; then
@@ -29,5 +29,5 @@ do
     let npv=npv+1
 done
 
-exec StripTool $cfg &
+exec StripTool $cfg >& /dev/null &
 

@@ -47,6 +47,11 @@ import csv
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 from xml.dom import minidom
 
+# Fix for elementtree.tostring() error (UnicodeDecodeError: 'ascii' codec can't
+# decode byte 0xe2 in position ##).  Error created by using " in elements.
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 def pretty_print(elem):
 
     rough_string = tostring(elem, "utf-8")

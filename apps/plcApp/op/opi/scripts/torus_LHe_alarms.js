@@ -27,7 +27,7 @@ var ELM = "TR817";
 var ID  = ["A", "B", "C", "D", "E", "F"];
 var SUF = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "R", "S"];
 
-for (var i=0; i<ELM.length; i++) {
+for (var i=0; i<ID.length; i++) {
 	for (var j=0; j<SUF.length; j++) {
 		PV_NAME = P + R + ELM + ID[i] + SUF[j];
 		createAlarmRow(PV_NAME);

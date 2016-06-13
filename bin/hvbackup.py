@@ -15,7 +15,12 @@ def exit(text):
 DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
 DETS=DETSHV+DETSLV
-FIELDSHV=[':vset',':vmax',':iset',':trip',':rup',':rdn']
+
+FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
+
+# key,value = field,deadband
+FIELDS_HV_MYA={':vset':0,':iset':0,':vmon':0.1,':imon':5.0}
+
 DATADIR='/usr/clas12/DATA/burt'
 
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
@@ -41,18 +46,21 @@ def getChannels(det,sector=None):
       for pp in ['1A','1B','2']:
         for lr in ['L','R']:
           for ii in range(nn[pp]):
+            #prefixes.append('B_DET_FTOF_HV_SEC%d_PANEL%s_%s_%.2d'%(ss,pp,lr,ii+1))
             prefixes.append('B_DET_FTOF_HV_SEC%d_PANEL%s_%s_E%.2d'%(ss,pp,lr,ii+1))
   elif det=='ECAL_HV':
     for ss in sectors:
       for uvw in ['U','V','W']:
         for io in ['I','O']:
           for ii in range(36):
+            #prefixes.append('B_DET_ECAL_HV_SEC%d_%s%s_%.2d'%(ss,uvw,io,ii+1))
             prefixes.append('B_DET_ECAL_HV_SEC%d_%s%s_E%.2d'%(ss,uvw,io,ii+1))
   elif det=='PCAL_HV':
     nn={'U':68,'V':62,'W':62}
     for ss in sectors:
       for uvw in ['U','V','W']:
         for ii in range(nn[uvw]):
+          #prefixes.append('B_DET_PCAL_HV_SEC%d_%s_%.2d'%(ss,uvw,ii+1))
           prefixes.append('B_DET_PCAL_HV_SEC%d_%s_E%.2d'%(ss,uvw,ii+1))
   elif det=='FTC_HV':
     for qq in range(4):
@@ -62,11 +70,13 @@ def getChannels(det,sector=None):
     for ss in sectors:
       for lr in ['L','R']:
         for ii in range(18):
+          #prefixes.append('B_DET_LTCC_HV_SEC%d_%s_%.2d'%(ss,lr,ii+1))
           prefixes.append('B_DET_LTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
   elif det=='HTCC_HV':
     for ss in sectors:
       for lr in ['L','R']:
         for ii in range(4):
+          #prefixes.append('B_DET_HTCC_HV_SEC%d_%s_%.2d'%(ss,lr,ii+1))
           prefixes.append('B_DET_HTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
   elif det=='DC_HV':
     SLAYERS={1:[1,2],2:[3,4],3:[5,6]}
@@ -82,10 +92,18 @@ def getChannels(det,sector=None):
 
   return prefixes
 
-def printPVs(det,sector=None):
+def printPVsBurt(det,sector=None):
   for channel in getChannels(det,sector):
-    for field in FIELDSHV:
+    for field in FIELDS_HV_BURT:
       print channel+field
+
+def printPVsMya(det,sector=None):
+  for channel in getChannels(det,sector):
+    for field in FIELDS_HV_MYA.keys():
+      deadband=FIELDS_HV_MYA[field]
+      if field==':imon':
+        if det=='FTC_HV': deadband=0.1
+      print channel+field,deadband
 
 def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
@@ -182,18 +200,22 @@ class SaveRestore:
 def main():
 
   scriptName=sys.argv.pop(0)
-  usage=scriptName+' [sec=S#] det=detectorName save/restore'
+  usage=scriptName+' [-b] [-m] [sec=S#] det=detectorName save|restore'
 
   det=None
   sector=None
   saverestore=None
-  printOnly=False
+  printMya=False
+  printBurt=False
 
   for arg in sys.argv[:]:
     if arg=='-h' or arg=='--help':
       sys.exit(usage)
-    elif arg=='-p':
-      printOnly=True
+    elif arg=='-m':
+      printMya=True
+      sys.argv.remove(arg)
+    elif arg=='-b':
+      printBurt=True
       sys.argv.remove(arg)
     elif arg.find('=')>=0:
       (key,val)=arg.split('=',1)
@@ -206,8 +228,11 @@ def main():
   if (det==None): sys.exit(usage)
   if (det not in DETS): sys.exit(usage)
 
-  if printOnly:
-    printPVs(det)
+  if printBurt:
+    printPVsBurt(det)
+    sys.exit()
+  if printMya:
+    printPVsMya(det)
     sys.exit()
 
   if len(sys.argv)!=1: sys.exit(usage)

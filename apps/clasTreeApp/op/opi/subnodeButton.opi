@@ -3,14 +3,10 @@
   <show_close_button>true</show_close_button>
   <rules />
   <wuid>2da4dada:138bb0b2666:-7ff6</wuid>
-  <show_grid>false</show_grid>
+  <show_grid>true</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
-  <scripts>
-    <path pathString="caput_all_0.py" checkConnect="true" sfe="false" seoe="false">
-      <pv trig="true">loc://$(DID)_NODE("$(P)")</pv>
-    </path>
-  </scripts>
-  <height>14</height>
+  <scripts />
+  <height>12</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -25,15 +21,15 @@
   <background_color>
     <color name="OPI_Background" red="50" green="50" blue="50" />
   </background_color>
-  <width>60</width>
-  <x>0</x>
+  <width>42</width>
+  <x>-1</x>
   <name>Display</name>
   <grid_space>6</grid_space>
   <show_ruler>true</show_ruler>
-  <y>0</y>
+  <y>-1</y>
   <snap_to_geometry>true</snap_to_geometry>
   <foreground_color>
-    <color red="192" green="192" blue="192" />
+    <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
   <actions hook="false" hook_all="false" />
   <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
@@ -41,25 +37,32 @@
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>false</alarm_pulsing>
-    <tooltip></tooltip>
+    <tooltip>$(RANGE_LOW) - $(RANGE_HIGH)</tooltip>
     <push_action_index>0</push_action_index>
     <rules>
-      <rule name="Rule" prop_id="text" out_exp="true">
-        <pv trig="true">loc://$(LCID)_NODE</pv>
+      <rule name="Rule" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pvStr0.search(pvStr1)&gt;-1">
+          <value>
+            <color red="255" green="255" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pvStr0.search(pvStr1)&lt;0">
+          <value>
+            <color red="240" green="240" blue="240" />
+          </value>
+        </exp>
+        <pv trig="true">loc://$(DID)_NODE("$(P)")</pv>
+        <pv trig="false">loc://$(DID)_$(SUBNODE)("$(TOP)_$(SUBNODE)")</pv>
       </rule>
     </rules>
     <enabled>true</enabled>
-    <wuid>451f3447:1523f7a495a:3022</wuid>
+    <wuid>2e1141ec:154f2fd7a8a:-6b1a</wuid>
     <pv_value />
-    <text>$(TEXT)</text>
-    <scripts>
-      <path pathString="caput_all_0.py" checkConnect="true" sfe="false" seoe="false">
-        <pv trig="true">loc://$(DID)_NODE("$(P)")</pv>
-      </path>
-    </scripts>
+    <text>$(SUBNODE)</text>
+    <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>14</height>
-    <border_width>1</border_width>
+    <height>12</height>
+    <border_width>0</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
       <height_scalable>true</height_scalable>
@@ -67,43 +70,34 @@
     </scale_options>
     <image></image>
     <visible>true</visible>
-    <pv_name>loc://$(LCID)_NODE</pv_name>
+    <pv_name>loc://$(DID)_NODE("$(P)")</pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
     <widget_type>Action Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
-      <color name="On" red="0" green="255" blue="0" />
+      <color red="240" green="240" blue="240" />
     </background_color>
-    <width>60</width>
+    <width>42</width>
     <x>0</x>
     <name>Action Button</name>
     <y>0</y>
     <style>0</style>
     <foreground_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
+      <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="EXECUTE_PYTHONSCRIPT">
-        <path></path>
-        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import ScriptUtil,GUIUtil,PVUtil,WidgetUtil
-node=widget.getPropertyValue("tooltip")  #node is stored in tooltip
-pv=widget.getMacroValue("PV")                 #get PV and VAL
-val=widget.getMacroValue("VAL")
-#write messsage and pop up confirmation dialog
-msg="WARNING: Writing "+pv+" = "+ val + " to all nodes under " + node 
-a=GUIUtil.openConfirmDialog(msg)
-
-if a:  #if YES then run the command
-	cmd = "caput_tree.py -v 1 " +  node + " " + pv + " " + val
-	ScriptUtil.executeSystemCommand(cmd, 100)]]></scriptText>
-        <embedded>true</embedded>
-        <description>Write $(PV) = $(VAL) to all elements under $(tooltip)</description>
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>$(TOP)_$(SUBNODE)</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Select $(SUBNODE) ($(RANGE_LOW) - $(RANGE_HIGH))</description>
       </action>
     </actions>
     <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>
   </widget>
 </display>

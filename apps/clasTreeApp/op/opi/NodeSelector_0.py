@@ -15,6 +15,9 @@ if nodesearch in nodeLoader.NodeIndex:             #if it's a node, tag a wildca
 	nodesearch = nodesearch+"*"
 
 nlist=fnmatch.filter(nodeLoader.NodeNames,nodesearch)       #filter on the node search
-nlist.sort()                                                #make a sorted list of them
+if(len(nlist)>=1):
+        nlist.sort()                                                #make a sorted list of them
+else:
+        nlist = ["None"]
 widget.setPropertyValue("items",Arrays.asList(nlist) )      #set the choice list
 widget.setPropertyValue("pv_value",nlist[0] )               #set selected as first in the list

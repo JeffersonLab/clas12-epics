@@ -1,4 +1,5 @@
 #!/bin/awk -f
+###Note - this should be changed to python. Ken Livingston
 #Run like this:
 # or   ./parseEpicsRecordDump -v outname="name" ioc1.dump ioc2.dump ioc3.dump .....
 #
@@ -70,11 +71,9 @@ BEGIN{
 	    system(str);
 	}
     }
-    #to be moved to input variable later
-    #nodeGraphString["BSIM_SYS_HV"]="BSIM_SYS_HV";
-    #nodeGraphString["BSIM_HW"]="BSIM_HW_HV";
-    nodeGraphString["B_SYS_HV"]="B_SYS_HV";
-    nodeGraphString["B_HW"]="B_HW_HV";
+    #Make an array of the top node for systems where we want to monitor all the elements.
+    nodeGraphRange["B_SYS_HV"]
+    #nodeGraphRange["B_HW_HV"] #if we can change B_HW_HVCAENTOF1 to B_HW_HV_CAENTOF1 etc.
 
     #some types for waveforms from different kinds of record.
     rTypes["ai"]="DOUBLE";  rTypes["ao"]="DOUBLE"; rTypes["bi"]="SHORT";  rTypes["bo"]="SHORT"; 
@@ -256,37 +255,36 @@ END{
       }             
     }
 
+
     #find the range of elements under each subnode - tricky.
-    for(n=1;n<=nNodes;n++){
-      name = ANodeNames[n];                          #get the node name for simplicity
-      #print "Name = " , name
-      for (ng in nodeGraphString){                     #go over all the listed names for graphing
-	if((name ~ nodeGraphString[ng])||(name==ng)){                    #check if current node is part of graph
-	  if(name==ng){                                  #if it's the actual top node
-	    etot=0;                                      #zero the counter
-	    #print "Zeroing",name, ADepth[name];
-	  }
-	  nodeGraphLow[name]=etot;
-	  #print name, nodeGraphLow[name];
-	  if (length(ElementNames[name])>0){
-	    enum=split(ElementNames[name],ea,",");
+    for (ng in nodeGraphRange){                     #go over all the listed names for graphing
+      etot=0                                          #init the counter for element number
+      for(n=1;n<=nNodes;n++){                         #go through all the nodes
+        name = ANodeNames[n]                            #get the name
+	if(name~ng){                                    #if the name contains the nodeGraph name
+	  #print name, ng
+	  nodeGraphLow[name]=etot;                       #save the current element number
+	  if (length(ElementNames[name])>0){               # if the node contains elements
+	    enum=split(ElementNames[name],ea,",");           # add the no of elements to the running total
 	    etot+=enum;
-	    sname=name;                                    #copy the name
-	    sub(ng,"",sname);                              #remove the listed name prefix
-	    sub("_","",sname);                             #and 1st undercore
-	    l=split(sname,sparts,"_");                     #split the remaining fields
-	    str=nodeGraphString[ng];
+	    sname=name;                                      #copy the name
+	    sub(ng,"",sname);                                #remove the listed name prefix
+	    sub("_","",sname);                               #and 1st undercore
+	    l=split(sname,sparts,"_");                       #split the remaining fields
+	    str=ng;                                          #add to the total for the top node
 	    nodeGraphHigh[str]+=enum;
-	    #print str,nodeGraphHigh[str];
-	    for(m=1;m<=l;m++){
+	    #print name,str,nodeGraphHigh[str];
+	    for(m=1;m<=l;m++){                                 #add to the totals for all its children
 	      str=sprintf("%s_%s",str,sparts[m]);
 	      nodeGraphHigh[str]+=enum;
-	      #print str,nodeGraphHigh[str];
+	      #print name,str,nodeGraphHigh[str];
 	    }
 	  }
 	}
       }
     }
+
+
         
     "date"|getline;ldate=$0;                       #get the date to timestamp outputfiles 
     
@@ -385,7 +383,8 @@ function printDict(dict){    #Print python dictionaries and lists for the benefi
     printf("NodeRecordTypes.append('%s')\n",   ANodeRecordTypes[name])    >> dict;
     string="";
     if(name in nodeGraphLow){
-      string=sprintf("%s,%s",nodeGraphLow[name],nodeGraphLow[name]+nodeGraphHigh[name]-1);	  
+      string=sprintf("%s,%s",nodeGraphLow[name],nodeGraphLow[name]+nodeGraphHigh[name]-1);
+     
     }
     printf("ElementRange.append('%s')\n",   string)    >> dict;
     print "" >> dict;
@@ -399,10 +398,11 @@ function printRecords(subfile){    #Print .substitution file for graphs etc
   print "file \"db/nodegraph.db\" {" >> subfile;
   printf"               pattern { P,\t\t\tNPT,\tTYPE }\n" >> subfile;
   
-  for(ng in nodeGraphString){                     #go over all the listed names for graphing
+  for(ng in nodeGraphRange){                     #go over all the listed names for graphing
     for(n=1;n<=nNodes;n++){
       name = ANodeNames[n];                          #get the node name for simplicity
-      if((name ~ nodeGraphString[ng])&&(length(ElementNames[name])>0)){ #fine the 1st with elements
+      #if((name ~ nodeGraphRange[ng])&&(length(ElementNames[name])>0)){ #fine the 1st with elements
+      if((name ~ ng)&&(length(ElementNames[name])>0)){ #fine the 1st with elements
 	enames=AElementRecordNames[name];                             #and assume it's representative 
 	etypes=AElementRecordTypes[name];
 	eflags=AElementRecordFlags[name];
@@ -417,7 +417,8 @@ function printRecords(subfile){    #Print .substitution file for graphs etc
     #print ng,enames,etypes,eflags;
     for(f=1;f<=n;f++){
       if((efarr[f]~"#GR")||(efarr[f]~"#PU")||(efarr[f]~"#PB")){      #make the relevant lines in the sub file
-	printf"                       {\"%s:%s\",\t\"%d\",\t\"%s\"}\n",nodeGraphString[ng],enarr[f], nodeGraphHigh[nodeGraphString[ng]], rTypes[etarr[f]] >> subfile;
+#	printf"                       {\"%s:%s\",\t\"%d\",\t\"%s\"}\n",nodeGraphRange[ng],enarr[f], nodeGraphHigh[nodeGraphRange[ng]], rTypes[etarr[f]] >> subfile;
+	printf"                       {\"%s:%s\",\t\"%d\",\t\"%s\"}\n",ng,enarr[f], nodeGraphHigh[ng], rTypes[etarr[f]] >> subfile;
       }
     }        
   }

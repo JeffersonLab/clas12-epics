@@ -48,11 +48,7 @@
     <wuid>451f3447:1523f7a495a:3022</wuid>
     <pv_value />
     <text>$(TEXT)</text>
-    <scripts>
-      <path pathString="caput_all_0.py" checkConnect="true" sfe="false" seoe="false">
-        <pv trig="true">loc://$(DID)_NODE("$(P)")</pv>
-      </path>
-    </scripts>
+    <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <height>14</height>
     <border_width>1</border_width>
@@ -81,32 +77,21 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>../../general/confirm_shellcmd.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <CMD>caput_tree.py -v 1 $(tooltip) $(PV) $(VAL)</CMD>
-          <MSG>Write $(PV) = $(VAL) to all elements under $(tooltip)</MSG>
-        </macros>
-        <replace>2</replace>
-        <description></description>
-      </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path></path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-var a = GUIUtil.openConfirmDialog("Hello")
-ScriptUtil.executeSystemCommand("ls -l", 1)]]></scriptText>
-        <embedded>true</embedded>
-        <description></description>
-      </action>
       <action type="EXECUTE_PYTHONSCRIPT">
         <path></path>
-        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import ScriptUtil
-from org.csstudio.opibuilder.scriptUtil import GUIUtil
-GUIUtil.openConfirmDialog("Hello")
-PVUtil.executeSystemCommand("ls -l", 100)]]></scriptText>
+        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import ScriptUtil,GUIUtil,PVUtil,WidgetUtil
+node=widget.getPropertyValue("tooltip")  #node is stored in tooltip
+pv=widget.getMacroValue("PV")                 #get PV and VAL
+val=widget.getMacroValue("VAL")
+#write messsage and pop up confirmation dialog
+msg="WARNING: Writing "+pv+" = "+ val + " to all nodes under " + node 
+a=GUIUtil.openConfirmDialog(msg)
+
+if a:  #if YES then run the command
+	cmd = "caput_tree.py -v 1 " +  node + " " + pv + " " + val
+	ScriptUtil.executeSystemCommand(cmd, 100)]]></scriptText>
         <embedded>true</embedded>
-        <description></description>
+        <description>Write $(PV) = $(VAL) to all elements under $(tooltip)</description>
       </action>
     </actions>
     <font>

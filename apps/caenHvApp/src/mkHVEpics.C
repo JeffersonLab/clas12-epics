@@ -152,7 +152,7 @@ const char *subnet       = "129.57.";  //will need to change the way this is don
 enum            Mainframes { HVFTOF1,    HVFTOF2,   HVFTOF3,   HVFTOF4,   HVFTOF5,   HVFTOF6,   HVECAL1,   HVECAL2,   HVECAL3,   HVECAL4,   HVECAL5,    HVECAL6,   HVDC1,   HVDC2,   HVDC3,   HVDC4,   HVTEST0,   HVLTCC0,   HVCTOF0,   HVFTAG,   HVCND,   NMAINFRAMES};
 const char *crateName[]  = {"HVFTOF1",  "HVFTOF2", "HVFTOF3", "HVFTOF4", "HVFTOF5", "HVFTOF6", "HVECAL1", "HVECAL2", "HVECAL3", "HVECAL4", "HVECAL5", "HVECAL6", "HVDC1", "HVDC2", "HVDC3", "HVDC4", "HVTEST0", "HVLTCC0",  "HVCTOF0", "HVFTAG", "HVCND",         NULL};
 const int  crateType[]   = {     4527,       4527,      1527,      4527,      1527,      1527,      4527,      4527,      4527,     4527,      4527,       4527,     527,     527,     527,     527,      4527,      4527,       1527,     1527,    527,             -1};
-const int  crateSubnet[] = {      167,        167,       167,       167,       167,       167,       167,       167,       167,      167,       167,         67,     167,     167,     167,     167,       167,       167,         86,       86,    666,             -1};
+const int  crateSubnet[] = {      167,        167,       167,       167,       167,       167,       167,       167,       167,      167,       167,        167,     167,     167,     167,     167,       167,       86,         86,       86,    666,             -1};
 const int  crateIP[]     = {       78,         47,        46,        79,       162,       161,        53,       191,        51,      190,        55,         56,     666,     667,     668,     669,        70,        36,         81,      108,    666,             -1};
 
 

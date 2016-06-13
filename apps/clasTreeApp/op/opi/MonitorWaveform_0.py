@@ -73,7 +73,7 @@ if widget.getMacroValue("NTRACE"):   #if there are some traces defined
 
         if not trace_count == ntrace:    # not created yet
                 widget.setPropertyValue("trace_count",str(ntrace))
-                widget.setPropertyValue("show_toolbar","true")
+                #widget.setPropertyValue("show_toolbar","true")
 
                 #Set some default values and see if there are macros to override them.
                 title      = "Monitor graph"

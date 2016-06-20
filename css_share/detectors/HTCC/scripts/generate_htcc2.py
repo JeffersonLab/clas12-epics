@@ -74,20 +74,20 @@ WIDGTAIL='''
         <path>/CLAS12_Share/apps/caenHvApp/det_channel_novice_withheader.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <P>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^</P>
+          <P>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^</P>
         </macros>
         <replace>2</replace>
         <description>Open Controls</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^:pwonoff</pv_name>
+        <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^:pwonoff</pv_name>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description>Turn On</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^:pwonoff</pv_name>
+        <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^:pwonoff</pv_name>
         <value>0</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
@@ -97,12 +97,12 @@ WIDGTAIL='''
 
     <scripts>
       <path pathString="../../apps/caenHvApp/set_status_led2.js" checkConnect="true" sfe="false" seoe="false">
-        <pv trig="true">^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^.L</pv>
-        <pv trig="true">^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^.T</pv>
+        <pv trig="true">^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^.L</pv>
+        <pv trig="true">^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^.T</pv>
       </path>
     </scripts>
     <transparent>false</transparent>
-    <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^_E^^^CHANNEL^^^</pv_name>
+    <pv_name>^^^PREFIX^^^_SEC^^^SECTOR^^^_^^^LEFTRIGHT^^^^^^CHANNEL^^^</pv_name>
     <background_color>
       <color name="Off" red="60" green="100" blue="60" />
     </background_color>

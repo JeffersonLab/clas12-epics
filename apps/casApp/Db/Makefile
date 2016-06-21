@@ -5,7 +5,6 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB  += cas.db
-REQ += cas_settings.req
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

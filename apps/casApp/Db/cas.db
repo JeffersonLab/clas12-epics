@@ -1,20 +1,21 @@
-record(bi,"$(P)$(R)CRYO:CAS" ) {
-    field(DESC, "CLAS12 CRYO R/W Permission")
-    field(ASG,  "CRYO")
+#
+# cas.db - generic on/off switch for channel access security (CAS)
+#
+# Macros:
+#   P   - record prefix
+#   R   - record prefix
+#   ASG - access security group (defaults to "DEFAULT")
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   June 2016
+#
+record(bi,"$(P)$(R)CAS_READWRITE" ) {
+    field(ASG,  "$(ASG=DEFAULT)")
     field(SCAN, "Passive")
     field(ZNAM, "CLOSED")
     field(ONAM, "OPEN")
     field(PINI, "YES")
-    field(VAL , "0")
+    field(VAL,  "0")
+    field(OSV,  "MAJOR")
+    info(autosaveFields_pass0, "VAL")
 }
-
-record(bi,"$(P)$(R)HV:CAS" ) {
-    field(DESC, "CLAS12 HV R/W Permission")
-    field(ASG,  "HV")
-    field(SCAN, "Passive")
-    field(ZNAM, "CLOSED")
-    field(ONAM, "OPEN")
-    field(PINI, "YES")
-    field(VAL , "0")
-}
-

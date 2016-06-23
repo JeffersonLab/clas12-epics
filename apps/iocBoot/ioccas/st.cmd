@@ -11,12 +11,11 @@ cas_registerRecordDeviceDriver pdbbase
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/cas.db", "P=B_,R=CAS:")
 
 dbLoadRecords("db/accessControl.db")
 
 cd "${TOP}/iocBoot/${IOC}"
-asSetFilename("${TOP}/iocBoot/acf/cas.acf")
+asSetFilename("${TOP}/iocBoot/acf/caenhv.acf")
 
 ## autosave setup
 < save_restore.cmd

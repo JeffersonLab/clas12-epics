@@ -1,19 +1,23 @@
 #
-# torus_generic_ai.db - ai Record for Torus PLCs
+# torus_ai_generic.db
+#
+# Generic aiRecord for Torus PLCs.  Used when PV matches tag name.
+# See also: torus_ai_renamed.db.
 #
 # Macros:
 #   P     - record prefix
 #   R     - record prefix
+#   TAG   - PLC tag also suffix of PV name
 #   PLCID - PLC ID set in startup
 #   EGU   - (optional)
-#   PREC  - (optional, default 0)
+#   PREC  - (optional)
 #   DESC  - (optional)
 #
 # Author: Wesley Moore (wmoore@jlab.org)
 # Date:   Mar 2016
 #
 
-record(ai, "$(P)$(R)$(PV)") {
+record(ai, "$(P)$(R)$(TAG)") {
     field(DESC, "$(DESC="")")
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")

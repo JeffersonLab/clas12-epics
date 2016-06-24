@@ -1,0 +1,62 @@
+#
+# DAQ and Quench Detection explanations
+#
+
+-----------
+ioctorusQD
+-----------
+  - Quench detection used by PLC
+  - cRIO -> PLC -> ioctorusQD
+  - Monitors/archives what the PLC is seeing
+
+  PVs:
+    B_TORUS:QD:VT#_DAQ
+    -- raw inputs (from cRIO to PLC)
+    -- archived
+    
+    B_TORUS:QD:V#
+    -- PLC's calcs for quench detection
+    -- archived
+    
+    B_TORUS:QD:C#
+    -- comparators for soft quench detection (ex. C1=V1-V2)
+    -- archived
+
+--------------------
+hallb-crio.jlab.org
+--------------------
+  - cRIO for fast data acquistion
+  - Hosts some PVs using LabView CA Server
+  - PV names constructed by LabView CA Server
+
+  PVs:
+    hallb-crio:IOC:B_TORUS:DAQ:VT#
+    -- fast daq buffer
+
+    hallb-crio:IOC:B_TORUS:DAQ:VT#_AVG
+    -- buffer avg
+    -- archived
+    
+    hallb-crio:IOC:B_TORUS:DAQ:VT#_MAX
+    -- buffer max
+    -- archived
+    
+    hallb-crio:IOC:B_TORUS:DAQ:VT#_MIN
+    -- buffer min
+    -- archived
+
+------------
+ioctorusDaq
+------------
+  - Runs wf2rootApp (writes waveforms to root tree)
+  
+  PVs:
+    B_TORUS:DAQ_REC:ctrl:daq
+    -- subroutine for filename and size management
+
+    B_TORUS:DAQ_REC:ctrl:daq_state
+    -- controls recording (WRITING/STOPPED)
+    -- autosaved
+    
+    B_TORUS:DAQ_REC:VT#
+    -- subroutine for converting waveform to root tree

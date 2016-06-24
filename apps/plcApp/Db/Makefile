@@ -28,6 +28,7 @@ DB  += torus_cryocon.db
 DB  += torus_force.substitutions
 REQ += torus_force_settings.req
 DB  += torus_generic_ai.db
+DB  += torus_renamed_ai.db
 DB  += torus_LHe.db
 DB  += torus_LHe.substitutions
 DB  += torus_LN2.db

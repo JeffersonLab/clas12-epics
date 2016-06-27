@@ -1,0 +1,60 @@
+#
+# Keithley 6221
+#
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct 2014
+#
+
+Terminator   = CR LF;
+ReadTimeout  = 1000;
+ReplyTimeout = 1000;
+
+#######################################
+# Status Commands
+#######################################
+getComp {
+    out "SOUR:CURR:COMP?";
+    in  "%f";
+}
+
+getCurr {
+    out ":CURR?";
+    in  "%e";
+}
+
+getEarthGnd {
+	out "OUTP:LTE?";
+	in	"%d";
+}
+
+getInShld {
+	out "OUTP:ISH?";
+	in	"%{GUAR|OLOW}";
+}
+
+getOutput {
+	out "OUTP:STAT?";
+	in  "%d";
+}
+
+getAutoRange {
+	out	"SOUR:CURR:RANG:AUTO?";
+	in  "%d";
+}
+
+getRange {
+	out "SOUR:CURR:RANG?";
+	in  "%e";
+}
+
+#######################################
+# Control Commands
+#######################################
+setAutoRange {	out "SOUR:CURR:RANG:AUTO %d";	}
+setComp		{ 	out "SOUR:CURR:COMP %f";		}
+setCurr		{ 	out "CURR %e";				}
+setEarthGnd {	out "OUTP:LTE %{OFF|ON}";		}
+setInShld 	{	out "OUTP:ISH %{GUARD|OLOW}";	}
+setOutput	{	out "OUTP:STAT %d";				}
+setRange	{	out "SOUR:CURR:RANG %s";				}

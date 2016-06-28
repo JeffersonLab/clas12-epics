@@ -33,6 +33,7 @@ DB  += torus_LN2.db
 DB  += torus_LN2.substitutions
 DB  += torus_mps.db
 DB  += torus_qd.db
+DB  += torus_quench.substitutions
 DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
 

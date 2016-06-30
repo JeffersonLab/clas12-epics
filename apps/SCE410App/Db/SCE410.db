@@ -1,0 +1,556 @@
+#
+# SCE410.db - SC Electronics 410 Power Supply
+#
+# Macros:
+#   P - pv prefix
+#   R - pv prefix
+#   PORT - asyn port name
+#   ADDR - RS485 Address
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   May 2016
+#
+# Based on work by Gary Croke (JLab)
+#
+
+#
+# Remote Queries
+#
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+}
+
+record(ai, "$(P)$(R)CURRENT") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),CU) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "A")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CURRENT_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),CR) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CURRENT_TRIM_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),CT) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)TEMP_WRNG_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),OW) $(PORT)")
+    field(PREC, "0")
+    field(EGU,  "C")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)TEMP_SHTDWN_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),OS) $(PORT)")
+    field(PREC, "0")
+    field(EGU,  "C")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)OVER_CRNT_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),OC) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)OVER_VOLT_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),OV) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "V")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)SLEW_RATE") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),SR) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A/s")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CURRENT_RB_TRIM") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),CB) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+# RMT/LOC
+record(stringin, "$(P)$(R)LOCAL_REMOTE") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getStr($(ADDR),MO) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+# CUR/VLT
+record(stringin, "$(P)$(R)VOLT_CRNT") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getStr($(ADDR),VC) $(PORT)")
+    field(ZNAM, "CUR")
+    field(ONAM, "VLT")
+    field(SCAN, "1 second")
+}
+
+# TODO: fill in states
+# OFF/STB/OPR/CAL
+record(stringin, "$(P)$(R)STATE") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getStr($(ADDR),ST) $(PORT)")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)REG_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),RG) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+
+record(stringin, "$(P)$(R)BAUD_RATE") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getStr($(ADDR),BR) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "10 second")
+}
+
+record(ai, "$(P)$(R)SERIAL_ID") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ID) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_VOLT") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ZV) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "V")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_ERROR") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ZE) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "A")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_LEM") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ZC) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_CONV") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ZN) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "V")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),ZT) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "C")
+    field(SCAN, "1 second")
+}
+
+# ZS not useful.
+#record(stringin, "$(P)$(R)DIAG_STATUS") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStr($(ADDR),ZS) $(PORT)")
+#    field(SCAN, "1 second")
+#}
+
+record(ai, "$(P)$(R)CONV_OVRHD") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),CV) $(PORT)")
+    field(PREC, "2")
+    field(EGU,  "V")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)VOLT_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XV) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "V")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)VOLT_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GV) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ADC_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XA) $(PORT)")
+    field(PREC, "4")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)DAC_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XD) $(PORT)")
+    field(PREC, "4")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CONV_OVRHD_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XO) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CONV_OVRHD_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GO) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)LEM_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XZ) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)LEM_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GL) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CONV_VOLT_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XC) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)CONV_VOLT_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GC) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)TEMP_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XT) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)TEMP_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GT) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ERROR_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),XE) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)ERROR_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),GE) $(PORT)")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+# TODO: parsing of fast resp protocol
+#record(bo, "$(P)$(R)REQ_FAST_RESP") {
+#    field(DTYP, "stream")
+#    field(OUT,  "@SCE410.proto setCmd($(ADDR)) $(PORT)")
+#    field(SCAN, "1 second")
+#}
+
+#record(mbbiDirect, "$(P)$(R)STATUS_A") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStatusA($(ADDR) $(PORT)")
+#    field(SCAN, "I/O Intr")
+#}
+
+#record(mbbiDirect, "$(P)$(R)STATUS_B") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStatusB($(ADDR) $(PORT)")
+#    field(SCAN, "I/O Intr")
+#}
+
+#
+# UNDOCUMENTED???
+#
+record(ai, "$(P)$(R)DCCT_OFFSET") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),DO) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)DCCT_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),DG) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)OVERALL_TRIM_GAIN") {
+    field(DTYP, "stream")
+    field(INP,  "@SCE410.proto getFloat($(ADDR),PG) $(PORT)")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+
+#
+# Remote Commands - NORMAL MODE
+#
+record(ao, "$(P)$(R)CURRENT_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),CR) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+}
+
+record(ao, "$(P)$(R)TEMP_WRNG_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),OW) $(PORT)")
+    field(PREC, "0")
+    field(EGU,  "C")
+}
+
+record(ao, "$(P)$(R)TEMP_SHTDWN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),OS) $(PORT)")
+    field(PREC, "0")
+    field(EGU,  "C")
+}
+
+record(ao, "$(P)$(R)OVER_CRNT_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),OC) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+}
+
+record(ao, "$(P)$(R)OVER_VOLT_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),OV) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "V")
+}
+
+record(bo, "$(P)$(R)OFF") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setCmd($(ADDR),OF) $(PORT)")
+}
+
+record(ao, "$(P)$(R)SLEW_RATE_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),SR) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A/s")
+}
+
+record(bo, "$(P)$(R)STBY") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setCmd($(ADDR),SB) $(PORT)")
+}
+
+record(bo, "$(P)$(R)RESET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setCmd($(ADDR),RR) $(PORT)")
+}
+
+record(bo, "$(P)$(R)OPER") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setCmd($(ADDR),OP) $(PORT)")
+}
+
+#
+# Remote Commands - CALIBRATION MODE
+#
+record(ao, "$(P)$(R)CAL_CURRENT_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),CS) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+}
+
+record(ao, "$(P)$(R)CONV_OVRHD_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),CV) $(PORT)")
+    field(PREC, "2")
+    field(EGU,  "V")
+}
+
+record(ao, "$(P)$(R)CURRENT_RB_TRIM_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),CB) $(PORT)")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R)CURRENT_TRIM_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),CT) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "A")
+}
+
+record(ao, "$(P)$(R)DCCT_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),DG) $(PORT)")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R)DCCT_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),DO) $(PORT)")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R)OVERALL_TRIM_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),PG) $(PORT)")
+    field(PREC, "0")
+}
+
+record(bo, "$(P)$(R)EEPROM_STORE") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setCmd($(ADDR),PE) $(PORT)")
+}
+
+record(ao, "$(P)$(R)SERIAL_ID_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setInt($(ADDR),PS) $(PORT)")
+    field(PREC, "0")
+    field(DRVH,"10000")
+    field(DRVL,"0")
+}
+
+record(ao, "$(P)$(R)VOLT_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XV) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "V")
+}
+
+record(ao, "$(P)$(R)VOLT_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GV) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)ADC_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XA) $(PORT)")
+    field(PREC, "4")
+}
+
+record(ao, "$(P)$(R)DAC_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XD) $(PORT)")
+    field(PREC, "4")
+}
+
+record(ao, "$(P)$(R)CONV_OVRHD_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XO) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)CONV_OVRHD_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GO) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)LEM_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XZ) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)LEM_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GL) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)CONV_VOLT_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XC) $(PORT)")
+    field(PREC, "3")
+    field(EGU,  "V")
+}
+
+record(ao, "$(P)$(R)CONV_VOLT_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GC) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)TEMP_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XT) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)TEMP_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GT) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)ERROR_OFFSET_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),XE) $(PORT)")
+    field(PREC, "3")
+}
+
+record(ao, "$(P)$(R)ERROR_GAIN_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),GE) $(PORT)")
+    field(PREC, "3")
+}
+
+#
+# UNDOCUMENTED???
+#
+record(ao, "$(P)$(R)REG_SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@SCE410.proto setFloat($(ADDR),RG) $(PORT)")
+    field(PREC, "1")
+}
+

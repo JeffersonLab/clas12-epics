@@ -1,0 +1,59 @@
+#
+# SCE410.proto - SC Electronics 410 Power Supply
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   May 2016
+#
+# Based on work by Gary Croke (JLab)
+#
+
+Terminator = LF;
+
+#
+# Fast Response Protocols
+#   Trigger call getFastResp at your polling rate, then use I/O Intr to parse response.
+#
+getFastResp {
+    out "#\$1";
+    in  "#0\$1*%39c";
+}
+
+getStatusA {
+    in "#0\$1*%d";
+}
+
+getStatusB {
+    in "#0\$1*%d";
+}
+
+#
+# Normal Protocols
+#   Query/Response and Command/Response
+#
+getFloat {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%f";
+}
+
+getInt {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%d";
+}
+
+getStr {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%s";
+}
+
+setFloat {
+    out "#\$1@\$2%f";
+}
+
+setInt {
+    out "#\$1@\$2%d";
+}
+
+# write only the command, no parameter
+setCmd {
+    out "#\$1@\$2";
+}

@@ -28,7 +28,7 @@ drvAsynIPPortConfigure("L1","fastlightpulser1:5000 UDP",0,0,0)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
-dbLoadRecords("db/genFlasher.db","P=B_DET_FTH_FLASHER,R=:asyn,PORT=L1");
+dbLoadRecords("db/genFlasher.db","P=B_DET_HTCC_FLASHER,R=:asyn,PORT=L1");
 
 
 cd "${TOP}/iocBoot/${IOC}"

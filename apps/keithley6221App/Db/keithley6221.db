@@ -1,0 +1,152 @@
+#
+# Keithley 6221
+#
+#
+# Notes:
+#   [Macros]
+#   P	  - standard record prefix
+#   R	  - standard record prefix
+#   PORT  - asyn port name
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct 2014
+#
+
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+}
+
+#######################################
+# Status Commands
+#######################################
+
+record(ai, "$(P)$(R)CURR") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getCurr $(PORT)")
+	field(PREC, "3")
+	field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)COMP") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getComp $(PORT)")
+	field(PREC, "3")
+	field(SCAN, "1 second")
+}
+
+record(bi, "$(P)$(R)EARTH_GND") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getEarthGnd $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+	field(SCAN, "1 second")
+}
+
+record(bi, "$(P)$(R)INNER_SHLD") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getInShld $(PORT)")
+	field(ZNAM, "GUARD")
+	field(ONAM, "OLOW")
+	field(SCAN, "1 second")
+}
+
+record(bi, "$(P)$(R)OUTPUT") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getOutput $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+	field(SCAN, "1 second")
+}
+
+record(bi, "$(P)$(R)AUTO_RANGE") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getAutoRange $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+	field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)RANGE") {
+	field(DTYP, "stream")
+	field(INP,  "@keithley6221.proto getRange $(PORT)")
+	field(PREC, "3")
+	field(SCAN, "1 second")
+}
+
+#######################################
+# Control Commands
+#######################################
+record(ao, "$(P)$(R)COMP:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setComp $(PORT)")
+	field(PREC, "3")
+}
+	
+record(ao, "$(P)$(R)CURR:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setCurr $(PORT)")
+	field(PREC, "3")
+}
+	
+record(bo, "$(P)$(R)EARTH_GND:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setEarthGnd $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+}
+
+record(bo, "$(P)$(R)INNER_SHLD:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setInShld $(PORT)")
+	field(ZNAM, "GUARD")
+	field(ONAM, "OLOW")
+}
+
+record(bo, "$(P)$(R)OUTPUT:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setOutput $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+}
+
+record(bo, "$(P)$(R)AUTO_RANGE:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setAutoRange $(PORT)")
+	field(ZNAM, "OFF")
+	field(ONAM, "ON")
+}
+
+record(mbbo, "$(P)$(R)RANGE:SET") {
+	field(DTYP, "stream")
+	field(OUT,  "@keithley6221.proto setRange $(PORT)")
+	field(ZRST, "2e-9")
+	field(ONST, "20e-9")
+	field(TWST, "200e-9")
+	field(THST, "2e-6")
+	field(FRST, "20e-6")
+	field(FVST, "200e-6")
+	field(SXST, "2e-3")
+	field(SVST, "20e-3")
+	field(EIST, "100e-3")
+}
+
+
+
+
+#####################################
+##########  TESTS  Rafo #############
+#####################################
+
+record(ai, "test_Indicator_light") {
+}
+
+
+record(ai, "test_Input_voltage") {
+	field(DTYP, "stream")
+	field(PREC, "3")
+}
+
+record(ai, "test_Output_voltage") {
+	field(DTYP, "stream")
+	field(PREC, "3")
+}

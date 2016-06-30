@@ -30,7 +30,8 @@ for (var sector=1; sector<=6; sector++) {
 }
 }
 
-iocs=["FTAG","DC","CTOF0","LTCC0","HVTEST0"];
+iocs=["FTAG","CTOF0","LTCC0","DC"];
+//,"HVTEST0"];
 for (var ii=0; ii<iocs.length; ii++) {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
     if (jj%2==0) lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft.opi"); 

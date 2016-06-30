@@ -20,7 +20,7 @@ for (var isec=1; isec<=nsectors; isec++)
             {
                 var thischan=ichan<10?"0"+ichan:ichan;
 
-                var suffix="_SEC"+isec+"_"+lrs[ilr]+"_E"+thischan;
+                var suffix="_SEC"+isec+"_"+lrs[ilr]+ichan;
 
 //                java.lang.System.err.println(suffix);              
             PVUtil.writePV(prefix+suffix+":pwonoff",0);

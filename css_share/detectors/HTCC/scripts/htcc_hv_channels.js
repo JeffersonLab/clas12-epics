@@ -22,7 +22,7 @@ for (var isec=1; isec<=nsectors; isec++)
     {
         if (lr!="0" && lr!=lrs[ilr] && lr!=lrs[ilr]) continue;
 
-                var suffix="_SEC"+isec+"_"+lrs[ilr]+"_E"+thischan;
+                var suffix="_SEC"+isec+"_"+lrs[ilr]+ichan;
 
 //                java.lang.System.err.println(suffix);
                 

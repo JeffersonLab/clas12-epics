@@ -5,34 +5,86 @@
 # Date:   Mar 2016
 #
 
-file "db/torus_LHe.db" {
-    pattern{ P, R, PLCID }
-    { B_TORUS:, LHe:, PLC_TORUS }
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_CRYO, B_TORUS:, LHe:, FI8561,     g/s,    2, "" } 
+    { PLC_CRYO, B_TORUS:, LHe:, PT8561,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TP8564,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TP8565,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, PT8565,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8513T,    K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, PT8513T,    atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8513S,    K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, PT8513S,    atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8522DR,   K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8522TR,   K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8522SR,   K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TP8523,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8512,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, PT8512,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LHe:, TD8210,     K,      2, "LHe 4K Supply Temp" }
+    { PLC_CRYO, B_TORUS:, LHe:, PT8563,     atma,   2, "" }
+    #
+    { PLC_TORUS, B_TORUS:, LHe:, PT8111,    atma,   2, "LHe Suppy Press." }
+    { PLC_TORUS, B_TORUS:, LHe:, PT8115,    atma,   2, "Magnet Ret Press." }
+    { PLC_TORUS, B_TORUS:, LHe:, PT8120,    atma,   2, "LHe Tank Press." }
+    { PLC_TORUS, B_TORUS:, LHe:, LL8120DP,  "%",    2, "Liq. level (dP)" }
+    { PLC_TORUS, B_TORUS:, LHe:, LL8120SC,  "%",    2, "Liq. level (probe)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8111,    K,      2, "LHe Supply Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8115,    K,      2, "Magnet Ret Temp (TST)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TP8121A,   K,      2, "Lead A Warm End Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8121A,   K,      2, "Lead A Cold End Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TP8121B,   K,      2, "Lead B Warm End Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8121B,   K,      2, "Lead B Cold End Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8120,    K,      2, "LHe Ret Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8111SC,  K,      2, "Magent Supply Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR8114R,   K,      2, "DS Hex Ring Ret Temp (chimney)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR8114S,   K,      2, "DS Hex Ring Sup Temp (chimney)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR8122A,   K,      2, "Splice Temp (chimney)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR8122B,   K,      2, "Splice Temp (chimney)" }
+    { PLC_TORUS, B_TORUS:, LHe:, TD8114DSHR,  K,    2, "DS Hex Ring Ret Temp (TST)" }
+    { PLC_TORUS, B_TORUS:, LHe:, FV8121A_OUT, SLPM, 2, "Lead A Mass Flow" }
+    { PLC_TORUS, B_TORUS:, LHe:, FV8121B_OUT, SLPM, 2, "Lead B Mass Flow" }
+}
+
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U1HB1, HB_US_S1.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U1HB2, HB_US_S1.Temp[2], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U2HB1, HB_US_S2.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U2HB2, HB_US_S2.Temp[2], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U3HB1, HB_US_S3.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U3HB2, HB_US_S3.Temp[2], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U4HB1, HB_US_S4.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U4HB2, HB_US_S4.Temp[2], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U5HB1, HB_US_S5.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U5HB2, HB_US_S5.Temp[2], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U6HB1, HB_US_S6.Temp[1], K, 2, "US Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817U6HB2, HB_US_S6.Temp[2], K, 2, "US Hex Beam Cernox" }
+    #
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D1HB1, HB_DS_S1.Temp[1], K, 2, "DS Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D2HB1, HB_DS_S2.Temp[1], K, 2, "DS Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D3HB1, HB_DS_S3.Temp[1], K, 2, "DS Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D4HB1, HB_DS_S4.Temp[1], K, 2, "DS Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D5HB1, HB_DS_S5.Temp[1], K, 2, "DS Hex Beam Cernox" }
+    { PLC_TORUS, B_TORUS:, LHe:, TR817D6HB1, HB_DS_S6.Temp[1], K, 2, "DS Hex Beam Cernox" }
 }
 
 file "db/datatype_ccm_cernox.db" {
-    pattern{ P, R, CCM, PLCID }
-    { B_TORUS:, LHe:, A, PLC_TORUS }
-    { B_TORUS:, LHe:, B, PLC_TORUS }
-    { B_TORUS:, LHe:, C, PLC_TORUS }
-    { B_TORUS:, LHe:, D, PLC_TORUS }
-    { B_TORUS:, LHe:, E, PLC_TORUS }
-    { B_TORUS:, LHe:, F, PLC_TORUS }
+    pattern{ PLCID, P, R, CCM }
+    { PLC_TORUS, B_TORUS:, LHe:, A }
+    { PLC_TORUS, B_TORUS:, LHe:, B }
+    { PLC_TORUS, B_TORUS:, LHe:, C }
+    { PLC_TORUS, B_TORUS:, LHe:, D }
+    { PLC_TORUS, B_TORUS:, LHe:, E }
+    { PLC_TORUS, B_TORUS:, LHe:, F }
 }
 
 file "db/datatype_cpid.db" {
-    pattern{ P, R, TAG, PLCID }
-    { B_TORUS:, LHe:, EV8111BY, PLC_TORUS }
-    { B_TORUS:, LHe:, EV8115JT, PLC_TORUS }
-    { B_TORUS:, LHe:, EV8111CD, PLC_TORUS }
+    pattern{ PLCID, P, R, TAG }
+    { PLC_TORUS, B_TORUS:, LHe:, EV8111BY   }
+    { PLC_TORUS, B_TORUS:, LHe:, EV8115JT   }
+    { PLC_TORUS, B_TORUS:, LHe:, EV8111CD   }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120    }
 }
 
-file "db/datatype_hexbeam.db" {
-    pattern{ P, R, HB, PLCID }
-    { B_TORUS:, LHe:, HB_US_S1, PLC_TORUS }
-    { B_TORUS:, LHe:, HB_US_S2, PLC_TORUS }
-    { B_TORUS:, LHe:, HB_US_S3, PLC_TORUS }
-    { B_TORUS:, LHe:, HB_US_S4, PLC_TORUS }
-    { B_TORUS:, LHe:, HB_US_S5, PLC_TORUS }
-    { B_TORUS:, LHe:, HB_US_S6, PLC_TORUS }
-}

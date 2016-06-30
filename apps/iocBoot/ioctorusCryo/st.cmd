@@ -29,13 +29,19 @@ dbLoadRecords("db/cryodbox_torus_cryocon.db", "P=B_TORUS:,R=DBX:,PLCID=PLC_CRYO"
 dbLoadTemplate("db/torus_LHe.substitutions")
 dbLoadTemplate("db/torus_LN2.substitutions")
 dbLoadRecords("db/torus_cryocon.db", "P=B_TORUS:,R=PLC:,PLCID=PLC_TORUS")
+## CA Security
+dbLoadRecords("db/cas.db", "P=B_TORUS:,R=CRYO:,ASG=DEFAULT")
+asSetFilename("${TOP}/iocBoot/acf/torus_cryo.acf")
+asSetSubstitutions("P=B_TORUS:,R=CRYO:")
 
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup
 < save_restore.cmd
 
+dbl > pv.list
 iocInit
+caPutLogInit("clonioc1:7011")
 
 ## autosave startup
 ## Handle autosave 'commands' contained in loaded databases.

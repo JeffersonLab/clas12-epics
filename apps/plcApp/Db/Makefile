@@ -15,25 +15,25 @@ include $(TOP)/configure/CONFIG
 ## Torus
 DB  += cryodbox_torus_cryocon.db
 DB  += cryodbox_torus_LHe.substitutions
-DB  += cryodbox_torus_LN2.db
 DB  += cryodbox_torus_LN2.substitutions
 DB  += datatype_ccm_cernox.db
 DB  += datatype_ccm_pt100.db
 DB  += datatype_cpid.db
-DB  += datatype_hexbeam.db
 DB  += datatype_loadcell.db
 REQ += datatype_loadcell.req
 DB  += datatype_straingage.db
 REQ += datatype_straingage.req
+DB  += torus_ai_generic.db
+DB  += torus_ai_renamed.db
 DB  += torus_cryocon.db
 DB  += torus_force.substitutions
 REQ += torus_force_settings.req
-DB  += torus_LHe.db
 DB  += torus_LHe.substitutions
 DB  += torus_LN2.db
 DB  += torus_LN2.substitutions
 DB  += torus_mps.db
 DB  += torus_qd.db
+DB  += torus_quench.substitutions
 DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
 

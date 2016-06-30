@@ -19,6 +19,7 @@ cd "${TOP}/iocBoot/${IOC}"
 ## autosave setup
 < save_restore.cmd
 
+dbl > pv.list
 iocInit
 
 ## autosave startup

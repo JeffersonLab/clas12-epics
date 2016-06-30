@@ -1,0 +1,23 @@
+UAG(torus_cryo) { 
+    ballard, 
+    bruhwel,
+    christo,
+    dinsley,
+    ghoshal,
+    kashy,
+    luongo,
+    ruben,
+    sandoval,
+    wmoore
+}
+
+ASG(DEFAULT) {
+    INPA($(P)$(R)CAS_READWRITE)
+    RULE(1,READ)
+    RULE(1,WRITE,TRAPWRITE) {
+        UAG(torus_cryo)
+    }
+    RULE(1,WRITE,TRAPWRITE) {
+        CALC("A=1")
+    }
+}

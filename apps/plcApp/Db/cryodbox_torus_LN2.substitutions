@@ -5,16 +5,38 @@
 # Date:   Mar 2016
 #
 
-file "db/cryodbox_torus_LN2.db" {
-    pattern{ P, R, PLCID }
-    { B_TORUS:, LN2:, PLC_CRYO }
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_CRYO, B_TORUS:, LN2:, TP8552,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, PT8552,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, PT8554,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, LL8554DP,   "%",    2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, LL8554CP,   "%",    2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, TP8567,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, PT8555,     atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, TP8555,     K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, TP8557T,    K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, PT8557T,    atma,   2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, TP8557S,    K,      2, "" }
+    { PLC_CRYO, B_TORUS:, LN2:, TC8559F,    K,      2, "Heater Female End" }
+    { PLC_CRYO, B_TORUS:, LN2:, TC8559M,    K,      2, "Heater Male End" }
+    { PLC_CRYO, B_TORUS:, LN2:, PT8557S,    atma,   2, "" }
 }
-
 # cPID_Records
 file "db/datatype_cpid.db" {
-    pattern{ P, R, TAG, PLCID }
-    { B_TORUS:, LN2:, EV8555T, PLC_CRYO }
-    { B_TORUS:, LN2:, EV8556T, PLC_CRYO }
-    { B_TORUS:, LN2:, HTR8559, PLC_CRYO }
+    pattern{ PLCID, P, R, TAG }
+    { PLC_CRYO, B_TORUS:, LN2:, EV8555T     }
+    { PLC_CRYO, B_TORUS:, LN2:, EV8556T     }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8559     }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8554     }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8558      }
+    { PLC_CRYO, B_TORUS:, LN2:, EV8553      }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8556T     }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8555S     }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8556S     }
+#   { PLC_CRYO, B_TORUS:, LN2:, PV8522SR    }
+#   { PLC_CRYO, B_TORUS:, LN2:, PV8566T     }
+#   { PLC_CRYO, B_TORUS:, LN2:, PV8522SCD   }
+#   { PLC_CRYO, B_TORUS:, LN2:, PV8522TCD   }
 }
 

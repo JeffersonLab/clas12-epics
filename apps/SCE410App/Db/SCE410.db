@@ -16,6 +16,10 @@
 #
 # Remote Queries
 #
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+}
+
 record(ai, "$(P)$(R)CURRENT") {
     field(DTYP, "stream")
     field(INP,  "@SCE410.proto getFloat($(ADDR),CU) $(PORT)")
@@ -86,23 +90,27 @@ record(ai, "$(P)$(R)CURRENT_RB_TRIM") {
     field(SCAN, "1 second")
 }
 
-record(bi, "$(P)$(R)LOCAL_REMOTE") {
+# RMT/LOC
+record(stringin, "$(P)$(R)LOCAL_REMOTE") {
     field(DTYP, "stream")
-    field(INP,  "@SCE410.proto getInt($(ADDR),MO) $(PORT)")
+    field(INP,  "@SCE410.proto getStr($(ADDR),MO) $(PORT)")
     field(SCAN, "1 second")
 }
 
-record(bi, "$(P)$(R)VOLT_CRNT") {
+# CUR/VLT
+record(stringin, "$(P)$(R)VOLT_CRNT") {
     field(DTYP, "stream")
-    field(INP,  "@SCE410.proto getInt($(ADDR),VC) $(PORT)")
+    field(INP,  "@SCE410.proto getStr($(ADDR),VC) $(PORT)")
+    field(ZNAM, "CUR")
+    field(ONAM, "VLT")
     field(SCAN, "1 second")
 }
 
 # TODO: fill in states
-# OFF/STBY/OPR/CAL
-record(mbbi, "$(P)$(R)STATE") {
+# OFF/STB/OPR/CAL
+record(stringin, "$(P)$(R)STATE") {
     field(DTYP, "stream")
-    field(INP,  "@SCE410.proto getInt($(ADDR),ST) $(PORT)")
+    field(INP,  "@SCE410.proto getStr($(ADDR),ST) $(PORT)")
     field(SCAN, "1 second")
 }
 
@@ -113,11 +121,11 @@ record(ai, "$(P)$(R)REG_SP") {
     field(SCAN, "1 second")
 }
 
-record(ai, "$(P)$(R)BAUD_RATE") {
+record(stringin, "$(P)$(R)BAUD_RATE") {
     field(DTYP, "stream")
-    field(INP,  "@SCE410.proto getFloat($(ADDR),BR) $(PORT)")
+    field(INP,  "@SCE410.proto getStr($(ADDR),BR) $(PORT)")
     field(PREC, "0")
-    field(SCAN, "1 second")
+    field(SCAN, "10 second")
 }
 
 record(ai, "$(P)$(R)SERIAL_ID") {
@@ -167,12 +175,12 @@ record(ai, "$(P)$(R)ADC_TEMP") {
     field(SCAN, "1 second")
 }
 
-record(ai, "$(P)$(R)DIAG_STATUS") {
-    field(DTYP, "stream")
-    field(INP,  "@SCE410.proto getFloat($(ADDR),ZS) $(PORT)")
-    field(PREC, "0")
-    field(SCAN, "1 second")
-}
+# ZS not useful.
+#record(stringin, "$(P)$(R)DIAG_STATUS") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStr($(ADDR),ZS) $(PORT)")
+#    field(SCAN, "1 second")
+#}
 
 record(ai, "$(P)$(R)CONV_OVRHD") {
     field(DTYP, "stream")
@@ -280,6 +288,25 @@ record(ai, "$(P)$(R)ERROR_GAIN") {
     field(PREC, "3")
     field(SCAN, "1 second")
 }
+
+# TODO: parsing of fast resp protocol
+#record(bo, "$(P)$(R)REQ_FAST_RESP") {
+#    field(DTYP, "stream")
+#    field(OUT,  "@SCE410.proto setCmd($(ADDR)) $(PORT)")
+#    field(SCAN, "1 second")
+#}
+
+#record(mbbiDirect, "$(P)$(R)STATUS_A") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStatusA($(ADDR) $(PORT)")
+#    field(SCAN, "I/O Intr")
+#}
+
+#record(mbbiDirect, "$(P)$(R)STATUS_B") {
+#    field(DTYP, "stream")
+#    field(INP,  "@SCE410.proto getStatusB($(ADDR) $(PORT)")
+#    field(SCAN, "I/O Intr")
+#}
 
 #
 # UNDOCUMENTED???

@@ -9,6 +9,27 @@
 
 Terminator = LF;
 
+#
+# Fast Response Protocols
+#   Trigger call getFastResp at your polling rate, then use I/O Intr to parse response.
+#
+getFastResp {
+    out "#\$1";
+    in  "#0\$1*%39c";
+}
+
+getStatusA {
+    in "#0\$1*%d";
+}
+
+getStatusB {
+    in "#0\$1*%d";
+}
+
+#
+# Normal Protocols
+#   Query/Response and Command/Response
+#
 getFloat {
     out "#\$1?\$2";
     in  "#0\$1!\$2%f";
@@ -17,6 +38,11 @@ getFloat {
 getInt {
     out "#\$1?\$2";
     in  "#0\$1!\$2%d";
+}
+
+getStr {
+    out "#\$1?\$2";
+    in  "#0\$1!\$2%s";
 }
 
 setFloat {

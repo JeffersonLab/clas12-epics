@@ -9,16 +9,18 @@ cd "${TOP}"
 dbLoadDatabase("dbd/SCE410.dbd")
 SCE410_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("SER1", "hallb-moxa2:4016")
+drvAsynIPPortConfigure("SER1", "hallb-moxa1:4001")
+# drvAsynIPPortConfigure("SER2", "hallb-moxa1:4002")
 
 ## debugging...
-asynSetTraceMask("SER1",-1,0x09)
-asynSetTraceIOMask("SER1",-1,0x02)
+#asynSetTraceMask("SER1",-1,0x09)
+#asynSetTraceIOMask("SER1",-1,0x02)
 
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOLLER_,PORT=SER1,ADDR=1")
+dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOLLER1_,PORT=SER1,ADDR=1")
+# dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOLLER2_,PORT=SER2,ADDR=1")
 
 cd "${TOP}/iocBoot/${IOC}"
 

@@ -1,0 +1,69 @@
+
+OutTerminator = LF;
+InTerminator = LF;
+ExtraInput = Ignore;
+
+WriteTimeout = 500;
+ReadTimeout = 5000;
+ReplyTimeout = 5000;
+
+config {
+    
+    # measure dc foltage:
+    out ":SENS:FUNC 'VOLT:DC'";
+    wait 100;
+    out ":STAT:MEAS:ENAB 512";
+    wait 100;
+    
+    out "*SRE 1";
+    wait 100;
+
+    # number of power line cycles (integration aperture):
+    out ":VOLT:NPLC 0.01";
+    wait 100;
+
+    # significant figures:
+    out ":VOLT:DIG:AUTO 0";
+    wait 100;
+    out ":VOLT:DIG 7";
+    wait 100;
+
+    # number of pretrigger readings:
+    out ":TRAC:FEED:PRET:AMO 0";
+    wait 100;
+    
+    # number of readouts (why can these be different?):
+    out ":TRIG:COUN \$1";
+    wait 100;
+    out ":TRAC:POIN \$1";
+    wait 100;
+    
+    # compact data format:
+    out ":TRAC:EGR COMP";
+    wait 100;
+    
+    # which input channel:
+    out ":TRAC:FEED SENS1";
+    wait 100;
+    
+    # this only works sometimes (workaround with key presses):
+    out ":TRAC:FEED:CONT NEXT";
+    wait 100;
+
+    # clear data buffer:
+    out ":TRAC:CLE";
+    wait 100;
+    
+    # high precision exponent:
+    out ":FORM:EXP HPR";
+    wait 100;
+
+    # burst mode:
+    out ":SYST:AMET BURS";
+    wait 100;
+    
+    # data format only readings (why doesnt compact suffice?):
+    out ":FORM:ELEM READ";
+    wait 100;
+}
+

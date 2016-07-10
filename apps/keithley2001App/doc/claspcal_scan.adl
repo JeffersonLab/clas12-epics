@@ -1,0 +1,807 @@
+
+file {
+	name="/usr/local/EPICS/R3.14.12/EPICS/baseBnew/ioccaenhvApp/op/adl/claspcal_scan.adl"
+	version=030104
+}
+display {
+	object {
+		x=974
+		y=49
+		width=300
+		height=670
+	}
+	clr=14
+	bclr=1
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+polyline {
+	object {
+		x=0
+		y=290
+		width=400
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,290)
+		(400,290)
+	}
+}
+text {
+	object {
+		x=20
+		y=160
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Number"
+}
+text {
+	object {
+		x=20
+		y=200
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Scintillator Length, cm"
+}
+"text entry" {
+	object {
+		x=265
+		y=160
+		width=20
+		height=20
+	}
+	control {
+		chan="claspcal:number"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=165
+		y=200
+		width=120
+		height=20
+	}
+	control {
+		chan="claspcal:scint_length"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"shell command" {
+	object {
+		x=20
+		y=295
+		width=120
+		height=20
+	}
+	command[0] {
+		label="Scan perl script"
+		name="$EPICS/EPICS/baseBnew/ioccaenhvApp/scripts/scanKeithley2001.pl"
+		args="scint &"
+	}
+	clr=30
+	bclr=15
+	label="-Scan Scintillator"
+}
+text {
+	object {
+		x=20
+		y=230
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Last measurement value:"
+}
+"text update" {
+	object {
+		x=175
+		y=230
+		width=110
+		height=20
+	}
+	monitor {
+		chan="claspcal:last_measurement"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=100
+		y=325
+		width=180
+		height=20
+	}
+	monitor {
+		chan="claspcal:status"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=20
+		y=260
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Motor position, cm"
+}
+"text update" {
+	object {
+		x=140
+		y=260
+		width=60
+		height=20
+	}
+	monitor {
+		chan="claspcal:m1.RBV"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=200
+		y=260
+		width=60
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		fill="outline"
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="((A=0)&&(B=0))"
+		chan="claspcal:m1.DMOV"
+		chanB="claspcal:m1.STAT"
+	}
+	textix="Moving"
+	align="horiz. centered"
+}
+"choice button" {
+	object {
+		x=165
+		y=70
+		width=120
+		height=20
+	}
+	control {
+		chan="claspcal:sector"
+		clr=14
+		bclr=55
+	}
+	stacking="column"
+}
+"choice button" {
+	object {
+		x=165
+		y=100
+		width=120
+		height=20
+	}
+	control {
+		chan="claspcal:layer"
+		clr=14
+		bclr=55
+	}
+	stacking="column"
+}
+"choice button" {
+	object {
+		x=165
+		y=130
+		width=120
+		height=20
+	}
+	control {
+		chan="claspcal:view"
+		clr=14
+		bclr=55
+	}
+	stacking="column"
+}
+text {
+	object {
+		x=20
+		y=130
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="View"
+}
+text {
+	object {
+		x=20
+		y=100
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Layer"
+}
+text {
+	object {
+		x=20
+		y=70
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Sector"
+}
+valuator {
+	object {
+		x=60
+		y=160
+		width=200
+		height=20
+	}
+	control {
+		chan="claspcal:number"
+		clr=14
+		bclr=55
+	}
+	dPrecision=1.000000
+	limits {
+	}
+}
+text {
+	object {
+		x=20
+		y=40
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="File name"
+}
+"text update" {
+	object {
+		x=90
+		y=40
+		width=190
+		height=20
+	}
+	monitor {
+		chan="claspcal:scint_name"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"shell command" {
+	object {
+		x=20
+		y=325
+		width=50
+		height=20
+	}
+	command[0] {
+		label="Stop scanning perl script"
+		name="killall -9 scanKeithley2001.pl"
+	}
+	clr=0
+	bclr=20
+	label="-Stop"
+}
+"related display" {
+	object {
+		x=20
+		y=523
+		width=90
+		height=20
+	}
+	display[0] {
+		label="Motor M0X"
+		name="motorx_all.adl"
+		args="P=claspcal:,M=m1"
+	}
+	clr=0
+	bclr=20
+	label="-Motor Expert"
+}
+"text entry" {
+	object {
+		x=20
+		y=483
+		width=60
+		height=20
+	}
+	control {
+		chan="claspcal:step_size"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=20
+		y=463
+		width=80
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step Size (cm)"
+}
+"message button" {
+	object {
+		x=134
+		y=523
+		width=140
+		height=20
+	}
+	control {
+		chan="claspcal:m1"
+		clr=0
+		bclr=20
+	}
+	label="Reset Motor Position"
+	press_msg="-500"
+}
+text {
+	object {
+		x=170
+		y=463
+		width=80
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Number of readings"
+}
+"text entry" {
+	object {
+		x=170
+		y=483
+		width=60
+		height=20
+	}
+	control {
+		chan="claspcal:nread"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"shell command" {
+	object {
+		x=20
+		y=563
+		width=150
+		height=20
+	}
+	command[0] {
+		label="Stop scanning perl script"
+		name="killall"
+		args="-9 root.exe ; root -l $EPICS/synApps_5_5/support/xxx-5-5/xxxApp/scripts/monitor_loop.cc &"
+	}
+	clr=30
+	bclr=15
+	label="-Start Ploting GUI"
+}
+"message button" {
+	object {
+		x=20
+		y=603
+		width=60
+		height=20
+	}
+	control {
+		chan="B/HVON_SET_03_03"
+		clr=15
+		bclr=0
+	}
+	label="HVMF On"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=20
+		y=628
+		width=60
+		height=20
+	}
+	control {
+		chan="B/HVON_SET_03_03"
+		clr=20
+		bclr=0
+	}
+	label="HVMF Off"
+	press_msg="0"
+}
+bar {
+	object {
+		x=90
+		y=603
+		width=15
+		height=45
+	}
+	monitor {
+		chan="B/HVSTATUS_03_03"
+		clr=15
+		bclr=1
+	}
+	direction="up"
+	limits {
+	}
+}
+"message button" {
+	object {
+		x=120
+		y=603
+		width=60
+		height=20
+	}
+	control {
+		chan="B_hv_pcal_04_03_CE"
+		clr=15
+		bclr=0
+	}
+	label="Chan On"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=120
+		y=628
+		width=60
+		height=20
+	}
+	control {
+		chan="B_hv_pcal_04_03_CE"
+		clr=20
+		bclr=0
+	}
+	label="Chan Off"
+	press_msg="0"
+}
+bar {
+	object {
+		x=190
+		y=603
+		width=15
+		height=45
+	}
+	monitor {
+		chan="B_hv_pcal_04_03_property.K"
+		clr=15
+		bclr=1
+	}
+	direction="up"
+	limits {
+	}
+}
+text {
+	object {
+		x=285
+		y=603
+		width=10
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="V"
+}
+text {
+	object {
+		x=285
+		y=628
+		width=10
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="I"
+}
+"text update" {
+	object {
+		x=220
+		y=603
+		width=60
+		height=20
+	}
+	monitor {
+		chan="B_hv_pcal_04_03_property.F"
+		clr=14
+		bclr=56
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=220
+		y=628
+		width=60
+		height=20
+	}
+	monitor {
+		chan="B_hv_pcal_04_03_property.E"
+		clr=14
+		bclr=56
+	}
+	limits {
+	}
+}
+polyline {
+	object {
+		x=0
+		y=553
+		width=400
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,553)
+		(400,553)
+	}
+}
+polyline {
+	object {
+		x=0
+		y=593
+		width=400
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,593)
+		(400,593)
+	}
+}
+polyline {
+	object {
+		x=0
+		y=453
+		width=400
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,453)
+		(400,453)
+	}
+}
+polyline {
+	object {
+		x=0
+		y=658
+		width=300
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,658)
+		(300,658)
+	}
+}
+text {
+	object {
+		x=20
+		y=360
+		width=80
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Bundle Number"
+}
+"text entry" {
+	object {
+		x=245
+		y=360
+		width=40
+		height=20
+	}
+	control {
+		chan="claspcal:fiberbundle"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+"shell command" {
+	object {
+		x=20
+		y=420
+		width=120
+		height=20
+	}
+	command[0] {
+		label="Scan perl script"
+		name="$EPICS/EPICS/baseBnew/ioccaenhvApp/scripts/scanKeithley2001.pl"
+		args="fiber &"
+	}
+	clr=30
+	bclr=15
+	label="-Scan Fiber"
+}
+"text entry" {
+	object {
+		x=264
+		y=390
+		width=20
+		height=20
+	}
+	control {
+		chan="claspcal:fiberset"
+		clr=14
+		bclr=55
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=20
+		y=390
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Set"
+}
+valuator {
+	object {
+		x=60
+		y=390
+		width=200
+		height=20
+	}
+	control {
+		chan="claspcal:fiberset"
+		clr=14
+		bclr=55
+	}
+	dPrecision=1.000000
+	limits {
+	}
+}
+polyline {
+	object {
+		x=0
+		y=353
+		width=300
+		height=0
+	}
+	"basic attribute" {
+		clr=39
+	}
+	points {
+		(0,353)
+		(300,353)
+	}
+}

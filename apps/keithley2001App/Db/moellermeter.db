@@ -1,0 +1,38 @@
+
+#######################################################
+
+record(stringin,"$(P):filename")
+{
+    field(VAL,"NONE")
+    field(PINI,1)
+}
+record(stringin,"$(P):msg")
+{
+    field(VAL,"IOC INIT")
+}
+
+#######################################################
+
+record(bo,"$(P):config")
+{
+    field(DTYP,"stream")
+    field(OUT, "@moellermeter.proto config($(NPOINTS)) $(PORT)")
+    field(FLNK,"$(P):waitAndReadDisplay")
+}
+
+#######################################################
+
+record(bo,"$(P):flipBtn"){}
+record(bo,"$(P):flipAndTrigBtn"){}
+record(bo,"$(P):cfgBtn"){}
+record(bo,"$(P):readCfgBtn"){}
+record(bo,"$(P):trigBtn"){}
+record(bo,"$(P):fileBtn"){}
+record(bo,"$(P):resetBtn"){}
+record(bo,"$(P):zeroBtn"){}
+
+# simulator:
+record(ao,"moellerPS:imon"){}
+record(ao,"moellerPS:iset"){ field(VAL,"10.0") }
+
+

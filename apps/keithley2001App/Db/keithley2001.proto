@@ -1,0 +1,49 @@
+OutTerminator = LF;
+InTerminator = LF;
+ExtraInput = Ignore;
+
+WriteTimeout = 500;
+ReadTimeout = 60000;
+ReplyTimeout = 60000;
+
+cmd       { out "\$1"; }
+
+putInt    { out "\$1 %d"; }
+putFloat  { out "\$1 %f"; }
+putString { out "\$1 %s"; }
+
+getInt    { out "\$1?"; in "%d"; }
+getFloat  { out "\$1?"; in "%f"; }
+getString { out "\$1?"; in "%#s"; }
+
+pressKey  { out ":SYST:KEY \$1"; }
+
+getData {
+    separator = ",";
+    out ":TRAC:DATA?";
+    in "%E";
+#    @mismatch { in "%*s"; }
+}
+
+trigger2 {
+    # enter key:
+    out ":SYST:KEY 18";
+    # trigger key:
+    out ":SYST:KEY 30";
+}
+
+reset {
+    out "*RST";
+    wait 100;
+    out ":SYST:PRES";
+    wait 100;
+    out ":STAT:PRES";
+    wait 100;
+    out ":ABOR";
+    wait 100;
+    out "*CLS";
+    wait 100;
+    out "*WAI";
+    wait 100;
+}
+

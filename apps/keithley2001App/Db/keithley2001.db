@@ -1,0 +1,408 @@
+#
+# Keithley 2001 Digital Multimeter
+#
+# $(PINI) = 0/1 whether to readout all settings on startup
+# $(NPOINTS) = hardcoded at startup, since still some issue
+#              in sequencer with dynamic length. 
+#
+# Choosing to scan everything passively.
+# All setters are FLNK'd to their getters.
+#
+# Process $(P):getcfg to read all settings.
+#
+
+#######################################################
+# FANOUTS:
+
+record(fanout,"$(P):getcfg")
+{
+   field(LNK1,"$(P):tracprepoints.PROC")
+   field(LNK2,"$(P):autodigits.PROC")
+   field(LNK3,"$(P):digits.PROC")
+   field(LNK4,"$(P):trigcount.PROC")
+   field(LNK5,"$(P):daqmode.PROC")
+   field(LNK6,"$(P):getcfg2")
+}
+record(fanout,"$(P):getcfg2")
+{
+   field(LNK1,"$(P):nplc.PROC")
+   field(LNK2,"$(P):aperture.PROC")
+   field(LNK3,"$(P):sensefunc.PROC")
+   field(LNK4,"$(P):tracegr.PROC")
+   field(LNK5,"$(P):tracpoints.PROC")
+   field(LNK6,"$(P):getcfg3")
+}
+record(fanout,"$(P):getcfg3")
+{
+   field(LNK1,"$(P):tracfeedcont.PROC")
+   field(LNK2,"$(P):formelem")
+   field(LNK3,"$(P):formexp")
+   field(LNK4,"$(P):range")
+   field(LNK5,"$(P):tracfeed.PROC")
+   field(LNK6,"$(P):display")
+}
+
+#######################################################
+# INPUTS:
+
+record(waveform,"$(P):data")
+{
+    field(NELM,$(NPOINTS))
+    field(FTVL,"DOUBLE")
+    field(DTYP,"stream")
+    field(INP, "@keithley2001.proto getData $(PORT)")
+    field(SCAN,"Passive")
+}
+record(stringin, "$(P):display")
+{
+    field(DTYP,"stream")
+    field(SCAN, "Passive")
+    #field(SCAN, "5 second")
+    field(INP, "@keithley2001.proto getString(:DISP:DATA) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin, "$(P):identity")
+{
+    field(DTYP, "stream")
+    field(SCAN, "Passive")
+    field(INP,  "@keithley2001.proto getString(*IDN) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin, "$(P):formexp")
+{
+    field(DTYP, "stream")
+    field(SCAN, "Passive")
+    field(INP,  "@keithley2001.proto getString(:FORM:EXP) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):range")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getFloat(:VOLT:RANGE) $(PORT)")
+    field(PINI,$(PINI))
+    field(PREC,1)
+    field(EGU,"V")
+}
+record(ai,"$(P):trigcount")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:TRIG:COUN) $(PORT)")
+    field(PREC,0)
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):tracpoints")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:TRAC:POIN) $(PORT)")
+    field(PREC,0)
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):tracprepoints")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:TRAC:FEED:PRET:AMO) $(PORT)")
+    field(PREC,0)
+    field(PINI,$(PINI))
+}
+record(stringin,"$(P):formelem")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:FORM:ELEM) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin,"$(P):daqmode")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:SYST:AMET) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):aperture")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getFloat(:VOLT:APER) $(PORT)")
+    field(EGU,"s")
+    field(PREC,7)
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):nplc")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getFloat(:VOLT:NPLC) $(PORT)")
+    field(PREC,2)
+    field(PINI,$(PINI))
+    field(FLNK,"$(P):aperture")
+}
+record(stringin,"$(P):sensefunc")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:SENSE:FUNC) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin,"$(P):tracegr")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:TRAC:EGR) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin,"$(P):tracfeed")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:TRAC:FEED) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(stringin,"$(P):tracfeedcont")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getString(:TRAC:FEED:CONT) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):digits")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:VOLT:DIG) $(PORT)")
+    field(PREC,0)
+    field(PINI,$(PINI))
+}
+record(ai,"$(P):autodigits")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:VOLT:DIG:AUTO) $(PORT)")
+    field(PINI,$(PINI))
+}
+record(mbbi,"$(P):measevent")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:STAT:MEAS) $(PORT)")
+    field(ZRST,"Overflow")
+    field(ONST,"Low Limit 1")
+    field(TWST,"High Limit 1")
+    field(THST,"Low Limit 2")
+    field(FRST,"High Limit 2")
+    field(FVST,"Reading Available")
+    field(SXST,"Unused Bit")
+    field(SVST,"Buffer Available")
+    field(EIST,"Buffer Half Full")
+    field(NIST,"Buffer Full")
+    field(TEST,"Unused Bit")
+}
+record(mbbiDirect,"$(P):measevent2")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(:STAT:MEAS) $(PORT)")
+    # B5 / B7 look interesting
+}
+
+#################################################
+# OUTPUTS:
+
+record(bo,"$(P):reset")
+{
+    field(DTYP,"stream")
+    field(OUT, "@keithley2001.proto reset $(PORT)")
+    field(FLNK,"$(P):getcfg")
+}
+record(stringout, "$(P):setformexp")
+{
+    field(DTYP, "stream")
+    field(OUT,  "@keithley2001.proto putString(:FORM:EXP) $(PORT)")
+    field(FLNK, "$(P):formexp")
+}
+record(ao,"$(P):setrange")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putFloat(:VOLT:RANGE) $(PORT)")
+    field(FLNK, "$(P):range")
+}
+record(ao,"$(P):settrigcount")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(:TRIG:COUN) $(PORT)")
+    field(FLNK, "$(P):trigcount")
+}
+record(ao,"$(P):settracpoints")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(:TRAC:POIN) $(PORT)")
+    field(FLNK, "$(P):tracpoints")
+}
+record(ao,"$(P):settracprepoints")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(:TRAC:FEED:PRET:AMO) $(PORT)")
+    field(FLNK, "$(P):tracprepoints")
+}
+record(stringout,"$(P):setformelem")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:FORM:ELEM) $(PORT)")
+    field(FLNK, "$(P):formelem")
+}
+record(bo,"$(P):zerodata")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto cmd(:TRAC:CLE) $(PORT)")
+}
+record(stringout,"$(P):setdaqmode")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:SYST:AMET) $(PORT)")
+    field(FLNK, "$(P):getcfg")
+}
+record(ao,"$(P):setaperture")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putFloat(:VOLT:APER) $(PORT)")
+    field(FLNK, "$(P):aperture")
+}
+record(ao,"$(P):setnplc")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putFloat(:VOLT:NPLC) $(PORT)")
+    field(FLNK, "$(P):nplc")
+}
+record(stringout,"$(P):setsensefunc")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:SENSE:FUNC) $(PORT)")
+    field(FLNK, "$(P):sensefunc")
+}
+record(stringout,"$(P):settracegr")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:TRAC:EGR) $(PORT)")
+    field(FLNK, "$(P):tracegr")
+}
+record(stringout,"$(P):settracfeed")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:TRAC:FEED) $(PORT)")
+    field(FLNK, "$(P):tracfeed")
+}
+record(stringout,"$(P):settracfeedcont")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:TRAC:FEED:CONT) $(PORT)")
+    field(FLNK, "$(P):tracfeedcont")
+}
+record(ao,"$(P):setdigits")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(:VOLT:DIG) $(PORT)")
+    field(FLNK, "$(P):digits")
+}
+record(ao,"$(P):setautodigits")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(:VOLT:DIG:AUTO) $(PORT)")
+    field(FLNK, "$(P):autodigits")
+}
+record(stringout,"$(P):settracfeed")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putString(:TRAC:FEED) $(PORT)")
+    field(FLNK, "$(P):tracfeed")
+}
+
+#######################################################
+
+record(ai,"$(P):opc")
+{
+    field(DTYP,"stream")
+    field(SCAN,"Passive")
+    field(INP,"@keithley2001.proto getInt(*OPC) $(PORT)")
+}
+record(bo,"$(P):setopc")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto putInt(*OPC) $(PORT)")
+}
+
+#######################################################
+# two ways to trigger, first one doesn't always work:
+
+record(bo,"$(P):trigger1")
+{
+    field(DTYP,"stream")
+    field(OUT, "@keithley2001.proto cmd(:INIT) $(PORT)")
+}
+record(bo,"$(P):trigger2")
+{
+    field(DTYP,"stream")
+    field(OUT, "@keithley2001.proto trigger2 $(PORT)")
+}
+
+#######################################################
+# expected wait times for trigger and readout:
+
+record(calc,"$(P):daqdelay")
+{
+    # manual claims 2 ms post-processing time per point, but that's wrong
+    field(INPA,"$(P):tracpoints.VAL CPP")
+    field(INPB,"50") # empirical duration for 6500 points
+    field(CALC,"A*B/6500+1")
+    field(PREC,0)
+}
+record(calc,"$(P):readoutdelay")
+{
+    field(INPA,"$(P):tracpoints.VAL CPP")
+    field(INPB,"13") # empirical duration for 1000 points
+    field(CALC,"A*B/1000+1")
+    field(PREC,0)
+}
+#record(waveform,"$(P):sampleno")
+#{
+#    field(NELM,$(NPOINTS))
+#    field(FTVL,"DOUBLE")
+#    field(SCAN,"Passive")
+#}
+
+#######################################################
+# emulate key presses:
+
+record(bo,"$(P):enterkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(18) $(PORT)")
+    field(FLNK,"$(P):waitAndReadDisplay")
+}
+record(bo,"$(P):triggerkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(30) $(PORT)")
+    field(FLNK,"$(P):waitAndReadDisplay")
+}
+record(bo,"$(P):exitkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(11) $(PORT)")
+    field(FLNK,"$(P):waitAndReadDisplay")
+}
+
+#######################################################
+
+record(calcout,"$(P):waitAndReadDisplay")
+{
+    field(SCAN,"Passive")
+    field(ODLY,15)
+    field(OVAL,1)
+    field(OUT,"$(P):display.PROC")
+}
+
+#######################################################
+

@@ -1,0 +1,62 @@
+##Warning : still under developpement
+##Will have to clarify the stepts/rev and eng units
+#record(motor,"moeller_target")
+#{
+## COMMON fild description
+#	field(DESC,"motor record for moeller")
+#        field(DTYP,"OMS VME8/44")
+#	field(OUT ,"#C1 S0 @" )
+#	
+## Calibration related fields
+#	field(OFF,"0") # Offset set to zero
+#	field(FOFF,"1") # The calibration Field is frozen
+#
+## Motor resolution fields
+#	field(SREV,"2000" )
+#	field(UREV,".5") # 2 revolution : 1 inch 
+#
+## Motion related fields
+#	field(S   ,"0.2"   ) # 5 revolutions pers second
+#	field(ACCL,".1"  ) 
+#	field(SBAS,"0.01")
+#	field(HLM ,"50" )
+#	field(LLM ,"-50")
+#	field(DHLM,"50" )
+#	field(DLLM,"-50")
+## Other
+#	field(PREC,"3"    )
+#}
+
+
+#
+# The command interface
+#
+record(ao,"moller_target_command") { }
+
+record(ao,"moller_target_left")  { }
+record(ao,"moller_target_empty") { }
+record(ao,"moller_target_right") { }
+record(ao,"moller_target_al") { }
+
+record(ao,"moller_target_calib") { }
+
+# target position
+
+#record(bo,"Moller_LEFT")
+#{
+#	field(VAL,"0")
+#	field(FLNK, "moller_move.PROC PP MS"
+#}
+
+#record(bo,"Moller_EMPTY")
+#{
+#	field(VAL,"1")
+#	field(FLNK, "moller_move.PROC PP MS"
+#}
+
+#record(bo,"Moller_RIGHT")
+#{
+#	field(VAL,"0")
+#	field(FLNK, "moller_move.PROC PP MS"
+#}
+

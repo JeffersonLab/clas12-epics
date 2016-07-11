@@ -25,6 +25,7 @@ DB  += datatype_straingage.db
 REQ += datatype_straingage.req
 DB  += torus_ai_generic.db
 DB  += torus_ai_renamed.db
+DB  += torus_bi_generic.db
 DB  += torus_cryocon.db
 DB  += torus_force.substitutions
 REQ += torus_force_settings.req

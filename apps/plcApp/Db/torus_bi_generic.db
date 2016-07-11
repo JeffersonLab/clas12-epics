@@ -1,0 +1,32 @@
+#
+# torus_bi_generic.db
+#
+# Generic biRecord for Torus PLCs.  Used when PV matches tag name.
+# See also: torus_bi_renamed.db.
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   TAG   - PLC tag also suffix of PV name
+#   PLCID - PLC ID set in startup
+#   ZNAM  - (optional)
+#   ZSV   - (optional)
+#   ONAM  - (optional)
+#   OSV   - (optional)
+#   DESC  - (optional)
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Mar 2016
+#
+
+record(bi, "$(P)$(R)$(TAG)") {
+    field(DESC, "$(DESC="")")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) $(TAG)")
+    field(ZNAM, "$(ZNAM="")")
+    field(ONAM, "$(ONAM="")")
+    field(ZSV,  "$(ZSV="NO_ALARM")")
+    field(OSV,  "$(OSV="MAJOR")")
+    info(autosaveFields_pass0, "ZSV OSV")
+}

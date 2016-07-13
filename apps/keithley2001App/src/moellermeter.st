@@ -3,39 +3,45 @@ program seqMoellermeter ("P=moellermeter")
 option -c;  // donot wait on pv connections
 option -r;  // donot allow multiple instances
 
+/*
+STATES:
+init
+|-idle
+setcfg
+|-getcfg
+reset
+zero
+flip
+trigger
+|-readout
+  |-writeout
+*/
+
 %{
 FILE* fd=NULL;
 void openFile(char* basename)
 {
     static const int datelen=18;
     static const char* dir="/usr/clas12/DATA/moeller/calib/";
-
     time_t now;
     struct tm *nowloc;
     char sdate[datelen];
     char filepath[150];
-
     time(&now);
     nowloc=localtime(&now);
-
     strftime(&sdate[0],datelen,"%m-%d-%y_%H:%M:%S", nowloc);
     strcpy(basename,"emf-");
     strcat(basename,sdate);
     strcat(basename,".txt");
-
     strcpy(filepath,dir);
     strcat(filepath,basename);
-
     fd=fopen(filepath,"w");
 }
 int writeFile(float data[1000],float aperture,float current,int nsamp)
 {
     int ii;
     fprintf(fd,"%.8f %.8f %8d\n",current,aperture,nsamp);
-    for (ii=0; ii<nsamp; ii++)
-    {
-        fprintf(fd,"%e\n",data[ii]);
-    }
+    for (ii=0; ii<nsamp; ii++) fprintf(fd,"%e\n",data[ii]);
     fclose(fd);
     return 1;
 }
@@ -49,6 +55,8 @@ short success=0;
 short configured=0;
 int readoutTimeout=120;
 short autoTrigger=0;
+short autoFlip=0;
+short triggered=0;
 
 string msg;            assign msg           to "{P}:msg";
 float daqDelay;        assign daqDelay      to "{P}:daqdelay";
@@ -57,7 +65,6 @@ short opc;             assign opc           to "{P}:opc";
 short setopc;          assign setopc        to "{P}:setopc";
 int nsamples;          assign nsamples      to "{P}:tracpoints";
 float aperture;        assign aperture      to "{P}:aperture";
-//float sampleno[1000];  assign sampleno      to "{P}:sampleno";
 float readoutData[1000];   assign readoutData       to "{P}:data";
 short readoutActive;   assign readoutActive to "{P}:data.PACT";
 short goreadout;       assign goreadout     to "{P}:data.PROC";
@@ -70,6 +77,7 @@ short zerodata;       assign zerodata       to "{P}:zerodata";
 short trigger1;       assign trigger1       to "{P}:trigger1";
 short trigger2;       assign trigger2       to "{P}:trigger2";
 
+short trigAndFlipBtn; assign trigAndFlipBtn to "{P}:trigAndFlipBtn"; monitor trigAndFlipBtn;
 short flipAndTrigBtn; assign flipAndTrigBtn to "{P}:flipAndTrigBtn"; monitor flipAndTrigBtn;
 short flipBtn;        assign flipBtn        to "{P}:flipBtn";        monitor flipBtn;
 short cfgBtn;         assign cfgBtn         to "{P}:cfgBtn";         monitor cfgBtn;
@@ -78,16 +86,21 @@ short fileBtn;        assign fileBtn        to "{P}:fileBtn";        monitor fil
 short trigBtn;        assign trigBtn        to "{P}:trigBtn";        monitor trigBtn;
 short resetBtn;       assign resetBtn       to "{P}:resetBtn";       monitor resetBtn;
 short zeroBtn;        assign zeroBtn        to "{P}:zeroBtn";        monitor zeroBtn;
-short display; assign display to"{P}:display";
+short display;        assign display        to "{P}:display";
+
+short enterKey;       assign enterKey       to "{P}:enterkey"; 
+short triggerKey;     assign triggerKey     to "{P}:triggerkey"; 
+
+float flipDelay;      assign flipDelay      to "{P}:flipdelay";
 
 // simulator:
-float iSet;            assign iSet          to "moellerPS:iset";
-float iMon;            assign iMon          to "moellerPS:imon";
+//float iSet;            assign iSet          to "moellerPS:iset";
+//float iMon;            assign iMon          to "moellerPS:imon";
 
 // real:
-//float iMon; assign iMon to "B_DET_MOELLER1_CURRENT";
-//float iSet; assign iSet to "B_DET_MOELLER1_CRNT_SET";
-//float iSetRbk; assign iSetRbk to "B_DET_MOELLER_CRNT_SP";
+float iMon; assign iMon to "B_DET_MOELLER1_CURRENT";
+float iSet; assign iSet to "B_DET_MOELLER1_CURRENT_SET";
+float iSetRbk; assign iSetRbk to "B_DET_MOELLER1_CURRENT_SP";
 
 ss seqMoellermeter 
 {
@@ -108,7 +121,8 @@ ss seqMoellermeter
             printf("seqMoellermeter:  idle state\n");
             sprintf(msg,"Idle State");
             autoTrigger=0;
-            pvPut(display);
+            autoFlip=0;
+            //pvPut(display);
             pvPut(msg);
             cfgBtn=0;
             flipBtn=0;
@@ -136,6 +150,11 @@ ss seqMoellermeter
             flipBtn=0;
             pvPut(flipBtn);
         } state flip
+        when (trigAndFlipBtn) {
+            autoFlip=0;
+            trigAndFlipBtn=0;
+            pvPut(trigAndFlipBtn);
+        } state trigAndFlip
         when (flipBtn) {
             flipBtn=0;
             pvPut(flipBtn);
@@ -179,6 +198,7 @@ ss seqMoellermeter
             epicsThreadSleep(1);
         } state readcfg
     }
+
     state zero {
         when () {
             sprintf(msg,"Clearing DMM Readout Memory ...");
@@ -194,6 +214,8 @@ ss seqMoellermeter
                 counter++;
             }
             pvPut(readoutData);
+	    sprintf(sfilename,"NONE");
+	    pvPut(sfilename);
             epicsThreadSleep(1);
         } state idle
     }
@@ -201,24 +223,13 @@ ss seqMoellermeter
     state setcfg {
         when () {
             printf("seqMoellermeter:  setcfg state\n");
-            sprintf(msg,"Configuring Multimeter ...");
+            sprintf(msg,"Configuring Multimeter for Moeller Calib ...");
             pvPut(msg);
 //            pvPut(pvReset);
             pvPut(pvConfig);
-            epicsThreadSleep(1);
-/*
-            counter=0;
-            while (counter<1000)
-            {
-                readoutData[counter]=0.;
-                sampleno[counter]=counter;
-                counter++;
-            }
-            pvPut(sampleno);
-            //pvPut(readoutData);
-*/
-            pvGet(aperture);
-            pvGet(nsamples);
+	    sprintf(sfilename,"NONE");
+	    pvPut(sfilename);
+            epicsThreadSleep(2);
             pvPut(display);
         } state readcfg
     }
@@ -235,7 +246,7 @@ ss seqMoellermeter
             pvGet(daqDelay);
             pvGet(readoutDelay);
             
-            epicsThreadSleep(2);
+            epicsThreadSleep(1);
             sprintf(msg,"Done Reading Configuration.");
             pvPut(msg);
             epicsThreadSleep(1);
@@ -266,9 +277,9 @@ ss seqMoellermeter
 
             sprintf(msg,"Polarity Reversed.");
             pvPut(msg);
-            pvPut(display);
         }
         when (autoTrigger) {} state trigger
+        when (autoFlip) {} state readout
         when () {} state idle
     }
 
@@ -278,6 +289,7 @@ ss seqMoellermeter
             pvPut(msg);
         } state idle
         when () {
+            autoTrigger=0;
             sprintf(msg,"Triggering Multimeter ...");
             pvPut(msg);
             printf("seqMoellermeter:  trigger state\n");
@@ -308,6 +320,38 @@ ss seqMoellermeter
         } state readout
     }
 
+    state trigAndFlip {
+        entry {
+            printf("seqMoellermeter:  trigAndFlip state\n");
+            sprintf(msg,"Reversing Polarity and Triggering...");
+            pvPut(msg);
+            pvGet(iSet);
+            pvGet(aperture);
+            pvGet(nsamples);
+            pvGet(flipdelay);
+
+            // press enter to be ready to press trigger
+            pvPut(enterKey);
+            
+            // store pre-flip current for writing to file:
+            current=iSet;
+            iSet=-iSet;
+
+            // wait to make sure all io has gone through: 
+            epicsThreadSleep(2);
+
+            // trigger
+            pvPut(triggerKey);
+
+            epicsThreadSleep(flipdelay);
+
+            // flip current:
+            pvPut(iSet);
+
+        }
+        when () {} state readout 
+    }
+
     state readout {
         
         entry {
@@ -318,6 +362,7 @@ ss seqMoellermeter
             epicsThreadSleep(1);
             failure=0;
             success=0;
+            autoFlip=0;
         }
         
         when (success) {
@@ -352,7 +397,7 @@ ss seqMoellermeter
             while (counter>0) {
                 pvGet(readoutActive);
                 if (!readoutActive) break;
-                sprintf(msg,"Checking Readout:  %d",readoutActive);
+                sprintf(msg,"Readout Still Active...");
                 pvPut(msg);
                 epicsThreadSleep(1);
                 counter--;
@@ -366,18 +411,21 @@ ss seqMoellermeter
 
     state writeout {
         when () {
-            sprintf(msg,"Writing Output File ...");
-            pvPut(msg);
-            epicsThreadSleep(2);
+            // current should have been retrieved earlier (pre-polarity flip)
             fprintf(stderr,"seqMoellermeter:  writeout state\n");
+            sprintf(msg,"Writing Output File ...");
+            pvGet(aperture);
+            pvGet(nsamples);
+            pvPut(msg);
             openFile(&cfilename);
             strcpy(sfilename,cfilename);
             pvPut(sfilename);
-            epicsThreadSleep(2);
+            epicsThreadSleep(1);
             pvGet(readoutData);
             fprintf(stderr,"seqMoellermeter:  writing file with %d points ...\n",nsamples);
             writeFile(readoutData,aperture,current,nsamples);
             pvPut(display);
+            epicsThreadSleep(1);
         } state idle
     }
 }

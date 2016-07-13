@@ -60,6 +60,15 @@ record(stringin, "$(P):display")
     #field(SCAN, "5 second")
     field(INP, "@keithley2001.proto getString(:DISP:DATA) $(PORT)")
     field(PINI,$(PINI))
+    field(FLNK,"$(P):display2")
+}
+record(stringin, "$(P):display2")
+{
+    field(DTYP,"stream")
+    field(SCAN, "Passive")
+    #field(SCAN, "5 second")
+    field(INP, "@keithley2001.proto getString(:DISP:WIND2:DATA) $(PORT)")
+    field(PINI,0)
 }
 record(stringin, "$(P):identity")
 {
@@ -348,6 +357,35 @@ record(bo,"$(P):trigger2")
 }
 
 #######################################################
+# emulate key presses:
+
+record(bo,"$(P):enterkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(18) $(PORT)")
+#    field(FLNK,"$(P):waitAndReadDisplay")
+}
+record(bo,"$(P):triggerkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(30) $(PORT)")
+#    field(FLNK,"$(P):waitAndReadDisplay")
+}
+record(bo,"$(P):exitkey")
+{
+    field(DTYP,"stream")
+    field(OUT,"@keithley2001.proto pressKey(11) $(PORT)")
+#    field(FLNK,"$(P):waitAndReadDisplay")
+}
+record(calcout,"$(P):waitAndReadDisplay")
+{
+    field(SCAN,"Passive")
+    field(ODLY,10)
+    field(OVAL,1)
+    field(OUT,"$(P):display.PROC")
+}
+
+#######################################################
 # expected wait times for trigger and readout:
 
 record(calc,"$(P):daqdelay")
@@ -365,44 +403,4 @@ record(calc,"$(P):readoutdelay")
     field(CALC,"A*B/1000+1")
     field(PREC,0)
 }
-#record(waveform,"$(P):sampleno")
-#{
-#    field(NELM,$(NPOINTS))
-#    field(FTVL,"DOUBLE")
-#    field(SCAN,"Passive")
-#}
-
-#######################################################
-# emulate key presses:
-
-record(bo,"$(P):enterkey")
-{
-    field(DTYP,"stream")
-    field(OUT,"@keithley2001.proto pressKey(18) $(PORT)")
-    field(FLNK,"$(P):waitAndReadDisplay")
-}
-record(bo,"$(P):triggerkey")
-{
-    field(DTYP,"stream")
-    field(OUT,"@keithley2001.proto pressKey(30) $(PORT)")
-    field(FLNK,"$(P):waitAndReadDisplay")
-}
-record(bo,"$(P):exitkey")
-{
-    field(DTYP,"stream")
-    field(OUT,"@keithley2001.proto pressKey(11) $(PORT)")
-    field(FLNK,"$(P):waitAndReadDisplay")
-}
-
-#######################################################
-
-record(calcout,"$(P):waitAndReadDisplay")
-{
-    field(SCAN,"Passive")
-    field(ODLY,15)
-    field(OVAL,1)
-    field(OUT,"$(P):display.PROC")
-}
-
-#######################################################
 

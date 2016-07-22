@@ -1,0 +1,48 @@
+#
+# torus_interlock.substitutions
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   July 2016
+#
+
+file "db/torus_bi_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    # Section 1, Hardwired Interlocks
+    { PLC_TORUS, B_TORUS:, MPS:, LHe_Liquid_Level,    Ok, Fault, NO_ALARM, MAJOR, "LHe Liquid Level" }
+    { PLC_TORUS, B_TORUS:, MPS:, VCL_Lead_T,          Ok, Fault, NO_ALARM, MAJOR, "Vapor Cooled Lead Temp" }
+    { PLC_TORUS, B_TORUS:, MPS:, Watchdog,            Ok, Fault, NO_ALARM, MAJOR, "Chassis Watchdog" }
+    { PLC_TORUS, B_TORUS:, MPS:, Lead_Water_Flow,     Ok, Fault, NO_ALARM, MAJOR, "Current Lead Water Flow" }
+    { PLC_TORUS, B_TORUS:, MPS:, VT_Cable_Intlck      Ok, Fault, NO_ALARM, MAJOR, "VT Cable Intlk" }
+    { PLC_TORUS, B_TORUS:, MPS:, System_Cable_Intlck, Ok, Fault, NO_ALARM, MAJOR, "System Cable Intlk" }
+    { PLC_TORUS, B_TORUS:, MPS:, QD_Sum1,             Ok, Fault, NO_ALARM, MAJOR, "Danfysik QD Sum 1" }
+    { PLC_TORUS, B_TORUS:, MPS:, QD_Sum2,             Ok, Fault, NO_ALARM, MAJOR, "Danfysik QD Sum 2" }
+    { PLC_TORUS, B_TORUS:, MPS:, QD_Sum3,             Ok, Fault, NO_ALARM, MAJOR, "Danfysik QD Sum 3" }
+    { PLC_TORUS, B_TORUS:, MPS:, CryoConRelay,        Ok, Fault, NO_ALARM, MAJOR, "Cryocon Over Temp" }
+    { PLC_TORUS, B_TORUS:, MPS:, PLC_Fast_Dump,       Ok, Fault, NO_ALARM, MAJOR, "PLC Fast Dump" }
+    # Section 2, PLC Fast Dump Interlocks
+    { PLC_TORUS, B_TORUS:, MPS:, EPICS_FastDump,      Ok, Fault, NO_ALARM, MAJOR, "EPICS Fast Dump Btn" }
+    { PLC_TORUS, B_TORUS:, MPS:, Hard_Overcurrent,    Ok, Fault, NO_ALARM, MAJOR, "Current Limit" }
+    { PLC_TORUS, B_TORUS:, MPS:, RampDown_Fail,       Ok, Fault, NO_ALARM, MAJOR, "Ramp Down Fail" }
+    { PLC_TORUS, B_TORUS:, MPS:, FIRE,                Ok, Fault, NO_ALARM, MAJOR, "VESDA Fire Detection" }
+    { PLC_TORUS, B_TORUS:, MPS:, Soft_Quench_2nd,     Ok, Fault, NO_ALARM, MAJOR, "SW Quench, 2nd Threshold" }
+    { PLC_TORUS, B_TORUS:, MPS:, UPS_Battery_Low,     Ok, Fault, NO_ALARM, MAJOR, "UPS Battery Low" }
+    { PLC_TORUS, B_TORUS:, MPS:, ESR_INTLCK,          Ok, Fault, NO_ALARM, MAJOR, "ESR Fault" }
+    # Section 3, PLC Controlled Ramp Down
+    { PLC_TORUS, B_TORUS:, MPS:, Axial_Support_Interlock,     Ok, Fault, NO_ALARM, MAJOR, "Axial Support SG" }
+    { PLC_TORUS, B_TORUS:, MPS:, DS_HB_SG_Interlock,  Ok, Fault, NO_ALARM, MAJOR, "DS Hex Beam SG" }
+    { PLC_TORUS, B_TORUS:, MPS:, US_HB_SG_Interlock,  Ok, Fault, NO_ALARM, MAJOR, "US Hex Beam SG" }
+    { PLC_TORUS, B_TORUS:, MPS:, CCM_LoadCell_Interlock,      Ok, Fault, NO_ALARM, MAJOR, "CCM Load Cell" }
+    { PLC_TORUS, B_TORUS:, MPS:, VerticalSupport_Interlock,   Ok, Fault, NO_ALARM, MAJOR, "Vertical Support" }
+    { PLC_TORUS, B_TORUS:, MPS:, Soft_Quench_1st,     Ok, Fault, NO_ALARM, MAJOR, "SW Quench" }
+    { PLC_TORUS, B_TORUS:, MPS:, Vacuum_Interlock,    Ok, Fault, NO_ALARM, MAJOR, "Vacuum" }
+    { PLC_TORUS, B_TORUS:, MPS:, EPICS_Watchdog_Fail, Ok, Fault, NO_ALARM, MAJOR, "EPICS Watchdog" }
+    { PLC_TORUS, B_TORUS:, MPS:, Cryo_Interlock,      Ok, Fault, NO_ALARM, MAJOR, "Cryo (LHe LL/Pres, LN2 LL/Pres)" }
+    { PLC_TORUS, B_TORUS:, MPS:, Soft_Overcurrent,    Ok, Fault, NO_ALARM, MAJOR, "SW Current Limit (EPICS)" }
+}
+
+file "db/torus_bo_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
+    # Section 4, Comm Resets
+    { PLC_TORUS, B_TORUS:, MPS:, CryoCon_Reset_PB,    "", Reset, "Reset CryoCon Comm" }
+    { PLC_TORUS, B_TORUS:, MPS:, LampTestReset,       "", Reset, "Reset CryoCon Comm" }
+}

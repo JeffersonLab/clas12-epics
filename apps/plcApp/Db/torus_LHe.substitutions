@@ -45,6 +45,22 @@ file "db/torus_ai_generic.db" {
     { PLC_TORUS, B_TORUS:, LHe:, TD8114DSHR,  K,    2, "DS Hex Ring Ret Temp (TST)" }
     { PLC_TORUS, B_TORUS:, LHe:, FV8121A_OUT, SLPM, 2, "Lead A Mass Flow" }
     { PLC_TORUS, B_TORUS:, LHe:, FV8121B_OUT, SLPM, 2, "Lead B Mass Flow" }
+    #
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_T_AVG,         K,    2, "Avg CCM Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_DT_MAX,        K,    2, "Max CCM Diff. Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, USHR_T_AVG,        K,    2, "Avg Upstream Hexbeams" }
+    { PLC_TORUS, B_TORUS:, LHe:, DSHR_T_AVG,        K,    2, "Avg Downstream Hexbeams" }
+    { PLC_TORUS, B_TORUS:, LHe:, METAL4K_T_MAX,     K,    2, "Max 4K Temp" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_DSHR_DT,       K,    2, "abs(CCM_T_AVG-DSHR_T_AVG)" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_USHR_DT,       K,    2, "abs(CCM_T_AVG-USHR_T_AVG)" }
+    { PLC_TORUS, B_TORUS:, LHe:, METAL4K_DT_MAX,    K,    2, "max(CCM_DT_MAX,CCM_DSHR_DT,CCM_USHR_DT)" }
+    { PLC_TORUS, B_TORUS:, LHe:, HE_METAL_DT,       K,    2, "abs(TD8111-METAL4K_T_MAX)" }
+    { PLC_TORUS, B_TORUS:, LHe:, HE_METAL_DT2,      K,    2, "abs(TD8513T-METAL4K_T_MAX)" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_DT_Dt30,       K/hr, 2, "30min avg, CCM_DT_AVG" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_DT_Dt120,      K/hr, 2, "120min avg, CCM_DT_AVG" }
+    { PLC_TORUS, B_TORUS:, LHe:, CCM_DT_Dt600,      K/hr, 2, "600min avg, CCM_DT_AVG" }
+    #
+    { PLC_CRYO,  B_TORUS:, LHe:, DP_CDHE_8563W,     atma, 2, "PT8561-PT8565" }
 }
 
 file "db/torus_ai_renamed.db" {

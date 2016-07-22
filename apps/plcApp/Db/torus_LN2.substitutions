@@ -10,6 +10,13 @@ file "db/torus_LN2.db" {
     { B_TORUS:, LN2:, PLC_TORUS }
 }
 
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    # TODO: replace torus_LN2.db with torus_ai_generic.db
+    { PLC_TORUS, B_TORUS:, LN2:, SHIELDOUT_T_MAX, K, 2, "Max of 80K & DSHR shields" }
+    { PLC_TORUS, B_TORUS:, LN2:, GN2_METAL_DT,    K, 2, "abs(TP8151-SHIELDOUT_T_MAX)" }
+}
+
 # cPID_Records
 file "db/datatype_ccm_pt100.db" {
     pattern{ P, R, CCM, PLCID }

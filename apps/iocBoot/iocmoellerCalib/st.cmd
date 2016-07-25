@@ -42,8 +42,8 @@ asynSetTraceIOMask("L0",-1,0x02)
 #asynOctetSetInputEos("L0",0,"\n")
 
 dbLoadRecords("db/asynRecord.db","P=moellermeter,R=:ASYN,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
-dbLoadRecords("db/keithley2001.db","P=moellermeter,NPOINTS=1000,PORT=L0,PINI=1")
-dbLoadRecords("db/moellermeter.db","P=moellermeter,NPOINTS=1000,PORT=L0")
+dbLoadRecords("db/keithley2001.db","P=moellermeter,NPOINTS=4000,PORT=L0,PINI=0")
+dbLoadRecords("db/moellermeter.db","P=moellermeter,NPOINTS=4000,PORT=L0")
 
 
 

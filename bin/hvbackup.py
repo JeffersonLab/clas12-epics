@@ -31,6 +31,7 @@ REQDIR=RELEASEPATH+'/epics/apps/scripts/hvburt/req'
 if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR)
 
 def getChannels(det,sector=None):
+  # THIS IS ONLY USED TO GENERATE THE REQ FILES
   prefixes=[]
   sectors=[]
   for ss in range(1,7):

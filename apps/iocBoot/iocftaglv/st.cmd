@@ -17,7 +17,8 @@ mpodLv_registerRecordDeviceDriver pdbbase
 
 devSnmpSetParam(DebugLevel,10)
 
-dbLoadTemplate("db/ftaglv.substitutions")
+dbLoadTemplate("db/ftcallv.substitutions")
+dbLoadTemplate("db/fthodlv.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 

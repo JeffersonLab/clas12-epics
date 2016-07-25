@@ -5,7 +5,8 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += mpod8008l.db
-DB += ftaglv.substitutions
+DB += ftcallv.substitutions
+DB += fthodlv.substitutions
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

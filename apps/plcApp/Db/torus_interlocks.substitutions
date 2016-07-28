@@ -18,7 +18,7 @@ file "db/torus_bi_generic.db" {
     { PLC_TORUS, B_TORUS:, MPS:, QD_Sum2,             Ok, Fault, NO_ALARM, MAJOR, "Danfysik QD Sum 2" }
     { PLC_TORUS, B_TORUS:, MPS:, QD_Sum3,             Ok, Fault, NO_ALARM, MAJOR, "Danfysik QD Sum 3" }
     { PLC_TORUS, B_TORUS:, MPS:, CryoConRelay,        Ok, Fault, NO_ALARM, MAJOR, "Cryocon Over Temp" }
-    { PLC_TORUS, B_TORUS:, MPS:, PLC_Fast_Dump,       Ok, Fault, NO_ALARM, MAJOR, "PLC Fast Dump" }
+    { PLC_TORUS, B_TORUS:, MPS:, PLC_Fast_Dump,       Ok, Fault, NO_ALARM, MAJOR, "PLC Fast Dump Sum" }
     # Section 2, PLC Fast Dump Interlocks
     { PLC_TORUS, B_TORUS:, MPS:, EPICS_FastDump,      Ok, Fault, NO_ALARM, MAJOR, "EPICS Fast Dump Btn" }
     { PLC_TORUS, B_TORUS:, MPS:, Hard_Overcurrent,    Ok, Fault, NO_ALARM, MAJOR, "Current Limit" }
@@ -43,6 +43,7 @@ file "db/torus_bi_generic.db" {
 file "db/torus_bo_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
     # Section 4, Comm Resets
+    # TODO: multiples of CryoCon_Reset_PB
     { PLC_TORUS, B_TORUS:, MPS:, CryoCon_Reset_PB,    "", Reset, "Reset CryoCon Comm" }
     { PLC_TORUS, B_TORUS:, MPS:, LampTestReset,       "", Reset, "Reset CryoCon Comm" }
 }

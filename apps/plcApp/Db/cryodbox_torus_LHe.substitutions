@@ -11,6 +11,22 @@ file "db/torus_ai_generic.db" {
     { PLC_CRYO, B_TORUS:, VAC:, TC8500DC,   torr,   2, "DBX vacuum vessel" }
 }
 
+file "db/torus_ao_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_CRYO, B_TORUS:, LHe:, DT_Interlock_Threshold,             K, 2, "DT for valve interlock" }
+}
+
+file "db/torus_bi_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_CRYO, B_TORUS:, LHe:, DT_ValveClose,     Ok,       Fault,     NO_ALARM, MAJOR, "PV8563C/PV8563W forced closed" }
+    { PLC_CRYO, B_TORUS:, LHe:, HTR8554_Enable_RB, Disabled, Enabled,   NO_ALARM, MAJOR, "Heater PID Interlock" }
+}
+
+file "db/torus_bo_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
+    { PLC_CRYO,  B_TORUS:, LHe:, DT_Interlock_PB,       "", Reset, "Reset DT Interlock" }
+}
+
 file "db/datatype_cpid.db" {
     pattern{ P, R, TAG, PLCID }
     { B_TORUS:, LHe:, PV8522TCD, PLC_CRYO }

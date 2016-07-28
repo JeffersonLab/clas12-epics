@@ -86,6 +86,21 @@ file "db/torus_ai_renamed.db" {
     { PLC_TORUS, B_TORUS:, LHe:, TR817D6HB1, HB_DS_S6.Temp[1], K, 2, "DS Hex Beam Cernox" }
 }
 
+file "db/torus_ao_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_LL_Interlock_Threshold,   "%", 2, "Temp. Enables HTR8120" }
+}
+
+file "db/torus_bi_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Enable, Disabled, Enabled, NO_ALARM, MAJOR, "Heater PID Interlock" }
+}
+
+file "db/torus_bo_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Interlock_PB, "", Reset, "Reset HTR Interlock" }
+}
+
 file "db/datatype_ccm_cernox.db" {
     pattern{ PLCID, P, R, CCM }
     { PLC_TORUS, B_TORUS:, LHe:, A }

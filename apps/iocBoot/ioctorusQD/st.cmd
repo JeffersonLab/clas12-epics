@@ -1,6 +1,7 @@
 #!../../bin/linux-x86_64/plc2epics
 ############################################################################
 < envPaths
+epicsEnvSet("EPICS_CA_ADDR_LIST", "129.57.96.26")
 ############################################################################
 cd "${TOP}"
 
@@ -15,7 +16,7 @@ drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/torus_qd.db","P=B_TORUS:,R=QD:,PLCID=PLC_TORUS")
+dbLoadTemplate("db/torus_quench.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 

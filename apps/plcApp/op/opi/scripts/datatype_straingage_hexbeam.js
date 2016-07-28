@@ -6,10 +6,10 @@ var run = PVUtil.getDouble(pvs[0]);
 var P = widget.getMacroValue("P");
 var R = widget.getMacroValue("R");
 
-var ELM = ["HB_US_S1", "HB_US_S2", "HB_US_S3", "HB_US_S4", "HB_US_S5", 
-		   "HB_DS_S1", "HB_DS_S2","HB_DS_S3","HB_DS_S4","HB_DS_S5"];
-var ID  = ["U1HB", "U2HB", "U3HB", "U4HB", "U5HB",
-		   "D1HB", "D2HB", "D3HB", "D4HB", "D5HB"];
+var ELM = ["HB_US_S1", "HB_US_S2", "HB_US_S3", "HB_US_S4", "HB_US_S5", "HB_US_S6", 
+		   "HB_DS_S1", "HB_DS_S2","HB_DS_S3","HB_DS_S4","HB_DS_S5", "HB_DS_S6"];
+var ID  = ["U1HB", "U2HB", "U3HB", "U4HB", "U5HB", "U6HB",
+		   "D1HB", "D2HB", "D3HB", "D4HB", "D5HB", "D6HB"];
 var CNT = 2;
 
 

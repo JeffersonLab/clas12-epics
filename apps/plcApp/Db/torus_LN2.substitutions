@@ -13,8 +13,13 @@ file "db/torus_LN2.db" {
 file "db/torus_ai_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
     # TODO: replace torus_LN2.db with torus_ai_generic.db
-    { PLC_TORUS, B_TORUS:, LN2:, SHIELDOUT_T_MAX, K, 2, "Max of 80K & DSHR shields" }
-    { PLC_TORUS, B_TORUS:, LN2:, GN2_METAL_DT,    K, 2, "abs(TP8151-SHIELDOUT_T_MAX)" }
+    { PLC_TORUS, B_TORUS:, LN2:, GN2_METAL_DT,      K,      2, "abs(TP8151-SHIELDOUT_T_MAX)" }
+    { PLC_TORUS, B_TORUS:, LN2:, SHLDOUT_T_AVG,     K,      2, "Avg of 80K & DSHR shields" }
+    { PLC_TORUS, B_TORUS:, LN2:, SHLDOUT_T_MAX,     K,      2, "Max of 80K & DSHR shields" }
+    { PLC_TORUS, B_TORUS:, LN2:, SHLDOUT_DT_Dt30,   K/hr,   2, "30min avg, SHLD_T_AVG" }
+    { PLC_TORUS, B_TORUS:, LN2:, SHLDOUT_DT_Dt120,  K/hr,   2, "120min avg, SHLD_T_AVG" }
+    { PLC_TORUS, B_TORUS:, LN2:, SHLDOUT_DT_Dt600,  K/hr,   2, "600min avg, SHLD_T_AVG" }
+    { PLC_TORUS, B_TORUS:, LN2:, TP8151_DT_Dt30,    K/hr,   2, "30min avg, TP8151" }
 }
 
 # cPID_Records

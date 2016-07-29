@@ -700,7 +700,7 @@ $(pv_value)</tooltip>
     <scripts />
     <on_image>/CLAS12_Share/common/images/on.png</on_image>
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <on_label>ON</on_label>
+    <on_label>ON </on_label>
     <scale_options>
       <width_scalable>true</width_scalable>
       <height_scalable>true</height_scalable>
@@ -850,7 +850,32 @@ $(pv_value)</tooltip>
     <auto_size>false</auto_size>
     <text>STATUS</text>
     <rotation_angle>0.0</rotation_angle>
-    <scripts />
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+var pv0 = PVUtil.getString(pvs[0]);
+if(pv0=="RDN" || pv0=="RUP")
+        widget.setPropertyValue("background_color","Attention");
+else if(pv0=="CC" || pv0=="CV")
+        widget.setPropertyValue("background_color","Attention");
+else if(pv0=="ADJ")
+        widget.setPropertyValue("background_color","Attention");
+else if(pv0=="ON")
+        widget.setPropertyValue("background_color","On");
+else if(pv0=="OFF")
+        widget.setPropertyValue("background_color","Off");
+else
+        widget.setPropertyValue("background_color","Major");
+if (pv0=="ON")
+widget.setPropertyValue("foreground_color","Write_Foreground");
+else
+widget.setPropertyValue("foreground_color","Read_Foreground");
+
+]]></scriptText>
+        <pv trig="true">$(pv_name)</pv>
+      </path>
+    </scripts>
     <border_alarm_sensitive>true</border_alarm_sensitive>
     <show_units>true</show_units>
     <height>20</height>
@@ -861,7 +886,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P):stat_string</pv_name>
+    <pv_name>$(P):parsed:stat_string</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="150" green="150" blue="150" />
@@ -884,6 +909,61 @@ $(pv_value)</tooltip>
     <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+    <toggle_button>false</toggle_button>
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-12bdba39:156275c214d:-7b73</wuid>
+    <pv_value />
+    <text>[]</text>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <image></image>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Action Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>40</width>
+    <x>921</x>
+    <name>Action Button</name>
+    <y>1</y>
+    <style>0</style>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>mpod8008l_cfg.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>User Config Settings</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

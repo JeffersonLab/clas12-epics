@@ -1,0 +1,918 @@
+#
+# Detector wise Records for board MPV.8008l
+#
+record( bi, "$(DETch):enable")
+{
+	field( DESC, "Channel enabled in GUIes")
+	field( SCAN, "Passive")
+	field( ZNAM, "Disabled")
+	field( ONAM, "Enabled")
+	field( PINI, "YES")
+	field( VAL,  "1")
+}
+record( mbbi, "$(DETch):alarm")
+{
+	field( DESC, "Alarm Status")
+	field( SCAN, "Passive")
+	field( PINI, "YES")
+	field( ZRVL, "0")	field( ZRST, "NO_ALARM")
+	field( ONVL, "1")	field( ONST, "Alarmed")
+	field( ZRSV, "NO_ALARM")
+	field( ONSV, "MAJOR")
+	field( VAL,  "0")
+}
+record( aSub, "$(DETch):parse:stat")
+{
+	field( DESC, "HW status string parser")
+	field( SCAN, "Passive")
+	field( INAM, "MpodStatusParserInit")
+	field( SNAM, "MpodStatusParserProcess")
+	# Input stat_string
+	field( INPA, "$(DETch):stat_string CPP MS")
+	field(  FTA, "STRING")
+	field(  NOA, "1")
+	field(  NEA, "1")
+	# Input stat_string.STAT to check is the HW channel exists
+	field( INPB, "$(DETch):stat.STAT CPP MS")
+	field(  FTB, "USHORT")
+	field(  NOB, "1")
+	field(  NEB, "1")	
+	# Output into mbbiDirect record which can keep maximum 16bit
+	field( OUTA, "$(DETch):parsed:status.RVAL PP MS")
+	field( FTVA, "ULONG")
+	field( NOVA, "1")
+	field( NEVA, "1")
+	# Output into bi record which can keep maximum 1bit
+	field( OUTB, "$(DETch):parsed:stat PP MS")
+	field( FTVB, "USHORT")
+	field( NOVB, "1")
+	field( NEVB, "1")
+	# Output into stringin record which can keep maximum 80 characters
+	field( OUTC, "$(DETch):parsed:stat_string PP MS")
+	field( FTVC, "STRING")
+	field( NOVC, "1")
+	field( NEVC, "1")
+}
+record( stringin, "$(DETch):parsed:stat_string")
+{
+	field( DESC, "HW status parsed string")
+	field( SCAN, "Passive")
+}
+record( mbbiDirect, "$(DETch):parsed:status")
+{
+	field( DESC, "HW status parsed result")
+	field( DTYP, "Raw Soft Channel")
+	field( SCAN, "Passive")
+}
+record( bi, "$(DETch):parsed:stat")
+{
+	field( DESC, "HW status parsed result")
+	field( SCAN, "Passive")
+	field( ZNAM, "Alarmed")
+	field( ONAM, "NO_ALARM")
+	field( ZSV, "MAJOR")
+	field( OSV, "NO_ALARM")
+}
+# GOOD           outputOn (0),                           output channel is on
+# BAD            outputInhibit(1),                       external (hardware-)inhibit of the output channel
+# BAD            outputFailureMinSenseVoltage (2)        Supervision limit hurt: Sense voltage is too low
+# BAD            outputFailureMaxSenseVoltage (3),       Supervision limit hurt: Sense voltage is too high
+# BAD            outputFailureMaxTerminalVoltage (4),    Supervision limit hurt: Terminal voltage is too high
+# BAD            outputFailureMaxCurrent (5),            Supervision limit hurt: Current is too high
+# BAD            outputFailureMaxTemperature (6),        Supervision limit hurt: Heat sink temperature is too high
+# BAD            outputFailureMaxPower (7),              Supervision limit hurt: Output power is too high
+# BAD            outputFailureTimeout (9),               Communication timeout between output channel and main control
+# NORMAL         outputCurrentLimited (10),              Current limiting is active (constant current mode)
+# NORMAL         outputRampUp (11),                      Output voltage is increasing (e.g. after switch on)
+# NORMAL         outputRampDown (12),                    Output voltage is decreasing (e.g. after switch off)
+# BAD            outputEnableKill (13),                  EnableKill is active
+# BAD            outputEmergencyOff (14),                EmergencyOff event is active
+# NORMAL         outputAdjusting (15),                   Fine adjustment is working
+# NORMAL         outputConstantVoltage (16),             Voltage control (constant voltage mode)
+# BAD            outputVoltageBoundsExceeded (17),       output Voltage out of bounds
+# BAD            outputCurrentBoundsExceeded (18),       output Current out of bounds
+# BAD            outputFailureCurrentLimit (19)          Hardware current limit (EHS) / trip (EDS, EBS) was exceeded
+
+
+# Alarm: will calculate the |v0set:fbk-vmon|<delta and monitor the inputs using CPP
+# In other words feeedback of set voltage and monitored voltage shouldn't be different than hardware voltage resolution
+record(calc, "$(DETch):alarm:delta") {
+  field(DESC, "CALC the alarm value")
+  field(CALC, "(ABS(D-E)<F)?1:0")
+  field(INPD, "$(DETch):v_set:fbk CPP MS")
+  field(INPE, "$(DETch):v_sens CPP MS")
+  field(INPF, "0.01") # the delta, the resolution of MPOD LV module
+}
+# Alarm: will calculate the |v0set-v0set:fbk|<epsilon and monitor the inputs using CPP
+# In other words feeedback of set voltage and set voltage itself shouldn't be different than the number precision of hardware or software 
+record(calc, "$(DETch):alarm:epsilon") {
+#  field(DESC, "CALC the alarm value")
+  field(DESC, "$(DETch):v_set CPP")
+  field(CALC, "(ABS(C-D)<G)?1:0")
+  #field(INPC, "$(DETch):v_set NPP NMS") # NPP doesn't allow to monitor changes, on other hand CPP is not causing indefinite loop 
+  field(INPC, "$(DETch):v_set CPP MS")  # output records are in UDF, INVALID at IOC startup, don't use their severity   
+  field(INPD, "$(DETch):v_set:fbk CPP MS")
+  field(INPG, "0.02") # the epsilon
+}
+# Alarm: will calculate the the part of condition for enabled case 
+# The condition is: 
+#  if on delta and epsilon must be OK 
+#  or 
+#  if ramping up at least the epsilon must be OK
+# The record processing will be initiated by setting monitors on input channels (CPP).
+record(calc, "$(DETch):alarm:cond1") {
+  field(DESC, "CALC the alarm value")
+  field(CALC, "!(H&2048)&&!(H&4096)&&F>0.5&&G>0.5") 
+  #field(INPA, "$(DETch):switch:fbk CPP MS")
+  #field(INPB, "$(DETch):parsed:stat CPP MS")
+  field(INPH, "$(DETch):parsed:status CPP MS")
+  field(INPF, "$(DETch):alarm:delta CPP MS")
+  field(INPG, "$(DETch):alarm:epsilon CPP MS")
+}
+record(calc, "$(DETch):alarm:cond2") {
+  field(DESC, "CALC the alarm value")
+  field(CALC, "((H&2048||H&4096)&&G>0.5)") 
+  #field(INPA, "$(DETch):switch:fbk CPP MS")
+  #field(INPB, "$(DETch):parsed:stat CPP MS")
+  field(INPH, "$(DETch):parsed:status CPP MS")
+  field(INPF, "$(DETch):alarm:delta CPP MS")
+  field(INPG, "$(DETch):alarm:epsilon CPP MS")
+}
+record(calc, "$(DETch):alarm:cond") {
+  field(DESC, "CALC the alarm value")
+  field(CALC, "((A=0)||(A=1&&B=1&&(F>0.5||G>0.5)))") 
+  field(INPA, "$(DETch):switch:fbk CPP MS")
+  field(INPB, "$(DETch):parsed:stat CPP MS")
+  field(INPH, "$(DETch):parsed:status CPP MS")
+  field(INPF, "$(DETch):alarm:cond1 CPP MS")
+  field(INPG, "$(DETch):alarm:cond2 CPP MS")
+}
+# Alarm: will calculate the NO_ALARM condition, but will output 0 for NO_ALARM and 1 for Alarmed
+# The formula is:
+# If the channel is  enabled the above condition $(DETch):alarm:cond must be true (1)
+# If the channel is disabled the channel must be in either off or ramping down states.
+# The record processing will be initiated by setting monitors on input channels (CPP).
+# It will output the value to another calcout which will delay for several seconds and will initiate its processing.
+record(calcout, "$(DETch):alarm:calc") {
+  field(DESC, "CALC the alarm value")
+  field( OUT, "$(DETch):alarm:delayed.CALC PP MS")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  #field(CALC, "(A=0&&(B=0||B=3))||(A=1&&((B=2&&ABS(D-E)<F)||(B=1&&ABS(D-E)<F&&ABS(C-D)<G)))?0:1")
+  field(CALC, "(I=0||(((I=1)&&(H>0.5))&&K=0))?0:1")
+  #field(INPA, "$(DETch):switch:fbk CPP MS")
+  #field(INPB, "$(DETch):parsed:stat CPP MS")
+#  field(INPF, "$(DETch):alarm:delta CPP MS") # the delta
+#  field(INPG, "$(DETch):alarm:epsilon CPP MS") # the epsilon
+  field(INPH, "$(DETch):alarm:cond CPP MS") # the long condition
+  field(INPI, "$(DETch):enable CPP MS")
+  field(INPK, "$(DETch):stat.STAT CPP MS")
+}
+# Alarm: will have copy of $(DETch):alarm:calc but delayed by ODLY seconds
+# It will output value into intermediate MBBO record and initiate its processing.
+record(calcout, "$(DETch):alarm:delayed") {
+  field(DESC, "delay the alarm value")
+  field(SCAN, "2 second")
+  field( OUT, "$(DETch):alarm:delay_out.VAL PP MS")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(CALC, "A")
+  field(INPA, "$(DETch):alarm:calc CPP MS")
+  field(ODLY, "3") # delay 3 second
+}
+# Alarm: will keep the the delayed out status of alarm
+# Using FLNK will initiate comparison record processing
+record( mbbo, "$(DETch):alarm:delay_out")
+{
+	field( DESC, "delay alarmed value cleanly")
+	field( SCAN, "Passive")
+	field( ZRVL, "0")	field( ZRST, "NO_ALARM")
+	field( ONVL, "1")	field( ONST, "Alarmed")
+	field( VAL,  "0")
+	field( OUT,  "")
+	field( FLNK, "$(DETch):alarm:compare")
+}
+# Alarm: Compare the current and delayed alarm statuses
+# Output into alarm record.
+# Read inputs without processing.
+# The alarm will be generated only when delayed and current statuses are alarmed.
+record(calcout, "$(DETch):alarm:compare") {
+  field(DESC, "compare delayed and current alarm values")
+  field( OUT, "$(DETch):alarm.VAL PP MS")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(CALC, "A=1&&B>0.5?1:0")
+  field(INPA, "$(DETch):alarm:delay_out NPP MS")
+  field(INPB, "$(DETch):alarm:calc NPP MS")
+}
+# End of records for alarm status calculation
+
+record(stringin, "$(DETch):name:fbk")
+{
+	field(DESC, "Channel Name")
+	field(SCAN, "Passive")
+	field( INP, "$(PORT):$(CH):name:fbk CPP MS")
+	field(PINI, "YES")
+	field(UDF, "0")
+	field( VAL, "$(DETch)")
+}
+record(stringin, "$(DETch):location")
+{
+	field(DESC, "Channel location")
+	field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(UDF, "0")
+	field( VAL, "$(PORT):$(CH)")
+}
+
+record(longin, "$(DETch):group")
+{
+	field(DESC, "Channel Group Number")
+	field(SCAN, "Passive")
+    field(PINI, "YES")
+    field(UDF, "0")
+	field( INP, "$(PORT):$(CH):group CPP MS")
+}
+
+record(longout, "$(DETch):switch")
+{
+  field(DESC, "Turn ON and OFF switch")
+  field(SCAN, "Passive")
+  field(OUT,  "$(PORT):$(CH):switch PP")
+  field(ADEL, "1")
+}
+# init the switch with switch:fbk then disable switch:init
+record(longout, "$(DETch):switch:init") {
+  field(DESC, "init switch from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):switch:fbk")
+  field(OUT, "$(DETch):switch NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):switch:dis")
+}
+record(calcout, "$(DETch):switch:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):switch:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(longin, "$(DETch):switch:fbk")
+{
+  field(DESC, "Turn ON and OFF switch")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(INP,  "$(PORT):$(CH):switch:fbk CPP MS")
+  field(FLNK, "$(DETch):switch:init")
+}
+
+record(longin, "$(DETch):stat")
+{
+  field(DESC, "Channel Status")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(INP,  "$(PORT):$(CH):stat CPP MS")
+}
+
+record(stringin, "$(DETch):stat_string")
+{
+  field(DESC, "Channel Status in String")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(INP,  "$(PORT):$(CH):stat_string CPP MS")
+}
+
+record(ai, "$(DETch):i_rd")
+{
+  field(DESC, "Current Readback")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):i_rd CPP MS")
+  field(ADEL, "1.0")  
+}
+
+record(ao, "$(DETch):i_set")
+{
+  field(DESC, "Current Setpoint")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):i_set PP")
+  field(ADEL, "1.0")
+}
+# init the i_set with i_set:fbk then disable i_set:init
+record(ao, "$(DETch):i_set:init") {
+  field(DESC, "init i_set from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):i_set:fbk")
+  field(OUT, "$(DETch):i_set NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):i_set:dis")
+}
+record(calcout, "$(DETch):i_set:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):i_set:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):i_set:fbk")
+{
+  field(DESC, "Current Setpoint")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):i_set:fbk CPP MS")
+  field(FLNK, "$(DETch):i_set:init")
+}
+
+
+record(ao, "$(DETch):i_max_sup")
+{
+  field(DESC, "Supervision Maximum Currrent")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):i_max_sup PP")
+  field(ADEL, "1.0")
+}
+# init the i_max_sup with i_max_sup:fbk then disable i_max_sup:init
+record(ao, "$(DETch):i_max_sup:init") {
+  field(DESC, "init i_max_sup from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):i_max_sup:fbk")
+  field(OUT, "$(DETch):i_max_sup NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):i_max_sup:dis")
+}
+record(calcout, "$(DETch):i_max_sup:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):i_max_sup:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):i_max_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Currrent")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):i_max_sup:fbk CPP MS")
+  field(FLNK, "$(DETch):i_max_sup:init")
+}
+
+record(ao, "$(DETch):i_max_cfg")
+{
+  field(DESC, "Config Maximum Currrent")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):i_max_cfg PP")
+  field(ADEL, "1.0")
+}
+# init the i_max_cfg with i_max_cfg:fbk then disable i_max_cfg:init
+record(ao, "$(DETch):i_max_cfg:init") {
+  field(DESC, "init i_max_cfg from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):i_max_cfg:fbk")
+  field(OUT, "$(DETch):i_max_cfg NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):i_max_cfg:dis")
+}
+record(calcout, "$(DETch):i_max_cfg:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):i_max_cfg:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):i_max_cfg:fbk")
+{
+  field(DESC, "Config Maximum Currrent")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):i_max_cfg:fbk CPP MS")
+  field(FLNK, "$(DETch):i_max_cfg:init")
+}
+
+#record(ai, "$(DETch):i_lim_hw")
+#{
+#  field(DESC, "Hardware Limit for Currrent")
+#  field(SCAN, "Passive")
+#  field(PREC, "3")
+#  field(EGU,  "")
+#  field(INP,  "$(PORT):$(CH):i_lim_hw CPP")
+#  field(ADEL, "1.0")
+#}
+
+
+record(longout, "$(DETch):i_trip_time")
+{
+  field(DESC, "Span for Time out Function.")
+  field(SCAN, "Passive")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):i_trip_time PP")
+  field(ADEL, "1")
+}
+# init the i_trip_time with i_trip_time:fbk then disable i_trip_time:init
+record(longout, "$(DETch):i_trip_time:init") {
+  field(DESC, "init i_trip_time from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):i_trip_time:fbk")
+  field(OUT, "$(DETch):i_trip_time NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):i_trip_time:dis")
+}
+record(calcout, "$(DETch):i_trip_time:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):i_trip_time:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(longin, "$(DETch):i_trip_time:fbk")
+{
+  field(DESC, "Span for Time out Function.")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):i_trip_time:fbk CPP MS")
+  field(FLNK, "$(DETch):i_trip_time:init")
+}
+
+
+record(ao, "$(DETch):vrise")
+{
+  field(DESC, "Voltage  RampUp Rate")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):vrise PP")
+  field(ADEL, "1.0")
+}
+# init the vrise with vrise:fbk then disable vrise:init
+record(ao, "$(DETch):vrise:init") {
+  field(DESC, "init vrise from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):vrise:fbk")
+  field(OUT, "$(DETch):vrise NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):vrise:dis")
+}
+record(calcout, "$(DETch):vrise:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):vrise:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):vrise:fbk")
+{
+  field(DESC, "Voltage  RampUp Rate")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):vrise:fbk CPP MS")
+  field(FLNK, "$(DETch):vrise:init")
+}
+
+
+record(ao, "$(DETch):vfall")
+{
+  field(DESC, "Voltage RampDown Rate")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):vfall PP")
+  field(ADEL, "1.0")
+}
+# init the vfall with vfall:fbk then disable vfall:init
+record(ao, "$(DETch):vfall:init") {
+  field(DESC, "init vfall from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):vfall:fbk")
+  field(OUT, "$(DETch):vfall NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):vfall:dis")
+}
+record(calcout, "$(DETch):vfall:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):vfall:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):vfall:fbk")
+{
+  field(DESC, "Voltage RampDown Rate")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):vfall:fbk CPP MS")
+  field(FLNK, "$(DETch):vfall:init")
+}
+
+
+record(ai, "$(DETch):v_sens")
+{
+  field(DESC, "Voltage Sensor Readback")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_sens CPP MS")
+  field(ADEL, "1.0")
+}
+
+record(ai, "$(DETch):v_term")
+{
+  field(DESC, "Voltage Terminal Readback")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_term CPP MS")
+  field(ADEL, "1.0")
+}
+
+record(ao, "$(DETch):v_set")
+{
+  field(DESC, "Voltage Setpoint")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_set PP")
+  field(ADEL, "1.0")
+}
+record(ai, "$(DETch):v_set:fbk")
+{
+  field(DESC, "Voltage Setpoint")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_set:fbk CPP MS")
+  field(FLNK, "$(DETch):v_set:init")
+}
+# init the v_set with v_set:fbk then disable v_set:init
+record(ao, "$(DETch):v_set:init") {
+  field(DESC, "init v_set from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_set:fbk")
+  #field(OUT, "$(DETch):v_set NPP") # v_set is used in the alarm calculation scheme, therefore we will use PP so it will be read correctly in alarm:epsilon 
+  field(OUT, "$(DETch):v_set PP") # for the same reason lets put delay in disabling to 5 second
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_set:dis")
+}
+record(calcout, "$(DETch):v_set:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_set:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+  #field(ODLY, "10")
+}
+
+
+record(ao, "$(DETch):v_min_sens_sup")
+{
+  field(DESC, "Supervision Minimum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_min_sens_sup PP")
+  field(ADEL, "1.0")
+}
+# init the v_min_sens_sup with v_min_sens_sup:fbk then disable v_min_sens_sup:init
+record(ao, "$(DETch):v_min_sens_sup:init") {
+  field(DESC, "init v_min_sens_sup from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_min_sens_sup:fbk")
+  field(OUT, "$(DETch):v_min_sens_sup NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_min_sens_sup:dis")
+}
+record(calcout, "$(DETch):v_min_sens_sup:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_min_sens_sup:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):v_min_sens_sup:fbk")
+{
+  field(DESC, "Supervision Minimum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_min_sens_sup:fbk CPP MS")
+  field(FLNK, "$(DETch):v_min_sens_sup:init")
+}
+
+record(ao, "$(DETch):v_max_sens_sup")
+{
+  field(DESC, "Supervision Maximum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_max_sens_sup PP")
+  field(ADEL, "1.0")
+}
+# init the v_max_sens_sup with v_max_sens_sup:fbk then disable v_max_sens_sup:init
+record(ao, "$(DETch):v_max_sens_sup:init") {
+  field(DESC, "init v_max_sens_sup from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_max_sens_sup:fbk")
+  field(OUT, "$(DETch):v_max_sens_sup NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_max_sens_sup:dis")
+}
+record(calcout, "$(DETch):v_max_sens_sup:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_max_sens_sup:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):v_max_sens_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_max_sens_sup:fbk CPP MS")
+  field(FLNK, "$(DETch):v_max_sens_sup:init")
+}
+
+
+record(ao, "$(DETch):v_max_term_sup")
+{
+  field(DESC, "Supervision Maximum Terminal Voltage")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_max_term_sup PP")
+  field(ADEL, "1.0")
+}
+# init the v_max_term_sup with v_max_term_sup:fbk then disable v_max_term_sup:init
+record(ao, "$(DETch):v_max_term_sup:init") {
+  field(DESC, "init v_max_term_sup from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_max_term_sup:fbk")
+  field(OUT, "$(DETch):v_max_term_sup NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_max_term_sup:dis")
+}
+record(calcout, "$(DETch):v_max_term_sup:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_max_term_sup:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):v_max_term_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Terminal Voltage")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_max_term_sup:fbk CPP MS")
+  field(FLNK, "$(DETch):v_max_term_sup:init")
+}
+
+record(ao, "$(DETch):v_max_sens_cfg")
+{
+  field(DESC, "Config Maximum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_max_sens_cfg PP")
+  field(ADEL, "1.0")
+}
+# init the v_max_sens_cfg with v_max_sens_cfg:fbk then disable v_max_sens_cfg:init
+record(ao, "$(DETch):v_max_sens_cfg:init") {
+  field(DESC, "init v_max_sens_cfg from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_max_sens_cfg:fbk")
+  field(OUT, "$(DETch):v_max_sens_cfg NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_max_sens_cfg:dis")
+}
+record(calcout, "$(DETch):v_max_sens_cfg:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_max_sens_cfg:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):v_max_sens_cfg:fbk")
+{
+  field(DESC, "Config Maximum Sensor Voltage")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_max_sens_cfg:fbk CPP MS")
+  field(FLNK, "$(DETch):v_max_sens_cfg:init")
+}
+
+
+record(ao, "$(DETch):v_max_term_cfg")
+{
+  field(DESC, "Config Maximum Terminal Voltage")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):v_max_term_cfg PP")
+  field(ADEL, "1.0")
+}
+# init the v_max_term_cfg with v_max_term_cfg:fbk then disable v_max_term_cfg:init
+record(ao, "$(DETch):v_max_term_cfg:init") {
+  field(DESC, "init v_max_term_cfg from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):v_max_term_cfg:fbk")
+  field(OUT, "$(DETch):v_max_term_cfg NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):v_max_term_cfg:dis")
+}
+record(calcout, "$(DETch):v_max_term_cfg:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):v_max_term_cfg:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(ai, "$(DETch):v_max_term_cfg:fbk")
+{
+  field(DESC, "Config Maximum Terminal Voltage")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(PREC, "3")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):v_max_term_cfg:fbk CPP MS")
+  field(FLNK, "$(DETch):v_max_term_cfg:init")
+}
+
+
+#record(ai, "$(DETch):v_lim_hw")
+#{
+#  field(DESC, "Hardware Limit for Voltage")
+#  field(SCAN, "Passive")
+#  field(PREC, "3")
+#  field(EGU,  "")
+#  field(INP,  "$(PORT):$(CH):v_lim_hw CPP MS")
+#  field(ADEL, "1.0")
+#}
+
+
+record(longin, "$(DETch):temp")
+{
+  field(DESC, "Hotspot Temperature")
+  field(SCAN, "Passive")
+  field(INP,  "$(PORT):$(CH):temp CPP MS")
+  field(PINI, "YES")
+  field(UDF, "0")
+}
+
+#record(longin, "$(DETch):max_temp_cfg")
+#{
+#  field(DESC, "Config Maximum Temperature")
+#  field(SCAN, "Passive")
+#  field(INP,  "$(PORT):$(CH):max_temp_cfg CPP MS")
+#}
+
+
+
+#record(longout, "$(DETch):regul")
+#{
+#  field(DESC, "Turn ON and OFF switch")
+#  field(SCAN, "Passive")
+#  field(EGU,  "")
+#  field(OUT,  "$(PORT):$(CH):regul PP")
+#  field(ADEL, "1")
+#}
+
+
+record(longout, "$(DETch):sup_behavior")
+{
+  field(DESC, "Supervision Behavior")
+  field(SCAN, "Passive")
+  field(EGU,  "")
+  field(OUT,  "$(PORT):$(CH):sup_behavior PP")
+  field(ADEL, "1")
+  field(VAL,  "17684")
+  field(PINI, "YES")
+}
+# init the sup_behavior with sup_behavior:fbk then disable sup_behavior:init
+record(longout, "$(DETch):sup_behavior:init") {
+  field(DESC, "init sup_behavior from fbk")
+  field(DTYP, "Soft Channel")
+  field(OMSL, "closed_loop")
+  field(DOL, "$(DETch):sup_behavior:fbk")
+  field(OUT, "$(DETch):sup_behavior NPP")
+  field(DISV, "1")
+#  field(DISA, "0")
+#  field(SDIS, "testhv:initao_dis NPP")
+  field(FLNK, "$(DETch):sup_behavior:dis")
+}
+record(calcout, "$(DETch):sup_behavior:dis") {
+  field(DESC, "disable after init")
+  field( OUT, "$(DETch):sup_behavior:init.DISA NPP")
+  field(CALC, "1")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+  field(ODLY, "20")
+}
+record(longin, "$(DETch):sup_behavior:fbk")
+{
+  field(DESC, "Supervision Behavior")
+  field(SCAN, "Passive")
+  field(EGU,  "")
+  field(INP,  "$(PORT):$(CH):sup_behavior:fbk CPP MS")
+  field(VAL,  "17684")
+  field(PINI, "YES")
+  field(UDF, "0")
+  field(FLNK, "$(DETch):sup_behavior:init")
+}

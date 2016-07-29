@@ -54,6 +54,15 @@ record(longin, "$(PORT):stat")
   alias("$(DETALIAS):stat")
 }
 
+record(mbbiDirect,"$(PORT):stat2")
+{
+    field(DESC,"Channel Status")
+    field(SCAN,"Passive")
+    field(DTYP,"Soft Channel")
+    field(INP,"$(PORT):stat CPP")
+    alias("$(DETALIAS):stat2")
+}
+
 record(stringin, "$(PORT):stat_string")
 {
   field(DESC, "Channel Status in String")
@@ -452,3 +461,85 @@ record(longin, "$(PORT):sup_behavior:fbk")
   field(PINI, "YES")
   alias("$(DETALIAS):sup_behavior:fbk")
 }
+
+# bit-3 is whether to use sense-line voltage (0=yes, 1=no)
+record(longin,"$(PORT):output_user_config:fbk") {
+  field(DESC,"Output Channel Behavior")
+  field(SCAN,"$(SCAN)")
+  field(DTYP,"Snmp")
+  field(EGU,  "")
+  field(INP,"@$(HOST) guru %{WO}UserConfig.u$(CH) INTEGER: 80")
+  alias("$(DETALIAS):output_user_config:fbk")
+}
+record(longout,"$(PORT):output_user_config") {
+  field(DESC,"Output Channel Behavior")
+  field(DTYP,"Snmp")
+  field(OUT,"@$(HOST) guru %{WO}UserConfig.u$(CH) INTEGER: 80 i")
+  alias("$(DETALIAS):output_user_config")
+}
+
+record(aSub,"$(PORT):parse:stat")
+{
+	field( DESC, "HW status string parser")
+	field( SCAN, "Passive")
+	field( INAM, "MpodStatusParserInit")
+	field( SNAM, "MpodStatusParserProcess")
+	# Input stat_string
+	field( INPA, "$(PORT):stat_string CPP MS")
+	field(  FTA, "STRING")
+	field(  NOA, "1")
+	field(  NEA, "1")
+	# Input stat_string.STAT to check is the HW channel exists
+	field( INPB, "$(PORT):stat.STAT CPP MS")
+	field(  FTB, "USHORT")
+	field(  NOB, "1")
+	field(  NEB, "1")	
+	# Output into mbbiDirect record which can keep maximum 16bit
+	field( OUTA, "$(PORT):parsed:status.RVAL PP MS")
+	field( FTVA, "ULONG")
+	field( NOVA, "1")
+	field( NEVA, "1")
+	# Output into bi record which can keep maximum 1bit
+	field( OUTB, "$(PORT):parsed:stat PP MS")
+	field( FTVB, "USHORT")
+	field( NOVB, "1")
+	field( NEVB, "1")
+	# Output into stringin record which can keep maximum 80 characters
+	field( OUTC, "$(PORT):parsed:stat_string PP MS")
+	field( FTVC, "STRING")
+	field( NOVC, "1")
+	field( NEVC, "1")
+}
+record( stringin, "$(PORT):parsed:stat_string")
+{
+	field( DESC, "HW status parsed string")
+	field( SCAN, "Passive")
+        alias("$(DETALIAS):parsed:stat_string")
+}
+record( mbbiDirect, "$(PORT):parsed:status")
+{
+	field( DESC, "HW status parsed result")
+	field( DTYP, "Raw Soft Channel")
+	field( SCAN, "Passive")
+        alias("$(DETALIAS):parsed:status")
+}
+record( mbbi, "$(PORT):parsed:status2")
+{
+	field( DESC, "HW status parsed result")
+	field( DTYP, "Soft Channel")
+        field( INP,  "$(PORT):parsed:status CPP")
+	field( SCAN, "Passive")
+        alias("$(DETALIAS):parsed:status2")
+}
+record( bi, "$(PORT):parsed:stat")
+{
+	field( DESC, "HW status parsed result")
+	field( SCAN, "Passive")
+	field( ZNAM, "Alarmed")
+	field( ONAM, "NO_ALARM")
+	field( ZSV, "MAJOR")
+	field( OSV, "NO_ALARM")
+        alias("$(DETALIAS):parsed:stat")
+}
+
+

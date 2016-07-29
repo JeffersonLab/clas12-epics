@@ -17,6 +17,8 @@ mpodLv_registerRecordDeviceDriver pdbbase
 
 devSnmpSetParam(DebugLevel,10)
 
+#MpodStatusParserDebug=1
+
 dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")
 

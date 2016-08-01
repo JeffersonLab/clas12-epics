@@ -28,6 +28,7 @@ file "db/torus_ao_generic.db" {
     { PLC_CRYO, B_TORUS:, LN2:, HTR8559_PT_Interlock_Threshold, atma,   2, "Pres. Enables HTR8559" }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8559_TP_Interlock_Threshold,    K,   2, "Temp. Enables HTR8559" }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8554_LL_Interlock_Threshold,  "%",   2, "Temp. Enables HTR8554" }
+    { PLC_CRYO, B_TORUS:, LN2:, DTGN2_Interlock_Threshold,         K,   2, "GN2 Diff Pres. Threshold" }
 }
 
 file "db/torus_bi_generic.db" {
@@ -42,8 +43,8 @@ file "db/torus_bo_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8559_Interlock_PB, "", Reset, "Heater PID Interlock" }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8554_Interlock_PB, "", Reset, "Heater PID Interlock" }
+    { PLC_CRYO, B_TORUS:, LN2:, GN2_Interlock_PB,     "", Reset, "Resets GN2 Diff Pres. Intlk" }
 }
-
 
 # cPID_Records
 file "db/datatype_cpid.db" {

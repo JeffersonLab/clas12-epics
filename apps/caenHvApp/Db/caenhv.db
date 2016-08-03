@@ -19,7 +19,7 @@ record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Alias")
 record(bigsub, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") 
 {
    field(PRIO,"LOW")
-   field(DESC,"$(Det)_$(Element)")
+   field(DESC,"$(Det)_HV_$(Element)")
    field(INAM,"InitChannel")
    field(INPA,"$(Cr)")
    field(INPB,"$(Sl)")
@@ -33,6 +33,8 @@ record(bigsub, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
    alias("B_DET_$(Det)_$(Sys)_$(Element)")
    alias("B_SYS_$(Sys)_$(Det)_$(Element)")
 }
+
+
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
 {
@@ -101,7 +103,7 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rdnrbk")
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
 {
-   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).T CPP NMS")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).L CPP NMS")
    field(OMSL,"closed_loop")
    field(PREC,"2")
    alias("B_DET_$(Det)_$(Sys)_$(Element):stat")
@@ -110,7 +112,8 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
 {
-   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).L CPP NMS")
+   field(DESC,"#GR")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).T CPP NMS")
    field(OMSL,"closed_loop")
    field(PREC,"2")
    alias("B_DET_$(Det)_$(Sys)_$(Element):comms")
@@ -211,4 +214,36 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
    field(VAL,"$(CrType)")
    alias("B_DET_$(Det)_$(Sys)_$(Element):type")   
    alias("B_SYS_$(Sys)_$(Det)_$(Element):type")   
+}
+
+#make a new ALARM channel
+#We want to alarm using the current value of STAT (sorted by bigsub).
+#but also if vmon is dropping below some threshold proportion of vset(INPA).
+#The logic is this:
+#If
+  #STAT is NOT in ALARM STATE(ie  (D=0))
+  #AND
+  #Channel is on (comms bit 0, ie (E&1))
+  #AND 
+  #Channel is NOT ramping up or down (comms bits 1,2, ie !(E&6))
+  #AND 
+  #vmon < 0.99*vset
+#set VAL=2 (MAJOR)
+
+#else 
+#VAL = STAT (pas alarm status from bigsub)
+  
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarm")
+{
+   alias("B_DET_$(Det)_$(Sys)_$(Element):alarm")   
+   field(INPA,"0.99")
+   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
+   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+   field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).STAT")
+   field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+   field(CALC,"((D=0)&&(E&1)&&(!(E&6))&&(C<A*B))?C:D")
+   field(HIGH,"1")
+   field(HIHI,"2")
+   field(HSV,"MINOR")
+   field(HHSV,"MAJOR")
 }

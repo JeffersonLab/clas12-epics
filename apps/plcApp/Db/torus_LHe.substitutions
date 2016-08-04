@@ -72,19 +72,19 @@ file "db/torus_ai_renamed.db" {
 
 file "db/torus_ao_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_LL_Interlock_Threshold,   "%", 2, "Temp. Enables HTR8120" }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_LL_Interlock_Threshold,   "%", 2, "LL8120SC Level Limit" }
 }
 
 file "db/torus_bi_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
-    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Enable, Disabled, Enabled, NO_ALARM, MAJOR,    "Heater PID Interlock" }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Enable, Ok,       Faulted, NO_ALARM, MAJOR,    "HTR8120 Interlock" }
     { PLC_TORUS, B_TORUS:, LHe:, HTR8121A_RB,    Disabled, Enabled, NO_ALARM, NO_ALARM, "Heater Rdbk" }
     { PLC_TORUS, B_TORUS:, LHe:, HTR8121B_RB,    Disabled, Enabled, NO_ALARM, NO_ALARM, "Heater Rdbk" }
 }
 
 file "db/torus_bo_generic.db" {
-    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
-    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Interlock_PB, "", Reset, "Reset HTR Interlock" }
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, HIGH, DESC }
+    { PLC_TORUS, B_TORUS:, LHe:, HTR8120_Interlock_PB, "", Reset, 1.0, "Reset HTR Interlock" }
 }
 
 file "db/datatype_ccm_cernox.db" {

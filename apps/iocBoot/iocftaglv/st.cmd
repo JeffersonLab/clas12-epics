@@ -15,6 +15,8 @@ cd "${TOP}"
 dbLoadDatabase "dbd/mpodLv.dbd"
 mpodLv_registerRecordDeviceDriver pdbbase
 
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+
 devSnmpSetParam(DebugLevel,10)
 
 #MpodStatusParserDebug=1

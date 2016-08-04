@@ -2,7 +2,9 @@
 import sys,os,stat,re
 
 # N.Baltzell
-# TODO: mkChannels* --> read from ccdb
+#
+# TODO: mkChannels* --> read from ccdb (?)
+#
 
 DBFILE='db/jscaler_channel.db'
 KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
@@ -50,9 +52,9 @@ def printStartup(crates,fileName=None):
   if fileName!=None: file=open(fileName,'w')
   else:              file=sys.stdout
   startCrates,loadRecords='',''
+  # problem here with multiple dbs per crate: 
   for crate in crates:
     startCrates += 'Start_SCALERS_CRATE("%d","%s")\n'%(int(crate['CrNo']),crate['CrName'])
-  for crate in crates:
     subFileName=re.sub('.*/','',crate['subFileName'])
     loadRecords += 'dbLoadTemplate("db/%s")\n'%(subFileName)
   contents= STARTUP.replace('STARTCRATE',startCrates)
@@ -60,6 +62,7 @@ def printStartup(crates,fileName=None):
   print >>file,contents
   if fileName!=None:
     file.close()
+    # add comment on why I did this:
     st=os.stat(fileName)
     os.chmod(fileName,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
@@ -107,6 +110,26 @@ def mkChannelsPCAL(crateNumber,sector,system):
       setCodes(crateNumber,channel)
       channels.append(channel)
       iChan += 1
+  return channels
+
+def mkChannelsLTCC(crateNumber,sector,system):
+  if system=='FADC': crate='ADCECAL'+str(sector)
+  else:              crate='TDCECAL'+str(sector)
+  sides=['L','R']
+  nChanPerSide=18
+  # LTCC starts in slot 18, channel 12 (after last ECAL channel)
+  hwSlot,hwChan=18,12
+  channels=[]
+  for side in sides:
+    for detChan in range(1,nChanPerSide+1):
+        if hwChan>=16:
+          hwChan=0
+          hwSlot+=1
+        channel={'Sl':'%.2d'%(hwSlot),'Ch':'%.2d'%(hwChan),'Side':side,'CrName':crate,'Det':'LTCC','Sys':system}
+        channel['Element']='SEC%d_%s%.2d'%(sector,side,detChan)
+        setCodes(crateNumber,channel)
+        channels.append(channel)
+        hwChan+=1
   return channels
 
 def mkChannelsFTOF(crateNumber,sector,system):
@@ -218,13 +241,14 @@ def mkChannels(detector,crateNumber,sector,system):
   if   detector=='ECAL': return mkChannelsECAL(crateNumber,sector,system)
   elif detector=='PCAL': return mkChannelsPCAL(crateNumber,sector,system)
   elif detector=='FTOF': return mkChannelsFTOF(crateNumber,sector,system)
+  elif detector=='LTCC': return mkChannelsLTCC(crateNumber,sector,system)
   else: sys.exit('Invalid detector:  ',detector)
 
 # make substution files and one startup per sector:
 def mkSector(sector):
   iCrate,crates=0,[]
   for system in ['FADC','DISC']:
-    for detector in ['ECAL','PCAL','FTOF']:
+    for detector in ['ECAL','PCAL','FTOF','LTCC']:
       channels=mkChannels(detector,iCrate,sector,system)
       subFileName='../Db/jscalers_S%d_%s_%s.sub'%(sector,detector,system)
       printSubstitutions(channels,subFileName)

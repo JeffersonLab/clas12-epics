@@ -45,6 +45,7 @@ for file in files:
     pvlist = open(file, 'r')
     for pv in pvlist:
         pv = pv.split(' ', 1)[0]
+        pv = pv.split('\t',1)[0]
         pv = pv.split('\n',1)[0]
         if pv != "":
             try:

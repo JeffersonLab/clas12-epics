@@ -207,9 +207,9 @@ dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=hps11,IP=129.57.167.93")
 dbLoadRecords("db/wienerW.db","HOST=hps11,IP=129.57.167.93")
 dbLoadRecords("db/vmePedestals.db","HOST=hps11,IP=129.57.167.93,VXS_FLAG=1")
 
-dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=dcrb2,IP=129.57.86.67")
-dbLoadRecords("db/wienerW.db","HOST=dcrb2,IP=129.57.86.67")
-dbLoadRecords("db/vmePedestals.db","HOST=dcrb2,IP=129.57.86.67,VXS_FLAG=1")
+#dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=dcrb2,IP=129.57.86.67")
+#dbLoadRecords("db/wienerW.db","HOST=dcrb2,IP=129.57.86.67")
+#dbLoadRecords("db/vmePedestals.db","HOST=dcrb2,IP=129.57.86.67,VXS_FLAG=1")
 
 dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=ctof1,IP=129.57.86.79")
 dbLoadRecords("db/wienerW.db","HOST=ctof1,IP=129.57.86.79")

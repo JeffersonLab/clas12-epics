@@ -9,11 +9,56 @@ import sys,os,stat,re
 DBFILE='db/jscaler_channel.db'
 KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
 
-def fadcslot2discslot(fadcslot):
-  if   fadcslot<7:  return fadcslot-1
-  elif fadcslot<11: return fadcslot
-  elif fadcslot<17: return fadcslot-1
-  else:             return fadcslot
+FTOF_SLOT_F2D={
+    3:2,
+    4:4,
+    5:5,
+    6:7,
+    7:8,
+    8:10,
+    9:12,
+    10:14,
+    13:15,
+    14:17,
+    15:18,
+    16:20
+}
+ECAL_SLOT_F2D={
+    3:3,
+    4:4,
+    5:5,
+    6:7,
+    7:8,
+    8:9,
+    9:10,
+    10:12,
+    13:13,
+    14:14,
+    15:15,
+    16:17,
+    17:18,
+    18:20,
+    19:21,
+    20:22
+}
+PCAL_SLOT_F2D={
+    3:2,
+    4:3,
+    5:4,
+    6:5,
+    7:7,
+    8:8,
+    9:9,
+    10:10,
+    13:12,
+    14:13,
+    15:14,
+    16:15
+}
+SLOT_F2D={'FTOF':FTOF_SLOT_F2D,
+          'PCAL':PCAL_SLOT_F2D,
+          'ECAL':ECAL_SLOT_F2D,
+          'LTCC':ECAL_SLOT_F2D}
 
 STARTUP='''#!../../bin/linux-x86_64/iocscalers
 < envPaths
@@ -52,17 +97,24 @@ def printStartup(crates,fileName=None):
   if fileName!=None: file=open(fileName,'w')
   else:              file=sys.stdout
   startCrates,loadRecords='',''
-  # problem here with multiple dbs per crate: 
   for crate in crates:
-    startCrates += 'Start_SCALERS_CRATE("%d","%s")\n'%(int(crate['CrNo']),crate['CrName'])
-    subFileName=re.sub('.*/','',crate['subFileName'])
-    loadRecords += 'dbLoadTemplate("db/%s")\n'%(subFileName)
+
+    if startCrates.find(crate['CrName'])<0:
+      startCrates += 'Start_SCALERS_CRATE("%d","%s")\n'%(int(crate['CrNo']),crate['CrName'])
+
+    for subFileName in crate['subFileName']:
+      subFileName=re.sub('.*/','',subFileName)
+      loadRecords += 'dbLoadTemplate("db/%s")\n'%(subFileName)
+
+    #subFileName=re.sub('.*/','',crate['subFileName'])
+    #loadRecords += 'dbLoadTemplate("db/%s")\n'%(subFileName)
+
   contents= STARTUP.replace('STARTCRATE',startCrates)
   contents=contents.replace('LOADRECORDS',loadRecords)
   print >>file,contents
   if fileName!=None:
     file.close()
-    # add comment on why I did this:
+    # add execute permissions to startups:
     st=os.stat(fileName)
     os.chmod(fileName,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
@@ -79,7 +131,7 @@ def mkChannelsECAL(crateNumber,sector,system):
   layers=['UI','VI','WI','UO','VO','WO']
   nPerLayer,iChan,channels=36,0,[]
   for slot in [3,4,5,6,7,8,9,10,13,14,15,16,17,18]:
-    if system!='FADC': slot=fadcslot2discslot(slot)
+    if system!='FADC': slot=SLOT_F2D['ECAL'][slot]
     for chan in range(16):
       if slot==9 and chan>11: break
       if iChan%nPerLayer==0:
@@ -99,7 +151,7 @@ def mkChannelsPCAL(crateNumber,sector,system):
   nPerLayers={'U':68,'V':62,'W':62}
   iChan,channels=0,[]
   for slot in [3,4,5,6,7,8,9,10,13,14,15,16]:
-    if system!='FADC': slot=fadcslot2discslot(slot)
+    if system!='FADC': slot=SLOT_F2D['PCAL'][slot]
     for chan in range(16):
       if iChan==0 or iChan%nPerLayers[layer]==0:
         iChan=0
@@ -117,14 +169,16 @@ def mkChannelsLTCC(crateNumber,sector,system):
   else:              crate='TDCECAL'+str(sector)
   sides=['L','R']
   nChanPerSide=18
-  # LTCC starts in slot 18, channel 12 (after last ECAL channel)
-  hwSlot,hwChan=18,12
+  # LTCC FADC starts in slot 18, channel 12 (after last ECAL channel)
+  fadcSlot,hwChan=18,12
   channels=[]
   for side in sides:
     for detChan in range(1,nChanPerSide+1):
         if hwChan>=16:
           hwChan=0
-          hwSlot+=1
+          fadcSlot+=1
+        hwSlot=fadcSlot
+        if system!='FADC': hwSlot=SLOT_F2D['ECAL'][hwSlot]
         channel={'Sl':'%.2d'%(hwSlot),'Ch':'%.2d'%(hwChan),'Side':side,'CrName':crate,'Det':'LTCC','Sys':system}
         channel['Element']='SEC%d_%s%.2d'%(sector,side,detChan)
         setCodes(crateNumber,channel)
@@ -213,7 +267,7 @@ def mkChannelsFTOF(crateNumber,sector,system):
   for ii in range(17*16):
     if layers[ii]==0: continue
     slot=ii/16
-    if system!='FADC': slot=fadcslot2discslot(slot)
+    if system!='FADC': slot=SLOT_F2D['FTOF'][slot]
     channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(ii%16),'CrName':crate,'Det':'FTOF','Sys':system}
     channel['Element']='SEC%d_PANEL%s_%s_E%.2d'%(
         sector,_layers[layers[ii]],_lrs[lrs[ii]],slabs[ii])
@@ -224,17 +278,21 @@ def mkChannelsFTOF(crateNumber,sector,system):
 def mkCrates(channels,subfileName):
   crates=[]
   for channel in channels:
-    oldCrate=False
+    oldCrate=None
     for crate in crates:
-      if crate['CrNo']!=channel['CrNo']: continue
-      if crate['CrName']!=channel['CrName']: continue
-      oldCrate=True
-    if not oldCrate:
+      if crate['CrName']==channel['CrName']:
+        oldCrate=crate
+        break
+    if oldCrate==None:
       crate={}
+      crate['Det']=channel['Det']
       crate['CrNo']=channel['CrNo']
       crate['CrName']=channel['CrName']
-      crate['subFileName']=subfileName
+      crate['subFileName']=[subfileName]
       crates.append(crate)
+    else:
+      if subfileName not in oldCrate['subFileName']:
+        oldCrate['subFileName'].append(subfileName)
   return crates
 
 def mkChannels(detector,crateNumber,sector,system):
@@ -248,7 +306,8 @@ def mkChannels(detector,crateNumber,sector,system):
 def mkSector(sector):
   iCrate,crates=0,[]
   for system in ['FADC','DISC']:
-    for detector in ['ECAL','PCAL','FTOF','LTCC']:
+    for detector in ['ECAL','LTCC','PCAL','FTOF']:
+      if detector=='LTCC': iCrate-=1 # <--- HACK
       channels=mkChannels(detector,iCrate,sector,system)
       subFileName='../Db/jscalers_S%d_%s_%s.sub'%(sector,detector,system)
       printSubstitutions(channels,subFileName)

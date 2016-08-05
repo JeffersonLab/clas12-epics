@@ -51,9 +51,10 @@ BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] iocname"
+    echo "usage: $SCRIPT_NAME [-h] [-R] iocname"
     echo ""
     echo "[-h] Print Help"
+    echo "[-R] Reboot IOC Non-Interactively (send ctrl-X through netcat)"
     echo ""
     echo "Examples:"
     echo "$SCRIPT_NAME [-h]"
@@ -156,26 +157,29 @@ function printconfig {
     echo ""
 }
 
-
 #-----------------------------------------------------------------------
 # Process Options
 #-----------------------------------------------------------------------
 parseconfig
 
-while getopts ":h:" opt; do
+reboot=0
+
+while getopts hR opt; do
     case $opt in
         
     h) usage 
        return 0
        ;;
-       \?) echo "Unknown Option: $opt"
-              usage
-           return 0
-           ;;
-        *) echo "Unknown Option: $opt"
+   R) reboot=1
+       ;;
+   \?) echo "Unknown Option: $opt"
        usage
-           return 1
-                ;;      
+       return 0
+       ;;
+   *) echo "Unknown Option: $opt"
+       usage
+       return 1
+       ;;
     esac
 done
 
@@ -190,6 +194,7 @@ if [ -z "$1" ]; then
     usage
     exit 1
 fi
+
 
 #-----------------------------------------------------------------------
 # Data File Sanity Check
@@ -251,12 +256,27 @@ if [ $ret = 0 ]; then
     exit 1
 fi
       
+rebootcmd="echo 18 | xxd -r -p | nc localhost $(eval echo \$${1}_port)"
+
 if [ "$(eval echo \$${1}_host)" = "$HOST" ] ; then
-    echo "$TELNET localhost $(eval echo \$${1}_port)"
-    $TELNET localhost $(eval echo \$${1}_port)
+    if [ $reboot == 0 ]; then
+        echo "$TELNET localhost $(eval echo \$${1}_port)"
+        $TELNET localhost $(eval echo \$${1}_port)
+    else
+        echo "Rebooting $1 ..."
+        echo "echo 18 | xxd -r -p | nc localhost $(eval echo \$${1}_port)"
+        echo 18 | xxd -r -p | nc localhost $(eval echo \$${1}_port)
+    fi
 else
-    echo $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
-    $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
+    if [ $reboot == 0 ]; then
+        echo $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
+        $SSH "$(eval echo \$${1}_host)" $TELNET localhost $(eval echo \$${1}_port)
+    else
+        rebootcmd="'$rebootcmd'"
+        echo "Rebooting $1 ...."
+        echo $SSH $(eval echo \$${1}_host) $rebootcmd
+        $SSH $(eval echo \$${1}_host) \'$rebootcmd\'
+    fi
 fi
 
 exit 0

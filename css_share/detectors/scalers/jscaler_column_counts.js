@@ -16,7 +16,7 @@ for (var cc=1; cc<=NCHAN; cc++) {
     lc.setPropertyValue("foreground_color","Header_Foreground");
     lc.setPropertyValue("width",60);
     lc.setPropertyValue("height",15);
-    lc.setPropertyValue("horizontal_alignment",2);
+    lc.setPropertyValue("horizontal_alignment",1);
     lc.setPropertyValue("font","Fine Print");
     lc.setPropertyValue("precision_from_pv",0);
     lc.setPropertyValue("precision",0);

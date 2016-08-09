@@ -9,6 +9,8 @@ import sys,os,stat,re
 DBFILE='db/jscaler_channel.db'
 KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
 
+
+
 FTOF_SLOT_F2D={
     3:2,
     4:4,
@@ -81,6 +83,7 @@ cd ${TOP}/iocBoot/${IOC}
 
 iocInit
 '''
+
 
 def printSubstitutions(channels,fileName=None):
   if fileName!=None: file=open(fileName,'w')
@@ -302,6 +305,23 @@ def mkChannels(detector,crateNumber,sector,system):
   elif detector=='LTCC': return mkChannelsLTCC(crateNumber,sector,system)
   else: sys.exit('Invalid detector:  ',detector)
 
+def printTriggerSubs(sector,CrNo,CrName):
+  if CrName.find('FTOF')<0 and CrName.find('PCAL')<0: return
+  channels=[]
+  if CrName.find('FTOF')>=0:
+    cc={'Sl':'20','Ch':'15','Det':'TRIG','Sys':'DISC','CrName':CrName,'CrNo':CrNo}
+    cc['Element']='SEC%d_F%.2d'%(sector,15)
+    setCodes(CrNo,cc)
+    channels.append(cc)
+  elif CrName.find('PCAL')>=0:
+    for ch in range(16):
+      cc={'Sl':'18','Ch':'%.2d'%(ch),'Det':'TRIG','Sys':'DISC','CrName':CrName,'CrNo':CrNo}
+      cc['Element']='SEC%d_P%.2d'%(sector,ch)
+      setCodes(CrNo,cc)
+      channels.append(cc)
+  subFileName='../Db/jscalers_%s_TRIG.sub'%(CrName)
+  printSubstitutions(channels,subFileName)
+
 # make substution files and one startup per sector:
 def mkSector(sector):
   iCrate,crates=0,[]
@@ -311,8 +331,11 @@ def mkSector(sector):
       channels=mkChannels(detector,iCrate,sector,system)
       subFileName='../Db/jscalers_S%d_%s_%s.sub'%(sector,detector,system)
       printSubstitutions(channels,subFileName)
+      if system=='DISC' and (detector=='PCAL' or detector=='FTOF'):
+        printTriggerSubs(sector,iCrate,'TDC'+detector+str(sector))
       crates.extend(mkCrates(channels,subFileName))
       iCrate += 1
+
   printStartup(crates,'jscalers_S%d.cmd'%(sector))
 
 

@@ -14,8 +14,14 @@ cRio_registerRecordDeviceDriver(pdbbase)
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
+## cRIO heartbeat alarms
+dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_FC_,   DLY=60")
+dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_GS_,   DLY=60")
+dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_SF_,   DLY=60")
+# dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
+# dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_HTCC_, DLY=60")
+# dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_SVT_,  DLY=60")
 ## Detector Systems
-dbLoadRecords("db/cRioTest.db",         "P=B_SVT_,R=N2_")
 dbLoadRecords("db/gas_cRIO_DC.db",      "P=B_DET_,R=DC_")
 dbLoadRecords("db/gas_cRIO_FTC.db",     "P=B_DET_,R=FTC_")
 # dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_,R=HTCC_")
@@ -34,6 +40,7 @@ cd "${TOP}/iocBoot/${IOC}"
 ## autosave setup
 < save_restore.cmd
 
+dbl > pv.list
 iocInit
 
 ## autosave startup
@@ -41,6 +48,4 @@ iocInit
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
-#create_monitor_set("gas_dc_settings.req", 30, "P=B_DET_,R=DC_")
-
 

@@ -24,7 +24,7 @@
   </background_color>
   <width>1760</width>
   <x>-1</x>
-  <name>FTOF DISC Scalers S4</name>
+  <name>FTOF DISC Scalers S$(SEC)</name>
   <grid_space>6</grid_space>
   <show_ruler>true</show_ruler>
   <y>-1</y>
@@ -50,7 +50,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL1B_L_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL1B_L_E</P>
       <N>62</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -64,9 +64,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>10</x>
+    <x>12</x>
     <name>Linking Container</name>
-    <y>10</y>
+    <y>30</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -92,7 +92,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL1B_R_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL1B_R_E</P>
       <N>62</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -106,9 +106,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>454</x>
+    <x>456</x>
     <name>Linking Container_1</name>
-    <y>10</y>
+    <y>30</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -134,7 +134,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL1A_L_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL1A_L_E</P>
       <N>23</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -148,9 +148,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>898</x>
+    <x>900</x>
     <name>Linking Container_2</name>
-    <y>10</y>
+    <y>30</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -176,7 +176,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL1A_R_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL1A_R_E</P>
       <N>23</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -190,9 +190,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>1342</x>
+    <x>1344</x>
     <name>Linking Container_3</name>
-    <y>10</y>
+    <y>30</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -218,7 +218,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL2_L_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL2_L_E</P>
       <N>5</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -232,9 +232,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>898</x>
+    <x>900</x>
     <name>Linking Container_4</name>
-    <y>390</y>
+    <y>410</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -260,7 +260,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_FTOF_FADC_SEC4_PANEL2_R_E</P>
+      <P>B_DET_FTOF_FADC_SEC$(SEC)_PANEL2_R_E</P>
       <N>5</N>
     </macros>
     <resize_behaviour>2</resize_behaviour>
@@ -274,15 +274,114 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>440</width>
-    <x>1342</x>
+    <x>1344</x>
     <name>Linking Container_5</name>
-    <y>390</y>
+    <y>410</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>72ae08ef:156748a661f:-4dc7</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>19</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>Sectors</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>91</width>
+    <x>12</x>
+    <name>Menu Button</name>
+    <y>6</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>1</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 1</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>2</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 2</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>3</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 3</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>4</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 4</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>5</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 5</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ftof_fadc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <SEC>6</SEC>
+        </macros>
+        <replace>1</replace>
+        <description>Sector 6</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

@@ -170,6 +170,12 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>CTOF LMS</description>
         </action>
+        <action type="EXECUTE_CMD">
+          <command></command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>CTOF LV</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -293,12 +299,40 @@ $(pv_value)</tooltip>
           <description>ECAL HV</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_full.opi</path>
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ecal_disc.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
           </macros>
           <replace>2</replace>
           <description>ECAL DISC Scalers S4 Debug</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ecal_fadc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>ECAL FADC Scalers S4 Debug</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_pcal_disc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>PCAL DISC Scalers S4 Debug</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_pcal_fadc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>PCAL FADC Scalers S4 Debug</description>
         </action>
       </actions>
       <font>
@@ -431,7 +465,7 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/test/jscaler_full.opi</path>
+          <path>/CLAS12_Share/detectors/FTOF/FTOF.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
@@ -439,20 +473,22 @@ $(pv_value)</tooltip>
           <description>FTOF HV</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/test/jscaler.opi</path>
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ftof_disc.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>FTOF Scalers S4</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_full2.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
           </macros>
           <replace>2</replace>
           <description>FTOF DISC Scalers S4 Debug</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ftof_fadc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>4</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>FTOF FADC Scalers S4 Debug</description>
         </action>
       </actions>
       <font>
@@ -1437,6 +1473,14 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>FCUP Calculation</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/scalers/jscaler_trigger.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Trigger</description>
         </action>
       </actions>
       <font>

@@ -7,6 +7,84 @@
 # Date:   Feb 2016
 #
 
+# From cRIO
 record(bi, "$(P)$(R)HEARTBEAT") {
+    field(VAL, "0")
+}
+
+# From cRIO
+record(ai, "$(P)$(R)UPTIME") {
+    field(EGU, "s")
+}
+
+# From cRIO
+record(ai, "$(P)$(R)CPULOAD") {
+    field(PREC, "1")
+    field(EGU,  "%")
+}
+
+#
+# Heartbeat alarms modified from Hall D (hovanes)
+#
+#
+# A set of records to check that a hearbeat is 
+# changing is value to 0 and 1. 
+# If for some time interval it does not do that 
+# the record $(R)HEARTBEAT_check is set to 0. 
+# Otherwise its value is 1.
+#
+#
+
+# Check for 0 value in heartbeat, if not detected increment by 1
+record(calc,"$(P)$(R)HEARTBEAT_0s") {
+        field(DESC,"Counter of 0 states" )
+        field(SCAN,".1 second") 
+        field(CALC,"(a&1)=0?0:b+1")
+        field(INPA,"$(P)$(R)HEARTBEAT NPP MS")
+        field(INPB,"$(P)$(R)HEARTBEAT_0s NPP NMS")
+}
+
+# Check for 1 value in heartbeat, if not detected increment by 1
+record(calc,"$(P)$(R)HEARTBEAT_1s") {
+        field(DESC,"Counter of 1 states" )
+        field(SCAN,".1 second") 
+        field(CALC,"(a&1)=1?0:b+1")
+        field(INPA,"$(P)$(R)HEARTBEAT NPP MS")
+        field(INPB,"$(P)$(R)HEARTBEAT_1s NPP NMS")
+}
+
+# Calculates if hartbeat is present or not
+# 1 - heartbeat is present, 0 - no heartbeat
+record(calc,"$(P)$(R)HEARTBEAT_CALC") {
+        field(DESC,"Check for heartbeat")
+        field(SCAN,".2 second") 
+        field(CALC,"a<(g*10)&b<(g*10)?1:0")
+        field(FLNK,"$(P)$(R)HEARTBEAT_STAT PP NMS")
+        field(INPA,"$(P)$(R)HEARTBEAT_0s NPP MS")
+        field(INPB,"$(P)$(R)HEARTBEAT_1s NPP MS")
+        field(INPG,"$(P)$(R)HEARTBEAT_DELAY CPP NMS")
+        field(LOW,  "0.1")
+        field(LSV,  "MAJOR")
+}
+
+record(bi, "$(P)$(R)HEARTBEAT_STAT") {
+        field(DESC, "Heartbeat status")
+        field(SCAN, "Passive")
+        field(PINI, "1" ) 
+        field(INP , "$(P)$(R)HEARTBEAT_CALC NPP NMS")
+        field(ZNAM, "Dead" )
+        field(ONAM, "Live" )
+        field(ZSV,  "MAJOR")
+        field(OSV,  "NO_ALARM")
+}
+
+# This record indicates how many seconds to wait before 
+# determining that the heartbeat is missing. 
+record(ai,"$(P)$(R)HEARTBEAT_DELAY") {
+        field(DESC,"Time limit for missing heartbeats")
+        field(SCAN,"Passive") 
+        field(PINI, "1")
+        field(EGU,  "s")
+        field(VAL,  "$(DLY=30)")
 }
 

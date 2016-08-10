@@ -9,8 +9,6 @@ import sys,os,stat,re
 DBFILE='db/jscaler_channel.db'
 KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
 
-
-
 FTOF_SLOT_F2D={
     3:2,
     4:4,

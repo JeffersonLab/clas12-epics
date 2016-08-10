@@ -308,7 +308,7 @@ def printTriggerSubs(sector,CrNo,CrName):
   channels=[]
   if CrName.find('FTOF')>=0:
     cc={'Sl':'20','Ch':'15','Det':'TRIG','Sys':'DISC','CrName':CrName,'CrNo':CrNo}
-    cc['Element']='SEC%d_F%.2d'%(sector,15)
+    cc['Element']='SEC%d_F%.2d'%(sector,0)
     setCodes(CrNo,cc)
     channels.append(cc)
   elif CrName.find('PCAL')>=0:

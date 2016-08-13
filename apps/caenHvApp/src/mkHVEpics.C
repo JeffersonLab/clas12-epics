@@ -320,7 +320,7 @@ int CTOFGen(int crate0=0, int slot0=0, int chan0=0,int det=CTOF ){
   const char  *SysFull[]={ "Up/Down stream",  "Element 1-62" };
   
   //Detector Sector,Layer, ...
-  const char *det_template   ="B_%s_%s_E%02d%s";
+  const char *det_template   ="B_%s_%s_%s%02d";
 
   int maxSlot=4;
   int maxChan=23;
@@ -338,7 +338,7 @@ int CTOFGen(int crate0=0, int slot0=0, int chan0=0,int det=CTOF ){
 	
 	markCSCUsed(det,cr,sl,ch);
 	
-	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],b+e,sideNames[s]);
+	sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],sideNames[s],b+e);
 	sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
 	printNames(canonicalName,alias);
 	

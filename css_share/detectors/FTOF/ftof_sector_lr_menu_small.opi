@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>20</height>
+  <height>12</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -19,33 +19,83 @@
     <min_height>-1</min_height>
   </auto_scale_widgets>
   <background_color>
-    <color name="OPI_Background" red="50" green="50" blue="50" />
+    <color name="Read_Background" red="77" green="77" blue="77" />
   </background_color>
-  <width>60</width>
-  <x>-1</x>
+  <width>14</width>
+  <x>0</x>
   <name>Display</name>
   <grid_space>6</grid_space>
   <show_ruler>true</show_ruler>
-  <y>-1</y>
+  <y>0</y>
   <snap_to_geometry>false</snap_to_geometry>
   <foreground_color>
     <color red="192" green="192" blue="192" />
   </foreground_color>
   <actions hook="false" hook_all="false" />
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>13811c48:155e6e802b3:-618d</wuid>
+    <transparent>false</transparent>
+    <auto_size>false</auto_size>
+    <text>$(SIDE)</text>
+    <scripts />
+    <height>12</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color name="Read_Background" red="77" green="77" blue="77" />
+    </background_color>
+    <width>12</width>
+    <x>120</x>
+    <name>Label</name>
+    <y>138</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>ftof_channels.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description></description>
+      </action>
+    </actions>
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Default" height="7" style="0">Fineprint</opifont.name>
+    </font>
+  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
     <border_style>1</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <actions_from_pv>false</actions_from_pv>
     <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>Sec$(SECTOR) Panel$(PANEL) Menu</tooltip>
+    <tooltip>Sec$(SECTOR) Panel$(PANEL) $(SIDE) Menu</tooltip>
     <rules />
     <enabled>true</enabled>
-    <wuid>-1d1e7440:1520a7cdd73:299b</wuid>
+    <wuid>26c3107e:156861f8861:-3612</wuid>
     <transparent>false</transparent>
     <pv_value />
     <scripts />
     <border_alarm_sensitive>true</border_alarm_sensitive>
-    <height>20</height>
+    <height>12</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -57,15 +107,15 @@
     <border_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </border_color>
-    <label>Sector $(SECTOR)</label>
+    <label>$(SIDE)</label>
     <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
       <color name="Read_Background" red="77" green="77" blue="77" />
     </background_color>
-    <width>60</width>
+    <width>14</width>
     <x>0</x>
-    <name>Menu Button</name>
+    <name>Menu Button_1</name>
     <y>0</y>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
@@ -77,25 +127,25 @@
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Sector$(SECTOR) Panel$(PANEL) - Open Channel Controls</description>
+        <description>Sector$(SECTOR) Panel$(PANEL) $(SIDE) - Open Channel Controls</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/FTOF/scripts/ftof_on.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Sector$(SECTOR) Panel$(PANEL) - Turn All ON</description>
+        <description>Sector$(SECTOR) Panel$(PANEL) $(SIDE) - Turn All On</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/FTOF/scripts/ftof_off.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Sector$(SECTOR) Panel$(PANEL) - Turn All OFF</description>
+        <description>Sector$(SECTOR) Panel$(PANEL) $(SIDE) - Turn All Off</description>
       </action>
     </actions>
     <font>
-      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+      <opifont.name fontName="Default" height="7" style="0">Fineprint</opifont.name>
     </font>
   </widget>
 </display>

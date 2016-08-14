@@ -11,6 +11,9 @@ include $(TOP)/configure/CONFIG
 DB    += caenhv.db
 DB    += $(wildcard ../*.substitutions)
 
+DB    += $(wildcard ../sums/*.substitutions)
+DB    += $(wildcard ../sums/*.db)
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

@@ -25,26 +25,24 @@ file "db/torus_ai_generic.db" {
 
 file "db/torus_ao_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_PT_Interlock_Threshold, atma,   2, "PT8557T Pres. Limit" }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_TP_Interlock_Threshold,    K,   2, "TP8151 Temp Limit" }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8554_LL_Interlock_Threshold,  "%",   2, "LL8554CP Level Limit" }
-    { PLC_CRYO, B_TORUS:, LN2:, DTGN2_Interlock_Threshold,         K,   2, "GN2_METAL_DT Max DT" }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_PT_Interlock_Threshold, atma,   2, "PT8557T Pres. Threshold" }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_TP_Interlock_Threshold,    K,   2, "TP8151 Temp Threshold" }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8554_LL_Interlock_Threshold,  "%",   2, "LL8554CP Level Threshold" }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8556T_DT_Interlock_Threshold,    K,   2, "GN2_METAL_DT Threshold" }
 }
 
 file "db/torus_bi_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_Enable_RB, Disabled, Enabled, "HTR8559 Interlock" }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8559_Permit,    Disabled, Enabled, "HTR8559 Interlock" }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8554_Enable_RB, Disabled, Enabled, "HTR8554 Interlock" }
     { PLC_CRYO, B_TORUS:, LN2:, HTR8554_Permit,    Disabled, Enabled, "HTR8554 Interlock" }
-    { PLC_CRYO, B_TORUS:, LN2:, GN2_ValveClose,    Ok,       Fault,   "PV8556T forced closed" }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8556T_Permit,    Disabled, Enabled, "PV8556T Interlock" }
 }
 
 file "db/torus_bo_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, HIGH, DESC }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_Interlock_PB, "", Reset, 1.0, "HTR8559 Interlock" }
-    { PLC_CRYO, B_TORUS:, LN2:, HTR8554_Interlock_PB, "", Reset, 1.0, "HTR8554 Interlock" }
-    { PLC_CRYO, B_TORUS:, LN2:, GN2_Interlock_PB,     "", Reset, 1.0, "GN2 Diff Temp. Intlk" }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8559_Interlock_PB, "", Reset, 1.0, "HTR8559 Interlock Reset" }
+    { PLC_CRYO, B_TORUS:, LN2:, HTR8554_Interlock_PB, "", Reset, 1.0, "HTR8554 Interlock Reset" }
+    { PLC_CRYO, B_TORUS:, LN2:, PV8556T_Interlock_PB, "", Reset, 1.0, "PV8563T Interlock Reset" }
 }
 
 # cPID_Records
@@ -72,3 +70,7 @@ file "db/datatype_cpid.db" {
 #   { PLC_CRYO, B_TORUS:, LN2:, PV8522TCD   }
 }
 
+file "db/datatype_cpid_intlk.db" {
+    pattern{ P, R, TAG, INTLK }
+    { B_TORUS:, LN2:, HTR8559, B_TORUS:LN2:HTR8559_Permit }
+}

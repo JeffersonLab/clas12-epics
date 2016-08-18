@@ -1,0 +1,25 @@
+#
+# datatype_cpid_interlock.db - (PLC cPID Record)
+# 
+# Purpose:
+#   In several cases, the PLC interlocks set a PID to manual and load 
+#   a specific setpoint (usually 0).  When this happens, they set the 
+#   MODE to manual but it doesn't set the MMOD setpoint to manual.  The 
+#   fix was not easy on the PLC-side, so this workaround/hack will set 
+#   MMOD to manual in the associated interlock is tripped.  
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Aug 2016
+#
+
+# If INTLK=0, set MMOD to Manual/1.
+# If INTLK=1, do nothing
+record(calcout, "$(P)$(R)$(TAG):MMOD:FORCE") {
+    field(DESC, "Force MMOD to Manual")
+    field(CALC, "A?0:1")
+    field(INPA, "$(INTLK="1")")
+    field(OOPT, "Transition To Non-zero")
+    field(OUT,  "$(P)$(R)$(TAG):MMOD:SET")
+    field(SCAN, ".1 second")
+    field(FLNK, "$(P)$(R)$(TAG):MMOD:SET")
+}

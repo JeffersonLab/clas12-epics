@@ -13,11 +13,11 @@ else           label += "Panel "+panel+", ";
 if (side==0)   label += "Left & Right";
 else if (side=="L") label += "Left";
 else if (side=="R") label += "Right";
-label += "\n\n               Really??"
+label += "\n\n               Really??";
 
-var response = GUIUtil.openConfirmDialog(label);
-if (response)
-{
+//var response = GUIUtil.openConfirmDialog(label);
+//if (response)
+//{
     var nSectors=6;
     var sides=["L","R"];
     var panels=["1B","1A","2"];
@@ -59,5 +59,5 @@ if (response)
 
     }
 
-}
+//}
 

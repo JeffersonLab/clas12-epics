@@ -16,11 +16,11 @@ if      (uvw=="U")  label += "U Layer";
 else if (uvw=="V")  label += "V Layer";
 else if (uvw=="W")  label += "W Layer";
 else                label += "U, V, & W Layers";
-label += "\n\n               Really??"
+label += "\n\n               Really??";
 
-var response = GUIUtil.openConfirmDialog(label);
-if (response)
-{
+//var response = GUIUtil.openConfirmDialog(label);
+//if (response)
+//{
 
     var nsectors=6;
     var uvws=["U","V","W"];
@@ -67,4 +67,4 @@ if (response)
             }
         }
     }
-}
+//}

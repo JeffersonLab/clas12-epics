@@ -3,10 +3,10 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 var label = "Turn OFF ALL CTOF HV\n\n";
 label +=    "      Really??"
 
-var response = GUIUtil.openConfirmDialog(label);
+//var response = GUIUtil.openConfirmDialog(label);
 
-if (response)
-{
+//if (response)
+//{
     var prefix = "B_DET_CTOF_HV_";
 
     for (var cc=1; cc<=48; cc++)
@@ -19,4 +19,4 @@ if (response)
         PVUtil.writePV(pvD,0);
     }
 
-}
+//}

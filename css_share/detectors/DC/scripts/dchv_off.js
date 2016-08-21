@@ -2,8 +2,6 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var PREFIX = "B_DET_DC_HV"
 
-var novice = PVUtil.getDouble(pvs[0]);
-
 var SECTOR = widget.getMacroValue("SECTOR");
 var REGION = widget.getMacroValue("REGION");
 var SLAYER = widget.getMacroValue("SLAYER");

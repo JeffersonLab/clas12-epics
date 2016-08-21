@@ -176,12 +176,11 @@ def genSector(sector,x0,y0):
 
 
 print HEAD
-for qq in range(1,5):
-  genSector(1,50+10,50)
-  genSector(2,50+250,50)
-  genSector(3,50+490,50)
-  genSector(4,50+10,250)
-  genSector(5,50+250,250)
-  genSector(6,50+490,250)
+genSector(1,50+10,50)
+genSector(2,50+250,50)
+genSector(3,50+490,50)
+genSector(4,50+10,300)
+genSector(5,50+250,300)
+genSector(6,50+490,300)
 print TAIL
 

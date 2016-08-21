@@ -198,12 +198,17 @@ class SaveRestore:
     [out,err]=restoreBurt(snpFilename)
     exit('RESTORED SETTINGS FROM\n\n'+snpFilename)
 
+#def getParent():
+#  os.getppid()
+#  with open('/proc/'+os.getppid()+'/comm') as file: lines=file.readlines()
+
 def main():
 
   scriptName=sys.argv.pop(0)
-  usage=scriptName+' [-b] [-m] [sec=S#] det=detectorName save|restore'
+  usage=scriptName+' [-b] [-m] det=detectorName save|restore'
 
   det=None
+  filename=None
   sector=None
   saverestore=None
   printMya=False
@@ -221,11 +226,11 @@ def main():
     elif arg.find('=')>=0:
       (key,val)=arg.split('=',1)
       if   key=='det': det=val
-      elif key=='sec': sector=val
+#      elif key=='sec': sector=val
       else: sys.exit(usage)
       sys.argv.remove(arg)
 
-  if sector != None: sector=sector.replace('S','')
+#  if sector != None: sector=sector.replace('S','')
   if (det==None): sys.exit(usage)
   if (det not in DETS): sys.exit(usage)
 
@@ -244,15 +249,17 @@ def main():
 
   user = pwd.getpwuid(os.getuid())[0]
   if os.getgid() != grp.getgrnam('onliners').gr_gid:
-      exit('BACKUPS REQUIRE MEMBERSHIP IN GROUP onliners.\n\n'+user+' IS NOT A MEMBER.\n\nEXITING.')
+      sys.exit('BACKUPS REQUIRE MEMBERSHIP IN GROUP onliners.\n\n'+user+' IS NOT A MEMBER.\n\nEXITING.')
 
   backup = SaveRestore()
 
   if saverestore=='save':
-    filename = backup.chooseNewBackup(det,sector)
+    if filename==None:
+      filename = backup.chooseNewBackup(det,sector)
     backup.saveBurt(filename,det,sector)
   elif saverestore=='restore':
-    filename = backup.chooseOldBackup(det)
+    if filename==None:
+      filename = backup.chooseOldBackup(det)
     if filename != None: backup.restoreBurt(filename)
 
 

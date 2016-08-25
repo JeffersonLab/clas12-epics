@@ -11156,7 +11156,7 @@ Reservoir</text>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>0</border_style>
     <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
+    <horizontal_alignment>0</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
     <wuid>656c1f2a:153d32deee8:-43d3</wuid>
@@ -11181,8 +11181,8 @@ Reservoir</text>
     <background_color>
       <color red="255" green="255" blue="255" />
     </background_color>
-    <width>185</width>
-    <x>10</x>
+    <width>175</width>
+    <x>16</x>
     <name>Label_132</name>
     <y>44</y>
     <foreground_color>
@@ -12325,6 +12325,14 @@ $(pv_value)</tooltip>
         <replace>2</replace>
         <description>Nitrogen Alarm Settings</description>
       </action>
+      <action type="OPEN_DISPLAY">
+        <path>torus_LHe.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Helium</description>
+      </action>
     </actions>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
@@ -13308,7 +13316,7 @@ $(pv_value)</tooltip>
     <height>20</height>
     <border_width>1</border_width>
     <visible>true</visible>
-    <pv_name>B_TORUS:LN2:PV8556T_Permit</pv_name>
+    <pv_name>B_TORUS:LN2:GN2_ValveClose</pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
@@ -13331,7 +13339,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>29b01209:156562d0654:-624c</wuid>
     <on_color>
-      <color name="OK" red="0" green="255" blue="0" />
+      <color name="Major" red="255" green="0" blue="0" />
     </on_color>
     <scripts />
     <border_alarm_sensitive>true</border_alarm_sensitive>
@@ -13342,7 +13350,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Major" red="255" green="0" blue="0" />
+      <color name="OK" red="0" green="255" blue="0" />
     </off_color>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <background_color>
@@ -13388,7 +13396,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>B_TORUS:LN2:PV8556T_Permit</pv_name>
+    <pv_name>B_TORUS:LN2:GN2_ValveClose</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="120" green="120" blue="120" />
@@ -13460,6 +13468,60 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Cantarell" height="9" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+    <toggle_button>false</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>Related Displays</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-1c763307:1567518bfd3:-1877</wuid>
+    <pv_value />
+    <text>[...]</text>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>25</height>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <image></image>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Action Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>30</width>
+    <x>163</x>
+    <name>Action Button_2</name>
+    <y>41</y>
+    <style>0</style>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="true">
+      <action type="OPEN_DISPLAY">
+        <path>torus_dbx.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Cryo DBox</description>
+      </action>
+    </actions>
     <font>
       <opifont.name fontName="Cantarell" height="9" style="0">Fine Print</opifont.name>
     </font>

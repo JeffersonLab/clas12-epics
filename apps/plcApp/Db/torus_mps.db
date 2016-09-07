@@ -206,6 +206,15 @@ record(bi, "$(P)$(R)Polarity") {
     field(ONAM, "POSITIVE")
 }
 
+record(bi, "$(P)$(R)Direction") {
+    field(DESC, "Field Direction")
+    field(INP,  "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_MPS.Polarity")
+    field(ZNAM, "CCW")
+    field(ONAM, "CW")
+}
+
 record(bo, "$(P)$(R)OnOffSet") {
     field(DTYP, "EtherIP")
     field(OUT,  "@$(PLCID) Torus_MPS.Contactor_SW S 1")
@@ -238,4 +247,10 @@ record(bi, "$(P)$(R)OnOff") {
 record(bo, "$(P)$(R)FastDump") {
     field(DTYP, "EtherIP")
     field(OUT,  "@$(PLCID) EPICS_Fast_Dump_sw S 1")
+}
+
+# Tie pushbutton to .PROC
+record(ao, "$(P)$(R)StopRamp") {
+    field(DOL, "$(P)$(R)IsetRdbk")
+    field(OUT, "$(P)$(R)Iset PP")
 }

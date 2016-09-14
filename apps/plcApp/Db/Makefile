@@ -24,6 +24,7 @@ DB  += datatype_loadcell.db
 REQ += datatype_loadcell.req
 DB  += datatype_straingage.db
 REQ += datatype_straingage.req
+DB  += solenoid_LHe.substitutions
 DB  += torus_ai_generic.db
 DB  += torus_ai_renamed.db
 DB  += torus_ao_generic.db

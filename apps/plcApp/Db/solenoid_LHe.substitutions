@@ -1,0 +1,66 @@
+#
+# solenoid_LHe.substitutions
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct 2016
+#
+
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    # temperature, Cernox
+    { PLC_SOL, B_SOL:, LHe:, TR8611,    K,      2, "LHe Supply" }
+    { PLC_SOL, B_SOL:, LHe:, TR8622A,   K,      2, "Lead A Top" }
+    { PLC_SOL, B_SOL:, LHe:, TR8622B,   K,      2, "Lead B Top" }
+    { PLC_SOL, B_SOL:, LHe:, TR8624A,   K,      2, "Lead A Btm" }
+    { PLC_SOL, B_SOL:, LHe:, TR8624B,   K,      2, "Lead B Btm" }
+    { PLC_SOL, B_SOL:, LHe:, TR8670,    K,      2, "LHe Tank Vent" }
+    { PLC_SOL, B_SOL:, LHe:, TR8671,    K,      2, "Magnet Res. Rtn" }
+    { PLC_SOL, B_SOL:, LHe:, TR8672,    K,      2, "Shield Supply" }
+    { PLC_SOL, B_SOL:, LHe:, TR8673,    K,      2, "Shield Vent" }
+    { PLC_SOL, B_SOL:, LHe:, TR8674,    K,      2, "LHe Tank Vent" }
+    # temperature, PT100
+    { PLC_SOL, B_SOL:, LHe:, TP8621A,   K,      2, "Lead A Warm End" }
+    { PLC_SOL, B_SOL:, LHe:, TP8621B,   K,      2, "Lead B Warm End" }
+    { PLC_SOL, B_SOL:, LHe:, TP8675,    K,      2, "LHe Rtn Line" }
+    { PLC_SOL, B_SOL:, LHe:, TP8676A,   K,      2, "LHe Rtn Line" }
+    { PLC_SOL, B_SOL:, LHe:, TP8676B,   K,      2, "LHe Rtn Line" }
+    { PLC_SOL, B_SOL:, LHe:, TP8677,    K,      2, "LHe Rtn Line" }
+    # pressure
+    { PLC_SOL, B_SOL:, LHe:, PT8620,    atma,   2, "Lead Res." }
+    { PLC_SOL, B_SOL:, LHe:, PT8670,    atma,   2, "Magnet Res." }
+    { PLC_SOL, B_SOL:, LHe:, PT8675A,   atma,   2, "LHe Rtn Line" }
+    { PLC_SOL, B_SOL:, LHe:, PT8677,    atma,   2, "Inlet to Guard Vac" }
+    { PLC_SOL, B_SOL:, LHe:, LL8620DP,  atma,   2, "Lead Res." }
+    { PLC_SOL, B_SOL:, LHe:, LL8670DP,  atma,   2, "Magnet Res." }
+    { PLC_SOL, B_SOL:, LHe:, TC8600,    atma,   2, "Vacuum" }
+    # liquid level
+    { PLC_SOL, B_SOL:, LHe:, LL8620SC,  %,      2, "Lead Res." }
+    { PLC_SOL, B_SOL:, LHe:, LL8670SC,  %,      2, "Magnet Res." }
+}
+
+file "db/datatype_cpid.db" {
+    pattern{ PLCID, P, R, TAG }
+    # valves
+    { PLC_SOL, B_SOL:, LHe:, EV8611CD,  %,      2, "Cooldown Btm Fill" }
+    { PLC_SOL, B_SOL:, LHe:, EV8670BY,  %,      2, "LHe Rtn" }
+    { PLC_SOL, B_SOL:, LHe:, EV8611JT,  %,      2, "Top Fill" }
+    { PLC_SOL, B_SOL:, LHe:, EV8612,    %,      2, "Btm Fill" }
+    { PLC_SOL, B_SOL:, LHe:, EV8611CD_LVDT,  %, 2, "Cooldown Btm Fill" }
+    { PLC_SOL, B_SOL:, LHe:, EV8670BY_LVDT,  %, 2, "LHe Rtn" }
+    { PLC_SOL, B_SOL:, LHe:, EV8611JT_LVDT,  %, 2, "Top Fill" }
+    { PLC_SOL, B_SOL:, LHe:, EV8612_LVDT,    %, 2, "Btm Fill" }
+    { PLC_SOL, B_SOL:, LHe:, PV8674,    %,      2, "Warm Rtn" }
+    { PLC_SOL, B_SOL:, LHe:, SV8675,    %,      2, "Vac Pump Inlet" }
+    { PLC_SOL, B_SOL:, LHe:, SV8676BY,  %,      2, "Pump Bypass" }
+    { PLC_SOL, B_SOL:, LHe:, SV8622,    %,      2, "Lead Flow Vent" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621A,   %,      2, "Lead A Flow Ctrl" }
+    { PLC_SOL, B_SOL:, LHe:, EV8621A,   %,      2, "Lead A Flow Ctrl" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621B,   %,      2, "Lead B Flow Ctrl" }
+    { PLC_SOL, B_SOL:, LHe:, EV8621B,   %,      2, "Lead B Flow Ctrl" }
+    { PLC_SOL, B_SOL:, LHe:, PV8600,    %,      2, "Vac Gate Valve" }
+    # heaters
+    { PLC_SOL, B_SOL:, LHe:, HTR8621A,  %,      2, "Lead A Flag" }
+    { PLC_SOL, B_SOL:, LHe:, HTR8621B,  %,      2, "Lead B Flag" }
+    { PLC_SOL, B_SOL:, LHe:, HTR8620,   %,      2, "Lead Res." }
+    { PLC_SOL, B_SOL:, LHe:, HTR8672,   %,      2, "Magnet Res." }
+}

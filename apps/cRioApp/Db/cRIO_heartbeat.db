@@ -8,7 +8,7 @@
 #
 
 # From cRIO
-record(bi, "$(P)$(R)HEARTBEAT") {
+record(ai, "$(P)$(R)HEARTBEAT") {
     field(VAL, "0")
 }
 
@@ -23,6 +23,8 @@ record(ai, "$(P)$(R)CPULOAD") {
     field(EGU,  "%")
 }
 
+# Moving this to a separate ioc (iocmonitor) running on clonioc#,
+# so that notifier still works when iocgassystem86 goes down.
 #
 # Heartbeat alarms modified from Hall D (hovanes)
 #

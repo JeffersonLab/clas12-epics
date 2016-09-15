@@ -9,8 +9,8 @@ cd "${TOP}"
 dbLoadDatabase("dbd/OmegaCYD218.dbd")
 OmegaCYD218_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("SER1", "hallb-moxa2:4001")
-drvAsynIPPortConfigure("SER2", "hallb-moxa2:4002")
+drvAsynIPPortConfigure("SER1", "hallb-moxa1:4001")
+drvAsynIPPortConfigure("SER2", "hallb-moxa1:4002")
 
 ## debugging...
 #asynSetTraceMask("SER1",-1,0x09)

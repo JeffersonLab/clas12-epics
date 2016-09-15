@@ -696,9 +696,9 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
   int maxChan=23;
 
   //0th element not used in these arrays since detector labels start at 1
-  int Sec[2][4]={{0,6,1,2},{0,5,4,3}}; //the sequence of sector for each "half"
+  const  int Sec[2][4]={{0,6,1,2},{0,5,4,3}}; //the sequence of sector for each "half"
   const  char *type[]={"0","S","F","G"};      //sense,field,guard /// val_piece : const
-  int nElem[] ={0,   8,  8,  2};       //no of HV elements for each of the above types
+  const  int nElem[] ={0,   8,  8,  2};       //no of HV elements for each of the above types
   const  char *wiresLabel[] = {"","01-08","09-16","17-24","25-32","33-48","49-64","65-80","81-112"}; /// val_piece : const
   const  char *guardLabel[] = {"","01-32","33-112"}; /// val_piece : const
 
@@ -713,10 +713,13 @@ int DCGen(int crate0=1, int slot0=0, int chan0=0, int det = DC){
 	  for(int l=1;l<=2;l++){              //super Layer
 	    for(int e=1;e<=nElem[t];e++){;       //elements
 
+              // change superlayer numbering from 1,2,1,2,1,2 to 1,2,3,4,5,6
+              const int slay = l + 2*(r-1);
+
 	      markCSCUsed(det,cr,sl,ch);
 	      
-	      if(t==3) sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],l,type[t],guardLabel[e]);
-	      else     sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],l,type[t],wiresLabel[e]);
+	      if(t==3) sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],slay,type[t],guardLabel[e]);
+	      else     sprintf(alias, det_template,GeogAbbr[CRATE],DetAbbr[det],SysAbbr[SECTOR],Sec[h][s],SysAbbr[REGION],r,SysAbbr[LAYER],slay,type[t],wiresLabel[e]);
 	      
 	      sprintf(canonicalName, hv_template,GeogAbbr[CRATE],HVCrate[det],cr,GeogAbbr[SLOT],sl,GeogAbbr[CHANNEL],ch);
 	      printNames(canonicalName,alias);

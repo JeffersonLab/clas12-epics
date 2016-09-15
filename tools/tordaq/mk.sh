@@ -1,1 +1,3 @@
-g++ -o tordaq tordaq.c `root-config --libs --cflags`
+
+g++ -std=c++11 -o tordaq tordaq.c `root-config --libs --cflags`
+

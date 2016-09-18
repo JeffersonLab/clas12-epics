@@ -11,8 +11,8 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TH1.h>
 #include <iostream>
-
 
 class tordaq {
 public :
@@ -169,5 +169,32 @@ void tordaq::Loop()
       std::cout<<std::endl;
       getchar();
    }
+}
+void ProgressMeter(const double total,const double current,const int starttime=0)
+{
+    static const int maxdots=40;
+    const double frac = current/total;
+    int ii=0;  printf("%3.0f%% [",frac*100);
+    for ( ; ii < frac*maxdots; ii++) printf("=");
+    for ( ; ii < maxdots;      ii++) printf(" ");
+    int timeRemain=-1;
+    if (starttime>0) {
+      time_t now=time(0);
+      timeRemain=float(time(0)-starttime)*(1/frac-1);
+    }
+    if (frac>0.1 && timeRemain>0) printf("]  %d sec          \r",timeRemain);
+    else                          printf("]                  \r");
+    fflush(stdout);
+}
+void WriteRemainingHistos()
+{
+    TObject *oo;
+    TIter noo(gDirectory->GetList());
+    while ((oo=(TObject*)noo()))
+    {
+        if (!oo) continue;
+        if (!oo->IsA()->InheritsFrom(TH1::Class())) continue;
+        oo->Write();
+    }
 }
 #endif

@@ -28,6 +28,8 @@
 #include <TTimeStamp.h>
 #include <TString.h>
 #include <TGComboBox.h>
+#include <TGSlider.h>
+#include <TGDoubleSlider.h>
 #include <TROOT.h>
 #include <TFile.h>
 #include <stdio.h>
@@ -43,22 +45,21 @@ class MyMainFrame: public TGMainFrame {
         TRootEmbeddedCanvas *canvas1;
         TRootEmbeddedCanvas *canvas2;
         TGStatusBar          *fStatusBar;
-        TGLabel *label_dir;
-        TGLabel *label_offset;
+        TGLabel *fileLabel;
         TGNumberEntryField *field_delay;
         TGNumberEntryField *field_resample;
         TGNumberEntryField *field_window;
-        TGTextButton *button_redraw;
-        TGTextButton *button_zoomout;
-        TGTextButton *button_zoomin;
-        TGTextButton *button_panleft;
-        TGTextButton *button_panright;
-        TGCheckButton *check_legend;
-        TGCheckButton *check_error;
-        TGCheckButton *check_mean;
-        TGCheckButton *check_fit;
-        TGCheckButton *check_ZFCT;
+        TGTextButton *redrawBtn;
+        TGTextButton *zoomoutBtn;
+        TGTextButton *zoominBtn;
+        TGTextButton *panleftBtn;
+        TGTextButton *panrightBtn;
         TGCheckButton *check_denoise;
+        TGDoubleHSlider *zoomSlider;
+        TGLabel *zoomSliderLabel1;
+        TGLabel *zoomSliderLabel2;
+        TGLabel *zoomSliderLabelU1;
+        TGLabel *zoomSliderLabelU2;
         std::vector <TGCheckButton*> selectors1;
         std::vector <TGCheckButton*> selectors2;
         std::vector <TGComboBox*> combos1;
@@ -79,5 +80,7 @@ class MyMainFrame: public TGMainFrame {
         void ZoomOut1();
         void PanLeft1();
         void PanRight1();
+        void SetStyle();
+        void UpdateZoomLabels();
 };
 #endif

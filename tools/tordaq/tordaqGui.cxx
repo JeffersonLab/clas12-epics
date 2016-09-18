@@ -6,216 +6,157 @@ ClassImp(MyMainFrame);
 const char* dataDir="/usr/clas12/DATA/wf2root";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 
+TString getTimeString(const Double_t time)
+{
+    char stime[26];
+    const time_t timet=(int)time;
+    const struct tm* stm=localtime(&timet);
+    strftime(stime,26,"%H:%M:%S",stm);
+    return TString(stime);
+
+// I wanted this to give more precision, but it does't work:
+//    const double fracsec=time-floor(time);
+//    return TString(Form("%s.%d",stime,1000*fracsec));
+}
+
 MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, h) {
+
+    // modern c++ should let me set this with a one-liner in the class def:
     colors[0]=1;
     colors[1]=2;
     colors[2]=4;
     colors[3]=3;
     colors[4]=6;
-    // Fill color
-    gStyle->SetStatColor(0);
-    gStyle->SetTitleFillColor(0);
-    gStyle->SetCanvasColor(0);
-    gStyle->SetPadColor(0);
-    gStyle->SetFrameFillColor(0);
-    // Border mode
-    gStyle->SetCanvasBorderMode(0);
-    gStyle->SetPadBorderMode(0);
-    gStyle->SetFrameBorderMode(0);
-    // Margin
-    gStyle->SetPadLeftMargin(0.06);
-    gStyle->SetPadRightMargin(0.04);
-    gStyle->SetPadTopMargin(0.06);
-    gStyle->SetPadBottomMargin(0.12);
-    // Font
-    gStyle->SetTextFont(132);
-    gStyle->SetLabelFont(132, "XYZ");
-    gStyle->SetTitleFont(132, "XYZ");
-    gStyle->SetStatFont(132);
-    gStyle->SetLegendFont(132);
-    // Fontsize
-    gStyle->SetLabelSize(0.05, "XYZ");
-    gStyle->SetTitleSize(0.06, "XYZ");
-    gStyle->SetTitleOffset(0.9, "X");
-    gStyle->SetTitleOffset(0.2, "Y");
-    // Opt
-    gStyle->SetOptTitle(0);
-    gStyle->SetOptFit(1);
-    gStyle->SetOptStat(0);
-    gStyle->SetStatX(0.97);
-    gStyle->SetStatY(0.98);
-    // Axis
-    //TGaxis::SetMaxDigits(3);
-    //TGaxis::SetExponentOffset(-0.06, -0.04,"y");
-    // Grid
-    gStyle->SetPadGridX(kTRUE);
-    gStyle->SetPadGridY(kTRUE);
 
-    legend1=new TLegend(0.8,0.8,1,1);
-    legend1->SetNColumns(2);
+    // bunch of global settings:
+    SetStyle();
 
-    TGHorizontalFrame *frame_dir = new TGHorizontalFrame(this, 1000, 40);
+    legend1=new TLegend(0.1,0.9,0.9,1);
+    legend1->SetNColumns(5);
+    legend1->SetBorderSize(0);
 
-    // button to open file
-    TGTextButton *button_open = new TGTextButton(frame_dir, "&Open File");
-    button_open->Connect("Clicked()", "MyMainFrame", this, "DoOpen()");
-    frame_dir->AddFrame(button_open,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
+    TGHorizontalFrame *topFrame = new TGHorizontalFrame(this, 1000, 40);
 
-    label_dir = new TGLabel(frame_dir, "");
-    label_dir->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    label_dir->SetWrapLength(-1);
-    frame_dir->AddFrame(label_dir,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
+    TGTextButton *openBtn = new TGTextButton(topFrame, "&Open File");
+    openBtn->Connect("Clicked()", "MyMainFrame", this, "DoOpen()");
+    topFrame->AddFrame(openBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 1, 5, 5));
 
-    // button to exit
-    TGTextButton *button_exit = new TGTextButton(frame_dir, "&Exit",
-            "gApplication->Terminate(0)");
-    frame_dir->AddFrame(button_exit,
-            new TGLayoutHints(kLHintsRight | kLHintsCenterY, 10, 5, 2, 2));
+    fileLabel = new TGLabel(topFrame, "");
+    fileLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    fileLabel->SetWrapLength(-1);
+    topFrame->AddFrame(fileLabel,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 1, 5, 5));
 
-    AddFrame(frame_dir, new TGLayoutHints(kLHintsExpandX, 2, 2, 2, 2));
+    TGTextButton *exitBtn = new TGTextButton(topFrame, "&Exit","gApplication->Terminate(0)");
+    topFrame->AddFrame(exitBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
+    
+    TGTextButton *rootBtn = new TGTextButton(topFrame, "Save ROOT File");
+    //rootBtn->Connect("Clicked()", "MyMainFrame", this, "DoRoot()");
+    topFrame->AddFrame(rootBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
+    
 
-    TGHorizontalFrame *dogframe = new TGHorizontalFrame(this, 1000, 250);
+    AddFrame(topFrame, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 1));
 
-    TGVerticalFrame *catframe=new TGVerticalFrame(dogframe,100,250);
+    TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1000, 250);
 
+    TGVerticalFrame *leftFrame=new TGVerticalFrame(middleFrame,100,250);
     for (int ii=0; ii<5; ii++)
     {
-        combos1.push_back(new TGComboBox(catframe));
+        combos1.push_back(new TGComboBox(leftFrame));
         combos1[combos1.size()-1]->AddEntry(" ",0);
-        catframe->AddFrame(combos1[combos1.size()-1],new TGLayoutHints(kLHintsLeft | kLHintsCenterY,2,2,2,2));
+        leftFrame->AddFrame(combos1[combos1.size()-1],new TGLayoutHints(kLHintsCenterX | kLHintsExpandX | kLHintsCenterY,2,2,2,2));
         combos1[combos1.size()-1]->Resize(60,20);
         combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
+    redrawBtn = new TGTextButton(leftFrame, "&Draw");
+    redrawBtn->Connect("Clicked()","MyMainFrame",this,"Update1()");
+    redrawBtn->Resize(60,20);
+    leftFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
-    button_redraw = new TGTextButton(catframe, "&Draw");
-    button_redraw->Connect("Clicked()","MyMainFrame",this,"Update1()");
-    button_redraw->Resize(60,20);
-    catframe->AddFrame(button_redraw,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 2, 2, 2));
+    TGLabel *zoomLabel = new TGLabel(leftFrame, "X-Zoom");
+    zoomLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomLabel->SetWrapLength(-1);
+    leftFrame->AddFrame(zoomLabel,new TGLayoutHints(kLHintsCenterY | kLHintsCenterX, 1, 1, 20, 1));
     
-    button_zoomin = new TGTextButton(catframe, "&Zoom In");
-    button_zoomin->Connect("Clicked()","MyMainFrame",this,"ZoomIn1()");
-    button_zoomin->Resize(60,20);
-    catframe->AddFrame(button_zoomin,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 2, 2, 2));
-    button_zoomout = new TGTextButton(catframe, "&Zoom Out");
-    button_zoomout->Connect("Clicked()","MyMainFrame",this,"ZoomOut1()");
-    button_zoomout->Resize(60,20);
-    catframe->AddFrame(button_zoomout,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 2, 2, 2));
+    TGHorizontalFrame *zoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
+    zoominBtn = new TGTextButton(zoomFrame, "In");
+    zoominBtn->Connect("Clicked()","MyMainFrame",this,"ZoomIn1()");
+    zoominBtn->Resize(60,20);
+    zoomFrame->AddFrame(zoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
+    zoomoutBtn = new TGTextButton(zoomFrame, "Out");
+    zoomoutBtn->Connect("Clicked()","MyMainFrame",this,"ZoomOut1()");
+    zoomoutBtn->Resize(60,20);
+    zoomFrame->AddFrame(zoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
+    leftFrame->AddFrame(zoomFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
 
-    button_panleft = new TGTextButton(catframe, "&Pan Left");
-    button_panleft->Connect("Clicked()","MyMainFrame",this,"PanLeft1()");
-    button_panleft->Resize(60,20);
-    catframe->AddFrame(button_panleft,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 2, 2, 2));
-    button_panright = new TGTextButton(catframe, "&Pan Right");
-    button_panright->Connect("Clicked()","MyMainFrame",this,"PanRight1()");
-    button_panright->Resize(60,20);
-    catframe->AddFrame(button_panright,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 2, 2, 2));
+    TGLabel *panLabel = new TGLabel(leftFrame, "X-Pan");
+    panLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    panLabel->SetWrapLength(-1);
+    leftFrame->AddFrame(panLabel,new TGLayoutHints(kLHintsCenterY | kLHintsCenterX, 1, 1, 20, 1));
     
-    dogframe->AddFrame(catframe,new TGLayoutHints(kLHintsLeft | kLHintsCenterY,2,2,2,2));
+    TGHorizontalFrame *panFrame = new TGHorizontalFrame(leftFrame, 100, 60);
+    panleftBtn = new TGTextButton(panFrame, "Left");
+    panleftBtn->Connect("Clicked()","MyMainFrame",this,"PanLeft1()");
+    panleftBtn->Resize(60,20);
+    panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
+    panrightBtn = new TGTextButton(panFrame, "Right");
+    panrightBtn->Connect("Clicked()","MyMainFrame",this,"PanRight1()");
+    panrightBtn->Resize(60,20);
+    panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
+    leftFrame->AddFrame(panFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
 
-    // Canvas for history plot
-    canvas1 = new TRootEmbeddedCanvas("canvas1", dogframe, 800, 250);
-    dogframe->AddFrame(canvas1, new TGLayoutHints(kLHintsExpandX, 2, 2, 2, 2));
+    middleFrame->AddFrame(leftFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY,5,5,1,1));
 
-    AddFrame(dogframe,new TGLayoutHints(kLHintsExpandX,2,2,2,2));
+    canvas1 = new TRootEmbeddedCanvas("canvas1", middleFrame, 800, 250);
+    middleFrame->AddFrame(canvas1, new TGLayoutHints(kLHintsExpandX|kLHintsExpandY, 1, 1, 1, 1));
 
-/*
-    TGHorizontalFrame *frame_cut2 = new TGHorizontalFrame(this, 1000, 40);
-    for (int ii=1; ii<=22; ii++)
-    {
-        selectors1.push_back(new TGCheckButton(frame_cut2,Form("%d",ii)));
-        frame_cut2->AddFrame(selectors1[selectors1.size()-1],
-                new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
-    }
-    AddFrame(frame_cut2, new TGLayoutHints(kLHintsExpandX, 2, 2, 2, 2));
-*/
+    AddFrame(middleFrame,new TGLayoutHints(kLHintsExpandX|kLHintsExpandY,1,1,1,1));
 
-    /*
-       TGHorizontalFrame *frame_cut3 = new TGHorizontalFrame(this, 1000, 40);
-       for (int ii=1; ii<=22; ii++)
-       {
-       selectors2.push_back(new TGCheckButton(frame_cut3,Form("%d",ii)));
-       frame_cut3->AddFrame(selectors2[selectors2.size()-1],
-       new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
-       }
-       AddFrame(frame_cut3, new TGLayoutHints(kLHintsExpandX, 2, 2, 2, 2));
-       */
+    
+    TGHorizontalFrame *bottomFrame = new TGHorizontalFrame(this, 1000, 40);
 
-    /*
-     * Horizontal frame for plot parameters
-     */
-    TGHorizontalFrame *frame_cut = new TGHorizontalFrame(this, 1000, 40);
-
-    // Data resample, 1-10000 Hz
-    field_resample = new TGNumberEntryField(frame_cut, -1, 100,
+    field_resample = new TGNumberEntryField(bottomFrame, -1, 100,
             TGNumberFormat::kNESInteger, TGNumberFormat::kNEANonNegative,
             TGNumberFormat::kNELLimitMinMax, 1, 10000);
     field_resample->SetWidth(40);
-    frame_cut->AddFrame(new TGLabel(frame_cut, "Resample Freq."),
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 2, 2, 2));
-    frame_cut->AddFrame(field_resample,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
-
-    // check box for legend
-    check_legend = new TGCheckButton(frame_cut, "Legend");
-    frame_cut->AddFrame(check_legend,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 5, 2, 2));
-
-    // check box for error bars
-    check_error = new TGCheckButton(frame_cut, "Error");
-    frame_cut->AddFrame(check_error,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
-
-    // check box for mean value
-    check_mean = new TGCheckButton(frame_cut, "Mean");
-    frame_cut->AddFrame(check_mean,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
-
-    // check box to do pol2 fit
-    check_fit = new TGCheckButton(frame_cut, "Fit");
-    frame_cut->AddFrame(check_fit,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 5, 2, 2));
-
-    // check box for denoise
-    check_denoise = new TGCheckButton(frame_cut, "DeNoise");
-    frame_cut->AddFrame(check_denoise,
-            new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
-
-    // button to create root file
-    TGTextButton *button_root = new TGTextButton(frame_cut, "Save ROOT File");
-    button_root->Connect("Clicked()", "MyMainFrame", this, "DoRoot()");
-    frame_cut->AddFrame(button_root,
-            new TGLayoutHints(kLHintsRight | kLHintsCenterY, 20, 5, 2, 2));
-
-    AddFrame(frame_cut, new TGLayoutHints(kLHintsExpandX));
+    bottomFrame->AddFrame(new TGLabel(bottomFrame, "Resample Freq."),new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 2, 2, 2));
+    bottomFrame->AddFrame(field_resample,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
+    check_denoise = new TGCheckButton(bottomFrame, "DeNoise");
+    bottomFrame->AddFrame(check_denoise,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
 
 
+    TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1000, 40);
+    
+    TGHorizontalFrame *sliderLabelFrameU = new TGHorizontalFrame(sliderFrame,1000,20);
+    zoomSliderLabelU1 = new TGLabel(sliderLabelFrameU, "");
+    zoomSliderLabelU1->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabelU1->SetWrapLength(-1);
+    sliderLabelFrameU->AddFrame(zoomSliderLabelU1,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 100, 0, 0, 0));
+    zoomSliderLabelU2 = new TGLabel(sliderLabelFrameU, "");
+    zoomSliderLabelU2->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabelU2->SetWrapLength(-1);
+    sliderLabelFrameU->AddFrame(zoomSliderLabelU2,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 100, 0, 0));
+    sliderFrame->AddFrame(sliderLabelFrameU,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 0,0,0,0));
 
-    /*
-     * Frame to generate plots
-     */
-    //TGHorizontalFrame *frame_plota = new TGHorizontalFrame(this, 1000, 40);
+    zoomSlider = new TGDoubleHSlider(sliderFrame);
+//    zoomSlider->Connect("SetValue(Double_t)", "MyMainFrame", zoomSliderLabelU1, "UpdateZoomLabels()");
+    sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsCenterY |kLHintsExpandX, 20,20,0,0));
 
+    TGHorizontalFrame *sliderLabelFrame = new TGHorizontalFrame(sliderFrame,1000,20);
+    zoomSliderLabel1 = new TGLabel(sliderLabelFrame, "");
+    zoomSliderLabel1->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabel1->SetWrapLength(-1);
+    sliderLabelFrame->AddFrame(zoomSliderLabel1,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 0, 0, 0, 0));
+    zoomSliderLabel2 = new TGLabel(sliderLabelFrame, "");
+    zoomSliderLabel2->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabel2->SetWrapLength(-1);
+    sliderLabelFrame->AddFrame(zoomSliderLabel2,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 0, 0, 0));
+    sliderFrame->AddFrame(sliderLabelFrame,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 0,0,0,0));
 
+    bottomFrame->AddFrame(sliderFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 2,2,2,2));
+    
+    AddFrame(bottomFrame, new TGLayoutHints(kLHintsExpandX));
 
-
-
-
-
-
-
-    /*
-     * Canvas for misc plots: zero and ratio
-     */
-    canvas2 = new TRootEmbeddedCanvas("canvas2", this, 800, 800);
-    AddFrame(canvas2,
-            new TGLayoutHints(kLHintsExpandX | kLHintsExpandY, 2, 2, 2, 2));
-
-    canvas2->GetCanvas()->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)","MyMainFrame",this, 
-            "EventInfo(Int_t,Int_t,Int_t,TObject*)");
-
-    // status bar
+    // status bar, wothless how to update it?
     Int_t parts[] = {20, 15, 10, 55};
     fStatusBar = new TGStatusBar(this, 50, 10, kVerticalFrame);
     fStatusBar->SetParts(parts, 4);
@@ -233,9 +174,6 @@ MyMainFrame::~MyMainFrame() {
 }
 
 void MyMainFrame::DoOpen() {
-
-    std::cout << std::endl;
-    // get list of files from GUI
     TList myli;
     TGFileInfo fi;
     TObjString str1;
@@ -244,17 +182,16 @@ void MyMainFrame::DoOpen() {
     fi.fMultipleSelection = true;
     TList *filelist;
     new TGFileDialog(gClient->GetRoot(), this, kFDOpen, &fi);
-    if (!fi.fFileNamesList) {
-        std::cout << "No file selected!" << std::endl;
-        return;
-    }
+    if (!fi.fFileNamesList) return;
     filelist = fi.fFileNamesList;
     TObjLink *lnk=filelist->FirstLink();
-    label_dir->ChangeText(lnk->GetObject()->GetName());
 
-    fStatusBar->SetText("Reading Data File ...",0);
+    fileLabel->ChangeText(Form("Reading %s ....",lnk->GetObject()->GetName()));
+   
+    // how to get it to update immeditately?
+    //fStatusBar->SetText("Reading Data File ...",0);
+    gClient->NeedRedraw(fileLabel);
     this->Layout();
-
 
     datafile=new TFile(lnk->GetObject()->GetName(),"READ");
     int ivt=1;
@@ -274,20 +211,42 @@ void MyMainFrame::DoOpen() {
             hh->GetXaxis()->SetNdivisions(5);
             hh->GetYaxis()->SetTitleOffset(0.7);
             hh->GetXaxis()->SetTitle("");
+            hh->GetYaxis()->SetTitle("");
             hh->SetTitle(Form("VT%d",ivt));
             datahistos.push_back(hh);
             for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
                 (*cbit)->AddEntry(Form("VT%d",ivt),ivt);
+            if (ivt==1)
+            {
+              zoomSlider->SetRange(hh->GetXaxis()->GetXmin(),
+                                   hh->GetXaxis()->GetXmax());
+              zoomSlider->SetPosition(hh->GetXaxis()->GetXmin(),
+                                   hh->GetXaxis()->GetXmax());
+              zoomSliderLabel1->SetText(getTimeString(hh->GetXaxis()->GetXmin()));
+              zoomSliderLabel2->SetText(getTimeString(hh->GetXaxis()->GetXmax()));
+              zoomSliderLabelU1->SetText(getTimeString(hh->GetXaxis()->GetXmin()));
+              zoomSliderLabelU2->SetText(getTimeString(hh->GetXaxis()->GetXmax()));
+            }
         }
         else break;
         ivt++;
-        //if (ivt>3) break;
+        if (ivt>10) break;
     }
     
-    fStatusBar->SetText("Done Reading Data File.",0);
+    fileLabel->ChangeText(lnk->GetObject()->GetName());
+    //fStatusBar->SetText("Done Reading Data File.",0);
+    this->Layout();
 }
 void MyMainFrame::Update1()
 {
+
+    if (datahistos.size()<1)
+    {
+        fileLabel->ChangeText("OPEN A FILE FIRST!");
+        this->Layout();
+        return;
+    }
+
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->cd();
     ctmp->Clear();
@@ -328,18 +287,24 @@ void MyMainFrame::ZoomIn1()
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
-    histos1[0]->GetXaxis()->SetRangeUser(x1+(x2-x1)*frac,x2-(x2-x1)*frac);
-    //ctmp->Update();
+    const double xlo=x1+(x2-x1)*frac;
+    const double xhi=x2-(x2-x1)*frac;
+    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
+    zoomSlider->SetPosition(xlo,xhi);
+    UpdateZoomLabels();
     Update1();
 }
 void MyMainFrame::ZoomOut1()
 {
-    double frac=0.45;
+    double frac=1.0;
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
-    histos1[0]->GetXaxis()->SetRangeUser(x1-(x2-x1)*frac,x2+(x2-x1)*frac);
-    //ctmp->Update();
+    const double xlo=x1-(x2-x1)*frac;
+    const double xhi=x2+(x2-x1)*frac;
+    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
+    zoomSlider->SetPosition(xlo,xhi);
+    UpdateZoomLabels();
     Update1();
 }
 void MyMainFrame::PanLeft1()
@@ -348,7 +313,11 @@ void MyMainFrame::PanLeft1()
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
-    histos1[0]->GetXaxis()->SetRangeUser(x1-(x2-x1)*frac,x2-(x2-x1)*frac);
+    const double xlo=x1-(x2-x1)*frac;
+    const double xhi=x2-(x2-x1)*frac;
+    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
+    zoomSlider->SetPosition(xlo,xhi);
+    UpdateZoomLabels();
     Update1();
 }
 void MyMainFrame::PanRight1()
@@ -357,15 +326,66 @@ void MyMainFrame::PanRight1()
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
-    histos1[0]->GetXaxis()->SetRangeUser(x1+(x2-x1)*frac,x2+(x2-x1)*frac);
+    const double xlo=x1+(x2-x1)*frac;
+    const double xhi=x2+(x2-x1)*frac;
+    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
+    zoomSlider->SetPosition(xlo,xhi);
+    UpdateZoomLabels();
     Update1();
+}
+void MyMainFrame::UpdateZoomLabels()
+{
+    float xlo,xhi;
+    zoomSlider->GetPosition(&xlo,&xhi);
+    zoomSliderLabelU1->SetText(getTimeString(xlo));
+    zoomSliderLabelU2->SetText(getTimeString(xhi));
+}
+void MyMainFrame::SetStyle()
+{
+    // Fill color
+    gStyle->SetStatColor(0);
+    gStyle->SetTitleFillColor(0);
+    gStyle->SetCanvasColor(0);
+    gStyle->SetPadColor(0);
+    gStyle->SetFrameFillColor(0);
+    // Border mode
+    gStyle->SetCanvasBorderMode(0);
+    gStyle->SetPadBorderMode(0);
+    gStyle->SetFrameBorderMode(0);
+    // Margin
+    gStyle->SetPadLeftMargin(0.06);
+    gStyle->SetPadRightMargin(0.04);
+    gStyle->SetPadTopMargin(0.1);
+    gStyle->SetPadBottomMargin(0.12);
+    // Font
+    gStyle->SetTextFont(132);
+    gStyle->SetLabelFont(132, "XYZ");
+    gStyle->SetTitleFont(132, "XYZ");
+    gStyle->SetStatFont(132);
+    gStyle->SetLegendFont(132);
+    // Fontsize
+    gStyle->SetLabelSize(0.05, "XYZ");
+    gStyle->SetTitleSize(0.06, "XYZ");
+    gStyle->SetTitleOffset(0.9, "X");
+    gStyle->SetTitleOffset(0.2, "Y");
+    // Opt
+    gStyle->SetOptTitle(0);
+    gStyle->SetOptFit(1);
+    gStyle->SetOptStat(0);
+    gStyle->SetStatX(0.97);
+    gStyle->SetStatY(0.98);
+    // Axis
+    //TGaxis::SetMaxDigits(3);
+    //TGaxis::SetExponentOffset(-0.06, -0.04,"y");
+    // Grid
+    gStyle->SetPadGridX(kTRUE);
+    gStyle->SetPadGridY(kTRUE);
 }
 int main(int argc, char **argv) {
 
     TApplication theApp("App", &argc, argv);
-    new MyMainFrame(gClient->GetRoot(), 1000, 800);
+    new MyMainFrame(gClient->GetRoot(), 1000, 400);
     theApp.Run();
     return 0;
-
 }
 

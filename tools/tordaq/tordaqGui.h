@@ -32,6 +32,7 @@
 #include <TGDoubleSlider.h>
 #include <TROOT.h>
 #include <TFile.h>
+#include <TGaxis.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -55,11 +56,10 @@ class MyMainFrame: public TGMainFrame {
         TGTextButton *panleftBtn;
         TGTextButton *panrightBtn;
         TGCheckButton *check_denoise;
-        TGDoubleHSlider *zoomSlider;
-        TGLabel *zoomSliderLabel1;
-        TGLabel *zoomSliderLabel2;
-        TGLabel *zoomSliderLabelU1;
-        TGLabel *zoomSliderLabelU2;
+        TGHSlider *zoomSlider;
+        TGLabel *zoomSliderLabelMin;
+        TGLabel *zoomSliderLabelMid;
+        TGLabel *zoomSliderLabelMax;
         std::vector <TGCheckButton*> selectors1;
         std::vector <TGCheckButton*> selectors2;
         std::vector <TGComboBox*> combos1;
@@ -67,20 +67,26 @@ class MyMainFrame: public TGMainFrame {
         TLegend *legend1;
         TGComboBox *combo2;
         TFile *datafile;
+        TString filename;
         TTree *datatree;
         TTimeStamp starttime;
         std::vector <TH1*> datahistos;
+        std::vector <TH1*> datahistosN;
+        std::vector <TH1*> datahistosS;
     public:
         MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h);
         virtual ~MyMainFrame();
         ClassDef(MyMainFrame,0);
-        void DoOpen();
+        void DoOpen(TString filename);
+        inline void DoOpen() { DoOpen(""); }
+        void Draw1();
         void Update1();
         void ZoomIn1();
         void ZoomOut1();
         void PanLeft1();
         void PanRight1();
+        void doZoomSlider1();
         void SetStyle();
-        void UpdateZoomLabels();
+        inline void SetFilename(TString filename){ this->filename=filename; }
 };
 #endif

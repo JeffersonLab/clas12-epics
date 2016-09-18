@@ -68,7 +68,7 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
         combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
     redrawBtn = new TGTextButton(leftFrame, "&Draw");
-    redrawBtn->Connect("Clicked()","MyMainFrame",this,"Update1()");
+    redrawBtn->Connect("Clicked()","MyMainFrame",this,"Draw1()");
     redrawBtn->Resize(60,20);
     leftFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
@@ -126,30 +126,24 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
 
     TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1000, 40);
     
-    TGHorizontalFrame *sliderLabelFrameU = new TGHorizontalFrame(sliderFrame,1000,20);
-    zoomSliderLabelU1 = new TGLabel(sliderLabelFrameU, "");
-    zoomSliderLabelU1->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    zoomSliderLabelU1->SetWrapLength(-1);
-    sliderLabelFrameU->AddFrame(zoomSliderLabelU1,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 100, 0, 0, 0));
-    zoomSliderLabelU2 = new TGLabel(sliderLabelFrameU, "");
-    zoomSliderLabelU2->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    zoomSliderLabelU2->SetWrapLength(-1);
-    sliderLabelFrameU->AddFrame(zoomSliderLabelU2,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 100, 0, 0));
-    sliderFrame->AddFrame(sliderLabelFrameU,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 0,0,0,0));
-
-    zoomSlider = new TGDoubleHSlider(sliderFrame);
-//    zoomSlider->Connect("SetValue(Double_t)", "MyMainFrame", zoomSliderLabelU1, "UpdateZoomLabels()");
+    zoomSlider = new TGHSlider(sliderFrame);
+    zoomSlider->Connect("PositionChanged(Int_t)", "MyMainFrame", this, "doZoomSlider1()");
+    zoomSlider->SetPosition(0);
     sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsCenterY |kLHintsExpandX, 20,20,0,0));
 
     TGHorizontalFrame *sliderLabelFrame = new TGHorizontalFrame(sliderFrame,1000,20);
-    zoomSliderLabel1 = new TGLabel(sliderLabelFrame, "");
-    zoomSliderLabel1->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    zoomSliderLabel1->SetWrapLength(-1);
-    sliderLabelFrame->AddFrame(zoomSliderLabel1,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 0, 0, 0, 0));
-    zoomSliderLabel2 = new TGLabel(sliderLabelFrame, "");
-    zoomSliderLabel2->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    zoomSliderLabel2->SetWrapLength(-1);
-    sliderLabelFrame->AddFrame(zoomSliderLabel2,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 0, 0, 0));
+    zoomSliderLabelMin = new TGLabel(sliderLabelFrame, "");
+    zoomSliderLabelMin->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabelMin->SetWrapLength(-1);
+    sliderLabelFrame->AddFrame(zoomSliderLabelMin,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 0, 0, 0, 0));
+    zoomSliderLabelMid = new TGLabel(sliderLabelFrame, "");
+    zoomSliderLabelMid->SetTextJustify(kTextCenterX | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabelMid->SetWrapLength(-1);
+    sliderLabelFrame->AddFrame(zoomSliderLabelMid,new TGLayoutHints(kLHintsCenterX | kLHintsCenterY, 0, 0, 0, 0));
+    zoomSliderLabelMax = new TGLabel(sliderLabelFrame, "");
+    zoomSliderLabelMax->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    zoomSliderLabelMax->SetWrapLength(-1);
+    sliderLabelFrame->AddFrame(zoomSliderLabelMax,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 0, 0, 0));
     sliderFrame->AddFrame(sliderLabelFrame,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 0,0,0,0));
 
     bottomFrame->AddFrame(sliderFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 2,2,2,2));
@@ -173,27 +167,32 @@ MyMainFrame::~MyMainFrame() {
     gApplication->Terminate(0);
 }
 
-void MyMainFrame::DoOpen() {
-    TList myli;
-    TGFileInfo fi;
-    TObjString str1;
-    fi.fFileTypes = filetypes;
-    fi.fIniDir = StrDup(dataDir);
-    fi.fMultipleSelection = true;
-    TList *filelist;
-    new TGFileDialog(gClient->GetRoot(), this, kFDOpen, &fi);
-    if (!fi.fFileNamesList) return;
-    filelist = fi.fFileNamesList;
-    TObjLink *lnk=filelist->FirstLink();
+void MyMainFrame::DoOpen(TString filename="") {
 
-    fileLabel->ChangeText(Form("Reading %s ....",lnk->GetObject()->GetName()));
+    if (filename=="")
+    {
+        TList myli;
+        TGFileInfo fi;
+        TObjString str1;
+        fi.fFileTypes = filetypes;
+        fi.fIniDir = StrDup(dataDir);
+        fi.fMultipleSelection = true;
+        TList *filelist;
+        new TGFileDialog(gClient->GetRoot(), this, kFDOpen, &fi);
+        if (!fi.fFileNamesList) return;
+        filelist = fi.fFileNamesList;
+        TObjLink *lnk=filelist->FirstLink();
+        filename=lnk->GetObject()->GetName();
+    }
+
+    fileLabel->ChangeText("Reading "+filename+" ....");
    
     // how to get it to update immeditately?
     //fStatusBar->SetText("Reading Data File ...",0);
     gClient->NeedRedraw(fileLabel);
     this->Layout();
 
-    datafile=new TFile(lnk->GetObject()->GetName(),"READ");
+    datafile=new TFile(filename,"READ");
     int ivt=1;
     std::vector <TGComboBox*>::iterator cbit;
     for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
@@ -218,14 +217,13 @@ void MyMainFrame::DoOpen() {
                 (*cbit)->AddEntry(Form("VT%d",ivt),ivt);
             if (ivt==1)
             {
-              zoomSlider->SetRange(hh->GetXaxis()->GetXmin(),
-                                   hh->GetXaxis()->GetXmax());
-              zoomSlider->SetPosition(hh->GetXaxis()->GetXmin(),
-                                   hh->GetXaxis()->GetXmax());
-              zoomSliderLabel1->SetText(getTimeString(hh->GetXaxis()->GetXmin()));
-              zoomSliderLabel2->SetText(getTimeString(hh->GetXaxis()->GetXmax()));
-              zoomSliderLabelU1->SetText(getTimeString(hh->GetXaxis()->GetXmin()));
-              zoomSliderLabelU2->SetText(getTimeString(hh->GetXaxis()->GetXmax()));
+              const double t0=hh->GetXaxis()->GetXmin();
+              const double t1=hh->GetXaxis()->GetXmax();
+              zoomSlider->SetRange(t0,t1);
+              zoomSlider->SetPosition(t0);
+              zoomSliderLabelMin->SetText(getTimeString(t0));
+              zoomSliderLabelMid->SetText(getTimeString(t0+(t1-t0)*0.50));
+              zoomSliderLabelMax->SetText(getTimeString(t1));
             }
         }
         else break;
@@ -233,11 +231,11 @@ void MyMainFrame::DoOpen() {
         if (ivt>10) break;
     }
     
-    fileLabel->ChangeText(lnk->GetObject()->GetName());
+    fileLabel->ChangeText(filename);
     //fStatusBar->SetText("Done Reading Data File.",0);
     this->Layout();
 }
-void MyMainFrame::Update1()
+void MyMainFrame::Draw1()
 {
 
     if (datahistos.size()<1)
@@ -281,6 +279,14 @@ void MyMainFrame::Update1()
     legend1->Draw();
     ctmp->Update();
 }
+void MyMainFrame::Update1()
+{
+    TCanvas *ctmp=canvas1->GetCanvas();
+    ctmp->Modified();
+    ctmp->Update();
+//    ctmp->cd();
+//    ctmp->ForceUpdate();
+}
 void MyMainFrame::ZoomIn1()
 {
     double frac=0.45;
@@ -290,8 +296,7 @@ void MyMainFrame::ZoomIn1()
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
     histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo,xhi);
-    UpdateZoomLabels();
+    zoomSlider->SetPosition(xlo);
     Update1();
 }
 void MyMainFrame::ZoomOut1()
@@ -303,9 +308,23 @@ void MyMainFrame::ZoomOut1()
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
     histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo,xhi);
-    UpdateZoomLabels();
+    zoomSlider->SetPosition(xlo);
     Update1();
+}
+void MyMainFrame::doZoomSlider1()
+{
+    const int pos=zoomSlider->GetPosition();
+    double x1,x2,y1,y2;
+    TCanvas *ctmp=canvas1->GetCanvas();
+    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    if (pos>=histos1[0]->GetXaxis()->GetXmax()
+            || pos<histos1[0]->GetXaxis()->GetXmin())
+        zoomSlider->SetPosition(x1);
+    else
+    {
+        histos1[0]->GetXaxis()->SetRangeUser(pos,pos+(x2-x1));
+        Update1();
+    }
 }
 void MyMainFrame::PanLeft1()
 {
@@ -316,9 +335,8 @@ void MyMainFrame::PanLeft1()
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
     histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo,xhi);
-    UpdateZoomLabels();
-    Update1();
+    zoomSlider->SetPosition(xlo);
+    Draw1();
 }
 void MyMainFrame::PanRight1()
 {
@@ -329,16 +347,8 @@ void MyMainFrame::PanRight1()
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
     histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo,xhi);
-    UpdateZoomLabels();
+    zoomSlider->SetPosition(xlo);
     Update1();
-}
-void MyMainFrame::UpdateZoomLabels()
-{
-    float xlo,xhi;
-    zoomSlider->GetPosition(&xlo,&xhi);
-    zoomSliderLabelU1->SetText(getTimeString(xlo));
-    zoomSliderLabelU2->SetText(getTimeString(xhi));
 }
 void MyMainFrame::SetStyle()
 {
@@ -384,7 +394,11 @@ void MyMainFrame::SetStyle()
 int main(int argc, char **argv) {
 
     TApplication theApp("App", &argc, argv);
-    new MyMainFrame(gClient->GetRoot(), 1000, 400);
+    MyMainFrame * mmf=new MyMainFrame(gClient->GetRoot(), 1000, 400);
+    if (argc>1)
+    {
+        mmf->SetFilename(argv[1]);
+    }
     theApp.Run();
     return 0;
 }

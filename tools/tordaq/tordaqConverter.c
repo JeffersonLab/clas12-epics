@@ -118,6 +118,15 @@ int main(int argc,char **argv)
     }
 
     tdr.process();
+
+    std::cout<<std::endl<<"Closing Files ..."<<std::endl<<std::endl;
+    if (tdr.outAsciiFile) fclose(tdr.outAsciiFile);
+    if (tdr.outRootFile) 
+    {
+        if (tdr.outTree) tdr.outTree->AutoSave();
+        tdr.WriteRemainingHistos();
+        tdr.outRootFile->Close();
+    }
 }
 
 

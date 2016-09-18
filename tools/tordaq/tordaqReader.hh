@@ -26,7 +26,7 @@ class tordaqReader {
         std::vector <tordaqData*> inTrees;
         std::vector <TH1*> outHistos;
 
-        void ProgressMeter(const double total,const double current,const int starttime=0)
+        static void ProgressMeter(const double total,const double current,const int starttime=0)
         {
             static const int maxdots=40;
             const double frac = current/total;
@@ -42,7 +42,7 @@ class tordaqReader {
             else                          printf("]                  \r");
             fflush(stdout);
         }
-        void WriteRemainingHistos()
+        static void WriteRemainingHistos()
         {
             TObject *oo;
             TIter noo(gDirectory->GetList());
@@ -80,8 +80,11 @@ class tordaqReader {
                 std::cerr<<"Found No Trees"<<std::endl<<std::endl;
                 return;
             }
-            std::cout<<"Found "<<inTrees.size()<<" Variables."<<std::endl;
-
+            if (inTrees.size()!=tordaqData::NVT)
+            {
+                std::cerr<<"Missing Trees"<<std::endl<<std::endl;
+                return;
+            }
 
             // open output ascii file:
             if (outAsciiFilename=="stdout") outAsciiFile=stdout;
@@ -126,7 +129,7 @@ class tordaqReader {
                 const Double_t sec1=floor(time1)+1;
                 const int nSeconds=floor(time1)+1-floor(time0);
                 const int nBins=nSeconds*tordaqData::FREQUENCY;
-                std::cerr<<std::endl<<nBins<<" "<<time0<<" "<<time1<<std::endl<<std::endl;
+                //std::cerr<<std::endl<<nBins<<" "<<time0<<" "<<time1<<std::endl<<std::endl;
                 for (unsigned int ii=0; ii<inTrees.size(); ii++)
                     outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
             }

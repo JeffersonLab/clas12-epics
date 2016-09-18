@@ -17,7 +17,8 @@
 
 class tordaqData {
 public :
-  
+ 
+   static const int NVT=22;
    static const int FREQUENCY=3846;
    static const int WFLENGTH=2000;
 

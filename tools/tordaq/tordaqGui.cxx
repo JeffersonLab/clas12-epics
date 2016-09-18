@@ -224,7 +224,7 @@ void MyMainFrame::DoOpen(TString filename="") {
 
         if (!xx) break;
 
-        ProgressMeter(22,ivt);
+        ProgressMeter(tordaqData::NVT,ivt);
 
         // memory-resident ?:
         //            TH1* hh=(TH1*)xx->Clone("hvt%d");

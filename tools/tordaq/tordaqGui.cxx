@@ -1,8 +1,8 @@
-
-#include "tordaqGui.h"
+#include "tordaqGui.hh"
 
 ClassImp(MyMainFrame);
 
+TString filename="";
 const char* dataDir="/usr/clas12/DATA/wf2root";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 
@@ -35,7 +35,7 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     legend1->SetNColumns(5);
     legend1->SetBorderSize(0);
 
-    TGHorizontalFrame *topFrame = new TGHorizontalFrame(this, 1000, 40);
+    topFrame = new TGHorizontalFrame(this, 1000, 40);
 
     TGTextButton *openBtn = new TGTextButton(topFrame, "&Open File");
     openBtn->Connect("Clicked()", "MyMainFrame", this, "DoOpen()");
@@ -161,6 +161,8 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     MapSubwindows();
     Resize(GetDefaultSize());
     MapWindow();
+
+    if (filename!="") DoOpen(filename);
 }
 MyMainFrame::~MyMainFrame() {
     Cleanup();
@@ -185,12 +187,19 @@ void MyMainFrame::DoOpen(TString filename="") {
         filename=lnk->GetObject()->GetName();
     }
 
+    std::cout<<"Reading "+filename+" ....."<<std::endl;
+
     fileLabel->ChangeText("Reading "+filename+" ....");
+//    fileLabel->SetText("Reading "+filename+" ....");
+//    fileLabel->Draw();
+    //topFrame->Layout();
    
     // how to get it to update immeditately?
+    //gClient->NeedRedraw(fileLabel);
+    //gClient->ForceRedraw();
+    //this->Layout();
+    
     //fStatusBar->SetText("Reading Data File ...",0);
-    gClient->NeedRedraw(fileLabel);
-    this->Layout();
 
     datafile=new TFile(filename,"READ");
     int ivt=1;
@@ -200,35 +209,51 @@ void MyMainFrame::DoOpen(TString filename="") {
         (*cbit)->RemoveAll();
         (*cbit)->AddEntry(" ",0);
     }
+
+    if (!gDirectory->Get("h1"))
+    {
+        tordaqReader tdr;
+        tdr.makeHistos=true;
+        tdr.process();
+    }
+
     while (1)
     {
-        TObject* xx=datafile->Get(Form("h%d",ivt));
-        if (xx) {
-            TH1* hh=(TH1*)xx;
-            hh->GetXaxis()->SetTimeFormat("#splitline{}{#splitline{%b %d}{%H:%M:%S}}");
-            hh->GetXaxis()->SetTimeDisplay(1);
-            hh->GetXaxis()->SetNdivisions(5);
-            hh->GetYaxis()->SetTitleOffset(0.7);
-            hh->GetXaxis()->SetTitle("");
-            hh->GetYaxis()->SetTitle("");
-            hh->SetTitle(Form("VT%d",ivt));
-            datahistos.push_back(hh);
-            for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
-                (*cbit)->AddEntry(Form("VT%d",ivt),ivt);
-            if (ivt==1)
-            {
-              const double t0=hh->GetXaxis()->GetXmin();
-              const double t1=hh->GetXaxis()->GetXmax();
-              zoomSlider->SetRange(t0,t1);
-              zoomSlider->SetPosition(t0);
-              zoomSliderLabelMin->SetText(getTimeString(t0));
-              zoomSliderLabelMid->SetText(getTimeString(t0+(t1-t0)*0.50));
-              zoomSliderLabelMax->SetText(getTimeString(t1));
-            }
+        //TObject* xx=datafile->Get(Form("h%d",ivt));
+        TObject* xx=gDirectory->Get(Form("h%d",ivt));
+
+        if (!xx) break;
+
+        ProgressMeter(22,ivt);
+
+        // memory-resident ?:
+        //            TH1* hh=(TH1*)xx->Clone("hvt%d");
+
+        // disk-resident ?:
+        TH1* hh=(TH1*)xx;
+
+        hh->GetXaxis()->SetTimeFormat("#splitline{}{#splitline{%b %d}{%H:%M:%S}}");
+        hh->GetXaxis()->SetTimeDisplay(1);
+        hh->GetXaxis()->SetNdivisions(5);
+        hh->GetYaxis()->SetTitleOffset(0.7);
+        hh->GetXaxis()->SetTitle("");
+        hh->GetYaxis()->SetTitle("");
+        hh->SetTitle(Form("VT%d",ivt));
+        datahistos.push_back(hh);
+        for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
+            (*cbit)->AddEntry(Form("VT%d",ivt),ivt);
+        if (ivt==1)
+        {
+            const double t0=hh->GetXaxis()->GetXmin();
+            const double t1=hh->GetXaxis()->GetXmax();
+            zoomSlider->SetRange(t0,t1);
+            zoomSlider->SetPosition(t0);
+            zoomSliderLabelMin->SetText(getTimeString(t0));
+            zoomSliderLabelMid->SetText(getTimeString(t0+(t1-t0)*0.50));
+            zoomSliderLabelMax->SetText(getTimeString(t1));
         }
-        else break;
         ivt++;
-        if (ivt>10) break;
+//        if (ivt>10) break;
     }
     
     fileLabel->ChangeText(filename);
@@ -237,7 +262,6 @@ void MyMainFrame::DoOpen(TString filename="") {
 }
 void MyMainFrame::Draw1()
 {
-
     if (datahistos.size()<1)
     {
         fileLabel->ChangeText("OPEN A FILE FIRST!");
@@ -391,14 +415,27 @@ void MyMainFrame::SetStyle()
     gStyle->SetPadGridX(kTRUE);
     gStyle->SetPadGridY(kTRUE);
 }
+void MyMainFrame::ProgressMeter(const double total,const double current,const int starttime)
+{
+    static const int maxdots=40;
+    const double frac = current/total;
+    int ii=0;  printf("%3.0f%% [",frac*100);
+    for ( ; ii < frac*maxdots; ii++) printf("=");
+    for ( ; ii < maxdots;      ii++) printf(" ");
+    int timeRemain=-1;
+    if (starttime>0) {
+      time_t now=time(0);
+      timeRemain=float(time(0)-starttime)*(1/frac-1);
+    }
+    if (frac>0.1 && timeRemain>0) printf("]  %d sec          \r",timeRemain);
+    else                          printf("]                  \r");
+    fflush(stdout);
+}
 int main(int argc, char **argv) {
 
+    if (argc>1) filename=argv[1];
     TApplication theApp("App", &argc, argv);
     MyMainFrame * mmf=new MyMainFrame(gClient->GetRoot(), 1000, 400);
-    if (argc>1)
-    {
-        mmf->SetFilename(argv[1]);
-    }
     theApp.Run();
     return 0;
 }

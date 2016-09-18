@@ -1,5 +1,5 @@
-#ifndef __GUI_H__
-#define __GUI_H__
+#ifndef __TORDAQGUI_H__
+#define __TORDAQGUI_H__
 
 #include <TApplication.h>
 #include <TStyle.h>
@@ -39,6 +39,7 @@
 #include <math.h>
 #include <vector>
 
+#include "tordaqReader.hh"
 
 class MyMainFrame: public TGMainFrame {
     private:
@@ -50,6 +51,7 @@ class MyMainFrame: public TGMainFrame {
         TGNumberEntryField *field_delay;
         TGNumberEntryField *field_resample;
         TGNumberEntryField *field_window;
+        TGHorizontalFrame *topFrame;
         TGTextButton *redrawBtn;
         TGTextButton *zoomoutBtn;
         TGTextButton *zoominBtn;
@@ -67,12 +69,12 @@ class MyMainFrame: public TGMainFrame {
         TLegend *legend1;
         TGComboBox *combo2;
         TFile *datafile;
-        TString filename;
         TTree *datatree;
         TTimeStamp starttime;
         std::vector <TH1*> datahistos;
         std::vector <TH1*> datahistosN;
         std::vector <TH1*> datahistosS;
+        tordaqReader tdr;
     public:
         MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h);
         virtual ~MyMainFrame();
@@ -87,6 +89,6 @@ class MyMainFrame: public TGMainFrame {
         void PanRight1();
         void doZoomSlider1();
         void SetStyle();
-        inline void SetFilename(TString filename){ this->filename=filename; }
+        void ProgressMeter(const double total,const double current,const int starttime=0);
 };
 #endif

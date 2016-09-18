@@ -7,8 +7,9 @@
 #include <TSystem.h>
 #include <TNtupleD.h>
 
-#include "tordaq.h"
+#include "tordaqData.h"
 
+/*
 #define FREQUENCY 3846
 
 Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
@@ -23,10 +24,11 @@ Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
     // So that leaves a contiguous 279 ms of every 1 second with no data.
     return sec + nsec/1e9 + (Double_t)iSample/FREQUENCY;
 }
-Double_t getTime(tordaq* td,Int_t iSample)
+Double_t getTime(tordaqData* td,Int_t iSample)
 {
     return getTime(td->record_tsec,td->record_tnsec,td->WFLENGTH,iSample);
 }
+*/
 
 int main(int argc,char **argv)
 {
@@ -48,7 +50,7 @@ int main(int argc,char **argv)
     std::string sStartTime="";
     std::string sEndTime="";
 
-    TString usage="\ntordaq2txt [options]\n"
+    TString usage="\ntordaq [options]\n"
         "\t  -i input wf2root filename\n"
         "\t  -o output ascii filename\n"
         "\t  -t output ROOT filename with ntuple\n"
@@ -147,13 +149,13 @@ int main(int argc,char **argv)
     }
 
     // find the input TTrees:
-    std::vector <tordaq*> tordaqs;
+    std::vector <tordaqData*> tordaqs;
     TFile *inFile=new TFile(inFilename,"READ");
     int itree=1;
     while (1)
     {
         TTree *tt=(TTree*)inFile->Get(Form("VT%d",itree++));
-        if (tt) tordaqs.push_back(new tordaq(tt));
+        if (tt) tordaqs.push_back(new tordaqData(tt));
         else break;
     }
     if (tordaqs.size()<1)
@@ -200,14 +202,16 @@ int main(int argc,char **argv)
         else
         {
             tordaqs[ii]->fChain->GetEntry(0);
-            const Double_t t0 = getTime(tordaqs[ii],0);
+            const Double_t t0 = tordaqs[ii]->getTime(0);
+            //const Double_t t0 = getTime(tordaqs[ii],0);
             if (time0<0 || t0<time0) time0=t0;
         }
         if (tordaqs[ii]->LoadTree(tordaqs[ii]->fChain->GetEntries()-1) < 0) continue;
         else
         {
             tordaqs[ii]->fChain->GetEntry(tordaqs[ii]->fChain->GetEntries()-1);
-            const Double_t t1 = getTime(tordaqs[ii],tordaqs[ii]->WFLENGTH-1);
+            const Double_t t1 = tordaqs[ii]->getTime(tordaqs[ii]->WFLENGTH-1);
+            //const Double_t t1 = getTime(tordaqs[ii],tordaqs[ii]->WFLENGTH-1);
             if (time1<0 || t1>time1) time1=t1;
         }
     }
@@ -218,7 +222,7 @@ int main(int argc,char **argv)
         const Double_t sec0=floor(time0);
         const Double_t sec1=floor(time1)+1;
         const int nSeconds=floor(time1)+1-floor(time0);
-        const int nBins=nSeconds*FREQUENCY;
+        const int nBins=nSeconds*tordaqData::FREQUENCY;
         std::cerr<<std::endl<<nBins<<" "<<time0<<" "<<time1<<std::endl<<std::endl;
         for (unsigned int ii=0; ii<tordaqs.size(); ii++)
             htordaqs.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
@@ -258,10 +262,11 @@ int main(int argc,char **argv)
             else
             {
                 tordaqs[iVar]->fChain->GetEntry(jentry);
-                const Double_t time = getTime(tordaqs[iVar]->record_tsec,
-                                              tordaqs[iVar]->record_tnsec,
-                                              tordaqs[iVar]->WFLENGTH,
-                                              0);
+                const Double_t time = tordaqs[iVar]->getTime(0);
+                //const Double_t time = getTime(tordaqs[iVar]->record_tsec,
+                //                              tordaqs[iVar]->record_tnsec,
+                //                              tordaqs[iVar]->WFLENGTH,
+                //                              0);
                 if (endTime<0   || time<endTime)   allLate=0;
                 if (startTime<0 || time>startTime) allEarly=0;
             }
@@ -281,10 +286,11 @@ int main(int argc,char **argv)
                 if (!skipVars[iVar])
                 {
                     data = tordaqs[iVar]->record_data[iSamp];
-                    time = getTime(tordaqs[iVar]->record_tsec,
-                                   tordaqs[iVar]->record_tnsec,
-                                   tordaqs[iVar]->WFLENGTH,
-                                   iSamp);
+                    time = tordaqs[iVar]->getTime(iSamp);
+//                    time = getTime(tordaqs[iVar]->record_tsec,
+//                                   tordaqs[iVar]->record_tnsec,
+//                                   tordaqs[iVar]->WFLENGTH,
+//                                   iSamp);
                     vars[2*iVar]=time;
                     vars[2*iVar+1]=data;
                     if (rubenTime)

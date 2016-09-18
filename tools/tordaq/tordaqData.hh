@@ -5,18 +5,20 @@
 // found on file: torus_20160818_114059.root
 //////////////////////////////////////////////////////////
 
-#ifndef tordaq_h
-#define tordaq_h
+#ifndef __TORDAQDATA_HH__
+#define __TORDAQDATA_HH__
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
 #include <TH1.h>
+#include <TNtupleD.h>
 #include <iostream>
 
-class tordaq {
+class tordaqData {
 public :
-   
+  
+   static const int FREQUENCY=3846;
    static const int WFLENGTH=2000;
 
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
@@ -30,18 +32,36 @@ public :
    // List of branches
    TBranch        *b_record;   //!
 
-   tordaq(TTree *tree=0);
-   virtual ~tordaq();
-   virtual Int_t    Cut(Long64_t entry);
-   virtual Int_t    GetEntry(Long64_t entry);
-   virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
-   virtual void     Loop();
-   virtual Bool_t   Notify();
-   virtual void     Show(Long64_t entry = -1);
-};
+   //tordaqData(TTree *tree=0);
+   //virtual ~tordaqData();
+   //virtual Int_t    Cut(Long64_t entry);
+   //virtual Int_t    GetEntry(Long64_t entry);
+   //virtual Long64_t LoadTree(Long64_t entry);
+   //virtual void     Init(TTree *tree);
+   //virtual void     Loop();
+   //virtual Bool_t   Notify();
+   //virtual void     Show(Long64_t entry = -1);
+   //Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample);
+   //Double_t getTime(Int_t iSample);
 
-tordaq::tordaq(TTree *tree) : fChain(0) 
+Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
+{
+    // assume the waveform is sampled at wfLength Hz
+    // and updated at 1 Hz, i.e. no deadtime
+    // return sec + nsec/1e9 + (Double_t)iSample/wfLength;
+  
+    // Nope, there's known deadtime:
+    // Consecutive samples are recorded at 3.846 kHz, or once per 260 us.
+    // 2000 samples are then reported to EPICS, but only once every 800 ms.
+    // So that leaves a contiguous 279 ms of every 1 second with no data.
+    return sec + nsec/1e9 + (Double_t)iSample/FREQUENCY;
+}
+Double_t getTime(Int_t iSample)
+{
+    return getTime(record_tsec,record_tnsec,WFLENGTH,iSample);
+}
+
+tordaqData(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -56,19 +76,19 @@ tordaq::tordaq(TTree *tree) : fChain(0)
    Init(tree);
 }
 
-tordaq::~tordaq()
+~tordaqData()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t tordaq::GetEntry(Long64_t entry)
+Int_t GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t tordaq::LoadTree(Long64_t entry)
+Long64_t LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -81,7 +101,7 @@ Long64_t tordaq::LoadTree(Long64_t entry)
    return centry;
 }
 
-void tordaq::Init(TTree *tree)
+void Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -101,7 +121,7 @@ void tordaq::Init(TTree *tree)
    Notify();
 }
 
-Bool_t tordaq::Notify()
+Bool_t Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -112,14 +132,14 @@ Bool_t tordaq::Notify()
    return kTRUE;
 }
 
-void tordaq::Show(Long64_t entry)
+void Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t tordaq::Cut(Long64_t entry)
+Int_t Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
@@ -127,7 +147,7 @@ Int_t tordaq::Cut(Long64_t entry)
    return 1;
 }
 
-void tordaq::Loop()
+void Loop()
 {
 //   In a ROOT session, you can do:
 //      Root > .L tordaq.C
@@ -170,31 +190,5 @@ void tordaq::Loop()
       getchar();
    }
 }
-void ProgressMeter(const double total,const double current,const int starttime=0)
-{
-    static const int maxdots=40;
-    const double frac = current/total;
-    int ii=0;  printf("%3.0f%% [",frac*100);
-    for ( ; ii < frac*maxdots; ii++) printf("=");
-    for ( ; ii < maxdots;      ii++) printf(" ");
-    int timeRemain=-1;
-    if (starttime>0) {
-      time_t now=time(0);
-      timeRemain=float(time(0)-starttime)*(1/frac-1);
-    }
-    if (frac>0.1 && timeRemain>0) printf("]  %d sec          \r",timeRemain);
-    else                          printf("]                  \r");
-    fflush(stdout);
-}
-void WriteRemainingHistos()
-{
-    TObject *oo;
-    TIter noo(gDirectory->GetList());
-    while ((oo=(TObject*)noo()))
-    {
-        if (!oo) continue;
-        if (!oo->IsA()->InheritsFrom(TH1::Class())) continue;
-        oo->Write();
-    }
-}
+};
 #endif

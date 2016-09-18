@@ -41,23 +41,22 @@
 
 #include "tordaqReader.hh"
 
-class MyMainFrame: public TGMainFrame {
+class tordaqGui: public TGMainFrame {
     private:
         int colors[5];
         TRootEmbeddedCanvas *canvas1;
         TRootEmbeddedCanvas *canvas2;
         TGStatusBar          *fStatusBar;
         TGLabel *fileLabel;
-        TGNumberEntryField *field_delay;
-        TGNumberEntryField *field_resample;
-        TGNumberEntryField *field_window;
+        TGNumberEntryField *delayField;
+        TGNumberEntryField *resampleField;
         TGHorizontalFrame *topFrame;
         TGTextButton *redrawBtn;
         TGTextButton *zoomoutBtn;
         TGTextButton *zoominBtn;
         TGTextButton *panleftBtn;
         TGTextButton *panrightBtn;
-        TGCheckButton *check_denoise;
+        TGCheckButton *denoiseCheck;
         TGHSlider *zoomSlider;
         TGLabel *zoomSliderLabelMin;
         TGLabel *zoomSliderLabelMid;
@@ -74,11 +73,11 @@ class MyMainFrame: public TGMainFrame {
         std::vector <TH1*> datahistos;
         std::vector <TH1*> datahistosN;
         std::vector <TH1*> datahistosS;
-        tordaqReader tdr;
+        tordaqReader tdReader;
     public:
-        MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h);
-        virtual ~MyMainFrame();
-        ClassDef(MyMainFrame,0);
+        tordaqGui(const TGWindow *p, UInt_t w, UInt_t h);
+        virtual ~tordaqGui();
+        ClassDef(tordaqGui,0);
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
         void Draw1();
@@ -88,7 +87,48 @@ class MyMainFrame: public TGMainFrame {
         void PanLeft1();
         void PanRight1();
         void doZoomSlider1();
-        void SetStyle();
-        void ProgressMeter(const double total,const double current,const int starttime=0);
+        void SetStyle()
+        {
+            // Fill color
+            gStyle->SetStatColor(0);
+            gStyle->SetTitleFillColor(0);
+            gStyle->SetCanvasColor(0);
+            gStyle->SetPadColor(0);
+            gStyle->SetFrameFillColor(0);
+            // Border mode
+            gStyle->SetCanvasBorderMode(0);
+            gStyle->SetPadBorderMode(0);
+            gStyle->SetFrameBorderMode(0);
+            // Margin
+            gStyle->SetPadLeftMargin(0.06);
+            gStyle->SetPadRightMargin(0.04);
+            gStyle->SetPadTopMargin(0.1);
+            gStyle->SetPadBottomMargin(0.15);
+            // Font
+            gStyle->SetTextFont(132);
+            gStyle->SetLabelFont(132, "XYZ");
+            gStyle->SetTitleFont(132, "XYZ");
+            gStyle->SetStatFont(132);
+            gStyle->SetLegendFont(132);
+            // Fontsize
+            gStyle->SetLabelSize(0.05, "XYZ");
+            gStyle->SetTitleSize(0.06, "XYZ");
+            gStyle->SetTitleOffset(0.6, "X");
+            gStyle->SetTitleOffset(0.2, "Y");
+            // Opt
+            gStyle->SetOptTitle(0);
+            gStyle->SetOptFit(1);
+            gStyle->SetOptStat(0);
+            gStyle->SetStatX(0.97);
+            gStyle->SetStatY(0.98);
+            // Axis
+            //TGaxis::SetMaxDigits(3);
+            //TGaxis::SetExponentOffset(-0.06, -0.04,"y");
+            // Grid
+            gStyle->SetPadGridX(kTRUE);
+            gStyle->SetPadGridY(kTRUE);
+
+            gROOT->ForceStyle();
+        }
 };
 #endif

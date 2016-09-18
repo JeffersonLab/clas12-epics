@@ -1,14 +1,12 @@
 #include <unistd.h> 
 #include <stdio.h>
-#include <vector>
 #include <string>
 #include <time.h>
 
 #include <TSystem.h>
-#include <TNtupleD.h>
+#include <TH1.h>
 
 #include "tordaqReader.hh"
-
 
 int main(int argc,char **argv)
 {
@@ -22,7 +20,7 @@ int main(int argc,char **argv)
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
         "\t  -h (print usage)\n";
-    
+   
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";
 
     tordaqReader tdr;
@@ -70,7 +68,7 @@ int main(int argc,char **argv)
         }
     }
 
-    // interpret time arguments:
+    // interpret start time argument:
     if (sStartTime!="")
     {
         if (sStartTime.find(":")==std::string::npos)
@@ -82,6 +80,8 @@ int main(int argc,char **argv)
             tdr.startTime=mktime(&tm);
         }
     }
+    
+    // interpret end time argument:
     if (sEndTime!="")
     {
         if (sEndTime.find(":")==std::string::npos)
@@ -94,13 +94,15 @@ int main(int argc,char **argv)
         }
     }
 
-    // check filesystem for input/output files:
+    // check filesystem for input file:
     if (gSystem->AccessPathName(tdr.inFilename))
     {
         std::cerr<<"Input File Does Not Exist:  "<<tdr.inFilename<<std::endl;
         std::cerr<<usage<<std::endl;
         exit(1);
     }
+
+    // check filesystem for output files:
     if (tdr.outAsciiFilename!="" && !gSystem->AccessPathName(tdr.outAsciiFilename))
     {
         if (tdr.outAsciiFilename!="stdout")
@@ -117,6 +119,7 @@ int main(int argc,char **argv)
         exit(1);
     }
 
+    // the real work:
     tdr.process();
 
     std::cout<<std::endl<<"Closing Files ..."<<std::endl<<std::endl;
@@ -124,7 +127,10 @@ int main(int argc,char **argv)
     if (tdr.outRootFile) 
     {
         if (tdr.outTree) tdr.outTree->AutoSave();
+
+        // this is slow:
         tdr.WriteRemainingHistos();
+
         tdr.outRootFile->Close();
     }
 }

@@ -1,6 +1,6 @@
 #include "tordaqGui.hh"
 
-ClassImp(MyMainFrame);
+ClassImp(tordaqGui);
 
 TString filename="";
 const char* dataDir="/usr/clas12/DATA/wf2root";
@@ -13,13 +13,11 @@ TString getTimeString(const Double_t time)
     const struct tm* stm=localtime(&timet);
     strftime(stime,26,"%H:%M:%S",stm);
     return TString(stime);
-
-// I wanted this to give more precision, but it does't work:
-//    const double fracsec=time-floor(time);
-//    return TString(Form("%s.%d",stime,1000*fracsec));
 }
 
-MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, h) {
+tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, h) {
+    
+    SetStyle();
 
     // modern c++ should let me set this with a one-liner in the class def:
     colors[0]=1;
@@ -28,17 +26,17 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     colors[3]=3;
     colors[4]=6;
 
-    // bunch of global settings:
-    SetStyle();
-
     legend1=new TLegend(0.1,0.9,0.9,1);
     legend1->SetNColumns(5);
     legend1->SetBorderSize(0);
 
+
+    // TOP FRAME -----------------------------------------------------------------
+
     topFrame = new TGHorizontalFrame(this, 1000, 40);
 
     TGTextButton *openBtn = new TGTextButton(topFrame, "&Open File");
-    openBtn->Connect("Clicked()", "MyMainFrame", this, "DoOpen()");
+    openBtn->Connect("Clicked()", "tordaqGui", this, "DoOpen()");
     topFrame->AddFrame(openBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 1, 5, 5));
 
     fileLabel = new TGLabel(topFrame, "");
@@ -50,11 +48,14 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     topFrame->AddFrame(exitBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
     
     TGTextButton *rootBtn = new TGTextButton(topFrame, "Save ROOT File");
-    //rootBtn->Connect("Clicked()", "MyMainFrame", this, "DoRoot()");
+    //rootBtn->Connect("Clicked()", "tordaqGui", this, "SaveRoot()");
     topFrame->AddFrame(rootBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
-    
 
     AddFrame(topFrame, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 1));
+
+
+
+    // MIDDLE FRAME ---------------------------------------------------------------
 
     TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1000, 250);
 
@@ -68,7 +69,7 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
         combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
     redrawBtn = new TGTextButton(leftFrame, "&Draw");
-    redrawBtn->Connect("Clicked()","MyMainFrame",this,"Draw1()");
+    redrawBtn->Connect("Clicked()","tordaqGui",this,"Draw1()");
     redrawBtn->Resize(60,20);
     leftFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
@@ -79,11 +80,11 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     
     TGHorizontalFrame *zoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     zoominBtn = new TGTextButton(zoomFrame, "In");
-    zoominBtn->Connect("Clicked()","MyMainFrame",this,"ZoomIn1()");
+    zoominBtn->Connect("Clicked()","tordaqGui",this,"ZoomIn1()");
     zoominBtn->Resize(60,20);
     zoomFrame->AddFrame(zoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     zoomoutBtn = new TGTextButton(zoomFrame, "Out");
-    zoomoutBtn->Connect("Clicked()","MyMainFrame",this,"ZoomOut1()");
+    zoomoutBtn->Connect("Clicked()","tordaqGui",this,"ZoomOut1()");
     zoomoutBtn->Resize(60,20);
     zoomFrame->AddFrame(zoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     leftFrame->AddFrame(zoomFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
@@ -95,11 +96,11 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     
     TGHorizontalFrame *panFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     panleftBtn = new TGTextButton(panFrame, "Left");
-    panleftBtn->Connect("Clicked()","MyMainFrame",this,"PanLeft1()");
+    panleftBtn->Connect("Clicked()","tordaqGui",this,"PanLeft1()");
     panleftBtn->Resize(60,20);
     panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     panrightBtn = new TGTextButton(panFrame, "Right");
-    panrightBtn->Connect("Clicked()","MyMainFrame",this,"PanRight1()");
+    panrightBtn->Connect("Clicked()","tordaqGui",this,"PanRight1()");
     panrightBtn->Resize(60,20);
     panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     leftFrame->AddFrame(panFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
@@ -111,23 +112,24 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
 
     AddFrame(middleFrame,new TGLayoutHints(kLHintsExpandX|kLHintsExpandY,1,1,1,1));
 
+
+    // BOTTOM FRAME -----------------------------------------------------------------
     
     TGHorizontalFrame *bottomFrame = new TGHorizontalFrame(this, 1000, 40);
 
-    field_resample = new TGNumberEntryField(bottomFrame, -1, 100,
+    resampleField = new TGNumberEntryField(bottomFrame, -1, 100,
             TGNumberFormat::kNESInteger, TGNumberFormat::kNEANonNegative,
             TGNumberFormat::kNELLimitMinMax, 1, 10000);
-    field_resample->SetWidth(40);
+    resampleField->SetWidth(40);
     bottomFrame->AddFrame(new TGLabel(bottomFrame, "Resample Freq."),new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 2, 2, 2));
-    bottomFrame->AddFrame(field_resample,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
-    check_denoise = new TGCheckButton(bottomFrame, "DeNoise");
-    bottomFrame->AddFrame(check_denoise,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
-
+    bottomFrame->AddFrame(resampleField,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
+    denoiseCheck = new TGCheckButton(bottomFrame, "DeNoise");
+    bottomFrame->AddFrame(denoiseCheck,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
 
     TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1000, 40);
     
     zoomSlider = new TGHSlider(sliderFrame);
-    zoomSlider->Connect("PositionChanged(Int_t)", "MyMainFrame", this, "doZoomSlider1()");
+    zoomSlider->Connect("PositionChanged(Int_t)", "tordaqGui", this, "doZoomSlider1()");
     zoomSlider->SetPosition(0);
     sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsCenterY |kLHintsExpandX, 20,20,0,0));
 
@@ -150,12 +152,14 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
     
     AddFrame(bottomFrame, new TGLayoutHints(kLHintsExpandX));
 
+/*
     // status bar, wothless how to update it?
     Int_t parts[] = {20, 15, 10, 55};
     fStatusBar = new TGStatusBar(this, 50, 10, kVerticalFrame);
     fStatusBar->SetParts(parts, 4);
     fStatusBar->Draw3DCorner(kFALSE);
     AddFrame(fStatusBar, new TGLayoutHints(kLHintsExpandX, 0, 0, 10, 0));
+*/
 
     SetWindowName("Hall-B Torus Analysis");
     MapSubwindows();
@@ -164,12 +168,12 @@ MyMainFrame::MyMainFrame(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p,
 
     if (filename!="") DoOpen(filename);
 }
-MyMainFrame::~MyMainFrame() {
+tordaqGui::~tordaqGui() {
     Cleanup();
     gApplication->Terminate(0);
 }
 
-void MyMainFrame::DoOpen(TString filename="") {
+void tordaqGui::DoOpen(TString filename="") {
 
     if (filename=="")
     {
@@ -187,22 +191,29 @@ void MyMainFrame::DoOpen(TString filename="") {
         filename=lnk->GetObject()->GetName();
     }
 
+    if (gSystem->AccessPathName(filename))
+    {
+        std::cerr<<"FILE NOT FOUND:  "+filename<<std::endl;
+        fileLabel->ChangeText("FILE NOT FOUND:  "+filename);
+        this->Layout();
+        return;
+    }
+
     std::cout<<"Reading "+filename+" ....."<<std::endl;
 
-    fileLabel->ChangeText("Reading "+filename+" ....");
-//    fileLabel->SetText("Reading "+filename+" ....");
-//    fileLabel->Draw();
-    //topFrame->Layout();
-   
     // how to get it to update immeditately?
+    fileLabel->ChangeText("Reading "+filename+" ....");
+    //fileLabel->SetText("Reading "+filename+" ....");
+    //fileLabel->Draw();
+    //topFrame->Layout();
     //gClient->NeedRedraw(fileLabel);
     //gClient->ForceRedraw();
     //this->Layout();
-    
-    //fStatusBar->SetText("Reading Data File ...",0);
 
     datafile=new TFile(filename,"READ");
     int ivt=1;
+    
+    // zero the combos boxes:
     std::vector <TGComboBox*>::iterator cbit;
     for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
     {
@@ -210,32 +221,35 @@ void MyMainFrame::DoOpen(TString filename="") {
         (*cbit)->AddEntry(" ",0);
     }
 
+    // generate the hitsos if not already there:
     if (!gDirectory->Get("h1"))
     {
-        tordaqReader tdr;
-        tdr.makeHistos=true;
-        tdr.process();
+        tdReader.makeHistos=true;
+        if (!tdReader.process())
+        {
+            std::cerr<<"NO WF2ROOT TREES FOUND IN   "+filename<<std::endl;
+            fileLabel->ChangeText("NO WF2ROOT TREES FOUND IN   "+filename);
+            this->Layout();
+            return;
+        }
     }
 
     while (1)
     {
-        //TObject* xx=datafile->Get(Form("h%d",ivt));
-        TObject* xx=gDirectory->Get(Form("h%d",ivt));
+        tordaqReader::ProgressMeter(tordaqData::NVT,ivt);
 
+        TObject* xx=gDirectory->Get(Form("h%d",ivt));
         if (!xx) break;
 
-        ProgressMeter(tordaqData::NVT,ivt);
+        // copy into memory (if on disk):
+        // TH1* hh=(TH1*)xx->Clone("hvt%d");
 
-        // memory-resident ?:
-        //            TH1* hh=(TH1*)xx->Clone("hvt%d");
-
-        // disk-resident ?:
         TH1* hh=(TH1*)xx;
 
         hh->GetXaxis()->SetTimeFormat("#splitline{}{#splitline{%b %d}{%H:%M:%S}}");
         hh->GetXaxis()->SetTimeDisplay(1);
         hh->GetXaxis()->SetNdivisions(5);
-        hh->GetYaxis()->SetTitleOffset(0.7);
+        hh->GetYaxis()->SetTitleOffset(0.5);
         hh->GetXaxis()->SetTitle("");
         hh->GetYaxis()->SetTitle("");
         hh->SetTitle(Form("VT%d",ivt));
@@ -253,18 +267,17 @@ void MyMainFrame::DoOpen(TString filename="") {
             zoomSliderLabelMax->SetText(getTimeString(t1));
         }
         ivt++;
-//        if (ivt>10) break;
+        // if (ivt>5) break;
     }
     
     fileLabel->ChangeText(filename);
-    //fStatusBar->SetText("Done Reading Data File.",0);
     this->Layout();
 }
-void MyMainFrame::Draw1()
+void tordaqGui::Draw1()
 {
     if (datahistos.size()<1)
     {
-        fileLabel->ChangeText("OPEN A FILE FIRST!");
+        fileLabel->ChangeText("!! OPEN A FILE FIRST !!");
         this->Layout();
         return;
     }
@@ -303,15 +316,12 @@ void MyMainFrame::Draw1()
     legend1->Draw();
     ctmp->Update();
 }
-void MyMainFrame::Update1()
+void tordaqGui::Update1()
 {
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->Modified();
-    ctmp->Update();
-//    ctmp->cd();
-//    ctmp->ForceUpdate();
+    canvas1->GetCanvas()->Modified();
+    canvas1->GetCanvas()->Update();
 }
-void MyMainFrame::ZoomIn1()
+void tordaqGui::ZoomIn1()
 {
     double frac=0.45;
     double x1,x2,y1,y2;
@@ -323,7 +333,7 @@ void MyMainFrame::ZoomIn1()
     zoomSlider->SetPosition(xlo);
     Update1();
 }
-void MyMainFrame::ZoomOut1()
+void tordaqGui::ZoomOut1()
 {
     double frac=1.0;
     double x1,x2,y1,y2;
@@ -335,7 +345,7 @@ void MyMainFrame::ZoomOut1()
     zoomSlider->SetPosition(xlo);
     Update1();
 }
-void MyMainFrame::doZoomSlider1()
+void tordaqGui::doZoomSlider1()
 {
     const int pos=zoomSlider->GetPosition();
     double x1,x2,y1,y2;
@@ -350,7 +360,7 @@ void MyMainFrame::doZoomSlider1()
         Update1();
     }
 }
-void MyMainFrame::PanLeft1()
+void tordaqGui::PanLeft1()
 {
     double frac=0.5;
     double x1,x2,y1,y2;
@@ -362,7 +372,7 @@ void MyMainFrame::PanLeft1()
     zoomSlider->SetPosition(xlo);
     Draw1();
 }
-void MyMainFrame::PanRight1()
+void tordaqGui::PanRight1()
 {
     double frac=0.5;
     double x1,x2,y1,y2;
@@ -374,68 +384,11 @@ void MyMainFrame::PanRight1()
     zoomSlider->SetPosition(xlo);
     Update1();
 }
-void MyMainFrame::SetStyle()
-{
-    // Fill color
-    gStyle->SetStatColor(0);
-    gStyle->SetTitleFillColor(0);
-    gStyle->SetCanvasColor(0);
-    gStyle->SetPadColor(0);
-    gStyle->SetFrameFillColor(0);
-    // Border mode
-    gStyle->SetCanvasBorderMode(0);
-    gStyle->SetPadBorderMode(0);
-    gStyle->SetFrameBorderMode(0);
-    // Margin
-    gStyle->SetPadLeftMargin(0.06);
-    gStyle->SetPadRightMargin(0.04);
-    gStyle->SetPadTopMargin(0.1);
-    gStyle->SetPadBottomMargin(0.12);
-    // Font
-    gStyle->SetTextFont(132);
-    gStyle->SetLabelFont(132, "XYZ");
-    gStyle->SetTitleFont(132, "XYZ");
-    gStyle->SetStatFont(132);
-    gStyle->SetLegendFont(132);
-    // Fontsize
-    gStyle->SetLabelSize(0.05, "XYZ");
-    gStyle->SetTitleSize(0.06, "XYZ");
-    gStyle->SetTitleOffset(0.9, "X");
-    gStyle->SetTitleOffset(0.2, "Y");
-    // Opt
-    gStyle->SetOptTitle(0);
-    gStyle->SetOptFit(1);
-    gStyle->SetOptStat(0);
-    gStyle->SetStatX(0.97);
-    gStyle->SetStatY(0.98);
-    // Axis
-    //TGaxis::SetMaxDigits(3);
-    //TGaxis::SetExponentOffset(-0.06, -0.04,"y");
-    // Grid
-    gStyle->SetPadGridX(kTRUE);
-    gStyle->SetPadGridY(kTRUE);
-}
-void MyMainFrame::ProgressMeter(const double total,const double current,const int starttime)
-{
-    static const int maxdots=40;
-    const double frac = current/total;
-    int ii=0;  printf("%3.0f%% [",frac*100);
-    for ( ; ii < frac*maxdots; ii++) printf("=");
-    for ( ; ii < maxdots;      ii++) printf(" ");
-    int timeRemain=-1;
-    if (starttime>0) {
-      time_t now=time(0);
-      timeRemain=float(time(0)-starttime)*(1/frac-1);
-    }
-    if (frac>0.1 && timeRemain>0) printf("]  %d sec          \r",timeRemain);
-    else                          printf("]                  \r");
-    fflush(stdout);
-}
 int main(int argc, char **argv) {
 
     if (argc>1) filename=argv[1];
     TApplication theApp("App", &argc, argv);
-    MyMainFrame * mmf=new MyMainFrame(gClient->GetRoot(), 1000, 400);
+    tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 1000, 600);
     theApp.Run();
     return 0;
 }

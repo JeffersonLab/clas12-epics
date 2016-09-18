@@ -370,7 +370,7 @@ void tordaqGui::PanLeft1()
     const double xhi=x2-(x2-x1)*frac;
     histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
     zoomSlider->SetPosition(xlo);
-    Draw1();
+    Update1();
 }
 void tordaqGui::PanRight1()
 {

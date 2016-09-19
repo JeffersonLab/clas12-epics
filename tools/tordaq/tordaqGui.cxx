@@ -129,7 +129,8 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1000, 40);
     
     zoomSlider = new TGHSlider(sliderFrame);
-    zoomSlider->Connect("PositionChanged(Int_t)", "tordaqGui", this, "doZoomSlider1()");
+    zoomSlider->Connect("Released()", "tordaqGui", this, "doZoomSlider1()");
+    //zoomSlider->Connect("PositionChanged(Int_t)", "tordaqGui", this, "doZoomSlider1()");
     zoomSlider->SetPosition(0);
     sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsCenterY |kLHintsExpandX, 20,20,0,0));
 

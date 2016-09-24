@@ -15,7 +15,7 @@ for (var cc=1; cc<=NCHAN; cc++) {
     lc.setPropertyValue("foreground_color","Header_Foreground");
     lc.setPropertyValue("width",230);
     lc.setPropertyValue("height",15);
-    lc.setPropertyValue("horizontal_alignment",1);
+    lc.setPropertyValue("horizontal_alignment",0);
     lc.setPropertyValue("font","Fineprint");
     lc.setPropertyValue("text",PREFIX+chan);
     lc.setPropertyValue("transparent",0);

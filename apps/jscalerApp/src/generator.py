@@ -187,6 +187,22 @@ def mkChannelsLTCC(crateNumber,sector,system):
         hwChan+=1
   return channels
 
+def mkChannelsCTOF(crateNumber):
+  firstSlot=13
+  channels=[]
+  sides=['D','U']
+  for chan in range(48):
+    for iSide in range(len(sides)):
+      fSlot = firstSlot + 2*((chan)/16) + chan%2
+      fChan = (chan%16)/2 + 4*iSide + 4*((chan%16)/8)
+      channel={'Sl':'%.2d'%(fSlot),'Ch':'%.2d'%(fChan),'Side':sides[iSide],'CrName':'CTOF1','Det':'CTOF','Sys':'FADC'}
+      channel['Element']='%s%.2d'%(sides[iSide],chan+1)
+      setCodes(crateNumber,channel)
+      channels.append(channel)
+  return channels
+
+
+
 def mkChannelsFTOF(crateNumber,sector,system):
   if system=='FADC': crate='ADCFTOF'+str(sector)
   else:              crate='TDCFTOF'+str(sector)
@@ -320,9 +336,10 @@ def printTriggerSubs(sector,CrNo,CrName):
   subFileName='../Db/jscalers_%s_TRIG.sub'%(CrName)
   printSubstitutions(channels,subFileName)
 
+
 # make substution files and one startup per sector:
 def mkSector(sector):
-  iCrate,crates=0,[]
+  crates=[]
   for system in ['FADC','DISC']:
     for detector in ['ECAL','LTCC','PCAL','FTOF']:
       if detector=='LTCC': iCrate-=1 # <--- HACK
@@ -333,10 +350,23 @@ def mkSector(sector):
         printTriggerSubs(sector,iCrate,'TDC'+detector+str(sector))
       crates.extend(mkCrates(channels,subFileName))
       iCrate += 1
-
   printStartup(crates,'jscalers_S%d.cmd'%(sector))
 
+# for detectors without a sector:
+def mkDetector(channels,subFileName,startupFileName):
+  printSubstitutions(channels,subFileName)
+  crate=mkCrates(channels,subFileName)
+  printStartup(crate,startupFileName)
 
-for sector in range(6): mkSector(sector+1)
+
+
+#for sector in range(6): mkSector(sector+1)
+
+mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.sub','jscalers_CTOF.cmd')
+
+#ctof=mkChannelsCTOF()
+#printSubstitutions(mkChannelsCTOF(),'../Db/jscalers_CTOF_FADC.sub')
+#crate=mkCrates(ctof,'../Db/jscalers_CTOF_FADC.sub')
+#printStrartup(crate,'jscalers_CTOF.sub')
 
 

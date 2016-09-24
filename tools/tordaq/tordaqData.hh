@@ -6,6 +6,7 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TH1.h>
 #include <iostream>
 
 class tordaqData {
@@ -20,6 +21,29 @@ public :
    Long64_t        record_tnsec;
    Float_t         record_data[WFLENGTH];
    TBranch        *b_record;
+
+   TH1* getHisto()
+   {
+       if (fChain == 0) return NULL;
+       fChain->LoadTree(0);
+       fChain->GetEntry(0);
+       const double tMin=getTime(0);
+       fChain->LoadTree(fChain->GetEntriesFast()-1);
+       fChain->GetEntry(fChain->GetEntriesFast()-1);
+       const double tMax=getTime(WFLENGTH-1);
+       const int nBins=(tMax-tMin)/FREQUENCY;
+       TH1F *hh=new TH1F(Form("h%d",fChain->GetName()),"",nBins,tMin,tMax);
+       for (Long64_t jentry=0; jentry<fChain->GetEntriesFast(); jentry++) {
+           if (LoadTree(jentry)) break;
+           fChain->GetEntry(jentry);
+           for (int ii=0; ii<WFLENGTH; ii++)
+           {
+               const Double_t tt=getTime(ii);
+               hh->SetBinContent(hh->GetXaxis()->FindBin(tt),record_data[ii]);
+           }
+       }
+       return hh;
+   }
 
    Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
    {

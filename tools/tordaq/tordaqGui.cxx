@@ -1,4 +1,5 @@
 #include "tordaqGui.hh"
+#include "tordaqWriter.hh"
 
 ClassImp(tordaqGui);
 
@@ -33,10 +34,10 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
 
     // TOP FRAME -----------------------------------------------------------------
 
-    topFrame = new TGHorizontalFrame(this, 1000, 40);
+    topFrame = new TGHorizontalFrame(this, 2000, 40);
 
     TGTextButton *openBtn = new TGTextButton(topFrame, "&Open File");
-    openBtn->Connect("Clicked()", "tordaqGui", this, "DoOpen()");
+    openBtn->Connect("Released()", "tordaqGui", this, "DoOpen()");
     topFrame->AddFrame(openBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 1, 5, 5));
 
     fileLabel = new TGLabel(topFrame, "");
@@ -46,10 +47,12 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
 
     TGTextButton *exitBtn = new TGTextButton(topFrame, "&Exit","gApplication->Terminate(0)");
     topFrame->AddFrame(exitBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
-    
+   
+    /*
     TGTextButton *rootBtn = new TGTextButton(topFrame, "Save ROOT File");
-    //rootBtn->Connect("Clicked()", "tordaqGui", this, "SaveRoot()");
+    //rootBtn->Connect("Released()", "tordaqGui", this, "SaveRoot()");
     topFrame->AddFrame(rootBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
+    */
 
     AddFrame(topFrame, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 1));
 
@@ -57,10 +60,10 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
 
     // MIDDLE FRAME ---------------------------------------------------------------
 
-    TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1000, 250);
+    TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1600, 250);
 
     TGVerticalFrame *leftFrame=new TGVerticalFrame(middleFrame,100,250);
-    for (int ii=0; ii<5; ii++)
+    for (int ii=0; ii<10; ii++)
     {
         combos1.push_back(new TGComboBox(leftFrame));
         combos1[combos1.size()-1]->AddEntry(" ",0);
@@ -68,8 +71,12 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
         combos1[combos1.size()-1]->Resize(60,20);
         combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
+    
+    showAllCheck=new TGCheckButton(leftFrame,"Show All");
+    leftFrame->AddFrame(showAllCheck,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY,1,1,1,1));
+    
     redrawBtn = new TGTextButton(leftFrame, "&Draw");
-    redrawBtn->Connect("Clicked()","tordaqGui",this,"Draw1()");
+    redrawBtn->Connect("Released()","tordaqGui",this,"Draw1()");
     redrawBtn->Resize(60,20);
     leftFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
@@ -80,11 +87,11 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     
     TGHorizontalFrame *zoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     zoominBtn = new TGTextButton(zoomFrame, "In");
-    zoominBtn->Connect("Clicked()","tordaqGui",this,"ZoomIn1()");
+    zoominBtn->Connect("Released()","tordaqGui",this,"ZoomIn1()");
     zoominBtn->Resize(60,20);
     zoomFrame->AddFrame(zoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     zoomoutBtn = new TGTextButton(zoomFrame, "Out");
-    zoomoutBtn->Connect("Clicked()","tordaqGui",this,"ZoomOut1()");
+    zoomoutBtn->Connect("Released()","tordaqGui",this,"ZoomOut1()");
     zoomoutBtn->Resize(60,20);
     zoomFrame->AddFrame(zoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     leftFrame->AddFrame(zoomFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
@@ -96,14 +103,16 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     
     TGHorizontalFrame *panFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     panleftBtn = new TGTextButton(panFrame, "Left");
-    panleftBtn->Connect("Clicked()","tordaqGui",this,"PanLeft1()");
+    panleftBtn->Connect("Released()","tordaqGui",this,"PanLeft1()");
     panleftBtn->Resize(60,20);
     panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     panrightBtn = new TGTextButton(panFrame, "Right");
-    panrightBtn->Connect("Clicked()","tordaqGui",this,"PanRight1()");
+    panrightBtn->Connect("Released()","tordaqGui",this,"PanRight1()");
     panrightBtn->Resize(60,20);
     panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
     leftFrame->AddFrame(panFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
+
+
 
     middleFrame->AddFrame(leftFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY,5,5,1,1));
 
@@ -115,18 +124,21 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
 
     // BOTTOM FRAME -----------------------------------------------------------------
     
-    TGHorizontalFrame *bottomFrame = new TGHorizontalFrame(this, 1000, 40);
+    TGHorizontalFrame *bottomFrame = new TGHorizontalFrame(this, 1600, 40);
 
+   /* 
     resampleField = new TGNumberEntryField(bottomFrame, -1, 100,
             TGNumberFormat::kNESInteger, TGNumberFormat::kNEANonNegative,
             TGNumberFormat::kNELLimitMinMax, 1, 10000);
     resampleField->SetWidth(40);
     bottomFrame->AddFrame(new TGLabel(bottomFrame, "Resample Freq."),new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 2, 2, 2));
     bottomFrame->AddFrame(resampleField,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
+
     denoiseCheck = new TGCheckButton(bottomFrame, "DeNoise");
     bottomFrame->AddFrame(denoiseCheck,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
+    */
 
-    TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1000, 40);
+    TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1600, 40);
     
     zoomSlider = new TGHSlider(sliderFrame);
     zoomSlider->Connect("Released()", "tordaqGui", this, "doZoomSlider1()");
@@ -152,6 +164,8 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     bottomFrame->AddFrame(sliderFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 2,2,2,2));
     
     AddFrame(bottomFrame, new TGLayoutHints(kLHintsExpandX));
+
+    
 
 /*
     // status bar, wothless how to update it?
@@ -284,9 +298,32 @@ void tordaqGui::Draw1()
     }
 
     TCanvas *ctmp=canvas1->GetCanvas();
+    
+    double xmin,xmax;
+    if (histos1.size()>0) {
+        double ymin,ymax;
+        ctmp->GetRangeAxis(xmin,ymin,xmax,ymax);
+    }
+
     ctmp->cd();
     ctmp->Clear();
+    
     float min=999999,max=-9999999;
+
+    for (unsigned int ii=0; ii<datahistos.size(); ii++)
+    {
+        bool selected=false;
+        for (unsigned jj=0; jj<combos1.size(); jj++)
+        {
+            if (combos1[jj]->GetSelected()==ii+1) selected=true;
+        }
+        if (selected || showAllCheck->IsOn())
+        {
+            if (datahistos[ii]->GetMaximum()>max) max=datahistos[ii]->GetMaximum();
+            if (datahistos[ii]->GetMinimum()<min) min=datahistos[ii]->GetMinimum();
+        }
+    }
+/*
     for (unsigned int ii=0; ii<combos1.size(); ii++)
     {
         const int jj=combos1[ii]->GetSelected();
@@ -295,9 +332,41 @@ void tordaqGui::Draw1()
             if (datahistos[jj-1]->GetMinimum()<min) min=datahistos[jj-1]->GetMinimum();
         }
     }
+*/
+
+
+
     bool first=true;
     legend1->Clear();
     histos1.clear();
+   
+    int nHist=0;
+
+    for (unsigned int ii=0; ii<datahistos.size(); ii++)
+    {
+        bool selected=false;
+        for (unsigned jj=0; jj<combos1.size(); jj++)
+        {
+            if (combos1[jj]->GetSelected()==ii+1) selected=true;
+        }
+        if (selected || showAllCheck->IsOn())
+        {
+            if (first)
+            {
+                datahistos[ii]->SetMaximum(max);
+                datahistos[ii]->SetMinimum(min);
+                datahistos[ii]->GetXaxis()->SetRangeUser(xmin,xmax);
+            }
+            histos1.push_back(datahistos[ii]);
+            datahistos[ii]->SetLineColor(colors[nHist%5]);
+            datahistos[ii]->SetLineStyle(nHist/5+1);
+            legend1->AddEntry(datahistos[ii],datahistos[ii]->GetTitle(),"L");
+            datahistos[ii]->Draw(first?"":"SAME");
+            first=false;
+            nHist++;
+        }
+    }
+   /* 
     for (unsigned int ii=0; ii<combos1.size(); ii++)
     {
         const int jj=combos1[ii]->GetSelected();
@@ -314,6 +383,7 @@ void tordaqGui::Draw1()
             first=false;
         }
     }
+    */
     legend1->Draw();
     ctmp->Update();
 }
@@ -389,7 +459,7 @@ int main(int argc, char **argv) {
 
     if (argc>1) filename=argv[1];
     TApplication theApp("App", &argc, argv);
-    tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 1000, 600);
+    tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 2000, 600);
     theApp.Run();
     return 0;
 }

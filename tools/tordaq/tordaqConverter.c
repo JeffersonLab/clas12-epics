@@ -119,8 +119,10 @@ int main(int argc,char **argv)
         exit(1);
     }
 
+//    TFile *inFile=new TFile(inFilename,"READ");
+
     // the real work:
-    tdr.process();
+    if (!tdr.process()) exit(1);
 
     std::cout<<std::endl<<"Closing Files ..."<<std::endl<<std::endl;
     if (tdr.outAsciiFile) fclose(tdr.outAsciiFile);

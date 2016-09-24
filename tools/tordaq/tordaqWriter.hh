@@ -18,7 +18,7 @@ public:
     {
         ntuple=NULL;
         histos.clear();
-        TObject *xx=gDirectory-Get("tordaq");
+        TObject *xx=gDirectory->Get("tordaq");
         if (xx)
         {
             ntuple=(TNtupleD*)xx;
@@ -28,7 +28,7 @@ public:
             int ivt=0;
             while (1)
             {
-                TObject *xx=gDirectory->Get(Form("h%d",ivt1+1));
+                TObject *xx=gDirectory->Get(Form("h%d",ivt+1));
                 if (!xx) break;
                 histos.push_back((TH1*)xx);
                 ivt++;
@@ -38,7 +38,7 @@ public:
                 std::cerr<<"tordaqWriter:  Wrong number of histograms."<<std::endl;
                 return false;
             }
-            return writeAsciiFileFromHistograms();
+            return writeAsciiFileFromHistos();
         }
     }
 };

@@ -61,6 +61,7 @@ class tordaqGui: public TGMainFrame {
         TGLabel *zoomSliderLabelMin;
         TGLabel *zoomSliderLabelMid;
         TGLabel *zoomSliderLabelMax;
+        TGCheckButton* showAllCheck;
         std::vector <TGCheckButton*> selectors1;
         std::vector <TGCheckButton*> selectors2;
         std::vector <TGComboBox*> combos1;

@@ -14,6 +14,8 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 #
 dbLoadTemplate("iocBoot/${IOC}/wf2root.substitutions")
 
+dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_TORUSDAQ_,DLY=60")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

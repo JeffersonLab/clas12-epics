@@ -360,13 +360,8 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-#for sector in range(6): mkSector(sector+1)
+for sector in range(6): mkSector(sector+1)
 
 mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.sub','jscalers_CTOF.cmd')
-
-#ctof=mkChannelsCTOF()
-#printSubstitutions(mkChannelsCTOF(),'../Db/jscalers_CTOF_FADC.sub')
-#crate=mkCrates(ctof,'../Db/jscalers_CTOF_FADC.sub')
-#printStrartup(crate,'jscalers_CTOF.sub')
 
 

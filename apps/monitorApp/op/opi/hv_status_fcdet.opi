@@ -460,7 +460,7 @@ $(pv_value)</tooltip>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>0</border_style>
-    <tooltip></tooltip>
+    <tooltip>Open Controls</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
@@ -498,7 +498,9 @@ $(pv_value)</tooltip>
         <path></path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-]]></scriptText>
+opiName=widget.getMacroValue("OPI");
+
+ScriptUtil.openOPI(widget,opiName,2,null);]]></scriptText>
         <embedded>true</embedded>
         <description>Open Controls</description>
       </action>

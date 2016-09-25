@@ -108,6 +108,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>FTOF</DET>
+      <OPI>/CLAS12_Share/detectors/FTOF/FTOF.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -436,6 +437,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>ECAL</DET>
+      <OPI>/CLAS12_Share/detectors/ECAL/ECAL.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -477,6 +479,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>PCAL</DET>
+      <OPI>/CLAS12_Share/detectors/ECAL/ECAL.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -518,6 +521,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>LTCC</DET>
+      <OPI>/CLAS12_Share/detectors/LTCC/ltcc_hv.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -559,6 +563,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>HTCC</DET>
+      <OPI>/CLAS12_Share/detectors/HTCC/htcc_hv.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -1143,6 +1148,7 @@ $(pv_value)</tooltip>
         <path></path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
+ScriptUtil.openOPI(widget,"/CLAS12_Share/detectors/FTC/FTC.opi",2,null);
 ]]></scriptText>
         <embedded>true</embedded>
         <description>Open Controls</description>
@@ -1264,6 +1270,10 @@ $(pv_value)</tooltip>
         <path></path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
+opiName=widget.getMacroValue("OPI");
+
+ScriptUtil.openOPI(widget,"/CLAS12_Share/detectors/FTH/FTH_HV_details_novice.opi",2,null);
+
 ]]></scriptText>
         <embedded>true</embedded>
         <description>Open Controls</description>
@@ -1384,6 +1394,11 @@ $(pv_value)</tooltip>
       <action type="EXECUTE_JAVASCRIPT">
         <path></path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+opiName=widget.getMacroValue("OPI");
+
+ScriptUtil.openOPI(widget,"/CLAS12_Share/detectors/FTT/FTT_HV_details_novice.opi",2,null);
+
 
 ]]></scriptText>
         <embedded>true</embedded>
@@ -1563,6 +1578,10 @@ $(pv_value)</tooltip>
       <action type="EXECUTE_JAVASCRIPT">
         <path></path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+opiName=widget.getMacroValue("OPI");
+
+ScriptUtil.openOPI(widget,"/CLAS12_Share/detectors/CTOF/ctof_hv.opi",2,null);
 
 ]]></scriptText>
         <embedded>true</embedded>

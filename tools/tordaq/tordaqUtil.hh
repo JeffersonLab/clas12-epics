@@ -3,32 +3,42 @@
 class tordaqUtil
 {
 public:
-static TH1* zoomHisto(TH1* hin,const int firstBin,const int lastBin)
+static TH1* zoomHisto(TH1* hin,const char* name,const int firstBin,const int lastBin)
 {
-    if (firstBin<1 || lastBin>hin->GetNbinsX())
+    if (gDirectory->Get(name)) gDirectory->Get(name)->Delete();
+    if (firstBin>lastBin || firstBin<1 || lastBin>hin->GetNbinsX())
     {
         std::cerr<<"zoomHistogram Error:  invalid bins"<<std::endl;
         return NULL;
     }
     const int nBins=lastBin-firstBin+1;
     TH1* hout=new TH1F(
-            Form("%s_zoom",hin->GetName()),
-            Form(";%s;%s",hin->GetXaxis()->GetTitle,hin->GetYaxis()->GetTitle()),
+            name,
+            Form(";%s;%s",hin->GetXaxis()->GetTitle(),hin->GetYaxis()->GetTitle()),
             nBins,
-            hin->GetXaxis()->GetBinLoEdge(firstBin),
+            hin->GetXaxis()->GetBinLowEdge(firstBin),
             hin->GetXaxis()->GetBinUpEdge(lastBin));
-    for (int ii=1,ii<nBins; ii++)
+    for (int ii=1; ii<nBins; ii++)
     {
         hout->SetBinContent(ii,hin->GetBinContent(firstBin+ii-1));
         hout->SetBinError(ii,hin->GetBinError(firstBin+ii-1));
     }
     return hout;
 }
+static TH1* zoomHisto(TH1* hin,const double x1,const double x2)
+{
+    int firstBin=hin->FindBin(x1);
+    int lastBin=hin->FindBin(x2);
+    if (firstBin<1) firstBin=1;
+    if (lastBin>hin->GetNbinsX()) lastBin=hin->GetNbinsX();
+    return zoomHisto(hin,firstBin,lastBin);
+}
 
 /*
- * Remove noise via transform to frequency domain and back.
- * copied from Hall-D (yqiang)
- */
+//
+// Remove noise via transform to frequency domain and back.
+// copied from Hall-D (yqiang)
+//
 static TH1 *deNoise(TH1 *h1)
 {
     // copied from Hall-D (yqiang)
@@ -88,10 +98,10 @@ static TH1 *deNoise(TH1 *h1)
     return h2;
 }
 
-/*
- * Resample data to lower frequency than the base frequency (upto 10000 Hz)
- * copied from Hall-D (yqiang)
- */
+//
+// Resample data to lower frequency than the base frequency (upto 10000 Hz)
+// copied from Hall-D (yqiang)
+//
 TH1F *Resample(
         TH1 *h1,
         const double freq,
@@ -167,5 +177,6 @@ TH1F *Resample(
         return h3;
     }
 }
+*/
 };
 #endif

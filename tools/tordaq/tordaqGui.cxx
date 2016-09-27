@@ -1,5 +1,6 @@
 #include "tordaqGui.hh"
 #include "tordaqWriter.hh"
+#include "tordaqUtil.hh"
 
 ClassImp(tordaqGui);
 
@@ -242,8 +243,8 @@ void tordaqGui::DoOpen(TString filename="") {
         tdReader.makeHistos=true;
         if (!tdReader.process())
         {
-            std::cerr<<"NO WF2ROOT TREES FOUND IN   "+filename<<std::endl;
-            fileLabel->ChangeText("NO WF2ROOT TREES FOUND IN   "+filename);
+            std::cerr<<"Error Reading WF2ROOT Trees in   "+filename<<std::endl;
+            fileLabel->ChangeText("Error Reading WF2ROOT Trees in   "+filename);
             this->Layout();
             return;
         }
@@ -307,9 +308,9 @@ void tordaqGui::Draw1()
 
     ctmp->cd();
     ctmp->Clear();
-    
+   
+    // determine minimum and maximum for y-range:
     float min=999999,max=-9999999;
-
     for (unsigned int ii=0; ii<datahistos.size(); ii++)
     {
         bool selected=false;
@@ -357,7 +358,17 @@ void tordaqGui::Draw1()
                 datahistos[ii]->SetMinimum(min);
                 datahistos[ii]->GetXaxis()->SetRangeUser(xmin,xmax);
             }
+
+            // This should give a huge speed up when overlaying many plots.
+            // But will need some reworking in the tordaqGui's zoom functions.
+            //histos1.push_back(tordaqUtil::zoomHisto(
+            //            datahistos[ii],
+            //            Form("%s_zoom",datahistos[ii]->GetName()),
+            //            xmin,
+            //            xmax));
+
             histos1.push_back(datahistos[ii]);
+            
             datahistos[ii]->SetLineColor(colors[nHist%5]);
             datahistos[ii]->SetLineStyle(nHist/5+1);
             legend1->AddEntry(datahistos[ii],datahistos[ii]->GetTitle(),"L");

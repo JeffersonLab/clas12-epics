@@ -29,7 +29,8 @@ public:
     static void ProgressMeter(const double total,const double current,const int starttime=0)
     {
         static const int maxdots=40;
-        const double frac = current/total;
+        double frac = current/total;
+        if (frac>1) frac=1;
         int ii=0;  printf("%3.0f%% [",frac*100);
         for ( ; ii < frac*maxdots; ii++) printf("=");
         for ( ; ii < maxdots;      ii++) printf(" ");
@@ -38,8 +39,12 @@ public:
             time_t now=time(0);
             timeRemain=float(time(0)-starttime)*(1/frac-1);
         }
-        if (frac>0.2 && timeRemain>0) printf("]  %d sec          \r",timeRemain);
-        else                          printf("]  ?? sec          \r");
+        if (frac>0.2)
+        {
+            if (timeRemain>0) printf("]  %d sec          \r",timeRemain);
+            else              printf("]                  \r");
+        }
+        else                  printf("]  ?? sec          \r");
         fflush(stdout);
     }
     
@@ -67,21 +72,32 @@ public:
         }
 
         // find the input TTrees:
-        int itree=1;
-        while (1)
+        for (int ii=0; ii<tordaqData::NVT; ii++)
         {
-            TTree *tt=(TTree*)gDirectory->Get(Form("VT%d",itree++));
+            TTree *tt=(TTree*)gDirectory->Get(Form("VT%d",ii+1));
             if (tt) inTrees.push_back(new tordaqData(tt));
-            else break;
         }
         if (inTrees.size()<1)
         {
             std::cerr<<"Found No Trees"<<std::endl<<std::endl;
             return false;
         }
+        // print names of any missing trees:
         if (inTrees.size()!=tordaqData::NVT)
         {
-            std::cerr<<"Missing Trees"<<std::endl<<std::endl;
+            for (int ii=0; ii<tordaqData::NVT; ii++)
+            {
+                bool found=false;
+                for (unsigned int jj=0; jj<inTrees.size(); jj++)
+                {
+                    if (!strcmp(Form("VT%d",ii+1),inTrees[jj]->fChain->GetName()))
+                    {
+                        found=true;
+                        break;
+                    }
+                }
+                if (!found) std::cerr<<"Missing Tree:   "<<Form("VT%d",ii+1)<<std::endl;
+            }
             return false;
         }
 
@@ -102,28 +118,27 @@ public:
             }
         }
 
-        // determine available time range:
-        Double_t time0=-1,time1=-1;
-        for (unsigned int ii=0; ii<inTrees.size(); ii++)
-        {
-            if (inTrees[ii]->LoadTree(0) < 0) continue;
-            else
-            {
-                inTrees[ii]->fChain->GetEntry(0);
-                const Double_t t0 = inTrees[ii]->getTime(0);
-                if (time0<0 || t0<time0) time0=t0;
-            }
-            if (inTrees[ii]->LoadTree(inTrees[ii]->fChain->GetEntries()-1) < 0) continue;
-            else
-            {
-                inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
-                const Double_t t1 = inTrees[ii]->getTime(inTrees[ii]->WFLENGTH-1);
-                if (time1<0 || t1>time1) time1=t1;
-            }
-        }
-
         if (makeHistos)
         {
+            // determine available time range:
+            Double_t time0=-1,time1=-1;
+            for (unsigned int ii=0; ii<inTrees.size(); ii++)
+            {
+                if (inTrees[ii]->LoadTree(0) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(0);
+                    const Double_t t0 = inTrees[ii]->getTime(0);
+                    if (time0<0 || t0<time0) time0=t0;
+                }
+                if (inTrees[ii]->LoadTree(inTrees[ii]->fChain->GetEntries()-1) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
+                    const Double_t t1 = inTrees[ii]->getTime(inTrees[ii]->WFLENGTH-1);
+                    if (time1<0 || t1>time1) time1=t1;
+                }
+            }
             const Double_t sec0=floor(time0);
             const Double_t sec1=floor(time1)+1;
             const int nSeconds=floor(time1)+1-floor(time0);
@@ -131,6 +146,41 @@ public:
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
                 outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
         }
+
+/*
+        if (makeHistos)
+        {
+            for (unsigned int ii=0; ii<inTrees.size(); ii++)
+            {
+                Double_t time0=-1,time1=-1;
+                if (inTrees[ii]->LoadTree(0) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(0);
+                    time0 = inTrees[ii]->getTime(0);
+                }
+                if (inTrees[ii]->LoadTree(inTrees[ii]->fChain->GetEntries()-1) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
+                    time1 = inTrees[ii]->getTime(inTrees[ii]->WFLENGTH-1);
+                }
+                if (time0>0 && time1>0)
+                {
+                    const Double_t sec0=floor(time0);
+                    const Double_t sec1=floor(time1)+1;
+                    const int nSeconds=floor(time1)+1-floor(time0);
+                    const int nBins=nSeconds*tordaqData::FREQUENCY;
+                    outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
+                }
+                else
+                {
+                    std::cerr<<"Error Reading TTree:  "<<inTrees[ii]->fChain->GetName()<<std::endl;
+                    return false;
+                }
+            }
+        }
+*/
 
         std::vector <bool> skipVars;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) skipVars.push_back(false);

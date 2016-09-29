@@ -12,14 +12,14 @@ def exit(text):
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
 DETS=DETSHV+DETSLV
 
 FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 
 # key,value = field,deadband
-FIELDS_HV_MYA={':vset':0,':iset':0,':vmon':0.1,':imon':5.0}
+FIELDS_HV_MYA={':pwonoff':0,':stat':0,':comms':0,':vset':0,':iset':0,':vmon':0.1,':imon':1.0}
 
 DATADIR='/usr/clas12/DATA/burt'
 
@@ -67,6 +67,14 @@ def getChannels(det,sector=None):
     for qq in range(4):
       for gg in range(9):
         prefixes.append('B_DET_FTC_HV_Q%dG%d'%(qq+1,gg+1))
+  elif det=='FTH_HV':
+    for ii in range(30):
+      prefixes.append('B_DET_FTH_HV_H%.2d'%(ii+1))
+  elif det=='FTT_HV':
+    for ii in range(2):
+      for side in ['TOP','BOT']:
+        for lay in ['STR','DR']:
+          prefixes.append('B_DET_FTT_HV_%.1d_%s%s'%(side,ii+1,lay))
   elif det=='LTCC_HV':
     for ss in sectors:
       for lr in ['L','R']:
@@ -78,7 +86,7 @@ def getChannels(det,sector=None):
       for lr in ['L','R']:
         for ii in range(4):
           #prefixes.append('B_DET_HTCC_HV_SEC%d_%s_%.2d'%(ss,lr,ii+1))
-          prefixes.append('B_DET_HTCC_HV_SEC%d_%s_E%.2d'%(ss,lr,ii+1))
+          prefixes.append('B_DET_HTCC_HV_SEC%d_%s%.1d'%(ss,lr,ii+1))
   elif det=='DC_HV':
     SLAYERS={1:[1,2],2:[3,4],3:[5,6]}
     SFWIRES=['01-08','09-16','17-24','25-32','33-48','49-64','65-80','81-112']

@@ -13,11 +13,11 @@
 
 #######################################
 
-record(asyn, "$(P)$(R)ASYN") {
-    field(PORT, "$(PORT)")
-    field(OEOS, "\r\n")
-    field(IEOS, "\r\n")
-}
+#record(asyn, "$(P)$(R)ASYN") {
+#    field(PORT, "$(PORT)")
+#    field(OEOS, "\r\n")
+#    field(IEOS, "\r\n")
+#}
 
 #######################################
 
@@ -32,6 +32,7 @@ record(ai, "$(P)$(R)ADDR") {
     field(DTYP, "stream")
     field(INP,  "@prologix.proto getAddr $(PORT)")
     field(SCAN, "10 second")
+    field(DESC, "$(DESC)")
 }
 
 record(ao, "$(P)$(R)ADDR:SET") {
@@ -63,9 +64,9 @@ record(bo, "$(P)$(R)AUTO:SET") {
 record(mbbi, "$(P)$(R)EOS") {
     field(DTYP, "stream")
     field(INP,  "@prologix.proto getEos $(PORT)")
-    field(ZRST, "CF+LF")
+    field(ZRST, "CR+LF")
     field(ZRVL, "0")
-    field(ONST, "CF")
+    field(ONST, "CR")
     field(ONVL, "1")
     field(TWST, "LF")
     field(TWVL, "2")

@@ -33,6 +33,7 @@ DB  += torus_bo_generic.db
 DB  += torus_cryocon.db
 DB  += torus_force.substitutions
 REQ += torus_force_settings.req
+DB  += torus_import.db
 DB  += torus_interlocks.substitutions
 DB  += torus_LHe.substitutions
 DB  += torus_LN2.db

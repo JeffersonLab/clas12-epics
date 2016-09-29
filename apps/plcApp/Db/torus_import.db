@@ -1,0 +1,33 @@
+#
+# torus_import.db
+#
+# Wierd work-around...  We need to write PVs from other systems to the PLC for 
+# cPID inputs.  Example: read a cryo PV (via read-only gateway) and write the value 
+# to the associated PLC tag.  This file assumed 1-1 naming convention.
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   TAG   - PLC tag also suffix of PV name
+#   PLCID - PLC ID set in startup
+#   EGU   - (optional)
+#   PREC  - (optional)
+#   DESC  - (optional)
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Sept 2016
+#
+
+record(ao, "$(P)$(R)$(TAG)") {
+    field(DESC, "$(DESC="")")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(OUT,  "@$(PLCID="") $(TAG="") S 1")
+    field(DOL,  "$(TAG)")
+    field(OMSL, "closed_loop")
+    field(EGU,  "$(EGU="")")
+    field(PREC, "$(PREC=0)")
+    field(SCAN, "1 second")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+

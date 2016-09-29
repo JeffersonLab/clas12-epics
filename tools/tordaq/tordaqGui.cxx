@@ -21,7 +21,8 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     
     SetStyle();
 
-    // modern c++ should let me set this with a one-liner in the class def:
+    // modern c++ should let me set this with a const one-liner in the class def,
+    // but looks like ROOT (maybe need ROOT6) dictionary generator donot like it.  
     colors[0]=1;
     colors[1]=2;
     colors[2]=4;
@@ -45,137 +46,144 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     fileLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
     fileLabel->SetWrapLength(-1);
     topFrame->AddFrame(fileLabel,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 10, 1, 5, 5));
+    
+    //progressBar = new TGHProgressBar(topFrame,50,20);
+    //topFrame->AddFrame(progressBar,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY,5,1,1,1));
 
     TGTextButton *exitBtn = new TGTextButton(topFrame, "&Exit","gApplication->Terminate(0)");
     topFrame->AddFrame(exitBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
    
-    /*
-    TGTextButton *rootBtn = new TGTextButton(topFrame, "Save ROOT File");
-    //rootBtn->Connect("Released()", "tordaqGui", this, "SaveRoot()");
-    topFrame->AddFrame(rootBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
-    */
+    //TGTextButton *rootBtn = new TGTextButton(topFrame, "Save ROOT File");
+    ////rootBtn->Connect("Released()", "tordaqGui", this, "SaveRoot()");
+    //topFrame->AddFrame(rootBtn,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 1, 10, 5, 5));
 
     AddFrame(topFrame, new TGLayoutHints(kLHintsExpandX, 1, 1, 1, 1));
 
 
-
     // MIDDLE FRAME ---------------------------------------------------------------
 
-    TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1600, 250);
+    TGHorizontalFrame *middleFrame = new TGHorizontalFrame(this, 1600, 600);
 
-    TGVerticalFrame *leftFrame=new TGVerticalFrame(middleFrame,100,250);
+    
+    // LEFT FRAME -----------------------------------------------------------------
+    
+    TGVerticalFrame *leftFrame=new TGVerticalFrame(middleFrame,100,600);
+   
+    TGVerticalFrame *selectFrame=new TGVerticalFrame(leftFrame,100,600);
+
     for (int ii=0; ii<10; ii++)
     {
-        combos1.push_back(new TGComboBox(leftFrame));
+        combos1.push_back(new TGComboBox(selectFrame));
         combos1[combos1.size()-1]->AddEntry(" ",0);
-        leftFrame->AddFrame(combos1[combos1.size()-1],new TGLayoutHints(kLHintsCenterX | kLHintsExpandX | kLHintsCenterY,2,2,2,2));
+        selectFrame->AddFrame(combos1[combos1.size()-1],new TGLayoutHints(kLHintsCenterX | kLHintsExpandX | kLHintsTop,2,2,2,2));
         combos1[combos1.size()-1]->Resize(60,20);
         combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
     
-    showAllCheck=new TGCheckButton(leftFrame,"Show All");
-    leftFrame->AddFrame(showAllCheck,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY,1,1,1,1));
+    showAllCheck=new TGCheckButton(selectFrame,"Show All");
     
-    redrawBtn = new TGTextButton(leftFrame, "&Draw");
+    selectFrame->AddFrame(showAllCheck,new TGLayoutHints(kLHintsExpandX | kLHintsTop,1,1,1,1));
+    redrawBtn = new TGTextButton(selectFrame, "&Draw");
     redrawBtn->Connect("Released()","tordaqGui",this,"Draw1()");
     redrawBtn->Resize(60,20);
-    leftFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
-    TGLabel *zoomLabel = new TGLabel(leftFrame, "X-Zoom");
-    zoomLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
-    zoomLabel->SetWrapLength(-1);
-    leftFrame->AddFrame(zoomLabel,new TGLayoutHints(kLHintsCenterY | kLHintsCenterX, 1, 1, 20, 1));
+    selectFrame->AddFrame(redrawBtn,new TGLayoutHints(kLHintsCenterY | kLHintsExpandX, 1, 1, 1, 1));
     
-    TGHorizontalFrame *zoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
-    zoominBtn = new TGTextButton(zoomFrame, "In");
-    zoominBtn->Connect("Released()","tordaqGui",this,"ZoomIn1()");
-    zoominBtn->Resize(60,20);
-    zoomFrame->AddFrame(zoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
-    zoomoutBtn = new TGTextButton(zoomFrame, "Out");
-    zoomoutBtn->Connect("Released()","tordaqGui",this,"ZoomOut1()");
-    zoomoutBtn->Resize(60,20);
-    zoomFrame->AddFrame(zoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
-    leftFrame->AddFrame(zoomFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
+    leftFrame->AddFrame(selectFrame,new TGLayoutHints(kLHintsExpandX | kLHintsTop,1,1,5,1));
+    
+    TGLabel *yZoomLabel = new TGLabel(leftFrame, "Y-Zoom");
+    yZoomLabel->SetTextJustify(kTextCenterX | kTextCenterY);
+    yZoomLabel->SetWrapLength(-1);
+    TGHorizontalFrame *yZoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
+    yZoominBtn = new TGTextButton(yZoomFrame, "In");
+    yZoominBtn->Connect("Released()","tordaqGui",this,"yZoomIn1()");
+    yZoominBtn->Resize(60,20);
+    yZoomFrame->AddFrame(yZoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+    yZoomoutBtn = new TGTextButton(yZoomFrame, "Out");
+    yZoomoutBtn->Connect("Released()","tordaqGui",this,"yZoomOut1()");
+    yZoomoutBtn->Resize(60,20);
+    yZoomFrame->AddFrame(yZoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+
+    TGLabel *xZoomLabel = new TGLabel(leftFrame, "X-Zoom");
+    xZoomLabel->SetTextJustify(kTextCenterX | kTextCenterY);
+    xZoomLabel->SetWrapLength(-1);
+    TGHorizontalFrame *xZoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
+    xZoominBtn = new TGTextButton(xZoomFrame, "In");
+    xZoominBtn->Connect("Released()","tordaqGui",this,"ZoomIn1()");
+    xZoominBtn->Resize(60,20);
+    xZoomFrame->AddFrame(xZoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+    xZoomoutBtn = new TGTextButton(xZoomFrame, "Out");
+    xZoomoutBtn->Connect("Released()","tordaqGui",this,"ZoomOut1()");
+    xZoomoutBtn->Resize(60,20);
+    xZoomFrame->AddFrame(xZoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
 
     TGLabel *panLabel = new TGLabel(leftFrame, "X-Pan");
-    panLabel->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
+    panLabel->SetTextJustify(kTextCenterX | kLHintsExpandX | kTextCenterY);
     panLabel->SetWrapLength(-1);
-    leftFrame->AddFrame(panLabel,new TGLayoutHints(kLHintsCenterY | kLHintsCenterX, 1, 1, 20, 1));
-    
     TGHorizontalFrame *panFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     panleftBtn = new TGTextButton(panFrame, "Left");
     panleftBtn->Connect("Released()","tordaqGui",this,"PanLeft1()");
     panleftBtn->Resize(60,20);
-    panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
+    panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
     panrightBtn = new TGTextButton(panFrame, "Right");
     panrightBtn->Connect("Released()","tordaqGui",this,"PanRight1()");
     panrightBtn->Resize(60,20);
-    panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 1, 1, 1, 1));
-    leftFrame->AddFrame(panFrame,new TGLayoutHints(kLHintsExpandX|kLHintsCenterY,1,1,1,1));
+    panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+   
+    // stacking from the bottom upwards:
+    leftFrame->AddFrame(panFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,1));
+    leftFrame->AddFrame(panLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
+    leftFrame->AddFrame(xZoomFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
+    leftFrame->AddFrame(xZoomLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
+    leftFrame->AddFrame(yZoomFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
+    leftFrame->AddFrame(yZoomLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
 
+    middleFrame->AddFrame(leftFrame,new TGLayoutHints(kLHintsLeft | kLHintsExpandY,5,5,1,1));
 
-
-    middleFrame->AddFrame(leftFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY,5,5,1,1));
-
-    canvas1 = new TRootEmbeddedCanvas("canvas1", middleFrame, 800, 250);
-    middleFrame->AddFrame(canvas1, new TGLayoutHints(kLHintsExpandX|kLHintsExpandY, 1, 1, 1, 1));
-
-    AddFrame(middleFrame,new TGLayoutHints(kLHintsExpandX|kLHintsExpandY,1,1,1,1));
-
-
-    // BOTTOM FRAME -----------------------------------------------------------------
+    // RIGHT FRAME -------------------------------------------------------------------
     
-    TGHorizontalFrame *bottomFrame = new TGHorizontalFrame(this, 1600, 40);
+    TGVerticalFrame *rightFrame = new TGVerticalFrame(middleFrame, 900, 400);
+    
+    
+    canvas1 = new TRootEmbeddedCanvas("canvas1", rightFrame, 900, 500);
+    rightFrame->AddFrame(canvas1, new TGLayoutHints(kLHintsExpandX|kLHintsExpandY, 1, 1, 1, 1));
 
-   /* 
-    resampleField = new TGNumberEntryField(bottomFrame, -1, 100,
-            TGNumberFormat::kNESInteger, TGNumberFormat::kNEANonNegative,
-            TGNumberFormat::kNELLimitMinMax, 1, 10000);
-    resampleField->SetWidth(40);
-    bottomFrame->AddFrame(new TGLabel(bottomFrame, "Resample Freq."),new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 2, 2, 2));
-    bottomFrame->AddFrame(resampleField,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 2, 5, 2, 2));
-
-    denoiseCheck = new TGCheckButton(bottomFrame, "DeNoise");
-    bottomFrame->AddFrame(denoiseCheck,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 5, 20, 2, 2));
-    */
-
-    TGVerticalFrame *sliderFrame = new TGVerticalFrame(bottomFrame, 1600, 40);
+    TGVerticalFrame *sliderFrame = new TGVerticalFrame(rightFrame, 1600, 40);
     
     zoomSlider = new TGHSlider(sliderFrame);
     zoomSlider->Connect("Released()", "tordaqGui", this, "doZoomSlider1()");
     //zoomSlider->Connect("PositionChanged(Int_t)", "tordaqGui", this, "doZoomSlider1()");
     zoomSlider->SetPosition(0);
-    sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsCenterY |kLHintsExpandX, 20,20,0,0));
+    sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsBottom |kLHintsExpandX, 20,20,0,0));
 
     TGHorizontalFrame *sliderLabelFrame = new TGHorizontalFrame(sliderFrame,1000,20);
     zoomSliderLabelMin = new TGLabel(sliderLabelFrame, "");
     zoomSliderLabelMin->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
     zoomSliderLabelMin->SetWrapLength(-1);
-    sliderLabelFrame->AddFrame(zoomSliderLabelMin,new TGLayoutHints(kLHintsLeft | kLHintsCenterY, 0, 0, 0, 0));
+    sliderLabelFrame->AddFrame(zoomSliderLabelMin,new TGLayoutHints(kLHintsLeft | kLHintsBottom, 0, 0, 0, 0));
     zoomSliderLabelMid = new TGLabel(sliderLabelFrame, "");
     zoomSliderLabelMid->SetTextJustify(kTextCenterX | kLHintsExpandX | kTextCenterY);
     zoomSliderLabelMid->SetWrapLength(-1);
-    sliderLabelFrame->AddFrame(zoomSliderLabelMid,new TGLayoutHints(kLHintsCenterX | kLHintsCenterY, 0, 0, 0, 0));
+    sliderLabelFrame->AddFrame(zoomSliderLabelMid,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 0, 0, 0, 0));
     zoomSliderLabelMax = new TGLabel(sliderLabelFrame, "");
     zoomSliderLabelMax->SetTextJustify(kTextLeft | kLHintsExpandX | kTextCenterY);
     zoomSliderLabelMax->SetWrapLength(-1);
-    sliderLabelFrame->AddFrame(zoomSliderLabelMax,new TGLayoutHints(kLHintsRight | kLHintsCenterY, 0, 0, 0, 0));
-    sliderFrame->AddFrame(sliderLabelFrame,new TGLayoutHints(kLHintsExpandX | kLHintsCenterY, 0,0,0,0));
+    sliderLabelFrame->AddFrame(zoomSliderLabelMax,new TGLayoutHints(kLHintsRight | kLHintsBottom, 0, 0, 0, 0));
+    sliderFrame->AddFrame(sliderLabelFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 0,0,0,0));
 
-    bottomFrame->AddFrame(sliderFrame,new TGLayoutHints(kLHintsLeft | kLHintsCenterY | kLHintsExpandX, 2,2,2,2));
-    
-    AddFrame(bottomFrame, new TGLayoutHints(kLHintsExpandX));
+    rightFrame->AddFrame(sliderFrame,new TGLayoutHints(kLHintsLeft | kLHintsBottom | kLHintsExpandX, 2,2,2,2));
 
-    
+    middleFrame->AddFrame(rightFrame,new TGLayoutHints(kLHintsExpandX | kLHintsExpandY,1,1,1,1));
 
-/*
-    // status bar, wothless how to update it?
+    AddFrame(middleFrame,new TGLayoutHints(kLHintsExpandX | kLHintsExpandY,1,1,1,1));
+
+
+    // status bar, how to update it?  (answer:  threads ...)
     Int_t parts[] = {20, 15, 10, 55};
     fStatusBar = new TGStatusBar(this, 50, 10, kVerticalFrame);
     fStatusBar->SetParts(parts, 4);
     fStatusBar->Draw3DCorner(kFALSE);
     AddFrame(fStatusBar, new TGLayoutHints(kLHintsExpandX, 0, 0, 10, 0));
-*/
 
     SetWindowName("Hall-B Torus Analysis");
     MapSubwindows();
@@ -200,7 +208,7 @@ void tordaqGui::DoOpen(TString filename="") {
         fi.fIniDir = StrDup(dataDir);
         fi.fMultipleSelection = true;
         TList *filelist;
-        new TGFileDialog(gClient->GetRoot(), this, kFDOpen, &fi);
+        TGFileDialog *tgfd=new TGFileDialog(gClient->GetRoot(), this, kFDOpen, &fi);
         if (!fi.fFileNamesList) return;
         filelist = fi.fFileNamesList;
         TObjLink *lnk=filelist->FirstLink();
@@ -217,7 +225,7 @@ void tordaqGui::DoOpen(TString filename="") {
 
     std::cout<<"Reading "+filename+" ....."<<std::endl;
 
-    // how to get it to update immeditately?
+    // how to get it to update immeditately?  (answer:  threads)
     fileLabel->ChangeText("Reading "+filename+" ....");
     //fileLabel->SetText("Reading "+filename+" ....");
     //fileLabel->Draw();
@@ -241,6 +249,7 @@ void tordaqGui::DoOpen(TString filename="") {
     if (!gDirectory->Get("h1"))
     {
         tdReader.makeHistos=true;
+        //tdReader.progressMeter=progressBar;
         if (!tdReader.process())
         {
             std::cerr<<"Error Reading WF2ROOT Trees in   "+filename<<std::endl;
@@ -252,7 +261,7 @@ void tordaqGui::DoOpen(TString filename="") {
 
     while (1)
     {
-        tordaqReader::ProgressMeter(tordaqData::NVT,ivt);
+        tdReader.ProgressMeter(tordaqData::NVT,ivt);
 
         TObject* xx=gDirectory->Get(Form("h%d",ivt));
         if (!xx) break;
@@ -299,13 +308,11 @@ void tordaqGui::Draw1()
     }
 
     TCanvas *ctmp=canvas1->GetCanvas();
-    
     double xmin,xmax;
     if (histos1.size()>0) {
         double ymin,ymax;
         ctmp->GetRangeAxis(xmin,ymin,xmax,ymax);
     }
-
     ctmp->cd();
     ctmp->Clear();
    
@@ -324,25 +331,11 @@ void tordaqGui::Draw1()
             if (datahistos[ii]->GetMinimum()<min) min=datahistos[ii]->GetMinimum();
         }
     }
-/*
-    for (unsigned int ii=0; ii<combos1.size(); ii++)
-    {
-        const int jj=combos1[ii]->GetSelected();
-        if (jj>0 && jj<=datahistos.size()) {
-            if (datahistos[jj-1]->GetMaximum()>max) max=datahistos[jj-1]->GetMaximum();
-            if (datahistos[jj-1]->GetMinimum()<min) min=datahistos[jj-1]->GetMinimum();
-        }
-    }
-*/
-
-
 
     bool first=true;
     legend1->Clear();
     histos1.clear();
-   
     int nHist=0;
-
     for (unsigned int ii=0; ii<datahistos.size(); ii++)
     {
         bool selected=false;
@@ -352,12 +345,12 @@ void tordaqGui::Draw1()
         }
         if (selected || showAllCheck->IsOn())
         {
-            if (first)
-            {
+            //if (first)
+            //{
                 datahistos[ii]->SetMaximum(max);
                 datahistos[ii]->SetMinimum(min);
                 datahistos[ii]->GetXaxis()->SetRangeUser(xmin,xmax);
-            }
+            //}
 
             // This should give a huge speed up when overlaying many plots.
             // But will need some reworking in the tordaqGui's zoom functions.
@@ -377,24 +370,7 @@ void tordaqGui::Draw1()
             nHist++;
         }
     }
-   /* 
-    for (unsigned int ii=0; ii<combos1.size(); ii++)
-    {
-        const int jj=combos1[ii]->GetSelected();
-        if (jj>0 && jj<=datahistos.size()) {
-            if (first)
-            {
-                datahistos[jj-1]->SetMaximum(max);
-                datahistos[jj-1]->SetMinimum(min);
-            }
-            histos1.push_back(datahistos[jj-1]);
-            datahistos[jj-1]->SetLineColor(colors[ii]);
-            legend1->AddEntry(datahistos[jj-1],datahistos[jj-1]->GetTitle(),"L");
-            datahistos[jj-1]->Draw(first?"":"SAME");
-            first=false;
-        }
-    }
-    */
+    
     legend1->Draw();
     ctmp->Update();
 }
@@ -402,10 +378,13 @@ void tordaqGui::Update1()
 {
     canvas1->GetCanvas()->Modified();
     canvas1->GetCanvas()->Update();
+
+    // this is a hack and shouldn't be necessary:
+    //Draw1();
 }
 void tordaqGui::ZoomIn1()
 {
-    double frac=0.45;
+    static const double frac=0.45;
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
@@ -417,7 +396,7 @@ void tordaqGui::ZoomIn1()
 }
 void tordaqGui::ZoomOut1()
 {
-    double frac=1.0;
+    static const double frac=1.0;
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
@@ -427,14 +406,41 @@ void tordaqGui::ZoomOut1()
     zoomSlider->SetPosition(xlo);
     Update1();
 }
+void tordaqGui::yZoomIn1()
+{
+    static const double frac=0.2;
+    double x1,x2,y1,y2;
+    TCanvas *ctmp=canvas1->GetCanvas();
+    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    const double ylo=y1+(y2-y1)*frac;
+    const double yhi=y2-(y2-y1)*frac;
+    histos1[0]->GetYaxis()->SetRangeUser(ylo,yhi);
+    Update1();
+}
+void tordaqGui::yZoomOut1()
+{
+    static const double frac=1.0;
+    double x1,x2,y1,y2;
+    TCanvas *ctmp=canvas1->GetCanvas();
+    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    const double ylo=y1-(y2-y1)*frac;
+    const double yhi=y2+(y2-y1)*frac;
+    histos1[0]->GetYaxis()->SetRangeUser(ylo,yhi);
+    Update1();
+}
 void tordaqGui::doZoomSlider1()
 {
     const int pos=zoomSlider->GetPosition();
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
+    if (!ctmp || histos1.size()<1)
+    {
+        zoomSlider->SetPosition(zoomSlider->GetMinPosition());
+        return;
+    }
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     if (pos>=histos1[0]->GetXaxis()->GetXmax()
-            || pos<histos1[0]->GetXaxis()->GetXmin())
+     || pos<histos1[0]->GetXaxis()->GetXmin())
         zoomSlider->SetPosition(x1);
     else
     {

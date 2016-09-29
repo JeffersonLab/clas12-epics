@@ -4,6 +4,7 @@
 #include "tordaqData.hh"
 
 #include <TNtupleD.h>
+#include <TGProgressBar.h>
 
 class tordaqReader {
 public:
@@ -23,10 +24,11 @@ public:
     FILE *outAsciiFile=NULL;
     TNtupleD *outTree=NULL;
     TFile *outRootFile=NULL;
+    TGHProgressBar *progressMeter=NULL;
     std::vector <tordaqData*> inTrees;
     std::vector <TH1*> outHistos;
     
-    static void ProgressMeter(const double total,const double current,const int starttime=0)
+    void ProgressMeter(const double total,const double current,const int starttime=0)
     {
         static const int maxdots=40;
         double frac = current/total;
@@ -46,6 +48,11 @@ public:
         }
         else                  printf("]  ?? sec          \r");
         fflush(stdout);
+        if (progressMeter)
+        {
+            progressMeter->SetPosition(progressMeter->GetMin() +
+                    (progressMeter->GetMax()-progressMeter->GetMin()) *frac);
+        }
     }
     
     static void WriteRemainingHistos()

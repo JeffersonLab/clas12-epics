@@ -30,6 +30,7 @@
 #include <TGComboBox.h>
 #include <TGSlider.h>
 #include <TGDoubleSlider.h>
+#include <TGProgressBar.h>
 #include <TROOT.h>
 #include <TFile.h>
 #include <TGaxis.h>
@@ -52,12 +53,15 @@ class tordaqGui: public TGMainFrame {
         TGNumberEntryField *resampleField;
         TGHorizontalFrame *topFrame;
         TGTextButton *redrawBtn;
-        TGTextButton *zoomoutBtn;
-        TGTextButton *zoominBtn;
+        TGTextButton *xZoomoutBtn;
+        TGTextButton *xZoominBtn;
+        TGTextButton *yZoomoutBtn;
+        TGTextButton *yZoominBtn;
         TGTextButton *panleftBtn;
         TGTextButton *panrightBtn;
         TGCheckButton *denoiseCheck;
         TGHSlider *zoomSlider;
+        TGHProgressBar *progressBar;
         TGLabel *zoomSliderLabelMin;
         TGLabel *zoomSliderLabelMid;
         TGLabel *zoomSliderLabelMax;
@@ -85,6 +89,8 @@ class tordaqGui: public TGMainFrame {
         void Update1();
         void ZoomIn1();
         void ZoomOut1();
+        void yZoomIn1();
+        void yZoomOut1();
         void PanLeft1();
         void PanRight1();
         void doZoomSlider1();

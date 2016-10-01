@@ -12,6 +12,47 @@ epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
 epicsEnvSet("scan","1 second")
 
+## Configure devices
+
+# FIRST TESTER:
+#drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
+#drvAsynIPPortConfigure("L0",129.57.160.108:1234,0,0,0)
+#asynSetTraceMask("L0",-1,0x09)
+#asynSetTraceIOMask("L0",-1,0x02)
+#asynOctetSetOutputEos("L0",0,"\r\n")
+#asynOctetSetInputEos("L0",0,"\n")
+#dbLoadRecords("db/A6551.db","S=1,L=1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
+
+
+# TEMPORARY in EEL125:
+#drvAsynIPPortConfigure("L0",129.57.86.140:1234,0,0,0)
+#dbLoadRecords("db/A6551.db","SCAN=${scan},P=B_DET_DC_LV_SEC5_R1,PORT=L0,ADDR=24,IMAX=2000,OMAX=2000")
+#asynOctetSetOutputEos("L0",0,"\r\n")
+#asynOctetSetInputEos("L0",0,"\n")
+
+
+# OLD TESTER:
+#drvAsynIPPortConfigure("L0",hallb-gpib04.jlab.org:1234,0,0,0)
+##dbLoadRecords("db/asynRecord.db","P=DCLV,R=:ASYN,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
+#dbLoadRecords("db/A6551.db","SCAN=${scan},P=DCLV,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
+##asynOctetSetOutputEos("L0",0,"\r\n")
+#asynOctetSetOutputEos("L0",0,"\r")
+#asynOctetSetInputEos("L0",0,"\n")
+#asynSetTraceMask("L0",-1,0x09)
+#asynSetTraceIOMask("L0",-1,0x02)
+
+
+# NEW TESTER:
+#drvAsynIPPortConfigure("S6R1",hallb-gpib01.jlab.org:1234,0,0,0)
+#dbLoadRecords("db/A6551.db","SCAN=${scan},P=B_DET_DC_LV_SEC6_R1,PORT=S6R1,ADDR=1,IMAX=2000,OMAX=2000")
+#asynOctetSetOutputEos("S6R1",0,"\r")
+#asynOctetSetInputEos("S6R1",0,"\n")
+#asynSetTraceMask("S6R1",-1,0x09)
+#asynSetTraceIOMask("S6R1",-1,0x02)
+
+
+
+
 drvAsynIPPortConfigure("S1R1",hallb-gpib02.jlab.org:1234,0,0,0)
 drvAsynIPPortConfigure("S1R2",hallb-gpib05.jlab.org:1234,0,0,0)
 drvAsynIPPortConfigure("S1R3",hallb-gpib08.jlab.org:1234,0,0,0)
@@ -50,24 +91,24 @@ drvAsynIPPortConfigure("S6R3",hallb-gpib07.jlab.org:1234,0,0,0)
 #dbLoadRecords("db/A6551.db","SCAN=${scan},P=B_DET_DC_LV_SEC6_R2,PORT=S6R2,ADDR=1,IMAX=2000,OMAX=2000")
 #dbLoadRecords("db/A6551.db","SCAN=${scan},P=B_DET_DC_LV_SEC6_R3,PORT=S6R3,ADDR=1,IMAX=2000,OMAX=2000")
 
-dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:,DESC=DCLV_S1R1,PORT=S1R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib05,R=:,DESC=DCLV_S1R2,PORT=S1R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib08,R=:,DESC=DCLV_S1R3,PORT=S1R3,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib03,R=:,DESC=DCLV_S2R1,PORT=S2R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib06,R=:,DESC=DCLV_S2R2,PORT=S2R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib09,R=:,DESC=DCLV_S2R3,PORT=S2R3,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib19,R=:,DESC=DCLV_S3R1,PORT=S3R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib15,R=:,DESC=DCLV_S3R2,PORT=S3R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib18,R=:,DESC=DCLV_S3R3,PORT=S3R3,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib11,R=:,DESC=DCLV_S4R1,PORT=S4R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib14,R=:,DESC=DCLV_S4R2,PORT=S4R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib20,R=:,DESC=DCLV_S4R3,PORT=S4R3,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib10,R=:,DESC=DCLV_S5R1,PORT=S5R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib13,R=:,DESC=DCLV_S5R2,PORT=S5R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib16,R=:,DESC=DCLV_S5R3,PORT=S5R3,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib01,R=:,DESC=DCLV_S6R1,PORT=S6R1,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib04,R=:,DESC=DCLV_S6R2,PORT=S6R2,")
-dbLoadRecords("db/prologix.db","P=hallb-gpib07,R=:,DESC=DCLV_S6R3,PORT=S6R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S1R1,PORT=S1R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S1R2,PORT=S1R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S1R3,PORT=S1R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S2R1,PORT=S2R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S2R2,PORT=S2R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S2R3,PORT=S2R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S3R1,PORT=S3R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S3R2,PORT=S3R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S3R3,PORT=S3R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S4R1,PORT=S4R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S4R2,PORT=S4R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S4R3,PORT=S4R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S5R1,PORT=S5R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S5R2,PORT=S5R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S5R3,PORT=S5R3,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S6R1,PORT=S6R1,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S6R2,PORT=S6R2,")
+dbLoadRecords("db/prologix.db","P=hallb-gpib02,R=:S6R3,PORT=S6R3,")
 
 # Non-DC hallb-gpibs:
 ##drvAsynIPPortConfigure("00",hallb-gpib00.jlab.org:1234,0,0,0)
@@ -76,14 +117,18 @@ dbLoadRecords("db/prologix.db","P=hallb-gpib07,R=:,DESC=DCLV_S6R3,PORT=S6R3,")
 ##drvAsynIPPortConfigure("21",hallb-gpib21.jlab.org:1234,0,0,0)
 
 
+#dbLoadTemplate("db/dclv.substitutions")
+
 #dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 #dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+
+dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
 cd ${TOP}/iocBoot/${IOC}
 
 #< save_restore.cmd
 
-#dbl > pv.list
+dbl > pv.list
 
 iocInit();
 

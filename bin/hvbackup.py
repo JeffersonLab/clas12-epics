@@ -27,7 +27,7 @@ SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
 RELEASEPATH=re.search('(^.*/release/\d[\.\d]+)',SCRIPTPATH)
 if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path')
 RELEASEPATH=RELEASEPATH.group(1)
-REQDIR=RELEASEPATH+'/epics/apps/scripts/hvburt/req'
+REQDIR=RELEASEPATH+'/epics/apps/burtreq'
 if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR)
 
 def getChannels(det,sector=None):
@@ -74,7 +74,7 @@ def getChannels(det,sector=None):
     for ii in range(2):
       for side in ['TOP','BOT']:
         for lay in ['STR','DR']:
-          prefixes.append('B_DET_FTT_HV_%.1d_%s%s'%(side,ii+1,lay))
+          prefixes.append('B_DET_FTT_HV_%.1d_%s%s'%(ii+1,side,lay))
   elif det=='LTCC_HV':
     for ss in sectors:
       for lr in ['L','R']:

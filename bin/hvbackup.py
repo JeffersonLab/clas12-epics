@@ -27,7 +27,7 @@ SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
 RELEASEPATH=re.search('(^.*/release/\d[\.\d]+)',SCRIPTPATH)
 if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path')
 RELEASEPATH=RELEASEPATH.group(1)
-REQDIR=RELEASEPATH+'/epics/apps/burtreq'
+REQDIR=RELEASEPATH+'/epics/tools/burtreq'
 if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR)
 
 def getChannels(det,sector=None):

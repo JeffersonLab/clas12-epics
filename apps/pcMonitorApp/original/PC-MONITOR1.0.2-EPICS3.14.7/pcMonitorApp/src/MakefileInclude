@@ -1,0 +1,121 @@
+#Do not modify this file.
+#This file is created during the build.
+
+ifneq ($(strip $(pcMonitor_SRCS_$(OS_CLASS))),)
+pcMonitor_SRCS+=$(subst -nil-,,$(pcMonitor_SRCS_$(OS_CLASS)))
+else
+ifdef pcMonitor_SRCS_DEFAULT
+pcMonitor_SRCS+=$(pcMonitor_SRCS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_RCS_$(OS_CLASS))),)
+pcMonitor_RCS+=$(subst -nil-,,$(pcMonitor_RCS_$(OS_CLASS)))
+else
+ifdef pcMonitor_RCS_DEFAULT
+pcMonitor_RCS+=$(pcMonitor_RCS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_OBJS_$(OS_CLASS))),)
+pcMonitor_OBJS+=$(subst -nil-,,$(pcMonitor_OBJS_$(OS_CLASS)))
+else
+ifdef pcMonitor_OBJS_DEFAULT
+pcMonitor_OBJS+=$(pcMonitor_OBJS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_LDFLAGS_$(OS_CLASS))),)
+pcMonitor_LDFLAGS+=$(subst -nil-,,$(pcMonitor_LDFLAGS_$(OS_CLASS)))
+else
+ifdef pcMonitor_LDFLAGS_DEFAULT
+pcMonitor_LDFLAGS+=$(pcMonitor_LDFLAGS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_OBJLIBS_$(OS_CLASS))),)
+pcMonitor_OBJLIBS+=$(subst -nil-,,$(pcMonitor_OBJLIBS_$(OS_CLASS)))
+else
+ifdef pcMonitor_OBJLIBS_DEFAULT
+pcMonitor_OBJLIBS+=$(pcMonitor_OBJLIBS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_LDOBJS_$(OS_CLASS))),)
+pcMonitor_LDOBJS+=$(subst -nil-,,$(pcMonitor_LDOBJS_$(OS_CLASS)))
+else
+ifdef pcMonitor_LDOBJS_DEFAULT
+pcMonitor_LDOBJS+=$(pcMonitor_LDOBJS_DEFAULT)
+endif
+endif
+pcMonitor_LDLIBS+=$(pcMonitor_LIBS)
+ifneq ($(strip $(pcMonitor_LIBS_$(OS_CLASS))),)
+pcMonitor_LDLIBS+=$(subst -nil-,,$(pcMonitor_LIBS_$(OS_CLASS)))
+else
+ifdef pcMonitor_LIBS_DEFAULT
+pcMonitor_LDLIBS+=$(pcMonitor_LIBS_DEFAULT)
+endif
+endif
+ifneq ($(strip $(pcMonitor_SYS_LIBS_$(OS_CLASS))),)
+pcMonitor_SYS_LIBS+=$(subst -nil-,,$(pcMonitor_SYS_LIBS_$(OS_CLASS)))
+else
+ifdef pcMonitor_SYS_LIBS_DEFAULT
+pcMonitor_SYS_LIBS+=$(pcMonitor_SYS_LIBS_DEFAULT)
+endif
+endif
+pcMonitor_OBJS+=$(addsuffix $(OBJ),$(basename $(pcMonitor_SRCS)))
+
+ifeq ($(filter pcMonitor,$(TESTPROD) $(PROD)),pcMonitor)
+ifeq (,$(strip $(pcMonitor_OBJS) $(PRODUCT_OBJS)))
+pcMonitor_OBJS+=pcMonitor$(OBJ)
+endif
+pcMonitor_RESS+=$(addsuffix $(RES),$(basename $(pcMonitor_RCS)))
+pcMonitor_OBJSNAME+=$(addsuffix $(OBJ),$(basename $(pcMonitor_OBJS)))
+pcMonitor_DEPLIBS=$(foreach lib, $(pcMonitor_LDLIBS),\
+ $(firstword $(wildcard $(addsuffix /$(LIB_PREFIX)$(lib)*,\
+ $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS)))\
+ $(addsuffix /$(LIB_PREFIX)$(lib)$(LIB_SUFFIX),\
+ $(firstword $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS))/)))
+pcMonitor$(EXE): $(pcMonitor_OBJSNAME) $(pcMonitor_RESS) $(pcMonitor_DEPLIBS)
+endif
+
+ifeq ($(filter pcMonitor,$(LIBRARY)),pcMonitor)
+ifneq ($(filter pcMonitor,$(LOADABLE_LIBRARY)),pcMonitor)
+ifneq (,$(strip $(pcMonitor_OBJS) $(LIBRARY_OBJS)))
+BUILD_LIBRARY += pcMonitor
+endif
+pcMonitor_RESS+=$(addsuffix $(RES),$(basename $(pcMonitor_RCS)))
+pcMonitor_OBJSNAME+=$(addsuffix $(OBJ),$(basename $(pcMonitor_OBJS)))
+pcMonitor_DEPLIBS=$(foreach lib, $(pcMonitor_LDLIBS),\
+ $(firstword $(wildcard $(addsuffix /$(LIB_PREFIX)$(lib)*,\
+ $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS)))\
+ $(addsuffix /$(LIB_PREFIX)$(lib)$(LIB_SUFFIX),\
+ $(firstword $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS))/)))
+pcMonitor_DLL_DEPLIBS=$(foreach lib, $(pcMonitor_DLL_LIBS),\
+ $(firstword $(wildcard $(addsuffix /$(LIB_PREFIX)$(lib)*,\
+ $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS)))\
+ $(addsuffix /$(LIB_PREFIX)$(lib)$(LIB_SUFFIX),\
+ $(firstword $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS))/)))
+$(LIB_PREFIX)pcMonitor$(LIB_SUFFIX):$(pcMonitor_OBJSNAME) $(pcMonitor_RESS)
+$(LIB_PREFIX)pcMonitor$(LIB_SUFFIX):$(pcMonitor_DEPLIBS)
+$(LIB_PREFIX)pcMonitor$(SHRLIB_SUFFIX):$(pcMonitor_OBJSNAME) $(pcMonitor_RESS)
+$(LIB_PREFIX)pcMonitor$(SHRLIB_SUFFIX):$(pcMonitor_DEPLIBS)
+$(LIB_PREFIX)pcMonitor$(SHRLIB_SUFFIX):$(pcMonitor_DLL_DEPLIBS)
+endif
+endif
+ifeq ($(filter pcMonitor,$(LOADABLE_LIBRARY)),pcMonitor)
+ifneq (,$(strip $(pcMonitor_OBJS) $(LIBRARY_OBJS)))
+LOADABLE_BUILD_LIBRARY += pcMonitor
+endif
+pcMonitor_RESS+=$(addsuffix $(RES),$(basename $(pcMonitor_RCS)))
+pcMonitor_OBJSNAME+=$(addsuffix $(OBJ),$(basename $(pcMonitor_OBJS)))
+pcMonitor_DEPLIBS=$(foreach lib, $(pcMonitor_LDLIBS),\
+ $(firstword $(wildcard $(addsuffix /$(LIB_PREFIX)$(lib)*,\
+ $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS)))\
+ $(addsuffix /$(LIB_PREFIX)$(lib)$(LIB_SUFFIX),\
+ $(firstword $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS))/)))
+pcMonitor_DLL_DEPLIBS=$(foreach lib, $(pcMonitor_DLL_LIBS),\
+ $(firstword $(wildcard $(addsuffix /$(LIB_PREFIX)$(lib)*,\
+ $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS)))\
+ $(addsuffix /$(LIB_PREFIX)$(lib)$(LIB_SUFFIX),\
+ $(firstword $($(lib)_DIR) $(SHRLIB_SEARCH_DIRS))/)))
+$(LOADABLE_SHRLIB_PREFIX)pcMonitor$(LOADABLE_SHRLIB_SUFFIX):$(pcMonitor_OBJSNAME) $(pcMonitor_RESS)
+$(LOADABLE_SHRLIB_PREFIX)pcMonitor$(LOADABLE_SHRLIB_SUFFIX):$(pcMonitor_DEPLIBS)
+$(LOADABLE_SHRLIB_PREFIX)pcMonitor$(LOADABLE_SHRLIB_SUFFIX):$(pcMonitor_DLL_DEPLIBS)
+endif
+

@@ -1,0 +1,350 @@
+# This is the template containing channels 
+# with status data for the givem bootPC
+# the status conatins: CPU load
+#                      MEM usage info
+#                      Boot time info
+
+record(bi,"$(NAME):status") {
+    field(INP,"1")
+    field(SCAN,"10 second")
+    field(ZNAM,"0")
+    field(ONAM,"Ok")
+}
+
+record(calcout,"$(NAME):CALCSTATUS")
+{
+    field(INPA,"$(NAME):LOAD NPP MS")
+    #field(INPB,"$(NAME):MEMFREE NPP MS")
+    #field(INPC,"$(NAME):CACLNT NPP MS")
+    #field(INPD,"$(NAME):CACNX NPP MS")
+    #field(INPE,"$(NAME):FDAV NPP MS")
+    field(CALC,"1")
+    field(OUT,"$(NAME):STATUS PP MS")
+    field(SCAN,"1 second")
+}
+
+record(bi,"$(NAME):STATUS")
+{ 
+    field(ONAM,"STATUS")
+}
+
+
+record (calcout, "$(NAME):CNT")
+{
+    field (DESC, "Seconds since last reboot")
+    field (EGU,  "s")
+    field (SCAN, "1 second")
+    field (PINI, "YES")
+    field (INPA, "$(NAME):CNT")
+    field (CALC, "A+1")
+    field (OCAL, "A&1")
+    field (DOPT, "Use OCAL")
+    field (OUT,  "$(NAME):WD PP")
+}
+
+record (bo, "$(NAME):WD")
+{
+}
+
+record(calc,"$(NAME):HBTMOD") {
+    field(DESC, "Heartbeat mod 9")
+    field(SCAN, "1 second")
+    field(CALC, "A%9")
+    field(INPA, "$(NAME):HBT.VAL .NPP.NMS")
+    field(EGU,  "ticks")
+    field(PREC, "0")
+}
+record(calc,"$(NAME):HBT") {
+    field(DESC, "IOC heartbeat")
+    field(SCAN, "1 second")
+    field(FLNK, "$(NAME):HBTMOD.VAL ")
+    field(CALC, "A>=B?0:A+1")
+    field(INPA, "$(NAME):HBT.VAL .NPP.NMS")
+    field(INPB, "98")
+    field(EGU,  "ticks")
+    field(PREC, "0")
+}
+
+#----------------------------------------------------
+#                   MEMORY STATUS
+#----------------------------------------------------
+
+# $(NAME):MEM record is the process record that synchronises all other MEM records# on the device supprot level 
+
+record(ai, "$(NAME):MEM")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+        field(SCAN,"5 second")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @PROC")
+	field(PINI,"YES")
+	field(FLNK,"$(NAME):MEMAV")
+}
+
+
+record(ai, "$(NAME):MEMAV")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")	
+        field(INP, "#C0 S0 @MEMAV")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):MEMUSED")
+}
+
+record(ai, "$(NAME):MEMUSED")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @MEMUSED")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):MEMFREE")
+}
+record(ai, "$(NAME):MEMFREE")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @MEMFREE")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):MEMSHRD")
+}
+
+record(ai, "$(NAME):MEMSHRD")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @MEMSHRD")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):MEMBUFF")
+}
+
+record(ai, "$(NAME):MEMBUFF")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @MEMBUFF")
+	field(EGU, "KB")
+	field(FLNK,"$(NAME):SWAPAV")
+}
+
+record(ai, "$(NAME):SWAPAV")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")	
+        field(INP, "#C0 S0 @SWAPAV")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):SWAPUSED")
+}
+
+record(ai, "$(NAME):SWAPUSED")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @SWAPUSED")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):SWAPFREE")
+}
+record(ai, "$(NAME):SWAPFREE")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @SWAPFREE")
+	field(EGU, "KB")
+        field(FLNK,"$(NAME):SWAPCACH")
+}
+record(ai, "$(NAME):SWAPCACH")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+	field(EGU, "KB")
+        field(INP, "#C0 S0 @SWAPCACH")
+}
+
+#----------------------------------------------
+#          	   TIME STATUS
+#----------------------------------------------
+
+
+record(stringin, "$(NAME):UPTIME")
+{
+        field(DESC, "Up time")
+        field(DTYP, "UpTime")
+	field(INP, "#C0 S0 @UPTIME")
+	field(SCAN,"10 second")
+	field(FLNK, "$(NAME):TIME")
+	field(PINI, "YES")
+}
+record(stringin, "$(NAME):TIME")
+{
+        field(DESC, "Current time")
+        field(DTYP, "UpTime")
+        field(INP, "#C0 S0 @CURTIME")
+        #field(FLNK, "$(NAME):BOOTTIME")
+}
+
+record(stringin, "$(NAME):BOOTTIME")
+{
+        field(DESC, "Boot  time")
+        field(DTYP, "UpTime")
+        field(INP, "#C0 S0 @BOOTIME")
+	field(PINI, "YES")
+}
+
+#---------------------------------------------------
+#               LOAD AVG
+#---------------------------------------------------
+
+record(ai, "$(NAME):LOAD1MIN")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "AvgLoad")
+	field(INP, "#C0 S0 @1min")
+        field(SCAN,"10 second")
+	field(PREC,"2")
+	field(PINI, "YES")
+	field(FLNK,"$(NAME):LOAD5MIN")
+}
+
+record(ai, "$(NAME):LOAD5MIN")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "AvgLoad")
+        field(INP, "#C0 S0 @5min")
+	field(PREC,"2")
+        field(FLNK,"$(NAME):LOAD15MIN")
+}
+record(ai, "$(NAME):LOAD15MIN")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "AvgLoad")
+        field(INP, "#C0 S0 @15min")
+	field(PREC,"2")
+}
+
+#----------------------------------------------------
+#               CPU load STATUS
+#----------------------------------------------------
+# $(NAME):CPU record is the process record that synchronises all other CPU records# on the device supprot level 
+
+
+record(ai, "$(NAME):CPU")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "CpuLoad")
+        field(SCAN,"5 second")
+        field(INP, "#C0 S0 @PROC")
+	field(PINI,"YES")
+	field(FLNK,"$(NAME):CPUIDLE")
+}
+
+
+record(ai, "$(NAME):CPUIDLE")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "CpuLoad")
+        field(PREC,"2")
+        field(INP, "#C0 S0 @IDLE")
+	field(EGU, "%")
+        field(FLNK,"$(NAME):CPUNICE")
+}
+
+record(ai, "$(NAME):CPUNICE")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "CpuLoad")
+        field(INP, "#C0 S0 @NICE")
+	field(EGU, "%")
+	field(PREC,"2")
+
+        field(FLNK,"$(NAME):CPUSYSTEM")
+}
+
+record(ai, "$(NAME):CPUSYSTEM")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "CpuLoad")
+        field(INP, "#C0 S0 @SYSTEM")
+	field(PREC,"2")
+	field(EGU, "%")
+        field(FLNK,"$(NAME):CPUUSER")
+}
+
+record(ai, "$(NAME):CPUUSER")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "CpuLoad")
+	field(PREC,"2")
+        field(INP, "#C0 S0 @USER")
+	field(EGU, "%")
+	field(FLNK,"$(NAME):LOAD")
+}
+
+record(calc, "$(NAME):LOAD")
+{
+        field(DESC, "CPU LOAD")
+	field(PREC,"2")
+        field(INPA, "$(NAME):CPUUSER")
+	field(INPB, "$(NAME):CPUNICE")
+	field(INPC, "$(NAME):CPUSYSTEM")
+	field(CALC, "A + B + C")
+	field(EGU, "%")
+    	field(HOPR, "100")
+    	field(HIHI, "90")
+    	field(HIGH, "70")
+    	field(HHSV, "MAJOR")
+    	field(HSV,  "MINOR")
+}
+
+#-------------------------------------------------
+#               SYSTEM INFO
+#------------------------------------------------
+
+record(stringin, "$(NAME):IPADDR")
+{
+        field(DESC, "Up time")
+        field(DTYP, "IpAddr")
+        #field(INP, "#C0 S0 @UPTIME")
+        #field(SCAN,"10 second")
+        field(PINI, "YES")
+}
+
+record(stringin, "$(NAME):SYSNAME")
+{
+        field(DESC, "Up time")
+        field(DTYP, "SysInfo")
+	field(INP, "#C0 S0 @SYSNAME")
+        field(PINI, "YES")
+}
+
+record(stringin, "$(NAME):RELEASE")
+{
+        field(DESC, "Up time")
+        field(DTYP, "SysInfo")
+        field(INP, "#C0 S0 @RELEASE")
+        field(PINI, "YES")
+}
+
+record(stringin, "$(NAME):VERSION")
+{
+        field(DESC, "Up time")
+        field(DTYP, "SysInfo")
+        field(INP, "#C0 S0 @VERSION")
+        field(PINI, "YES")
+}
+record(stringin, "$(NAME):MACHINE")
+{
+        field(DESC, "Up time")
+        field(DTYP, "SysInfo")
+        field(INP, "#C0 S0 @MACHINE")
+        field(PINI, "YES")
+}
+

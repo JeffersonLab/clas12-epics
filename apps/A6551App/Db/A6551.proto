@@ -5,6 +5,12 @@ OutTerminator = CR;
 InTerminator = LF;
 ExtraInput = Ignore;
 
+# doc says OutTerminator should be 10, which is LF
+
+#writetimeout = 100;
+#readtimeout = 300;     # milliseconds
+#replytimeout = 2000;
+
 #writetimeout = 100;
 #readtimeout = 100;     # milliseconds
 #replytimeout = 100;
@@ -13,13 +19,21 @@ ExtraInput = Ignore;
 #readtimeout = 300;     # milliseconds
 #replytimeout = 1000;
 
-writetimeout = 200;
-readtimeout = 400;     # milliseconds
-replytimeout = 1200;
+#writetimeout = 200;
+#readtimeout = 400;     # milliseconds
+#replytimeout = 1200;
 
 #writetimeout = 500;
 #readtimeout = 600;     # milliseconds
 #replytimeout = 2000;
+
+writetimeout = 500;
+readtimeout = 600;     # milliseconds
+replytimeout = 10000;
+
+getIdentity {
+    out "*IDN?"; in "%#s";
+}
 
 getVoltage {
    out "MEAS:VOLT?"; in "%f"; 
@@ -27,12 +41,17 @@ getVoltage {
 getCurrent {
    out "MEAS:CURR?"; in "%f"; 
 }
-
 getCurrentSetpoint {
    out "CURR?"; in "%f"; 
 }
 getVoltageSetpoint {
    out "VOLT?"; in "%f"; 
+}
+getOnOff {
+    out "OUTP?"; in "%d";
+}
+getOcOnOff {
+    out "CURR:PROT:STAT?"; in "%d";
 }
 
 setCurrent {
@@ -43,18 +62,9 @@ setVoltage {
     out "VOLT %f";
     @init {getVoltageSetpoint;}
 }
-
-
-getOnOff {
-    out "OUTP?"; in "%d";
-}
 setOnOff {
     out "OUTP %d";
     @init {getOnOff;}
-}
-
-getOcOnOff {
-    out "CURR:PROT:STAT?"; in "%d";
 }
 setOcOnOff {
     out "CURR:PROT:STAT %d";
@@ -62,8 +72,8 @@ setOcOnOff {
 }
 
 clearOC {
-#    out "OUTP OFF";
-#    wait 1000;
+    out "OUTP 0";
+    wait 500;
     out "CURR:PROT:STAT 0";
 #    wait 1000;
     out "OUTP:PROT:CLE";
@@ -84,5 +94,5 @@ setOnOffFull {
     out "CURR:PROT:STAT 1";
     wait 800;
     out "OUTP %d";
-    @init {getOnOff;}
+#    @init {getOnOff;}
 }

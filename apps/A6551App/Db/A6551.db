@@ -1,78 +1,91 @@
 #asyn is useful for debugging the communication
-record(asyn,"$(P):ASYN")
-{
-    field(DTYP,"asynRecordDevice")
-    field(PORT,"$(PORT)")
-    field(ADDR,"$(ADDR)")
-    field(OMAX,"$(OMAX)")
-    field(IMAX,"$(IMAX)")
-}
-
-record (ai, "$(P):vmon")
-{
-    field (DESC, "Get Voltage")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getVoltage $(PORT)")
-    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
-}
-
-record (ao, "$(P):vset")
-{
-    field (DESC, "Set voltage")
-    field (DTYP, "stream")
-    field (OUT,  "@A6551.proto setVoltage $(PORT)")
-}
+#record(asyn,"$(P):ASYN")
+#{
+#    field(DTYP,"asynRecordDevice")
+#    field(PORT,"$(PORT)")
+#    field(ADDR,"$(ADDR)")
+#    field(OMAX,"$(OMAX)")
+#    field(IMAX,"$(IMAX)")
+#}
 
 record (ai, "$(P):imon")
 {
     field (DESC, "Get current of PS1")
     field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
+field (SCAN, "$(SCAN)")
+    field (EGU,  "A")
     field (INP,  "@A6551.proto getCurrent $(PORT)")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
+record (ai, "$(P):vmon")
+{
+    field (DESC, "Get Voltage")
+    field (DTYP, "stream")
+field (SCAN, "$(SCAN)")
+    field (EGU,  "V")
+    field (INP,  "@A6551.proto getVoltage $(PORT)")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record (ai, "$(P):ocstat")
+{
+    field (DESC, "Get OC Status")
+    field (DTYP, "stream")
+field (SCAN, "$(SCAN)")
+    field (INP,  "@A6551.proto getOcStatus $(PORT)")
+}
+record (bi, "$(P):pwrbk")
+{
+    field (DESC, "Get PW ON/OFF Status")
+    field (DTYP, "stream")
+field (SCAN, "$(SCAN)")
+    field (INP,  "@A6551.proto getOnOff $(PORT)")
+}
 
-record (ai, "$(P):isetrbk")
-{
-    field (DESC, "Get Current Setpoint")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getCurrentSetpoint $(PORT)")
-}
-record (ai, "$(P):vsetrbk")
-{
-    field (DESC, "Get Voltage Setpoint")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getVoltageSetpoint $(PORT)")
-}
 
 record (ao, "$(P):iset")
 {
     field (DESC, "Set current of PS1")
     field (DTYP, "stream")
+    field (EGU,  "A")
     field (OUT,  "@A6551.proto setCurrent $(PORT)")
+    field (FLNK, "$(P):isetrbk.PROC")
+}
+record (ao, "$(P):vset")
+{
+    field (DESC, "Set voltage")
+    field (DTYP, "stream")
+    field (EGU,  "V")
+    field (OUT,  "@A6551.proto setVoltage $(PORT)")
+    field (FLNK, "$(P):vsetrbk.PROC")
+}
+record (ai, "$(P):isetrbk")
+{
+    field (DESC, "Get Current Setpoint")
+    field (DTYP, "stream")
+    field (EGU,  "A")
+    field (INP,  "@A6551.proto getCurrentSetpoint $(PORT)")
+    field (PINI, 1)
+}
+record (ai, "$(P):vsetrbk")
+{
+    field (DESC, "Get Voltage Setpoint")
+    field (DTYP, "stream")
+    field (EGU,  "V")
+    field (INP,  "@A6551.proto getVoltageSetpoint $(PORT)")
+    field (PINI, 1)
+}
+record (bi, "$(P):ocsetrbk")
+{
+    field (DESC, "Get OC ON/OFF Status")
+    field (DTYP, "stream")
+    field (INP,  "@A6551.proto getOcOnOff $(PORT)")
+    field (PINI, 1)
 }
 
-record (bi, "$(P):pwrbk")
-{
-    field (DESC, "Get PW ON/OFF Status")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getOnOff $(PORT)")
-}
 record (bo, "$(P):pwset")
 {
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto setOnOff $(PORT)")
-    field (ZNAM, "OFF")
-    field (ONAM, "ON")
-}
-record (bo, "$(P):pwsetfull")
-{
-    field (DTYP, "stream")
-    field (OUT,  "@A6551.proto setOnOffFull $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
 }
@@ -82,25 +95,40 @@ record (bo, "$(P):ocset")
     field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
     field (ZNAM, "OFF")
     field (ONAM, "ON")
-}
-record (bi, "$(P):ocrbk")
-{
-    field (DESC, "Get OC ON/OFF Status")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getOcOnOff $(PORT)")
+    field (FLNK, "$(P):ocsetrbk.PROC")
 }
 record (ao, "$(P):ocreset")
 {
     field (DESC, "Clear OC")
     field (DTYP, "stream")
     field (OUT,  "@A6551.proto clearOC $(PORT)")
+    field (FLNK, "$(P):ocsetrbk")
 }
 
-record (ai, "$(P):ocstat")
+record (calc, "$(P):comm")
 {
-    field (DESC, "Get OC Status")
-    field (DTYP, "stream")
-    field (SCAN, "$(SCAN)")
-    field (INP,  "@A6551.proto getOcStatus $(PORT)")
+    field (SCAN,"1 second")
+    field (INPA,"$(P):imon.STAT")
+    field (INPB,"$(P):vmon.STAT")
+    field (INPC,"$(P):ocstat.STAT")
+    field (INPD,"$(P):pwrbk.STAT")
+    field (INPE,"$(P):imonrbk.STAT")
+    field (INPF,"$(P):vmonrbk.STAT")
+    field (CALC,"A=0 && B=0 && C=0 && D=0 && E=0 && F=0")
 }
+
+#record (stringin, "$(P):model")
+#{
+#    field(DESC,"Model Name")
+#    field(DTYP,"stream")
+#    field(SCAN,"$(SCAN")
+#    field(INP,"@A6551.proto getIdentity $(PORT)")
+#}
+
+#record (bo, "$(P):pwsetfull")
+#{
+#    field (DTYP, "stream")
+#    field (OUT,  "@A6551.proto setOnOffFull $(PORT)")
+#    field (ZNAM, "OFF")
+#    field (ONAM, "ON")
+#}

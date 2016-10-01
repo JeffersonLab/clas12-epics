@@ -78,22 +78,29 @@
     <horizontal_alignment>1</horizontal_alignment>
     <rules>
       <rule name="Label" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0==1 &amp;&amp; pv1!=2">
-          <value>ON</value>
-        </exp>
-        <exp bool_exp="pv0==0 &amp;&amp; pv1!=2">
-          <value>OFF</value>
+        <exp bool_exp="pv2!=0">
+          <value>COMMS</value>
         </exp>
         <exp bool_exp="pv1==2">
           <value>Tripped</value>
         </exp>
+        <exp bool_exp="pv0==1 &amp;&amp; pv2==0">
+          <value>ON</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>OFF</value>
+        </exp>
+        <exp bool_exp="1">
+          <value>UNKNOWN</value>
+        </exp>
         <pv trig="true">$(P):pwrbk</pv>
         <pv trig="true">$(P):ocstat</pv>
+        <pv trig="true">$(P):imon.STAT</pv>
       </rule>
       <rule name="Color" prop_id="foreground_color" out_exp="false">
-        <exp bool_exp="pv1==2">
+        <exp bool_exp="pv2!=0">
           <value>
-            <color name="Major" red="255" green="0" blue="0" />
+            <color name="Minor" red="255" green="128" blue="0" />
           </value>
         </exp>
         <exp bool_exp="pv0==0">
@@ -106,12 +113,23 @@
             <color name="OK" red="0" green="255" blue="0" />
           </value>
         </exp>
+        <exp bool_exp="pv1==2">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="1">
+          <value>
+            <color red="192" green="192" blue="192" />
+          </value>
+        </exp>
         <pv trig="true">$(P):pwrbk</pv>
         <pv trig="true">$(P):ocstat</pv>
+        <pv trig="true">$(P):imon.STAT</pv>
       </rule>
     </rules>
     <enabled>true</enabled>
-    <wuid>-23f950ef:14e7a408eff:10d</wuid>
+    <wuid>3f5216af:157780aec4b:2dcb</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
     <text>Status</text>
@@ -162,8 +180,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -201,7 +219,7 @@ $(pv_value)</tooltip>
     <border_style>1</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>false</alarm_pulsing>
-    <precision>3</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -214,8 +232,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -266,8 +284,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -318,8 +336,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>

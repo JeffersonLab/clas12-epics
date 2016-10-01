@@ -137,22 +137,31 @@ $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
     <rules>
       <rule name="Label" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0==1 &amp;&amp; pv1!=2">
-          <value>ON</value>
-        </exp>
-        <exp bool_exp="pv0==0 &amp;&amp; pv1!=2">
-          <value>OFF</value>
+        <exp bool_exp="pv2!=0 || pv3!=0 || pv4!=0">
+          <value>COMMS</value>
         </exp>
         <exp bool_exp="pv1==2">
           <value>Tripped</value>
         </exp>
+        <exp bool_exp="pv0==1">
+          <value>ON</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>OFF</value>
+        </exp>
+        <exp bool_exp="1">
+          <value>UNKNOWN</value>
+        </exp>
         <pv trig="true">$(P):pwrbk</pv>
         <pv trig="true">$(P):ocstat</pv>
+        <pv trig="true">$(P):imon.STAT</pv>
+        <pv trig="true">$(P):vmon.STAT</pv>
+        <pv trig="true">$(P):pwrbk.STAT</pv>
       </rule>
       <rule name="Color" prop_id="foreground_color" out_exp="false">
-        <exp bool_exp="pv1==2">
+        <exp bool_exp="pv2!=0||pv3!=0||pv4!=0">
           <value>
-            <color name="Major" red="255" green="0" blue="0" />
+            <color name="Minor" red="255" green="128" blue="0" />
           </value>
         </exp>
         <exp bool_exp="pv0==0">
@@ -165,8 +174,21 @@ $(pv_value)</tooltip>
             <color name="OK" red="0" green="255" blue="0" />
           </value>
         </exp>
+        <exp bool_exp="pv1==2">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="1">
+          <value>
+            <color red="192" green="192" blue="192" />
+          </value>
+        </exp>
         <pv trig="true">$(P):pwrbk</pv>
         <pv trig="true">$(P):ocstat</pv>
+        <pv trig="true">$(P):imon.STAT</pv>
+        <pv trig="true">$(P):vmon.STAT</pv>
+        <pv trig="true">$(P):pwrbk.STAT</pv>
       </rule>
     </rules>
     <enabled>true</enabled>
@@ -221,8 +243,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -260,7 +282,7 @@ $(pv_value)</tooltip>
     <border_style>1</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>false</alarm_pulsing>
-    <precision>3</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -273,8 +295,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -325,8 +347,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -377,8 +399,8 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
     <scale_options>
@@ -414,7 +436,7 @@ $(pv_value)</tooltip>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="2.0.0">
     <alarm_pulsing>false</alarm_pulsing>
-    <precision>3</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -466,12 +488,12 @@ $(pv_value)</tooltip>
     </foreground_color>
     <minimum>-1.7976931348623157E308</minimum>
     <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="2.0.0">
     <alarm_pulsing>false</alarm_pulsing>
-    <precision>3</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -523,12 +545,12 @@ $(pv_value)</tooltip>
     </foreground_color>
     <minimum>-1.7976931348623157E308</minimum>
     <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
     <toggle_button>false</toggle_button>
-    <border_style>1</border_style>
+    <border_style>6</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>false</alarm_pulsing>
     <tooltip>$(pv_name)
@@ -557,7 +579,7 @@ $(pv_value)</tooltip>
     <widget_type>Action Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
-      <color name="Major" red="255" green="0" blue="0" />
+      <color red="191" green="191" blue="191" />
     </background_color>
     <width>50</width>
     <x>565</x>
@@ -565,7 +587,7 @@ $(pv_value)</tooltip>
     <y>63</y>
     <style>0</style>
     <foreground_color>
-      <color name="Header_ForeGround" red="255" green="255" blue="255" />
+      <color name="Text_Foreground" red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="WRITE_PV">

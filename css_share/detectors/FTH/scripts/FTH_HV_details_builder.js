@@ -4,12 +4,6 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var novice = PVUtil.getDouble(pvs[0]);
 
-var crate = "HVFTAG";
-var nchan = 12;
-
-var slots=["06","07","08"];
-
-
 /*
 for (var ii=1; ii<=30; ii++)
 {
@@ -31,6 +25,10 @@ for (var ii=1; ii<=30; ii++)
     widget.addChildToBottom(lc);
 }
 */
+
+var crate = "HVFTAG";
+var nchan = 12;
+var slots=["06","07","08"];
 for (var islot=0; islot<3; islot++)
 {
   var slot=slots[islot];

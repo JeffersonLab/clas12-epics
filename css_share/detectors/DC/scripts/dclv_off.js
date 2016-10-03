@@ -19,7 +19,7 @@ if (response)
       for (var ireg=1; ireg<=NREGIONS; ireg++) {
           if (REGION!="0" && REGION!=ireg) continue;
           var suffix = "_SEC"+isec+"_R"+ireg+":pwset";
-          java.lang.System.err.println(suffix);
+//          java.lang.System.err.println(suffix);
           PVUtil.writePV(PREFIX+suffix,0);
       } 
   }

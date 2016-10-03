@@ -19,7 +19,8 @@ DETS=DETSHV+DETSLV
 FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 
 # key,value = field,deadband
-FIELDS_HV_MYA={':pwonoff':0,':stat':0,':comms':0,':vset':0,':iset':0,':vmon':0.1,':imon':1.0}
+FIELDS_HV_MYA={':pwonoff':0,':stat':0,':comms':0,':vsetrbk':0,':isetrbk':0,':vmon':0.1,':imon':1.0}
+FIELDS_LV_MYA={':vsetrbk':0,':isetrbk':0,':pwrbk':0,':comms':0,':vmon':0.01,':imon':0.05,
 
 DATADIR='/usr/clas12/DATA/burt'
 
@@ -98,6 +99,10 @@ def getChannels(det,sector=None):
           for gg in ['S','F','G']:
             for ww in WIRES[gg]:
               prefixes.append('B_DET_DC_HV_SEC%d_R%d_SL%d_%s%s'%(ss,rr,ll,gg,ww))
+  elif det=='DC_LV':
+    for ss in sectors:
+      for rr in [1,2,3]:
+        prefixes.append('B_DET_DC_LV_SEC%d_R%d'%(ss,rr))
 
   return prefixes
 
@@ -111,7 +116,8 @@ def printPVsMya(det,sector=None):
     for field in FIELDS_HV_MYA.keys():
       deadband=FIELDS_HV_MYA[field]
       if field==':imon':
-        if det=='FTC_HV': deadband=0.1
+        if   det=='FTC_HV': deadband=0.1
+        elif det=='DC_HV':  deadband=0.1
       print channel+field,deadband
 
 def saveBurt(snpFilename,det,sector=None):

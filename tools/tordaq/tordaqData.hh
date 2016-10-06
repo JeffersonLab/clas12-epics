@@ -19,7 +19,7 @@ public :
    static const int NVT=23;
    
    //static const int FREQUENCY=3846;
-   static const int FREQUENCY=2000;
+   static const int FREQUENCY=10000;
    static const int WFLENGTH=2000;
 
    TTree          *fChain;
@@ -140,8 +140,8 @@ public :
            if (ientry < 0) break;
            nb = fChain->GetEntry(jentry);   nbytes += nb;
            std::cout<<record_tsec<<" "<<record_tnsec<<" "<<std::endl<<std::endl;
-           for (int ii=0; ii<WFLENGTH; ii++)
-               std::cout<<record_data[ii]<<" ";
+           //for (int ii=0; ii<WFLENGTH; ii++)
+           //    std::cout<<record_data[ii]<<" ";
            std::cout<<std::endl;
            getchar();
        }

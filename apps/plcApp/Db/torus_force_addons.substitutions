@@ -1,0 +1,220 @@
+#
+# torus_force.substitutions - Strains and Loads
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct 2016
+#
+
+# EM Force addons 
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB1:EM_BASE,  LB_HB_US_S1[1], lb, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB2:EM_BASE,  LB_HB_US_S1[2], lb, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB1:EM_DEVN,  LB_HB_US_S1[3], lb, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB2:EM_DEVN,  LB_HB_US_S1[4], lb, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB1:EM_LIM,   LB_HB_US_S1[5], lb, 2, "EM Limit (abs)" }  # TODO
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB2:EM_LIM,   LB_HB_US_S1[6], lb, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB1:EM_INTLK, LB_HB_US_S1[7], "", 0, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1:, SG817U1HB2:EM_INTLK, LB_HB_US_S1[7], "", 0, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB1:EM_BASE,  LB_HB_US_S2[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB2:EM_BASE,  LB_HB_US_S2[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB1:EM_DEVN,  LB_HB_US_S2[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB2:EM_DEVN,  LB_HB_US_S2[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB1:EM_LIM,   LB_HB_US_S2[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB2:EM_LIM,   LB_HB_US_S2[6], V, 2, "EM Limit" } 
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB1:EM_INTLK, LB_HB_US_S2[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S2:, SG817U2HB2:EM_INTLK, LB_HB_US_S2[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB1:EM_BASE,  LB_HB_US_S3[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB2:EM_BASE,  LB_HB_US_S3[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB1:EM_DEVN,  LB_HB_US_S3[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB2:EM_DEVN,  LB_HB_US_S3[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB1:EM_LIM,   LB_HB_US_S3[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB2:EM_LIM,   LB_HB_US_S3[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB1:EM_INTLK, LB_HB_US_S3[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S3:, SG817U3HB2:EM_INTLK, LB_HB_US_S3[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB1:EM_BASE,  LB_HB_US_S4[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB2:EM_BASE,  LB_HB_US_S4[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB1:EM_DEVN,  LB_HB_US_S4[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB2:EM_DEVN,  LB_HB_US_S4[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB1:EM_LIM,   LB_HB_US_S4[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB2:EM_LIM,   LB_HB_US_S4[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB1:EM_INTLK, LB_HB_US_S4[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4:, SG817U4HB2:EM_INTLK, LB_HB_US_S4[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB1:EM_BASE,  LB_HB_US_S5[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB2:EM_BASE,  LB_HB_US_S5[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB1:EM_DEVN,  LB_HB_US_S5[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB2:EM_DEVN,  LB_HB_US_S5[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB1:EM_LIM,   LB_HB_US_S5[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB2:EM_LIM,   LB_HB_US_S5[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB1:EM_INTLK, LB_HB_US_S5[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S5:, SG817U5HB2:EM_INTLK, LB_HB_US_S5[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB1:EM_BASE,  LB_HB_US_S6[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB2:EM_BASE,  LB_HB_US_S6[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB1:EM_DEVN,  LB_HB_US_S6[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB2:EM_DEVN,  LB_HB_US_S6[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB1:EM_LIM,   LB_HB_US_S6[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB2:EM_LIM,   LB_HB_US_S6[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB1:EM_INTLK, LB_HB_US_S6[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S6:, SG817U6HB2:EM_INTLK, LB_HB_US_S6[7], V, 2, "EM Interlock" }
+    #
+    # Downstream
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB1:EM_BASE,  LB_HB_DS_S1[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB2:EM_BASE,  LB_HB_DS_S1[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB1:EM_DEVN,  LB_HB_DS_S1[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB2:EM_DEVN,  LB_HB_DS_S1[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB1:EM_LIM,   LB_HB_DS_S1[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB2:EM_LIM,   LB_HB_DS_S1[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB1:EM_INTLK, LB_HB_DS_S1[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1:, SG817D1HB2:EM_INTLK, LB_HB_DS_S1[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB1:EM_BASE,  LB_HB_DS_S2[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB2:EM_BASE,  LB_HB_DS_S2[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB1:EM_DEVN,  LB_HB_DS_S2[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB2:EM_DEVN,  LB_HB_DS_S2[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB1:EM_LIM,   LB_HB_DS_S2[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB2:EM_LIM,   LB_HB_DS_S2[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB1:EM_INTLK, LB_HB_DS_S2[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S2:, SG817D2HB2:EM_INTLK, LB_HB_DS_S2[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB1:EM_BASE,  LB_HB_DS_S3[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB2:EM_BASE,  LB_HB_DS_S3[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB1:EM_DEVN,  LB_HB_DS_S3[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB2:EM_DEVN,  LB_HB_DS_S3[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB1:EM_LIM,   LB_HB_DS_S3[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB2:EM_LIM,   LB_HB_DS_S3[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB1:EM_INTLK, LB_HB_DS_S3[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S3:, SG817D3HB2:EM_INTLK, LB_HB_DS_S3[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB1:EM_BASE,  LB_HB_DS_S4[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB2:EM_BASE,  LB_HB_DS_S4[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB1:EM_DEVN,  LB_HB_DS_S4[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB2:EM_DEVN,  LB_HB_DS_S4[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB1:EM_LIM,   LB_HB_DS_S4[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB2:EM_LIM,   LB_HB_DS_S4[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB1:EM_INTLK, LB_HB_DS_S4[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4:, SG817D4HB2:EM_INTLK, LB_HB_DS_S4[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB1:EM_BASE,  LB_HB_DS_S5[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB2:EM_BASE,  LB_HB_DS_S5[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB1:EM_DEVN,  LB_HB_DS_S5[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB2:EM_DEVN,  LB_HB_DS_S5[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB1:EM_LIM,   LB_HB_DS_S5[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB2:EM_LIM,   LB_HB_DS_S5[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB1:EM_INTLK, LB_HB_DS_S5[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S5:, SG817D5HB2:EM_INTLK, LB_HB_DS_S5[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB1:EM_BASE,  LB_HB_DS_S6[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB2:EM_BASE,  LB_HB_DS_S6[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB1:EM_DEVN,  LB_HB_DS_S6[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB2:EM_DEVN,  LB_HB_DS_S6[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB1:EM_LIM,   LB_HB_DS_S6[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB2:EM_LIM,   LB_HB_DS_S6[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB1:EM_INTLK, LB_HB_DS_S6[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S6:, SG817D6HB2:EM_INTLK, LB_HB_DS_S6[7], V, 2, "EM Interlock" }
+    #
+    # Vertical Supports
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB3:EM_BASE,  LB_VS_US_S1[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB4:EM_BASE,  LB_VS_US_S1[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB3:EM_DEVN,  LB_VS_US_S1[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB4:EM_DEVN,  LB_VS_US_S1[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB3:EM_LIM,   LB_VS_US_S1[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB4:EM_LIM,   LB_VS_US_S1[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB3:EM_INTLK, LB_VS_US_S1[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S1_VS:, SG817U1HB4:EM_INTLK, LB_VS_US_S1[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB3:EM_BASE,  LB_VS_US_S4[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB4:EM_BASE,  LB_VS_US_S4[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB3:EM_DEVN,  LB_VS_US_S4[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB4:EM_DEVN,  LB_VS_US_S4[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB3:EM_LIM,   LB_VS_US_S4[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB4:EM_LIM,   LB_VS_US_S4[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB3:EM_INTLK, LB_VS_US_S4[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_US_S4_VS:, SG817U4HB4:EM_INTLK, LB_VS_US_S4[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB3:EM_BASE,  LB_VS_DS_S1[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB4:EM_BASE,  LB_VS_DS_S1[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB3:EM_DEVN,  LB_VS_DS_S1[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB4:EM_DEVN,  LB_VS_DS_S1[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB3:EM_LIM,   LB_VS_DS_S1[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB4:EM_LIM,   LB_VS_DS_S1[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB3:EM_INTLK, LB_VS_DS_S1[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S1_VS:, SG817D1HB4:EM_INTLK, LB_VS_DS_S1[7], V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB3:EM_BASE,  LB_VS_DS_S4[1], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB4:EM_BASE,  LB_VS_DS_S4[2], V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB3:EM_DEVN,  LB_VS_DS_S4[3], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB4:EM_DEVN,  LB_VS_DS_S4[4], V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB3:EM_LIM,   LB_VS_DS_S4[5], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB4:EM_LIM,   LB_VS_DS_S4[6], V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB3:EM_INTLK, LB_VS_DS_S4[7], V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:HB_DS_S4_VS:, SG817D4HB4:EM_INTLK, LB_VS_DS_S4[7], V, 2, "EM Interlock" }
+    #
+    # Axial Supports
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B5:EM_BASE,     LB_AS_B[1],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B6:EM_BASE,     LB_AS_B[2],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B5:EM_DEVN,     LB_AS_B[3],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B6:EM_DEVN,     LB_AS_B[4],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B5:EM_LIM,      LB_AS_B[5],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B6:EM_LIM,      LB_AS_B[6],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B5:EM_INTLK,    LB_AS_B[7],     V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B_AS:, SG817B6:EM_INTLK,    LB_AS_B[7],     V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D5:EM_BASE,     LB_AS_D[1],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D6:EM_BASE,     LB_AS_D[2],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D5:EM_DEVN,     LB_AS_D[3],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D6:EM_DEVN,     LB_AS_D[4],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D5:EM_LIM,      LB_AS_D[5],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D6:EM_LIM,      LB_AS_D[6],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D5:EM_INTLK,    LB_AS_D[7],     V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D_AS:, SG817D6:EM_INTLK,    LB_AS_D[7],     V, 2, "EM Interlock" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F5:EM_BASE,     LB_AS_F[1],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F6:EM_BASE,     LB_AS_F[2],     V, 2, "EM Baseline" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F5:EM_DEVN,     LB_AS_F[3],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F6:EM_DEVN,     LB_AS_F[4],     V, 2, "EM Deviation" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F5:EM_LIM,      LB_AS_F[5],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F6:EM_LIM,      LB_AS_F[6],     V, 2, "EM Limit" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F5:EM_INTLK,    LB_AS_F[7],     V, 2, "EM Interlock" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F_AS:, SG817F6:EM_INTLK,    LB_AS_F[7],     V, 2, "EM Interlock" }
+    #
+    # Calcs
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_A:, HB_US_DIFF, LB_HB_US_Diff[1],    lb,  2,  "CCMA US Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B:, HB_US_DIFF, LB_HB_US_Diff[2],    V,  2,  "CCMB US Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_C:, HB_US_DIFF, LB_HB_US_Diff[3],    V,  2,  "CCMC US Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D:, HB_US_DIFF, LB_HB_US_Diff[4],    V,  2,  "CCMD US Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_E:, HB_US_DIFF, LB_HB_US_Diff[5],    V,  2,  "CCME US Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F:, HB_US_DIFF, LB_HB_US_Diff[6],    V,  2,  "CCMF US Diff." }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_A:, HB_DS_DIFF, LB_HB_DS_Diff[1],    lb,  2,  "CCMA DS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B:, HB_DS_DIFF, LB_HB_DS_Diff[2],    V,  2,  "CCMB DS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_C:, HB_DS_DIFF, LB_HB_DS_Diff[3],    V,  2,  "CCMC DS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D:, HB_DS_DIFF, LB_HB_DS_Diff[4],    V,  2,  "CCMD DS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_E:, HB_DS_DIFF, LB_HB_DS_Diff[5],    V,  2,  "CCME DS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F:, HB_DS_DIFF, LB_HB_DS_Diff[6],    V,  2,  "CCMF DS Diff." }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, HB_US_COMPR, LB_HB_US_Total,     lb, 2,  "CCM US Compression" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, HB_DS_COMPR, LB_HB_DS_Total,     lb, 2,  "CCM DS Compression" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_A:, LC_DIFF,    LB_LC_Diff[1],       lb, 2,  "CCM A OOPS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_B:, LC_DIFF,    LB_LC_Diff[2],       lb, 2,  "CCM B OOPS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_C:, LC_DIFF,    LB_LC_Diff[3],       lb, 2,  "CCM C OOPS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_D:, LC_DIFF,    LB_LC_Diff[4],       lb, 2,  "CCM D OOPS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_E:, LC_DIFF,    LB_LC_Diff[5],       lb, 2,  "CCM E OOPS Diff." }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_F:, LC_DIFF,    LB_LC_Diff[6],       lb, 2,  "CCM F OOPS Diff." }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, LC_VERT_TOTAL, LB_LC_Vert_Total, lb, 2,  "OOPS LC Vert Total" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, LC_HORZ_TOTAL, LB_LC_Horz_Total, lb, 2,  "OOPS LC Horz Total" }
+    #
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, SG_VS_TOTAL,   LB_VS_Total,      lb, 2,  "SG VS Total Force" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, SG_AS_TOTAL,   LB_AS_Total,      lb, 2,  "SG AS Total Force" }
+    { PLC_TORUS, B_TORUS:, FOR:CCM_X:, LCSG_VERT_TOTAL, LB_Total_Vert_Total, lb, 2,  "LC+SG Vert Total Force" }
+}

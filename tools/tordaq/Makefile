@@ -1,17 +1,17 @@
-TARGET = tordaq
+STUB = tordaq
 DICT = exDict
 CC = g++
 LDFLAGS = $(shell root-config --libs) $(shell root-config --glibs)
 CFLAGS = -std=c++11 $(shell root-config --cflags)
 
-all: tordaqDict tordaqGui tordaqConverter
+all: $(STUB)Dict $(STUB)Gui $(STUB)Converter
 
-tordaqDict:
-	rootcint -f $(DICT).cxx -c $(TARGET)Gui.hh exLinkDef.h
+$(STUB)Dict:
+	rootcint -f $(DICT).cxx -c $(STUB)Gui.hh exLinkDef.h
 
-tordaqGui:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET)Gui $(TARGET)Gui.cxx $(DICT).cxx
+$(STUB)Gui:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(STUB)Gui $(STUB)Gui.cxx $(DICT).cxx
 
-tordaqConverter:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET)Converter $(TARGET)Converter.c
+$(STUB)Converter:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(STUB)Converter $(STUB)Converter.c
 

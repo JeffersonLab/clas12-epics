@@ -110,13 +110,15 @@ public:
 
         // open output ascii file:
         if (outAsciiFilename=="stdout") outAsciiFile=stdout;
-        else if (outAsciiFilename!="")  outAsciiFile=fopen(outAsciiFilename,"w");
-
-        if (!outAsciiFile)
+        else if (outAsciiFilename!="")
         {
-            std::cerr<<"Error Opening Output File:  "<<outAsciiFilename<<std::endl;
-            std::cerr<<"Probably you don't have permissions to write to that directory"<<std::endl;
-            return false;
+            outAsciiFile=fopen(outAsciiFilename,"w");
+            if (!outAsciiFile)
+            {
+                std::cerr<<"Error Opening Output File:  "<<outAsciiFilename<<std::endl;
+                std::cerr<<"Probably you don't have permissions to write to that directory"<<std::endl;
+                return false;
+            }
         }
 
         // open output ROOT file and TNtupleD:

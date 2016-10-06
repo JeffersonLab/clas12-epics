@@ -8,13 +8,20 @@
 #include <TFile.h>
 #include <TH1.h>
 #include <iostream>
+#include <vector>
+#include <string>
 
 class tordaqData {
 public :
-   static const int NVT=22;
+
+   //std::vector <std::string> VARNAMES;
+
+   static const int NVT=23;
+   
    //static const int FREQUENCY=3846;
    static const int FREQUENCY=2000;
    static const int WFLENGTH=2000;
+
    TTree          *fChain;
    Int_t           fCurrent;
    Long64_t        record_tsec;
@@ -47,11 +54,10 @@ public :
 
    Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
    {
-       // assume the waveform is sampled at wfLength Hz
-       // and updated at 1 Hz, i.e. no deadtime
+       // Assume the waveform is sampled at wfLength Hz
+       // and updated at 1 Hz (i.e. no deadtime).
        // return sec + nsec/1e9 + (Double_t)iSample/wfLength;
 
-       // Nope, there's known deadtime:
        // Consecutive samples are recorded at 3.846 kHz, or once per 260 us.
        // 2000 samples are then reported to EPICS, but only once every 800 ms.
        // So that leaves a contiguous 279 ms of every 1 second with no data.
@@ -64,17 +70,23 @@ public :
    }
    
    tordaqData(TTree *tree) : fChain(0) 
-    {
-        if (tree == 0) {
-            TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("torus_20160818_114059.root");
-            if (!f || !f->IsOpen()) {
-                f = new TFile("torus.root");
-            }
-            f->GetObject("VT6",tree);
-        }
-        Init(tree);
-    }
-   
+   {
+       //for (int ii=1; ii<=NVT; ii++)
+       //{
+       //    VARNAMES.push_back(Form("VT%d",ii));
+       //    if (ii==17) VARNAMES.push_back(Form("VT17_1"));
+       //}
+
+       if (tree == 0) {
+           TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("torus_20160818_114059.root");
+           if (!f || !f->IsOpen()) {
+               f = new TFile("torus.root");
+           }
+           f->GetObject("VT6",tree);
+       }
+       Init(tree);
+   }
+
    ~tordaqData()
    {
        if (!fChain) return;

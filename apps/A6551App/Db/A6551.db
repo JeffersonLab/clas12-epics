@@ -8,39 +8,45 @@
 #    field(IMAX,"$(IMAX)")
 #}
 
+#####################################################################
+
 record (ai, "$(P):imon")
 {
     field (DESC, "Get current of PS1")
     field (DTYP, "stream")
-field (SCAN, "$(SCAN)")
+    field (SCAN, "$(SCAN)")
     field (EGU,  "A")
     field (INP,  "@A6551.proto getCurrent $(PORT)")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+#    field (FLNK, "$(P):comm.PROC")
 }
 record (ai, "$(P):vmon")
 {
     field (DESC, "Get Voltage")
     field (DTYP, "stream")
-field (SCAN, "$(SCAN)")
+    field (SCAN, "$(SCAN)")
     field (EGU,  "V")
     field (INP,  "@A6551.proto getVoltage $(PORT)")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+#    field (FLNK, "$(P):comm.PROC")
 }
 record (ai, "$(P):ocstat")
 {
     field (DESC, "Get OC Status")
     field (DTYP, "stream")
-field (SCAN, "$(SCAN)")
+    field (SCAN, "$(SCAN)")
     field (INP,  "@A6551.proto getOcStatus $(PORT)")
+#    field (FLNK, "$(P):comm.PROC")
 }
 record (bi, "$(P):pwrbk")
 {
     field (DESC, "Get PW ON/OFF Status")
     field (DTYP, "stream")
-field (SCAN, "$(SCAN)")
+    field (SCAN, "$(SCAN)")
     field (INP,  "@A6551.proto getOnOff $(PORT)")
+#    field (FLNK, "$(P):comm.PROC")
 }
-
+#####################################################################
 
 record (ao, "$(P):iset")
 {
@@ -58,6 +64,31 @@ record (ao, "$(P):vset")
     field (OUT,  "@A6551.proto setVoltage $(PORT)")
     field (FLNK, "$(P):vsetrbk.PROC")
 }
+record (bo, "$(P):pwset")
+{
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setOnOff $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (FLNK, "$(P):pwsetrbk.PROC")
+}
+record (bo, "$(P):ocset")
+{
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (FLNK, "$(P):ocsetrbk.PROC")
+}
+record (ao, "$(P):ocreset")
+{
+    field (DESC, "Clear OC")
+    field (DTYP, "stream")
+    field (OUT,  "@A6551.proto clearOC $(PORT)")
+    field (FLNK, "$(P):ocsetrbk.PROC")
+}
+#####################################################################
+
 record (ai, "$(P):isetrbk")
 {
     field (DESC, "Get Current Setpoint")
@@ -81,41 +112,32 @@ record (bi, "$(P):ocsetrbk")
     field (INP,  "@A6551.proto getOcOnOff $(PORT)")
     field (PINI, 1)
 }
+#####################################################################
 
-record (bo, "$(P):pwset")
-{
-    field (DTYP, "stream")
-    field (OUT,  "@A6551.proto setOnOff $(PORT)")
-    field (ZNAM, "OFF")
-    field (ONAM, "ON")
-}
-record (bo, "$(P):ocset")
-{
-    field (DTYP, "stream")
-    field (OUT,  "@A6551.proto setOcOnOff $(PORT)")
-    field (ZNAM, "OFF")
-    field (ONAM, "ON")
-    field (FLNK, "$(P):ocsetrbk.PROC")
-}
-record (ao, "$(P):ocreset")
-{
-    field (DESC, "Clear OC")
-    field (DTYP, "stream")
-    field (OUT,  "@A6551.proto clearOC $(PORT)")
-    field (FLNK, "$(P):ocsetrbk")
-}
-
-record (calc, "$(P):comm")
+record (calc, "$(P):comms")
 {
     field (SCAN,"1 second")
     field (INPA,"$(P):imon.STAT")
     field (INPB,"$(P):vmon.STAT")
     field (INPC,"$(P):ocstat.STAT")
     field (INPD,"$(P):pwrbk.STAT")
-    field (INPE,"$(P):imonrbk.STAT")
-    field (INPF,"$(P):vmonrbk.STAT")
-    field (CALC,"A=0 && B=0 && C=0 && D=0 && E=0 && F=0")
+    field (CALC,"(A#0 || B#0 || C#0 || D#0)")
 }
+
+#record (calc,"$(P):imontime")
+#{
+#    field(DTYP,"Soft Timestamp")
+#    field(TSEL,"$(P):imon.TIME CP")
+#    field(INP,"@%b %d %Y %H:%M:%S")
+#}
+
+#record (fanout, "$(P):scansetrbk")
+#{
+#    record (LNKA, "$(P):isetrbk")
+#    record (LNKB, "$(P):vsetrbk")
+#    record (LNKC, "$(P):ocsetrbk")
+#}
+#####################################################################
 
 #record (stringin, "$(P):model")
 #{
@@ -132,3 +154,4 @@ record (calc, "$(P):comm")
 #    field (ZNAM, "OFF")
 #    field (ONAM, "ON")
 #}
+

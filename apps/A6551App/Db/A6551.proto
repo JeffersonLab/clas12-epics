@@ -31,6 +31,13 @@ writetimeout = 500;
 readtimeout = 600;     # milliseconds
 replytimeout = 10000;
 
+#putInt    { out "\$1 %d"; }
+#putFloat  { out "\$1 %f"; }
+#putString { out "\$1 %s"; }
+#getInt    { out "\$1?"; in "%d"; }
+#getFloat  { out "\$1?"; in "%f"; }
+#getString { out "\$1?"; in "%#s"; }
+
 getIdentity {
     out "*IDN?"; in "%#s";
 }
@@ -87,12 +94,14 @@ getOcStatus {
     out "STAT:QUES:COND?"; in "%d";
 }
 
-setOnOffFull {
-    out "CURR:PROT:STAT 0";
-    out "OUTP:PROT:CLE";
-    wait 800;
-    out "CURR:PROT:STAT 1";
-    wait 800;
-    out "OUTP %d";
-#    @init {getOnOff;}
-}
+#setOnOffFull {
+#    out "CURR:PROT:STAT 0";
+#    out "OUTP:PROT:CLE";
+#    wait 800;
+#    out "CURR:PROT:STAT 1";
+#    wait 800;
+#    out "OUTP %d";
+##    @init {getOnOff;}
+#}
+
+

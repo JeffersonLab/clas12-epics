@@ -442,7 +442,15 @@ break;
   //printf("value=%f\n",value);
   /* Report any failure to initialize
    */
+
+  // these result in setpoint initted to zero (and do not propogate to hw):
+  //if (status ==OK) pao->val = value;
+  //if (status ==OK) pao->oval = value;
+
+  // this results in setpoint initted "correctly" but truncated to an integer 
+  // since rval is an integer (and also does not propogate to hw):
   if (status ==OK) pao->rval = value;
+
   else
     {
       char alert[128];

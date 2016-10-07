@@ -60,7 +60,9 @@ mkHVEpics:	mkHVEpics.C
 
 ../HV_allnames.txt:	mkHVEpics ../HVswaps.txt ../../Db/caenhv.db
 	echo "Generating HV names, substitutions and iocs. See mkHVEpics.log and HV_allnames.txt"
-	./mkHVEpics crates > ../mkHVEpics.log 
-	./mkHVEpics groups >> ../mkHVEpics.log
-	./mkHVEpics all >> ../mkHVEpics.log
-
+#	./mkHVEpics crates > ../mkHVEpics.log 
+#	./mkHVEpics groups >> ../mkHVEpics.log
+#	./mkHVEpics all >> ../mkHVEpics.log
+	./mkHVEpics crates
+	./mkHVEpics groups
+	./mkHVEpics all

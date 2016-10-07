@@ -133,7 +133,7 @@ public:
                 outTree=new TNtupleD("tordaq","",vars);
             }
         }
-
+/*
         if (makeHistos)
         {
             // determine available time range:
@@ -157,13 +157,15 @@ public:
             }
             const Double_t sec0=floor(time0);
             const Double_t sec1=floor(time1)+1;
-            const int nSeconds=floor(time1)+1-floor(time0);
-            const int nBins=nSeconds*tordaqData::FREQUENCY;
+            //const int nSeconds=floor(time1)+1-floor(time0);
+            const Long_t nSeconds=sec1-sec0;
+            //const int nSeconds=(int)time1 - (int)time0 + 1;
+            const Long_t nBins=nSeconds*tordaqData::FREQUENCY;
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
                 outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
         }
+*/
 
-/*
         if (makeHistos)
         {
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
@@ -183,11 +185,16 @@ public:
                 }
                 if (time0>0 && time1>0)
                 {
-                    const Double_t sec0=floor(time0);
-                    const Double_t sec1=floor(time1)+1;
-                    const int nSeconds=floor(time1)+1-floor(time0);
-                    const int nBins=nSeconds*tordaqData::FREQUENCY;
-                    outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
+                    const Double_t t0 = time0 - 0.5/tordaqData::FREQUENCY;
+                    const Double_t t1 = time1 + 0.5/tordaqData::FREQUENCY;
+                    const int nBins=(t1-t0)*tordaqData::FREQUENCY;
+                    outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,t0,t1));
+
+                    //const Double_t sec0=floor(time0);
+                    //const Double_t sec1=floor(time1)+1;
+                    //const int nSeconds=floor(time1)+1-floor(time0);
+                    //const int nBins=nSeconds*tordaqData::FREQUENCY;
+                    //outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
                 }
                 else
                 {
@@ -196,7 +203,7 @@ public:
                 }
             }
         }
-*/
+
 
         std::vector <bool> skipVars;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) skipVars.push_back(false);
@@ -204,7 +211,8 @@ public:
         static const int ASCIITIMELENGTH=26;
         char stime[ASCIITIMELENGTH];
 
-        Double_t vars[1000];
+        Double_t vars[tordaqData::NVT*2];
+        //Double_t vars[1000];
 
         Long64_t jentry=-1;
         Long64_t nSamples=0;
@@ -266,7 +274,29 @@ public:
                             sprintf(stime,"%s %.4f",stime,time-(int)time);
                         }
                         if (makeHistos)
-                            outHistos[iVar]->SetBinContent(outHistos[iVar]->FindBin(time),data);
+                        {
+                            const int bin=outHistos[iVar]->FindBin(time);
+                            
+                            /*
+                            if (iVar==18)
+                            {
+                                if (fabs(outHistos[iVar]->GetBinContent(bin))>1e-8)
+                                {
+                                    std::cerr<<"Overlapping Data:"<<inTrees[iVar]->fChain->GetName();
+                                    fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
+                                    fprintf(stderr," (%20f,%f) ",time,data);
+                                    std::cerr<<outHistos[iVar]->GetBinContent(bin)<<std::endl;
+                                    getchar();
+                                }
+                                else
+                                {
+                                    fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
+                                    fprintf(stderr,"  (%20f,%f)\n",time,data);
+                                }
+                            }
+                            */
+                            outHistos[iVar]->SetBinContent(bin,data);
+                        }
                     }
                     if (outAsciiFile)
                     {

@@ -11,10 +11,38 @@
 #include <vector>
 #include <string>
 
+static const char* CVARNAMES[]={
+    "VT1",
+    "VT2",
+    "VT3",
+    "VT4",
+    "VT5",
+    "VT6",
+    "VT7",
+    "VT8",
+    "VT9",
+    "VT10",
+    "VT11",
+    "VT12",
+    "VT13",
+    "VT14",
+    "VT15",
+    "VT16",
+    "VT17",
+    "VT18",
+    "VT19",
+    "VT20",
+    "VT21",
+    "VT22",
+    "VT23",
+    "IDCCT1",
+    NULL
+};
+
 class tordaqData {
 public :
 
-   //std::vector <std::string> VARNAMES;
+   std::vector <std::string> VARNAMES;
 
    static const int NVT=23;
    
@@ -68,14 +96,19 @@ public :
    {
        return getTime(record_tsec,record_tnsec,WFLENGTH,iSample);
    }
-   
+  
+   tordaqData()
+   {
+       int ii=0;
+       VARNAMES.clear();
+       while (CVARNAMES[ii]) VARNAMES.push_back(CVARNAMES[ii++]);
+   }
+
    tordaqData(TTree *tree) : fChain(0) 
    {
-       //for (int ii=1; ii<=NVT; ii++)
-       //{
-       //    VARNAMES.push_back(Form("VT%d",ii));
-       //    if (ii==17) VARNAMES.push_back(Form("VT17_1"));
-       //}
+       int ii=0;
+       VARNAMES.clear();
+       while (CVARNAMES[ii]) VARNAMES.push_back(CVARNAMES[ii++]);
 
        if (tree == 0) {
            TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("torus_20160818_114059.root");

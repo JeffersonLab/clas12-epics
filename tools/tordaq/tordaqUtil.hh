@@ -8,7 +8,7 @@ static TH1* zoomHisto(TH1* hin,const char* name,const int firstBin,const int las
     if (gDirectory->Get(name)) gDirectory->Get(name)->Delete();
     if (firstBin>lastBin || firstBin<1 || lastBin>hin->GetNbinsX())
     {
-        std::cerr<<"zoomHistogram Error:  invalid bins"<<std::endl;
+        std::cerr<<"zoomHistogram Error:  invalid bins:  "<<std::endl;
         return NULL;
     }
     const int nBins=lastBin-firstBin+1;
@@ -25,16 +25,16 @@ static TH1* zoomHisto(TH1* hin,const char* name,const int firstBin,const int las
     }
     return hout;
 }
-static TH1* zoomHisto(TH1* hin,const double x1,const double x2)
+static TH1* zoomHisto(TH1* hin,const char* name,const double x1,const double x2)
 {
     int firstBin=hin->FindBin(x1);
     int lastBin=hin->FindBin(x2);
     if (firstBin<1) firstBin=1;
     if (lastBin>hin->GetNbinsX()) lastBin=hin->GetNbinsX();
-    return zoomHisto(hin,firstBin,lastBin);
+    return zoomHisto(hin,name,firstBin,lastBin);
 }
 
-/*
+
 //
 // Remove noise via transform to frequency domain and back.
 // copied from Hall-D (yqiang)
@@ -49,7 +49,7 @@ static TH1 *deNoise(TH1 *h1)
     const double list_noise[6] = { 60, 120, 180, 205, 240, 300 };
 
     const double xrange = h1->GetXaxis()->GetXmax() - h1->GetXaxis()->GetXmin();
-    const int nbin = h1->GetNbinsX();
+    int nbin = h1->GetNbinsX();
     const TString hname = TString(h1->GetName())+"_de";
     TH1 *h2 = (TH1*) gROOT->FindObject(hname);
     if (h2) delete h2;
@@ -97,7 +97,7 @@ static TH1 *deNoise(TH1 *h1)
     //delete filter;
     return h2;
 }
-
+/*
 //
 // Resample data to lower frequency than the base frequency (upto 10000 Hz)
 // copied from Hall-D (yqiang)

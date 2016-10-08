@@ -1,11 +1,11 @@
 #include "tordaqGui.hh"
-#include "tordaqWriter.hh"
 #include "tordaqUtil.hh"
 
 ClassImp(tordaqGui);
 
 TString filename="";
-const char* dataDir="/usr/clas12/DATA/wf2root";
+//const char* dataDir="/usr/clas12/DATA/wf2root";
+const char* dataDir="/logs/torus";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 
 TString getTimeString(const Double_t time)
@@ -138,6 +138,9 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     leftFrame->AddFrame(yZoomFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
     leftFrame->AddFrame(yZoomLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
 
+    //denoiseCheck=new TGCheckButton(leftFrame,"Denoise");
+    //leftFrame->AddFrame(denoiseCheck,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1,1,1,1));
+
     middleFrame->AddFrame(leftFrame,new TGLayoutHints(kLHintsLeft | kLHintsExpandY,5,5,1,1));
 
     // RIGHT FRAME -------------------------------------------------------------------
@@ -235,7 +238,6 @@ void tordaqGui::DoOpen(TString filename="") {
     //this->Layout();
 
     datafile=new TFile(filename,"READ");
-    int ivt=1;
     
     // zero the combos boxes:
     std::vector <TGComboBox*>::iterator cbit;
@@ -246,7 +248,7 @@ void tordaqGui::DoOpen(TString filename="") {
     }
 
     // generate the hitsos if not already there:
-    if (!gDirectory->Get("h1"))
+    if (!gDirectory->Get(("h"+tdData.VARNAMES[0]).c_str()))
     {
         tdReader.makeHistos=true;
         //tdReader.progressMeter=progressBar;
@@ -259,12 +261,20 @@ void tordaqGui::DoOpen(TString filename="") {
         }
     }
 
-    while (1)
+    histos1.clear();
+    dataHistos1.clear();
+    for (unsigned int iv=0; iv<tdData.VARNAMES.size(); iv++)
     {
-        tdReader.ProgressMeter(tordaqData::NVT,ivt);
+        const TString vn=tdData.VARNAMES[iv];
 
-        TObject* xx=gDirectory->Get(Form("h%d",ivt));
-        if (!xx) break;
+        tdReader.ProgressMeter(tdData.VARNAMES.size(),iv);
+
+        TObject* xx=gDirectory->Get("h"+vn);
+        if (!xx) 
+        {
+            std::cerr<<"tordaqGui:  Error Reading Histogram:  "<<vn<<std::endl;
+            continue;
+        }
 
         // copy into memory (if on disk):
         // TH1* hh=(TH1*)xx->Clone("hvt%d");
@@ -277,11 +287,11 @@ void tordaqGui::DoOpen(TString filename="") {
         hh->GetYaxis()->SetTitleOffset(0.5);
         hh->GetXaxis()->SetTitle("");
         hh->GetYaxis()->SetTitle("");
-        hh->SetTitle(Form("VT%d",ivt));
-        datahistos.push_back(hh);
+        hh->SetTitle(vn);
+        dataHistos1.push_back(hh);
         for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
-            (*cbit)->AddEntry(Form("VT%d",ivt),ivt);
-        if (ivt==1)
+            (*cbit)->AddEntry(vn,iv+1);
+        if (iv==0)
         {
             const double t0=hh->GetXaxis()->GetXmin();
             const double t1=hh->GetXaxis()->GetXmax();
@@ -291,16 +301,16 @@ void tordaqGui::DoOpen(TString filename="") {
             zoomSliderLabelMid->SetText(getTimeString(t0+(t1-t0)*0.50));
             zoomSliderLabelMax->SetText(getTimeString(t1));
         }
-        ivt++;
-        // if (ivt>5) break;
     }
     
-    fileLabel->ChangeText(filename);
+    if (dataHistos1.size() != tdData.VARNAMES.size())
+         fileLabel->ChangeText(filename + " --   ERROR READING HISTOS.");
+    else fileLabel->ChangeText(filename);
     this->Layout();
 }
 void tordaqGui::Draw1()
 {
-    if (datahistos.size()<1)
+    if (dataHistos1.size()<1)
     {
         fileLabel->ChangeText("!! OPEN A FILE FIRST !!");
         this->Layout();
@@ -318,8 +328,10 @@ void tordaqGui::Draw1()
    
     // determine minimum and maximum for y-range:
     float min=999999,max=-9999999;
-    for (unsigned int ii=0; ii<datahistos.size(); ii++)
+    for (unsigned int ii=0; ii<dataHistos1.size(); ii++)
     {
+        TH1* hh=dataHistos1[ii];
+
         bool selected=false;
         for (unsigned jj=0; jj<combos1.size(); jj++)
         {
@@ -327,16 +339,14 @@ void tordaqGui::Draw1()
         }
         if (selected || showAllCheck->IsOn())
         {
-            if (datahistos[ii]->GetMaximum()>max) max=datahistos[ii]->GetMaximum();
-            if (datahistos[ii]->GetMinimum()<min) min=datahistos[ii]->GetMinimum();
+            if (hh->GetMaximum()>max) max=hh->GetMaximum();
+            if (hh->GetMinimum()<min) min=hh->GetMinimum();
         }
     }
 
-    bool first=true;
     legend1->Clear();
     histos1.clear();
-    int nHist=0;
-    for (unsigned int ii=0; ii<datahistos.size(); ii++)
+    for (unsigned int ii=0; ii<dataHistos1.size(); ii++)
     {
         bool selected=false;
         for (unsigned jj=0; jj<combos1.size(); jj++)
@@ -345,42 +355,53 @@ void tordaqGui::Draw1()
         }
         if (selected || showAllCheck->IsOn())
         {
-            //if (first)
-            //{
-                datahistos[ii]->SetMaximum(max);
-                datahistos[ii]->SetMinimum(min);
-                datahistos[ii]->GetXaxis()->SetRangeUser(xmin,xmax);
-            //}
+            TH1* hh=dataHistos1[ii];
+            //TH1* hh;
+            //if (denoiseCheck->IsOn()) hh=tordaqUtil::deNoise(dataHistos1[ii]);
+            //else hh=dataHistos1[ii];
+            
+            hh->SetMaximum(max);
+            hh->SetMinimum(min);
+            hh->GetXaxis()->SetRangeUser(xmin,xmax);
 
             // This should give a huge speed up when overlaying many plots.
             // But will need some reworking in the tordaqGui's zoom functions.
             //histos1.push_back(tordaqUtil::zoomHisto(
-            //            datahistos[ii],
-            //            Form("%s_zoom",datahistos[ii]->GetName()),
+            //            hh,
+            //            Form("%s_zoom",histos1[ii]->GetName()),
             //            xmin,
             //            xmax));
 
-            histos1.push_back(datahistos[ii]);
-            
-            datahistos[ii]->SetLineColor(colors[nHist%5]);
-            datahistos[ii]->SetLineStyle(nHist/5+1);
-            legend1->AddEntry(datahistos[ii],datahistos[ii]->GetTitle(),"L");
-            datahistos[ii]->Draw(first?"":"SAME");
-            first=false;
-            nHist++;
+            histos1.push_back(hh);
+           
+            hh->SetLineWidth(2);
+            hh->SetLineColor(colors[(histos1.size()-1)%5]);
+            hh->SetLineStyle((histos1.size()-1)/5+1);
+            legend1->AddEntry(hh,hh->GetTitle(),"L");
+            hh->Draw(histos1.size()==1?"":"SAME");
         }
     }
     
     legend1->Draw();
     ctmp->Update();
 }
-void tordaqGui::Update1()
+void tordaqGui::Update1(const double xmin=0,const double xmax=-1)
 {
+    if (xmax>xmin)
+    {
+        for (unsigned int ii=0; ii<histos1.size(); ii++)
+        {
+            histos1[ii]->GetXaxis()->SetRangeUser(xmin,xmax);
+            //histos1[ii]=tordaqUtil::zoomHisto(histos1[ii],
+            //            Form("%s_zoom",histos1[ii]->GetName()),
+            //            xmin,
+            //            xmax);
+            //histos1[ii]->Draw(ii==0?"":"SAME");
+        }
+        zoomSlider->SetPosition(xmin);
+    }
     canvas1->GetCanvas()->Modified();
     canvas1->GetCanvas()->Update();
-
-    // this is a hack and shouldn't be necessary:
-    //Draw1();
 }
 void tordaqGui::ZoomIn1()
 {
@@ -390,9 +411,7 @@ void tordaqGui::ZoomIn1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
-    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo);
-    Update1();
+    Update1(xlo,xhi);
 }
 void tordaqGui::ZoomOut1()
 {
@@ -402,9 +421,7 @@ void tordaqGui::ZoomOut1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
-    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo);
-    Update1();
+    Update1(xlo,xhi);
 }
 void tordaqGui::yZoomIn1()
 {
@@ -414,7 +431,8 @@ void tordaqGui::yZoomIn1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double ylo=y1+(y2-y1)*frac;
     const double yhi=y2-(y2-y1)*frac;
-    histos1[0]->GetYaxis()->SetRangeUser(ylo,yhi);
+    histos1[0]->SetMinimum(ylo);
+    histos1[0]->SetMaximum(yhi);
     Update1();
 }
 void tordaqGui::yZoomOut1()
@@ -425,7 +443,8 @@ void tordaqGui::yZoomOut1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double ylo=y1-(y2-y1)*frac;
     const double yhi=y2+(y2-y1)*frac;
-    histos1[0]->GetYaxis()->SetRangeUser(ylo,yhi);
+    histos1[0]->SetMinimum(ylo);
+    histos1[0]->SetMaximum(yhi);
     Update1();
 }
 void tordaqGui::doZoomSlider1()
@@ -443,10 +462,7 @@ void tordaqGui::doZoomSlider1()
      || pos<histos1[0]->GetXaxis()->GetXmin())
         zoomSlider->SetPosition(x1);
     else
-    {
-        histos1[0]->GetXaxis()->SetRangeUser(pos,pos+(x2-x1));
-        Update1();
-    }
+        Update1(pos,pos+(x2-x1));
 }
 void tordaqGui::PanLeft1()
 {
@@ -456,9 +472,7 @@ void tordaqGui::PanLeft1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
-    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo);
-    Update1();
+    Update1(xlo,xhi);
 }
 void tordaqGui::PanRight1()
 {
@@ -468,9 +482,7 @@ void tordaqGui::PanRight1()
     ctmp->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
-    histos1[0]->GetXaxis()->SetRangeUser(xlo,xhi);
-    zoomSlider->SetPosition(xlo);
-    Update1();
+    Update1(xlo,xhi);
 }
 int main(int argc, char **argv) {
 

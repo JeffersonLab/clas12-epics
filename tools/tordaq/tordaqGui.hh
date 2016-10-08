@@ -75,10 +75,12 @@ class tordaqGui: public TGMainFrame {
         TFile *datafile;
         TTree *datatree;
         TTimeStamp starttime;
-        std::vector <TH1*> datahistos;
-        std::vector <TH1*> datahistosN;
-        std::vector <TH1*> datahistosS;
+        std::vector <TH1*> dataHistos1;
+        std::vector <TH1*> dataHistos1N;
+        std::vector <TH1*> dataHistos1S;
         tordaqReader tdReader;
+        tordaqData tdData;
+
     public:
         tordaqGui(const TGWindow *p, UInt_t w, UInt_t h);
         virtual ~tordaqGui();
@@ -86,7 +88,7 @@ class tordaqGui: public TGMainFrame {
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
         void Draw1();
-        void Update1();
+        void Update1(const double,const double);
         void ZoomIn1();
         void ZoomOut1();
         void yZoomIn1();

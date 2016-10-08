@@ -1,3 +1,4 @@
+
 #ifndef __TORDAQREADER__HH
 #define __TORDAQREADER__HH
 
@@ -5,6 +6,8 @@
 
 #include <TNtupleD.h>
 #include <TGProgressBar.h>
+
+#include <map>
 
 class tordaqReader {
 public:
@@ -25,9 +28,12 @@ public:
     TNtupleD *outTree=NULL;
     TFile *outRootFile=NULL;
     TGHProgressBar *progressMeter=NULL;
+  
+    tordaqData tdData;
+
     std::vector <tordaqData*> inTrees;
     std::vector <TH1*> outHistos;
-    
+
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
         static const int maxdots=40;
@@ -77,34 +83,21 @@ public:
             }
             inFile=new TFile(inFilename,"READ");
         }
-
+        
         // find the input TTrees:
-        for (int ii=0; ii<tordaqData::NVT; ii++)
+        std::vector <std::string> missingTrees;
+        for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
         {
-            TTree *tt=(TTree*)gDirectory->Get(Form("VT%d",ii+1));
+            TTree *tt=(TTree*)gDirectory->Get(tdData.VARNAMES[ii].c_str());
             if (tt) inTrees.push_back(new tordaqData(tt));
+            else missingTrees.push_back(tdData.VARNAMES[ii]);
         }
-        if (inTrees.size()<1)
+        for (unsigned int ii=0; ii<missingTrees.size(); ii++)
+            std::cerr<<"Missing Tree:   "<<missingTrees[ii]<<std::endl;
+        if (missingTrees.size()>0) return false;
+        if (tdData.VARNAMES.size() != inTrees.size())
         {
-            std::cerr<<"Found No Trees"<<std::endl<<std::endl;
-            return false;
-        }
-        // print names of any missing trees:
-        if (inTrees.size()!=tordaqData::NVT)
-        {
-            for (int ii=0; ii<tordaqData::NVT; ii++)
-            {
-                bool found=false;
-                for (unsigned int jj=0; jj<inTrees.size(); jj++)
-                {
-                    if (!strcmp(Form("VT%d",ii+1),inTrees[jj]->fChain->GetName()))
-                    {
-                        found=true;
-                        break;
-                    }
-                }
-                if (!found) std::cerr<<"Missing Tree:   "<<Form("VT%d",ii+1)<<std::endl;
-            }
+            std::cerr<<"Unkown missing trees (this should be impossible)."<<std::endl;
             return false;
         }
 
@@ -121,50 +114,26 @@ public:
             }
         }
 
+
         // open output ROOT file and TNtupleD:
         if (outRootFilename!="")
         {
             outRootFile=new TFile(outRootFilename,"CREATE");
             if (makeNtuple)
             {
-                TString vars="t1:x1";
-                for (unsigned int ii=1; ii<inTrees.size(); ii++)
-                    vars+=Form(":t%d:x%d",ii+1,ii+1);
-                outTree=new TNtupleD("tordaq","",vars);
+                std::string separator="";
+                std::string varnames="";
+                for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
+                {
+                    varnames += separator+"t"+tdData.VARNAMES[ii];
+                    varnames += ":"+tdData.VARNAMES[ii];
+                    separator=":";
+                }
+                std::cerr<<varnames<<std::endl;
+                outTree=new TNtupleD("tordaq","",varnames.c_str());
             }
         }
-/*
-        if (makeHistos)
-        {
-            // determine available time range:
-            Double_t time0=-1,time1=-1;
-            for (unsigned int ii=0; ii<inTrees.size(); ii++)
-            {
-                if (inTrees[ii]->LoadTree(0) < 0) continue;
-                else
-                {
-                    inTrees[ii]->fChain->GetEntry(0);
-                    const Double_t t0 = inTrees[ii]->getTime(0);
-                    if (time0<0 || t0<time0) time0=t0;
-                }
-                if (inTrees[ii]->LoadTree(inTrees[ii]->fChain->GetEntries()-1) < 0) continue;
-                else
-                {
-                    inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
-                    const Double_t t1 = inTrees[ii]->getTime(inTrees[ii]->WFLENGTH-1);
-                    if (time1<0 || t1>time1) time1=t1;
-                }
-            }
-            const Double_t sec0=floor(time0);
-            const Double_t sec1=floor(time1)+1;
-            //const int nSeconds=floor(time1)+1-floor(time0);
-            const Long_t nSeconds=sec1-sec0;
-            //const int nSeconds=(int)time1 - (int)time0 + 1;
-            const Long_t nBins=nSeconds*tordaqData::FREQUENCY;
-            for (unsigned int ii=0; ii<inTrees.size(); ii++)
-                outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
-        }
-*/
+
 
         if (makeHistos)
         {
@@ -181,20 +150,15 @@ public:
                 else
                 {
                     inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
-                    time1 = inTrees[ii]->getTime(inTrees[ii]->WFLENGTH-1);
+                    time1 = inTrees[ii]->getTime(tordaqData::WFLENGTH-1);
                 }
                 if (time0>0 && time1>0)
                 {
                     const Double_t t0 = time0 - 0.5/tordaqData::FREQUENCY;
                     const Double_t t1 = time1 + 0.5/tordaqData::FREQUENCY;
                     const int nBins=(t1-t0)*tordaqData::FREQUENCY;
-                    outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,t0,t1));
-
-                    //const Double_t sec0=floor(time0);
-                    //const Double_t sec1=floor(time1)+1;
-                    //const int nSeconds=floor(time1)+1-floor(time0);
-                    //const int nBins=nSeconds*tordaqData::FREQUENCY;
-                    //outHistos.push_back(new TH1F(Form("h%d",ii+1),Form(";;VT%d",ii+1),nBins,sec0,sec1));
+                    const TString vn=inTrees[ii]->fChain->GetName();
+                    outHistos.push_back(new TH1F("h"+vn,";;"+vn,nBins,t0,t1));
                 }
                 else
                 {
@@ -204,23 +168,22 @@ public:
             }
         }
 
-
         std::vector <bool> skipVars;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) skipVars.push_back(false);
 
         static const int ASCIITIMELENGTH=26;
         char stime[ASCIITIMELENGTH];
 
-        Double_t vars[tordaqData::NVT*2];
-        //Double_t vars[1000];
+        Double_t ntupleVars[1000];
 
         Long64_t jentry=-1;
         Long64_t nSamples=0;
         bool tooManySamples=0;
 
         // just for progress meter:
-        const int nev = maxSamples>0 && maxSamples<inTrees[0]->fChain->GetEntries() ?
-            maxSamples/inTrees[0]->WFLENGTH : inTrees[0]->fChain->GetEntries();
+        const int nev = maxSamples>0 && maxSamples<inTrees[0]->fChain->GetEntries()
+                      ? maxSamples/tordaqData::WFLENGTH
+                      : inTrees[0]->fChain->GetEntries();
         const time_t runStartTime=time(0);
 
         while (1)
@@ -252,20 +215,21 @@ public:
             // all times are too early, skip to next entry:
             if (allEarly) continue;
 
-            for (int iSamp=0; iSamp<inTrees[0]->WFLENGTH; iSamp++)
+
+            for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++)
             {
                 char sep[1]="";
                 for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
                 {
                     strcpy(stime,"0000:00:00 00:00:00: 0.0000");
                     Double_t time=0,data=0;
-                    vars[2*iVar]=vars[2*iVar+1]=0;
+                    ntupleVars[2*iVar]=ntupleVars[2*iVar+1]=0;
                     if (!skipVars[iVar])
                     {
                         data = inTrees[iVar]->record_data[iSamp];
                         time = inTrees[iVar]->getTime(iSamp);
-                        vars[2*iVar]=time;
-                        vars[2*iVar+1]=data;
+                        ntupleVars[2*iVar]=time;
+                        ntupleVars[2*iVar+1]=data;
                         if (rubenTime)
                         {
                             const time_t timet=(int)time;
@@ -306,7 +270,7 @@ public:
                     strcpy(sep,separator);
                 }
                 if (outAsciiFile) fprintf(outAsciiFile,"\n");
-                if (outTree) outTree->Fill(vars);
+                if (outTree) outTree->Fill(ntupleVars);
                 if (++nSamples>=maxSamples && maxSamples>0)
                 {
                     tooManySamples=1;

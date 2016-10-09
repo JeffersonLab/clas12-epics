@@ -1,6 +1,8 @@
 #include "tordaqGui.hh"
 #include "tordaqUtil.hh"
 
+#include "TThread.h"
+
 ClassImp(tordaqGui);
 
 TString filename="";

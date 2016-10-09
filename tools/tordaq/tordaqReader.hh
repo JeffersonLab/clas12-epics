@@ -6,15 +6,19 @@
 
 #include <TNtupleD.h>
 #include <TGProgressBar.h>
-
-#include <map>
+#include <iomanip>
 
 class tordaqReader {
+private:
+    const char* asciiDelimiter=",";
+    TFile *inFile=NULL;
+    tordaqData tdData;
+    std::vector <tordaqData*> inTrees;
+    std::vector <TH1*> outHistos;
+
 public:
-    const char* separator=",";
     tordaqReader(){};
     ~tordaqReader(){};
-    TFile *inFile=NULL;
     TString inFilename="";
     TString outAsciiFilename="";
     TString outRootFilename="";
@@ -28,11 +32,6 @@ public:
     TNtupleD *outTree=NULL;
     TFile *outRootFile=NULL;
     TGHProgressBar *progressMeter=NULL;
-  
-    tordaqData tdData;
-
-    std::vector <tordaqData*> inTrees;
-    std::vector <TH1*> outHistos;
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
@@ -121,13 +120,13 @@ public:
             outRootFile=new TFile(outRootFilename,"CREATE");
             if (makeNtuple)
             {
-                std::string separator="";
+                std::string sep="";
                 std::string varnames="";
                 for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
                 {
-                    varnames += separator+"t"+tdData.VARNAMES[ii];
+                    varnames += sep+"t"+tdData.VARNAMES[ii];
                     varnames += ":"+tdData.VARNAMES[ii];
-                    separator=":";
+                    sep=":";
                 }
                 std::cerr<<varnames<<std::endl;
                 outTree=new TNtupleD("tordaq","",varnames.c_str());
@@ -168,8 +167,18 @@ public:
             }
         }
 
+        std::vector < std::vector <bool> > missedSample;
+        std::vector <int> dupSamples;
         std::vector <bool> skipVars;
-        for (unsigned int ii=0; ii<inTrees.size(); ii++) skipVars.push_back(false);
+        for (unsigned int ii=0; ii<inTrees.size(); ii++) 
+        {
+            skipVars.push_back(false);
+            dupSamples.push_back(0);
+            std::vector <bool> mm;
+            for (int jj=1; jj<=outHistos[ii]->GetNbinsX(); jj++) mm.push_back(true);
+            missedSample.push_back(mm);
+        }
+
 
         static const int ASCIITIMELENGTH=26;
         char stime[ASCIITIMELENGTH];
@@ -215,7 +224,6 @@ public:
             // all times are too early, skip to next entry:
             if (allEarly) continue;
 
-
             for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++)
             {
                 char sep[1]="";
@@ -240,34 +248,32 @@ public:
                         if (makeHistos)
                         {
                             const int bin=outHistos[iVar]->FindBin(time);
-                            
-                            /*
-                            if (iVar==18)
+
+                            if (fabs(outHistos[iVar]->GetBinContent(bin))>1e-8)
                             {
-                                if (fabs(outHistos[iVar]->GetBinContent(bin))>1e-8)
-                                {
-                                    std::cerr<<"Overlapping Data:"<<inTrees[iVar]->fChain->GetName();
-                                    fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
-                                    fprintf(stderr," (%20f,%f) ",time,data);
-                                    std::cerr<<outHistos[iVar]->GetBinContent(bin)<<std::endl;
-                                    getchar();
-                                }
-                                else
-                                {
-                                    fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
-                                    fprintf(stderr,"  (%20f,%f)\n",time,data);
-                                }
+                                dupSamples[iVar]++;
+                                //std::cerr<<"Overlapping Data:"<<inTrees[iVar]->fChain->GetName();
+                                //fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
+                                //fprintf(stderr," (%20f,%f) ",time,data);
+                                //std::cerr<<outHistos[iVar]->GetBinContent(bin)<<std::endl;
+                                //getchar();
                             }
-                            */
+                            else
+                            {
+                                //fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
+                                //fprintf(stderr,"  (%20f,%f)\n",time,data);
+                            }
+                            
                             outHistos[iVar]->SetBinContent(bin,data);
+                            missedSample[iVar][bin-1]=false;
                         }
                     }
                     if (outAsciiFile)
                     {
-                        if (rubenTime) fprintf(outAsciiFile,"%s%s%s%12f",sep,stime,separator,data);
-                        else           fprintf(outAsciiFile,"%s%18.4f%s%12f",sep,time,separator,data);
+                        if (rubenTime) fprintf(outAsciiFile,"%s%s%s%12f",sep,stime,asciiDelimiter,data);
+                        else           fprintf(outAsciiFile,"%s%18.4f%s%12f",sep,time,asciiDelimiter,data);
                     }
-                    strcpy(sep,separator);
+                    strcpy(sep,asciiDelimiter);
                 }
                 if (outAsciiFile) fprintf(outAsciiFile,"\n");
                 if (outTree) outTree->Fill(ntupleVars);
@@ -278,6 +284,44 @@ public:
                 }
             }
             if (tooManySamples) break;
+        }
+
+        // print out duplicates samples info:
+        if (dupSamples.size()>0)
+        {
+            std::cerr<<std::endl<<std::endl<<"Duplicate Samples:"<<std::endl;
+            for (unsigned int ii=0; ii<dupSamples.size(); ii++)
+                if (dupSamples[ii]>0) {
+                    std::cerr<<inTrees[ii]->fChain->GetName()<<":  "<<dupSamples[ii]<<" / ";
+                    std::cerr<<std::setprecision(1)<<100*(double)dupSamples[ii]/outHistos[ii]->GetNbinsX()<<"%"<<std::endl;
+                }
+            std::cerr<<std::endl<<std::endl;
+        }
+
+        // print out missing sample info:
+        bool anyMissed=false;
+        for (unsigned int ii=0; ii<missedSample.size(); ii++)
+        {
+            int nMissed=0;
+            for (unsigned int jj=0; jj<missedSample[ii].size(); jj++)
+                if (missedSample[ii][jj]) nMissed++;
+            if (nMissed>0) anyMissed=true;
+        }
+        if (anyMissed)
+        {
+            std::cerr<<"Missing Samples:"<<std::endl;
+            for (unsigned int ii=0; ii<missedSample.size(); ii++)
+            {
+                int nMissed=0;
+                for (unsigned int jj=0; jj<missedSample[ii].size(); jj++)
+                    if (missedSample[ii][jj]) nMissed++;
+                if (nMissed>0) anyMissed=true;
+                {
+                    std::cerr<<inTrees[ii]->fChain->GetName()<<":  "<<nMissed<<" / ";
+                    std::cerr<<std::setprecision(1)<<100*(double)nMissed/outHistos[ii]->GetNbinsX()<<"%"<<std::endl;
+                }
+            }
+            std::cerr<<std::endl<<std::endl;
         }
         return true;
     }

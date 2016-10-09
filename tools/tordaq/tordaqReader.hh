@@ -32,6 +32,7 @@ public:
     TNtupleD *outTree=NULL;
     TFile *outRootFile=NULL;
     TGHProgressBar *progressMeter=NULL;
+    bool doSynchroAna=false;
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
@@ -167,16 +168,17 @@ public:
             }
         }
 
-        std::vector < std::vector <bool> > missedSample;
-        std::vector <int> dupSamples;
         std::vector <bool> skipVars;
+        std::vector < std::vector <int> > sampleFills;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) 
         {
             skipVars.push_back(false);
-            dupSamples.push_back(0);
-            std::vector <bool> mm;
-            for (int jj=1; jj<=outHistos[ii]->GetNbinsX(); jj++) mm.push_back(true);
-            missedSample.push_back(mm);
+            if (doSynchroAna)
+            {
+                std::vector <int> mm;
+                for (int jj=0; jj<outHistos[ii]->GetNbinsX(); jj++) mm.push_back(0);
+                sampleFills.push_back(mm);
+            }
         }
 
 
@@ -248,8 +250,8 @@ public:
                         if (makeHistos)
                         {
                             const int bin=outHistos[iVar]->FindBin(time);
-
-                            if (fabs(outHistos[iVar]->GetBinContent(bin))>1e-8)
+/*
+                            if (sampleFills[iVar][bin-1])
                             {
                                 dupSamples[iVar]++;
                                 //std::cerr<<"Overlapping Data:"<<inTrees[iVar]->fChain->GetName();
@@ -263,9 +265,9 @@ public:
                                 //fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
                                 //fprintf(stderr,"  (%20f,%f)\n",time,data);
                             }
-                            
+*/                            
                             outHistos[iVar]->SetBinContent(bin,data);
-                            missedSample[iVar][bin-1]=false;
+                            if (doSynchroAna) sampleFills[iVar][bin-1]++;
                         }
                     }
                     if (outAsciiFile)
@@ -286,43 +288,31 @@ public:
             if (tooManySamples) break;
         }
 
-        // print out duplicates samples info:
-        if (dupSamples.size()>0)
+        if (doSynchroAna)
         {
-            std::cerr<<std::endl<<std::endl<<"Duplicate Samples:"<<std::endl;
-            for (unsigned int ii=0; ii<dupSamples.size(); ii++)
-                if (dupSamples[ii]>0) {
-                    std::cerr<<inTrees[ii]->fChain->GetName()<<":  "<<dupSamples[ii]<<" / ";
-                    std::cerr<<std::setprecision(1)<<100*(double)dupSamples[ii]/outHistos[ii]->GetNbinsX()<<"%"<<std::endl;
-                }
-            std::cerr<<std::endl<<std::endl;
-        }
-
-        // print out missing sample info:
-        bool anyMissed=false;
-        for (unsigned int ii=0; ii<missedSample.size(); ii++)
-        {
-            int nMissed=0;
-            for (unsigned int jj=0; jj<missedSample[ii].size(); jj++)
-                if (missedSample[ii][jj]) nMissed++;
-            if (nMissed>0) anyMissed=true;
-        }
-        if (anyMissed)
-        {
-            std::cerr<<"Missing Samples:"<<std::endl;
-            for (unsigned int ii=0; ii<missedSample.size(); ii++)
+            // print out duplicates and missing samples info:
+            std::cout<<std::endl<<std::endl;
+            for (unsigned int ii=0; ii<sampleFills.size(); ii++)
             {
-                int nMissed=0;
-                for (unsigned int jj=0; jj<missedSample[ii].size(); jj++)
-                    if (missedSample[ii][jj]) nMissed++;
-                if (nMissed>0) anyMissed=true;
+                int nDuplicates=0,nMissing=0;
+                for (unsigned int jj=0; jj<sampleFills[ii].size(); jj++)
                 {
-                    std::cerr<<inTrees[ii]->fChain->GetName()<<":  "<<nMissed<<" / ";
-                    std::cerr<<std::setprecision(1)<<100*(double)nMissed/outHistos[ii]->GetNbinsX()<<"%"<<std::endl;
+                    if      (sampleFills[ii][jj]>1) nDuplicates++;
+                    else if (sampleFills[ii][jj]<1) nMissing++;
                 }
+                if (nDuplicates>0 || nMissing>0)
+                {
+                    const double fracDuplicates=100*(double)nDuplicates/outHistos[ii]->GetNbinsX();
+                    const double fracMissing   =100*(double)nMissing   /outHistos[ii]->GetNbinsX();
+                    fprintf(stdout,"%10s:   Overlaps = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
+                            inTrees[ii]->fChain->GetName(),
+                            (float)nDuplicates,fracDuplicates,
+                            (float)nMissing,fracMissing);
+                }                
             }
-            std::cerr<<std::endl<<std::endl;
+            std::cout<<std::endl;
         }
+        
         return true;
     }
 };

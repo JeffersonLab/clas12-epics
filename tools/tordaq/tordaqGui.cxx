@@ -9,6 +9,7 @@ TString filename="";
 //const char* dataDir="/usr/clas12/DATA/wf2root";
 const char* dataDir="/logs/torus";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
+bool doSynchroAna=false;
 
 TString getTimeString(const Double_t time)
 {
@@ -254,6 +255,7 @@ void tordaqGui::DoOpen(TString filename="") {
     {
         tdReader.makeHistos=true;
         //tdReader.progressMeter=progressBar;
+        tdReader.doSynchroAna=doSynchroAna;
         if (!tdReader.process())
         {
             std::cerr<<"Error Reading WF2ROOT Trees in   "+filename<<std::endl;
@@ -269,7 +271,7 @@ void tordaqGui::DoOpen(TString filename="") {
     {
         const TString vn=tdData.VARNAMES[iv];
 
-        tdReader.ProgressMeter(tdData.VARNAMES.size(),iv);
+        //tdReader.ProgressMeter(tdData.VARNAMES.size(),iv);
 
         TObject* xx=gDirectory->Get("h"+vn);
         if (!xx) 
@@ -486,9 +488,30 @@ void tordaqGui::PanRight1()
     const double xhi=x2+(x2-x1)*frac;
     Update1(xlo,xhi);
 }
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{    
+    int itmp;
+    const char* usage="\ntordaqGui [options] [filename]\n"
+        "\t -s (do synchronization analysis - memory intensive)\n"
+        "\t -h (print usage)\n";
+    while ( (itmp=getopt(argc,argv,"sh")) != -1 )
+    {
+        switch (itmp)
+        {
+            case 's':
+                doSynchroAna=true;
+                break;
+            case 'h':
+                std::cout<<usage<<std::endl;
+                exit(0);
+            default:
+                break;
+        }
+    }
 
-    if (argc>1) filename=argv[1];
+    if (argc>1 && strcmp(argv[argc-1],"-s") && strcmp(argv[argc-1],"-m"))
+        filename=argv[argc-1];
+    
     TApplication theApp("App", &argc, argv);
     tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 2000, 600);
     theApp.Run();

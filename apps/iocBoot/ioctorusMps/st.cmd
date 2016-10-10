@@ -9,6 +9,7 @@ dbLoadDatabase("dbd/plc2epics.dbd")
 plc2epics_registerRecordDeviceDriver(pdbbase)
 
 ## Initialize EtherIP driver, define PLCs
+EIP_buffer_limit(450)
 drvEtherIP_init()
 drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 

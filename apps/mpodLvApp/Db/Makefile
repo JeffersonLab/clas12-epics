@@ -7,6 +7,7 @@ include $(TOP)/configure/CONFIG
 DB += mpod8008l.db
 DB += ftcallv.substitutions
 DB += fthodlv.substitutions
+DB += fttrklv.substitutions
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

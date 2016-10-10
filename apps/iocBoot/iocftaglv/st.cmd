@@ -23,8 +23,12 @@ devSnmpSetParam(DebugLevel,10)
 
 dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")
+dbLoadTemplate("db/fttrklv.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
+
+
+dbl > pv.list
 
 iocInit
 

@@ -20,7 +20,7 @@ FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 
 # key,value = field,deadband
 FIELDS_HV_MYA={':pwonoff':0,':stat':0,':comms':0,':vsetrbk':0,':isetrbk':0,':vmon':0.1,':imon':1.0}
-FIELDS_LV_MYA={':vsetrbk':0,':isetrbk':0,':pwrbk':0,':comms':0,':vmon':0.01,':imon':0.05,
+FIELDS_LV_MYA={':vsetrbk':0,':isetrbk':0,':pwrbk':0,':comms':0,':vmon':0.01,':imon':0.05}
 
 DATADIR='/usr/clas12/DATA/burt'
 
@@ -113,8 +113,17 @@ def printPVsBurt(det,sector=None):
 
 def printPVsMya(det,sector=None):
   for channel in getChannels(det,sector):
-    for field in FIELDS_HV_MYA.keys():
-      deadband=FIELDS_HV_MYA[field]
+    if channel.find('_LV_'):
+      fieldMap=FIELDS_LV_MYA
+    elif channel.find('_HV_'):
+      fieldMap=FIELDS_HV_MYA
+    else:
+      print 'UNKOWN HV/LV TYPE:  ',channel
+      sys.exit()
+#    for field in FIELDS_HV_MYA.keys():
+#      deadband=FIELDS_HV_MYA[field]
+    for field in fieldMap.keys():
+      deadband=fieldMap[field]
       if field==':imon':
         if   det=='FTC_HV': deadband=0.1
         elif det=='DC_HV':  deadband=0.1

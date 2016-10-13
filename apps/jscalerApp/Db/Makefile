@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-DB += jscaler_channel.db
+DB += $(wildcard ../*.db)
 DB += $(wildcard ../*.sub)
 
 

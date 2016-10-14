@@ -2,17 +2,75 @@
 # TODO List
 #
 
-# documentation
-  * Add git submodule instructions
-
-# environment
-  * Update .setup as needed (wmoore)
-
 # procServMgr
   * Update procServMgr with new paths to cfgs, etc (wmoore)  
-  * fix issue with procServMgr cron job not having correct environment
-  ** affects snmp (iocvmeCrates, iocftaglv) and scripty iocftcFlasher
+  * Fix issue with procServMgr cron job not having correct environment
+  ** affects iocs using snmp (iocvmeCrates, iocftaglv) due to LD_LIBRARY_PATH
+  ** and scripts for iocftcFlasher due to PATH
+
+# .sub (baltzell)
+  * Figure out how to get build system to deal with .sub suffix
+  * else rename to (too long) .substititions and update startups (e.g. jscalers)
 
 # utils
   * Update testbuild.sh for CLAS12 structure (wmoore)
+
+# firefox/chrome
+  * Move default workspaces to puppet and out of clas12-epics
+  * Maybe workspace generator and wrapper script too
+
+# autosave
+  * make sure all (within reason) alarm fields are autosaved
+
+# syX527App
+  * pull support for old SY527 mainframes into clas12-epics from release 0.3
+  ** started, see syX527App/src/NEW
+  ** currently requires two binaries built from same source (via preprocessor macros)
+  *** develop automatic solution
+
+# btaApp (baltzell)
+  * no business being on vxworks, move it to a softioc
+  ** maybe shove it in iocmonitor, or its own iocbta
+
+# jscalersApp (baltzell)
+  * archive in mya
+  ** careful about deadbands, lots of channels
+
+# iocmonitor (baltzell)
+  * move cRio heartbeat calcs here rather than special ioc on 86 (for power outages)
+
+# pcMonitorApp
+  * to monitor/alarm resource usage on clonpcs
+
+# diagguiserver in procserv (baltzell/boiarino)
+  * not just a slow controls decision
+  * currently rebooting crate is the method
+
+# overview screens (mckinnon)
+  * beamline
+  * global
+
+# ftcFlasherApp (kliv)
+  * use native cs-studio confirm dialog instead of zenity popups (which get lost)?
+  * use burt save/restore instead of users editing caget/caput scripts?
+
+# genFlasherApp (kliv)
+  * rename jflasherApp/jlabFlasherApp (a'la jscalerApp)
+  * separate screens for individual channels (detectors)
+
+# add to puppet (wmoore)
+  * texlive-titlesec
+  * texlive-multirow
+  * texlive-revtex4
+  * xscreensaver
+  * screen
+  * ddd
+
+#
+# Long-term
+#
+
+# EPICS 3.15
+# CS-Studio 4.3.3 (testing)
+# ChannelFinder
 

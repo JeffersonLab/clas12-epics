@@ -10,7 +10,7 @@ A6551_registerRecordDeviceDriver pdbbase
 
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
-epicsEnvSet("scan","10 second")
+epicsEnvSet("scan","2 second")
 
 drvAsynIPPortConfigure("S6R2",hallb-gpib04.jlab.org:1234,0,0,0)
 

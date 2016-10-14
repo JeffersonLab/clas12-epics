@@ -10,7 +10,10 @@ A6551_registerRecordDeviceDriver pdbbase
 
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
-epicsEnvSet("scan","10 second")
+epicsEnvSet("scan","2 second")
+
+dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 drvAsynIPPortConfigure("S1R1",hallb-gpib02.jlab.org:1234,0,0,0)
 #drvAsynIPPortConfigure("S1R2",hallb-gpib05.jlab.org:1234,0,0,0)
@@ -71,5 +74,14 @@ dbLoadRecords("db/A6551.db","SCAN=${scan},P=B_DET_DC_LV_SEC1_R1,PORT=S1R1,ADDR=1
 
 cd ${TOP}/iocBoot/${IOC}
 
+< save_restore.cmd
+
 iocInit();
+
+caPutLogInit("clonioc1:7011")
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
 

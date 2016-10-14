@@ -85,6 +85,7 @@ class tordaqGui: public TGMainFrame {
         tordaqGui(const TGWindow *p, UInt_t w, UInt_t h);
         virtual ~tordaqGui();
         ClassDef(tordaqGui,0);
+        void *DoOpen1(void *ptr);
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
         void Draw1();

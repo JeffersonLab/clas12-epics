@@ -18,10 +18,10 @@ static TH1* zoomHisto(TH1* hin,const char* name,const int firstBin,const int las
             nBins,
             hin->GetXaxis()->GetBinLowEdge(firstBin),
             hin->GetXaxis()->GetBinUpEdge(lastBin));
-    for (int ii=1; ii<nBins; ii++)
+    for (int ii=firstBin; ii<=lastBin; ii++)
     {
-        hout->SetBinContent(ii,hin->GetBinContent(firstBin+ii-1));
-        hout->SetBinError(ii,hin->GetBinError(firstBin+ii-1));
+        hout->SetBinContent(ii-firstBin+1, hin->GetBinContent(ii));
+        hout->SetBinError(  ii-firstBin+1, hin->GetBinError(ii));
     }
     return hout;
 }
@@ -129,8 +129,7 @@ TH1 *Resample(
     const double xmax_new = h1->GetXaxis()->GetBinUpEdge(bin_xmin + nbin_new * nrebin - 1);
 
     const TString hname = TString(h1->GetName())+"_res";
-    const TString htitle = TString(h1->GetName()) + ";"
-        + TString(h1->GetXaxis()->GetTitle()) + ";";// + scale.unit;
+    const TString htitle = TString(h1->GetName()) + ";" + TString(h1->GetXaxis()->GetTitle()) + ";";
 
     TH1F *h2 = (TH1F*) gROOT->FindObject(hname);
     if (h2) delete h2;

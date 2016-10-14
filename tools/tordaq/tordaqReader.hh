@@ -312,7 +312,8 @@ public:
             }
             std::cout<<std::endl;
         }
-        
+       
+        std::cout<<std::endl<<"tordaqReader:  Finished Reading File"<<std::endl;
         return true;
     }
 };

@@ -203,7 +203,13 @@ tordaqGui::~tordaqGui() {
     gApplication->Terminate(0);
 }
 
-void tordaqGui::DoOpen(TString filename="") {
+void *tordaqGui::DoOpen1(void *ptr)
+{
+//    TThread *th1=new TThread("th1",DoOpen,(void*) 1);
+}
+
+void tordaqGui::DoOpen(TString filename="")
+{
 
     if (filename=="")
     {
@@ -294,6 +300,7 @@ void tordaqGui::DoOpen(TString filename="") {
         hh->SetTitle(vn);
         dataHistos1.push_back(hh);
         for (cbit=combos1.begin(); cbit!=combos1.end(); ++cbit)
+            // must offset by 1, because 0 is reserved for no selection
             (*cbit)->AddEntry(vn,iv+1);
         if (iv==0)
         {
@@ -339,6 +346,7 @@ void tordaqGui::Draw1()
         bool selected=false;
         for (unsigned jj=0; jj<combos1.size(); jj++)
         {
+            // must offset by 1, because 0 is reserved for no selection
             if (combos1[jj]->GetSelected()==ii+1) selected=true;
         }
         if (selected || showAllCheck->IsOn())
@@ -355,6 +363,7 @@ void tordaqGui::Draw1()
         bool selected=false;
         for (unsigned jj=0; jj<combos1.size(); jj++)
         {
+            // must offset by 1, because 0 is reserved for no selection
             if (combos1[jj]->GetSelected()==ii+1) selected=true;
         }
         if (selected || showAllCheck->IsOn())
@@ -458,19 +467,23 @@ void tordaqGui::doZoomSlider1()
     TCanvas *ctmp=canvas1->GetCanvas();
     if (!ctmp || histos1.size()<1)
     {
+        // invalid
         zoomSlider->SetPosition(zoomSlider->GetMinPosition());
-        return;
     }
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
-    if (pos>=histos1[0]->GetXaxis()->GetXmax()
-     || pos<histos1[0]->GetXaxis()->GetXmin())
-        zoomSlider->SetPosition(x1);
     else
-        Update1(pos,pos+(x2-x1));
+    {
+        ctmp->GetRangeAxis(x1,y1,x2,y2);
+        if (pos>=histos1[0]->GetXaxis()->GetXmax()
+                || pos<histos1[0]->GetXaxis()->GetXmin())
+            zoomSlider->SetPosition(x1);
+        else
+            Update1(pos,pos+(x2-x1));
+    }
 }
 void tordaqGui::PanLeft1()
 {
-    double frac=0.5;
+    if (histos1.size()<1) return;
+    static const double frac=0.5;
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
@@ -480,7 +493,8 @@ void tordaqGui::PanLeft1()
 }
 void tordaqGui::PanRight1()
 {
-    double frac=0.5;
+    if (histos1.size()<1) return;
+    static const double frac=0.5;
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
     ctmp->GetRangeAxis(x1,y1,x2,y2);
@@ -509,7 +523,7 @@ int main(int argc, char **argv)
         }
     }
 
-    if (argc>1 && strcmp(argv[argc-1],"-s") && strcmp(argv[argc-1],"-m"))
+    if (argc>1 && strcmp(argv[argc-1],"-s") && strcmp(argv[argc-1],"-h"))
         filename=argv[argc-1];
     
     TApplication theApp("App", &argc, argv);

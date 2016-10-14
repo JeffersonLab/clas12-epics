@@ -40,3 +40,4 @@ cd ${TOP}/iocBoot/${IOC}
 
 iocInit
 
+dbl > pv.list

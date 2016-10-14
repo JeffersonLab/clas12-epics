@@ -18,6 +18,7 @@ A6551_DBD += drvAsynIPPort.dbd
 A6551_DBD += asyn.dbd
 A6551_DBD += asSupport.dbd
 A6551_DBD += devIocStats.dbd
+A6551_DBD += caPutLog.dbd
 
 # A6551_registerRecordDeviceDriver.cpp derives from A6551.dbd
 A6551_SRCS += A6551_registerRecordDeviceDriver.cpp
@@ -30,6 +31,7 @@ A6551_LIBS += stream
 A6551_LIBS += asyn
 A6551_LIBS += autosave
 A6551_LIBS += devIocStats
+A6551_LIBS += caPutLog
 A6551_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Finally link to the EPICS Base libraries

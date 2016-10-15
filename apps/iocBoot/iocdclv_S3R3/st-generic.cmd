@@ -1,0 +1,1 @@
+../iocdclv/st-generic.cmd

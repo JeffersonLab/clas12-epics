@@ -13,8 +13,8 @@
   set_requestfile_path("$(TOP)/req")
 
   ## Restores
-  #set_pass0_restoreFile("info_positions.sav")
-  #set_pass1_restoreFile("info_settings.sav")
+  set_pass0_restoreFile("info_positions.sav")
+  set_pass1_restoreFile("info_settings.sav")
 
 #  set_pass1_restoreFile("iocdclv_settings.sav")
 

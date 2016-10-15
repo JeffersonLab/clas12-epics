@@ -9,8 +9,8 @@ dbLoadDatabase "dbd/monitor.dbd"
 monitor_registerRecordDeviceDriver pdbbase
 
 # increase from the defaults was necessary (although not tuned)
-callbackSetQueueSize(5000)
-scanOnceSetQueueSize(5000)
+callbackSetQueueSize(10000)
+scanOnceSetQueueSize(10000)
 
 #dbLoadRecords("db/heartbeatCalc.db","P=B_HW_,R=CRIO_DEV_,DLY=60")
 #dbLoadRecords("db/heartbeatCalc.db","P=B_HW_,R=CRIO_HTCC_,DLY=60")

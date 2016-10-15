@@ -326,12 +326,11 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>../apps/synApps/devIocStats/ioc_stats_reboot_confirm.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
+      <action type="WRITE_PV">
+        <pv_name>$(ioc):SysReset</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Restart $(ioc)?</confirm_message>
         <description></description>
       </action>
     </actions>

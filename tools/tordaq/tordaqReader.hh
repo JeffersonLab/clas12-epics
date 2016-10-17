@@ -114,7 +114,6 @@ public:
             }
         }
 
-
         // open output ROOT file and TNtupleD:
         if (outRootFilename!="")
         {
@@ -133,7 +132,6 @@ public:
                 outTree=new TNtupleD("tordaq","",varnames.c_str());
             }
         }
-
 
         if (makeHistos)
         {
@@ -180,7 +178,6 @@ public:
                 sampleFills.push_back(mm);
             }
         }
-
 
         static const int ASCIITIMELENGTH=26;
         char stime[ASCIITIMELENGTH];
@@ -250,22 +247,6 @@ public:
                         if (makeHistos)
                         {
                             const int bin=outHistos[iVar]->FindBin(time);
-/*
-                            if (sampleFills[iVar][bin-1])
-                            {
-                                dupSamples[iVar]++;
-                                //std::cerr<<"Overlapping Data:"<<inTrees[iVar]->fChain->GetName();
-                                //fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
-                                //fprintf(stderr," (%20f,%f) ",time,data);
-                                //std::cerr<<outHistos[iVar]->GetBinContent(bin)<<std::endl;
-                                //getchar();
-                            }
-                            else
-                            {
-                                //fprintf(stderr," (%d,%d,%d) ",jentry,iSamp,bin);
-                                //fprintf(stderr,"  (%20f,%f)\n",time,data);
-                            }
-*/                            
                             outHistos[iVar]->SetBinContent(bin,data);
                             if (doSynchroAna) sampleFills[iVar][bin-1]++;
                         }
@@ -313,12 +294,9 @@ public:
             std::cout<<std::endl;
         }
       
-
         std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl;
-        
         if (inFile) inFile->Close();
         if (outAsciiFile) fclose(outAsciiFile);
-
         return true;
     }
 };

@@ -10,7 +10,7 @@
 
 int main(int argc,char **argv)
 {
-    TString usage="\ntordaq [options]\n"
+    TString usage="\ntordaqConverter [options]\n"
         "\t  -i input wf2root filename\n"
         "\t  -o output ascii filename\n"
         "\t  -t output ROOT filename with ntuple\n"
@@ -79,6 +79,7 @@ int main(int argc,char **argv)
             strptime(sStartTime.c_str(),timeFormat,&tm);
             tdr.startTime=mktime(&tm);
         }
+        std::cout<<"Start Time:  "<<tdr.startTime<<std::endl;
     }
     
     // interpret end time argument:
@@ -92,6 +93,7 @@ int main(int argc,char **argv)
             strptime(sEndTime.c_str(),timeFormat,&tm);
             tdr.endTime=mktime(&tm);
         }
+        std::cout<<"End Time:    "<<tdr.endTime<<std::endl;
     }
 
     // check filesystem for input file:
@@ -119,19 +121,21 @@ int main(int argc,char **argv)
         exit(1);
     }
 
-//    TFile *inFile=new TFile(inFilename,"READ");
-
     // the real work:
     if (!tdr.process()) exit(1);
 
     std::cout<<std::endl<<"Closing Files ..."<<std::endl<<std::endl;
-    if (tdr.outAsciiFile) fclose(tdr.outAsciiFile);
+    
     if (tdr.outRootFile) 
     {
         if (tdr.outTree) tdr.outTree->AutoSave();
 
         // this is slow:
-        tdr.WriteRemainingHistos();
+        if (tdr.makeHistos) 
+        {
+            std::cout<<std::endl<<"Writing Histograms ... (this can take a couple minutes) ..."<<std::endl<<std::endl;
+            tdr.WriteRemainingHistos();
+        }
 
         tdr.outRootFile->Close();
     }

@@ -25,7 +25,7 @@ public:
     Long64_t maxSamples=-1;
     Long64_t startTime=-1;
     Long64_t endTime=-1;
-    bool rubenTime=0;
+    bool rubenTime=false;
     bool makeHistos=false;
     bool makeNtuple=false;
     FILE *outAsciiFile=NULL;
@@ -312,8 +312,13 @@ public:
             }
             std::cout<<std::endl;
         }
-       
-        std::cout<<std::endl<<"tordaqReader:  Finished Reading File"<<std::endl;
+      
+
+        std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl;
+        
+        if (inFile) inFile->Close();
+        if (outAsciiFile) fclose(outAsciiFile);
+
         return true;
     }
 };

@@ -50,7 +50,7 @@ public :
    // EPICS waveform length:
    static const int WFLENGTH=2000;
 
-   TTree          *fChain;
+   TTree          *fChain=NULL;
    Int_t           fCurrent;
    Long64_t        record_tsec;
    Long64_t        record_tnsec;
@@ -122,8 +122,7 @@ public :
 
    ~tordaqData()
    {
-       if (!fChain) return;
-       delete fChain->GetCurrentFile();
+       if (fChain) delete fChain->GetCurrentFile();
    }
 
    Long64_t LoadTree(Long64_t entry)

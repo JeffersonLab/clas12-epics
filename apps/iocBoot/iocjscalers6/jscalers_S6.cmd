@@ -34,6 +34,8 @@ dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=FADC,SEC=6,CH=1")
 dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=DISC,SEC=6,CH=3")
 dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=FADC,SEC=6,CH=1")
 dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=DISC,SEC=6,CH=3")
+dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=FADC,SEC=6,CH=1")
+dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=DISC,SEC=6,CH=3")
 
 dbLoadTemplate("db/jscalers_TDCPCAL6_TRIG.sub")
 dbLoadTemplate("db/jscalers_TDCFTOF6_TRIG.sub")

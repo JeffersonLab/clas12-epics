@@ -179,7 +179,7 @@ def mkChannelsLTCC(crateNumber,sector,system):
           hwChan=0
           fadcSlot+=1
         hwSlot=fadcSlot
-        if system!='FADC': hwSlot=SLOT_F2D['ECAL'][hwSlot]
+        print hwSlot,hwChan
         channel={'Sl':'%.2d'%(hwSlot),'Ch':'%.2d'%(hwChan),'Side':side,'CrName':crate,'Det':'LTCC','Sys':system}
         channel['Element']='SEC%d_%s%.2d'%(sector,side,detChan)
         setCodes(crateNumber,channel)

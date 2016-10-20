@@ -201,8 +201,6 @@ def mkChannelsCTOF(crateNumber):
       channels.append(channel)
   return channels
 
-
-
 def mkChannelsFTOF(crateNumber,sector,system):
   if system=='FADC': crate='ADCFTOF'+str(sector)
   else:              crate='TDCFTOF'+str(sector)
@@ -337,8 +335,11 @@ def printTriggerSubs(sector,CrNo,CrName):
   printSubstitutions(channels,subFileName)
 
 
+iCrate=0
+
 # make substution files and one startup per sector:
 def mkSector(sector):
+  global iCrate
   crates=[]
   for system in ['FADC','DISC']:
     for detector in ['ECAL','LTCC','PCAL','FTOF']:

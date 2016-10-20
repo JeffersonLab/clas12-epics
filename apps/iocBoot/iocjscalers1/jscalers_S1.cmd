@@ -16,6 +16,9 @@ Start_SCALERS_CRATE("5","TDCFTOF1")
 dbLoadDatabase("dbd/iocscalers.dbd")
 iocscalers_registerRecordDeviceDriver(pdbbase)
 
+callbackSetQueueSize(5000)
+scanOnceSetQueueSize(5000)
+
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 

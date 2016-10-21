@@ -57,12 +57,14 @@ record(calcout, "$(P)$(R)Iset:DRVL") {
     field(OUT,  "$(P)$(R)Iset.DRVL")
 }
 
+# Alarms used for things like monitoring magnet over weekends
 record(ai, "$(P)$(R)I_MPS") {
     field(DTYP, "EtherIP")
     field(SCAN, "1 second")
     field(INP,  "@$(PLCID) Torus_MPS.I_fromMPS")
     field(EGU,  "A")
     field(PREC, "2")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
 
 record(ai, "$(P)$(R)I_ZFCT") {

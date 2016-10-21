@@ -29,6 +29,7 @@ DB  += torus_ai_generic.db
 DB  += torus_ai_renamed.db
 DB  += torus_ao_generic.db
 DB  += torus_bi_generic.db
+DB  += torus_bi_renamed.db
 DB  += torus_bo_generic.db
 DB  += torus_cryocon.db
 DB  += torus_force.substitutions

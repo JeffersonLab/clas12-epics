@@ -23,24 +23,45 @@ FTOF_SLOT_F2D={
     15:18,
     16:20
 }
+
+#ECAL_SLOT_F2D={
+#    3:3,
+#    4:4,
+#    5:5,
+#    6:7,
+#    7:8,
+#    8:9,
+#    9:10,
+#    10:12,
+#    13:13,
+#    14:14,
+#    15:15,
+#    16:17,
+#    17:18,
+#    18:20,
+#    19:21,
+#    20:22
+#}
+
 ECAL_SLOT_F2D={
-    3:3,
-    4:4,
-    5:5,
-    6:7,
-    7:8,
-    8:9,
-    9:10,
-    10:12,
-    13:13,
-    14:14,
-    15:15,
-    16:17,
-    17:18,
-    18:20,
-    19:21,
-    20:22
+  3:2,
+  4:3,
+  5:4,
+  6:5,
+  7:7,
+  8:8,
+  9:9,
+  10:10,
+  13:12,
+  14:13,
+  15:14,
+  16:15,
+  17:17,
+  18:18,
+  19:19,
+  20:20
 }
+
 PCAL_SLOT_F2D={
     3:2,
     4:3,
@@ -179,9 +200,8 @@ def mkChannelsLTCC(crateNumber,sector,system):
           hwChan=0
           fadcSlot+=1
         hwSlot=fadcSlot
-        print hwSlot,hwChan
         channel={'Sl':'%.2d'%(hwSlot),'Ch':'%.2d'%(hwChan),'Side':side,'CrName':crate,'Det':'LTCC','Sys':system}
-        channel['Element']='SEC%d_%s%.2d'%(sector,side,detChan)
+        channel['Element']='SEC%d_%s_E%.2d'%(sector,side,detChan)
         setCodes(crateNumber,channel)
         channels.append(channel)
         hwChan+=1
@@ -334,12 +354,9 @@ def printTriggerSubs(sector,CrNo,CrName):
   subFileName='../Db/jscalers_%s_TRIG.sub'%(CrName)
   printSubstitutions(channels,subFileName)
 
-
-iCrate=0
-
 # make substution files and one startup per sector:
 def mkSector(sector):
-  global iCrate
+  iCrate=0
   crates=[]
   for system in ['FADC','DISC']:
     for detector in ['ECAL','LTCC','PCAL','FTOF']:

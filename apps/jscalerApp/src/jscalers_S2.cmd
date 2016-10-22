@@ -20,9 +20,11 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 dbLoadTemplate("db/jscalers_S2_ECAL_FADC.sub")
+dbLoadTemplate("db/jscalers_S2_LTCC_FADC.sub")
 dbLoadTemplate("db/jscalers_S2_PCAL_FADC.sub")
 dbLoadTemplate("db/jscalers_S2_FTOF_FADC.sub")
 dbLoadTemplate("db/jscalers_S2_ECAL_DISC.sub")
+dbLoadTemplate("db/jscalers_S2_LTCC_DISC.sub")
 dbLoadTemplate("db/jscalers_S2_PCAL_DISC.sub")
 dbLoadTemplate("db/jscalers_S2_FTOF_DISC.sub")
 

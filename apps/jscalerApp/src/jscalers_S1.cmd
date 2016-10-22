@@ -20,18 +20,14 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 dbLoadTemplate("db/jscalers_S1_ECAL_FADC.sub")
+dbLoadTemplate("db/jscalers_S1_LTCC_FADC.sub")
 dbLoadTemplate("db/jscalers_S1_PCAL_FADC.sub")
 dbLoadTemplate("db/jscalers_S1_FTOF_FADC.sub")
 dbLoadTemplate("db/jscalers_S1_ECAL_DISC.sub")
+dbLoadTemplate("db/jscalers_S1_LTCC_DISC.sub")
 dbLoadTemplate("db/jscalers_S1_PCAL_DISC.sub")
 dbLoadTemplate("db/jscalers_S1_FTOF_DISC.sub")
 
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=FADC,SEC=1")
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=DISC,SEC=1")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=FADC,SEC=1")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=DISC,SEC=1")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=FADC,SEC=1")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=DISC,SEC=1")
 
 cd ${TOP}/iocBoot/${IOC}
 

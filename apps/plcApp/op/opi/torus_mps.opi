@@ -531,7 +531,7 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
@@ -544,7 +544,17 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
-    <actions hook="true" hook_all="true" />
+    <actions hook="true" hook_all="true">
+      <action type="OPEN_DISPLAY">
+        <path>../../alarms/aiaocalc_alarm_set.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <sig>${pv_name}</sig>
+        </macros>
+        <replace>2</replace>
+        <description>Alarm Settings</description>
+      </action>
+    </actions>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>
@@ -1160,7 +1170,7 @@ $(pv_value)</tooltip>
     <text>####</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
     <show_units>false</show_units>
     <height>25</height>
     <border_width>1</border_width>
@@ -1289,7 +1299,7 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
           <P>$(DAQ}</P>
         </macros>
-        <replace>1</replace>
+        <replace>2</replace>
         <description>DAQ Recording Ctrl</description>
       </action>
     </actions>
@@ -1362,7 +1372,7 @@ $(pv_value)</tooltip>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <height>30</height>
-    <on_label>Dumping...</on_label>
+    <on_label>Fast Dump Triggered...</on_label>
     <border_width>2</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -1391,7 +1401,15 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
     <show_boolean_label>true</show_boolean_label>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
@@ -1439,7 +1457,7 @@ $(pv_value)</tooltip>
     <off_color>
       <color red="0" green="100" blue="0" />
     </off_color>
-    <confirm_message>Are your sure you want to do this?</confirm_message>
+    <confirm_message></confirm_message>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
       <color name="Button" red="240" green="240" blue="240" />
@@ -1452,7 +1470,15 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
     <show_boolean_label>true</show_boolean_label>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
@@ -1500,7 +1526,7 @@ $(pv_value)</tooltip>
     <off_color>
       <color red="0" green="100" blue="0" />
     </off_color>
-    <confirm_message>Are your sure you want to do this?</confirm_message>
+    <confirm_message></confirm_message>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
       <color name="Button" red="240" green="240" blue="240" />
@@ -1513,7 +1539,15 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
     <show_boolean_label>true</show_boolean_label>
     <font>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
@@ -1560,19 +1594,11 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>torus_mps_full.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>1</replace>
-        <description>Detailed Status</description>
-      </action>
-      <action type="OPEN_DISPLAY">
         <path>torus_mps_interlocks.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
-        <replace>1</replace>
+        <replace>2</replace>
         <description>Interlock Status</description>
       </action>
       <action type="OPEN_DISPLAY">
@@ -1581,8 +1607,16 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
           <P>${DAQ}</P>
         </macros>
-        <replace>1</replace>
+        <replace>2</replace>
         <description>DAQ Recording Ctrl</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>torus_mps_full.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Expert Details</description>
       </action>
     </actions>
     <font>

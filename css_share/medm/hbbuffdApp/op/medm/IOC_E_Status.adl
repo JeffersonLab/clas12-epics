@@ -1,0 +1,515 @@
+
+file {
+	name="/home/epics/R3.13.4_standalone/epicsB/release-7-12/app/hbbuffd/medm/IOC_E_Status.adl"
+	version=020303
+}
+display {
+	object {
+		x=52
+		y=176
+		width=415
+		height=480
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=335
+		width=395
+		height=30
+	}
+	"basic attribute" {
+		clr=32
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=372
+		width=395
+		height=30
+	}
+	"basic attribute" {
+		clr=32
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=414
+		width=395
+		height=30
+	}
+	"basic attribute" {
+		clr=32
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=291
+		width=395
+		height=30
+	}
+	"basic attribute" {
+		clr=32
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=209
+		width=395
+		height=65
+	}
+	"basic attribute" {
+		clr=32
+	}
+}
+rectangle {
+	object {
+		x=196
+		y=171
+		width=150
+		height=22
+	}
+	"basic attribute" {
+		clr=36
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="iocptarg:smode"
+	}
+}
+rectangle {
+	object {
+		x=35
+		y=171
+		width=150
+		height=22
+	}
+	"basic attribute" {
+		clr=36
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="iocptarg:smode"
+	}
+}
+rectangle {
+	object {
+		x=206
+		y=107
+		width=150
+		height=22
+	}
+	"basic attribute" {
+		clr=36
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="iocptarg:smode"
+	}
+}
+"choice button" {
+	object {
+		x=273
+		y=340
+		width=115
+		height=20
+	}
+	control {
+		chan="iocptarg:reboot2"
+		clr=14
+		bclr=51
+	}
+	stacking="column"
+}
+"text update" {
+	object {
+		x=151
+		y=63
+		width=100
+		height=17
+	}
+	monitor {
+		chan="iocptarg:heartbeat"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+"shell command" {
+	object {
+		x=290
+		y=234
+		width=20
+		height=20
+	}
+	command[0] {
+		label="iocptarg reboot:  SAVE"
+		name="/home/epics/R3.13.4/epicsB/prod/app/hbbuffd/medm/iocptargS.medm&"
+	}
+	clr=14
+	bclr=51
+}
+rectangle {
+	object {
+		x=0
+		y=1
+		width=415
+		height=28
+	}
+	"basic attribute" {
+		clr=19
+	}
+}
+text {
+	object {
+		x=59
+		y=5
+		width=255
+		height=20
+	}
+	"basic attribute" {
+		clr=55
+		style="dash"
+		width=1
+	}
+	textix="Hall B Buffer Dewar Mode"
+	align="horiz. centered"
+}
+menu {
+	object {
+		x=273
+		y=294
+		width=115
+		height=20
+	}
+	control {
+		chan="iocptarg:reboot1"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=49
+		y=173
+		width=140
+		height=17
+	}
+	monitor {
+		chan="iocptarg:bootdate"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+"text update" {
+	object {
+		x=209
+		y=173
+		width=140
+		height=17
+	}
+	monitor {
+		chan="iocptarg:loadPercent"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+text {
+	object {
+		x=255
+		y=154
+		width=44
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix=" % Idle"
+}
+text {
+	object {
+		x=72
+		y=156
+		width=113
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix=" Last Reboot date"
+}
+text {
+	object {
+		x=167
+		y=45
+		width=63
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="iocptarg Heartbeat"
+	align="horiz. centered"
+}
+rectangle {
+	object {
+		x=47
+		y=107
+		width=150
+		height=22
+	}
+	"basic attribute" {
+		clr=36
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="iocptarg:smode"
+	}
+}
+"text update" {
+	object {
+		x=209
+		y=110
+		width=140
+		height=15
+	}
+	monitor {
+		chan="iocptarg:rdate"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+"text update" {
+	object {
+		x=49
+		y=110
+		width=140
+		height=15
+	}
+	monitor {
+		chan="iocptarg:sdate"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+rectangle {
+	object {
+		x=142
+		y=63
+		width=8
+		height=17
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="iocptarg:ioc_sr.VALD"
+	}
+}
+text {
+	object {
+		x=238
+		y=89
+		width=82
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Last Restore"
+}
+text {
+	object {
+		x=84
+		y=89
+		width=65
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Last Save"
+}
+text {
+	object {
+		x=15
+		y=217
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step 1: If changes to control parameters"
+}
+text {
+	object {
+		x=15
+		y=301
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step 2: Select reason for Reboot"
+}
+text {
+	object {
+		x=15
+		y=341
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step 3: Issue Reboot Command"
+}
+text {
+	object {
+		x=15
+		y=381
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step 4: Restore Control Parameters"
+}
+"shell command" {
+	object {
+		x=290
+		y=377
+		width=20
+		height=20
+	}
+	command[1] {
+		label="iocptarg reboot:  RESTORE"
+		name="/home/epics/R3.13.4/epicsB/prod/app/hbbuffd/medm/iocptargR.medm&"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=15
+		y=421
+		width=230
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Step 5: Report errors to Krister Bruhwel"
+}
+text {
+	object {
+		x=15
+		y=232
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="meters have been made, SAVE the new"
+}
+text {
+	object {
+		x=14
+		y=247
+		width=200
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="parameters.  Else skip to Step 2."
+}

@@ -1,0 +1,1292 @@
+
+file {
+	name="/tmp_mnt/u/site/epics/1098bin/hcmcryo/ILM_expert.adl"
+	version=020306
+}
+display {
+	object {
+		x=47
+		y=162
+		width=765
+		height=600
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=1
+		y=1
+		width=799
+		height=28
+	}
+	"basic attribute" {
+		clr=60
+	}
+}
+rectangle {
+	object {
+		x=509
+		y=75
+		width=250
+		height=217
+	}
+	"basic attribute" {
+		clr=53
+	}
+}
+text {
+	object {
+		x=297
+		y=5
+		width=204
+		height=25
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="ILM200 LHe Level Probe"
+}
+text {
+	object {
+		x=521
+		y=85
+		width=162
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B0"
+	}
+	textix="In Shut Down State"
+}
+text {
+	object {
+		x=521
+		y=115
+		width=130
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B1"
+	}
+	textix="Alarm Sounding"
+}
+text {
+	object {
+		x=521
+		y=145
+		width=115
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B2"
+	}
+	textix="In Alarm State"
+}
+text {
+	object {
+		x=521
+		y=175
+		width=217
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B3"
+	}
+	textix="Alarm SILENCE prohibited"
+}
+text {
+	object {
+		x=521
+		y=205
+		width=117
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B4"
+	}
+	textix="Relay 1 Active"
+}
+text {
+	object {
+		x=521
+		y=235
+		width=117
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B5"
+	}
+	textix="Relay 2 Active"
+}
+text {
+	object {
+		x=521
+		y=265
+		width=117
+		height=25
+	}
+	"basic attribute" {
+		clr=30
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_RSTAT.B6"
+	}
+	textix="Relay 3 Active"
+}
+text {
+	object {
+		x=572
+		y=47
+		width=103
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Relay Status"
+}
+"message button" {
+	object {
+		x=16
+		y=92
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_init"
+		clr=14
+		bclr=51
+	}
+	label="Init (reset)"
+	press_msg="1"
+	release_msg="0"
+}
+"text update" {
+	object {
+		x=22
+		y=199
+		width=310
+		height=24
+	}
+	monitor {
+		chan="$(N)_version"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+rectangle {
+	object {
+		x=509
+		y=322
+		width=250
+		height=270
+	}
+	"basic attribute" {
+		clr=2
+		width=2
+	}
+}
+rectangle {
+	object {
+		x=5
+		y=324
+		width=250
+		height=270
+	}
+	"basic attribute" {
+		clr=2
+		width=2
+	}
+}
+"text update" {
+	object {
+		x=80
+		y=377
+		width=109
+		height=24
+	}
+	monitor {
+		chan="$(N)_R1"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=326
+		y=379
+		width=109
+		height=24
+	}
+	monitor {
+		chan="$(N)_R2"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=574
+		y=378
+		width=109
+		height=24
+	}
+	monitor {
+		chan="$(N)_R3"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=267
+		y=416
+		width=233
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B0"
+	}
+	textix="Current flowing in Helium Probe Wire"
+}
+text {
+	object {
+		x=267
+		y=436
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B1"
+	}
+	textix="Helium Probe in FAST rate"
+}
+text {
+	object {
+		x=267
+		y=456
+		width=176
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B2"
+	}
+	textix="Helium Probe in SLOW rate"
+}
+text {
+	object {
+		x=267
+		y=476
+		width=103
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Auto-Fill Status:"
+}
+text {
+	object {
+		x=267
+		y=516
+		width=108
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B5"
+	}
+	textix="Low State Active"
+}
+text {
+	object {
+		x=267
+		y=536
+		width=111
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B6"
+	}
+	textix="Alarm Requested"
+}
+text {
+	object {
+		x=267
+		y=556
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH2STAT.B7"
+	}
+	textix="Pre-Pulse Current Flowing"
+}
+text {
+	object {
+		x=8
+		y=413
+		width=233
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B0"
+	}
+	textix="Current flowing in Helium Probe Wire"
+}
+text {
+	object {
+		x=8
+		y=433
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B1"
+	}
+	textix="Helium Probe in FAST rate"
+}
+text {
+	object {
+		x=8
+		y=453
+		width=176
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B2"
+	}
+	textix="Helium Probe in SLOW rate"
+}
+text {
+	object {
+		x=8
+		y=473
+		width=103
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Auto-Fill Status:"
+}
+text {
+	object {
+		x=8
+		y=513
+		width=108
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B5"
+	}
+	textix="Low State Active"
+}
+text {
+	object {
+		x=8
+		y=533
+		width=111
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B6"
+	}
+	textix="Alarm Requested"
+}
+text {
+	object {
+		x=8
+		y=553
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH1STAT.B7"
+	}
+	textix="Pre-Pulse Current Flowing"
+}
+text {
+	object {
+		x=512
+		y=415
+		width=233
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B0"
+	}
+	textix="Current flowing in Helium Probe Wire"
+}
+text {
+	object {
+		x=512
+		y=435
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B1"
+	}
+	textix="Helium Probe in FAST rate"
+}
+text {
+	object {
+		x=512
+		y=455
+		width=176
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B2"
+	}
+	textix="Helium Probe in SLOW rate"
+}
+text {
+	object {
+		x=512
+		y=475
+		width=103
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Auto-Fill Status:"
+}
+text {
+	object {
+		x=512
+		y=515
+		width=108
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B5"
+	}
+	textix="Low State Active"
+}
+text {
+	object {
+		x=512
+		y=535
+		width=111
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B6"
+	}
+	textix="Alarm Requested"
+}
+text {
+	object {
+		x=512
+		y=555
+		width=171
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_CH3STAT.B7"
+	}
+	textix="Pre-Pulse Current Flowing"
+}
+text {
+	object {
+		x=81
+		y=330
+		width=104
+		height=23
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Channel 1"
+}
+text {
+	object {
+		x=327
+		y=332
+		width=104
+		height=23
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Channel 2"
+}
+text {
+	object {
+		x=575
+		y=331
+		width=104
+		height=23
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Channel 3"
+}
+"text update" {
+	object {
+		x=81
+		y=350
+		width=159
+		height=24
+	}
+	monitor {
+		chan="$(N)_CH1USAGE"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=327
+		y=352
+		width=159
+		height=24
+	}
+	monitor {
+		chan="$(N)_CH2USAGE"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=575
+		y=351
+		width=159
+		height=24
+	}
+	monitor {
+		chan="$(N)_CH3USAGE"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=11
+		y=353
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Usage"
+}
+text {
+	object {
+		x=11
+		y=380
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Value"
+}
+"text update" {
+	object {
+		x=116
+		y=474
+		width=136
+		height=15
+	}
+	monitor {
+		chan="$(N)_CH1FILL"
+		clr=37
+		bclr=2
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=373
+		y=476
+		width=136
+		height=15
+	}
+	monitor {
+		chan="$(N)_CH2FILL"
+		clr=37
+		bclr=4
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=621
+		y=476
+		width=136
+		height=15
+	}
+	monitor {
+		chan="$(N)_CH3FILL"
+		clr=37
+		bclr=2
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=270
+		y=355
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Usage"
+}
+text {
+	object {
+		x=270
+		y=382
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Value"
+}
+text {
+	object {
+		x=518
+		y=355
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Usage"
+}
+text {
+	object {
+		x=518
+		y=382
+		width=52
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Value"
+}
+"message button" {
+	object {
+		x=16
+		y=114
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_loc"
+		clr=14
+		bclr=51
+	}
+	label="Local"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=16
+		y=136
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_rem_lock"
+		clr=14
+		bclr=51
+	}
+	label="Remote & Locked"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=16
+		y=158
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_rem"
+		clr=14
+		bclr=51
+	}
+	label="Remote & Unlocked"
+	press_msg="1"
+}
+text {
+	object {
+		x=18
+		y=64
+		width=159
+		height=23
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Control Commands"
+}
+"text update" {
+	object {
+		x=186
+		y=136
+		width=300
+		height=24
+	}
+	monitor {
+		chan="$(N)_resp"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=268
+		y=99
+		width=218
+		height=32
+	}
+	control {
+		chan="$(N)_cmd"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=180
+		y=103
+		width=83
+		height=22
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Command"
+}
+"text update" {
+	object {
+		x=167
+		y=233
+		width=300
+		height=24
+	}
+	monitor {
+		chan="$(N)_stat"
+		clr=30
+		bclr=53
+	}
+	limits {
+	}
+}
+"message button" {
+	object {
+		x=333
+		y=199
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_version.PROC"
+		clr=14
+		bclr=51
+	}
+	label="Get Version"
+	press_msg="1"
+	release_msg="0"
+}
+"message button" {
+	object {
+		x=26
+		y=256
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_stat.SCAN"
+		clr=14
+		bclr=51
+	}
+	label="Status 10s Scan"
+	press_msg="3"
+}
+"message button" {
+	object {
+		x=25
+		y=230
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_stat.SCAN"
+		clr=14
+		bclr=51
+	}
+	label="Status Passive "
+	press_msg="0"
+	release_msg="0"
+}
+rectangle {
+	object {
+		x=22
+		y=226
+		width=141
+		height=32
+	}
+	"basic attribute" {
+		clr=54
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="$(N)_stat.SCAN"
+	}
+}
+rectangle {
+	object {
+		x=22
+		y=251
+		width=141
+		height=32
+	}
+	"basic attribute" {
+		clr=54
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_stat.SCAN"
+	}
+}
+"message button" {
+	object {
+		x=310
+		y=300
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_R1.SCAN"
+		clr=14
+		bclr=51
+	}
+	label="Status 5s Scan"
+	press_msg="4"
+}
+"message button" {
+	object {
+		x=309
+		y=274
+		width=135
+		height=24
+	}
+	control {
+		chan="$(N)_R1.SCAN"
+		clr=14
+		bclr=51
+	}
+	label="Level Passive Scan"
+	press_msg="0"
+	release_msg="0"
+}
+rectangle {
+	object {
+		x=306
+		y=270
+		width=141
+		height=32
+	}
+	"basic attribute" {
+		clr=54
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="$(N)_R1.SCAN"
+	}
+}
+rectangle {
+	object {
+		x=306
+		y=295
+		width=141
+		height=32
+	}
+	"basic attribute" {
+		clr=54
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="$(N)_R1.SCAN"
+	}
+}
+"message button" {
+	object {
+		x=203
+		y=436
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Tcmd"
+		clr=14
+		bclr=51
+	}
+	label="FAST"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=203
+		y=455
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Scmd"
+		clr=14
+		bclr=51
+	}
+	label="SLOW"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=455
+		y=436
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Tcmd"
+		clr=14
+		bclr=51
+	}
+	label="FAST"
+	press_msg="2"
+}
+"message button" {
+	object {
+		x=455
+		y=455
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Scmd"
+		clr=14
+		bclr=51
+	}
+	label="SLOW"
+	press_msg="2"
+}
+"message button" {
+	object {
+		x=712
+		y=436
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Tcmd"
+		clr=14
+		bclr=51
+	}
+	label="FAST"
+	press_msg="3"
+}
+"message button" {
+	object {
+		x=712
+		y=455
+		width=36
+		height=14
+	}
+	control {
+		chan="$(N)_Scmd"
+		clr=14
+		bclr=51
+	}
+	label="SLOW"
+	press_msg="4"
+}
+rectangle {
+	object {
+		x=225
+		y=324
+		width=20
+		height=22
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=9"
+		chan="$(N)_.VALA"
+	}
+}
+rectangle {
+	object {
+		x=471
+		y=325
+		width=20
+		height=22
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=9"
+		chan="$(N)_.VALB"
+	}
+}
+rectangle {
+	object {
+		x=733
+		y=322
+		width=20
+		height=22
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="calc"
+		calc="A=9"
+		chan="$(N)_.VALC"
+	}
+}
+rectangle {
+	object {
+		x=225
+		y=323
+		width=20
+		height=23
+	}
+	"basic attribute" {
+		clr=15
+	}
+}
+rectangle {
+	object {
+		x=471
+		y=325
+		width=20
+		height=23
+	}
+	"basic attribute" {
+		clr=15
+	}
+}
+rectangle {
+	object {
+		x=733
+		y=322
+		width=20
+		height=23
+	}
+	"basic attribute" {
+		clr=15
+	}
+}

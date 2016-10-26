@@ -1,0 +1,337 @@
+
+file {
+	name="/home/epics/R3.13.4_standalone/epicsB/release-7-13/app/pol_targ/medm/Charge.adl"
+	version=020306
+}
+display {
+	object {
+		x=26
+		y=58
+		width=355
+		height=400
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=5
+		width=350
+		height=50
+	}
+	"basic attribute" {
+		clr=19
+	}
+}
+text {
+	object {
+		x=5
+		y=21
+		width=312
+		height=24
+	}
+	"basic attribute" {
+		clr=55
+	}
+	textix="EG4 Charge Integrator"
+}
+"text update" {
+	object {
+		x=96
+		y=136
+		width=91
+		height=18
+	}
+	monitor {
+		chan="LongCellCharge"
+		clr=3
+		bclr=54
+	}
+	format="exponential"
+	limits {
+		precSrc="default"
+		precDefault=3
+	}
+}
+"text update" {
+	object {
+		x=160
+		y=332
+		width=91
+		height=20
+	}
+	monitor {
+		chan="hallb_IPM2H01_CUR"
+		clr=20
+		bclr=14
+	}
+	align="horiz. centered"
+	limits {
+		precSrc="default"
+		precDefault=2
+	}
+}
+"message button" {
+	object {
+		x=215
+		y=136
+		width=76
+		height=20
+	}
+	control {
+		chan="hbtResetLongCellCharge"
+		clr=14
+		bclr=25
+	}
+	label="Zero"
+	press_msg="1"
+	release_msg="0"
+}
+text {
+	object {
+		x=16
+		y=138
+		width=100
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Long NH3"
+}
+text {
+	object {
+		x=19
+		y=219
+		width=100
+		height=17
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Short NH3"
+}
+text {
+	object {
+		x=19
+		y=267
+		width=120
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Current Position:"
+}
+"text update" {
+	object {
+		x=141
+		y=265
+		width=84
+		height=21
+	}
+	monitor {
+		chan="hallbpttgt"
+		clr=14
+		bclr=5
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=97
+		y=216
+		width=91
+		height=18
+	}
+	monitor {
+		chan="ShortCellCharge"
+		clr=3
+		bclr=54
+	}
+	format="exponential"
+	limits {
+		precSrc="default"
+		precDefault=3
+	}
+}
+"message button" {
+	object {
+		x=216
+		y=216
+		width=76
+		height=20
+	}
+	control {
+		chan="hbtResetShortCellCharge"
+		clr=14
+		bclr=25
+	}
+	label="Zero"
+	press_msg="1"
+	release_msg="0"
+}
+text {
+	object {
+		x=21
+		y=335
+		width=120
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Beam Current (nA)"
+}
+"text entry" {
+	object {
+		x=11
+		y=85
+		width=76
+		height=20
+	}
+	control {
+		chan="hbtChargeCalcConst"
+		clr=14
+		bclr=25
+	}
+	format="engr. notation"
+	limits {
+	}
+}
+text {
+	object {
+		x=11
+		y=65
+		width=167
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="conversion constant"
+}
+text {
+	object {
+		x=92
+		y=87
+		width=117
+		height=14
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="electrons/nA/s"
+}
+text {
+	object {
+		x=192
+		y=137
+		width=18
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="e-"
+}
+text {
+	object {
+		x=192
+		y=217
+		width=18
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="e-"
+}
+text {
+	object {
+		x=42
+		y=354
+		width=100
+		height=12
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="(hallb_IPM2H01_CUR)"
+}

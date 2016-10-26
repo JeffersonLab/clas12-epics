@@ -1,0 +1,989 @@
+
+file {
+	name="/home/epics/R3.13.4_standalone/epicsB/release-7-12/app/medm/hbbuffd/batchfill.adl"
+	version=020306
+}
+display {
+	object {
+		x=256
+		y=182
+		width=550
+		height=400
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=143
+		y=104
+		width=22
+		height=23
+	}
+	"basic attribute" {
+		clr=19
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="MAGDWR_BFILL"
+	}
+}
+"text update" {
+	object {
+		x=183
+		y=36
+		width=350
+		height=25
+	}
+	monitor {
+		chan="MAGDWR_BATCHFILL_STATE"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=8
+		y=106
+		width=124
+		height=23
+	}
+	monitor {
+		chan="MAGDWR_BFILL"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"choice button" {
+	object {
+		x=23
+		y=157
+		width=80
+		height=32
+	}
+	control {
+		chan="MAGDWR_SEQ_ENABLE"
+		clr=14
+		bclr=51
+	}
+}
+"text entry" {
+	object {
+		x=369
+		y=90
+		width=98
+		height=21
+	}
+	control {
+		chan="MAGDWR_CDLIMIT"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=369
+		y=135
+		width=98
+		height=21
+	}
+	control {
+		chan="MAGDWR_1STPOS"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=108
+		y=255
+		width=98
+		height=21
+	}
+	control {
+		chan="LL8220HIGH"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=108
+		y=232
+		width=98
+		height=21
+	}
+	control {
+		chan="LL8220LOW"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=369
+		y=158
+		width=98
+		height=21
+	}
+	control {
+		chan="MAGDWR_LSTPOS"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=23
+		y=137
+		width=83
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="BATCH FILL"
+}
+text {
+	object {
+		x=30
+		y=89
+		width=83
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="FILL MODE"
+}
+text {
+	object {
+		x=39
+		y=37
+		width=134
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="BATCH FILL STATE"
+}
+text {
+	object {
+		x=255
+		y=91
+		width=103
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Cool Down Time"
+}
+text {
+	object {
+		x=267
+		y=136
+		width=91
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Init Valve Pos"
+}
+text {
+	object {
+		x=264
+		y=159
+		width=94
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Full Valve Pos"
+}
+text {
+	object {
+		x=76
+		y=235
+		width=28
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MIN"
+}
+text {
+	object {
+		x=69
+		y=257
+		width=34
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MAX"
+}
+"text update" {
+	object {
+		x=107
+		y=212
+		width=100
+		height=17
+	}
+	monitor {
+		chan="LL8220"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=103
+		y=284
+		width=100
+		height=17
+	}
+	monitor {
+		chan="PI8210"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=103
+		y=305
+		width=100
+		height=17
+	}
+	monitor {
+		chan="PI8220"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=396
+		y=347
+		width=100
+		height=17
+	}
+	monitor {
+		chan="EV8212_readback"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=397
+		y=370
+		width=98
+		height=21
+	}
+	control {
+		chan="EV8212.MVAL"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=126
+		y=189
+		width=60
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="LL8220"
+}
+text {
+	object {
+		x=52
+		y=284
+		width=46
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="PI8210"
+}
+text {
+	object {
+		x=52
+		y=305
+		width=46
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="PI8220"
+}
+text {
+	object {
+		x=80
+		y=337
+		width=90
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Emergency vent"
+}
+text {
+	object {
+		x=315
+		y=256
+		width=65
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="magnet transfer line valve"
+}
+text {
+	object {
+		x=328
+		y=349
+		width=64
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Readback"
+}
+text {
+	object {
+		x=341
+		y=371
+		width=48
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Manual"
+}
+text {
+	object {
+		x=449
+		y=320
+		width=74
+		height=23
+	}
+	"basic attribute" {
+		clr=19
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="EV8212.MMOD"
+	}
+	textix="Manual"
+}
+text {
+	object {
+		x=453
+		y=322
+		width=74
+		height=23
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="EV8212.MMOD"
+	}
+	textix="PID"
+}
+rectangle {
+	object {
+		x=143
+		y=104
+		width=22
+		height=23
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="MAGDWR_BFILL"
+	}
+}
+"text update" {
+	object {
+		x=186
+		y=66
+		width=224
+		height=23
+	}
+	monitor {
+		chan="ESR_OUTAGE_STATE"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=467
+		y=89
+		width=60
+		height=20
+	}
+	monitor {
+		chan="MAGDWR_CDTIME"
+		clr=30
+		bclr=54
+	}
+	limits {
+	}
+}
+"shell command" {
+	object {
+		x=526
+		y=9
+		width=15
+		height=15
+	}
+	command[0] {
+		label="Web HELP"
+		name="/apps/netscape/netscape-4.5.1/netscape -ncols 64 http://opweb/internal/llapps/hbptarg/0.html &"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=506
+		y=9
+		width=15
+		height=15
+	}
+	display[0] {
+		label="Serial ILM200 expert"
+		name="hbptarg/ILM_expert.adl"
+	}
+	display[1] {
+		label="500 l Buffer Dewer"
+		name="hbptarg/AMI136_expert.adl"
+		args="X=LL8210"
+	}
+	display[2] {
+		label="Banjo"
+		name="hbptarg/AMI136_expert.adl"
+		args="X=LL8240"
+	}
+	display[3] {
+		label="Expert ITC501"
+		name="hbptarg/itc501.adl"
+	}
+	display[4] {
+		label="Needle Valve"
+		name="hbptarg/EV8212.adl"
+	}
+	display[5] {
+		label="ED2 expert Display"
+		name="hbptarg/ed2expert.adl"
+	}
+	display[6] {
+		label="Expert ITC502"
+		name="hbptarg/hbptarg-octal.adl"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=486
+		y=9
+		width=15
+		height=15
+	}
+	display[0] {
+		label="Cryo Controls Menu"
+		name="hbptarg/cryocontrols.adl"
+	}
+	display[1] {
+		label="Schematic Controls"
+		name="hbptarg/hbptarg.adl"
+	}
+	display[2] {
+		label="Expert Controls"
+		name="hbptarg/hbptarg-expert.adl"
+	}
+	display[3] {
+		label="Alarm panel"
+		name="hbptarg/alarm.adl"
+	}
+	display[4] {
+		label="Needle Valve"
+		name="hbptarg/EV8212.adl"
+	}
+	display[5] {
+		label="Reboot/Save/Restore"
+		name="hbptarg/IOC_E_Status.adl"
+	}
+	display[6] {
+		label="Expert ITC502"
+		name="hbptarg/hbptarg-octal.adl"
+	}
+	clr=14
+	bclr=51
+}
+rectangle {
+	object {
+		x=0
+		y=1
+		width=550
+		height=30
+	}
+	"basic attribute" {
+		clr=19
+	}
+}
+text {
+	object {
+		x=101
+		y=9
+		width=369
+		height=18
+	}
+	"basic attribute" {
+		clr=30
+	}
+	textix="MAGNET DEWAR BATCH FILL CONTROLS"
+}
+"choice button" {
+	object {
+		x=409
+		y=300
+		width=30
+		height=38
+	}
+	control {
+		chan="EV8212.MMOD"
+		clr=14
+		bclr=51
+	}
+}
+"choice button" {
+	object {
+		x=330
+		y=300
+		width=50
+		height=38
+	}
+	control {
+		chan="EV8212DIS"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=329
+		y=279
+		width=51
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Output"
+}
+rectangle {
+	object {
+		x=387
+		y=302
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="EV8212DIS"
+	}
+}
+rectangle {
+	object {
+		x=387
+		y=302
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+}
+"related display" {
+	object {
+		x=458
+		y=297
+		width=20
+		height=20
+	}
+	display[1] {
+		label="EV8212 PID Parameters"
+		name="./BigPid.adl"
+		args="PID=EV8212"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=388
+		y=276
+		width=98
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Manual Control"
+}
+rectangle {
+	object {
+		x=111
+		y=162
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=15
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="MAGDWR_SEQ_ENABLE"
+	}
+}
+rectangle {
+	object {
+		x=111
+		y=162
+		width=15
+		height=15
+	}
+	"basic attribute" {
+		clr=20
+	}
+}
+"text entry" {
+	object {
+		x=369
+		y=111
+		width=98
+		height=21
+	}
+	control {
+		chan="MAGDWR_WULIMIT"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=255
+		y=112
+		width=103
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Warm Up Time"
+}
+"text entry" {
+	object {
+		x=369
+		y=179
+		width=98
+		height=21
+	}
+	control {
+		chan="MAGDWR_CLSPOS"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=250
+		y=180
+		width=108
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Close Valve Pos"
+}
+text {
+	object {
+		x=200
+		y=337
+		width=100
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Flow meter bypass"
+}
+oval {
+	object {
+		x=81
+		y=362
+		width=20
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		chan="SV8221V"
+	}
+}
+"message button" {
+	object {
+		x=105
+		y=355
+		width=42
+		height=20
+	}
+	control {
+		chan="SV8221V_open"
+		clr=14
+		bclr=51
+	}
+	label="OPEN"
+	press_msg="1"
+	release_msg="0"
+}
+"message button" {
+	object {
+		x=105
+		y=376
+		width=48
+		height=20
+	}
+	control {
+		chan="SV8221V_close"
+		clr=14
+		bclr=51
+	}
+	label="CLOSE"
+	press_msg="1"
+	release_msg="0"
+}
+composite {
+	object {
+		x=225
+		y=355
+		width=73
+		height=41
+	}
+	"composite name"=""
+	children {
+		oval {
+			object {
+				x=225
+				y=362
+				width=20
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			"dynamic attribute" {
+				clr="alarm"
+				chan="SV8223"
+			}
+		}
+		"message button" {
+			object {
+				x=250
+				y=355
+				width=42
+				height=20
+			}
+			control {
+				chan="SV8223_open"
+				clr=14
+				bclr=51
+			}
+			label="OPEN"
+			press_msg="1"
+			release_msg="0"
+		}
+		"message button" {
+			object {
+				x=250
+				y=376
+				width=48
+				height=20
+			}
+			control {
+				chan="SV8223_close"
+				clr=14
+				bclr=51
+			}
+			label="CLOSE"
+			press_msg="1"
+			release_msg="0"
+		}
+	}
+}
+polyline {
+	object {
+		x=39
+		y=328
+		width=295
+		height=67
+	}
+	"basic attribute" {
+		clr=24
+		width=5
+	}
+	points {
+		(41,330)
+		(331,392)
+	}
+}
+polyline {
+	object {
+		x=37
+		y=324
+		width=288
+		height=75
+	}
+	"basic attribute" {
+		clr=24
+		width=5
+	}
+	points {
+		(39,396)
+		(322,326)
+	}
+}

@@ -1,0 +1,474 @@
+
+file {
+	name="/a/user1/withers/myscreens/FROST/RGA100_stat.adl"
+	version=020306
+}
+display {
+	object {
+		x=470
+		y=113
+		width=450
+		height=350
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+text {
+	object {
+		x=63
+		y=66
+		width=75
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="STATUS"
+}
+"text update" {
+	object {
+		x=160
+		y=67
+		width=55
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_ERR_STAT"
+		clr=14
+		bclr=4
+	}
+	format="hexadecimal"
+	limits {
+	}
+}
+text {
+	object {
+		x=244
+		y=64
+		width=128
+		height=27
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="hbRGA100_ERR_STAT"
+	}
+	textix="ERRORS"
+}
+text {
+	object {
+		x=223
+		y=63
+		width=184
+		height=27
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="hbRGA100_ERR_STAT"
+	}
+	textix="NO ERRORS"
+}
+"text update" {
+	object {
+		x=257
+		y=103
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_FIL_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=103
+		width=68
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Filament"
+}
+oval {
+	object {
+		x=218
+		y=103
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_FIL_ERRC"
+	}
+}
+"text update" {
+	object {
+		x=257
+		y=137
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_COM_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=137
+		width=136
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Communications"
+}
+oval {
+	object {
+		x=218
+		y=137
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_COM_ERRC"
+	}
+}
+"text update" {
+	object {
+		x=257
+		y=169
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_CEM_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=169
+		width=148
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Electron Multiplier"
+}
+oval {
+	object {
+		x=218
+		y=169
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_CEM_ERRC"
+	}
+}
+"text update" {
+	object {
+		x=257
+		y=203
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_QMF_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=203
+		width=191
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Quadrupole Mass Filter"
+}
+oval {
+	object {
+		x=218
+		y=203
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_QMF_ERRC"
+	}
+}
+"text update" {
+	object {
+		x=257
+		y=236
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_DET_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=236
+		width=104
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Electrometer"
+}
+oval {
+	object {
+		x=218
+		y=236
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_DET_ERRC"
+	}
+}
+"text update" {
+	object {
+		x=257
+		y=270
+		width=155
+		height=18
+	}
+	monitor {
+		chan="hbRGA100_PS_ERRS"
+		clr=14
+		bclr=4
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=270
+		width=140
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="24V External P/S"
+}
+oval {
+	object {
+		x=218
+		y=270
+		width=19
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	"dynamic attribute" {
+		clr="alarm"
+		calc="A<128"
+		chan="hbRGA100_PS_ERRC"
+	}
+}
+"message button" {
+	object {
+		x=386
+		y=37
+		width=51
+		height=21
+	}
+	control {
+		chan="hbRGA100_RESET.PROC"
+		clr=14
+		bclr=4
+	}
+	label="RESET"
+	press_msg="1"
+}
+menu {
+	object {
+		x=5
+		y=43
+		width=83
+		height=19
+	}
+	control {
+		chan="hbRGA100_ERR_STAT.SCAN"
+		clr=14
+		bclr=4
+	}
+}
+"message button" {
+	object {
+		x=22
+		y=66
+		width=31
+		height=21
+	}
+	control {
+		chan="hbRGA100_ERR_STAT.PROC"
+		clr=14
+		bclr=4
+	}
+	label="ERR"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=450
+		height=31
+	}
+	"basic attribute" {
+		clr=40
+		width=2
+	}
+}
+text {
+	object {
+		x=87
+		y=4
+		width=307
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="SRS Residual Gas Analyzer   RGA100"
+}

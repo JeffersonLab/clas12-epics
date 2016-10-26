@@ -1,0 +1,317 @@
+
+file {
+	name="/tmp_mnt/u/site/epics/1098bin/hbptarg/EV8212.adl"
+	version=020303
+}
+display {
+	object {
+		x=27
+		y=225
+		width=200
+		height=200
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+"text update" {
+	object {
+		x=108
+		y=130
+		width=80
+		height=21
+	}
+	monitor {
+		chan="EV8212_readback"
+		clr=2
+		bclr=54
+	}
+	align="horiz. centered"
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=200
+		height=28
+	}
+	"basic attribute" {
+		clr=19
+	}
+}
+text {
+	object {
+		x=20
+		y=1
+		width=137
+		height=26
+	}
+	"basic attribute" {
+		clr=55
+	}
+	textix=" Needle Valve"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=18
+		y=128
+		width=72
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Readback"
+}
+text {
+	object {
+		x=17
+		y=103
+		width=72
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Setpoint"
+}
+"text entry" {
+	object {
+		x=107
+		y=103
+		width=80
+		height=25
+	}
+	control {
+		chan="EV8212.MVAL"
+		clr=14
+		bclr=50
+	}
+}
+"related display" {
+	object {
+		x=164
+		y=57
+		width=20
+		height=20
+	}
+	display[1] {
+		label="EV8212 PID Parameters"
+		name="hbptarg/BigPid.adl"
+		args="PID=EV8212"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=115
+		y=72
+		width=52
+		height=15
+	}
+	"basic attribute" {
+		clr=19
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="EV8212.MMOD"
+	}
+	textix="Manual "
+}
+text {
+	object {
+		x=116
+		y=55
+		width=28
+		height=16
+	}
+	"basic attribute" {
+		clr=20
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="EV8212.MMOD"
+	}
+	textix="PID "
+}
+"choice button" {
+	object {
+		x=80
+		y=53
+		width=30
+		height=38
+	}
+	control {
+		chan="EV8212.MMOD"
+		clr=14
+		bclr=50
+	}
+}
+text {
+	object {
+		x=74
+		y=34
+		width=98
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Manual Control"
+}
+"choice button" {
+	object {
+		x=18
+		y=53
+		width=50
+		height=38
+	}
+	control {
+		chan="EV8212DIS"
+		clr=14
+		bclr=50
+	}
+}
+text {
+	object {
+		x=16
+		y=34
+		width=51
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Output"
+}
+text {
+	object {
+		x=52
+		y=167
+		width=72
+		height=18
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="EV8212"
+}
+"shell command" {
+	object {
+		x=185
+		y=3
+		width=15
+		height=15
+	}
+	command[1] {
+		label="Web HELP"
+		name="/apps/netscape/netscape-4.5.1/netscape -ncols 64 http://devlnxsrv/twiki/bin/view/SWDocs/TroubleGuideHallBPtarg &"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=165
+		y=3
+		width=15
+		height=15
+	}
+	display[0] {
+		label="Schematic Controls"
+		name="hbptarg/hbptarg.adl"
+	}
+	display[1] {
+		label="Expert Controls"
+		name="hbptarg/hbptarg-expert.adl"
+	}
+	display[2] {
+		label="ITC502 Expert"
+		name="hbptarg/itc502.adl"
+	}
+	display[3] {
+		label="Alarm panel"
+		name="hbptarg/cryoAlarms.adl"
+	}
+	display[4] {
+		label="Needle Valve"
+		name="hbptarg/EV8212.adl"
+	}
+	clr=14
+	bclr=51
+}

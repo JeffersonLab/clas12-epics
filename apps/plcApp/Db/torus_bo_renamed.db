@@ -1,0 +1,29 @@
+#
+# torus_bo_generic.db
+#
+# Generic boRecord for Torus PLCs.  Used when PV doesn't match tag name.
+# See also: torus_bo_renamed.db.
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PV    - record suffix
+#   TAG   - PLC tag also suffix of PV name
+#   PLCID - PLC ID set in startup
+#   ZNAM  - (optional)
+#   ONAM  - (optional)
+#   DESC  - (optional)
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct 2016
+#
+
+record(bo, "$(P)$(R)$(PV)") {
+    field(DESC, "$(DESC="")")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(OUT,  "@$(PLCID) $(TAG)")
+    field(ZNAM, "$(ZNAM="")")
+    field(ONAM, "$(ONAM="")")
+    field(HIGH, "$(HIGH)="0")")
+}

@@ -13,38 +13,22 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 
 ## Torus
-DB  += cryodbox_torus_cryocon.db
-DB  += cryodbox_torus_LHe.substitutions
-DB  += cryodbox_torus_LN2.substitutions
-DB  += datatype_ccm_cernox.db
-DB  += datatype_ccm_pt100.db
-DB  += datatype_cpid.db
-DB  += datatype_cpid_intlk.db
-DB  += datatype_loadcell.db
+DB  += $(wildcard ../*.db) $(wildcard ../*.substitutions)
+
 REQ += datatype_loadcell.req
-DB  += datatype_straingage.db
 REQ += datatype_straingage.req
-DB  += solenoid_LHe.substitutions
-DB  += torus_ai_generic.db
-DB  += torus_ai_renamed.db
-DB  += torus_ao_generic.db
-DB  += torus_bi_generic.db
-DB  += torus_bi_renamed.db
-DB  += torus_bo_generic.db
-DB  += torus_cryocon.db
-DB  += torus_force.substitutions
-DB  += torus_force_addons.substitutions
 REQ += torus_force_settings.req
-DB  += torus_import.db
-DB  += torus_interlocks.substitutions
-DB  += torus_LHe.substitutions
-DB  += torus_LN2.db
-DB  += torus_LN2.substitutions
-DB  += torus_mps.db
-DB  += torus_qd.db
-DB  += torus_quench.substitutions
-DB  += torus_vacuum.db
 REQ += torus_vacuum_settings.req
+
+BEAST += torus_cooldown_interlocks.xml
+BEAST += torus_cooldown.xml
+BEAST += torus_force_loadcells_contacts.xml
+BEAST += torus_force_loadcells.xml
+BEAST += torus_force_straingages.xml
+BEAST += torus_interlocks.xml
+BEAST += torus_LHe.xml
+BEAST += torus_LN2.xml
+BEAST += torus_vacuum.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

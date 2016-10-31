@@ -13,6 +13,11 @@ DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db
 DB += gas_cRIO_RICH.db
 DB += gas_cRIO_SVT.db
 
+BEAST += gas_cRIO_COMM.xml
+BEAST += gas_cRIO_HTCC.xml
+BEAST += gas_cRIO_IOCS.xml
+BEAST += gas_cRIO_SVT.xml
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 

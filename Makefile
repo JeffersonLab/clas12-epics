@@ -1,12 +1,15 @@
 #
 # CLAS12 EPICS Makefile 
 #
+.PHONY: epics tools
 
 all: epics tools
 
 clean: clean-epics clean-tools
 
 distclean: distclean-epics
+
+rebuild: rebuild-epics
 
 install: epics install-tools
 
@@ -23,6 +26,9 @@ clean-epics:
 
 distclean-epics:
 	(cd apps; make distclean)
+
+rebuild-epics:
+	(cd apps; make rebuild)
 
 #
 # tools 

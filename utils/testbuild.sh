@@ -53,7 +53,7 @@ printBreak ()
 printEnvErr ()
 {
 	printBreak
-	echo "Use .setup-hps to setup the environmental variables (source .setup-hps)."
+	echo "Use .setup to setup the environmental variables (source .setup)."
 }
 
 ########################################
@@ -73,7 +73,7 @@ while getopts "e" opt; do
   esac
 done
 
-declare -a vars=("CLAS" "EPICS_BASE" "EPICS_HOST_ARCH" "EPICSB_DRIVERS")
+declare -a vars=("CLAS" "EPICS_BASE" "EPICS_HOST_ARCH")
 printf "Testing environment variables:\n"
 for var in "${vars[@]}"; do
   	if [ -n "${!var}" ]; then

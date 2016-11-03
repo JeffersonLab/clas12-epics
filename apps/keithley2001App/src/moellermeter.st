@@ -328,7 +328,7 @@ ss seqMoellermeter
             pvGet(iSet);
             pvGet(aperture);
             pvGet(nsamples);
-            pvGet(flipdelay);
+            pvGet(flipDelay);
 
             // press enter to be ready to press trigger
             pvPut(enterKey);
@@ -343,7 +343,7 @@ ss seqMoellermeter
             // trigger
             pvPut(triggerKey);
 
-            epicsThreadSleep(flipdelay);
+            epicsThreadSleep(flipDelay);
 
             // flip current:
             pvPut(iSet);

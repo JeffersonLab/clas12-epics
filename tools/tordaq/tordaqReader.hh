@@ -12,7 +12,6 @@ class tordaqReader {
 private:
     const char* asciiDelimiter=",";
     TFile *inFile=NULL;
-    tordaqData tdData;
     std::vector <tordaqData*> inTrees;
     std::vector <TH1*> outHistos;
 
@@ -33,6 +32,7 @@ public:
     TFile *outRootFile=NULL;
     TGHProgressBar *progressMeter=NULL;
     bool doSynchroAna=false;
+    tordaqData tdData;
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
@@ -83,6 +83,11 @@ public:
             }
             inFile=new TFile(inFilename,"READ");
         }
+
+        // determine the variable names based on file contents:
+        tdData.setTreeNames();
+
+        //std::vector <std::string> VARNAMES=tdData.getTreeNames();
         
         // find the input TTrees:
         std::vector <std::string> missingTrees;
@@ -193,6 +198,17 @@ public:
                       ? maxSamples/tordaqData::WFLENGTH
                       : inTrees[0]->fChain->GetEntries();
         const time_t runStartTime=time(0);
+
+        /*
+        // print header
+        if (outAsciiFile)
+        {
+            for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
+            {
+                fprintf(outAsciiFile,"%s%s%s%12f",inTrees[iVar].GetName());
+            }
+        }
+        */
 
         while (1)
         {

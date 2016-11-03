@@ -257,7 +257,7 @@ void tordaqGui::DoOpen(TString filename="")
     }
 
     // generate the hitsos if not already there:
-    if (!gDirectory->Get(("h"+tdData.VARNAMES[0]).c_str()))
+    if (!gDirectory->Get(("h"+tdReader.tdData.VARNAMES[0]).c_str()))
     {
         tdReader.makeHistos=true;
         //tdReader.progressMeter=progressBar;
@@ -273,11 +273,11 @@ void tordaqGui::DoOpen(TString filename="")
 
     histos1.clear();
     dataHistos1.clear();
-    for (unsigned int iv=0; iv<tdData.VARNAMES.size(); iv++)
+    for (unsigned int iv=0; iv<tdReader.tdData.VARNAMES.size(); iv++)
     {
-        const TString vn=tdData.VARNAMES[iv];
+        const TString vn=tdReader.tdData.VARNAMES[iv];
 
-        //tdReader.ProgressMeter(tdData.VARNAMES.size(),iv);
+        //tdReader.ProgressMeter(tdReader.tdData.VARNAMES.size(),iv);
 
         TObject* xx=gDirectory->Get("h"+vn);
         if (!xx) 
@@ -314,7 +314,7 @@ void tordaqGui::DoOpen(TString filename="")
         }
     }
     
-    if (dataHistos1.size() != tdData.VARNAMES.size())
+    if (dataHistos1.size() != tdReader.tdData.VARNAMES.size())
          fileLabel->ChangeText(filename + " --   ERROR READING HISTOS.");
     else fileLabel->ChangeText(filename);
     this->Layout();

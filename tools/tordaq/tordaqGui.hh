@@ -79,7 +79,7 @@ class tordaqGui: public TGMainFrame {
         std::vector <TH1*> dataHistos1N;
         std::vector <TH1*> dataHistos1S;
         tordaqReader tdReader;
-        tordaqData tdData;
+        //tordaqData tdData;
 
     public:
         tordaqGui(const TGWindow *p, UInt_t w, UInt_t h);

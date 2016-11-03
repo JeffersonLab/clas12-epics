@@ -3,12 +3,13 @@
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TKey.h>
 #include <TH1.h>
 #include <iostream>
 #include <vector>
 #include <string>
 
-// names of the TTrees in the wf2root ROOT files:
+// names of the TTrees in the wf2root ROOT files (deprecated):
 static const char* CVARNAMES[]={
     "VT1",
     "VT2",
@@ -36,6 +37,10 @@ static const char* CVARNAMES[]={
     "IDCCT1",
     NULL
 };
+
+// names of the possible TTree stubs:
+// (will keep them in this order, and then numerical order)
+static const char* VARSTUBS[]={"VT","IDCCT",NULL};
 
 class tordaqData {
 private:
@@ -151,5 +156,22 @@ public :
            getchar();
        }
    }
+
+   static std::vector <std::string> getTreeNames()
+   {
+       int ii=0;
+       std::vector <std::string> ss;
+       while (VARSTUBS[ii])
+       {
+           for (int jj=0; jj<100; jj++)
+               if (gDirectory->Get(Form("%s%d",VARSTUBS[ii],jj)))
+                   ss.push_back(Form("%s%d",VARSTUBS[ii],jj));
+           ii++;
+       }
+       return ss;
+   }
+
+   void setTreeNames() { VARNAMES=getTreeNames(); }
+
 };
 #endif

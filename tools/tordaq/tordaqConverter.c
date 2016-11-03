@@ -96,6 +96,15 @@ int main(int argc,char **argv)
         std::cout<<"End Time:    "<<tdr.endTime<<std::endl;
     }
 
+    if (tdr.endTime>0 && tdr.startTime>0)
+    {
+        if (tdr.endTime < tdr.startTime)
+        {
+            std::cerr<<"User Error:  Start Time later then End Time."<<std::endl;
+            exit(1);
+        }
+    }
+
     // check filesystem for input file:
     if (gSystem->AccessPathName(tdr.inFilename))
     {

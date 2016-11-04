@@ -351,7 +351,7 @@ def printTriggerSubs(sector,CrNo,CrName):
       cc['Element']='SEC%d_P%.2d'%(sector,ch)
       setCodes(CrNo,cc)
       channels.append(cc)
-  subFileName='../Db/jscalers_%s_TRIG.sub'%(CrName)
+  subFileName='../Db/jscalers_%s_TRIG.substitutions'%(CrName)
   printSubstitutions(channels,subFileName)
 
 # make substution files and one startup per sector:
@@ -362,7 +362,7 @@ def mkSector(sector):
     for detector in ['ECAL','LTCC','PCAL','FTOF']:
       if detector=='LTCC': iCrate-=1 # <--- HACK
       channels=mkChannels(detector,iCrate,sector,system)
-      subFileName='../Db/jscalers_S%d_%s_%s.sub'%(sector,detector,system)
+      subFileName='../Db/jscalers_S%d_%s_%s.substitutions'%(sector,detector,system)
       printSubstitutions(channels,subFileName)
       if system=='DISC' and (detector=='PCAL' or detector=='FTOF'):
         printTriggerSubs(sector,iCrate,'TDC'+detector+str(sector))
@@ -380,6 +380,6 @@ def mkDetector(channels,subFileName,startupFileName):
 
 for sector in range(6): mkSector(sector+1)
 
-mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.sub','jscalers_CTOF.cmd')
+mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
 
 

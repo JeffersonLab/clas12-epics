@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# run css with an on-the-fly generated workspace
+#   - to avoid duplicate conflicting workspaces
+#   - to guarantee standard startup user interface
+#   - to avoid users modifying the configuration
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+# path hold generated workspaces
+tmp_path=/tmp/CSS-Workspaces
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+share=$DIR/../css_share
+
+plugin_profile=$share/common/prefs/plugin_customization_beta.ini
+#plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
+workspace=$share/common/workspaces/Default_Torus
+
+# generate a temporary css workspace:
+#   Note: needs rw from all groups onliners, clas, etc.
+if [[ ! -e $tmp_path ]]; then
+    mkdir -p $tmp_path -m 777
+fi
+wsp=`mktemp -d -p $tmp_path`
+cp -rf $workspace/*    $wsp >& /dev/null
+cp -rf $workspace/.*   $wsp >& /dev/null
+cp -rf $plugin_profile $wsp
+
+# we want to run *everything* from the wsp workspace:
+/usr/clas12/css/4.3.3/cs-studio -data $wsp \
+    -pluginCustomization $wsp/plugin_customization_beta.ini \
+    -share_link $share=/CLAS12_Share
+

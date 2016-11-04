@@ -13,14 +13,13 @@ plc2epics_registerRecordDeviceDriver(pdbbase)
 EIP_buffer_limit(450)
 drvEtherIP_init()
 #drvEtherIP_define_PLC("PLC_CRYO",  "129.57.96.17", 0)
-drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
+#drvEtherIP_define_PLC("PLC_TORUS", "129.57.96.15", 0)
 
 ## Debugging [7-10]
 #EIP_verbosity(7)
 
 ## Load record instances
-#dbLoadTemplate("db/torus_import.substitutions")
-dbLoadTemplate("db/torus_force_addons.substitutions")
+dbLoadRecords("db/torus_interlock_sum.db","P=B_TORUS:,R=MPS:")
 
 cd ${TOP}/iocBoot/${IOC}
 

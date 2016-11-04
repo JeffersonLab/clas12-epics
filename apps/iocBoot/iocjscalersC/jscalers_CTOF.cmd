@@ -14,7 +14,7 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
-dbLoadTemplate("db/jscalers_CTOF_FADC.sub")
+dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
 
 dbLoadRecords("db/jscalers_CTOF_FADC_sums.db","SIDE=U")
 dbLoadRecords("db/jscalers_CTOF_FADC_sums.db","SIDE=D")

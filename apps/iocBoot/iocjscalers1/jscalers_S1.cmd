@@ -22,14 +22,14 @@ scanOnceSetQueueSize(5000)
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
-dbLoadTemplate("db/jscalers_S1_ECAL_FADC.sub")
-dbLoadTemplate("db/jscalers_S1_PCAL_FADC.sub")
-dbLoadTemplate("db/jscalers_S1_FTOF_FADC.sub")
-dbLoadTemplate("db/jscalers_S1_LTCC_FADC.sub")
-dbLoadTemplate("db/jscalers_S1_ECAL_DISC.sub")
-dbLoadTemplate("db/jscalers_S1_PCAL_DISC.sub")
-dbLoadTemplate("db/jscalers_S1_FTOF_DISC.sub")
-dbLoadTemplate("db/jscalers_S1_LTCC_DISC.sub")
+dbLoadTemplate("db/jscalers_S1_ECAL_FADC.substitutions")
+dbLoadTemplate("db/jscalers_S1_PCAL_FADC.substitutions")
+dbLoadTemplate("db/jscalers_S1_FTOF_FADC.substitutions")
+dbLoadTemplate("db/jscalers_S1_LTCC_FADC.substitutions")
+dbLoadTemplate("db/jscalers_S1_ECAL_DISC.substitutions")
+dbLoadTemplate("db/jscalers_S1_PCAL_DISC.substitutions")
+dbLoadTemplate("db/jscalers_S1_FTOF_DISC.substitutions")
+dbLoadTemplate("db/jscalers_S1_LTCC_DISC.substitutions")
 
 dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=FADC,SEC=1,CH=1")
 dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=DISC,SEC=1,CH=3")
@@ -40,8 +40,8 @@ dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=DISC,SEC=1,CH=3")
 dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=FADC,SEC=1,CH=1")
 dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=DISC,SEC=1,CH=3")
 
-dbLoadTemplate("db/jscalers_TDCPCAL1_TRIG.sub")
-dbLoadTemplate("db/jscalers_TDCFTOF1_TRIG.sub")
+dbLoadTemplate("db/jscalers_TDCPCAL1_TRIG.substitutions")
+dbLoadTemplate("db/jscalers_TDCFTOF1_TRIG.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

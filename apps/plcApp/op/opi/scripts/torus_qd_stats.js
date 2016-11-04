@@ -16,7 +16,7 @@ function createRow(desc, pv_name) {
 var run = PVUtil.getDouble(pvs[0]);
 var P 	= "B_TORUS:QD:VT";
 
-for (var i=1; i<=23; i++) {
+for (var i=1; i<=24; i++) {
 	DESC = "VT" + i;
 	PV_NAME = P + i;
 	createRow(DESC, PV_NAME);

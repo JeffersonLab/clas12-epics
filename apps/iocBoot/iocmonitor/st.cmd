@@ -24,6 +24,8 @@ dbLoadRecords("db/caenhv_stat.db","SEC=4")
 dbLoadRecords("db/caenhv_stat.db","SEC=5")
 dbLoadRecords("db/caenhv_stat.db","SEC=6")
 
+dbLoadRecords("db/monitorApp_torus.db")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
 cd ${TOP}/iocBoot/${IOC}

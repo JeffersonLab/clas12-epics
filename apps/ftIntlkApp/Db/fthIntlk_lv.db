@@ -1,0 +1,191 @@
+record(calcout,"$(P)INTLK:lvcheck1")
+{
+    field(INPA,"$(P)LV_P:v_sens")
+    field(INPB,"$(P)LV_N:v_sens")
+    field(INPC,"$(P)LV_P:i_rd")
+    field(INPD,"$(P)LV_N:i_rd")
+    field(INPE,"$(P)INTLK:lvvmin")
+    field(INPF,"$(P)INTLK:lvimin")
+    field(INPG,"$(P)INTLK:bypass")
+    field(CALC,"(A<E || B<E || C<F || D<F) && G#1 ? 1 : 0")
+    field(SCAN,"2 second")
+    field(OUT,"$(P)INTLK:lvcheck2 PP")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(OCAL,"1")
+    field(ODLY,"0")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+record(calcout,"$(P)INTLK:lvcheck2")
+{
+    field(INPA,"$(P)LV_P:v_sens")
+    field(INPB,"$(P)LV_N:v_sens")
+    field(INPC,"$(P)LV_P:i_rd")
+    field(INPD,"$(P)LV_N:i_rd")
+    field(INPE,"$(P)INTLK:lvvmin")
+    field(INPF,"$(P)INTLK:lvimin")
+    field(INPG,"$(P)INTLK:bypass")
+    field(CALC,"(A<E || B<E || C<F || D<F) && G#1 ? 1 : 0")
+    field(SCAN,"2 second")
+    field(OUT,"$(P)INTLK:status.VAL PP")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use CALC")
+    field(OCAL,"1")
+    field(ODLY,"0")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+record(ai,"$(P)INTLK:lvvmin")
+{
+    field(VAL,0.5)
+    field(PREC,1)
+    field(EGU,"V")
+}
+record(ai,"$(P)INTLK:lvimin")
+{
+    field(VAL,0.5)
+    field(PREC,1)
+    field(EGU,"A")
+}
+record(ao, "$(P)INTLK:delay") {
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(VAL, "0")
+  field(OUT, "$(P)INTLK:lvcheck1.ODLY")
+  field(EGU, "sec")
+}
+record(bo,"$(P)INTLK:status")
+{
+    field(DESC,"Interlock Status")
+    field(SCAN,"Passive")
+    field(PINI,"YES")
+    field(VAL,"0")
+    field(ZNAM,"Ok")
+    field(ONAM,"Fault")
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+}
+record(bo,"$(P)INTLK:bypass")
+{
+    field(DESC,"Interlock Bypass")
+    field(SCAN,"Passive")
+    field(PINI,"YES")
+    field(VAL,"0")
+    field(ZNAM,"Normal")
+    field(ONAM,"Bypass")
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+}
+record(bo,"$(P)INTLK:reset")
+{
+    field(DESC,"Interlock Reset")
+    field(SCAN,"Passive")
+    field(PINI,"NO")
+    field(UDF,"0")
+    field(VAL,"0")
+    field(OUT,"$(P)INTLK:status.VAL PP")
+}
+
+# check that any HV is actually ON:
+record(calcout,"$(P)INTLK:preforcecheck")
+{
+    field(DESC,"Pre-Force Check")
+    field(SCAN,"1 second")
+    field(INPA,"$(P)INTLK_H01-H10:hvstat")
+    field(INPA,"$(P)INTLK_H11-H20:hvstat")
+    field(INPA,"$(P)INTLK_H21-H30:hvstat")
+    field(CALC,"A#0 || B#0 || C#0")
+    field(OUT,"$(P)INTLK:force.PROC")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(OCAL,"1")
+}
+
+record(bo,"$(P)INTLK_Q$(Q1)Q$(Q2):force")
+{
+  field(DESC, "Force Value")
+  field(SCAN, "Passive")
+#field(SCAN, "1 second")
+  field(DISV, "0")
+  field(SDIS, "$(P)INTLK:status.VAL")
+  field(VAL, "1")
+  field(OUT, "$(P)INTLK:sethvoff PP")
+}
+
+#record(seq,"$(P)LV_Q$(Q1)Q$(Q2):setlvoff")
+#{
+#    field(LNK1,"$(P)LV_Q$(Q1)Q$(Q2)P:switch PP")
+#    field(DO1,0)
+#    field(DOL1,0)
+#    field(LNK2,"$(P)LV_Q$(Q1)Q$(Q2)N:switch PP")
+#    field(DO2,0)
+#    field(DOL2,0)
+#}
+record(seq,"$(P)HV_Q$(Q1)Q$(Q2):sethvoff")
+{
+    field(LNK1,"$(P)INTLK:sethvoff PP")
+    field(DO1,0)
+    field(DOL1,0)
+}
+
+
+#record(seq,"$(P)INTLK:setalloff")
+#{
+#    field(LNK1,"$(P)HV:sethvoff PP")
+#    field(DO1,0)
+#    field(DOL1,0)
+#    field(LNK2,"$(P)HV:sethvoff PP")
+#    field(DO2,0)
+#    field(DOL2,0)
+#    field(LNK3,"$(P)LV:setlvoff PP")
+#    field(DO3,0)
+#    field(DOL3,0)
+#    field(DLY3,10)
+#}
+
+
+
+
+
+
+#record(calcout,"$(P)INTLK_Q$(Q1)Q$(Q2):hvcheck1")
+#{
+#    field(INPA,"$(P)INTLK_Q$(Q1):hvvmon")
+#    field(INPB,"$(P)INTLK_Q$(Q1):hvcomm")
+#    field(INPC,"$(P)INTLK_Q$(Q1):hvstat")
+#    field(INPD,"$(P)INTLK_Q$(Q2):hvvmon")
+#    field(INPE,"$(P)INTLK_Q$(Q2):hvcomm")
+#    field(INPF,"$(P)INTLK_Q$(Q2):hvstat")
+#    field(INPG,"$(P)INTLK_Q$(Q1)Q$(Q2):bypass")
+#    field(CALC,"(A!0 || B!0 || C!0 || D!0 || E!0 || F!0) && G=0")
+#    field(SCAN,"2 second")
+#    field(OUT,"$(P)INTLK_Q$(Q1)Q$(Q2):hvcheck2 PP")
+#    field(OOPT,"When Non-zero")
+#    field(DOPT,"Use OCAL")
+#    field(OCAL,"1")
+#    field(ODLY,"0")
+#    field(HIGH,"1")
+#    field(HSV,"MAJOR")
+#}
+#record(calcout,"$(P)INTLK_Q$(Q1)Q$(Q2):hvcheck2")
+#{
+#    field(INPA,"$(P)INTLK_Q$(Q1):hvvmon")
+#    field(INPB,"$(P)INTLK_Q$(Q1):hvcomm")
+#    field(INPC,"$(P)INTLK_Q$(Q1):hvstat")
+#    field(INPD,"$(P)INTLK_Q$(Q2):hvvmon")
+#    field(INPE,"$(P)INTLK_Q$(Q2):hvcomm")
+#    field(INPF,"$(P)INTLK_Q$(Q2):hvstat")
+#    field(INPG,"$(P)INTLK_Q$(Q1)Q$(Q2):bypass")
+#    field(CALC,"(A!0 || B!0 || C!0 || D!0 || E!0 || F!0) & G=0")
+#    field(SCAN,"2 second")
+#    field(OUT,"$(P)INTLK_Q$(Q1)Q$(Q2):status.VAL PP")
+#    field(OOPT,"When Non-zero")
+#    field(DOPT,"Use CALC")
+#    field(OCAL,"1")
+#    field(ODLY,"0")
+#    field(HIGH,"1")
+#    field(HSV,"MAJOR")
+#}
+
+

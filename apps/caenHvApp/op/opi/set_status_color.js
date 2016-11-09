@@ -15,7 +15,7 @@ if (type == "527")
 {
 	
 	var statuses=["ON","RUP",  "RDN",  "OVC",  "UNV",  "OVV",  "ExTrip","MAXV", "    ", "Kill", "InTrip"];
-	var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Major","Major"];
+	var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Minor","Major"];
 	
 	var theStatus=-1;
 	var j10=-1
@@ -53,6 +53,7 @@ if (type == "527")
 	  }
 	  else {
 	  	  widget.setPropertyValue("background_color","Major");
+	  	  //widget.setPropertyValue("background_color",bgcolors[theStatus]);
 	  }
 	}
 }

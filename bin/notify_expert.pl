@@ -25,6 +25,8 @@ $comment_string = '';
 # create the text entry widget
 my $tk_main = MainWindow->new;
 
+$tk_main->title("Page Expert:  $contact");
+
 my $tk_label = $tk_main -> Label(-text=>'Enter the message');
 $tk_label -> pack;
 my $tk_text = $tk_main->Scrolled(Text,

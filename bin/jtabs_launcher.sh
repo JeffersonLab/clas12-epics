@@ -13,5 +13,6 @@ user=hbops
 #fi
 
 #ssh $host -l $user jtabs
-ssh -i ~/.ssh/id_rsa_hpsrun $host -l $user jmenu
+#ssh -i ~/.ssh/id_rsa_hpsrun $host -l $user jmenu
+ssh $host -l $user jmenu
 

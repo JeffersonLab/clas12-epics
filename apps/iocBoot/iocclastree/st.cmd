@@ -12,6 +12,6 @@ clasTree_registerRecordDeviceDriver(pdbbase)
 dbLoadTemplate("db/clas12Nodes.substitutions");
 
 cd ${TOP}/iocBoot/${IOC}
-dbLoadRecords("test.db")
+#dbLoadRecords("test.db")
 iocInit
 

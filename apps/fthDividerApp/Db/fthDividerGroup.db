@@ -1,0 +1,21 @@
+#These records are for a single channel
+#For the whole box see fthDivider.db
+#For those which are for single channels on the board.
+
+#The macros (from the .substitutions file are:
+
+#BOARD
+#HALF
+#HV
+#CHLIST 
+
+#Put useful info into the DESC
+record(stringout, "B_HW_FTDIVIDER_Sl$(BOARD)_Half$(HALF):CHANLIST")
+{
+   alias("B_DET_FTH_DIVIDER_HV$(HV):CHANLIST")
+   field(DESC,"HVChan,DivSlot,Half:,$(HV),$(BOARD),$(HALF)")
+   field(VAL,"$(CHLIST)")
+}
+
+
+

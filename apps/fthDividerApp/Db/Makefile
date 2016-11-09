@@ -12,7 +12,13 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 #DB += xxx.db
 DB    += fthDivider.db
+DB    += fthDividerChan.db
+DB    += fthDividerGroup.db
+
+DB    += fthDividerChan.substitutions
+DB    += fthDividerBoard.substitutions
 PROTO += fthDivider.proto
+
 
 
 

@@ -73,7 +73,7 @@ def main():
     while mon_line > 0:
         ca.poll()
         time.sleep(1.0)
-        print "poll"
+        #print "poll"
 
 
 
@@ -93,7 +93,7 @@ def monitor(mon_line):                               #this is run as a thread to
                 if chid > 0:                                        #if the channel is connected
                     pvdata[mon_line][pvf.ARRAY][n]=ca.get_complete(chid)#get the value to the array
             pvdata[mon_line][pvf.WF].put(pvdata[mon_line][pvf.ARRAY])#put to the waveform      
-            print "mon_line",mon_line,pvdata[mon_line][pvf.PERIOD]
+            #print "mon_line",mon_line,pvdata[mon_line][pvf.PERIOD]
             time.sleep(float(pvdata[mon_line][pvf.PERIOD]))          #wait for the refresh period
                 
 
@@ -120,3 +120,4 @@ def my_node(node,depth,mode='elem',result=None):
         
 
 if __name__ == "__main__": main()  # call main comes at the end: a quirk of python
+

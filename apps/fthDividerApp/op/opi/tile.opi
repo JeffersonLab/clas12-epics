@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0.0">
+  <show_close_button>true</show_close_button>
+  <rules />
+  <wuid>-58f3270b:1579a7979e0:-7d96</wuid>
+  <show_grid>true</show_grid>
+  <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
+  <scripts />
+  <height>40</height>
+  <macros>
+    <include_parent_macros>false</include_parent_macros>
+  </macros>
+  <boy_version>4.0.103.201511111440</boy_version>
+  <show_edit_range>true</show_edit_range>
+  <widget_type>Display</widget_type>
+  <auto_scale_widgets>
+    <auto_scale_widgets>false</auto_scale_widgets>
+    <min_width>-1</min_width>
+    <min_height>-1</min_height>
+  </auto_scale_widgets>
+  <background_color>
+    <color red="240" green="240" blue="240" />
+  </background_color>
+  <width>40</width>
+  <x>0</x>
+  <name></name>
+  <grid_space>6</grid_space>
+  <show_ruler>true</show_ruler>
+  <y>0</y>
+  <snap_to_geometry>true</snap_to_geometry>
+  <foreground_color>
+    <color red="192" green="192" blue="192" />
+  </foreground_color>
+  <actions hook="false" hook_all="false" />
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-58f3270b:1579a7979e0:-7ac3</wuid>
+    <transparent>false</transparent>
+    <lock_children>false</lock_children>
+    <scripts />
+    <height>60</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>false</width_scalable>
+      <height_scalable>false</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <visible>true</visible>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Grouping Container</widget_type>
+    <background_color>
+      <color red="144" green="238" blue="144" />
+    </background_color>
+    <width>60</width>
+    <x>0</x>
+    <name>Grouping Container</name>
+    <y>0</y>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <fc>false</fc>
+    <show_scrollbar>true</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+    <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+      <toggle_button>false</toggle_button>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>true</alarm_pulsing>
+      <tooltip></tooltip>
+      <push_action_index>0</push_action_index>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>d280607:157c3b42dec:-2aa</wuid>
+      <pv_value />
+      <text></text>
+      <scripts>
+        <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+          <scriptName>EmbeddedScript</scriptName>
+          <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil
+desc = PVUtil.getString(pvArray[0])
+widget.setPropertyValue("tooltip", desc)
+
+#hv = desc.find("HVChan")
+hv = int(desc[desc.find("HVChan")+7:])
+col = 2*hv
+widget.setPropertyValue("background_color","MEDM_COLOR_"+str(col));]]></scriptText>
+          <pv trig="true">$(P)_ID$(ID):INDEX.DESC</pv>
+        </path>
+        <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+          <scriptName>EmbeddedScript</scriptName>
+          <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,ConsoleUtil
+selected   = int(PVUtil.getDouble(pvArray[0]))
+desc = PVUtil.getString(pvArray[1])
+
+id  = int(widget.getMacroValue("ID"))
+if(id==selected):
+       	ConsoleUtil.writeInfo(str(id) + "    " + str(selected))
+	widget.setPropertyValue("background_color","MEDM_COLOR_0");
+	widget.setPropertyValue("backcolor_alarm_sensitive", "true")
+	widget.setPropertyValue("alarm_pulsing", "true")
+else:
+	hv = int(desc[desc.find("HVChan")+7:])
+	col = 2*hv
+	widget.setPropertyValue("background_color","MEDM_COLOR_"+str(col));
+	widget.setPropertyValue("backcolor_alarm_sensitive", "false")
+	widget.setPropertyValue("alarm_pulsing", "false")
+
+]]></scriptText>
+          <pv trig="true">$(P):SELECTED_CHANNEL</pv>
+          <pv trig="false">$(P)_ID$(ID):INDEX.DESC</pv>
+        </path>
+      </scripts>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>60</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <image></image>
+      <visible>true</visible>
+      <pv_name>$(P)_ID$(ID):INDEX</pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Action Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>60</width>
+      <x>0</x>
+      <name>Action Button</name>
+      <y>0</y>
+      <style>0</style>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="WRITE_PV">
+          <pv_name>$(P):SELECTED_CHANNEL</pv_name>
+          <value>$(ID)</value>
+          <timeout>10</timeout>
+          <confirm_message></confirm_message>
+          <description></description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+  </widget>
+</display>

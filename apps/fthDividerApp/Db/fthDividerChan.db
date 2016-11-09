@@ -1,0 +1,74 @@
+#These records are for a single channel
+#For the whole box see fthDivider.db
+#For those which are for single channels on the board.
+
+#The macros (from the .substitutions file are:
+#I        Index on the divider box      
+#X      
+#Y      
+#Size   
+#SLOT   
+#CHAN   
+#LAYER  
+#SECTOR
+#ELEM   
+#HVCHAN
+
+#Put useful info into the DESC
+record(ao, "B_HW_FTDIVIDER_Sl$(SLOT)_Ch$(CHAN):INDEX")
+{
+   alias("B_DET_FTH_DIVIDER_ID$(I):INDEX")
+   alias("B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):INDEX")
+   field(DESC,"S$(SECTOR)E$(ELEM) s,c=$(SLOT),$(CHAN) HVChan=$(HVCHAN)")
+   field(VAL,"$(I)")
+   field (LSV,  "NO_ALARM")
+   field (LLSV, "NO_ALARM")
+   field (HSV,  "NO_ALARM")
+   field (HHSV, "MAJOR")
+   field (HIHI, -100)
+   field(PINI,"YES")
+}
+
+
+#record(ai, "B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):AMPRBV")
+#{
+#   field(DTYP, "stream")
+#   alias("B_DET_FTH_DIVIDER_ID$(I)")
+#   alias("B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):AMPRBV")
+#   #field(OUT,  "@fthDivider.proto getAmplChan($(I)) L1")
+#   field(OUT,  "@fthDivider.proto setAmplChan($(I)) L1")
+#   #field(FLNK, "B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):AMPRBV")
+#  
+#}
+
+record(ai, "B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):AMPRBV")
+{
+#    field(DTYP, "stream")
+    alias("B_DET_FTH_DIVIDER_ID$(I)")
+    alias("B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):AMPRBV")
+#    field(INP,  "@fthDivider.proto getAmplChan($(I)) L1")
+  
+}
+
+record(ao, "B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):AMPSET")
+{
+   alias("B_DET_FTH_DIVIDER_ID$(I):AMPSET")
+   alias("B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):AMPSET")
+  field(DTYP, "stream")
+   field(LOPR,"0")
+   field(HOPR,"4090")
+  field(OUT,  "@fthDivider.proto setAmplChan($(I)) L1")
+  #field(FLNK, "B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):AMPRBV")
+  field(FLNK, "B_DET_FTH_DIVIDER:GET_AMP_ALL.PROC")
+}
+
+
+record(calc,"B_HW_FTHDIVIDER_Sl$(SLOT)_Ch$(CHAN):VCALC")
+{
+        alias("B_DET_FTH_DIVIDER_ID$(I):VCALC")
+	alias("B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):VCALC")
+	field(INPA, "B_DET_FTH_HV_H$(HVCHAN):vmon CPP")
+	field(INPB, "B_DET_FTH_SIPM_L$(LAYER)_S$(SECTOR)_$(ELEM):AMPRBV CPP")
+#	field(CALC, "A - 5.0*(B/4095.0)")
+	field(CALC, "100 - 5.0*(B/4095.0)")
+}

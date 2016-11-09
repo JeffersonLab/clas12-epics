@@ -25,28 +25,11 @@ setGateway { out "SET GATEWAY %s";wait 10;};
 sendReset { out "RESET"; disconnect; wait 1000; connect 2000; };
 
 ##NEEDS CHECKING
-#getDriverStatus {  out "GET STATUS"; in "%s";wait 10; };
 getDriverStatus { out "GET STATUS"; in "%{OFF|ON}";wait 10; };
 setDriverStatus { out "TURN %{OFF|ON}";wait 2000;};
 
-getSequence { out "GET SEQUENCE"; in "%{SEQUENCE OFF|SEQUENCE ON}";wait 100; };
 
 setAmpAll { out "SET AMPL_ALL %d";wait 10; }; 
-
-setWidthAll { out "SET WIDTH_ALL %d";wait 10; }; 
-
-getClock {out "GET CLOCK"; in "%{INTERNAL|EXTERNAL} CLOCK";wait 10;};
-setClock {out "SET CLOCK %{INT|EXT}";wait 10;};
-
-getCol {out "GET COLOR"; in "%{RED|BLUE}";wait 10;};  
-setCol {out "SET COLOR %{R|B}";wait 10;};  
-
-getFreq { out "GET FREQ"; in "%g Hz";wait 10; }
-setFreq { out "SET FREQ %d";wait 10; };
-
-#getOwr { out "GET OWR"; in "%{OFF|ON}";wait 10; };
-getOwr { out "GET OWR"; in "%d";wait 10; };
-setOwr { out "SET OWR %s";wait 10; };
 
 
 #advanced
@@ -61,51 +44,35 @@ setSeqFile { out "SET SEQUENCE_FILE_NAME %s";wait 10;};
 
 loadData { out "LOAD_DATA";wait 10; };
 
-loadSeq { out "LOAD_SEQUENCE";wait 10; };
-
-#seqStart{ out "%s_SEQUENCE";wait 10; };
-seqStart{ out "%{STOP_SEQUENCE|START_SEQUENCE}";wait 500; };
 
 #Channel commands, where channel passes as arg
-getAmpChan { out "GET AMPL \$1"; in "%g"; wait 10;};
-setAmpChan { out "SET AMPL \$1 %d"; wait 10;};
+getAmplChan { out "GET AMPL \$1"; in "%g"; wait 10;};
+setAmplChan { out "SET AMPL \$1 %d"; wait 100;};
 
-#Channel commands, where channel passes as arg
-getWidthChan { out "GET WIDTH \$1"; in "%g";wait 10;};
-setWidthChan { out "SET WIDTH \$1 %d";wait 10;};
-getWidthAll { out "GET WIDTH_ALL"; in "\$1 %d";};
+getAmplArray { out "GET AMPL_ALL"; in "\$1 %d";};
 
-getAmplAll { out "GET AMPL_ALL"; in "\$1 %d";};
-
-#Read which 6 LEDs are on
-getLeds { out "GET LED_STATUS_ALL"; in "%(\$1:LED_ID1.VAL)g %(\$1:LED_ID2.VAL)g %(\$1:LED_ID3.VAL)g %(\$1:LED_ID4.VAL)g %(\$1:LED_ID5.VAL)g %(\$1:LED_ID6.VAL)g ";wait 10;};
-#getLeds { out "GET LED_STATUS_ALL"; in "%(\$1:LED_ID1.VAL)g %(\$1:LED_ID2.VAL)g %(\$1:LED_ID3.VAL)g %(\$1:LED_ID4.VAL)g ";wait 10;};
 
 #Write to the selected channel
-setWidthSel { out "SET WIDTH %(\$1:SELECTED_CHANNEL.VAL)s %d"; wait 10;};
-setAmplSel { out "SET AMPL %(\$1:SELECTED_CHANNEL.VAL)s %d"; wait 10;};
+setAmplSel { out "SET AMPL %(\$1:SELECTED_CHANNEL)s %d"; wait 10;};
 
 #Read to the selected channel
-getWidthSel { out "GET WIDTH %(\$1:SELECTED_CHANNEL.VAL)s"; in "%g"; wait 10;};
-getAmplSel { out "GET AMPL %(\$1:SELECTED_CHANNEL.VAL)s"; in "%g";  wait 10;};
+getAmplSel { out "GET AMPL %(\$1:SELECTED_CHANNEL)s"; in "%g";  wait 10;};
 
-setAllAmpAsSelected { out "SET AMPL_ALL %(\$1:SET_SELECTED_AMP.VAL)s"; wait 10; }; 
-setAllWidthAsSelected { out "SET WIDTH_ALL %(\$1:SET_SELECTED_WIDTH.VAL)s"; wait 10; };
+setAllAmpAsSelected { out "SET AMPL_ALL %(\$1:SET_SELECTED_AMP)s"; wait 10; }; 
 
 #setData { separator=" "; out "SET DATA% i"; wait 100;}; 
 setData { separator=""; out "SET DATA% i"; wait 100;}; 
 
-switchLED{ out "SWITCH %{OFF|ON} %(\$1:SELECTED_CHANNEL.VAL)s"; wait 10;};
-statusLED{ out "GET LED_STATUS %(\$1:SELECTED_CHANNEL.VAL)s"; in "%{0|1}"; wait 10;};
+#Read temperatures
+getTemps { out "GET TEMPERATURE_ALL"; in "15 %(\$100)g %(\$101)g %(\$102)g %(\$103)g %(\$104)g %(\$105)g %(\$106)g %(\$107)g %(\$108)g %(\$109)g %(\$110)g %(\$111)g %(\$112)g %(\$113)g %(\$114)g ";wait 10;};
 
-#sequence stuff
-setNSeqRep{ out "SET N_SEQUENCE_REPETITIONS %d";  wait 10;};
-setNSeqSteps{ out "SET N_SEQUENCE_STEPS %d";  wait 10;};
-setSeqDone{ out "SET SEQUENCE_DONE";  wait 10;};
+#getAmplAll { out "GET AMPL_ALL"; in "\$1 %d";};
 
-setSeqStep{ out "SET SEQUENCE_STEP %s";  wait 10;};
+getAmplAll  { 
 
-setScanTon{ out "SET SCAN_TON %d"; wait 10;};
-setScanToff{ out "SET SCAN_TOFF %d"; wait 10;};
-setScanLed{out "SET SCAN_LED %s"; wait 10;};
-scanStart{out "%{STOP_SCAN|START_SCAN}"; wait 10;};
+out "GET AMPL_ALL"; 
+in "\$2 %d";
+wait 100;
+out "GET AMPL_ALL"; 
+in "240 %(\$1000)g %(\$1001)g %(\$1002)g %(\$1003)g %(\$1004)g %(\$1005)g %(\$1006)g %(\$1007)g %(\$1008)g %(\$1009)g %(\$1010)g %(\$1011)g %(\$1012)g %(\$1013)g %(\$1014)g %(\$1015)g %(\$1016)g %(\$1017)g %(\$1018)g %(\$1019)g %(\$1020)g %(\$1021)g %(\$1022)g %(\$1023)g %(\$1024)g %(\$1025)g %(\$1026)g %(\$1027)g %(\$1028)g %(\$1029)g %(\$1030)g %(\$1031)g %(\$1032)g %(\$1033)g %(\$1034)g %(\$1035)g %(\$1036)g %(\$1037)g %(\$1038)g %(\$1039)g %(\$1040)g %(\$1041)g %(\$1042)g %(\$1043)g %(\$1044)g %(\$1045)g %(\$1046)g %(\$1047)g %(\$1048)g %(\$1049)g %(\$1050)g %(\$1051)g %(\$1052)g %(\$1053)g %(\$1054)g %(\$1055)g %(\$1056)g %(\$1057)g %(\$1058)g %(\$1059)g %(\$1060)g %(\$1061)g %(\$1062)g %(\$1063)g %(\$1064)g %(\$1065)g %(\$1066)g %(\$1067)g %(\$1068)g %(\$1069)g %(\$1070)g %(\$1071)g %(\$1072)g %(\$1073)g %(\$1074)g %(\$1075)g %(\$1076)g %(\$1077)g %(\$1078)g %(\$1079)g %(\$1080)g %(\$1081)g %(\$1082)g %(\$1083)g %(\$1084)g %(\$1085)g %(\$1086)g %(\$1087)g %(\$1088)g %(\$1089)g %(\$1090)g %(\$1091)g %(\$1092)g %(\$1093)g %(\$1094)g %(\$1095)g %(\$1096)g %(\$1097)g %(\$1098)g %(\$1099)g %(\$1100)g %(\$1101)g %(\$1102)g %(\$1103)g %(\$1104)g %(\$1105)g %(\$1106)g %(\$1107)g %(\$1108)g %(\$1109)g %(\$1110)g %(\$1111)g %(\$1112)g %(\$1113)g %(\$1114)g %(\$1115)g %(\$1116)g %(\$1117)g %(\$1118)g %(\$1119)g %(\$1120)g %(\$1121)g %(\$1122)g %(\$1123)g %(\$1124)g %(\$1125)g %(\$1126)g %(\$1127)g %(\$1128)g %(\$1129)g %(\$1130)g %(\$1131)g %(\$1132)g %(\$1133)g %(\$1134)g %(\$1135)g %(\$1136)g %(\$1137)g %(\$1138)g %(\$1139)g %(\$1140)g %(\$1141)g %(\$1142)g %(\$1143)g %(\$1144)g %(\$1145)g %(\$1146)g %(\$1147)g %(\$1148)g %(\$1149)g %(\$1150)g %(\$1151)g %(\$1152)g %(\$1153)g %(\$1154)g %(\$1155)g %(\$1156)g %(\$1157)g %(\$1158)g %(\$1159)g %(\$1160)g %(\$1161)g %(\$1162)g %(\$1163)g %(\$1164)g %(\$1165)g %(\$1166)g %(\$1167)g %(\$1168)g %(\$1169)g %(\$1170)g %(\$1171)g %(\$1172)g %(\$1173)g %(\$1174)g %(\$1175)g %(\$1176)g %(\$1177)g %(\$1178)g %(\$1179)g %(\$1180)g %(\$1181)g %(\$1182)g %(\$1183)g %(\$1184)g %(\$1185)g %(\$1186)g %(\$1187)g %(\$1188)g %(\$1189)g %(\$1190)g %(\$1191)g %(\$1192)g %(\$1193)g %(\$1194)g %(\$1195)g %(\$1196)g %(\$1197)g %(\$1198)g %(\$1199)g %(\$1200)g %(\$1201)g %(\$1202)g %(\$1203)g %(\$1204)g %(\$1205)g %(\$1206)g %(\$1207)g %(\$1208)g %(\$1209)g %(\$1210)g %(\$1211)g %(\$1212)g %(\$1213)g %(\$1214)g %(\$1215)g %(\$1216)g %(\$1217)g %(\$1218)g %(\$1219)g %(\$1220)g %(\$1221)g %(\$1222)g %(\$1223)g %(\$1224)g %(\$1225)g %(\$1226)g %(\$1227)g %(\$1228)g %(\$1229)g %(\$1230)g %(\$1231)g"; 
+};

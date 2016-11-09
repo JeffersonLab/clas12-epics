@@ -5,7 +5,7 @@ import array
 import math
 
 nodeLoader.readTree()                              #Read in the node tree
-views=["B_SYS_HV"]                                 #list of possible views
+views=["B_SYS_HV","B_HW_HV"]                       #list of possible views
 
 topnode    = str(widget.getMacroValue("TOP"))      #Get the top node
 rangemode  = str(widget.getMacroValue("SCALE"))    #Get the scale for the (= Whole or Part)

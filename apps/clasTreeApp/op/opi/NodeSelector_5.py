@@ -34,14 +34,16 @@ if len(subnodes[0]):                         #if there are subnodes
         linkingContainer.addMacro("SUBNODE", subnodes[i])
         linkingContainer.addMacro("RANGE_LOW", low)
         linkingContainer.addMacro("RANGE_HIGH", high)
-        linkingContainer.setPropertyValue("resize_behaviour", 1)
+        linkingContainer.setPropertyValue("resize_behaviour", 2)
         linkingContainer.setPropertyValue("border_style", 0)
-        
+        linkingContainer.setPropertyValue("width", 60)
+        linkingContainer.setPropertyValue("height", 12)
+       
         widget.addChild(linkingContainer)
-        linkingContainer.setPropertyValue("x",str(col*40))
-        linkingContainer.setPropertyValue("y",str(row*12))
+        linkingContainer.setPropertyValue("x",str(col*62))
+        linkingContainer.setPropertyValue("y",str(row*14))
         col+=1
-        if col==10:
+        if col==7:
             row+=1
             col=0
             

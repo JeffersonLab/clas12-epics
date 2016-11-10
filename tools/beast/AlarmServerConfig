@@ -1,0 +1,23 @@
+#!/bin/sh
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+ROOT=HallB
+
+EXE_DIR=/usr/clas12/css/dev/linux-x86_64/bin
+INI_DIR=/usr/clas12/release/pro/epics/tools/beast
+XML_DIR=/usr/clas12/release/pro/epics/apps/beast
+
+# Delete existing database
+$EXE_DIR/AlarmConfigTool -root $ROOT -import -file $INI_DIR/$ROOT\_root.xml
+
+# Import all included XMLs
+while read line
+do 
+    [[ "$line" =~ ^#.*$ ]] && continue #skip comment lines
+    $EXE_DIR/AlarmConfigTool -root $ROOT -modify -file $XML_DIR/$line -pluginCustomization $INI_DIR/alarm_settings.ini  
+done <  $INI_DIR/$ROOT\_includes.cfg
+
+# Export full generated alarm tree
+$EXE_DIR/AlarmConfigTool -root $ROOT -export -file $INI_DIR/$ROOT\_tree.xml -pluginCustomization $INI_DIR/alarm_settings.ini

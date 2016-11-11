@@ -32,7 +32,7 @@ var ss=[
 {
     for (var ii=0; ii<ss.length; ii++)
     {
-      java.lang.System.err.println(ss[ii]);
+ //     java.lang.System.err.println(ss[ii]);
 
       PVUtil.writePV("B_DET_BLINE_HV_"+ss[ii]+":pwonoff",1);
 

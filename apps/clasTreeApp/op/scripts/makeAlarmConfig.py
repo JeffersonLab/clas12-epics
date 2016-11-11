@@ -75,7 +75,7 @@ def my_node(node,depth,mode='elem',result=None):
         print '  '*depth+"      </guidance>"
         print '  '*depth+"      <display>"
         print '  '*depth+"         <title>Open HV GUI</title>"
-        print '  '*depth+"         <details>/CSS/HV2/ntree.opi   &quot;node="+parent+"&quot;</details>"
+        print '  '*depth+"         <details>/CLAS12_Share/apps/clasTreeApp/HVMonitor.opi \"P="+parent+",E="+node+"\"</details>"
         print '  '*depth+"      </display>"
         print '  '*depth+"   </pv>"
         

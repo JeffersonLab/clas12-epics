@@ -9,11 +9,20 @@ from java.util import Arrays
 nodeLoader.readTree()                        #make sure the node tree is made
 
 nodefull = PVUtil.getString(pvArray[0])      #Full name of the node Eg. B_SYS_HV_ECAL_SEC1
-       
+element  = PVUtil.getString(pvArray[1])
+ConsoleUtil.writeInfo("NS4" + element)
+
 itemlist = ["Element"]                       #start off the default itemlist
 count=1
 
+
+#if nodeLoader.NodeIndex[nodefull]:               #if its a node
 index =  int(nodeLoader.NodeIndex[nodefull]) #get index of node
+
+#else:                                            #else assume an element get node as parent
+#    element = nodefull
+#    nodefull = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+#    index =  int(nodeLoader.NodeIndex[nodefull]) #get index of node
 
 #if there are elements, make a list
 if ((len(nodeLoader.ElementRange[index])>2)and(len(nodeLoader.ElementNames[index])>2)):
@@ -31,7 +40,11 @@ if ((len(nodeLoader.ElementRange[index])>2)and(len(nodeLoader.ElementNames[index
 
 widget.setPropertyValue("items",Arrays.asList(itemlist) ) #set the relevant props
 widget.setPropertyValue("height",24*count )
-widget.setPropertyValue("pv_value", itemlist[0] )
 
-pvArray[1].setValue(itemlist[0]) #make the pv the 1st item on the list
-        
+ConsoleUtil.writeInfo("NS4" + element)
+if element: 
+    pvArray[1].setValue(element) #make the pv the 1st item on the list
+    widget.setPropertyValue("pv_value", element )
+else:
+    pvArray[1].setValue(itemlist[0]) #make the pv the 1st item on the list
+    widget.setPropertyValue("pv_value", itemlist[0] )

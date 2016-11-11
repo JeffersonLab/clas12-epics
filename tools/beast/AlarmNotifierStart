@@ -3,10 +3,15 @@
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
 export PATH=$JAVA_HOME/bin:$PATH
 
-ROOT=HallB
-
 EXE_DIR=/usr/clas12/css/dev/linux-x86_64/bin
 INI_DIR=/usr/clas12/release/pro/epics/tools/beast
 XML_DIR=/usr/clas12/release/pro/epics/apps/beast
+
+if [ "$1" != "" ]; then
+    ROOT=$1
+else
+    systemd-notify --status "Usage: $0 <root>"
+    exit
+fi
 
 $EXE_DIR/AlarmNotifier -root $ROOT -pluginCustomization $INI_DIR/notifier_settings.ini

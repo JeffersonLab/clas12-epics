@@ -3,21 +3,38 @@
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
 export PATH=$JAVA_HOME/bin:$PATH
 
-ROOT=HallB
-
 EXE_DIR=/usr/clas12/css/dev/linux-x86_64/bin
 INI_DIR=/usr/clas12/release/pro/epics/tools/beast
 XML_DIR=/usr/clas12/release/pro/epics/apps/beast
 
-# Delete existing database
-$EXE_DIR/AlarmConfigTool -root $ROOT -import -file $INI_DIR/$ROOT\_root.xml
+if [ "$1" != "" ]; then
+    ROOT=$1
+    ROOT_XML=$INI_DIR/$1_root.xml
+    ROOT_INC=$INI_DIR/$1_includes.cfg
+else
+    echo "Usage: $0 <root>"
+    exit
+fi
 
-# Import all included XMLs
-while read line
-do 
-    [[ "$line" =~ ^#.*$ ]] && continue #skip comment lines
-    $EXE_DIR/AlarmConfigTool -root $ROOT -modify -file $XML_DIR/$line -pluginCustomization $INI_DIR/alarm_settings.ini  
-done <  $INI_DIR/$ROOT\_includes.cfg
+if [ -e "$ROOT_XML" ]; then
+    # Delete existing database
+    $EXE_DIR/AlarmConfigTool -root $ROOT -import -file $ROOT_XML -data /dev/null
+else
+    echo "$0: file not found ($ROOT_XML)"
+    exit
+fi
+
+if [ -e "$ROOT_INC" ]; then
+    # Import all included XMLs
+    while read line
+    do 
+        [[ "$line" =~ ^#.*$ ]] && continue 
+        XML_FILE="$XML_DIR/$line"
+        if [ -f "$XML_FILE" ]; then
+            $EXE_DIR/AlarmConfigTool -root $ROOT -modify -file $XML_FILE -data /dev/null
+        fi
+    done <  $ROOT_INC
+fi
 
 # Export full generated alarm tree
-$EXE_DIR/AlarmConfigTool -root $ROOT -export -file $INI_DIR/$ROOT\_tree.xml -pluginCustomization $INI_DIR/alarm_settings.ini
+$EXE_DIR/AlarmConfigTool -root $ROOT -export -file $INI_DIR/$ROOT\_tree.xml -data /dev/null

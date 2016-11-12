@@ -14,6 +14,7 @@ PROD_IOC = monitor
 DBD += monitor.dbd
 monitor_DBD += base.dbd
 monitor_DBD += devIocStats.dbd
+monitor_DBD += asSupport.dbd
 
 # monitor_registerRecordDeviceDriver.cpp derives from monitor.dbd
 monitor_SRCS += monitor_registerRecordDeviceDriver.cpp
@@ -22,6 +23,7 @@ monitor_SRCS += monitor_registerRecordDeviceDriver.cpp
 monitor_SRCS_DEFAULT += monitorMain.cpp
 monitor_SRCS_vxWorks += -nil-
 
+monitor_LIBS += autosave
 monitor_LIBS += devIocStats
 monitor_LIBS += $(EPICS_BASE_IOC_LIBS)
 

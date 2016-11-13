@@ -47,7 +47,7 @@ USR_INCLUDES += $(SMIXX_INCLUDE)
 USR_INCLUDES += $(DIM_INCLUDE)
 
 
-TARGETS += mkHVEpics ../HV_allnames.txt 
+#TARGETS += mkHVEpics ../HV_allnames.txt 
 
 #===========================
 include $(TOP)/configure/RULES

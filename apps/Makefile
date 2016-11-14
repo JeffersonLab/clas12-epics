@@ -5,6 +5,10 @@ DIRS := $(DIRS) $(filter-out $(DIRS), configure)
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard *App))
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocBoot))
 
+# these are currently built by hand on RHEL5:
+DIR := $(filter-out caenHv527App, $(DIRS))
+DIR := $(filter-out sy527App, $(DIRS))
+
 define DIR_template
  $(1)_DEPEND_DIRS = configure
 endef

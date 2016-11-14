@@ -14,12 +14,9 @@
 #define S_MCDZ    0x07    /* Set measured current dead-zone */
 #define S_HV      0x08    /* Set HV on/off                  */
 #define S_SOT     0x09    /* Set samples over threshold     */
-/// my: it is actually the time with high current before trip occurs
 #define S_PRD     0x0A    /* Set post ramp delay            */ 
-/// my:
-#define S_CHHV      0x0B    /* Set CHANNEL HV on/off                  */ 
-/// my:
-#define S_BDHV      0x0C    /* Set BOARD HV on/off                  */ 
-#define S_VMAX      0x0D    /* Set MAX CHANNEL VOLATAGE                 */ 
+#define S_CHHV    0x0B    /* Set CHANNEL HV on/off          */ 
+#define S_BDHV    0x0C    /* Set BOARD HV on/off            */ 
+#define S_VMAX    0x0D    /* Set MAX CHANNEL VOLATAGE       */ 
 
 #endif

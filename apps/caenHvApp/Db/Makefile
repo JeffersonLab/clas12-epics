@@ -8,11 +8,11 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-DB    += caenhv.db
+DB    += caenhv.db caenhv-nosvmax.db
 DB    += $(wildcard ../*.substitutions)
 
-DB    += $(wildcard ../sums/*.substitutions)
-DB    += $(wildcard ../sums/*.db)
+DB    += $(wildcard *sums*.db)
+BEAST += HValarm.xml HValarmDetBased.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

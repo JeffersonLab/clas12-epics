@@ -10,8 +10,8 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 DB    += caenhv.db caenhv-nosvmax.db
 DB    += $(wildcard ../*.substitutions)
+DB    += $(wildcard ../*sums*.db)
 
-DB    += $(wildcard *sums*.db)
 BEAST += HValarm.xml HValarmDetBased.xml
 
 #----------------------------------------------------

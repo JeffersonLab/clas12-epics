@@ -3,6 +3,14 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 var lr     = widget.getMacroValue("LR"); 
 var sector = widget.getMacroValue("SECTOR");
 
+var question = "   Turn ON HTCC HV\n\n";
+if (sector==0) question += "    All Sectors\n\n";
+else           question += "    Sector "+sector+"\n\n";
+question += "    Really??";
+
+if (GUIUtil.openConfirmDialog(question))
+{
+
 var prefix="B_DET_HTCC_HV";
 var nsectors=6;
 var lrs=["L","R"];
@@ -30,3 +38,4 @@ for (var isec=1; isec<=nsectors; isec++)
     }
 }
 
+}

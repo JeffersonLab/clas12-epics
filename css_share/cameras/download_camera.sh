@@ -14,6 +14,6 @@ do
   # so wget to a temporary file, then mv
   wget -O ${host}_tmp.jpg http://${host}/axis-cgi/jpg/image.cgi
   mv -f ${host}_tmp.jpg ${host}.jpg
-  sleep 1
+  sleep 0.5
 done
 

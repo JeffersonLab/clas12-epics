@@ -2,7 +2,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var prefix = "B_DET_FTC_HV_";
 
-var label = "Turn ON ALL HV for FTC?"
+var label = "\nTurn ON ALL HV for FTC?"
 
 var response = GUIUtil.openConfirmDialog(label);
 if (response)

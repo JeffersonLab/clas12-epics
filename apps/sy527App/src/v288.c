@@ -173,7 +173,9 @@ v288Reset(UINT32 addr)
   if(i>11) printf("v288Reset: error: q=0x%08x, i=%d\n",q,i);
   /*else printf("v288Reset: info: q=0x%08x, i=%d\n",q,i);*/
 
-  return((i==11) ? 11 : OK);
+//  return((i==11) ? 11 : OK);
+  // NAB:
+  return i;
 }
 
 
@@ -278,7 +280,12 @@ v288Send(UINT32 addr, UINT16 crate, UINT16 code, UINT16 *value)
   if(res == WAIT_ERROR)goto error; /// my:
   goto noerror;
 error: 
-  v288Reset(addr);
+  //v288Reset(addr);
+  // NAB:
+  if (v288Reset(addr))
+  {
+    printf("v288Send:  v288Return error on %u / %u\n",addr,crate);
+  }
 noerror:
   return OK; /// my:
   return(res);

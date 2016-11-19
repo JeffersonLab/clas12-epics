@@ -56,6 +56,10 @@ if (type == "527")
 	  	  //widget.setPropertyValue("background_color",bgcolors[theStatus]);
 	  }
 	}
+  if (sstatus=="NotPrt")
+  {
+    widget.setPropertyValue("background_color","MEDM_COLOR_38");
+  }
 }
 
 

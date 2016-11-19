@@ -32,8 +32,8 @@ if (type == "527")
 	    sstatus = statuses[j10];
 	  }
 	}
-	
-	//java.lang.System.out.println("----- "+istatus+" "+theStatus+" "+sstatus);
+
+	//java.lang.System.out.println("----- "+pvs[0].getName()+" "+istatus+" "+theStatus+" "+sstatus);
 	
 	if ( ((1<<6)  & istatus)) { sstatus="Kill"; }
 	if ( ((1<<13) & istatus)) { sstatus="RDN"; }
@@ -56,6 +56,12 @@ if (type == "527")
 	  	  widget.setPropertyValue("background_color","Major");
 	  }
 	}
+
+  if (sstatus=="NotPrt")
+  {
+    widget.setPropertyValue("background_color","MEDM_COLOR_38");
+  }
+
 }
 
 

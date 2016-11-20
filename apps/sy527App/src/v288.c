@@ -161,6 +161,8 @@ v288Reset(UINT32 addr)
 
   /*printf("v288Reset reached\n");*/
 
+  // NAB:  is this 11 iterations optimized / appropriate?
+
   while(q!=QQ && i<=11)
   {
 	v288ActiveLoop(delay);
@@ -284,7 +286,7 @@ error:
   // NAB:
   if (v288Reset(addr))
   {
-    printf("v288Send:  v288Return error on %u / %u\n",addr,crate);
+    printf("v288Send:  v288Reset error on %u / %u\n",addr,crate);
   }
 noerror:
   return OK; /// my:
@@ -848,6 +850,7 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   int *ival = ParValue;
 
   usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
+
   GET_SYSTEM_ID(SystemName);
   /*printf("CAENHVSetChParam reached\n");*/
 

@@ -51,8 +51,8 @@ if (response)
             var wires=WSFG[sfg][iwire];
 
             var suffix = "_SEC"+isec+"_R"+ireg+"_SL"+slay+"_"+sfg+wires;
-            java.lang.System.err.println(suffix);
-            PVUtil.writePV(PREFIX+suffix,1);
+            //java.lang.System.err.println(PREFIX+suffix+":pwonoff");
+            PVUtil.writePV(PREFIX+suffix+":pwonoff",1);
           } 
         }
       }

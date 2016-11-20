@@ -30,8 +30,8 @@ for (var isec=1; isec<=NSECTORS; isec++) {
           var wires=WSFG[sfg][iwire];
 
             var suffix = "_SEC"+isec+"_R"+ireg+"_SL"+slay+"_"+sfg+wires;
-            java.lang.System.err.println(suffix);
-            PVUtil.writePV(PREFIX+suffix,0);
+            //java.lang.System.err.println(suffix);
+            PVUtil.writePV(PREFIX+suffix+":pwonoff",0);
         } 
       }
     }

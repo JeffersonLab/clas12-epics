@@ -1,0 +1,36 @@
+
+------------------------------------------------------------------------------------------------------
+
+/logs/torus
+
+This directory is the temporary location for torus fastdaq raw data and where the IOC writes the files.
+Raw fastdaq files get automatically moved to /cache/torus/data for transition to tape storage.
+
+**** This directory contains 3 subdirectories:
+
+cache
+  ** A symbolic link to /cache/torus/data for easy access to the raw files during transition.
+
+converted
+  ** A place to write non-raw converted files.
+
+JLabTorus
+  ** A symbolic link for easy access to this torus directory on the M: (/group) drive:
+  /group/hallb_eng/CLAS12/Magnets/Torus/JLab\ Torus/
+  
+------------------------------------------------------------------------------------------------------
+
+**** To read a raw file from cache and write the converted file:
+
+cd /logs/torus
+tordaqConverter -i ./cache/torus_foobar.root -o ./converted/torus_foobar.txt
+
+Or if the raw file is still local before being moved to cache:
+
+cd /logs/torus
+tordaqConverter -i ./torus_foobar.root -o ./converted/torus_foobar.txt
+
+------------------------------------------------------------------------------------------------------
+
+
+

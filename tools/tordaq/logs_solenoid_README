@@ -1,0 +1,36 @@
+
+------------------------------------------------------------------------------------------------------
+
+/logs/solenoid
+
+This directory is the temporary location for solenoid fastdaq raw data and where the IOC writes the files.
+Raw fastdaq files get automatically moved to /cache/solenoid/data for transition to tape storage.
+
+**** This directory contains 3 subdirectories:
+
+cache
+  ** A symbolic link to /cache/solenoid/data for easy access to the raw files during transition.
+
+converted
+  ** A place to write non-raw converted files.
+
+JLabSolenoid
+  ** A symbolic link for easy access to this solenoid directory on the M: (/group) drive:
+  /group/hallb_eng/CLAS12/Magnets/Solenoid/JLab\ Solenoid/
+  
+------------------------------------------------------------------------------------------------------
+
+**** To read a raw file from cache and write the converted file:
+
+cd /logs/solenoid
+tordaqConverter -i ./cache/solenoid_foobar.root -o ./converted/solenoid_foobar.txt
+
+Or if the raw file is still local before being moved to cache:
+
+cd /logs/solenoid
+tordaqConverter -i ./solenoid_foobar.root -o ./converted/solenoid_foobar.txt
+
+------------------------------------------------------------------------------------------------------
+
+
+

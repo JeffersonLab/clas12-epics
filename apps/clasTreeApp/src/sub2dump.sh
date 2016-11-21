@@ -1,6 +1,6 @@
 #!/bin/sh
 
-subs=`ls ../../db/HV*_*.substitutions | grep -v sums  | grep -v SPARE`
+subs=`ls ../../db/HV*_*.substitutions | grep -v sums  | grep -v SPARE | grep -v CND`
 #subs=`ls ../../db/HV*_ECAL.substitutions ../../db/HV*_FTOF.substitutions `
 
 today=`date`

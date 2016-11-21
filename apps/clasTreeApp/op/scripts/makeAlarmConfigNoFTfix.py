@@ -55,15 +55,11 @@ def my_node(node,depth,mode='elem',result=None):
             print '  '*depth+"  <component name=\""+topName+"\">"
         else:
             if(depth>0):
-                if shortname == 'FTH' or shortname == 'FTT' or shortname == 'FTC': #put these under extra FT layer
-                    print '  '*depth+"  <component name=\"FT\">"
                 print '  '*depth+"  <component name=\""+shortname+"\">"
         return
 
     if mode == 'end':  #ifend of node
         if(depth>0):
-            if shortname == 'FTH' or shortname == 'FTT' or shortname == 'FTC': #close the extra FT layer
-                print '  '*depth+"  </component>"
             print '  '*depth+"   </component>"
         return
 

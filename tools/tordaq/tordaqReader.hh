@@ -359,49 +359,53 @@ public:
         {
           std::cout<<"tordaqReader:  Making Comparators ..."<<std::endl;
           TH1 *hh[100];
+          bool foundComparatorInputs=true;
           for (int ii=1; ii<23; ii++)
           {
             if (gDirectory->Get(Form("hVT%d",ii)))
               hh[ii]=(TH1*)gDirectory->Get(Form("hVT%d",ii));
             else
             {
-              std::cerr<<"Error Finding Comparators:  "<<Form("hVT%d",ii)<<std::endl;
-              return false;
+              std::cerr<<"tordaqReader:  Error finding comparator input:  "<<Form("VT%d",ii)<<std::endl;
+              std::cerr<<"tordaqReader:  Proceeding without making comparators."<<std::endl;
+              foundComparatorInputs=false;
             }
           }
+          if (foundComparatorInputs)
+          {
+            TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
+            TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
+            TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);
+            TH1* hV4 =(TH1*)hh[11]->Clone("hV4"); hV4->Add(hh[12]); hV4->Add(hh[13]);
 
-          TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
-          TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
-          TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);
-          TH1* hV4 =(TH1*)hh[11]->Clone("hV4"); hV4->Add(hh[12]); hV4->Add(hh[13]);
+            //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
+            //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
 
-          //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
-          //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
-          
-          //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
-          
-          //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
+            //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
 
-          TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);
-          TH1* hV34 =(TH1*)hV3->Clone("hV34"); hV34->Add(hV4);
-          //TH1* hV56 =(TH1*)hV5->Clone("hV56"); hV56->Add(hV6);
-         
-          //TH1* hC1 =(TH1*)hV1->Clone("hC1");  hC1->Add(hV2,-1);
-          //TH1* hC2 =(TH1*)hV3->Clone("hC2");  hC2->Add(hV4,-1);
-          //TH1* hC3 =(TH1*)hV5->Clone("hC3");  hC3->Add(hV6,-1);
-          TH1* hC4 =(TH1*)hV12->Clone("hC4"); hC4->Add(hV34,-1);
-          //TH1* hC5 =(TH1*)hV34->Clone("hC5"); hC5->Add(hV56,-1);
-          //TH1* hC6 =(TH1*)hV56->Clone("hC6"); hC6->Add(hV12,-1);
-          //TH1* hC7 =(TH1*)hV7->Clone("hC7");  hC7->Add(hV15,-1);
-          
-          //TH1* hC8  =(TH1*)hh[3]->Clone("hC8");  hC8->Add(hh[19],-1);
-          //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
-          //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
+            //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
 
-          tdData.VARNAMES.push_back("C4");
-          outHistos.push_back(hC4);
+            TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);
+            TH1* hV34 =(TH1*)hV3->Clone("hV34"); hV34->Add(hV4);
+            //TH1* hV56 =(TH1*)hV5->Clone("hV56"); hV56->Add(hV6);
 
-          std::cout<<"tordaqReader:  Finished Making Comparators."<<std::endl;
+            //TH1* hC1 =(TH1*)hV1->Clone("hC1");  hC1->Add(hV2,-1);
+            //TH1* hC2 =(TH1*)hV3->Clone("hC2");  hC2->Add(hV4,-1);
+            //TH1* hC3 =(TH1*)hV5->Clone("hC3");  hC3->Add(hV6,-1);
+            TH1* hC4 =(TH1*)hV12->Clone("hC4"); hC4->Add(hV34,-1);
+            //TH1* hC5 =(TH1*)hV34->Clone("hC5"); hC5->Add(hV56,-1);
+            //TH1* hC6 =(TH1*)hV56->Clone("hC6"); hC6->Add(hV12,-1);
+            //TH1* hC7 =(TH1*)hV7->Clone("hC7");  hC7->Add(hV15,-1);
+
+            //TH1* hC8  =(TH1*)hh[3]->Clone("hC8");  hC8->Add(hh[19],-1);
+            //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
+            //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
+
+            tdData.VARNAMES.push_back("C4");
+            outHistos.push_back(hC4);
+
+            std::cout<<"tordaqReader:  Finished Making Comparators."<<std::endl;
+          }
         }
 
       

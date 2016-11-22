@@ -73,13 +73,13 @@ static long wf2rootDAQProcess(aSubRecord *record) {
 				(void*) record);
 
 	epicsEnum16 daqStatReq = *((epicsEnum16*) record->a);
-	char* file_dir  = (char*) record->b;
-//    char* file_pref = (char*) record->e;
+	char* file_dir    = (char*) record->b;
+    char* file_prefix = (char*) record->e;
 	if (wf2rootDebug > 1)
 		printf("DAQ state is %d, directory is %s \n", daqStatReq, file_dir);
 
 	if (record != NULL && daqStatReq == 0) {
-		StartRootDAQ(file_dir, "torus_", "", ((long*) record->d)[0]);
+		StartRootDAQ(file_dir, file_prefix, "", ((long*) record->d)[0]);
 		if (wf2rootDebug > 0)
 			printf("Start recording ROOT files ...\n");
 	} else if (record != NULL && daqStatReq == 1) {

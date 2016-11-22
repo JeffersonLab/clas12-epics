@@ -4,6 +4,8 @@
 # Macros:
 #   P     - record prefix
 #   R     - record prefix
+#   PATH  - directory path of output data (ex. "/logs/torus/")
+#   PREFIX- filename prefix (ex. "torus_")
 #
 # Author: Wesley Moore (wmoore@jlab.org), Yi Qiang
 # Date:   Mar 2016, 2014
@@ -36,10 +38,10 @@ record(aSub,"$(P)$(R)ctrl:daq")
 	field(FTD ,"LONG")
 	field(INPD,"$(P)$(R)ctrl:file_limit NPP") 	
 #
-#    field(NOE, "1")
-#    field(FTE,"STRING")
-#    field(FTVE,"STRING")
-#    field(INPE,"$(P)$(R)ctrl:file_prfx PP)
+    field(NOE, "1")
+    field(FTE,"STRING")
+    field(FTVE,"STRING")
+    field(INPE,"$(P)$(R)ctrl:file_prefix PP")
 }
 
 # Record to enable or disable writing data to the disk
@@ -94,6 +96,15 @@ record(longin,"$(P)$(R)ctrl:file_limit")
 	field(DTYP,"Soft Channel")
 	field(SCAN,"Passive")
     field(FLNK, "$(P)$(R)ctrl:file_progress")
+}
+
+# Record that carries output file directory
+record(stringin,"$(P)$(R)ctrl:file_prefix")
+{
+	field(VAL ,"$(PREFIX)")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
 }
 
 record(calc,"$(P)$(R)ctrl:file_progress")

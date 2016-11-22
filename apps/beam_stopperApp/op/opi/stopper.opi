@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>180</height>
+  <height>200</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -21,7 +21,7 @@
   <background_color>
     <color name="OPI_Background" red="50" green="50" blue="50" />
   </background_color>
-  <width>200</width>
+  <width>250</width>
   <x>759</x>
   <name>stopper</name>
   <grid_space>10</grid_space>
@@ -167,60 +167,6 @@ $(pv_value)</tooltip>
     <line_color>
       <color red="128" green="0" blue="255" />
     </line_color>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>380dbfff:15024d0bd95:16f8</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <label></label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="115" green="255" blue="107" />
-    </background_color>
-    <width>70</width>
-    <x>70</x>
-    <name>Menu Button</name>
-    <y>145</y>
-    <foreground_color>
-      <color red="33" green="108" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>motor_expert.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <motor_name>beam_stop</motor_name>
-        </macros>
-        <replace>0</replace>
-        <description>X</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
     <toggle_button>true</toggle_button>
@@ -387,7 +333,7 @@ $(pv_value)</tooltip>
       <color red="78" green="165" blue="249" />
     </background_color>
     <width>60</width>
-    <x>75</x>
+    <x>90</x>
     <name>Text Update</name>
     <y>105</y>
     <foreground_color>
@@ -437,7 +383,7 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>61</width>
-    <x>75</x>
+    <x>90</x>
     <name>Label</name>
     <y>126</y>
     <foreground_color>
@@ -467,7 +413,7 @@ $(pv_value)</tooltip>
     <wuid>380dbfff:15024d0bd95:16fd</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>done</text>
+    <text>done moving</text>
     <scripts />
     <height>17</height>
     <border_width>1</border_width>
@@ -486,60 +432,10 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="255" green="255" blue="255" />
     </background_color>
-    <width>61</width>
-    <x>75</x>
+    <width>119</width>
+    <x>89</x>
     <name>Label</name>
-    <y>126</y>
-    <foreground_color>
-      <color name="Text_ForeGround" red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>0</horizontal_alignment>
-    <rules>
-      <rule name="Visibility" prop_id="visible" out_exp="false">
-        <exp bool_exp="pv0==0">
-          <value>true</value>
-        </exp>
-        <exp bool_exp="!(pv0==0)">
-          <value>false</value>
-        </exp>
-        <pv trig="true">beam_stop.DMOV</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>380dbfff:15024d0bd95:16fe</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>moving</text>
-    <scripts />
-    <height>17</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>61</width>
-    <x>144</x>
-    <name>Label</name>
-    <y>126</y>
+    <y>125</y>
     <foreground_color>
       <color name="Text_ForeGround" red="0" green="0" blue="0" />
     </foreground_color>
@@ -557,7 +453,7 @@ $(pv_value)</tooltip>
     <wuid>380dbfff:15024d0bd95:1701</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>position</text>
+    <text>position:</text>
     <scripts />
     <height>12</height>
     <border_width>1</border_width>
@@ -577,7 +473,7 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>62</width>
-    <x>4</x>
+    <x>19</x>
     <name>Label</name>
     <y>107</y>
     <foreground_color>
@@ -597,7 +493,7 @@ $(pv_value)</tooltip>
     <wuid>380dbfff:15024d0bd95:1702</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>status</text>
+    <text>status:</text>
     <scripts />
     <height>12</height>
     <border_width>1</border_width>
@@ -617,7 +513,7 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>62</width>
-    <x>4</x>
+    <x>19</x>
     <name>Label</name>
     <y>127</y>
     <foreground_color>
@@ -628,44 +524,60 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+    <toggle_button>false</toggle_button>
     <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>0</horizontal_alignment>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <push_action_index>0</push_action_index>
     <rules />
     <enabled>true</enabled>
-    <wuid>380dbfff:15024d0bd95:1703</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>expert</text>
+    <wuid>-712ab691:1588c642d5d:-7a5d</wuid>
+    <pv_value />
+    <text>EXPERT</text>
     <scripts />
-    <height>12</height>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
+    <image></image>
     <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
+    <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
+    <widget_type>Action Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
-      <color red="255" green="255" blue="255" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
-    <width>62</width>
-    <x>4</x>
-    <name>Label</name>
-    <y>147</y>
+    <width>73</width>
+    <x>65</x>
+    <name>Action Button_4</name>
+    <y>149</y>
+    <style>0</style>
     <foreground_color>
-      <color name="Text_ForeGround" red="0" green="0" blue="0" />
+      <color red="0" green="0" blue="0" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/apps/harp_genericApp/motor_expert.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <motor_name>beam_stop</motor_name>
+        </macros>
+        <replace>2</replace>
+        <description></description>
+      </action>
+    </actions>
     <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

@@ -1,0 +1,92 @@
+#
+# solenoid_quench.substitions - Fast DAQ Quench Detection
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Nov 2016
+#
+
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, QD:, VT1_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT2_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT3_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT4_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT5_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT6_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT7_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT8_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT9_DAQ,  V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT10_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT11_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT12_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT13_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT14_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT15_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT16_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT17_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT18_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT19_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT20_DAQ, V, 5, "raw input" }
+    { PLC_SOL, B_SOL:, QD:, VT21_DAQ, V, 5, "raw input" }
+    #
+    { PLC_SOL, B_SOL:, QD:, V1,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V2,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V3,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V4,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V5,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V6,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V7,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V8,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V9,  V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V10, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V11, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V12, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V13, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V14, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V15, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V16, V, 5, "plc calc" }
+    { PLC_SOL, B_SOL:, QD:, V17, V, 5, "plc calc" }
+    #
+    { PLC_SOL, B_SOL:, QD:, C1,  V, 5, "V1-V2" }
+    { PLC_SOL, B_SOL:, QD:, C2,  V, 5, "V3-V4" }
+    { PLC_SOL, B_SOL:, QD:, C3,  V, 5, "V5-V6" }
+    { PLC_SOL, B_SOL:, QD:, C4,  V, 5, "(V1+V2)-(V3+V4)" }
+    { PLC_SOL, B_SOL:, QD:, C5,  V, 5, "(V3+V4)-(V5+V6)" }
+    { PLC_SOL, B_SOL:, QD:, C6,  V, 5, "(V5+V6)-(V1+V2)" }
+    { PLC_SOL, B_SOL:, QD:, C7,  V, 5, "V7-V15" }
+    { PLC_SOL, B_SOL:, QD:, C8,  V, 5, "V8-V14" }
+    { PLC_SOL, B_SOL:, QD:, C9,  V, 5, "V9-V13" }
+    { PLC_SOL, B_SOL:, QD:, C10, V, 5, "V10-V12" }
+}
+
+################################
+# from cRIO
+# - VT#_AVG
+# - VT#_MAX
+# - VT#_MIN
+################################
+file "db/torus_qd.db" {
+    pattern{ P, R, VT, EGU, PREC, SCAN }
+    { B_SOL:, QD:, VT1,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT2,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT3,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT4,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT5,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT6,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT7,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT8,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT9,  V, 5, "1 second" }
+    { B_SOL:, QD:, VT10, V, 5, "1 second" }
+    { B_SOL:, QD:, VT11, V, 5, "1 second" }
+    { B_SOL:, QD:, VT12, V, 5, "1 second" }
+    { B_SOL:, QD:, VT13, V, 5, "1 second" }
+    { B_SOL:, QD:, VT14, V, 5, "1 second" }
+    { B_SOL:, QD:, VT15, V, 5, "1 second" }
+    { B_SOL:, QD:, VT16, V, 5, "1 second" }
+    { B_SOL:, QD:, VT17, V, 5, "1 second" }
+    { B_SOL:, QD:, VT18, V, 5, "1 second" }
+    { B_SOL:, QD:, VT19, V, 5, "1 second" }
+    { B_SOL:, QD:, VT20, V, 5, "1 second" }
+    { B_SOL:, QD:, VT21, V, 5, "1 second" }
+    { B_SOL:, QD:, IDCCT1, A, 2, "1 second" }
+}

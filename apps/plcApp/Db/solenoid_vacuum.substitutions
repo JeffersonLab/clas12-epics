@@ -1,0 +1,21 @@
+#
+# solenoid_quench.substitions - Fast DAQ Quench Detection
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Nov 2016
+#
+
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, VAC:, CG8606,            torr,       2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_RATE,       "torr/hr",  2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG1HR,     "torr/hr",  2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG10HR,    "torr/hr",  2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8600TB,          torr,       2,  "Main Turbo" }
+    { PLC_SOL, B_SOL:, VAC:, TB8600,            "%",        2,  "Turbo Speed" }
+}
+
+file "db/torus_bi_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_SOL, B_SOL:, VAC:, PV8600TS, Closed, Open, MAJOR, NO_ALARM, "Main Gate Valve" }
+}

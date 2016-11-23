@@ -12,7 +12,7 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install)
 # databases, templates, substitutions like this
 
-## Torus
+## Solenoid/Torus
 DB  += $(wildcard ../*.db) $(wildcard ../*.substitutions)
 
 REQ += datatype_loadcell.req

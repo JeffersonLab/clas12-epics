@@ -1,31 +1,23 @@
-#!../../bin/linux-x86_64/plc
+#!../../bin/linux-x86_64/plc2epics
 ############################################################################
 < envPaths
 ############################################################################
 cd "${TOP}"
 
 ## Register all support components
-dbLoadDatabase("dbd/plc.dbd")
-plc_registerRecordDeviceDriver(pdbbase)
+dbLoadDatabase("dbd/plc2epics.dbd")
+plc2epics_registerRecordDeviceDriver(pdbbase)
 
 ## Initialize EtherIP driver, define PLCs
-## NOTE: if buffer limit is left at 500, read errors will occur.
 EIP_buffer_limit(450)
 drvEtherIP_init()
-drvEtherIP_define_PLC("PLC_SOL",  "129.57.96.999", 0)
-
-## Debugging [7-10]
-#EIP_verbosity(7)
+drvEtherIP_define_PLC("PLC_SOL", "129.57.96.30", 0)
 
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-## PLC_SOL
-dbLoadTemplate("db/solenoid_LHe.substitutions")
-## CA Security
-dbLoadRecords("db/cas.db", "P=B_SOL:,R=CRYO:,ASG=DEFAULT")
-asSetFilename("${TOP}/iocBoot/acf/solenoid_cryo.acf")
-asSetSubstitutions("P=B_SOL:,R=CRYO:")
+dbLoadRecords("db/solenoid_mps.db","P=B_SOL:,R=MPS:,PLCID=PLC_SOL")
+dbLoadTemplate("db/solenoid_interlocks.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -34,11 +26,11 @@ cd ${TOP}/iocBoot/${IOC}
 
 dbl > pv.list
 iocInit
-caPutLogInit("clonioc1:7011")
 
 ## autosave startup
 ## Handle autosave 'commands' contained in loaded databases.
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
+create_monitor_set("torus_mps_settings.req", 30, "P=B_SOL:,R=MPS:")
 

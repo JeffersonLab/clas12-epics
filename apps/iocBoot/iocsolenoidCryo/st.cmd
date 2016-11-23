@@ -30,7 +30,7 @@ dbLoadTemplate("db/solenoid_LHe.substitutions")
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup
-#< save_restore.cmd
+< save_restore.cmd
 
 dbl > pv.list
 iocInit

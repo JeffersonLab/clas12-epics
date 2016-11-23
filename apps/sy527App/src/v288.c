@@ -730,8 +730,8 @@ CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
   for(ich=0; ich<ChNum; ich++)
   {
 
-	/* hack to speed things up: read hardware ONLY if 'V0Set' is requested;
-	   we assume that parameters are requested in the same order starting from 'V0Set' */
+    /* hack to speed things up: read hardware ONLY if 'V0Set' is requested;
+       we assume that parameters are requested in the same order starting from 'V0Set' */
     if( !strcmp(ParName,"V0Set") )
     {
       value[0] = (slot<<8) + ChList[ich];
@@ -743,7 +743,7 @@ CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
       {
         printf("WARN: v288Get(1) returned %d, cut to %d\n",tmp,MAX_V288GET);
         tmp = MAX_V288GET;
-	  }
+      }
       for(i=0; i<tmp; i++) buffer1[ich][i] = buffer[i];
       /*printf("v288Get returns %d\n",tmp);*/
       /*for(i=0; i<tmp; i++) printf("[%3d] %5d   0x%04x\n",i,buffer1[ich][i],buffer1[ich][i]);*/
@@ -756,12 +756,12 @@ CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
       {
         printf("WARN: v288Get(2) returned %d, cut to %d\n",tmp,MAX_V288GET);
         tmp = MAX_V288GET;
-	  }
+      }
       for(i=0; i<tmp; i++) buffer2[ich][i] = buffer[i];
       /*printf("v288Get returns %d\n",tmp);*/
       /*for(i=0; i<tmp; i++) printf("[%3d] %5d   0x%04x\n",i,buffer2[ich][i],buffer2[ich][i]);*/
       /*printf("\n");*/
-	}
+    }
 
     ch = (char *)&buffer1[ich][0];
     /*printf("Channel name >%s<\n",ch);*/
@@ -849,6 +849,7 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   float *fval = ParValue;
   int *ival = ParValue;
 
+  // NAB:  120 ms sleep, this can't be good:
   usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
 
   GET_SYSTEM_ID(SystemName);

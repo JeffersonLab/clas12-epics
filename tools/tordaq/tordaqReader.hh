@@ -367,11 +367,14 @@ public:
             else
             {
               std::cerr<<"tordaqReader:  Error finding comparator input:  "<<Form("VT%d",ii)<<std::endl;
-              std::cerr<<"tordaqReader:  Proceeding without making comparators."<<std::endl;
               foundComparatorInputs=false;
             }
           }
-          if (foundComparatorInputs)
+          if (!foundComparatorInputs)
+          {
+            std::cerr<<"tordaqReader:  Proceeding without making comparators."<<std::endl;
+          }
+          else
           {
             TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
             TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);

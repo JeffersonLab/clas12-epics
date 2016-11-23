@@ -1,0 +1,308 @@
+#
+# solenoid_mps.db - Solenoid Magnet Power Supply
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Nov 2016
+#
+
+#record(stringout, "$(P)$(R)ManCmd") {
+#    field(DESC, "Manual Command")
+#    field(DTYP, "EtherIP")
+#    field(SCAN, "1 second")
+#    field(OUT,  "@$(PLCID) Solenoid_MPS.Man_Cmd")
+#    field(FLNK, "$(P)$(R)ManCmdResp")
+#}
+#record(stringin, "$(P)$(R)ManCmdResp") {
+#    field(DESC, "Manual Command")
+#    field(DTYP, "EtherIP")
+#    field(SCAN, "1 second")
+#    field(INP,  "@$(PLCID) Solenoid_MPS.Man_Response")
+#}
+
+record(waveform, "$(P)$(R)ADCScales") {
+    field(DESC, "ADC scale factor array")
+    field(DTYP, "EtherIP")
+    field(NELM, "32")
+    field(FTVL, "DOUBLE")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.ADC_Values")
+}
+
+record(ao, "$(P)$(R)Slew") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.Slew_fromHMI S 1")
+    field(EGU,  "mA/s")
+    field(PREC, "0")
+}
+
+record(ao, "$(P)$(R)Iset") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.I_fromHMI S 1")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
+
+# Using SW limit, set DRVH for Iset
+record(ao, "$(P)$(R)Iset:DRVH") {
+    field(DOL,  "$(P)$(R)ImaxSW CPP")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)Iset.DRVH PP")
+    field(FLNK, "$(P)$(R)Iset:DRVL")
+}
+
+# Using SW limit, set DRVL for Iset
+record(calcout, "$(P)$(R)Iset:DRVL") {
+    field(INPA, "$(P)$(R)Iset:DRVH")
+    field(CALC, "-A")
+    field(OUT,  "$(P)$(R)Iset.DRVL")
+}
+
+# Alarms used for things like monitoring magnet over weekends
+record(ai, "$(P)$(R)I_MPS") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.I_fromMPS")
+    field(EGU,  "A")
+    field(PREC, "2")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
+record(ai, "$(P)$(R)I_ZFCT") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.I_fromZFCT")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)IsetRdbk") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.I_setting")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)ImaxHW") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.I_Capacity")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
+
+record(ai, "$(P)$(R)SlewRdbk") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.SlewRate")
+    field(EGU,  "mA/s")
+    field(PREC, "0")
+}
+
+record(ai, "$(P)$(R)ImaxSW") {
+    field(DESC, "User current limit")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Max_Current_Soft")
+    field(EGU,  "A")
+    field(PREC, "2")
+}
+
+record(mbbiDirect, "$(P)$(R)Status") {
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Status1_BOOLS[0]")
+}
+
+record(mbbiDirect, "$(P)$(R)Status2") {
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Status1_BOOLS[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)StatusTrips") {
+    field(DESC, "Status array, 1st trip")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Status1_1st_BOOLS[0]")
+}
+
+record(mbbiDirect, "$(P)$(R)StatusTrips2") {
+    field(DESC, "Status array, 1st trip")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Status1_1st_BOOLS[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Active_Flags[0]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags2") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Active_Flags[16]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags3") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Active_Flags[32]")
+}
+
+record(mbbiDirect, "$(P)$(R)ActiveFlags4") {
+    field(DESC, "Flags array")
+    field(DTYP, "EtherIP")
+    field(NOBT, "16")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Active_Flags[48]")
+}
+
+record(bi, "$(P)$(R)CommError") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.CommError")
+    field(ZNAM, "OK")
+    field(ONAM, "ERROR")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
+}
+
+record(bo, "$(P)$(R)CommReset") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.Reset_sw S 1")
+}
+
+record(bi, "$(P)$(R)Mode") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.LocalFlag")
+    field(ZNAM, "REMOTE")
+    field(ZSV,  "NO_ALARM")
+    field(ONAM, "LOCAL")
+    field(OSV,  "MAJOR")
+}
+
+record(bo, "$(P)$(R)ModeSet") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.LocalRemote_SW S 1")
+    field(ZNAM, "Remote")
+    field(ONAM, "Local")
+}
+
+record(bi, "$(P)$(R)Polarity") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Polarity")
+    field(ZNAM, "NEGATIVE")
+    field(ONAM, "POSITIVE")
+}
+
+record(bi, "$(P)$(R)Direction") {
+    field(DESC, "Field Direction")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Polarity")
+    field(ZNAM, "CW")
+    field(ONAM, "CCW")
+}
+
+record(bo, "$(P)$(R)OnOffSet") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.Contactor_SW S 1")
+    field(ZNAM, "Turn Off")
+    field(ONAM, "Turn On")
+}
+
+record(bo, "$(P)$(R)IntlockReset") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) Solenoid_MPS.InterlockReset_SW S 1")
+}
+
+record(ai, "$(P)$(R)V") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.V_fromMPS")
+    field(EGU,  "V")
+    field(PREC, "2")
+}
+
+# 0=On, 1=Off - matches Danfysik logic...
+record(bi, "$(P)$(R)OnOff") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Solenoid_MPS.Main_Power_Status")
+    field(ZNAM, "ON")
+    field(ONAM, "OFF")
+}
+
+record(bo, "$(P)$(R)FastDump") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) EPICS_Fast_Dump_sw S 1")
+}
+
+# Tie pushbutton to .PROC
+record(ao, "$(P)$(R)StopRamp") {
+    field(DOL, "$(P)$(R)I_MPS")
+    field(OUT, "$(P)$(R)Iset PP")
+}
+
+#
+# Interlock Summations
+#
+record(calc, "$(P)$(R)IntlkFastDumpSum") {
+    field(DESC, "Fast Dump")
+    field(INPA, "$(P)$(R)LHe_Liquid_Level CP")
+    field(INPB, "$(P)$(R)VCL_Lead_T CP")
+    field(INPC, "$(P)$(R)Watchdog CP")
+    field(INPD, "$(P)$(R)Lead_Water_Flow CP")
+    field(INPE, "$(P)$(R)VT_Cable_Intlck CP")
+    field(INPF, "$(P)$(R)System_Cable_Intlck CP")
+    field(INPG, "$(P)$(R)QD_Sum1 CP")
+    field(INPH, "$(P)$(R)QD_Sum2 CP")
+    field(INPI, "$(P)$(R)QD_Sum3 CP")
+    field(INPJ, "$(P)$(R)PLC_Fast_Dump CP")
+    field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+}
+
+record(calc, "$(P)$(R)IntlkInternalSum") {
+    field(DESC, "MPS Internal")
+    field(INPA, "$(P)$(R)Status.B9 CP")
+    field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+}
+
+record(calc, "$(P)$(R)IntlkCtrlRampSum") {
+    field(DESC, "Controlled Ramp")
+    field(INPA, "$(P)$(R)Axial_Support_Interlock CP")
+    field(INPB, "$(P)$(R)DS_HB_SG_Interlock CP")
+    field(INPC, "$(P)$(R)US_HB_SG_Interlock CP")
+    field(INPD, "$(P)$(R)CCM_LoadCell_Interlock CP")
+    field(INPE, "$(P)$(R)VerticalSupport_Interlock CP")
+    field(INPF, "$(P)$(R)Soft_Quench_1st CP")
+    field(INPG, "$(P)$(R)Vacuum_Interlock CP")
+    field(INPH, "$(P)$(R)EPICS_Watchdog_Fail CP")
+    field(INPI, "$(P)$(R)Cryo_Interlock CP")
+    field(INPJ, "$(P)$(R)Soft_Overcurrent CP")
+    field(INPK, "$(P)$(R)FastDAQ_Comm_Error CP")
+    field(INPL, "$(P)$(R)IntlkCtrlRampSum2 CP")
+    field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+}
+
+record(calc, "$(P)$(R)IntlkCtrlRampSum2") {
+    field(DESC, "Controlled Ramp")
+    field(INPA, "$(P)$(R)Splice_Overtemp CP")
+    field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+}
+

@@ -541,6 +541,7 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
     case S_MCDZ: property = "MCDZ"; break;
     case S_SOT:  property = "SOT"; break;
     case S_PRD:  property = "PRD"; break;
+//    case S_VMAX: property = "HVL"; break;
     default: status = ERROR; break;
   }
 

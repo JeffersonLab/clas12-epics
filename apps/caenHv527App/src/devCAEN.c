@@ -437,6 +437,9 @@ static long init_ao(struct aoRecord  *pao)
       status = CAEN_GetProperty(chassis, slot, channel, "PRD", &value); 
  //printf("ttt value=%f\n",value);
 break;
+    case S_VMAX:
+      status = CAEN_GetProperty(chassis, slot, channel, "HVL", &value); break;
+
     default: status = ERROR; break;
   }
 
@@ -541,7 +544,7 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
     case S_MCDZ: property = "MCDZ"; break;
     case S_SOT:  property = "SOT"; break;
     case S_PRD:  property = "PRD"; break;
-//    case S_VMAX: property = "HVL"; break;
+    case S_VMAX: property = "HVL"; break;
     default: status = ERROR; break;
   }
 

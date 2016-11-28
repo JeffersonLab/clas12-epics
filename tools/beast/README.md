@@ -53,7 +53,12 @@ database and starts new one.
 
 To export current tree to file: 
 ```
-AlarmConfigTool -root <root> -export -file <outfile>
+AlarmConfigTool -root <root> -export -file <outfile> -data /dev/null
+```
+
+To delete an existing tree:
+```
+AlarmConfigTool -root <root> -delete / -data /dev/null
 ```
 
 ## Further Info

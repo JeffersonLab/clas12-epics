@@ -14,7 +14,7 @@ var CNT = 4;
 for (var i=0; i<ELM.length; i++) {
 	for (var n=1; n<=CNT; n++) {
 		var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-		lc.setPropertyValue("opi_file","/CLAS12_Share/apps/plcApp/datatype_straingage_row.opi");
+		lc.setPropertyValue("opi_file","datatype_straingage_row.opi");
 		lc.setPropertyValue("auto_size",true);
 		lc.setPropertyValue("zoom_to_fit",false);
 		lc.setPropertyValue("border_style",0);
@@ -32,7 +32,7 @@ ID  = ["B", "D", "F"];
 for (i=0; i<ELM.length; i++) {
 	for (n=5; n<=6; n++) {
 		var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-		lc.setPropertyValue("opi_file","/CLAS12_Share/apps/plcApp/datatype_straingage_row.opi");
+		lc.setPropertyValue("opi_file","datatype_straingage_row.opi");
 		lc.setPropertyValue("auto_size",true);
 		lc.setPropertyValue("zoom_to_fit",false);
 		lc.setPropertyValue("border_style",0);

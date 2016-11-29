@@ -14,7 +14,7 @@ var CNT = 4;
 for (var i=0; i<ELM.length; i++) {
 	for (var n=1; n<=CNT; n++) {
 		var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-		lc.setPropertyValue("opi_file","/CLAS12_Share/alarms/alarm_aiao_row.opi");
+		lc.setPropertyValue("opi_file","alarm_aiao_row.opi");
 		lc.setPropertyValue("auto_size",true);
 		lc.setPropertyValue("zoom_to_fit",false);
 		lc.setPropertyValue("border_style",0);
@@ -30,7 +30,7 @@ for (var i=0; i<ELM.length; i++) {
 }
 
 var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-lc.setPropertyValue("opi_file","/CLAS12_Share/alarms/alarm_aiao_row.opi");
+lc.setPropertyValue("opi_file","alarm_aiao_row.opi");
 lc.setPropertyValue("auto_size",true);
 lc.setPropertyValue("zoom_to_fit",false);
 lc.setPropertyValue("border_style",0);
@@ -43,7 +43,7 @@ lc.addMacro("PV", PV_NAME);
 widget.addChildToBottom(lc);
 
 var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-lc.setPropertyValue("opi_file","/CLAS12_Share/alarms/alarm_aiao_row.opi");
+lc.setPropertyValue("opi_file","alarm_aiao_row.opi");
 lc.setPropertyValue("auto_size",true);
 lc.setPropertyValue("zoom_to_fit",false);
 lc.setPropertyValue("border_style",0);

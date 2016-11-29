@@ -2,7 +2,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 function createAlarmRow(desc, pv_name) {
 	var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-	lc.setPropertyValue("opi_file","/CLAS12_Share/alarms/alarm_aiao_row.opi");
+	lc.setPropertyValue("opi_file","../../alarms/alarm_aiao_row.opi");
 	lc.setPropertyValue("auto_size",true);
 	lc.setPropertyValue("zoom_to_fit",false);
 	lc.setPropertyValue("border_style",0);

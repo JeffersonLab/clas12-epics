@@ -10,6 +10,9 @@ file "db/torus_ai_generic.db" {
     #
     # Cryo Can
     #
+    { PLC_SOL, B_SOL:, LHe:, FI8621A_IN, SLPM,      2, "LHe Liquid Level" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621B_IN, SLPM,      2, "LHe Liquid Level" }
+    #
     { PLC_SOL, B_SOL:, LHe:, LL8620DP,    "%",      2, "LHe Liquid Level" }
     { PLC_SOL, B_SOL:, LHe:, LL8620SC,    "%",      2, "LHe Liquid Level Probe" }
     { PLC_SOL, B_SOL:, LHe:, LL8670DP,    "%",      2, "LHe Liquid Level" }
@@ -18,8 +21,10 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, PT8620,     atma,      2, "LHe Tank Pressure" }
     { PLC_SOL, B_SOL:, LHe:, PT8670,     atma,      2, "Solenoid Pressure" }
     { PLC_SOL, B_SOL:, LHe:, PT8675,     atma,      2, "LHe RTN Line Pressure" }
+    { PLC_SOL, B_SOL:, LHe:, PT8675A,    atma,      2, "LHe RTN Line Pressure" }
     { PLC_SOL, B_SOL:, LHe:, PT8677,     atma,      2, "Inlet to Guard Vacuum" }
     #
+    { PLC_SOL, B_SOL:, LHe:, TP8611,        K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8676A,       K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8676AR,      K,      2, "PT100 - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TP8676B,       K,      2, "PT100" }
@@ -28,11 +33,14 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, TP8675R,       K,      2, "PT100 - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TP8677,        K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8677R,       K,      2, "PT100 - redundant" }
+    { PLC_SOL, B_SOL:, LHe:, TP8620A,       K,      2, "PT100" }
+    { PLC_SOL, B_SOL:, LHe:, TP8620B,       K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8621B,       K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8621BR,      K,      2, "PT100 - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TP8621A,       K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8621AR,      K,      2, "PT100 - redundant" }
     #
+    { PLC_SOL, B_SOL:, LHe:, TR8610,        K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TR8670,        K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TP8670R,       K,      2, "Cernox - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TR8671,        K,      2, "Cernox" }
@@ -51,10 +59,12 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, TP8624BR,      K,      2, "Cernox - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TR8624A,       K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TP8624AR,      K,      2, "Cernox - redundant" }
+    { PLC_SOL, B_SOL:, LHe:, TR8674,        K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TR8674A,       K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TP8674AR,      K,      2, "Cernox - redundant" }
     { PLC_SOL, B_SOL:, LHe:, TR8674B,       K,      2, "Cernox" }
     { PLC_SOL, B_SOL:, LHe:, TP8674BR,      K,      2, "Cernox - redundant" }
+    { PLC_SOL, B_SOL:, LHe:, TP8675,        K,      2, "Cernox" }
     #
     # Temperatures On Magnet
     #
@@ -102,5 +112,42 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, TP86139HS_DS_CO_UBL,   K,  2, "Rad Shield Cone TS6" }
     { PLC_SOL, B_SOL:, LHe:, TP86140HS_DS_CO_LBL,   K,  2, "Rad Shield Cone TS7" }
     { PLC_SOL, B_SOL:, LHe:, TP86141HS_US_CO_LBL,   K,  2, "Rad Shield Cone TS8" }
+}
+
+file "db/torus_bi_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_SOL, B_SOL:, LHe:, SV8621,      Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8622,      Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8675BY,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8678CR,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8678DV,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+}
+
+file "db/torus_ao_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,        SLPM,  2, "FI8621A Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,        SLPM,  2, "FI8621B Setpoint" }
+}
+
+file "db/datatype_cpid.db" {
+    pattern{ PLCID, P, R, TAG }
+    { PLC_SOL, B_SOL:, LHe:, HTR8620 }
+    { PLC_SOL, B_SOL:, LHe:, HTR8672 }
+    { PLC_SOL, B_SOL:, LHe:, HTR8674 }
+    #
+    { PLC_SOL, B_SOL:, LHe:, EV8611CD }
+    { PLC_SOL, B_SOL:, LHe:, EV8611JT }
+    { PLC_SOL, B_SOL:, LHe:, EV8612 }
+    { PLC_SOL, B_SOL:, LHe:, EV8621A }
+    { PLC_SOL, B_SOL:, LHe:, EV8621B }
+    { PLC_SOL, B_SOL:, LHe:, EV8670BY }
+    #
+    { PLC_SOL, B_SOL:, LHe:, PV8621A }
+    { PLC_SOL, B_SOL:, LHe:, PV8621B }
+    #
+#    { PLC_SOL, B_SOL:, LHe:, SV8621 }
+#    { PLC_SOL, B_SOL:, LHe:, SV8622 }
+#    { PLC_SOL, B_SOL:, LHe:, SV8675BY }
+#    { PLC_SOL, B_SOL:, LHe:, SV8678CR }
 }
 

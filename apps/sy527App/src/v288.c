@@ -36,7 +36,11 @@ IMPORT  STATUS sysBusToLocalAdrs(int, char *, char **);
 #define MEK (UINT16)1
 
 /* how many times loop before give up */
-#define TIMEOUT 1111
+//#define TIMEOUT 1111
+
+//NAB:
+//#define TIMEOUT 11111
+#define TIMEOUT 5111
 
 #define RESET_ERR 101
 #define WAIT_ERROR 102
@@ -103,10 +107,11 @@ v288Transmit(UINT32 addr, UINT32 offset, UINT16 vmedat, int spas)
     q = vmeRead16(statreg);
     i++;
   }
-  if(i>=TIMEOUT) printf("v288Transmit: error: q=0x%08x, i=%d\n",q,i);
+  if(i>TIMEOUT) printf("v288Transmit: error: q=0x%08x, i=%d\n",q,i);
   /*else printf("v288Transmit: info: q=0x%08x, i=%d\n",q,i);*/
 
-  return((i==TIMEOUT) ? TIMEOUT : OK);
+  //return((i==TIMEOUT) ? TIMEOUT : OK);
+  return((i>TIMEOUT) ? TIMEOUT : OK);
 }
 
 /*---------------------------------------------------------*/
@@ -135,6 +140,8 @@ v288Wait(UINT32 addr, int delay)
     }
 #ifndef VXWORKS
 	usleep(1);
+  // NAB:
+	//usleep(100);
 #endif
     i++;
   }
@@ -161,7 +168,8 @@ v288Reset(UINT32 addr)
 
   /*printf("v288Reset reached\n");*/
 
-  // NAB:  is this 11 iterations optimized / appropriate?
+  // NAB:  Is this 11 iterations optimized / appropriate?
+  //       Why is there no delay in this loop?
 
   while(q!=QQ && i<=11)
   {
@@ -172,12 +180,27 @@ v288Reset(UINT32 addr)
     /*printf("q=0x%08x\n",q);*/
     i++;
   }
-  if(i>11) printf("v288Reset: error: q=0x%08x, i=%d\n",q,i);
+
+  //if(i>11) printf("v288Reset: error: q=0x%08x, i=%d\n",q,i);
   /*else printf("v288Reset: info: q=0x%08x, i=%d\n",q,i);*/
 
-//  return((i==11) ? 11 : OK);
+  //return((i==11) ? 11 : OK);
+
   // NAB:
-  return i;
+  //return((i>11) ? i : OK);
+  //return i;
+  
+  if(i>11)
+  {
+    printf("v288Reset: ERROR: q=0x%08x, i=%d\n",q,i);
+    return i;
+  }
+  else
+  {
+    printf("v288Reset: INFO: q=0x%08x, i=%d\n",q,i);
+    return OK;
+  }
+
 }
 
 
@@ -286,7 +309,7 @@ error:
   // NAB:
   if (v288Reset(addr))
   {
-    printf("v288Send:  v288Reset error on %u / %u\n",addr,crate);
+    printf("v288Send:  v288Reset ERROR on %u / %u\n",addr,crate);
   }
 noerror:
   return OK; /// my:
@@ -594,6 +617,8 @@ CAENHVGetCrateMap(const char *SystemName, unsigned short *NrOfSlot,
   bitmap = buffer[0];
   /*printf("v288Get returns %d\n",tmp);*/
 
+  // NAB:  how much time is being wasted scanning slots without boards?
+
   *NrOfSlot = 10; /* sy527 has 10 slots */
   /*printf("\nCrate bitmap 0x%04x, NrOfSlot=%d\n\n",bitmap,*NrOfSlot);*/
 
@@ -679,6 +704,8 @@ CAENHVGetCrateMap(const char *SystemName, unsigned short *NrOfSlot,
     sy527[id].scalev[i] = paw_10[Vdec];
     sy527[id].scalei[i] = paw_10[Idec];
 
+    //printf("Scale Factors:  I=%.0f V=%.0f\n",sy527[id].scalei[i],sy527[id].scalev[i]);
+
     /*
     printf("Vmax=%d V\n",Vmax);
     printf("Imax=%d %s\n",Imax,Iunits);
@@ -733,6 +760,7 @@ CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
     /* hack to speed things up: read hardware ONLY if 'V0Set' is requested;
        we assume that parameters are requested in the same order starting from 'V0Set' */
     if( !strcmp(ParName,"V0Set") )
+    //if( 1 )
     {
       value[0] = (slot<<8) + ChList[ich];
 
@@ -849,8 +877,19 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   float *fval = ParValue;
   int *ival = ParValue;
 
-  // NAB:  120 ms sleep, this can't be good:
-  usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
+  // NAB:  120 ms sleep, this can't be good?
+  //usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
+
+  // NAB: try this instead:
+  //usleep(12000);
+  usleep(1200);
+  //usleep(120);
+  //usleep(12);
+
+  // NAB:  ^ that is a critical parameter
+  // too small and writes are missed, too large and unnecessarily block the scan thread
+  // i haven't figured out how writes can be missed, regardless the value
+
 
   GET_SYSTEM_ID(SystemName);
   /*printf("CAENHVSetChParam reached\n");*/

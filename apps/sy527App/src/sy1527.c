@@ -220,6 +220,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, lParValList);
 //if(!strcmp(ParName,"RUp"))printf("RUp l %d\n", lParValList);
     }
+    
 ///-------------- simulator -------
 /**
 FILE *fps=fopen("/home/clasioc/flags","r");
@@ -311,15 +312,24 @@ fclose(fps);
       {
         for(i=0; i<ChNum; i++)
         {
+          // NAB: can we lock this low?
+          LOCK_MAINFRAME(id);
+
           Measure[id].board[board].channel[i].fval[ipar] = fParValList[i];
           /*printf("Slot: %2d  Ch: %3d  %s: %10.2f\n", Slot, ChList[i],
             ParName, fParValList[i]);*/
+          
+          // NAB: can we lock this low?
+          UNLOCK_MAINFRAME(id);
         }
       }
       else
       {
         for(i=0; i<ChNum; i++)   
         {
+          // NAB: can we lock this low? 
+          LOCK_MAINFRAME(id);
+          
           Measure[id].board[board].channel[i].lval[ipar] = lParValList[i];
           if(ipar==Status){
           /// my: smi: accumulates all channels attuses into board status
@@ -328,6 +338,9 @@ fclose(fps);
           }
           /*printf("Slot: %2d  Ch: %3d  %s: %x\n", Slot, ChList[i],
             ParName, lParValList[i]);*/ 
+          
+          // NAB: can we lock this low?
+          UNLOCK_MAINFRAME(id);
         }
       }
     }
@@ -492,6 +505,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
     tipo = Demand[id].board[board].partypes[ipar];
 
 
+    //fprintf(stderr,"sy1527SetBoard:  %d %d %s\n",id,board,ParName);
 
     /* will be good to do it this way, but is does not work
     if(tipo == PARAM_TYPE_NUMERIC)
@@ -526,6 +540,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
     {
       if(Demand[id].board[board].channel[Ch].setflag[ipar] == 1)
       {
+        //fprintf(stderr,"sy1527SetBoard:  %d\n",Ch);
         if(tipo == PARAM_TYPE_NUMERIC)
         {
           fParVal = Demand[id].board[board].channel[Ch].fval[ipar];
@@ -919,25 +934,27 @@ sy1527MainframeThread(void *arg)
 {
   int id, i, ret, status;
 
-//printf("+++++++++++++++++++++++++starts 00\n");
   id=((THREAD *)arg)->threadid;
   printf("[%2d] starts thread +++ ++\n",id);
 
   while(1)
   {
-//printf("+++++++++++++++++++++++++starts 0\n");
     sleep(1);
-//printf("+++++++++++++++++++++++++starts 1\n");
-    LOCK_MAINFRAME(id);
-//printf("+++++++++++++++++++++++++starts 2\n");
+
+    // NAB:  can we do this at a lower level?
+    //LOCK_MAINFRAME(id);
+    
     if(force_exit[id])
     {
-      pthread_mutex_unlock(&mainframe_mutex[id]);
+      //pthread_mutex_unlock(&mainframe_mutex[id]);
       break;
     }
 
     /***** talk to mainframe here *****/
 
+    // NAB:  try it here (separately for write and read queues):
+    LOCK_MAINFRAME(id);
+    
     /* sets all existing boards in mainframe 'id' with 'setflag' */
     if(Demand[id].setflag == 1)
     {
@@ -948,31 +965,35 @@ sy1527MainframeThread(void *arg)
         {
           if(Demand[id].board[i].setflag == 1)
           {
-            printf("[%2d] sets board %d\n",id,i); // my:
+            printf("[%2d] sets board %d\n",id,i);
+
             ret = sy1527SetBoard(id,i);
             if(ret == CAENHV_OK) Demand[id].board[i].setflag = 0;
             else                 status |= CAENHV_SYSERR;
+            printf("[%2d] DONE sets board %d\n",id,i);
           }
         }
       }
       if(status == CAENHV_OK) Demand[id].setflag = 0;
     }
-//printf("+++++++++++++++++++++++++starts 3\n");
+    // NAB: try it here:
+    UNLOCK_MAINFRAME(id);
+    
     /* gets all existing boards in mainframe 'id' */
     for(i=0; i<Measure[id].nslots; i++)
     {
-      //      printf("[%2d] gets board %d nslots=%d\n",id,i,Measure[id].nslots); // my:
       /* measure all active boards */
       if(Measure[id].board[i].nchannels > 0)
       {
-        /*printf("[%2d] reads out board %d\n",id,i);*/
+        // NAB:  move lock into here:
         ret = sy1527GetBoard(id,i);
       }
     }
     /**********************************/
 
-    pthread_mutex_unlock(&mainframe_mutex[id]);
-//printf("+++++++++++++++++++++++++starts  %d\n",id);
+    // NAB:  can we do this at a lower level?
+    //pthread_mutex_unlock(&mainframe_mutex[id]);
+
     for(i=0; i<nmainframes; i++){
      if(mainframes[i]==id)is_mainframe_read[i]=1;
     }
@@ -1141,6 +1162,9 @@ sy1527Stop(unsigned id)
 {
   char name[MAX_CAEN_NAME];
   int i, j, ret;
+
+  // NAB:  shouldn't we do this? :
+  // UNLOCK_MAINFRAME(id);
 
   /* lock global mutex to prevent other mainframes to be stoped
      until we are done with this one */

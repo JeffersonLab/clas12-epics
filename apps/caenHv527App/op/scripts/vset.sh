@@ -1,9 +1,10 @@
 #!/bin/bash
 
-sector=$1
-region=$2
-layer=$3
-voltage=$4
+suffix=$1
+sector=$2
+region=$3
+layer=$4
+voltage=$5
 
 for ss in 1 2 3 4 5 6
 do
@@ -27,11 +28,9 @@ do
 
       for ww in 01-08 09-16 17-24 25-32 33-48 49-64 65-80 81-112
       do
-        caput -w 5 B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_S${ww}:vset $voltage
-        caput -w 5 B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_F${ww}:vset $voltage
-        #caget B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_S${ww}:${voltage}
-        #caget B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_F${ww}:${voltage}
-        sleep 1
+        caput -w 5 B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_S${ww}:$suffix $voltage
+        caput -w 5 B_DET_DC_HV_SEC${ss}_R${rr}_SL${ll}_F${ww}:$suffix $voltage
+        #sleep 1
       done
       #for ww in 01-32 33-112
       #do

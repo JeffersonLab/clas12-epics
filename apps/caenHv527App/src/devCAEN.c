@@ -146,6 +146,9 @@ static long init_bo(struct boRecord  *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+  // Using card<0 for group output operations.  Do not initialize.
+  if (pvmeio->card < 0) return 0;
+
   block_until_fraimworks_read(); // my:
 
   // my: uncomment
@@ -154,7 +157,6 @@ static long init_bo(struct boRecord  *pbo)
 ///  printf( "Initialize : Slot is %d, Chassis is %d, Command is 0x%x, channel is %d \n", 
 ///		  slot, chassis, command, channel ) ;
   
-
   char tmp[81]; /// temporal
   int retv;
   int first_channel=channel, chs_number=command;
@@ -215,7 +217,8 @@ static long write_bo(struct boRecord *pbo)
      These data items are not used as card/signal, but are defined as
      {card 0-7: chassis, 8-15: slot;  signal 0-7:channel, 8-15:command}.
    */
-  struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value);  
+  struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value); 
+
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
 
@@ -224,6 +227,20 @@ static long write_bo(struct boRecord *pbo)
 
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
+ 
+  // temporary for testing groups:  (NAB)
+  if (pvmeio->card < 0)
+  {
+    short tmp = -pvmeio->card;
+    slot = (tmp)>>8;
+    chassis = (tmp) - ((slot)<<8) ;
+    unsigned group = channel;
+    printf("devCAEN.c:  write_bo:  GROUP:   %d %d %d %d %d\n",
+        pvmeio->card,pvmeio->signal,chassis,group,pbo->rval);
+    sy1527SetGroupOnOff(chassis, group, pbo->rval);
+    return 0;
+  }
+
 
   printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval); //my: 
 
@@ -404,6 +421,9 @@ static long init_ao(struct aoRecord  *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+  // Using card<0 for group output operations.  Do not initialize.
+  if (pvmeio->card < 0) return 0;
+
   /*
   printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
 		  (unsigned short)pvmeio->signal );
@@ -501,6 +521,19 @@ static long write_ao(struct aoRecord *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+  // temporary for testing groups: (NAB)
+  if (pvmeio->card < 0)
+  {
+    short tmp = -pvmeio->card;
+    slot = (tmp)>>8;
+    chassis = (tmp) - ((slot)<<8) ;
+    unsigned group = channel;
+    printf("devCAEN.c:  write_ao:  GROUP:   %d %d %d %d %d %.2f %s\n",
+        pvmeio->card,pvmeio->signal,chassis,group,pao->rval,pao->val,pao->name);
+    float dog=pao->val;
+    sy1527SetGroupParam(chassis, group, "V0Set",dog);
+    return 0;
+  }
 
   float value_f; /// my:
   if(ALLSET_THROUGH_ONE){

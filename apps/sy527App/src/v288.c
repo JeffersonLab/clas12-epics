@@ -1,4 +1,3 @@
-
 /* v288.c - provides interface emulating CAENHVWrapper */
 
 
@@ -54,7 +53,6 @@ static int nwords[96] = {
   1, 1,-1, 1, 1, 1, 1,-1,-1,-1,-1,-1,-1,-1,-1,-1, /*opcodes 0x40-0x4f (64-79)*/
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1,-1,-1,-1,-1  /*opcodes 0x50-0x5f (80-95)*/
 };
-
 
 /*******************************/
 /*******************************/
@@ -725,6 +723,294 @@ CAENHVGetCrateMap(const char *SystemName, unsigned short *NrOfSlot,
   return(CAENHV_OK);
 }
 
+
+#define V288SENDANDGETBIG \
+    if(pthread_mutex_lock(&v288_mutex)<0) perror("pthread_mutex_lock");\
+    v288Send(addr, crate, code, value); \
+    tmp = v288Get(addr, 2048, buffer); \
+    if(pthread_mutex_unlock(&v288_mutex)<0) perror("pthread_mutex_unlock")
+
+/*
+   CAENHVGetGroupList
+
+   input:
+      group - group number
+            - 0 is all channels in mainframe
+            - doc says only 16 groups are allowed (0-15)
+
+   output:
+      slot - array of slot numbers
+      chan - array of channel numbers
+
+   return value:
+      number of channels in the group
+ */
+int
+CAENHVGetGroupList(
+    const char* SystemName, ushort group,
+    int *slot, int* chan)
+{
+  const int wpc=2;
+  int tmp,jj,id=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[2048];
+ 
+  GET_SYSTEM_ID(SystemName);
+  
+  int nchan=0;
+  value[0] = group;
+
+  // Read channel list:
+  code = 0x40;
+  V288SENDANDGETBIG;
+  for (jj=0; jj<tmp; jj++)
+  {
+    // should this be a break?
+    if (buffer[jj] == 0xFFFF) continue;
+
+    // the first 6 words are group name, ignore them:
+    if (jj<6) continue;
+   
+    // word pairs:
+    //  - first is slot/channel
+    //  - second is on/off priority for group operations, ignore it
+    //      - 0x0101 by default for group-0
+    //      - two bytes are on and off priorities
+    if (jj%wpc==0)
+    {
+      slot[nchan] = buffer[jj] >> 8;
+      chan[nchan] = buffer[jj] & 0xFF;
+      nchan++;
+    }
+  }
+  return nchan;
+}
+
+int
+CAENHVGetGroupFast(
+    const char* SystemName, ushort group,
+    float* vmon, float* imon, float* smax, int* stat,
+    float* vset, float* iset)
+{
+  int wpc; // words per channel
+  int tmp,jj,id=0,nchan=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[2048];
+  GET_SYSTEM_ID(SystemName);
+  value[0] = group;
+  
+  // Read IMON, VMON, and STAT:
+  code = 0x41;
+  wpc = 5;
+  V288SENDANDGETBIG;
+  nchan = tmp/wpc;
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    vmon[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+    smax[jj/wpc] = buffer[jj+2];
+    imon[jj/wpc] = buffer[jj+3];
+    stat[jj/wpc] = buffer[jj+4];
+  }
+
+  // Read V0SET and I0SET:
+  code = 0x43;
+  wpc = 3;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  V0SET/I0SET:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    //ss = slot[jj/wpc];
+    vset[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+    iset[jj/wpc] = buffer[jj+2];
+    //vset[jj/wpc] /= (float)sy527[id].scalev[ss];
+    //iset[jj/wpc] /= (float)sy527[id].scalei[ss];
+  }
+  return nchan;
+}
+
+int
+CAENHVGetGroupSlow(
+    const char* SystemName, ushort group,
+    float* vmax, float* trip, float* rup, float* rdn,
+    int* flag)
+{
+  int wpc; // words per channel
+  int tmp,jj,id=0,nchan=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[2048];
+  
+  GET_SYSTEM_ID(SystemName);
+
+  value[0] = group;
+
+  // Read VMAX, TRIP, and FLAG:
+  code = 0x45;
+  wpc = 3;
+  V288SENDANDGETBIG;
+  nchan = tmp/wpc;
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    vmax[jj/wpc] = buffer[jj];
+    trip[jj/wpc] = buffer[jj+1];
+    flag[jj/wpc] = buffer[jj+2];
+  }
+
+  // Read RAMPUP and RAMPDN:
+  code = 0x46;
+  wpc = 2;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  RUP/RDN:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    rup[jj/wpc] = buffer[jj];
+    rdn[jj/wpc] = buffer[jj+1];
+  }
+
+  return nchan;
+}
+
+/*
+   CAENHVGetGroupParam
+
+   input:
+      group - group number
+            - 0 is all channels in mainframe
+            - doc says only 16 groups are allowed (0-15)
+
+   output:
+      many
+
+   return value:
+      number of channels in the group
+ */
+int
+CAENHVGetGroupParam(
+    const char* SystemName, ushort group,
+    int* slot, int* chan,
+    float* vmon, float* imon,
+    float* vset, float* iset,
+    float* vmax, float* smax,
+    float* trip, float* rup, float* rdn,
+    int* flag, int* stat)
+{
+  int wpc; // words per channel
+  int tmp,ss,jj,id=0,nchan=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[2048];
+  
+  GET_SYSTEM_ID(SystemName);
+
+  value[0] = group;
+
+  // Read channel list:
+  code = 0x40;
+  wpc = 2;
+  V288SENDANDGETBIG;
+  for (jj=0; jj<tmp; jj++)
+  {
+    // should this be a break?
+    if (buffer[jj] == 0xFFFF) continue;
+
+    // the first 6 words are group name, ignore them:
+    if (jj<6) continue;
+   
+    // word pairs:
+    //  - first is slot/channel
+    //  - second is on/off priority for group operations, ignore it
+    //      - 0x0101 by default for group-0
+    //      - two bytes are on and off priorities
+    if (jj%wpc==0)
+    {
+      slot[nchan] = buffer[jj] >> 8;
+      chan[nchan] = buffer[jj] & 0xFF;
+      nchan++;
+    }
+  }
+
+  if (nchan > MAX_SLOT*MAX_CHAN) 
+  {
+    printf("CAENHVGetGroupParam:  #CHAN ERROR:  %d\n",nchan);
+    return 0;
+  }
+
+  // Read V0SET and I0SET:
+  code = 0x43;
+  wpc = 3;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  V0SET/I0SET:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    ss = slot[jj/wpc];
+    vset[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+    iset[jj/wpc] = buffer[jj+2];
+    vset[jj/wpc] /= (float)sy527[id].scalev[ss];
+    iset[jj/wpc] /= (float)sy527[id].scalei[ss];
+  }
+
+  // Read VMAX, TRIP, and FLAG:
+  code = 0x45;
+  wpc = 3;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  VMAX/TRIP/FLAG:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    vmax[jj/wpc] = buffer[jj];
+    trip[jj/wpc] = buffer[jj+1];
+    flag[jj/wpc] = buffer[jj+2];
+  }
+
+  // Read RAMPUP and RAMPDN:
+  code = 0x46;
+  wpc = 2;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  RUP/RDN:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    rup[jj/wpc] = buffer[jj];
+    rdn[jj/wpc] = buffer[jj+1];
+  }
+
+  // Read VMON, IMON, VMAX, and STAT:
+  code = 0x41;
+  wpc = 5;
+  V288SENDANDGETBIG;
+  if (tmp/wpc != nchan)
+  {
+    printf("CAENHVGetGroupParam:  VMON/IMON/STAT:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    return 0;
+  }
+  for (jj=0; jj<tmp; jj+=wpc)
+  {
+    vmon[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+    smax[jj/wpc] = buffer[jj+2];
+    imon[jj/wpc] = buffer[jj+3];
+    stat[jj/wpc] = buffer[jj+4];
+  }
+
+  return nchan;
+}
+
+
 /*
    input:
       ChNum - the number of channels
@@ -867,6 +1153,98 @@ CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
 
 
 int
+CAENHVSetGroupOnOff(const char* SystemName, ushort group,ushort onoff)
+{
+  int tmp,id=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[2048];
+  
+  GET_SYSTEM_ID(SystemName);
+
+  value[0] = group;
+
+  if (onoff) code = 0x5A;
+  else       code = 0x5B;
+  V288SENDANDGETBIG;
+
+  return (CAENHV_OK);
+}
+
+int
+CAENHVSetGroupParam(const char* SystemName, ushort group, const char* ParName,float fval)
+{
+  int tmp,id=0;
+  UINT32 addr=0;
+  UINT16 code=0,crate=0,value[20],buffer[1024];
+
+  // groups must be of similar cards
+  // need to attach a slot number to the group
+  int slot = 0;
+
+  GET_SYSTEM_ID(SystemName);
+
+  value[0] = group;
+
+  if(!strcmp(ParName,"V0Set") )
+  {
+    code = 0x52;
+    value[1] = (int)(fval*sy527[id].scalev[slot]);
+    printf("CAENHVSetGroupParam:  %.2f %d\n",fval,value[1]);
+  }
+  else if( !strcmp(ParName,"I0Set") )
+  {
+    code = 0x54;
+    value[1] = (int)(fval*sy527[id].scalei[slot]);
+  }
+  else if( !strcmp(ParName,"V1Set") )
+  {
+    code = 0x53;
+    value[1] = (int)(fval*sy527[id].scalev[slot]);
+  }
+  else if( !strcmp(ParName,"I1Set") )
+  {
+    code = 0x55;
+    value[1] = (int)(fval*sy527[id].scalei[slot]);
+  }
+  else if( !strcmp(ParName,"Rup") )
+  {
+    code = 0x57;
+    value[1] = (int)(fval);
+  }
+  else if( !strcmp(ParName,"Rdwn") )
+  {
+    code = 0x58;
+    value[1] = (int)(fval);
+  }
+  else if( !strcmp(ParName,"Trip") )
+  {
+    code = 0x59;
+    value[1] = (int)(fval);
+  }
+  else if( !strcmp(ParName,"SVMax") )
+  {
+    code = 0x56;
+    value[1] = (int)(fval);
+  }
+  else if ( !strcmp(ParName,"Pw"))
+  {
+    if ((int)fval) code = 0x5A; // ON
+    else           code = 0x5B; // OFF
+  }
+  else
+  {
+    printf("CAENHVSetGroupParam:  ERROR:  ParName:  %s\n",ParName);
+    return (CAENHV_SYSERR);
+  }
+
+  printf("CAENHVSetGroupParam:  0x%x %d %d\n",code,value[0],value[1]);
+
+  V288SENDANDGET;
+
+  return (CAENHV_OK);
+}
+
+int
 CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
                  ushort ChNum, const ushort *ChList, void *ParValue)
 {
@@ -881,8 +1259,8 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   //usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
 
   // NAB: try this instead:
-  //usleep(12000);
-  usleep(1200);
+  usleep(12000);
+  //usleep(1200);
   //usleep(120);
   //usleep(12);
 

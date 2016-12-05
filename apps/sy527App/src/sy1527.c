@@ -1,6 +1,8 @@
 
 /* sy1527.c - EPICS driver support for CAEN SY1527 HV mainframe */
 
+//#define GROUPOPERATIONS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +40,9 @@ int mainframes_disconnect[MAX_HVPS]; // my_n: indicate connect status
 static HV Demand[MAX_HVPS];
 HV Measure[MAX_HVPS];
 int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before reading by driver
+
+GROUPS MeasureGroups[MAX_HVPS];
+//static GROUPS DemandGroups[MAX_HVPS];
 
 // we're going to restart the connection if we hit this error too many times consecutively:
 static const int MAXCFEDOWNERR=100;
@@ -372,6 +377,246 @@ fclose(fps);
   return(CAENHV_OK);
 }
 
+// Maximum possible number of channels in a group.  Equivalent to maximum
+// number of channels in a mainframe, because groups cannot span multiple
+// mainframes.  The SY527 has 10 slots;  DC's 944 boards have 24 channels.
+#define MAXGRPCH 512
+
+int
+sy1527SetGroupOnOff(unsigned int id, unsigned int group, unsigned int onoff)
+{
+  char name[MAX_CAEN_NAME];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  CAENHVSetGroupOnOff(name,group,onoff);
+  return (CAENHV_OK);
+}
+
+int
+sy1527SetGroupParam(unsigned int id, unsigned int group, const char* ParName, float fval)
+{
+  char name[MAX_CAEN_NAME];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  printf("sy1527SetGroupParam:  %.2f\n",fval);
+  CAENHVSetGroupParam(name,group,ParName,fval);
+  return (CAENHV_OK);
+}
+
+int
+sy1527GetGroup(unsigned int id,unsigned int group)
+{
+  //printf("sy1527GetGroup:  %d %d\n",id,group);
+  
+  int nchan,ii;
+  char name[MAX_CAEN_NAME];
+  float rup[MAXGRPCH]={},rdn[MAXGRPCH]={};
+  float vset[MAXGRPCH]={},iset[MAXGRPCH]={},vmax[MAXGRPCH]={},trip[MAXGRPCH]={};
+  float vmon[MAXGRPCH]={},imon[MAXGRPCH]={},smax[MAXGRPCH]={};
+  int slot[MAXGRPCH]={},chan[MAXGRPCH]={},stat[MAXGRPCH],flag[MAXGRPCH]={};
+
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+
+  nchan = CAENHVGetGroupParam(
+      name,group,
+      slot,chan,
+      vmon,imon,
+      vset,iset,
+      vmax,smax,
+      trip,rup,rdn,
+      flag,stat);
+/*
+  if (nchan != MeasureGroups[id].group[group].nchannels)
+  {
+    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
+    return (CAENHV_SYSERR);
+  }
+*/
+
+  if (nchan<=0 || nchan>=MAXGRPCH)
+  {
+    time_t tnow;
+    char tbuff[26];
+    time(&tnow);
+    strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
+    printf("%s  sy1527GetGroup:  #CHAN ERROR:  %d\n",tbuff,nchan);
+    //printf("sy1527GetGroup:  #CHAN ERROR:  %d\n",nchan);
+    return (CAENHV_SYSERR); 
+  }
+
+  LOCK_MAINFRAME(id);
+
+/*
+  for (ii=0; ii<nchan; ii++)
+  {
+    int ss=MeasureGroups[id].group[group].slot[ii];
+    int cc=MeasureGroups[id].group[group].chan[ii];
+    Measure[id].board[ss].channel[cc].fval[V0Set]  = vset[ii];
+    Measure[id].board[ss].channel[cc].fval[I0Set]  = iset[ii];
+    Measure[id].board[ss].channel[cc].fval[VMon]   = vmon[ii];
+    Measure[id].board[ss].channel[cc].fval[IMon]   = imon[ii];
+    Measure[id].board[ss].channel[cc].fval[RUp]    = rup[ii];
+    Measure[id].board[ss].channel[cc].fval[RDWn]   = rdn[ii];
+    Measure[id].board[ss].channel[cc].fval[Trip]   = trip[ii];
+    //Measure[id].board[ss].channel[cc].fval[SVMax]  = smax[ii];
+    Measure[id].board[ss].channel[cc].fval[SVMax]  = vmax[ii];
+    Measure[id].board[ss].channel[cc].lval[Status] = stat[ii];
+    //Measure[id].board[ss].channel[cc].lval[Pw]     = 0;
+    //Measure[id].board[ss].channel[cc].lval[PrOn]   = 0;
+    //Measure[id].board[ss].channel[cc].lval[PrOff]  = 0;
+    //Measure[id].board[ss].channel[cc].lval[Pon]    = 0;
+    //Measure[id].board[ss].channel[cc].lval[Pdwn]   = 0;
+  }
+*/
+
+  for (ii=0; ii<nchan; ii++)
+  {
+    if (slot[ii]<0 || slot[ii]>=Measure[id].nslots)
+    {
+      printf("sy1527GetGroup:  SLOT ERROR:  %d>=%d\n",slot[ii],Measure[id].nslots);
+      continue;
+    }
+    if (chan[ii]<0 || chan[ii]>=Measure[id].board[slot[ii]].nchannels)
+    {
+      printf("sy1527GetGroup:  CHAN ERROR:  %d>=%d\n",chan[ii],Measure[id].board[slot[ii]].nchannels);
+      continue;
+    }
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[V0Set]  = vset[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[I0Set]  = iset[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[VMon]   = vmon[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[IMon]   = imon[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[RUp]    = rup[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[RDWn]   = rdn[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[Trip]   = trip[ii];
+    //Measure[id].board[slot[ii]].channel[chan[ii]].fval[SVMax]  = smax[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].fval[SVMax]  = vmax[ii];
+    Measure[id].board[slot[ii]].channel[chan[ii]].lval[Status] = stat[ii];
+    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pw]     = 0;
+    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[PrOn]   = 0;
+    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[PrOff]  = 0;
+    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pon]    = 0;
+    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pdwn]   = 0;
+  }
+    
+  UNLOCK_MAINFRAME(id);
+
+  return(CAENHV_OK);
+}
+
+  
+int
+sy1527GetGroupFast(unsigned int id,unsigned int group)
+{
+  int nchan,ii;
+  char name[MAX_CAEN_NAME];
+  float vset[MAXGRPCH]={},iset[MAXGRPCH]={};
+  float vmon[MAXGRPCH]={},imon[MAXGRPCH]={},smax[MAXGRPCH]={};
+  int stat[MAXGRPCH]={};
+
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+
+  nchan = CAENHVGetGroupFast(
+      name,group,
+      vmon,imon,smax,stat,
+      vset,iset);
+
+  if (nchan != MeasureGroups[id].group[group].nchannels)
+  {
+    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
+    return (CAENHV_SYSERR);
+  }
+
+  if (nchan<=0 || nchan>=MAXGRPCH)
+  {
+    time_t tnow;
+    char tbuff[26];
+    time(&tnow);
+    strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
+    printf("%s  sy1527GetGroup:  #CHAN ERROR:  %d\n",tbuff,nchan);
+    return (CAENHV_SYSERR); 
+  }
+
+  LOCK_MAINFRAME(id);
+
+  for (ii=0; ii<nchan; ii++)
+  {
+    int ss=MeasureGroups[id].group[group].slot[ii];
+    int cc=MeasureGroups[id].group[group].chan[ii];
+    Measure[id].board[ss].channel[cc].fval[V0Set]  = vset[ii];
+    Measure[id].board[ss].channel[cc].fval[I0Set]  = iset[ii];
+    Measure[id].board[ss].channel[cc].fval[VMon]   = vmon[ii];
+    Measure[id].board[ss].channel[cc].fval[IMon]   = imon[ii];
+    Measure[id].board[ss].channel[cc].lval[Status] = stat[ii];
+  }
+    
+  UNLOCK_MAINFRAME(id);
+
+  return(CAENHV_OK);
+}
+  
+int
+sy1527GetGroupSlow(unsigned int id,unsigned int group)
+{
+  int nchan,ii;
+  char name[MAX_CAEN_NAME];
+  float rup[MAXGRPCH]={},rdn[MAXGRPCH]={};
+  float vmax[MAXGRPCH]={},trip[MAXGRPCH]={};
+  int flag[MAXGRPCH]={};
+
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+
+  nchan = CAENHVGetGroupSlow(
+      name,group,
+      vmax,trip,rup,rdn,flag);
+
+  if (nchan != MeasureGroups[id].group[group].nchannels)
+  {
+    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
+    return (CAENHV_SYSERR);
+  }
+
+  if (nchan<=0 || nchan>=MAXGRPCH)
+  {
+    time_t tnow;
+    char tbuff[26];
+    time(&tnow);
+    strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
+    printf("%s  sy1527GetGroup:  #CHAN ERROR:  %d\n",tbuff,nchan);
+    //printf("sy1527GetGroup:  #CHAN ERROR:  %d\n",nchan);
+    return (CAENHV_SYSERR); 
+  }
+
+  LOCK_MAINFRAME(id);
+
+  for (ii=0; ii<nchan; ii++)
+  {
+    int ss=MeasureGroups[id].group[group].slot[ii];
+    int cc=MeasureGroups[id].group[group].chan[ii];
+    Measure[id].board[ss].channel[cc].fval[RUp]    = rup[ii];
+    Measure[id].board[ss].channel[cc].fval[RDWn]   = rdn[ii];
+    Measure[id].board[ss].channel[cc].fval[Trip]   = trip[ii];
+    //Measure[id].board[ss].channel[cc].fval[SVMax]  = smax[ii];
+    Measure[id].board[ss].channel[cc].fval[SVMax]  = vmax[ii];
+    //Measure[id].board[ss].channel[cc].lval[Pw]     = 0;
+    //Measure[id].board[ss].channel[cc].lval[PrOn]   = 0;
+    //Measure[id].board[ss].channel[cc].lval[PrOff]  = 0;
+    //Measure[id].board[ss].channel[cc].lval[Pon]    = 0;
+    //Measure[id].board[ss].channel[cc].lval[Pdwn]   = 0;
+  }
+
+  UNLOCK_MAINFRAME(id);
+
+  return(CAENHV_OK);
+}
+
 #ifdef USE_SMI
 /// my_n_smi ======================================================================================
 int sy1527CrateSmiInit ///  my: smi  my_n_smi
@@ -631,7 +876,6 @@ sy1527GetMap(unsigned int id)
     // }
     */
 
-
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
                           &FmwRelMinList, &FmwRelMaxList );
@@ -757,10 +1001,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -784,10 +1028,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -811,10 +1055,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -842,10 +1086,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -870,9 +1114,57 @@ sy1527GetMap(unsigned int id)
     free(FmwRelMinList);
     free(FmwRelMaxList);
     free(NrOfCh);
-
-
     // free(ParNameList); // my:
+
+#ifdef GROUPOPERATIONS
+    // get channel list for groups:
+    printf("\n\n########################################\n");
+    for (j=0; j<MAX_GROUP; j++)
+    {
+      MeasureGroups[id].group[j].nchannels=0;
+      int slot[MAX_SLOT*MAX_CHAN]={};
+      int chan[MAX_SLOT*MAX_CHAN]={};
+      ret = CAENHVGetGroupList(name,j,slot,chan);
+      if (ret>=0 && ret<=MAX_SLOT*MAX_CHAN)
+      {
+        MeasureGroups[id].group[j].nchannels = ret;
+        for (i=0; i<ret; i++)
+        {
+          if (chan[i]<0 || chan[i]>=MAX_CHAN)
+          {
+            MeasureGroups[id].group[j].nchannels = 0;
+            printf("Error Reading Group-%d List\n",j);
+            return(CAENHV_SYSERR);
+          }
+          if (slot[i]<0 || slot[i]>=MAX_SLOT)
+          {
+            MeasureGroups[id].group[j].nchannels = 0;
+            printf("Error Reading Group-%d List\n",j);
+            return(CAENHV_SYSERR);
+          }
+          MeasureGroups[id].group[j].slot[i] = slot[i];
+          MeasureGroups[id].group[j].chan[i] = chan[i];
+        }
+      }
+      else
+      {
+        printf("Error Reading Group-%d List\n",j);
+        return(CAENHV_SYSERR);
+      }
+    }
+    for (j=0; j<MAX_GROUP; j++)
+    {
+      printf("# Mainframe %d:  Found Group %2d with %3d Channels\n",
+          id,j,MeasureGroups[id].group[j].nchannels);
+      //for (i=0; i<MeasureGroups[id].group[j].nchannels; i++)
+      //{
+      //  printf("# group=%2d   slot=%2d   chan=%2d\n",j,
+      //      MeasurMeasureeGroups[id].group[j].slot[i],
+      //      Groups[id].group[j].chan[i]);
+      //}
+    }
+    printf("########################################\n\n\n");
+#endif
 
   }
 
@@ -934,6 +1226,8 @@ sy1527MainframeThread(void *arg)
 {
   int id, i, ret, status;
 
+  int nIterSinceLastSlowGet=0;
+
   id=((THREAD *)arg)->threadid;
   printf("[%2d] starts thread +++ ++\n",id);
 
@@ -954,7 +1248,7 @@ sy1527MainframeThread(void *arg)
 
     // NAB:  try it here (separately for write and read queues):
     LOCK_MAINFRAME(id);
-    
+
     /* sets all existing boards in mainframe 'id' with 'setflag' */
     if(Demand[id].setflag == 1)
     {
@@ -978,7 +1272,18 @@ sy1527MainframeThread(void *arg)
     }
     // NAB: try it here:
     UNLOCK_MAINFRAME(id);
-    
+
+    clock_t diff, start = clock();
+#ifdef GROUPOPERATIONS
+    // read all channels in the mainframe 'id' (group=0 is all channels):
+    ret = sy1527GetGroup(id,0);
+    //ret = sy1527GetGroupFast(id,0);
+    //if (nIterSinceLastSlowGet++>10)
+    //{
+    //    if (sy1527GetGroupSlow(id,0) == CAENHV_OK)
+    //      nIterSinceLastSlowGet=0;
+    //}
+#else
     /* gets all existing boards in mainframe 'id' */
     for(i=0; i<Measure[id].nslots; i++)
     {
@@ -989,7 +1294,10 @@ sy1527MainframeThread(void *arg)
         ret = sy1527GetBoard(id,i);
       }
     }
-    /**********************************/
+#endif
+    diff = clock() - start;
+    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
+    printf("sy1527MainframeThread:  Read Time = %.0f ms\n",msec);
 
     // NAB:  can we do this at a lower level?
     //pthread_mutex_unlock(&mainframe_mutex[id]);
@@ -1240,6 +1548,8 @@ sy1527Stop(unsigned id)
 
 #define GET_LVALUE(prop_name_m, value_m) \
   value_m = Measure[id].board[board].channel[chan].lval[prop_name_m]
+
+
 //===================================================================================
 /* loop over all available channels and set them on or off */
 int
@@ -1249,26 +1559,16 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
 
   pthread_mutex_lock(&global_mutex);
 
- // check if it is active 
-
-//printf("hjhjhjhjhjhjhhjh nmainframes,id, mainframes[i] %d %d %d\n",nmainframes,id, mainframes[i]);
   for(i=0; i<nmainframes; i++)
   {
-    /*printf("-> check mainframe %d\n",i);*/
+    // check if it is active 
     if(mainframes[i] == id)
     {
-//printf("hjhjhjhjhjhjhhjh 2\n");
-      /*printf("-> mainframe %d has id=%d, so loop over %d boards\n",
-        i,id,Measure[id].nslots);*/
       /* loop over all channels in all boards and set it to 'on_off' */
-
       for(board=0; board<Measure[id].nslots; board++)
       {
-        /*printf("-> slot %d: nchannels=%d\n",
-          board,Measure[id].board[board].nchannels);*/
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
         {
-         /// printf("-> set channel %d to %d\n",chan, on_off); /// my:
           SET_LVALUE(Pw, on_off);
         }
       }
@@ -1289,17 +1589,10 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
 
   pthread_mutex_lock(&global_mutex);
 
- // check if it is active 
-
-//printf("hjhjhjhjhjhjhhjh nmainframes,id, mainframes[i] %d %d %d\n",nmainframes,id, mainframes[i]);
   for(i=0; i<nmainframes; i++)
   {
-    /*printf("-> check mainframe %d\n",i);*/
     if(mainframes[i] == id)
     {
-//printf("hjhjhjhjhjhjhhjh 2\n");
-      /*printf("-> mainframe %d has id=%d, so loop over %d boards\n",
-        i,id,Measure[id].nslots);*/
       /* loop over all channels in all boards and set it to 'on_off' */
 
       /// for(board=0; board < Measure[id].nslots; board++)

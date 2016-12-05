@@ -7,6 +7,7 @@
 #define MAX_SLOT  16
 #define MAX_CHAN  30
 #define MAX_PARAM 40
+#define MAX_GROUP 16
 /// my_n_smi:
 #define MAX_BOARDPARTS 24
 
@@ -91,6 +92,18 @@ int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
 
 int  CAENHVGetSysProp(const char *SystemName, const char *PropName, void *Result);
 
+int  CAENHVGetGroupParam(
+    const char* SystemName, ushort group,
+    int* slot, int* chan,
+    float* vmon, float* imon,
+    float* vset, float* iset,
+    float* vmax, float* smax,
+    float* trip, float* rup, float* rdn,
+    int* flag, int* stat);
+
+int  CAENHVSetGroupOnOff(const char* SystemName, ushort group, ushort onoff);
+int  CAENHVSetGroupParam(const char* SystemName, ushort group, const char* ParName, float fval);
+
 ///==============================================================================
 
 
@@ -110,6 +123,24 @@ typedef struct channel
   unsigned long lval[MAX_PARAM];
   int           setflag[MAX_PARAM]; /* if 1, need to write */
 } CHANNEL;
+
+typedef struct group
+{
+  int nchannels;
+  int slot[MAX_SLOT*MAX_CHAN];
+  int chan[MAX_SLOT*MAX_CHAN];
+//  char parnames[MAX_PARAM][MAX_CAEN_NAME];
+//  unsigned long partypes[MAX_PARAM];
+//  float fval[MAX_PARAM];
+//  unsigned long lval[MAX_PARAM];
+//  int setflag[MAX_PARAM];
+} GROUP;
+
+typedef struct groups
+{
+  int ngroups;
+  GROUP group[MAX_GROUP];
+} GROUPS;
 
 typedef struct board
 {
@@ -237,3 +268,8 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
+
+int
+sy1527SetGroupParam(unsigned int id, unsigned int group,
+    const char* ParName, float fval);
+

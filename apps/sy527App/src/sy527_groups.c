@@ -44,11 +44,6 @@ IMPORT  STATUS sysBusToLocalAdrs(int, char *, char **);
 #define MAX_V288GET 50
 
 
-static int nA944param = 16;
-static char A944param[MAX_PARAM][MAX_NAME] = {
-                "V0Set","I0Set","V1Set","I1Set","Rup","Rdwn","Trip","SVMax",
-                "VMon","IMon","Status","Pw","PrOn","PrOff","Pon","Pdwn"};
-
 #ifdef VXWORKS
 void
 v288test1()
@@ -57,16 +52,11 @@ int
 main(int argc,char** argv)
 #endif
 {
-  unsigned short NrOfSl, *SerNumList, *NrOfCh, ChList[MAX_CHAN];
+  unsigned short NrOfSl, *SerNumList, *NrOfCh;
   char *ModelList, *DescriptionList;
   unsigned char	*FmwRelMinList, *FmwRelMaxList;
   char name[MAX_NAME];
   int i, ret;
-  unsigned short Slot, ChNum;
-  float fParValList[MAX_CHAN];
-  unsigned long	lParValList[MAX_CHAN];
-  char ParName[MAX_NAME];
-  unsigned long retval;
 
   char caenetAddr[100]="sy527_0x100000_3";
 
@@ -125,21 +115,16 @@ if (argc>1)
 
   printf("\n-----------------------------------------------------------------\n");
   printf("\n      START GROUP STUFF                      \n");
-  printf("\n-----------------------------------------------------------------\n");
+  printf("\n-----------------------------------------------------------------\n\n");
 
+#define BUFSIZE 2048
 
   char* Arg=caenetAddr;
-  int group,ii,jj,id=0;
+  int group,ii,jj;
   char *ch1,*ch2;
   char arg1[256],arg2[256],arg3[256];
-  int addr,len;
+  int addr,len,res;
   unsigned long vmeaddr=0;
-  unsigned long vrate=0;
-
-  float V0SET[1024],I0SET[1024],VMAX[1024],TRIP[1024];
-  UINT16 NCHAN,ICHAN;
-  UINT16 SLOT[1024];
-  UINT16 CHAN[1024];
 
   ushort slot=0;
   ushort channel=0;
@@ -147,7 +132,7 @@ if (argc>1)
   UINT16 code;
   UINT16 crate=0;
   UINT16 value[20];
-  UINT16 buffer[1024];
+  UINT16 buffer[BUFSIZE];
  
   ch1 = (char *)Arg;
   ch2 = arg1;
@@ -168,25 +153,57 @@ if (argc>1)
   vmeBusToLocalAdrs(0x39,addr,(char**)&vmeaddr);
   crate = strtol(arg3,(char**)NULL,0);
 
-  code=2;
-  value[0] = (slot<<8)+channel;
-  v288Send(vmeaddr,crate,code,value);
-  len=v288Get(vmeaddr,1024,buffer);
+  float VSET[1024]={},ISET[1024]={},VMAX[1024]={},TRIP[1024]={};
+  float RUP[1024]={},RDN[1024]={},FLAG[1024]={},STAT[1024]={};
+  float VMON[1024]={},IMON[1024]={},SMAX[1024]={};
+  UINT16 NCHAN=0,SLOT[1024]={},CHAN[1024]={};
 
-  printf("%d\n",len);
-  for (ii=0; ii<len; ii++) printf("[%3d] %5d   0x%04x\n",ii,buffer[ii],buffer[ii]);
+/*
+  // add channel to group-1:
+  code = 0x50;
+  group = 1;
+  value[0] = group;
+  value[1] = 0x0000;
+  res = v288Send(vmeaddr,crate,code,value);
+  len = v288Get(vmeaddr,BUFSIZE,buffer);
+  value[0] = group;
+  value[1] = 0x0101;
+  res = v288Send(vmeaddr,crate,code,value);
+  len = v288Get(vmeaddr,BUFSIZE,buffer);
+*/
+/*
+  // set group-0 v0set:
+  code = 0x52;
+  value[0] = 0;
+  value[1] = 210; // <-- this is 10x voltage
+  res = v288Send(vmeaddr,crate,code,value);
+  len = v288Get(vmeaddr,BUFSIZE,buffer);
+*/
+/*
+  // set group-0 ON:
+  code = 0x5A;
+  value[0] = 0;
+  res = v288Send(vmeaddr,crate,code,value);
+  len = v288Get(vmeaddr,BUFSIZE,buffer);
+*/
+/*
+  // set group-0 OFF:
+  code = 0x5B;
+  value[0] = 0;
+  res = v288Send(vmeaddr,crate,code,value);
+  len = v288Get(vmeaddr,BUFSIZE,buffer);
+*/
 
-  NCHAN=0;
 
   // read group configurations
   code = 0x40;
   //for (ii=0; ii<16; ii++)
-  for (ii=0; ii<1; ii++)
+  for (ii=0; ii<16; ii++)
   {
     value[0] = ii;
-    v288Send(vmeaddr,crate,code,value);
-    len = v288Get(vmeaddr,1024,buffer);
-    //printf("%d %d\n",ii,len);
+    res = v288Send(vmeaddr,crate,code,value);
+    len = v288Get(vmeaddr,BUFSIZE,buffer);
+    printf("GROUP-%d:         %d %d\n",ii,len,(len-6)/2);
     for (jj=0; jj<len; jj++)
     {
 
@@ -198,9 +215,13 @@ if (argc>1)
         slot    = buffer[jj] >> 8;
         channel = buffer[jj] & 0xFF;
 
-        printf("group=%d  [%3d] %5d   0x%04x",ii,jj,buffer[jj],buffer[jj]);
-        printf("      slot=%d chan=%d pri=%d",slot,channel,buffer[jj+1]);
-        printf("\n");
+#define DEBUG 0
+        //if (DEBUG)
+        //{
+          printf("group=%d  [%3d] %5d   0x%04x",ii,jj,buffer[jj],buffer[jj]);
+          printf("      slot=%d chan=%d pri=%d",slot,channel,buffer[jj+1]);
+          printf("\n");
+        //}
 
         SLOT[NCHAN]=slot;
         CHAN[NCHAN]=channel;
@@ -210,89 +231,86 @@ if (argc>1)
     }
   }
 
-  // read group v0set and i0set:
-  group = 0;
-  value[0] = group;
-
-  code = 0x43;
-  ICHAN=0;
-  v288Send(vmeaddr,crate,code,value);
-  len = v288Get(vmeaddr,1024,buffer);
-  for (jj=0; jj<len; jj+=3)
+  // read group parameters
+  if (0)
   {
-    V0SET[ICHAN] = (float)((buffer[jj]<<16) + buffer[jj+1]);
-    I0SET[ICHAN] = buffer[jj+2];
-    V0SET[ICHAN] /= 10.;
-    I0SET[ICHAN] /= 100.;
-    printf("%d:   %d %d %d   %.2f %f\n",jj,buffer[jj],buffer[jj+1],buffer[jj+2],V0SET[ICHAN],I0SET[ICHAN]);
-    ICHAN++;
-  }
+    group = 0;
+    value[0] = group;
 
-  // read group vmax, trip, and flag;
-  code = 0x45;
-
-  // read group rup and rdn:
-  code = 0x46;
-
-  // read group statuses:
-  code=0x41;
-
-exit(0);
-
-
-  /* get params info 
-  ret = CAENHVGetChParamProp("TestSetup", 3, 1, "VMon", "Type", &retval);
-  printf("retval(VMon)=%d\n",retval);
-  ret = CAENHVGetChParamProp("TestSetup", 3, 1, "Status", "Type", &retval);
-  printf("retval(Status)=%d\n",retval);
-  ret = CAENHVGetChParamProp("TestSetup", 3, 1, "Pw", "Type", &retval);
-  printf("retval(Pw)=%d\n",retval);
-  */
-
-
-  ChNum = 24; /* # of channels */
-  for(i = 0; i<ChNum; i++)
-  {
-    ChList[i] = (unsigned short)i;
-  }
-
-
-  Slot = 0;
-  ChNum = 1;
-  for(i=0; i<nA944param; i++)
-  {
-    ret = CAENHVGetChParamProp("TestSetup", Slot, ChNum, A944param[i], "Type", &retval);
-    if(retval == PARAM_TYPE_NUMERIC)
+    // read group v0set and i0set:
+    code = 0x43;
+    res = v288Send(vmeaddr,crate,code,value);
+    len = v288Get(vmeaddr,BUFSIZE,buffer);
+    printf("VSET/ISET:       %d %d\n",len,len/3);
+    for (jj=0; jj<len; jj+=3)
     {
-      ret = CAENHVGetChParam("TestSetup", Slot, A944param[i], ChNum, ChList, fParValList);
-      printf("CAENHVGetChParam(float): %s = %7.3f\n",A944param[i],fParValList[0]);
+      VSET[jj/3] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+      ISET[jj/3] = buffer[jj+2];
+      VSET[jj/3] /= 10.;
+      ISET[jj/3] /= 100.;
+      if (DEBUG) printf("%d:   %d %d %d   %.2f %f\n",jj,buffer[jj],buffer[jj+1],buffer[jj+2],VSET[jj/3],ISET[jj/3]);
     }
-    else
+
+    // read group vmax, trip, and flag;
+    code = 0x45;
+    res = v288Send(vmeaddr,crate,code,value);
+    len = v288Get(vmeaddr,BUFSIZE,buffer);
+    printf("VMAX/TRIP/FLAG:  %d %d\n",len,len/3);
+    for (jj=0; jj<len; jj+=3)
     {
-      ret = CAENHVGetChParam("TestSetup", Slot, A944param[i], ChNum, ChList, lParValList);
-      printf("CAENHVGetChParam(int): %s = %ld\n",A944param[i],lParValList[0]);
+      VMAX[jj/3] = buffer[jj];
+      TRIP[jj/3] = buffer[jj+1];
+      FLAG[jj/3] = buffer[jj+2];
+      if (DEBUG) printf("%d:   %d %d %d   %.2f %f %f\n",jj,buffer[jj],buffer[jj+1],buffer[jj+2],VMAX[jj/3],TRIP[jj/3],FLAG[jj/3]);
+    }
+
+    // read group rup and rdn:
+    code = 0x46;
+    res = v288Send(vmeaddr,crate,code,value);
+    len = v288Get(vmeaddr,BUFSIZE,buffer);
+    printf("RUP/RDN:         %d %d\n",len,len/2);
+    for (jj=0; jj<len; jj+=2)
+    {
+      RUP[jj/2] = buffer[jj];
+      RDN[jj/2] = buffer[jj+1];
+      if (DEBUG) printf("%d:   %d %d   %f %f\n",jj,buffer[jj],buffer[jj+1],RUP[jj/2],RDN[jj/2]);
+    }
+
+    // read group channel status:
+    code = 0x41;
+    res = v288Send(vmeaddr,crate,code,value);
+    len = v288Get(vmeaddr,BUFSIZE,buffer);
+    printf("VMON/IMON/STAT:  %d %d\n",len,len/5);
+    for (jj=0; jj<len; jj+=5)
+    {
+      VMON[jj/5] = (float)((buffer[jj]<<16) + buffer[jj+1]);
+      SMAX[jj/5] = buffer[jj+2];
+      IMON[jj/5] = buffer[jj+3];
+      STAT[jj/5] = buffer[jj+4];
+      VMON[jj/5] /= 10;
+      IMON[jj/5] /= 100;
+      if (DEBUG) printf("%d:   %d %d %d %d %d  %.2f %f %f %f\n",jj,
+          buffer[jj],buffer[jj+1],buffer[jj+2],buffer[jj+3],buffer[jj+4],
+          VMON[jj/5],IMON[jj/5],SMAX[jj/5],STAT[jj/5]);
+    }
+
+
+    printf("\nGROUP-%d SUMMARY::::::::::::::::::::::::::::::\n\n",group);
+
+    // print all values by channel:
+    for (jj=0; jj<NCHAN; jj++)
+    {
+      printf("(%d,%d):  ",SLOT[jj],CHAN[jj]);
+      printf("(%.2f,%.0f,%.0f) ",VMON[jj],IMON[jj],STAT[jj]);
+      printf("(%.2f,%.2f,%.0f,%.0f,%.0f,%.0f) ",VSET[jj],ISET[jj],VMAX[jj],SMAX[jj],RUP[jj],RDN[jj]);
+      printf("\n");
     }
   }
 
 
-  strcpy(ParName,"SVMax");
-  Slot = 0;
-  ChNum = 1;
-  fParValList[0] = 1600.0;
-  ret = CAENHVSetChParam("TestSetup", Slot, ParName, ChNum, ChList, fParValList);
+  exit(0);
 
-  /*
-  strcpy(ParName,"Pon");
-  ChNum = 1;
-  lParValList[0] = 1;
-  ret = CAENHVSetChParam("TestSetup", Slot, ParName, ChNum, ChList, lParValList);
 
-  strcpy(ParName,"Pw");
-  ChNum = 1;
-  lParValList[0] = 1;
-  ret = CAENHVSetChParam("TestSetup", Slot, ParName, ChNum, ChList, lParValList);
-  */
-  return 0;
 }
 
 #else /* vxWorks or Linux */

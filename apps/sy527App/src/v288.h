@@ -42,6 +42,18 @@ int  CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
 int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
                       const char *ParName, const char *PropName, void *retval);
 
+int  CAENHVGetGroupParam(
+    const char* SystemName, ushort group,
+    int* slot, int* chan,
+    float* vmon, float* imon,
+    float* vset, float* iset,
+    float* vmax, float* smax,
+    float* trip, float* rup, float* rdn,
+    int* flag, int* stat);
+
+
+int CAENHVSetGroupOnOff(const char* SystemName, ushort group,ushort onoff);
+
 ///=================== my: ========================================
 //unsigned char vmeRead8(volatile unsigned char *addr);
 //void vmeWrite8(volatile unsigned char *addr, unsigned char val);

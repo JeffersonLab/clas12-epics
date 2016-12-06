@@ -1,0 +1,32 @@
+# % macro, PORT, Asyn port name
+# % macro, P   , prefix eg. B_DET_FT_MM_FEU
+# This one for debugging using asyns
+# run something like this:
+#
+#medm -x -macro P=B_DET_FTH_DIVIDER,R=:asyn /home/epics/clas/clas12/R3.14.12.3/synApps_5_5/support/asyn-4-13/medm/asynRecord.adl
+#
+#In the GUI select the "more" menu : asynOctet Interface option
+#This pops up a GUI where we can write and read strings directly to the device.
+#  
+#record(asyn,"$(P):asyn"){
+#     field(DTYP,"asynRecordDevice")
+#     field(PORT,"$(PORT)")
+#}
+
+ 
+#Basic configuration commands
+record(stringout, "$(P):COMMAND") {
+   field(DTYP, "stream")
+   field(OUT, "@mmfeu.proto sendCommand($(P)) $(PORT)")
+}
+
+record(stringin, "$(P):RESPONSE") {
+}
+   
+record(stringin, "$(P):NAME") {
+   field(DESC, "IP for $(P)")
+   field(DTYP, "stream")
+   field(PINI, "YES")
+   field(INP, "@mmfeu.proto getName $(PORT)")
+}
+ 

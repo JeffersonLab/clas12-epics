@@ -1,0 +1,33 @@
+#!../../bin/linux-x86_64/mmfeu
+
+## You may have to change mmfeu to something else
+## everywhere it appears in this file
+
+< envPaths
+epicsEnvSet("IOC","iocsvtMMfeu")
+
+cd "${TOP}"
+
+epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
+epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", "600000")
+
+## Register all support components
+dbLoadDatabase "dbd/mmfeu.dbd"
+mmfeu_registerRecordDeviceDriver pdbbase
+
+## Configure devices
+drvAsynIPPortConfigure("L1","sedipcu184:15000",0,0,0)
+
+
+## Comment these for verbose output - for debugging purposes.
+#asynSetTraceMask("L1", 0, 4)
+#asynSetTraceIOMask("L1", 0, 6)
+#asynSetTraceIOTruncateSize("L1", 0, 1000)
+
+## Load record instances
+dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/mmfeu.db","P=B_DET_SVT_MM_FEU,R=:asyn,PORT=L1");
+
+
+cd "${TOP}/iocBoot/${IOC}"
+iocInit

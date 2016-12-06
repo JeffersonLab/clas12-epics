@@ -1,0 +1,15 @@
+#Protocols to implement the functions for FLASHER controller for the FT flasher
+#see flasher.template and flasherChan.template
+#Now these are the records for the board (as opposed to the individual channels)
+#OutTerminator = CR LF;
+Terminator = LF;
+ReplyTimeout = 3000;
+ExtraInput = Ignore;
+
+sendCommand { out "%s"; in "%(\$1:RESPONSE.VAL)s"; wait 10; };
+
+#These ones are for the whole board commands.
+#basic first
+getName { out "GET_PLC_NAME"; in "%s";wait 10; };
+
+

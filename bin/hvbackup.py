@@ -270,9 +270,9 @@ def main():
 
   if saverestore!='save' and saverestore!='restore': sys.exit(usage)
 
-  user = pwd.getpwuid(os.getuid())[0]
-  if os.getgid() != grp.getgrnam('onliners').gr_gid:
-      sys.exit('BACKUPS REQUIRE MEMBERSHIP IN GROUP onliners.\n\n'+user+' IS NOT A MEMBER.\n\nEXITING.')
+  #user = pwd.getpwuid(os.getuid())[0]
+  #if os.getgid() != grp.getgrnam('onliners').gr_gid:
+  #    sys.exit('BACKUPS REQUIRE MEMBERSHIP IN GROUP onliners.\n\n'+user+' IS NOT A MEMBER.\n\nEXITING.')
 
   backup = SaveRestore()
 

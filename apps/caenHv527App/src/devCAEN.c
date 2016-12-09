@@ -10,6 +10,8 @@
  *   07/010/2003 - Initial release                                           *
 \*****************************************************************************/
 
+//#define GROUPOPERATIONS
+
 #define NO_SMI
 
 #define ALLSET_THROUGH_ONE 0
@@ -40,7 +42,6 @@ typedef int STATUS;
 #ifndef OK
 #define OK (0)
 #endif
-
 
 #include <alarm.h> 
 #include <dbDefs.h> 
@@ -146,8 +147,10 @@ static long init_bo(struct boRecord  *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+#ifdef GROUPOPERATIONS
   // Using card<0 for group output operations.  Do not initialize.
   if (pvmeio->card < 0) return 0;
+#endif
 
   block_until_fraimworks_read(); // my:
 
@@ -228,6 +231,7 @@ static long write_bo(struct boRecord *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
  
+#ifdef GROUPOPERATIONS
   // temporary for testing groups:  (NAB)
   if (pvmeio->card < 0)
   {
@@ -240,6 +244,7 @@ static long write_bo(struct boRecord *pbo)
     sy1527SetGroupOnOff(chassis, group, pbo->rval);
     return 0;
   }
+#endif
 
 
   printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval); //my: 
@@ -421,8 +426,10 @@ static long init_ao(struct aoRecord  *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+#ifdef GROUPOPERATIONS
   // Using card<0 for group output operations.  Do not initialize.
   if (pvmeio->card < 0) return 0;
+#endif
 
   /*
   printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
@@ -521,6 +528,7 @@ static long write_ao(struct aoRecord *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
+#ifdef GROUPOPERATIONS
   // temporary for testing groups: (NAB)
   if (pvmeio->card < 0)
   {
@@ -534,6 +542,7 @@ static long write_ao(struct aoRecord *pao)
     sy1527SetGroupParam(chassis, group, "V0Set",dog);
     return 0;
   }
+#endif
 
   float value_f; /// my:
   if(ALLSET_THROUGH_ONE){

@@ -27,6 +27,7 @@ dbLoadRecords("db/caenhv_stat.db","SEC=6")
 dbLoadRecords("db/monitorApp_torus.db")
 
 dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")
+dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

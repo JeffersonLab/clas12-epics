@@ -8,6 +8,7 @@ cd /usr/clas12/DATA/cameras
 rm -f ${host}_link.jpg
 ln -s ${host}.jpg ${host}_link.jpg
 
+ii = 0
 while [ 1 ]
 do
   # wget is slower than mv, and cs-studio doesn't like a partial file,
@@ -15,5 +16,14 @@ do
   wget -O ${host}_tmp.jpg http://${host}/axis-cgi/jpg/image.cgi
   mv -f ${host}_tmp.jpg ${host}.jpg
   sleep 0.5
+  
+  let ii=ii+1
+  jj=`echo "scale=0;$ii%2" | bc`
+  kk=`echo "scale=0;$ii/2" | bc`
+  if [ "$jj" = "0" ]
+  then
+    caput B_HW_CAMS_cctv6:HEARTBEAT $kk &
+  fi
+  
 done
 

@@ -7,14 +7,15 @@
     <grid>true</grid>
     <scroll>true</scroll>
     <update_period>1.0</update_period>
-    <scroll_step>5</scroll_step>
-    <start>-1.00 m</start>
+    <scroll_step>1</scroll_step>
+    <plain_mouse_pointer>true</plain_mouse_pointer>
+    <start>-10.0 m</start>
     <end>now</end>
     <archive_rescale>STAGGER</archive_rescale>
     <background>
-      <red>201</red>
-      <green>201</green>
-      <blue>201</blue>
+      <red>221</red>
+      <green>221</green>
+      <blue>221</blue>
     </background>
     <title_font>Sans|15|1</title_font>
     <label_font>Sans|10|1</label_font>
@@ -45,7 +46,7 @@
     </annotations>
     <pvlist>
         <pv>
-            <display_name>L$(L1)S</display_name>
+          <display_name>        L$(L1)S</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L1)_S:imon</name>
             <axis>0</axis>
@@ -64,7 +65,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>L$(L1)F</display_name>
+            <display_name>        L$(L1)F</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L1)_F:imon</name>
             <axis>0</axis>
@@ -83,7 +84,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>L$(L1)G</display_name>
+            <display_name>        L$(L1)G</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L1)_G:imon</name>
             <axis>0</axis>
@@ -102,7 +103,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>L$(L2)S</display_name>
+            <display_name>        L$(L2)S</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L2)_S:imon</name>
             <axis>0</axis>
@@ -121,7 +122,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>L$(L2)F</display_name>
+            <display_name>        L$(L2)F</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L2)_F:imon</name>
             <axis>0</axis>
@@ -140,7 +141,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>L$(L2)G</display_name>
+            <display_name>        L$(L2)G</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L2)_G:imon</name>
             <axis>0</axis>

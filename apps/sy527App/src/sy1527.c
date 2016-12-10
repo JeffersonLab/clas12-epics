@@ -429,13 +429,12 @@ sy1527GetGroup(unsigned int id,unsigned int group)
       vmax,smax,
       trip,rup,rdn,
       flag,stat);
-/*
+
   if (nchan != MeasureGroups[id].group[group].nchannels)
   {
     printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
     return (CAENHV_SYSERR);
   }
-*/
 
   if (nchan<=0 || nchan>=MAXGRPCH)
   {
@@ -529,11 +528,6 @@ sy1527GetGroupFast(unsigned int id,unsigned int group)
   if (nchan != MeasureGroups[id].group[group].nchannels)
   {
     printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
-    return (CAENHV_SYSERR);
-  }
-
-  if (nchan<=0 || nchan>=MAXGRPCH)
-  {
     time_t tnow;
     char tbuff[26];
     time(&tnow);
@@ -580,11 +574,6 @@ sy1527GetGroupSlow(unsigned int id,unsigned int group)
   if (nchan != MeasureGroups[id].group[group].nchannels)
   {
     printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
-    return (CAENHV_SYSERR);
-  }
-
-  if (nchan<=0 || nchan>=MAXGRPCH)
-  {
     time_t tnow;
     char tbuff[26];
     time(&tnow);
@@ -1118,7 +1107,10 @@ sy1527GetMap(unsigned int id)
 
 #ifdef GROUPOPERATIONS
     // get channel list for groups:
-    printf("\n\n########################################\n");
+    printf("\n\n");
+    printf("######################################################\n");
+    printf("############## GROUP OPERATIONS ENABLED ##############\n");
+    printf("######################################################\n");
     for (j=0; j<MAX_GROUP; j++)
     {
       MeasureGroups[id].group[j].nchannels=0;
@@ -1297,7 +1289,7 @@ sy1527MainframeThread(void *arg)
 #endif
     diff = clock() - start;
     float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
-    printf("sy1527MainframeThread:  Read Time = %.0f ms\n",msec);
+    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
 
     // NAB:  can we do this at a lower level?
     //pthread_mutex_unlock(&mainframe_mutex[id]);

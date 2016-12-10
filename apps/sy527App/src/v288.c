@@ -171,7 +171,7 @@ v288Reset(UINT32 addr)
 
   while(q!=QQ && i<=11)
   {
-	v288ActiveLoop(delay);
+    v288ActiveLoop(delay);
     vmeWrite16(resetreg, MEK);
     v288ActiveLoop(delay);
     q = vmeRead16(statreg);
@@ -786,6 +786,7 @@ CAENHVGetGroupList(
   return nchan;
 }
 
+// NAB:  going to have to sort out slot-based scale factors
 int
 CAENHVGetGroupFast(
     const char* SystemName, ushort group,
@@ -804,6 +805,11 @@ CAENHVGetGroupFast(
   wpc = 5;
   V288SENDANDGETBIG;
   nchan = tmp/wpc;
+  if (nchan<=0 || nchan>MAX_CHAN*MAX_SLOT)
+  {
+    printf("CAENHVGetGroupFast:  V0SET/I0SET:  #CHAN ERROR:  %d/%d==%d\n",tmp,wpc,nchan);
+    return 0;
+  }
   for (jj=0; jj<tmp; jj+=wpc)
   {
     vmon[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
@@ -818,7 +824,7 @@ CAENHVGetGroupFast(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
-    printf("CAENHVGetGroupParam:  V0SET/I0SET:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    printf("CAENHVGetGroupFast:  V0SET/I0SET:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)
@@ -852,6 +858,11 @@ CAENHVGetGroupSlow(
   wpc = 3;
   V288SENDANDGETBIG;
   nchan = tmp/wpc;
+  if (nchan<=0 || nchan>MAX_CHAN*MAX_SLOT)
+  {
+    printf("CAENHVGetGroupFast:  V0SET/I0SET:  #CHAN ERROR:  %d/%d==%d\n",tmp,wpc,nchan);
+    return 0;
+  }
   for (jj=0; jj<tmp; jj+=wpc)
   {
     vmax[jj/wpc] = buffer[jj];
@@ -865,7 +876,7 @@ CAENHVGetGroupSlow(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
-    printf("CAENHVGetGroupParam:  RUP/RDN:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+    printf("CAENHVGetGroupSlow:  RUP/RDN:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)
@@ -1255,10 +1266,10 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   float *fval = ParValue;
   int *ival = ParValue;
 
-  // NAB:  120 ms sleep, this can't be good?
   //usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
 
   // NAB: try this instead:
+  //usleep(48000);
   usleep(12000);
   //usleep(1200);
   //usleep(120);
@@ -1281,7 +1292,7 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
     {
       code = 0x10;
       value[1] = (int)(fval[ich]*sy527[id].scalev[slot]);
-	}
+    }
     else if( !strcmp(ParName,"I0Set") )
     {
       code = 0x12;
@@ -1291,27 +1302,27 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
     {
       code = 0x11;
       value[1] = (int)(fval[ich]*sy527[id].scalev[slot]);
-	}
+    }
     else if( !strcmp(ParName,"I1Set") )
     {
       code = 0x13;
       value[1] = (int)(fval[ich]*sy527[id].scalei[slot]);
-	}
+    }
     else if( !strcmp(ParName,"Rup") )
     {
       code = 0x15;
       value[1] = (int)(fval[ich]);
-	}
+    }
     else if( !strcmp(ParName,"Rdwn") )
     {
       code = 0x16;
       value[1] = (int)(fval[ich]);
-	}
+    }
     else if( !strcmp(ParName,"Trip") )
     {
       code = 0x17;
       value[1] = (int)(fval[ich]);
-	}
+    }
     else if( !strcmp(ParName,"SVMax") )
     {
       code = 0x14;

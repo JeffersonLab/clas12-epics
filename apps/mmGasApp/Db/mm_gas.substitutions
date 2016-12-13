@@ -1,0 +1,47 @@
+#
+# mm_gas.substitutions
+#
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Dec 2016
+#
+
+#file "$(MODBUS)/db/bo_word.template" { pattern 
+#{P,             R,      PORT,   OFFSET, MASK,   ZNAM,   ONAM}
+#{B_DET_MM_GAS_, START,  MM502,  0,      0,      "",     START}
+#{B_DET_MM_GAS_, STOP,   MM502,  0,      1,      "",     STOP}
+#}
+file "$(MODBUS)/db/bo_bit.template" { pattern 
+{P,             R,      PORT,   OFFSET, ZNAM,   ONAM}
+{B_DET_MM_GAS_, START,  MM502,  0,      "",     START}
+#{B_DET_MM_GAS_, STOP,   MM502,  0,     "",     STOP}
+}
+
+
+file "$(MODBUS)/db/bi_word.template" { pattern 
+{P,             R,      PORT,   OFFSET, MASK,   SCAN,       ZNAM,   ZSV,        ONAM,   OSV}
+#{B_DET_MM_GAS_, DIN01,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN02,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN03,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN04,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN05,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN06,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN07,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN08,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN09,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN10,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN11,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN12,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN13,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN14,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+#{B_DET_MM_GAS_, DIN15,  MM502,  0,      0,      "1 second", OFF,    NO_ALARM,   ON,     NO_ALARM}
+}
+
+file "$(MODBUS)/db/ai.template" { pattern
+{P,             R,      PORT,   OFFSET, BITS,   SCAN,       PREC,   EGUL,   EGUF}
+#{B_DET_MM_GAS_, AIN01,  MM504,  0,      0,      "10 second", 2,      0,      0}
+#{B_DET_MM_GAS_, AIN02,  MM504,  4,      0,      "10 second", 2,      0,      0}
+#{B_DET_MM_GAS_, AIN03,  MM504,  8,      0,      "10 second", 2,      0,      0}
+#{B_DET_MM_GAS_, AIN04,  MM504,  12,     0,      "10 second", 2,      0,      0}
+#{B_DET_MM_GAS_, AIN05,  MM504,  16,     0,      "10 second", 2,      0,      0}
+}

@@ -9,6 +9,7 @@ include $(TOP)/configure/CONFIG
 
 #----------------------------------------------------
 DB += caenhv-groups.db
+DB += caenhv-527.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

@@ -33,7 +33,16 @@
   <foreground_color>
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
-  <actions hook="false" hook_all="false" />
+  <actions hook="false" hook_all="false">
+    <action type="OPEN_DISPLAY">
+      <path>HVDC.opi</path>
+      <macros>
+        <include_parent_macros>true</include_parent_macros>
+      </macros>
+      <replace>1</replace>
+      <description>Reopen Screen</description>
+    </action>
+  </actions>
   <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -60743,7 +60752,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <label>Sums</label>
+    <label>Monitoring</label>
     <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -60758,12 +60767,20 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
+        <path>HVDC_sums_all.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Sums - All Regions</description>
+      </action>
+      <action type="OPEN_DISPLAY">
         <path>/CLAS12_Share/detectors/DC/HVDC_sums_R1.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Region 1</description>
+        <description>Current Sums - Region 1</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>/CLAS12_Share/detectors/DC/HVDC_sums_R2.opi</path>
@@ -60771,7 +60788,7 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Region 2</description>
+        <description>Current Sums - Region 2</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>/CLAS12_Share/detectors/DC/HVDC_sums_R3.opi</path>
@@ -60779,7 +60796,15 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Region 3</description>
+        <description>Current Sums - Region 3</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>HVDC_strip.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Sums - Strip Charts</description>
       </action>
     </actions>
     <font>

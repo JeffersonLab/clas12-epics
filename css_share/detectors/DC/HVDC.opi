@@ -23,7 +23,7 @@
   <background_color>
     <color red="38" green="38" blue="38" />
   </background_color>
-  <width>900</width>
+  <width>920</width>
   <x>-1</x>
   <name>DC HV</name>
   <grid_space>5</grid_space>
@@ -60707,19 +60707,22 @@ $(pv_value)</tooltip>
         <wait_time>1</wait_time>
         <description>Restore Settings</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path></path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>All OFF</description>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/DC_HV/ONOFF/HVDC_OFF.snp</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn ALL OFF</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
+      <action type="EXECUTE_PYTHONSCRIPT">
         <path></path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>All ON</description>
+        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil
+from org.csstudio.opibuilder.scriptUtil import GUIUtil
+import os
+
+if GUIUtil.openConfirmDialog('Turn ALL DC HV ON?'):
+  os.system('burtwb -f /usr/clas12/DATA/burt/DC_HV/ONOFF/HVDC_ON.snp')]]></scriptText>
+        <embedded>true</embedded>
+        <description>Turn ALL ON</description>
       </action>
     </actions>
     <font>
@@ -60807,6 +60810,46 @@ $(pv_value)</tooltip>
         <description>Current Sums - Strip Charts</description>
       </action>
     </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.linkingContainer" version="1.0.0">
+    <opi_file>HVDC_fixers.opi</opi_file>
+    <border_style>14</border_style>
+    <tooltip></tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-2d5522f4:15902d29287:3c98</wuid>
+    <scripts />
+    <height>154</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <macros>
+      <include_parent_macros>true</include_parent_macros>
+    </macros>
+    <resize_behaviour>2</resize_behaviour>
+    <visible>true</visible>
+    <group_name></group_name>
+    <border_color>
+      <color red="127" green="127" blue="127" />
+    </border_color>
+    <widget_type>Linking Container</widget_type>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>137</width>
+    <x>752</x>
+    <name>Linking Container_62</name>
+    <y>228</y>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

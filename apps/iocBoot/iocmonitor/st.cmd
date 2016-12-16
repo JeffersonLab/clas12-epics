@@ -32,6 +32,8 @@ dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
+dbLoadRecords("db/HVDC_VSCAN.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

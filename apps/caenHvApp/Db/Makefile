@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-DB    += caenhv.db caenhv-nosvmax.db
+DB    += caenhv.db
 DB    += $(wildcard ../*.substitutions)
 DB    += $(wildcard ../*sums*.db)
 

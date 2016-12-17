@@ -23,18 +23,53 @@ record(bigsub, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
    field(INAM,"InitChannel")
    field(INPA,"$(Cr)")
    field(INPB,"$(Sl)")
-   field(HIGH,"50")
    field(INPC,"$(Ch)")
-   field(HSV,"MAJOR")
+field(LSV,"MAJOR")
+field(HSV,"MAJOR")
+field(LLSV,"MAJOR")
+field(HHSV,"MAJOR")
+field(HIGH,"10")
+field(LOW,"-10")
+field(HIHI, "10000")
+field(LOLO,"-10000")
    field(PREC,"1")
    field(SNAM,"ScanChannel")
    field(SCAN,"2 second")
-   field(ASG,"EXPERT")
+# leave open access (like pwonoff) for setting alarm limits:
+#   field(ASG,"EXPERT")
    alias("B_DET_$(Det)_$(Sys)_$(Element)")
    alias("B_SYS_$(Sys)_$(Det)_$(Element)")
+info(autosaveFields_pass1,"HIGH LOW")
 }
 
 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):crate")
+{
+   field(DESC,"Crate Number")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).A CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"0")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):crate")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):crate")
+}   
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):slot")
+{
+   field(DESC,"Slot Number")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).B CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"0")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):slot")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):slot")
+}   
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):chan")
+{
+   field(DESC,"Channel Number")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).C CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"0")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):chan")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):chan")
+}   
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
 {

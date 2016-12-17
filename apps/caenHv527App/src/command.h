@@ -22,4 +22,11 @@
 #define S_BDHV      0x0C    /* Set BOARD HV on/off                  */ 
 #define S_VMAX      0x0D    /* Set MAX CHANNEL VOLATAGE                 */ 
 
+// Group Operations
+#define S_GRP_HV  0xFB /* Set HV on/off      */
+#define S_GRP_DV  0xF2 /* Set demand voltage */
+#define S_GRP_TC  0xF5 /* Set trip current   */
+#define S_GRP_RDN 0xF3 /* Set ramp down      */
+#define S_GRP_RUP 0xF4 /* Set ramp up        */
+
 #endif

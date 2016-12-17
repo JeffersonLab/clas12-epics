@@ -1,0 +1,14 @@
+#!/bin/sh
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+EXE_DIR=/usr/clas12/css/dev/linux-x86_64/bin
+INI_DIR=/usr/clas12/release/pro/epics/tools/beast
+XML_DIR=/usr/clas12/release/pro/epics/apps/beast
+
+WORKSPACE=/tmp/Annunciator.$$
+
+# Start Headless Annunciator
+$EXE_DIR/JMS2SPEECH -pluginCustomization $INI_DIR/annunciator_settings.ini -data $WORKSPACE
+

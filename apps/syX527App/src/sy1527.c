@@ -1268,22 +1268,26 @@ return CAENHV_OK;
 int /// my_n: adding heart beat
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan){
-
-///-------- my_n:
 // id comes from db here.
 // if not connection: id is absent in nmainframes[] (in mainframes[] it is present as -1)
 // if comment in startup.all: id is absent in nmainframes[]
-int i, i10, absent_error=1;
-for(i=0;i<nmainframes;i++){
- if(mainframes[i]==id){absent_error=0;i10=i;break;}
-}
-///--------
-if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
-else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
+  int i, i10, absent_error=1;
+  for (i=0; i<nmainframes; i++)
+  {
+    if (mainframes[i]==id)
+    {
+      absent_error=0;
+      i10=i;
+      break;
+    }
+  }
+  if (absent_error==0)
+  {
+    if      (mainframes_disconnect[i10]==1)        absent_error=3;
+    else if (Demand[id].board[board].nchannels==0) absent_error=2;
+  }
 
-
-return absent_error;
-
+  return absent_error;
 }
 
 ///=======================================================================================

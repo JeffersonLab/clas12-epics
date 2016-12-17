@@ -66,6 +66,19 @@
 /// 12 ... 31 Reserved, forced to 0
 
 
+// SY527 Manual, page 90, Table 31
+#define BIT527_PRESENT 1 << 0
+#define BIT527_INTRIP  1 << 5
+#define BIT527_KILL    1 << 6
+#define BIT527_VMAX    1 << 8
+#define BIT527_EXTRIP  1 << 9
+#define BIT527_OVV     1 << 10
+#define BIT527_UNV     1 << 11
+#define BIT527_OVC     1 << 12
+#define BIT527_RDN     1 << 13
+#define BIT527_RUP     1 << 14
+#define BIT527_ON      1 << 15
+
 
 ///==============================================================================
 int  CAENHVInitSystem(const char *SystemName, int LinkType, void *Arg,
@@ -101,8 +114,27 @@ int  CAENHVGetGroupParam(
     float* trip, float* rup, float* rdn,
     int* flag, int* stat);
 
-int  CAENHVSetGroupOnOff(const char* SystemName, ushort group, ushort onoff);
-int  CAENHVSetGroupParam(const char* SystemName, ushort group, const char* ParName, float fval);
+int CAENHVGetGroupList(
+    const char* SystemName, ushort group,
+    int *slot, int* chan);
+
+int CAENHVGetGroupFast(
+    const char* SystemName, ushort group,
+    float* vmon, float* imon, float* smax, int* stat,
+    float* vset, float* iset);
+
+int CAENHVGetGroupSlow(
+    const char* SystemName, ushort group,
+    float* vmax, float* trip, float* rup, float* rdn,
+    int* flag);
+
+int  CAENHVSetGroupOnOff(
+    const char* SystemName,ushort group,
+    ushort onoff);
+
+int  CAENHVSetGroupParam(
+    const char* SystemName, ushort group,
+    const char* ParName, void *fval);
 
 ///==============================================================================
 
@@ -129,16 +161,18 @@ typedef struct group
   int nchannels;
   int slot[MAX_SLOT*MAX_CHAN];
   int chan[MAX_SLOT*MAX_CHAN];
-//  char parnames[MAX_PARAM][MAX_CAEN_NAME];
-//  unsigned long partypes[MAX_PARAM];
-//  float fval[MAX_PARAM];
-//  unsigned long lval[MAX_PARAM];
-//  int setflag[MAX_PARAM];
+  char parnames[MAX_PARAM][MAX_CAEN_NAME];
+  unsigned long partypes[MAX_PARAM];
+  float fval[MAX_PARAM];
+  unsigned long lval[MAX_PARAM];
+  int setflag[MAX_PARAM];
+  int nparams;
 } GROUP;
 
 typedef struct groups
 {
   int ngroups;
+  int setflag;
   GROUP group[MAX_GROUP];
 } GROUPS;
 
@@ -269,7 +303,31 @@ float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
 
+
+
+
 int
 sy1527SetGroupParam(unsigned int id, unsigned int group,
     const char* ParName, float fval);
+int
+sy1527GetGroupFast(unsigned int id,unsigned int group);
+
+int
+sy1527GetGroupSlow(unsigned int id,unsigned int group);
+
+int
+sy1527SetGroupDemandVoltage(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupMaxVoltage(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupMaxCurrent(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupRampUp(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupRampDown(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupTripTime(unsigned int id,unsigned int group,float u);
+int
+sy1527SetGroupOnOff(unsigned int id,unsigned int group,int u);
+
 

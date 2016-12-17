@@ -1,7 +1,12 @@
 
 /* sy1527.c - EPICS driver support for CAEN SY1527 HV mainframe */
 
-//#define GROUPOPERATIONS
+
+// 2016, N. Balzell, implemented group read, fully tested:
+#define GROUPOPS_READ
+
+// 2016, N. Baltzell, implemented group write, unfinished:
+//#define GROUPOPS_WRITE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +47,7 @@ HV Measure[MAX_HVPS];
 int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before reading by driver
 
 GROUPS MeasureGroups[MAX_HVPS];
-//static GROUPS DemandGroups[MAX_HVPS];
+static GROUPS DemandGroups[MAX_HVPS];
 
 // we're going to restart the connection if we hit this error too many times consecutively:
 static const int MAXCFEDOWNERR=100;
@@ -173,7 +178,21 @@ sy1527Measure2Demand(unsigned int id, unsigned int board)
 int
 sy1527GetBoard(unsigned int id, unsigned int board)
 {
-
+  //
+  // 2016 Update (N. Baltzell)
+  //
+  // Move mainframe locking into here, as low as possible,
+  // and only protect Measure.board.channel.?val.  This
+  // drastically improves update time of the bigsub scan
+  // thread for EPICS feedback, by factor of over 10, and
+  // allows acceptable feedback rate with multiple mainframes
+  // per CAENET card.
+  //
+  // The downside is that now we read nparams, parnames,
+  // partypes, and nchannels unlocked, but this is safe as
+  // those never change after initialization.
+  // 
+  
   int b_status=0;/// b_status_res=0; /// my: smi
 
   int nXXXXXparam;
@@ -190,8 +209,9 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  for(i10=0;i10<nmainframes;i10++){ // my_n: hbeat
-   if(mainframes[i10]==id)break;
+  for (i10=0; i10<nmainframes; i10++)
+  {
+   if (mainframes[i10]==id) break;
   }
 
 
@@ -213,34 +233,15 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Measure[id].board[board].partypes[ipar];
 
-   // if(!strcmp(ParName,"RUp"))printf("RUp type=%d %d\n",tipo,PARAM_TYPE_NUMERIC);
     if(tipo == PARAM_TYPE_NUMERIC)
     {
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, fParValList);
-//if(!strcmp(ParName,"RUp")){ printf("%s %d %d \n",name, Slot, ChNum);
-//printf("RUp f %f\n",fParValList[0]);}
     }
     else
     {
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, lParValList);
-//if(!strcmp(ParName,"RUp"))printf("RUp l %d\n", lParValList);
     }
     
-///-------------- simulator -------
-/**
-FILE *fps=fopen("/home/clasioc/flags","r");
-int flags; 
-//printf("pointer=%p\n",fps);
-fscanf(fps,"%d",&flags);//printf("%d\n",flags);
-//printf("%s\n",name);
-if(!strcmp(name,"B_HV009"))
-{
- ///printf("%d\n",flags);
- if(flags==1) { printf("==%d\n",flags); ret=4001;}
-}
-fclose(fps);
-*/
-///--------------------------------
 
 /*
      int ret1,ret2;
@@ -311,20 +312,12 @@ fclose(fps);
     }
     else
     {
-   ///   mainframes_disconnect[i10]=0; /// my_n: hbeat
-      /*printf("PARAM VALUE\n");*/
       if(tipo == PARAM_TYPE_NUMERIC)
       {
         for(i=0; i<ChNum; i++)
         {
-          // NAB: can we lock this low?
           LOCK_MAINFRAME(id);
-
           Measure[id].board[board].channel[i].fval[ipar] = fParValList[i];
-          /*printf("Slot: %2d  Ch: %3d  %s: %10.2f\n", Slot, ChList[i],
-            ParName, fParValList[i]);*/
-          
-          // NAB: can we lock this low?
           UNLOCK_MAINFRAME(id);
         }
       }
@@ -332,19 +325,13 @@ fclose(fps);
       {
         for(i=0; i<ChNum; i++)   
         {
-          // NAB: can we lock this low? 
           LOCK_MAINFRAME(id);
-          
           Measure[id].board[board].channel[i].lval[ipar] = lParValList[i];
           if(ipar==Status){
-          /// my: smi: accumulates all channels attuses into board status
-           b_status = b_status | lParValList[i];
-           if(!(lParValList[i] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
+            /// my: smi: accumulates all channels attuses into board status
+            b_status = b_status | lParValList[i];
+            if(!(lParValList[i] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
           }
-          /*printf("Slot: %2d  Ch: %3d  %s: %x\n", Slot, ChList[i],
-            ParName, lParValList[i]);*/ 
-          
-          // NAB: can we lock this low?
           UNLOCK_MAINFRAME(id);
         }
       }
@@ -377,11 +364,14 @@ fclose(fps);
   return(CAENHV_OK);
 }
 
+
+
+
 // Maximum possible number of channels in a group.  Equivalent to maximum
 // number of channels in a mainframe, because groups cannot span multiple
 // mainframes.  The SY527 has 10 slots;  DC's 944 boards have 24 channels.
 #define MAXGRPCH 512
-
+/*
 int
 sy1527SetGroupOnOff(unsigned int id, unsigned int group, unsigned int onoff)
 {
@@ -392,7 +382,7 @@ sy1527SetGroupOnOff(unsigned int id, unsigned int group, unsigned int onoff)
   CAENHVSetGroupOnOff(name,group,onoff);
   return (CAENHV_OK);
 }
-
+*/
 int
 sy1527SetGroupParam(unsigned int id, unsigned int group, const char* ParName, float fval)
 {
@@ -401,26 +391,78 @@ sy1527SetGroupParam(unsigned int id, unsigned int group, const char* ParName, fl
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
   printf("sy1527SetGroupParam:  %.2f\n",fval);
-  CAENHVSetGroupParam(name,group,ParName,fval);
+  CAENHVSetGroupParam(name,group,ParName,&fval);
+  return (CAENHV_OK);
+}
+
+
+//
+// sy1527CheckChannelList(group,nchan,slot,chan)
+//  This compares the channel list described by nchan,slot,chan
+//  with that in group.
+//
+int
+sy1527CheckChannelList(GROUP* group,int nchan, int* slot, int* chan)
+{
+  unsigned int ii=0;
+  if (nchan != group->nchannels)
+  {
+    printf("sy1528CheckChannelList:  #CHAN ERROR:  %d!=%d\n",
+        nchan,group->nchannels);
+    return (CAENHV_SYSERR);
+  }
+  for (ii=0; ii<nchan; ii++)
+  {
+    if (slot[ii] != group->slot[ii])
+    {
+      printf("sy1528CheckChannelList:  SLOT ERROR:  (%d) %d!=%d\n",
+          ii,slot[ii],group->slot[ii]);
+      return (CAENHV_SYSERR);
+    }
+    if (chan[ii] != group->chan[ii])
+    {
+      printf("sy1527CheckChannelList:  CHAN ERROR:  (%d) %d!=%d\n",
+          ii,chan[ii],group->chan[ii]);
+      return (CAENHV_SYSERR);
+    }
+  }
   return (CAENHV_OK);
 }
 
 int
 sy1527GetGroup(unsigned int id,unsigned int group)
 {
-  //printf("sy1527GetGroup:  %d %d\n",id,group);
-  
-  int nchan,ii;
+  //
+  // N. Baltzell, 2016
+  //
+  // Implemented group read operations.  Althought number of VME
+  // transmit transactions is greatly reduced (by 2*NCHANNELS/5)
+  // relative to channel-by-channel operations, effective speed
+  // improvement to readout an entire mainframe is nill.  However,
+  // new integrity checks possible in group read mode are worthwhile.
+  //
+  // One could optimize this further with separate Fast/Slow read
+  // subroutines below, but deemed not worthwhile for now.
+  //
+  // We lock as low as possible in here, only when accessing
+  // Measure.board.channel.?val
+  //
+
+  int nchan,ii,ss,cc;
   char name[MAX_CAEN_NAME];
   float rup[MAXGRPCH]={},rdn[MAXGRPCH]={};
-  float vset[MAXGRPCH]={},iset[MAXGRPCH]={},vmax[MAXGRPCH]={},trip[MAXGRPCH]={};
+  float vset[MAXGRPCH]={},iset[MAXGRPCH]={};
+  float vmax[MAXGRPCH]={},trip[MAXGRPCH]={};
   float vmon[MAXGRPCH]={},imon[MAXGRPCH]={},smax[MAXGRPCH]={};
-  int slot[MAXGRPCH]={},chan[MAXGRPCH]={},stat[MAXGRPCH],flag[MAXGRPCH]={};
+  int slot[MAXGRPCH]={},chan[MAXGRPCH]={};
+  int stat[MAXGRPCH],flag[MAXGRPCH]={};
+  GROUP *groupexp;
 
   CHECK_ID(id);
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
+  // read group's parameters from hardware:
   nchan = CAENHVGetGroupParam(
       name,group,
       slot,chan,
@@ -429,31 +471,27 @@ sy1527GetGroup(unsigned int id,unsigned int group)
       vmax,smax,
       trip,rup,rdn,
       flag,stat);
+  
+  // the group's expected slot/channel list, as read during init: 
+  groupexp = &MeasureGroups[id].group[group];
 
-  if (nchan != MeasureGroups[id].group[group].nchannels)
-  {
-    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
-    return (CAENHV_SYSERR);
-  }
-
-  if (nchan<=0 || nchan>=MAXGRPCH)
+  // if any slot/chan in group does not match expected, ignore this read:
+  if (nchan<=0 || sy1527CheckChannelList(groupexp,nchan,slot,chan) != CAENHV_OK)
   {
     time_t tnow;
     char tbuff[26];
     time(&tnow);
     strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
-    printf("%s  sy1527GetGroup:  #CHAN ERROR:  %d\n",tbuff,nchan);
-    //printf("sy1527GetGroup:  #CHAN ERROR:  %d\n",nchan);
-    return (CAENHV_SYSERR); 
+    printf("sy1527GetGroup:  ChannelList ERROR:  %s\n",tbuff);
+    return (CAENHV_SYSERR);
   }
 
+  // After satisfying group/slot/chan checks, transfer data to the buffer for EPICS:
   LOCK_MAINFRAME(id);
-
-/*
   for (ii=0; ii<nchan; ii++)
   {
-    int ss=MeasureGroups[id].group[group].slot[ii];
-    int cc=MeasureGroups[id].group[group].chan[ii];
+    ss = MeasureGroups[id].group[group].slot[ii];
+    cc = MeasureGroups[id].group[group].chan[ii];
     Measure[id].board[ss].channel[cc].fval[V0Set]  = vset[ii];
     Measure[id].board[ss].channel[cc].fval[I0Set]  = iset[ii];
     Measure[id].board[ss].channel[cc].fval[VMon]   = vmon[ii];
@@ -470,37 +508,6 @@ sy1527GetGroup(unsigned int id,unsigned int group)
     //Measure[id].board[ss].channel[cc].lval[Pon]    = 0;
     //Measure[id].board[ss].channel[cc].lval[Pdwn]   = 0;
   }
-*/
-
-  for (ii=0; ii<nchan; ii++)
-  {
-    if (slot[ii]<0 || slot[ii]>=Measure[id].nslots)
-    {
-      printf("sy1527GetGroup:  SLOT ERROR:  %d>=%d\n",slot[ii],Measure[id].nslots);
-      continue;
-    }
-    if (chan[ii]<0 || chan[ii]>=Measure[id].board[slot[ii]].nchannels)
-    {
-      printf("sy1527GetGroup:  CHAN ERROR:  %d>=%d\n",chan[ii],Measure[id].board[slot[ii]].nchannels);
-      continue;
-    }
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[V0Set]  = vset[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[I0Set]  = iset[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[VMon]   = vmon[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[IMon]   = imon[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[RUp]    = rup[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[RDWn]   = rdn[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[Trip]   = trip[ii];
-    //Measure[id].board[slot[ii]].channel[chan[ii]].fval[SVMax]  = smax[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].fval[SVMax]  = vmax[ii];
-    Measure[id].board[slot[ii]].channel[chan[ii]].lval[Status] = stat[ii];
-    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pw]     = 0;
-    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[PrOn]   = 0;
-    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[PrOff]  = 0;
-    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pon]    = 0;
-    //Measure[id].board[slot[ii]].channel[chan[ii]].lval[Pdwn]   = 0;
-  }
-    
   UNLOCK_MAINFRAME(id);
 
   return(CAENHV_OK);
@@ -527,7 +534,8 @@ sy1527GetGroupFast(unsigned int id,unsigned int group)
 
   if (nchan != MeasureGroups[id].group[group].nchannels)
   {
-    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,MeasureGroups[id].group[group].nchannels);
+    printf("sy1527GetGroup:  #CHAN ERROR:  %d!=%d\n",nchan,
+        MeasureGroups[id].group[group].nchannels);
     time_t tnow;
     char tbuff[26];
     time(&tnow);
@@ -699,8 +707,77 @@ else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
 }
 #endif
 
+
+int
+sy1527SetGroup(unsigned int id, unsigned int group)
+{
+  int ret;
+  float fParVal;
+  unsigned int iPar;
+  unsigned long lParVal;
+  char name[MAX_CAEN_NAME];
+  char ParName[MAX_CAEN_NAME];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name,Demand[id].name);
+  for (iPar=0; iPar<DemandGroups[id].group[group].nparams; iPar++)
+  {
+    if (DemandGroups[id].group[group].setflag[iPar])
+    {
+      strcpy(ParName,DemandGroups[id].group[group].parnames[iPar]);
+      if (DemandGroups[id].group[group].partypes[iPar] == PARAM_TYPE_NUMERIC)
+      {
+          fParVal = DemandGroups[id].group[group].fval[iPar];
+          ret = CAENHVSetGroupParam(name, group, ParName, &fParVal);
+      }
+      else
+      {
+          lParVal = DemandGroups[id].group[group].lval[iPar];
+          ret = CAENHVSetGroupParam(name, group, ParName, &lParVal);
+      }
+      if(ret != CAENHV_OK)
+      {
+        printf("CAENHVSetChParam error: %s (num. %d)\n",CAENHVGetError(name),ret);
+        return(CAENHV_SYSERR);
+      }
+      else
+      {
+        DemandGroups[id].group[group].setflag[iPar] = 0;
+      }
+    }
+  }
+  return(CAENHV_OK);
+}
+
 ///======================================================================================
 /* */
+
+/*
+int
+sy1527CheckMeasureDemand(unsigned int ii)
+{
+// NOTE NEED TO DIFFERENTIATE BETWEEN (NON)NUMERIC PARAMETER_TYPE
+  unsigned int ii,jj,kk;
+  for (ii=0; ii<Measure[id].nslots; ii++)
+  {
+    for (jj=0; jj<Measure[id].board[ii].nchannels; jj++)
+    {
+      for (kk=0; kk<Measure[id].board[ii].nparams; kk++)
+      {
+        if (fabs(Measure[id].board[board].channel[jj].fval[kk] -
+                  Demand[id].board[board].channel[jj].fval[kk]) > 0.1)
+        {
+          Demand[id].board[board].channel[jj].setflag[kk] = 1;
+          Demand[id].board[board].setflag = 1;
+          Demand[id].setflag = 1;
+        }
+      }
+    }
+  }
+  return 0;
+}
+*/
+
 int
 sy1527SetBoard(unsigned int id, unsigned int board)
 {
@@ -814,7 +891,7 @@ sy1527GetMap(unsigned int id)
   char *ModelList, *DescriptionList;
   unsigned char	*FmwRelMinList, *FmwRelMaxList;
   char name[MAX_CAEN_NAME];
-  int i, j, ret;
+  int i, j, k, ret;
   unsigned long tipo;
   char ParName[MAX_CAEN_NAME];
 
@@ -1105,57 +1182,106 @@ sy1527GetMap(unsigned int id)
     free(NrOfCh);
     // free(ParNameList); // my:
 
-#ifdef GROUPOPERATIONS
-    // get channel list for groups:
+#ifdef GROUPOPS_READ
+    // get slot/channel lists for groups:
     printf("\n\n");
-    printf("######################################################\n");
-    printf("############## GROUP OPERATIONS ENABLED ##############\n");
-    printf("######################################################\n");
+    printf("###########################################################\n");
+    printf("############## GROUP READ OPERATIONS ENABLED ##############\n");
+    printf("###########################################################\n");
+    
+    for (j=0; j<MAX_GROUP; j++) MeasureGroups[id].group[j].nchannels = 0;
+
     for (j=0; j<MAX_GROUP; j++)
     {
-      MeasureGroups[id].group[j].nchannels=0;
-      int slot[MAX_SLOT*MAX_CHAN]={};
-      int chan[MAX_SLOT*MAX_CHAN]={};
+      int slot[MAX_SLOT*MAX_CHAN]={},chan[MAX_SLOT*MAX_CHAN]={};
+     
+      // get slot/channel list, return value is #channels:
       ret = CAENHVGetGroupList(name,j,slot,chan);
-      if (ret>=0 && ret<=MAX_SLOT*MAX_CHAN)
+      if (ret<0 || ret>MAX_SLOT*MAX_CHAN)
       {
-        MeasureGroups[id].group[j].nchannels = ret;
-        for (i=0; i<ret; i++)
-        {
-          if (chan[i]<0 || chan[i]>=MAX_CHAN)
-          {
-            MeasureGroups[id].group[j].nchannels = 0;
-            printf("Error Reading Group-%d List\n",j);
-            return(CAENHV_SYSERR);
-          }
-          if (slot[i]<0 || slot[i]>=MAX_SLOT)
-          {
-            MeasureGroups[id].group[j].nchannels = 0;
-            printf("Error Reading Group-%d List\n",j);
-            return(CAENHV_SYSERR);
-          }
-          MeasureGroups[id].group[j].slot[i] = slot[i];
-          MeasureGroups[id].group[j].chan[i] = chan[i];
-        }
-      }
-      else
-      {
-        printf("Error Reading Group-%d List\n",j);
+        printf("Error Reading Group-%d List:  #chan=%d\n",j,ret);
         return(CAENHV_SYSERR);
       }
+      if (ret==0) continue;
+      
+      // validate slot/channel list, return on error, load into MeasureGroups:
+      for (i=0; i<ret; i++)
+      {
+        if (slot[i]<0 || slot[i]>=Measure[id].nslots || slot[i]>=MAX_SLOT)
+        {
+          printf("Error Reading Group-%d List:  slot[%d]=%d\n",j,i,slot[i]);
+          return(CAENHV_SYSERR);
+        }
+        if (chan[i]<0 || chan[i]>=Measure[id].board[slot[i]].nchannels || chan[i]>=MAX_CHAN)
+        {
+          printf("Error Reading Group-%d List:  chan[%d]=%d\n",j,i,chan[i]);
+          return(CAENHV_SYSERR);
+        }
+        MeasureGroups[id].group[j].slot[i] = slot[i];
+        MeasureGroups[id].group[j].chan[i] = chan[i];
+      }
+
+      // update nchannels for the group now that slot/chan list is validated:
+      MeasureGroups[id].group[j].nchannels = ret;
+
+      // check for duplicate channels in the group (not sure if this is possible):
+      int foundDuplicates=0;
+      for (i=0; i<ret; i++)
+      {
+        for (k=i+1; k<ret; k++)
+        {
+          if (MeasureGroups[id].group[j].slot[i]==MeasureGroups[id].group[j].slot[k] &&
+              MeasureGroups[id].group[j].chan[i]==MeasureGroups[id].group[j].chan[k])
+          {
+            printf("# INFO:  DUPLICATE CHANNEL FOUND FOR MAINFRAME=%d GROUP=%d:  slot/chan = %d/%d\n",id,j,
+              MeasureGroups[i].group[j].slot[i],MeasureGroups[i].group[j].chan[i]);
+            foundDuplicates++;
+          }
+        }
+      }
+
+      // check for mixed board types in the group (could be dangerous):
+      int nboardmodels=0;
+      char boardmodels[MAX_SLOT][MAX_CAEN_NAME];
+      for (i=0; i<ret; i++)
+      {
+        int newboardmodel=1;
+        for (k=0; k<nboardmodels; k++)
+        {
+          if (strcmp(Measure[id].board[slot[i]].modelname,boardmodels[k])==0)
+          {
+            newboardmodel=0;
+            break;
+          }
+        }
+        if (newboardmodel)
+        {
+          strcpy(boardmodels[nboardmodels],Measure[id].board[slot[i]].modelname);
+          nboardmodels++;
+        }
+      }
+      if (nboardmodels!=1)
+      {
+        printf("# INFO:  MULTIPLE BOARD MODELS FOUND FOR MAINFRAME=%d in GROUP=%d: \n# --",id,j);
+        for (k=0; k<nboardmodels; k++) printf(" %s",boardmodels[k]);
+        printf("\n");
+      }
     }
+
+    // print groups summary information:
     for (j=0; j<MAX_GROUP; j++)
     {
+      if (MeasureGroups[id].group[j].nchannels==0) continue;
       printf("# Mainframe %d:  Found Group %2d with %3d Channels\n",
           id,j,MeasureGroups[id].group[j].nchannels);
       //for (i=0; i<MeasureGroups[id].group[j].nchannels; i++)
       //{
-      //  printf("# group=%2d   slot=%2d   chan=%2d\n",j,
-      //      MeasurMeasureeGroups[id].group[j].slot[i],
-      //      Groups[id].group[j].chan[i]);
+      //  printf("# id/group/slot/chan = %2d/%2d/%2d/%2d\n",id,j,
+      //      MeasureGroups[id].group[j].slot[i],
+      //      MeasureGroups[id].group[j].chan[i]);
       //}
     }
-    printf("########################################\n\n\n");
+    printf("######################################################\n\n\n");
 #endif
 
   }
@@ -1216,9 +1342,15 @@ sy1527PrintMap(unsigned int id)
 void *
 sy1527MainframeThread(void *arg)
 {
+  //
+  // 2016 Update (N. Baltzell)
+  // Restructure locking, now separately for READ and WRITE queues,
+  // for improved performance with v288 CAENET cards on multiple SY527s.
+  //
+  
   int id, i, ret, status;
 
-  int nIterSinceLastSlowGet=0;
+  //int nIterSinceLastSlowGet=0;
 
   id=((THREAD *)arg)->threadid;
   printf("[%2d] starts thread +++ ++\n",id);
@@ -1227,20 +1359,20 @@ sy1527MainframeThread(void *arg)
   {
     sleep(1);
 
-    // NAB:  can we do this at a lower level?
-    //LOCK_MAINFRAME(id);
-    
-    if(force_exit[id])
-    {
-      //pthread_mutex_unlock(&mainframe_mutex[id]);
-      break;
-    }
+    if(force_exit[id]) break;
 
     /***** talk to mainframe here *****/
 
-    // NAB:  try it here (separately for write and read queues):
-    LOCK_MAINFRAME(id);
+#ifdef GROUPOPS_WRITE
+// This is untested:
+//    LOCK_MAINFRAME(id);
+//    for (i=0; i<MAX_GROUP; i++)
+//      if (DemandGroups[id].group[i].setflag==1) sy1527SetGroup(id,i);
+//    UNLOCK_MAINFRAME(id);
+#endif
 
+    // Lock for the WRITE queue:
+    LOCK_MAINFRAME(id);
     /* sets all existing boards in mainframe 'id' with 'setflag' */
     if(Demand[id].setflag == 1)
     {
@@ -1262,37 +1394,49 @@ sy1527MainframeThread(void *arg)
       }
       if(status == CAENHV_OK) Demand[id].setflag = 0;
     }
-    // NAB: try it here:
+    // Unlock for the WRITE queue:
     UNLOCK_MAINFRAME(id);
 
+
+    // Let's time read speed:
     clock_t diff, start = clock();
-#ifdef GROUPOPERATIONS
+
+#ifdef GROUPOPS_READ
+
     // read all channels in the mainframe 'id' (group=0 is all channels):
+    // Lock/Unlock inside here for the READ queue:
     ret = sy1527GetGroup(id,0);
+
+    // We could separate this into fast (freqeuent) and slow reads:
     //ret = sy1527GetGroupFast(id,0);
     //if (nIterSinceLastSlowGet++>10)
     //{
     //    if (sy1527GetGroupSlow(id,0) == CAENHV_OK)
     //      nIterSinceLastSlowGet=0;
     //}
+
 #else
+
     /* gets all existing boards in mainframe 'id' */
     for(i=0; i<Measure[id].nslots; i++)
     {
       /* measure all active boards */
       if(Measure[id].board[i].nchannels > 0)
       {
-        // NAB:  move lock into here:
+        // Lock/Unlock inside here for the READ queue:
         ret = sy1527GetBoard(id,i);
       }
     }
+
 #endif
+
     diff = clock() - start;
     float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
+#ifdef GROUPOPS_READ
+    printf("sy1527MainframeThread:  [%d]  Group Read Time = %.0f ms\n",id,msec);
+#else
     printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
-
-    // NAB:  can we do this at a lower level?
-    //pthread_mutex_unlock(&mainframe_mutex[id]);
+#endif
 
     for(i=0; i<nmainframes; i++){
      if(mainframes[i]==id)is_mainframe_read[i]=1;
@@ -1541,6 +1685,15 @@ sy1527Stop(unsigned id)
 #define GET_LVALUE(prop_name_m, value_m) \
   value_m = Measure[id].board[board].channel[chan].lval[prop_name_m]
 
+#define SET_GROUP_FVALUE(prop_name_m,value_m) \
+  DemandGroups[id].group[group].fval[prop_name_m] = value_m; \
+  DemandGroups[id].group[group].setflag[prop_name_m] = 1; \
+  DemandGroups[id].setflag = 1
+
+#define SET_GROUP_LVALUE(prop_name_m,value_m) \
+  DemandGroups[id].group[group].lval[prop_name_m] = value_m; \
+  DemandGroups[id].group[group].setflag[prop_name_m] = 1; \
+  DemandGroups[id].setflag = 1
 
 //===================================================================================
 /* loop over all available channels and set them on or off */
@@ -1649,22 +1802,25 @@ return CAENHV_OK;
 int /// my_n: adding heart beat
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan){
-
-///-------- my_n:
 // id comes from db here.
 // if not connection: id is absent in nmainframes[] (in mainframes[] it is present as -1)
 // if comment in startup.all: id is absent in nmainframes[]
-int i, i10, absent_error=1;
-for(i=0;i<nmainframes;i++){
- if(mainframes[i]==id){absent_error=0;i10=i;break;}
-}
-///--------
-if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
-else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
-
-
-return absent_error;
-
+  int i, i10, absent_error=1;
+  for (i=0; i<nmainframes; i++)
+  {
+    if (mainframes[i]==id)
+    {
+      absent_error=0;
+      i10=i;
+      break;
+    }
+  }
+  if (absent_error==0)
+  {
+    if      (mainframes_disconnect[i10]==1)        absent_error=3;
+    else if (Demand[id].board[board].nchannels==0) absent_error=2;
+  }
+  return absent_error;
 }
 
 ///=======================================================================================
@@ -1824,11 +1980,9 @@ float
 sy1527GetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan)
 {
   float u;
-//printf("===========================================id=%d board=%d chan=%d\n",id,board,chan);
   LOCK_MAINFRAME(id);
   GET_FVALUE(RUp, u);
   UNLOCK_MAINFRAME(id);
- //printf("===========================================id=%d board=%d chan=%d value=%f\n",id,board,chan,u);
   return(u);
 }
 
@@ -1888,10 +2042,7 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
   LOCK_MAINFRAME(id);
   //GET_FVALUE(Trip, u);
 u=Measure[id].board[board].channel[chan].fval[Trip];
-//printf("trip time  %f %d %f\n", u, //Measure[id].board[board].channel[chan].lval[Trip],Measure[id].board[board].channel[chan].fval[Trip]);
   UNLOCK_MAINFRAME(id);
-
-//printf("trip time  %f\n", u);
   return u;
 }
 
@@ -1940,5 +2091,62 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
   GET_LVALUE(Status, u);
   UNLOCK_MAINFRAME(id);
   return(u);
+}
+
+int
+sy1527SetGroupDemandVoltage(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(V0Set, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupMaxVoltage(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(SVMax, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupMaxCurrent(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(I0Set, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupRampUp(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(RUp, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupRampDown(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(RDWn, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupTripTime(unsigned int id,unsigned int group,float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_FVALUE(Trip, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+int
+sy1527SetGroupOnOff(unsigned int id,unsigned int group,int u)
+{
+  LOCK_MAINFRAME(id);
+  SET_GROUP_LVALUE(Pw, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
 }
 

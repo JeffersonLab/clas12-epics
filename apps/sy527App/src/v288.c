@@ -750,7 +750,7 @@ CAENHVGetGroupList(
     const char* SystemName, ushort group,
     int *slot, int* chan)
 {
-  const int wpc=2;
+  const int wpc=2; // words per channel
   int tmp,jj,id=0;
   UINT32 addr=0;
   UINT16 code=0,crate=0,value[20],buffer[2048];
@@ -895,12 +895,13 @@ CAENHVGetGroupSlow(
       group - group number
             - 0 is all channels in mainframe
             - doc says only 16 groups are allowed (0-15)
-
    output:
-      many
+      slot,chan,vmon,imon,vset,iset,vmax,smax,trip,rup,rdn,flag,stat
 
    return value:
       number of channels in the group
+  
+  Stops at the first sign of error and returns 0.
  */
 int
 CAENHVGetGroupParam(
@@ -921,7 +922,8 @@ CAENHVGetGroupParam(
 
   value[0] = group;
 
-  // Read channel list:
+  // Start by reading channel list:
+  nchan = 0;
   code = 0x40;
   wpc = 2;
   V288SENDANDGETBIG;
@@ -930,12 +932,12 @@ CAENHVGetGroupParam(
     // should this be a break?
     if (buffer[jj] == 0xFFFF) continue;
 
-    // the first 6 words are group name, ignore them:
+    // the first 6 words are group name, let's ignore them:
     if (jj<6) continue;
    
     // word pairs:
-    //  - first is slot/channel
-    //  - second is on/off priority for group operations, ignore it
+    //  - first of pair is slot/channel
+    //  - second of pair is on/off priority for group operations, ignore it
     //      - 0x0101 by default for group-0
     //      - two bytes are on and off priorities
     if (jj%wpc==0)
@@ -946,7 +948,7 @@ CAENHVGetGroupParam(
     }
   }
 
-  if (nchan > MAX_SLOT*MAX_CHAN) 
+  if (nchan<=0 || nchan>MAX_SLOT*MAX_CHAN) 
   {
     printf("CAENHVGetGroupParam:  #CHAN ERROR:  %d\n",nchan);
     return 0;
@@ -1012,12 +1014,16 @@ CAENHVGetGroupParam(
   }
   for (jj=0; jj<tmp; jj+=wpc)
   {
+    ss = slot[jj/wpc];
     vmon[jj/wpc] = (float)((buffer[jj]<<16) + buffer[jj+1]);
     smax[jj/wpc] = buffer[jj+2];
     imon[jj/wpc] = buffer[jj+3];
     stat[jj/wpc] = buffer[jj+4];
+    vmon[jj/wpc] /= (float)sy527[id].scalev[ss];
+    imon[jj/wpc] /= (float)sy527[id].scalei[ss];
   }
 
+  // success, just return #channels:
   return nchan;
 }
 
@@ -1182,14 +1188,15 @@ CAENHVSetGroupOnOff(const char* SystemName, ushort group,ushort onoff)
 }
 
 int
-CAENHVSetGroupParam(const char* SystemName, ushort group, const char* ParName,float fval)
+CAENHVSetGroupParam(const char* SystemName, ushort group, 
+                    const char* ParName,float fval)
 {
   int tmp,id=0;
   UINT32 addr=0;
   UINT16 code=0,crate=0,value[20],buffer[1024];
 
-  // groups must be of similar cards
-  // need to attach a slot number to the group
+  // Groups must be of similar cards due to scale factors.
+  // Need to attach a slot number to the group.
   int slot = 0;
 
   GET_SYSTEM_ID(SystemName);
@@ -1239,8 +1246,8 @@ CAENHVSetGroupParam(const char* SystemName, ushort group, const char* ParName,fl
   }
   else if ( !strcmp(ParName,"Pw"))
   {
-    if ((int)fval) code = 0x5A; // ON
-    else           code = 0x5B; // OFF
+    if (fval < 0.5) code = 0x5B; // OFF
+    else            code = 0x5A; // ON
   }
   else
   {
@@ -1269,8 +1276,8 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
   //usleep(120000); /// my: inserted although VME access is synchronized (probably: no way to switch frequently)
 
   // NAB: try this instead:
-  //usleep(48000);
-  usleep(12000);
+  usleep(48000);
+  //usleep(12000);
   //usleep(1200);
   //usleep(120);
   //usleep(12);
@@ -1327,19 +1334,19 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
     {
       code = 0x14;
       value[1] = (int)(fval[ich]);
-	}
+    }
     /*else if( !strcmp(ParName,"VMon") )
-    {
+      {
       ;
-	}*/
+      }*/
     /*else if( !strcmp(ParName,"IMon") )
-    {
+      {
       ;
-	}*/
+      }*/
     /*else if( !strcmp(ParName,"Status") )
-    {
+      {
       ;
-	}*/
+      }*/
     /* NOTE: few following parameters are set using 'Flag' bits (code=0x18) */
     /* flag bit 3 (mask bit 11) (Pw) - Power,
        flag bit 6 (mask bit 14) (on/off) - enable,
@@ -1351,29 +1358,29 @@ CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
       code = 0x18;
       bit = ival[ich] & 0x1; /* can be 0 or 1 */
       value[1] = ((bit<<3) | (1<<11));
-    ///  printf("Pw: 0x%04x\n",value[1]);
-	}
+      ///  printf("Pw: 0x%04x\n",value[1]);
+    }
     /*else if( !strcmp(ParName,"PrOn") )
-    {
+      {
       ;
-	}*/
+      }*/
     /*else if( !strcmp(ParName,"PrOff") )
-    {
+      {
       ;
-	}*/
+      }*/
     else if( !strcmp(ParName,"Pon") ) /* bit 'Power-on enable' ??? */
     {
       code = 0x18;
       bit = ival[ich] & 0x1; /* can be 0 or 1 */
       value[1] = ((bit<<6) | (1<<14));
       //printf("Pon: 0x%04x\n",value[1]);
-	}
+    }
     /*else if( !strcmp(ParName,"Pdwn") )
-    {
+      {
       ;
-	}*/
+      }*/
     else
-	{
+    {
       printf("CAENHVSetChParam: ERROR: unknown ParName >%s<\n",ParName);
       continue;
     }

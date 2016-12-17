@@ -43,6 +43,7 @@ IMPORT  STATUS sysBusToLocalAdrs(int, char *, char **);
 
 #define MAX_V288GET 50
 
+#define DEBUG 0
 
 #ifdef VXWORKS
 void
@@ -215,13 +216,9 @@ if (argc>1)
         slot    = buffer[jj] >> 8;
         channel = buffer[jj] & 0xFF;
 
-#define DEBUG 0
-        //if (DEBUG)
-        //{
-          printf("group=%d  [%3d] %5d   0x%04x",ii,jj,buffer[jj],buffer[jj]);
-          printf("      slot=%d chan=%d pri=%d",slot,channel,buffer[jj+1]);
-          printf("\n");
-        //}
+        printf("group=%d  [%3d] %5d   0x%04x",ii,jj,buffer[jj],buffer[jj]);
+        printf("      slot=%d chan=%d pri=%d",slot,channel,buffer[jj+1]);
+        printf("\n");
 
         SLOT[NCHAN]=slot;
         CHAN[NCHAN]=channel;

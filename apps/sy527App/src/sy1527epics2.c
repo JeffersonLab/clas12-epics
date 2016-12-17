@@ -78,6 +78,46 @@ CAEN_SetHV(unsigned id, unsigned char on_off)
   return(0);
 }
 
+
+// need to add this to header sy1527epics?.h
+// currently sharing header with syX527App - will need to change this
+STATUS
+CAEN_HVgroupload(unsigned id, unsigned group, char* property, float value)
+{
+  if (!strncmp("DV",property,2))
+  {
+    printf("CAEN_HVgroupload: request for DV\n");
+    sy1527SetGroupDemandVoltage(id,group,value);
+  }
+  else if (!strncmp("TC",property,2))
+  {
+    printf("CAENHV_groupload: request for TC\n");
+    sy1527SetGroupMaxCurrent(id,group,value);
+  }
+  else if (!strncmp("RUP",property,3))
+  {
+    printf("CAENHV_groupload: request for RUP\n");
+    sy1527SetGroupRampUp(id,group,value);
+  }
+  else if (!strncmp("RDN",property,3))
+  {
+    printf("CAENHV_groupload: request for RDN\n");
+    sy1527SetGroupRampDown(id,group,value);
+  }
+  else if (!strncmp("ONOFF",property,5))
+  {
+    printf("CAENHV_groupload: request for ONOFF\n");
+    if (value>0.5) sy1527SetGroupOnOff(id,group,0);
+    else           sy1527SetGroupOnOff(id,group,1);
+  }
+  else
+  {
+    printf("CAENHV_groupload:  UNKNOWN PROPERTY:  %s\n",property);
+  }
+  return(0);
+}
+
+
 /* */
 STATUS
 CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
@@ -116,7 +156,7 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
   else if(!strncmp("CE",property,2))
   {
     printf("CAEN_HVload: request for CE: id=%d sl=%d ch=%d val=%f\n",
-      id,slot,channel,value);
+        id,slot,channel,value);
     if(value > 0.5)
     {
       /* enable the channel */
@@ -124,7 +164,7 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
       sleep(2);
 
       /* if mainframe is ON, turn channel ON */
-	  {
+      {
         int active, onoff, alarm;
         sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
         if(onoff)
@@ -132,8 +172,8 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
           sleep(2);
           sy1527SetChannelOnOff(id, slot, channel, 1);
         }
-	  }
-	}
+      }
+    }
     else
     {
       /* disable the channel */
@@ -141,15 +181,15 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
       sleep(2);
       sy1527SetChannelEnableDisable(id, slot, channel, 0);
       sleep(2);
-	}
+    }
   }
   else if(!strncmp("CHONOFF",property,7))
   {
     printf("CAEN_HVload: request for CHONOFF: id=%d sl=%d ch=%d val=%f\n",
-      id,slot,channel,value);
+        id,slot,channel,value);
     if(value > 0.5)
     {
-          sy1527SetChannelOnOff(id, slot, channel, 1);
+      sy1527SetChannelOnOff(id, slot, channel, 1);
     }
     else
     {
@@ -270,8 +310,29 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
 
   property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// my_n:  // t
 
+  /*
   if( ((int)property[PROP_ST] & (BIT_INTTRIP |  BIT_OVERVOLT | BIT_OVERCUR )   ) ) *delta=100;
   else *delta=0;
-  ///*delta =  fabs(property[PROP_MV] - property[PROP_DV]) ;
+  //delta =  fabs(property[PROP_MV] - property[PROP_DV]) ;
   return(0);
+  */
+
+  // this is what we alarm on:
+  *delta=0;
+
+  // delta is difference between measured and demand voltages
+  // if channel is not ON, or RAMPING, do not set delta
+  if ( ((int)property[PROP_ST] & (BIT527_ON) ) )
+    if ( ! ((int)property[PROP_ST] & (BIT527_RUP | BIT527_RDN) ) )
+      *delta =  property[PROP_MV] - property[PROP_DV];
+
+  // if ERROR bits are set, override delta with very big number
+  if( ((int)property[PROP_ST] & (BIT527_EXTRIP | BIT527_INTRIP | BIT527_OVV | BIT527_OVC | BIT527_KILL)   ) ) *delta=99999;
+
+  // if HEARTBEAT error, override delta with very big negative number
+  if( (int)property[PROP_HBEAT] ) *delta=-99999;
+
+  return(0);
+
+
 }

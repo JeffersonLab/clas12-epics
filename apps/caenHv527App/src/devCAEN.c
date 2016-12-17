@@ -10,7 +10,8 @@
  *   07/010/2003 - Initial release                                           *
 \*****************************************************************************/
 
-//#define GROUPOPERATIONS
+// Group write opertaions are unfinished:
+//#define GROUPOPS_WRITE
 
 #define NO_SMI
 
@@ -147,9 +148,11 @@ static long init_bo(struct boRecord  *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-#ifdef GROUPOPERATIONS
+#ifdef GROUPOPS_WRITE
   // Using card<0 for group output operations.  Do not initialize.
   if (pvmeio->card < 0) return 0;
+  // 0xF* is a group operation, do not initialize:
+  if (command & 0xF0) return 0;
 #endif
 
   block_until_fraimworks_read(); // my:
@@ -231,7 +234,7 @@ static long write_bo(struct boRecord *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
  
-#ifdef GROUPOPERATIONS
+#ifdef GROUPOPS_WRITE
   // temporary for testing groups:  (NAB)
   if (pvmeio->card < 0)
   {
@@ -244,6 +247,25 @@ static long write_bo(struct boRecord *pbo)
     sy1527SetGroupOnOff(chassis, group, pbo->rval);
     return 0;
   }
+ /* 
+  // 0xF? is a group operation:
+  if (command & 0xF0)
+  {
+    if (command == S_GRP_HV)
+    {
+      CAEN_HVgroupload(chassis,group,"ONOFF",pbo->rval);
+      //sy1527SetGroupOnOff(chassis, group, pbo->rval);
+    }
+    else
+    {
+      char alert[128];
+      sprintf(alert, "CAEN Bo - %s(%d): Card=%d Signal=%d",
+              __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal) );
+      recGblRecordError(S_db_badField, (void *) pbo, alert);
+      return(S_db_badField);
+    }
+  }
+  */
 #endif
 
 
@@ -426,9 +448,12 @@ static long init_ao(struct aoRecord  *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-#ifdef GROUPOPERATIONS
+#ifdef GROUPOPS_WRITE
   // Using card<0 for group output operations.  Do not initialize.
   if (pvmeio->card < 0) return 0;
+
+  // 0xF* is a group operation, do not initialize:
+  if (command & 0xF0) return 0;
 #endif
 
   /*
@@ -528,7 +553,7 @@ static long write_ao(struct aoRecord *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-#ifdef GROUPOPERATIONS
+#ifdef GROUPOPS_WRITE
   // temporary for testing groups: (NAB)
   if (pvmeio->card < 0)
   {
@@ -539,8 +564,34 @@ static long write_ao(struct aoRecord *pao)
     printf("devCAEN.c:  write_ao:  GROUP:   %d %d %d %d %d %.2f %s\n",
         pvmeio->card,pvmeio->signal,chassis,group,pao->rval,pao->val,pao->name);
     float dog=pao->val;
-    sy1527SetGroupParam(chassis, group, "V0Set",dog);
+    //sy1527SetGroupParam(chassis, group, "V0Set",dog);
     return 0;
+    /*
+    switch (command)
+    { case S_DV:   property = "DV"; break;
+      case S_RDN:  property = "RDN"; break;
+      case S_RUP:  property = "RUP"; break;
+      case S_TC:   property = "TC"; break;
+      case S_MVDZ: property = "MVDZ"; break;
+      case S_MCDZ: property = "MCDZ"; break;
+      case S_SOT:  property = "SOT"; break;
+      case S_PRD:  property = "PRD"; break;
+      case S_VMAX: property = "HVL"; break;
+      default: status = ERROR; break;
+    }
+    if (status == OK)
+    {
+      status = CAEN_HVgroupload(chassis, slot, channel, property, value_f );
+    }
+    else
+    {
+      char alert[128];
+      sprintf(alert, "Ao - %s(%d): Card=%d Signal=%d",
+          __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal));
+      recGblRecordError(S_db_badField, (void *) pao, alert);
+      return(S_db_badField);
+    }
+    */
   }
 #endif
 
@@ -626,22 +677,17 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
 
 void block_until_fraimworks_read(){ ///my:
   int i;
- // printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ nmainframes=%d block=%d\n",nmainframes,FLAG_BLOCK_INIT);
   if(FLAG_BLOCK_INIT){
    while(1)
    {  
     int allmfsareread=1;
     for(i=0;i<nmainframes;i++){
        if(is_mainframe_read[i] == 0)allmfsareread=0;
-  //    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ is_mainframe_read[%d]=%d\n",i,is_mainframe_read[i]);
     }
-  //printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ allmfsareread=%d\n", allmfsareread);
     if(allmfsareread){FLAG_BLOCK_INIT=0; break;}
     sleep(1);//printf("is_mainframe_read[%d]=%d\n",chassis,is_mainframe_read[chassis]);
    }
   }
-//printf("INIT +++++++++++++++++++++++++++++++ value=%x\n",command);
-
 }
 
 ///=======================================================================================================

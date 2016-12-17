@@ -1,3 +1,52 @@
 
-RHEL5
+For CAENET with SY527.
+
+TODO:
+Merge with syX527App for SY1527 and SY4527.
+
+
+###################################################################
+###################################################################
+
+December 2016 (NAB):
+
+Changes:
+-  Was a 120 ms sleep for every channel write.  Reduced it to 48 ms.
+-  Moved locking in read queue to lower level.  Now more lock/unlocks
+   per read.  Locking in write queue unchanged.
+-  Use group=0 (entire mainframe) read.  No fundamental speed
+   improvement, but allows much better error checking on reads.  More
+   robust since fewer transmits by factor of 2*NCHANNELS/5.
+-  Corrected status bits for bigsub (alarm) value.
+-  Added setcheck/fix records to check for missed writes (set vs setrbk)
+   and correct them by issuing sets again.
+-  Tested group=0 (entire mainframe) write of pwonoff.  Does give
+   significant speed improvement over looping over channels for writes.
+   Adds large complications in EPICS with updating single channel outputs
+   so that outputs match inputs.  In the future may want to pursue this,
+   but now performance is sufficient.  Note, when implementing group
+   writes, updating single channel outputs will have to be addressed and/or
+   setcheck/fix records discarded.
+-  Mechanism to not issue single channels writes if readback already
+   matches may be considered.
+-  Moving setcheck/fix into driver instead of separate records may be good.
+   However, records provide easy feedback if corrections are occurring.
+
+Result:
+-  With 1.5 mainframes (15 boards) on single CAENET card
+-  1 second update time in EPICS between output and corresponding input
+   update.  Previously *averaged* 20 seconds.
+-  No bad readbacks.  Previously readback synchronization occaisonally
+   erred (e.g. voltages read as currents).
+-  Sets entire mainframe voltages in 30 seconds, maximum 1 minute, even
+   after setcheck/fix records finish.  Previously this was few minutes.
+-  Reducing sleep in write queue may have increased rate of missed writes.
+   But deemed worthwhile since it allows much better EPICS feedback time
+   and setcheck/fix records address missed writes.
+
+###################################################################
+###################################################################
+
+
+
 

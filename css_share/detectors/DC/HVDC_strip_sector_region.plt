@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <databrowser>
-    <title></title>
-    <save_changes>true</save_changes>
+  <title></title>
+    <save_changes>false</save_changes>
     <show_legend>true</show_legend>
     <show_toolbar>false</show_toolbar>
     <grid>true</grid>
     <scroll>true</scroll>
     <update_period>1.0</update_period>
     <scroll_step>1</scroll_step>
-    <plain_mouse_pointer>true</plain_mouse_pointer>
     <start>-10.0 m</start>
     <end>now</end>
     <archive_rescale>STAGGER</archive_rescale>

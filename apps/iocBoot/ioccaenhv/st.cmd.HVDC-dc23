@@ -10,7 +10,8 @@ cd ${TOP}
 dbLoadDatabase("dbd/ioccaen527.dbd")
 ioccaen527_registerRecordDeviceDriver(pdbbase)
 
-#Init_CAEN()
+callbackSetQueueSize(10000)
+scanOnceSetQueueSize(10000)
 
 # Note:
 # Wiring is daisychained:  v288 -> 1 -> 2 -> 3 -> 4 -> Terminated

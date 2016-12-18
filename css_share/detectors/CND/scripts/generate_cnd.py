@@ -63,8 +63,8 @@ $(pv_value)</tooltip>
     </bg_gradient_color>
     <scripts>
       <path pathString="/CLAS12_Share/apps/caenHvApp/set_status_led2.js" checkConnect="true" sfe="false" seoe="false">
-        <pv trig="true">___PVPREFIX___:comms</pv>
         <pv trig="true">___PVPREFIX___:stat</pv>
+        <pv trig="true">___PVPREFIX___:comms</pv>
       </path>
     </scripts>
     <border_alarm_sensitive>false</border_alarm_sensitive>
@@ -187,7 +187,7 @@ def getCircle(rad,angle,element):
   return cc
 
 print head
-for ii in range(1,49):
+for ii in range(48):
   foo,bar=int(ii/2)+1,ii%2+1
   phi=float(ii-1)*2*math.pi/48
   oo=getCircle(radO,phi,'Outer_Seg%dE%d'%(foo,bar))

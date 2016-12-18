@@ -34,6 +34,7 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
 
+int nConsecutiveSuccessfullWrites=0;
 
 /* flag to tell mainframe thread it is time to exit */
 static int force_exit[MAX_HVPS];
@@ -482,7 +483,8 @@ sy1527GetGroup(unsigned int id,unsigned int group)
     char tbuff[26];
     time(&tnow);
     strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
-    printf("sy1527GetGroup:  ChannelList ERROR:  %s\n",tbuff);
+    printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveSuccessfullWrites,tbuff);
+    nConsecutiveSuccessfullWrites=0;
     return (CAENHV_SYSERR);
   }
 
@@ -509,6 +511,8 @@ sy1527GetGroup(unsigned int id,unsigned int group)
     //Measure[id].board[ss].channel[cc].lval[Pdwn]   = 0;
   }
   UNLOCK_MAINFRAME(id);
+
+  nConsecutiveSuccessfullWrites++;
 
   return(CAENHV_OK);
 }
@@ -1398,8 +1402,8 @@ sy1527MainframeThread(void *arg)
     UNLOCK_MAINFRAME(id);
 
 
-    // Let's time read speed:
-    clock_t diff, start = clock();
+//    Let's time read speed:
+//    clock_t diff, start = clock();
 
 #ifdef GROUPOPS_READ
 
@@ -1430,16 +1434,18 @@ sy1527MainframeThread(void *arg)
 
 #endif
 
-    diff = clock() - start;
-    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
-#ifdef GROUPOPS_READ
-    printf("sy1527MainframeThread:  [%d]  Group Read Time = %.0f ms\n",id,msec);
-#else
-    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
-#endif
+//    diff = clock() - start;
+//    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
+//#ifdef GROUPOPS_READ
+//    printf("sy1527MainframeThread:  [%d]  Group Read Time = %.0f ms\n",id,msec);
+//#else
+//    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
+//#endif
 
-    for(i=0; i<nmainframes; i++){
-     if(mainframes[i]==id)is_mainframe_read[i]=1;
+    for (i=0; i<nmainframes; i++)
+    {
+      if (mainframes[i]==id)
+        is_mainframe_read[i]=1;
     }
   }
   printf("[%2d] exit thread\n",id);

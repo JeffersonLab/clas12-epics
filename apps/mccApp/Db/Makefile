@@ -6,6 +6,8 @@ include $(TOP)/configure/CONFIG
 # Install databases, templates & substitutions like this
 DB += $(wildcard ../*.db)
 
+BEAST += $(wildcard ../*.xml)
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 

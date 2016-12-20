@@ -23,6 +23,8 @@ DB += dclv.substitutions
 
 #REQ += dclv_settings.req
 
+BEAST += dclv.xml
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

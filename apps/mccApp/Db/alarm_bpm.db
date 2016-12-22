@@ -1,14 +1,14 @@
 
 record(calc, "$(P)") {
-  field(DESC, "$(DESC)")
-  field(INPA, "$(CUR)")
-  field(INPB, "$(POS)")
-  field(INPC, "1")   # minimum current
-  field(INPD, "0")   # mean position
-  field(INPE, "0.1") # minor limit
-  field(INPF, "0.2") # major limit
+  field(DESC, "$(DESC)") 
+  field(INPA, "$(CUR)") # measured current
+  field(INPB, "$(POS)") # measured position
+  field(INPC, "1")      # minimum current
+  field(INPD, "0")      # mean position
+  field(INPE, "0.1")    # MINOR alarm delta
+  field(INPF, "0.2")    # MAJOR alarm delta
   field(SCAN, "1 second")
-  field(CALC, "A<C ? 0 : ( ABS(B-D) > ABS(B-F) ? 2 : ( ABS(B-D) > ABS(B-E) ? 1 : 0 ) )")
+  field(CALC, "A<C ? 0 : ( ABS(B-D) > F ? 2 : ( ABS(B-D) > E ? 1 : 0 ) )")
   field(HHSV, "MAJOR")
   field(HSV,  "MINOR")
   field(LSV,  "NO_ALARM")

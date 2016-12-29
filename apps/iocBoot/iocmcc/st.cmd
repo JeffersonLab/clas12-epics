@@ -15,6 +15,8 @@ dbLoadRecords("db/mcc_vacuum.db")
 dbLoadRecords("db/mcc_bpm.db")
 dbLoadRecords("db/mcc_cryo.db")
 
+dbLoadTemplate("db/alarm_bpm.substitutions")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

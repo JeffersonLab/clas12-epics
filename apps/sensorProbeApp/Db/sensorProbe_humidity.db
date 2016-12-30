@@ -1,51 +1,48 @@
 #
 # sensorProbe_humidity.db
-#
 # AKCP sensorProbe - Humidity Sensor
 #
-# Author: Wesley Moore (wmoore@jlab.org)
-# Date:   2015-09-04
-#
 
-# NAB:  this looks like just copy/paste from the temperature records and never worked
-
-
-#record(stringin, "$(P)$(R)$(CHAN)HumidityDesc") {
-#    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) STRING: 100")
-#}
-
-#record(stringout, "$(P)$(R)$(CHAN)HumidityDesc") {
-#    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) s")
-#}
-
-record(ai, "$(P)$(R)$(CHAN)HumidityPercent") {
+record(ai, "$(P)$(R)$(C)_Humid") {
     field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public $(SPM)HumidityPercent.$(CHAN) INTEGER: 100")
-    field(EGU, "Percent")
-    field(SCAN, "10 second")
+    field(INP,  "@$(HOST) public %(MIB)HumidityPercent.$(C) INTEGER: 100")
+    field(EGU,  "%")
+    field(SCAN, "$(SCAN)")
+    info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 
-#record(bi, "$(P)$(R)$(CHAN)HumidityOnline") {
+# Much of below doesn't work:
+
+#record(stringin, "$(P)$(R)$(C)_Humid:Desc") {
+#    field(DTYP, "Snmp")
+#    field(INP,  "@$(HOST) public %(MIB)HumidityDescription.$(C) STRING: 100")
+#}
+
+#record(stringout, "$(P)$(R)$(C)_Humid:DescSet") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public %(MIB)HumidityDescription.$(C) s")
+#}
+
+
+#record(bi, "$(P)$(R)$(C)_Humid:Online") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOnline.$(CHAN)")
+#    field(INP,  "@$(HOST) public %(MIB)HumidityOnline.$(C) INTEGER: 100")
 #}
 
-#record(bo, "$(P)$(R)$(CHAN)HumidityOnlineSet") {
+#record(bo, "$(P)$(R)$(C)_Humid:OnlineSet") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempGoOnline.$(CHAN) i")
+#    field(INP,  "@$(HOST) public %(MIB)HumidityGoOnline.$(C) i")
 #}
 
-#record(ai, "$(P)$(R)$(CHAN)HumidityOffset") {
+#record(ai, "$(P)$(R)$(C)_Humid:Offset") {
 #    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN)")
+#    field(INP,  "@$(HOST) public %(MIB)HumidityOffset.$(C) INTEGER: 100")
 #}
 
-#record(ao, "$(P)$(R)$(CHAN)HumidityOffset") {
+#record(ao, "$(P)$(R)$(C)_Humid:Offset") {
 #    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN) i")
+#    field(OUT,  "@$(HOST) public %(MIB)HumidityOffset.$(C) i")
 #}
 

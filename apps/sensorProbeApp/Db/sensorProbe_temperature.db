@@ -1,63 +1,62 @@
 #
 # sensorProbe_temperature.db
-#
 # AKCP sensorProbe - Temperature Sensor
 #
-# Macros Required:
-#   P -
-#   R - 
-#   Host - SNMP host
-#   CHAN - sensor channel number
-# 
-# Author: Wesley Moore (wmoore@jlab.org)
-# Date:   2015-09-04
-#
 
-# NAB:  needs heavy modification, e.g. INP strings too long, datatype descriptor seems to be required, did this ever work as is?
-
-
-#record(stringin, "$(P)$(R)$(CHAN)TempDesc") {
-#    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) STRING: 100 ")
-#}
-
-#record(stringout, "$(P)$(R)$(CHAN)TempDescSet") {
-#    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) s")
-#}
-#
-record(ai, "$(P)$(R)$(CHAN)Temp") {
+record(ai, "$(P)$(R)$(C)_Temp") {
     field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public $(SPM)TempDegree.$(CHAN) INTEGER: 100")
+    field(INP,  "@$(HOST) public %(MIB)TempDegree.$(C) INTEGER: 100")
     field(EGU,  "F")
-    field(SCAN, "10 second")
+    field(SCAN, "$(SCAN)")
+    info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
+
+# Much of below doesn't work:
+
+#record(stringin, "$(P)$(R)$(C)_Temp:Desc") {
+#    field(DTYP, "Snmp")
+#    field(INP,  "@$(HOST) public %(MIB)TempDescription.$(C) STRING:__ 100")
+#    field(PINI, 1)
+#}
+
+#record(stringout, "$(P)$(R)$(C)_Temp:DescSet") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public %(MIB)TempDescription.$(C) s")
+#    field(FLNK, "$(P)$(R)$(C)_Temp:Desc")
+#}
+
 #
-#record(bi, "$(P)$(R)$(CHAN)TempOnline") {
+#record(bi, "$(P)$(R)$(C)_Temp:Online") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOnline.$(CHAN)")
+#    field(INP,  "@$(HOST) public %(MIB)TempOnline.$(C)")
 #}
 #
-#record(bo, "$(P)$(R)$(CHAN)TempOnlineSet") {
+#record(bo, "$(P)$(R)$(C)_Temp:OnlineSet") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempGoOnline.$(CHAN)")
+#    field(OUT,  "@$(HOST) public %(MIB)TempGoOnline.$(C) ( 100 i")
 #}
 #
-#record(bo, "$(P)$(R)$(CHAN)TempUnits") {
+#record(bi, "$(P)$(R)$(C)_Temp:Units") {
 #    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDegreeType.$(CHAN) i")
-#    field(ZNAM, "?")
-#    field(ONAM, "?")
+#    field(OUT,  "@$(HOST) public %(MIB)TempDegreeType.$(C) ( 100 i")
+#    field(ZNAM, "F")
+#    field(ONAM, "C")
+#}
+#record(bo, "$(P)$(R)$(C)_Temp:UnitsSet") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public %(MIB)TempSetDegreeType.$(C) i")
+#    field(ZNAM, "F")
+#    field(ONAM, "C")
 #}
 #
-#record(ai, "$(P)$(R)$(CHAN)TempOffset") {
+#record(ai, "$(P)$(R)$(C)_Temp:Offset") {
 #    field(DTYP, "Snmp")
-#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN)")
+#    field(INP,  "@$(HOST) public %(MIB)TempOffset.$(C) INTEGER: 100")
 #}
 #
-#record(ao, "$(P)$(R)$(CHAN)TempOffsetSet") {
+#record(ao, "$(P)$(R)$(C)_Temp:OffsetSet") {
 #    field(DTYP, "Snmp")
-#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN) i")
+#    field(OUT,  "@$(HOST) public %(MIB)TempOffset.$(C) i")
 #}

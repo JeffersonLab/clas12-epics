@@ -13,47 +13,51 @@
 # Date:   2015-09-04
 #
 
-record(stringin, “$(P)$(R)$(CHAN)TempDesc”) {
-    field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN)")
-}
+# NAB:  needs heavy modification, e.g. INP strings too long, datatype descriptor seems to be required, did this ever work as is?
 
-record(stringout, “$(P)$(R)$(CHAN)TempDescSet”) {
-    field(DTYP, "Snmp")
-    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) s”)
-}
 
-record(ai, “$(P)$(R)$(CHAN)Temp”) {
+#record(stringin, "$(P)$(R)$(CHAN)TempDesc") {
+#    field(DTYP, "Snmp")
+#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) STRING: 100 ")
+#}
+
+#record(stringout, "$(P)$(R)$(CHAN)TempDescSet") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDescription.$(CHAN) s")
+#}
+#
+record(ai, "$(P)$(R)$(CHAN)Temp") {
     field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDegree.$(CHAN)")
+    field(INP,  "@$(HOST) public $(SPM)TempDegree.$(CHAN) INTEGER: 100")
+    field(EGU,  "F")
     field(SCAN, "10 second")
 }
-
-record(bi, “$(P)$(R)$(CHAN)TempOnline”) {
-    field(DESC, “online/offline status”)
-    field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOnline.$(CHAN)")
-}
-
-record(bo, “$(P)$(R)$(CHAN)TempOnlineSet”) {
-    field(DESC, “online/offline status”)
-    field(DTYP, "Snmp")
-    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempGoOnline.$(CHAN)")
-}
-
-record(bo, “$(P)$(R)$(CHAN)TempUnits”) {
-    field(DTYP, "Snmp")
-    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDegreeType.$(CHAN) i”)
-    field(ZNAM, “C”)
-    field(ONAM, “F”)
-}
-
-record(ai, “$(P)$(R)$(CHAN)TempOffset”) {
-    field(DTYP, "Snmp")
-    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN)”)
-}
-
-record(ao, “$(P)$(R)$(CHAN)TempOffsetSet”) {
-    field(DTYP, "Snmp")
-    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN) i”)
-}
+#
+#record(bi, "$(P)$(R)$(CHAN)TempOnline") {
+#    field(DESC, "online/offline status")
+#    field(DTYP, "Snmp")
+#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOnline.$(CHAN)")
+#}
+#
+#record(bo, "$(P)$(R)$(CHAN)TempOnlineSet") {
+#    field(DESC, "online/offline status")
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempGoOnline.$(CHAN)")
+#}
+#
+#record(bo, "$(P)$(R)$(CHAN)TempUnits") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempDegreeType.$(CHAN) i")
+#    field(ZNAM, "?")
+#    field(ONAM, "?")
+#}
+#
+#record(ai, "$(P)$(R)$(CHAN)TempOffset") {
+#    field(DTYP, "Snmp")
+#    field(INP,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN)")
+#}
+#
+#record(ao, "$(P)$(R)$(CHAN)TempOffsetSet") {
+#    field(DTYP, "Snmp")
+#    field(OUT,  "@$(HOST) public SPAGENT-MIB::sensorProbeTempOffset.$(CHAN) i")
+#}

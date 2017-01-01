@@ -34,7 +34,7 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
 
-int nConsecutiveSuccessfullWrites=0;
+int nConsecutiveGoodReads=0;
 
 /* flag to tell mainframe thread it is time to exit */
 static int force_exit[MAX_HVPS];
@@ -483,8 +483,9 @@ sy1527GetGroup(unsigned int id,unsigned int group)
     char tbuff[26];
     time(&tnow);
     strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
-    printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveSuccessfullWrites,tbuff);
-    nConsecutiveSuccessfullWrites=0;
+    if (nConsecutiveGoodReads < 10)
+      printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads,tbuff);
+    nConsecutiveGoodReads=0;
     return (CAENHV_SYSERR);
   }
 
@@ -512,7 +513,7 @@ sy1527GetGroup(unsigned int id,unsigned int group)
   }
   UNLOCK_MAINFRAME(id);
 
-  nConsecutiveSuccessfullWrites++;
+  nConsecutiveGoodReads++;
 
   return(CAENHV_OK);
 }

@@ -41,6 +41,8 @@ IMPORT  STATUS sysBusToLocalAdrs(int, char *, char **);
 //#define TIMEOUT 11111
 #define TIMEOUT 5111
 
+//#define DEBUG 0
+
 #define RESET_ERR 101
 #define WAIT_ERROR 102
 
@@ -950,7 +952,9 @@ CAENHVGetGroupParam(
 
   if (nchan<=0 || nchan>MAX_SLOT*MAX_CHAN) 
   {
+#ifdef DEBUG
     printf("CAENHVGetGroupParam:  #CHAN ERROR:  %d\n",nchan);
+#endif
     return 0;
   }
 
@@ -960,7 +964,9 @@ CAENHVGetGroupParam(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
+#ifdef DEBUG
     printf("CAENHVGetGroupParam:  V0SET/I0SET:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+#endif
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)
@@ -978,7 +984,9 @@ CAENHVGetGroupParam(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
+#ifdef DEBUG
     printf("CAENHVGetGroupParam:  VMAX/TRIP/FLAG:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+#endif
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)
@@ -994,7 +1002,9 @@ CAENHVGetGroupParam(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
+#ifdef DEBUG
     printf("CAENHVGetGroupParam:  RUP/RDN:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+#endif
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)
@@ -1009,7 +1019,9 @@ CAENHVGetGroupParam(
   V288SENDANDGETBIG;
   if (tmp/wpc != nchan)
   {
+#ifdef DEBUG
     printf("CAENHVGetGroupParam:  VMON/IMON/STAT:  #CHAN ERROR:  %d!=%d\n",tmp/wpc,nchan);
+#endif
     return 0;
   }
   for (jj=0; jj<tmp; jj+=wpc)

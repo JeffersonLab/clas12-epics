@@ -40,6 +40,18 @@ devSnmpSetParam(SessionRetries,50)
 
 
 
-In the end, moving the mib file to the first dir in the
-search path seemed to resolve it.
+Moving the akcp mib file to the first dir in the search path seems to
+greatly reduce error rate.  But it still errors.
+
+
+********************************
+Current Solution:
+Commented out setting of flagged_read_bad in snmp-nscl-1-0-RC9/snmpApp/src/devSnmp.cpp
+in devSnmp_oid::readReplyProcessing to allow it to continue to transmit snmp requests
+even after it (faultily) determines the variable is missing from the MIB file.  This
+succeeds on successive polls.
+
+
+
+
 

@@ -3,60 +3,61 @@
 # AKCP sensorProbe - Temperature Sensor
 #
 
-record(ai, "$(P)$(R)$(C)_Temp") {
+record(ai, "$(P)_Ch$(C):Temp") {
     field(DTYP, "Snmp")
     field(INP,  "@$(HOST) public %(MIB)TempDegree.$(C) INTEGER: 100")
     field(EGU,  "F")
-    field(SCAN, "$(SCAN)")
+    field(SCAN, "10 second")
     info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+    alias("$(A):Temp")
 }
 
 # Much of below doesn't work:
 
-#record(stringin, "$(P)$(R)$(C)_Temp:Desc") {
+#record(stringin, "$(P)_Ch$(C)_Temp:Desc") {
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)TempDescription.$(C) STRING:__ 100")
 #    field(PINI, 1)
 #}
 
-#record(stringout, "$(P)$(R)$(C)_Temp:DescSet") {
+#record(stringout, "$(P)_Ch$(C)_Temp:DescSet") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)TempDescription.$(C) s")
-#    field(FLNK, "$(P)$(R)$(C)_Temp:Desc")
+#    field(FLNK, "$(P)_Ch$(C)_Temp:Desc")
 #}
 
 #
-#record(bi, "$(P)$(R)$(C)_Temp:Online") {
+#record(bi, "$(P)_Ch$(C)_Temp:Online") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)TempOnline.$(C)")
 #}
 #
-#record(bo, "$(P)$(R)$(C)_Temp:OnlineSet") {
+#record(bo, "$(P)_Ch$(C)_Temp:OnlineSet") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)TempGoOnline.$(C) ( 100 i")
 #}
 #
-#record(bi, "$(P)$(R)$(C)_Temp:Units") {
+#record(bi, "$(P)_Ch$(C)_Temp:Units") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)TempDegreeType.$(C) ( 100 i")
 #    field(ZNAM, "F")
 #    field(ONAM, "C")
 #}
-#record(bo, "$(P)$(R)$(C)_Temp:UnitsSet") {
+#record(bo, "$(P)_Ch$(C)_Temp:UnitsSet") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)TempSetDegreeType.$(C) i")
 #    field(ZNAM, "F")
 #    field(ONAM, "C")
 #}
 #
-#record(ai, "$(P)$(R)$(C)_Temp:Offset") {
+#record(ai, "$(P)_Ch$(C)_Temp:Offset") {
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)TempOffset.$(C) INTEGER: 100")
 #}
 #
-#record(ao, "$(P)$(R)$(C)_Temp:OffsetSet") {
+#record(ao, "$(P)_Ch$(C)_Temp:OffsetSet") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)TempOffset.$(C) i")
 #}

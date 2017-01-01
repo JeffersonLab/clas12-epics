@@ -6,6 +6,7 @@ include $(TOP)/configure/CONFIG
 # Install databases, templates & substitutions like this
 DB  += sensorProbe_temperature.db
 DB  += sensorProbe_humidity.db
+DB  += hallWeather.substitutions
 
 MIB += akcp.mib
 

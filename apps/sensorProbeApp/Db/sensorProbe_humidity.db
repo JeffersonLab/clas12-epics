@@ -3,45 +3,46 @@
 # AKCP sensorProbe - Humidity Sensor
 #
 
-record(ai, "$(P)$(R)$(C)_Humid") {
+record(ai, "$(P)_Ch$(C):Humid") {
     field(DTYP, "Snmp")
     field(INP,  "@$(HOST) public %(MIB)HumidityPercent.$(C) INTEGER: 100")
     field(EGU,  "%")
-    field(SCAN, "$(SCAN)")
+    field(SCAN, "10 second")
     info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+    alias("$(A):Humid")
 }
 
 # Much of below doesn't work:
 
-#record(stringin, "$(P)$(R)$(C)_Humid:Desc") {
+#record(stringin, "$(P)_Humid:Desc") {
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)HumidityDescription.$(C) STRING: 100")
 #}
 
-#record(stringout, "$(P)$(R)$(C)_Humid:DescSet") {
+#record(stringout, "$(P)_Humid:DescSet") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)HumidityDescription.$(C) s")
 #}
 
 
-#record(bi, "$(P)$(R)$(C)_Humid:Online") {
+#record(bi, "$(P)_Humid:Online") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)HumidityOnline.$(C) INTEGER: 100")
 #}
 
-#record(bo, "$(P)$(R)$(C)_Humid:OnlineSet") {
+#record(bo, "$(P)_Humid:OnlineSet") {
 #    field(DESC, "online/offline status")
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)HumidityGoOnline.$(C) i")
 #}
 
-#record(ai, "$(P)$(R)$(C)_Humid:Offset") {
+#record(ai, "$(P)_Humid:Offset") {
 #    field(DTYP, "Snmp")
 #    field(INP,  "@$(HOST) public %(MIB)HumidityOffset.$(C) INTEGER: 100")
 #}
 
-#record(ao, "$(P)$(R)$(C)_Humid:Offset") {
+#record(ao, "$(P)_Humid:Offset") {
 #    field(DTYP, "Snmp")
 #    field(OUT,  "@$(HOST) public %(MIB)HumidityOffset.$(C) i")
 #}

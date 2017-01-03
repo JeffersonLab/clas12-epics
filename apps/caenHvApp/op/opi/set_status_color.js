@@ -15,7 +15,7 @@ if (type == "527")
 {
 	
 	var statuses=["ON","RUP",  "RDN",  "OVC",  "UNV",  "OVV",  "ExTrip","MAXV", "    ", "Kill", "InTrip"];
-	var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Minor","Major"];
+	var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Off","Major"];
 	
 	var theStatus=-1;
 	var j10=-1
@@ -32,7 +32,12 @@ if (type == "527")
 	    sstatus = statuses[j10];
 	  }
 	}
-	
+
+//  if (pvs[0].getName()=="B_DET_DC_HV_SEC6_R2_SL3_S01-08.L")
+//  {
+//    java.lang.System.err.println("-- "+pvs[0].getName()+" = "+istatus);
+//  }
+
 	//java.lang.System.out.println("----- "+istatus+" "+theStatus+" "+sstatus);
 	
 	if ( ((1<<6)  & istatus)) { sstatus="Kill"; }
@@ -45,6 +50,21 @@ if (type == "527")
 	  widget.setPropertyValue("background_color","Off");
 	  widget.setPropertyValue("foreground_color","Header_Foreground");
 	}
+  else if (sstatus=="NotPrt")
+  {
+    widget.setPropertyValue("background_color","MEDM_COLOR_38");
+	  widget.setPropertyValue("foreground_color","Header_Foreground");
+  }
+  else if (sstatus=="Kill")
+  {
+    widget.setPropertyValue("background_color","MEDM_COLOR_24");
+	  widget.setPropertyValue("foreground_color","Header_Foreground");
+  }
+  else if (sstatus=="RUP" || sstatus=="RDN")
+  {
+    widget.setPropertyValue("background_color","Minor");
+	  widget.setPropertyValue("foreground_color","Header_Foreground");
+  }
 	else
 	{
 	  widget.setPropertyValue("foreground_color","Text_Foreground");
@@ -53,13 +73,10 @@ if (type == "527")
 	  }
 	  else {
 	  	  widget.setPropertyValue("background_color","Major");
-	  	  //widget.setPropertyValue("background_color",bgcolors[theStatus]);
+        if (theStatus>=0 && theStatus<bgcolors.size)
+	  	    widget.setPropertyValue("background_color",bgcolors[theStatus]);
 	  }
 	}
-  if (sstatus=="NotPrt")
-  {
-    widget.setPropertyValue("background_color","MEDM_COLOR_38");
-  }
 }
 
 

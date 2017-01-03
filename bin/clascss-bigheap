@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# run css with an on-the-fly generated workspace
+#   - to avoid duplicate conflicting workspaces
+#   - to guarantee standard startup user interface
+#   - to avoid users modifying the configuration
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+# path hold generated workspaces
+tmp_path=/tmp/CSS-Workspaces
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+share=$DIR/../css_share
+
+plugin_profile=$share/common/prefs/plugin_customization.ini
+#plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
+workspace=$share/common/workspace
+
+# generate a temporary css workspace:
+#   Note: needs rw from all groups onliners, clas, etc.
+if [[ ! -e $tmp_path ]]; then
+    mkdir -p $tmp_path -m 777
+fi
+wsp=`mktemp -d -p $tmp_path`
+cp -rf $workspace/*    $wsp >& /dev/null
+cp -rf $workspace/.*   $wsp >& /dev/null
+cp -rf $plugin_profile $wsp
+
+# we want to run *everything* from the wsp workspace:
+#echo css -data $wsp \
+#    -pluginCustomization $wsp/plugin_customization.ini \
+#    -share_link $share=/CLAS12_Share \
+#    -nosplash
+
+
+####################################################################
+# pulled out the whole command that "css" actually executes,
+# to be able to set heap size without recompiling css
+
+#m=-Xmx1024m
+#m=-Xmx2048m
+m=-Xmx3072m
+
+/usr/lib/jvm/java-1.8.0-oracle/bin/java -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar -os linux -ws gtk -arch x86_64 -launcher /usr/clas12/css/4.1.1/linux-x86_64/clas12-css/css -name Css --launcher.library /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.200.v20150204-1316/eclipse_1607.so -startup /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar --launcher.overrideVmargs -exitdata f0000 -data $wsp -pluginCustomization $wsp/plugin_customization.ini -share_link $share=/CLAS12_Share -vm /usr/lib/jvm/java-1.8.0-oracle/bin/java -vmargs -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
+

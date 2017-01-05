@@ -1,0 +1,32 @@
+
+record(calc,"B_SYS_TARGET:CALC")
+{
+  field(INPA,"moller_target_empty CPP")
+  field(INPB,"harp_2H00A.RBV CPP")
+  field(INPC,"0") # cryotarget: 0=none, 1=empty, 2=H, 3=D
+  field(CALC,"A#1 ? 5 : (ABS(B)>0.01 ? 4 : C)")
+}
+
+record(mbbi,"B_SYS_TARGET:MBBI")
+{
+  field(INP,"B_SYS_TARGET:CALC CPP")
+  field(ZRST,"None")
+  field(ONST,"Empty")
+  field(TWST,"LH2")
+  field(THST,"LD")
+  field(FRST,"Harp-2H01")
+  field(FVST,"Moeller")
+}
+
+record(stringout,"B_SYS_TARGET:STRINGOUT")
+{
+  field(OMSL,"closed_loop")
+  field(DOL,"B_SYS_TARGET:MBBI CPP")
+  field(OUT,"B_SYS_TARGET:STRINGIN CPP")
+}
+
+# Proxy for accelerator's record:
+record(stringin,"B_SYS_TARGET:STRINGIN")
+{
+}
+

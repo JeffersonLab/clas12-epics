@@ -34,6 +34,8 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 dbLoadRecords("db/HVDC_VSCAN.db")
 
+dbLoadRecords("db/hall_target.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

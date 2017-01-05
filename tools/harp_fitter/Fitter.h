@@ -10,6 +10,7 @@ class TGMainFrame;
 class TRootEmbeddedCanvas;
 class TGTextEntry;
 class TGTextEdit;
+class TGMsgBox;
 class TGComboBox;
 class TGraph;
 class TGNumberEntry;
@@ -33,6 +34,7 @@ private:
   std::string harp_name;
   TGComboBox *counters_box;
   TGTextEdit *comments;
+  TGMsgBox *msg_box;
   TGCheckButton *but_to_MYA;
   TGCheckButton *but_to_HBLOG;
   TGCheckButton *but_to_ELOG;
@@ -91,6 +93,7 @@ public:
   void Draw_All_Counters();
   void FitData( bool, bool );
   void GetComments();
+  void popupMSG(std::string);
   void CloseUtilFrame();
   void CloseFitRanges();
   void CloseApp();
@@ -105,4 +108,5 @@ public:
   TH1D *Graph2Hist(TGraph *, double );
   void Load_Fit_Pars();
   void CAPUT();
+  
 };

@@ -10,6 +10,7 @@
 #include <TGFrame.h>
 #include <TGLabel.h>
 #include <TGButton.h> 
+#include <TGMsgBox.h>
 #include <TSpectrum.h>
 #include <TGTextEdit.h>
 #include <TTimeStamp.h>
@@ -444,7 +445,9 @@ void Fitter::FitData( bool manual_fit, bool preview )
 	  c1->Update();
 	}
       
-    }
+    } else {
+    popupMSG("You should select a counter for fitting");
+  }
   preview_mode = false;
 }
 
@@ -597,6 +600,11 @@ void Fitter::GetComments()
   else{
     fMain_log->RaiseWindow();
   }
+}
+
+void Fitter::popupMSG(std::string a){
+  msg_box = new TGMsgBox(gClient->GetRoot(), fMain,  "Message", a.c_str(), kMBIconStop);
+  //msg_box->CenterOnParent( kTRUE, kCenter );
 }
 
 void Fitter::Set_Fit_Pars()

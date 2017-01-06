@@ -55,9 +55,9 @@ dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=hps2,IP=129.57.167.165")
 dbLoadRecords("db/wienerW.db","HOST=hps2,IP=129.57.167.165")
 dbLoadRecords("db/vmePedestals.db","HOST=hps2,IP=129.57.167.165,VXS_FLAG=1")
 
-dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=dcrb1,IP=129.57.86.53")
-dbLoadRecords("db/wienerW.db","HOST=dcrb1,IP=129.57.86.53")
-dbLoadRecords("db/vmePedestals.db","HOST=dcrb1,IP=129.57.86.53,VXS_FLAG=1")
+#dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=dcrb1,IP=129.57.86.53")
+#dbLoadRecords("db/wienerW.db","HOST=dcrb1,IP=129.57.86.53")
+#dbLoadRecords("db/vmePedestals.db","HOST=dcrb1,IP=129.57.86.53,VXS_FLAG=1")
 
 dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=tdcecal1,IP=129.57.167.52")
 dbLoadRecords("db/wienerW.db","HOST=tdcecal1,IP=129.57.167.52")
@@ -227,5 +227,10 @@ dbLoadRecords("db/wienerR.db","SCAN=${scan},HOST=adcft3,IP=129.57.86.104")
 dbLoadRecords("db/wienerW.db","HOST=adcft3,IP=129.57.86.104")
 dbLoadRecords("db/vmePedestals.db","HOST=adcft3,IP=129.57.86.104,VXS_FLAG=1")
 
+< "${TOP}/iocBoot/${IOC}/st-DC.cmd"
+
 cd "${TOP}/iocBoot/${IOC}"
+
+
 iocInit
+

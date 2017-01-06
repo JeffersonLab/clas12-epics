@@ -45,7 +45,7 @@
     </annotations>
     <pvlist>
         <pv>
-          <display_name>        L5S</display_name>
+          <display_name>     L5S</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL5_S:imon</name>
             <axis>0</axis>
@@ -64,7 +64,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>        L5F</display_name>
+            <display_name>     L5F</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL5_F:imon</name>
             <axis>0</axis>
@@ -83,7 +83,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>        L5G</display_name>
+            <display_name>     L5G</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL5_G:imon</name>
             <axis>0</axis>
@@ -102,7 +102,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>        L6S</display_name>
+            <display_name>     L6S</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL6_S:imon</name>
             <axis>0</axis>
@@ -121,7 +121,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>        L6F</display_name>
+            <display_name>     L6F</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL6_F:imon</name>
             <axis>0</axis>
@@ -140,7 +140,7 @@
             <request>OPTIMIZED</request>
         </pv>
         <pv>
-            <display_name>        L6G</display_name>
+            <display_name>     L6G</display_name>
             <visible>true</visible>
             <name>B_DET_DC_HV_SEC1_R3_SL6_G:imon</name>
             <axis>0</axis>

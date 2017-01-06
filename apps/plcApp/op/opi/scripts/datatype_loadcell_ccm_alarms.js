@@ -14,7 +14,7 @@ var CNT = 4;
 for (var i=0; i<ELM.length; i++) {
 	for (var n=1; n<=CNT; n++) {
 		var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-		lc.setPropertyValue("opi_file","alarm_aiao_row.opi");
+		lc.setPropertyValue("opi_file","../../alarms/alarm_aiao_row.opi");
 		lc.setPropertyValue("auto_size",true);
 		lc.setPropertyValue("zoom_to_fit",false);
 		lc.setPropertyValue("border_style",0);

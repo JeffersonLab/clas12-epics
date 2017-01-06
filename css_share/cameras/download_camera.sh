@@ -29,6 +29,6 @@ do
   then
     caput -t B_HW_CAMS_cctv6:HEARTBEAT $kk &
   fi
-  
+
 done
 

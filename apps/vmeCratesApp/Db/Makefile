@@ -18,6 +18,8 @@ DB += vmePedestals.db
 DB += vmeCratesCommon.db 
 DB += vmeCrateGroup.db 
 
+DB += vmeCrates.substitutions
+
 REQ += vmeCratePedestal.req
 REQ += vmeGroupSettings.req
 

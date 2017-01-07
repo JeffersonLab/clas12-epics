@@ -97,8 +97,46 @@ record (bi,"$(HOST):plugAndPlayIncompatible") {
 	field (SCAN,"Passive")
 	field (INP,"$(HOST):CrateStat.B8")
 	field (DESC,"1=wrong power supply and rack connected")
-	field (FLNK,"$(HOST):anyFailure.PROC")
+	field (FLNK,"$(HOST):alarm.PROC")
 }
+
+####################################################
+record(calc,"$(HOST):alarmcalc")
+{
+  field(INPA,"$(HOST):sysMainSwitchR CPP")
+  field(INPB,"$(HOST):mainOn CPP")
+  field(INPC,"$(HOST):mainInhibit CPP")
+  field(INPD,"$(HOST):localControlOnly CPP")
+  field(INPE,"$(HOST):inputFailure CPP")
+  field(INPF,"$(HOST):fantrayFailure CPP")
+  field(INPG,"$(HOST):vmeSysfail CPP")
+#  field(HIHI,1)
+#  field(HHSV,"MAJOR")
+#field(CALC,"(A=0 || B#0 || C#0 || D#0 || E#0 || F#0 || G#0) ? 1 : 0")
+  field(CALC,"A=0?1:(B#0?2:(C#0?3:(D#0?4:(E#0?5:(F#0?6:(G#0?7:0))))))")
+  field(FLNK,"$(HOST):alarm")
+}
+record(mbbi,"$(HOST):alarm")
+{
+  field(INP,"$(HOST):alarmcalc")
+  field(ZRST,"OK")
+  field(ONST,"Main Switch OFF")
+  field(TWST,"Main OFF")
+  field(THST,"Main Inhibit")
+  field(FRST,"Local Control")
+  field(FVST,"Input Failure")
+  field(SXST,"Fantray Failure")
+  field(SVST,"VME Sys Failure")
+  field(ZRSV,"NO_ALARM")
+  field(ONSV,"MAJOR")
+  field(TWSV,"MAJOR")
+  field(THSV,"MAJOR")
+  field(FRSV,"MAJOR")
+  field(FVSV,"MAJOR")
+  field(SXSV,"MAJOR")
+  field(SVSV,"MAJOR")
+}
+###################################################
 
 #Output channels (4 on Hall D  models: 1, 2, 4, 6)
 record (longin,"$(HOST):outNumber")
@@ -419,6 +457,7 @@ record (ai,"$(HOST):out1measureSenseVolt")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured voltage at sense input lines")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out2measureSenseVolt")
 {
@@ -427,6 +466,7 @@ record (ai,"$(HOST):out2measureSenseVolt")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured voltage at sense input lines")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out4measureSenseVolt")
 {
@@ -435,6 +475,7 @@ record (ai,"$(HOST):out4measureSenseVolt")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured voltage at sense input lines")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out6measureSenseVolt")
 {
@@ -443,6 +484,7 @@ record (ai,"$(HOST):out6measureSenseVolt")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured voltage at sense input lines")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 
 record (ai,"$(HOST):out1measuredCurrent")
@@ -452,6 +494,7 @@ record (ai,"$(HOST):out1measuredCurrent")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured current")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out2measuredCurrent")
 {
@@ -460,6 +503,7 @@ record (ai,"$(HOST):out2measuredCurrent")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured current")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out4measuredCurrent")
 {
@@ -468,6 +512,7 @@ record (ai,"$(HOST):out4measuredCurrent")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured current")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (ai,"$(HOST):out6measuredCurrent")
 {
@@ -476,6 +521,7 @@ record (ai,"$(HOST):out6measuredCurrent")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Measured current")
 	field (PREC,"6")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 
 
@@ -1097,13 +1143,13 @@ record (longin,"$(HOST):sens8FailThreshR")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"If sensor temp>lim power switches off")
 }
-record (stringin,"$(HOST):psSerialNumber")
-{
-	field (DTYP,"Snmp")
-	field (INP,"@$(IP) public %(MIB)psSerialNumber.0 STRING: 100")
-	field (SCAN,"$(SCAN)")
-	field (DESC,"Serial Number of power supply")
-}
+#record (stringin,"$(HOST):psSerialNumber")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(MIB)psSerialNumber.0 STRING: 100")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Serial Number of power supply")
+#}
 record (longin,"$(HOST):psOperatingTime")
 {
 	field (DTYP,"Snmp")
@@ -1132,13 +1178,13 @@ record (longin,"$(HOST):fanAirTemp")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Temperature in C of fan tray inlet air")
 }
-record (longin,"$(HOST):fanSwitchOffDelayR")
-{
-	field (DTYP,"Snmp")
-	field (INP,"@$(IP) public %(WF)SwitchOffDelay.0 INTEGER: 100")
-	field (SCAN,"$(SCAN)")
-	field (DESC,"Time in seconds fans run after poweroff")
-}
+#record (longin,"$(HOST):fanSwitchOffDelayR")
+#{
+#field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WF)SwitchOffDelay.0 INTEGER: 100")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Time in seconds fans run after poweroff")
+#}
 record (longin,"$(HOST):fanNominalSpeedR")
 {
 	field (DTYP,"Snmp")
@@ -1146,19 +1192,20 @@ record (longin,"$(HOST):fanNominalSpeedR")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Nominal fan speed in RPM")
 }
-record (longin,"$(HOST):fanNumberOfFans")
-{
-	field (DTYP,"Snmp")
-	field (INP,"@$(IP) public %(WF)NumberOfFans.0 INTEGER: 100")
-	field (SCAN,"$(SCAN)")
-	field (DESC,"Number of installed fans")
-}
+#record (longin,"$(HOST):fanNumberOfFans")
+#{
+#	field (DTYP,"Snmp")
+#	field (INP,"@$(IP) public %(WF)NumberOfFans.0 INTEGER: 100")
+#	field (SCAN,"$(SCAN)")
+#	field (DESC,"Number of installed fans")
+#}
 record (longin,"$(HOST):fan1speed")
 {
 	field (DTYP,"Snmp")
 	field (INP,"@$(IP) public %(WF)Speed.1 INTEGER: 100")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Fan rotation speed in RPM")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (longin,"$(HOST):fan2speed")
 {
@@ -1166,6 +1213,7 @@ record (longin,"$(HOST):fan2speed")
 	field (INP,"@$(IP) public %(WF)Speed.2 INTEGER: 100")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Fan rotation speed in RPM")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record (longin,"$(HOST):fan3speed")
 {
@@ -1173,7 +1221,7 @@ record (longin,"$(HOST):fan3speed")
 	field (INP,"@$(IP) public %(WF)Speed.3 INTEGER: 100")
 	field (SCAN,"$(SCAN)")
 	field (DESC,"Fan rotation speed in RPM")
+  info (autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 
 
-#	field (DESC,"123456789A123456789B123456789C123456789D")

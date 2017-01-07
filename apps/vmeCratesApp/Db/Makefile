@@ -23,6 +23,8 @@ DB += vmeCrates.substitutions
 REQ += vmeCratePedestal.req
 REQ += vmeGroupSettings.req
 
+BEAST += vmeCrateAlarms.xml
+
 #Install the IOC status reporting DB
 #DEVIOCSTAT_LOC=$(DEVIOCSTATS)/db
 #DB += $(DEVIOCSTAT_LOC)/iocAdminSoft.db

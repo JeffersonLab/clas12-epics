@@ -1,7 +1,7 @@
 #!/bin/sh
 
-windowID=$1
-windowTitle=$2
+#windowID=$1
+#windowTitle=$2
 
 # force java version
 
@@ -21,5 +21,5 @@ CLASSPATH="${CLASSPATH}:${EPICS}/tools/logEntry/lib/jlog2.jar"
 CLASSPATH="${CLASSPATH}:${EPICS}/tools/logEntry/lib/mysql-connector-java-5.1.32-bin.jar"
 export CLASSPATH
 
-java org/jlab/hallb/AutoLogEntry/MakeLogEntry $windowID $windowTitle
+java org/jlab/hallb/AutoLogEntry/MakeLogEntry $@
 

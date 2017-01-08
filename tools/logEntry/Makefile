@@ -12,10 +12,10 @@ CLASSPATH :=.:lib/jlog2.jar:lib/mysql-connector-java-5.1.32-bin.jar:src/main/jav
 
 
 all:
-	javac -cp $(CLASSPATH) src/main/java/org/jlab/AutoLogEntry/MakeLogEntry.java
+	javac -cp $(CLASSPATH) src/main/java/org/jlab/hallb/AutoLogEntry/MakeLogEntry.java
 
 clean:
-	rm -f src/main/java/org/jlab/AutoLogEntry/*.class
+	rm -f src/main/java/org/jlab/hallb/AutoLogEntry/*.class
 
 print:
 	echo ${PATH}

@@ -1,4 +1,5 @@
-package org.jlab.AutoLogEntry;
+package org.jlab.hallb.AutoLogEntry;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,11 +8,18 @@ import java.awt.Frame ;
 import java.io.*;
 import java.sql.*;
 import java.util.Date;
+
 import org.jlab.elog.LogEntry;
 
 public class MakeLogEntry
 {
     String LOGBOOKNAME="TLOG";
+
+    String RUNDBSERVER="clondb1:3306";
+    String RUNDBTABLE="daq_clasrun";
+    String RUNDBUSER="clasrun";
+    String RUNDBPASSWD="";
+
     String WINID=null;      // Window ID, that we need to get an image from
     String MEDMNAME=null; // The name of MEDM (.adl) file
     String IMGPATH;       // Path of the Image, that will be submited to logbook
@@ -27,7 +35,7 @@ public class MakeLogEntry
           MakeLogEntry obj = new MakeLogEntry();
           obj.run(args);
         }
-        catch( Exception e) { e.printStackTrace(); }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
     public void run(String[] args)
@@ -36,7 +44,7 @@ public class MakeLogEntry
             if (args.length>0) WINID = args[0];
             if (args.length>1) MEDMNAME = args[1];
             IMGPATH = getImgPath(WINID, MEDMNAME);
-            addComments();
+            getUserInput();
           }
           catch (Exception e) { e.printStackTrace(); }
     }
@@ -76,6 +84,20 @@ public class MakeLogEntry
       catch (Exception e) { e.printStackTrace(); }
       return windowID;
     }
+    
+    public int getRunNumber()
+    {
+        int runNumber = 0;
+        try { Class.forName("com.mysql.jdbc.Driver"); }
+        catch (ClassNotFoundException e) { e.printStackTrace(); } 
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://"+RUNDBSERVER+"/"+RUNDBTABLE, RUNDBUSER, RUNDBPASSWD);
+            ResultSet rs = conn.createStatement().executeQuery("select runnumber from sessions where name=\"clashps\" ;");
+            while (rs.next()) runNumber=rs.getInt("runnumber");
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        return runNumber;
+    }
 
     public String getImgPath(String winid, String medmName)
     {
@@ -94,7 +116,7 @@ public class MakeLogEntry
         return imgPath;
     }
 
-    public void addComments()
+    public void getUserInput()
     {
         FRAME = new JFrame("Hall B Logbook Entry");
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,7 +147,7 @@ public class MakeLogEntry
         LOGTEXT.setMinimumSize(new Dimension(10, 10));
         LOGTEXT.setForeground(Color.BLUE);
         LOGTEXT.setFont(new Font("Dialog.plain", 0, 20));
-        ScrollablePanel sp = new ScrollablePanel();
+        scrollablePanel sp = new scrollablePanel();
         BoxLayout layout = new BoxLayout(sp, BoxLayout.Y_AXIS);
         sp.setLayout(layout);
         sp.add(LOGTEXT);
@@ -139,10 +161,10 @@ public class MakeLogEntry
         // buttons:
         JButton butSubmit = new JButton();
         butSubmit.setText("Submit To Logbook");
-        butSubmit.addActionListener(new SubmitAction());
+        butSubmit.addActionListener(new submitAction());
         JButton butScreenshot = new JButton();
         butScreenshot.setText("Add Screenshot");
-        //butScreenshot.addActionListener(new ScreenshotAction());
+        //butScreenshot.addActionListener(new screenshotAction());
         JPanel buttonPanel = new JPanel();
         FRAME.getContentPane().add(buttonPanel, "South");
         buttonPanel.add(butScreenshot);
@@ -170,60 +192,36 @@ public class MakeLogEntry
     }
 
 
-    public void SubmitElog()
+    public void submitElog()
     {
         System.err.println("NOT SUBMITTING ELOG");
 /*
         LogEntry entry = new LogEntry("", LOGBOOKNAME);
         //entry.setEmailNotify("rafopar@jlab.org");
-
         try {
-            entry.addAttachment( IMGPATH, "Snapshot of " + FILENAME + "window");
-            entry.setTitle(elog_Title);	
+            entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);
+            entry.setTitle(LOGTITLE.getText());
             entry.setBody(LOGTEXT.getText());
-            if( rb_important.isSelected() ) // Checks whether this entry needs special attention
-            {
-                entry.setSticky(true);
-                System.out.println("Needs Special Attention");
-            }
             long logNumber = entry.submitNow();
+            System.out.println("Log Submitted as Entry #" + logNumber);
             //entry.submit();
-            System.out.println("Entry was submited under the logNumber " + logNumber);
             //System.out.println(entry.getXML());
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
 */
     }
 
-    public int getRunNumber()
-    {
-        int cur_runnumber = 0;
-        try { Class.forName("com.mysql.jdbc.Driver"); }
-        catch (ClassNotFoundException e) { e.printStackTrace(); } 
-        try {
-            BufferedReader stdInput;
-            //Connection conn = DriverManager.getConnection("jdbc:mysql://clondb1:3306/daq_clasdev", "clasrun", "");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://clondb1:3306/daq_clasrun", "clasrun", "");
-            Statement stmt = conn.createStatement();
-            String query = "select runnumber from sessions where name=\"clashps\" ;" ;
-            ResultSet rs = stmt.executeQuery(query) ;
-            while (rs.next()) cur_runnumber=rs.getInt("runnumber");
-        }
-        catch (Exception e) { e.printStackTrace(); }
-        return cur_runnumber;
-    }
-
-    class SubmitAction implements ActionListener
+    class submitAction implements ActionListener
     {
         public void actionPerformed (ActionEvent e)
         {
-            SubmitElog();
+            submitElog();
             FRAME.dispose();
         }
     }
 
     /*
-    class ScreenshotAction implements ActionListener
+    class screenshotAction implements ActionListener
     {
         public void actionPerformed (ActionEvent e)
         {
@@ -233,7 +231,7 @@ public class MakeLogEntry
     }
     */
 
-    private static class ScrollablePanel extends JPanel implements Scrollable
+    private static class scrollablePanel extends JPanel implements Scrollable
     {
         public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)  { return 16; }
         public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) { return 16; }

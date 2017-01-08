@@ -25,7 +25,7 @@ public class MakeLogEntry
 
   String SCREENSHOTDIR=System.getenv("HOME")+"/screenshots/";
 
-  String USAGE="MakeLogEntry [-w windowId] [-m screenName]";
+  String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
   String IMGPATH; // Path of image to submit to logbook
 
   JTextArea LOGTEXT = new JTextArea("Comments", 20, 40);
@@ -62,6 +62,8 @@ public class MakeLogEntry
         {
           if      (args[ii].equals("-w")) windowId = args[++ii];
           else if (args[ii].equals("-m")) screenName = args[++ii];
+          else if (args[ii].equals("-l")) LOGBOOKNAME = args[++ii];
+          else if (args[ii].equals("-s")) RUNDBSESSION = args[++ii];
           else System.err.println("Invalid Argument: >"+args[ii]+"<");
         }
       }

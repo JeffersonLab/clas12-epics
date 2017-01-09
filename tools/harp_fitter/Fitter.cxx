@@ -193,7 +193,7 @@ void Fitter::InitData( string fname )
 
   }
 
-  cout<<"fit_tagger = "<<fit_tagger<<endl;
+  //cout<<"fit_tagger = "<<fit_tagger<<endl;
 
   gr_[0] = new TGraph(Form("%s", fname.c_str() ), "%lg %*s %lg");
   gr_[1] = new TGraph(Form("%s", fname.c_str() ), "%lg %*s %*s %lg");

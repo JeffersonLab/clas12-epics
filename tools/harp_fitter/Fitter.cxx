@@ -99,13 +99,13 @@ Fitter::Fitter(const TGWindow *p,UInt_t w,UInt_t h, string fname)
   fit_data->Connect("Clicked()", "Fitter", this, "FitData( =false, false )");
   vframe->AddFrame(fit_data, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
 
-  TGTextButton *to_log = new TGTextButton(vframe, "Submit to Logbook");
-  to_log->Connect("Clicked()", "Fitter", this, "GetComments()");
-  vframe->AddFrame(to_log, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
-
   TGTextButton *fit_pars = new TGTextButton(vframe, "Set Fit Ranges");
   fit_pars->Connect("Clicked()", "Fitter", this, "Set_Fit_Pars()");
   vframe->AddFrame(fit_pars, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
+  
+  TGTextButton *to_log = new TGTextButton(vframe, "Submit to Logbook");
+  to_log->Connect("Clicked()", "Fitter", this, "GetComments()");
+  vframe->AddFrame(to_log, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
 
   //  TGTextButton *b_to_MYA = new TGTextButton(vframe, "&Send parameters to MYA");
   //  b_to_MYA->Connect("Clicked()", "Fitter", this, "CAPUT()");
@@ -113,6 +113,10 @@ Fitter::Fitter(const TGWindow *p,UInt_t w,UInt_t h, string fname)
 
   TGTextButton *exit = new TGTextButton(vframe,"&Exit", "gApplication->Terminate(0)"); 
   vframe->AddFrame(exit, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
+
+  status_label = new TGLabel(vframe,"");
+  status_label->SetTextJustify(kTextLeft | kTextCenterY);
+  vframe->AddFrame(status_label, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
 
   fMain->AddFrame(vframe,new TGLayoutHints(kLHintsTop,2,2,2,2) );
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX| kLHintsExpandY,

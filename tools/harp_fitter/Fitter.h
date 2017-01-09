@@ -15,6 +15,7 @@ class TGComboBox;
 class TGraph;
 class TGNumberEntry;
 class TGCheckButton;
+class TGLabel;
 
 class Fitter { 
   RQ_OBJECT("Fitter")
@@ -32,6 +33,7 @@ class Fitter {
     std::string counter_names_[n_counters];
     std::string file_name;
     std::string harp_name;
+    TGLabel *status_label;
     TGComboBox *counters_box;
     TGTextEdit *comments;
     TGCheckButton *but_to_MYA;

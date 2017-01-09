@@ -603,10 +603,7 @@ void Fitter::GetComments()
 }
 
 void Fitter::popupMSG(std::string a){
-  msg_box = new TGMsgBox(gClient->GetRoot(), fMain,  "HarpFitterMessage", a.c_str(), kMBIconStop);
-  msg_box->CenterOnParent();// kTRUE);//, kCenter );
-  //std::cout<<"X: "<<msg_box->GetX()<<std::endl;
-  //std::cout<<"Y: "<<msg_box->GetY()<<std::endl;
+  new TGMsgBox(gClient->GetRoot(), fMain,  "HarpFitterMessage", a.c_str(), kMBIconExclamation);
 }
 
 void Fitter::Set_Fit_Pars()

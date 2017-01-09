@@ -34,7 +34,6 @@ class Fitter {
     std::string harp_name;
     TGComboBox *counters_box;
     TGTextEdit *comments;
-    TGMsgBox *msg_box;
     TGCheckButton *but_to_MYA;
     TGCheckButton *but_to_HBLOG;
     TGCheckButton *but_to_ELOG;

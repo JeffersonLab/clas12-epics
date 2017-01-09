@@ -1,0 +1,1 @@
+../tools/logEntry/logbookEntry.sh

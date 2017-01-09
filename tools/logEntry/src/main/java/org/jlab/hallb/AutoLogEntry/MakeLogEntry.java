@@ -212,12 +212,16 @@ public class MakeLogEntry
 
   public void makeGui()
   {
-    FRAME = new JFrame("Hall B Logbook Entry");
+    FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
     FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
     FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    // for screenshot:
+    // screenshot panel:
     IMPANEL.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
+    
+    // status line:
+    STATUSTEXT = makeTextPane("",Color.RED);
+    STATUSTEXT.setPreferredSize(new Dimension(400,25));
 
     // log title instructions:
     JTextPane logTitleInst = makeTextPane("Enter Log Title:",Color.DARK_GRAY);
@@ -236,9 +240,6 @@ public class MakeLogEntry
     JTextPane logTextInst = makeTextPane("Enter Log Content:",Color.DARK_GRAY);
     logTextInst.setPreferredSize(new Dimension(400, 20));
 
-    STATUSTEXT = makeTextPane("",Color.RED);
-    STATUSTEXT.setPreferredSize(new Dimension(400,25));
-
     // log text entry:
     LOGTEXT.setLineWrap(true);
     LOGTEXT.setWrapStyleWord(true);
@@ -254,7 +255,7 @@ public class MakeLogEntry
     jsp.getVerticalScrollBar().setUnitIncrement(16);
     jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    jsp.setPreferredSize(new Dimension(500,200));
+    jsp.setPreferredSize(new Dimension(300,200));
 
     // buttons:
     JButton butSubmit = new JButton();
@@ -267,10 +268,10 @@ public class MakeLogEntry
     butCancel.setText("Exit");
     butCancel.addActionListener(new exitAction());
     BUTTONPANEL = new JPanel();
-    BUTTONPANEL.add(STATUSTEXT);
     BUTTONPANEL.add(butScreenshot);
     BUTTONPANEL.add(butSubmit);
     BUTTONPANEL.add(butCancel);
+    BUTTONPANEL.add(STATUSTEXT);
 
     JPanel titlePanel = new JPanel();
     titlePanel.setLayout(new FlowLayout(FlowLayout.LEADING));

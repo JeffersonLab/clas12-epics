@@ -23,18 +23,19 @@ public class MakeLogEntry
 //  String RUNDBTABLE="daq_"+RUNDBEXPID;
 //  String RUNDBUSER=RUNDBEXPID;
 
-  String RUNDBSESSION="clashps";   // $SESSION, "clasprod"
-  String RUNDBTABLE="daq_clasrun"; // daq_$EXPID
+  // hps 2015 settings:
+  String RUNDBSESSION="clashps";
+  String RUNDBTABLE="daq_clasrun";
   
   final String RUNDBHOST=System.getenv("MYSQL_HOST");
   final String RUNDBPORT="3306";
 
-  final String RUNDBUSER="clasrun"; // $EXPID
+  final String RUNDBUSER="clasrun"; // $EXPID?
   final String RUNDBPASSWD="";
 
   final String SCREENSHOTDIR=System.getenv("HOME")+"/screenshots/";
   final String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
-  String IMGPATH; // Path of image to submit to logbook
+  String IMGPATH = null; // Path of image to submit to logbook
 
   JTextArea LOGTEXT = new JTextArea("Comments", 20, 40);
   JTextArea LOGTITLE = new JTextArea("Title", 20, 40);
@@ -43,8 +44,8 @@ public class MakeLogEntry
   JPanel BUTTONPANEL=null;
   JFrame FRAME;
 
-  final int IMGHEIGHT=200;
-  final int IMGWIDTH=300;
+  final int IMGHEIGHT = 200;
+  final int IMGWIDTH = 300;
 
   public static void main( String[] args )
   {
@@ -156,7 +157,8 @@ public class MakeLogEntry
 
   public BufferedImage readScreenshot(String filename)
   {
-    // try/wait for file to register, and sleep before reading it:
+    // try/wait for file to register, and sleep before reading it.
+    // these loops, sleeps, tests were found to be important for reliability
     File file=null;
     BufferedImage imbuff = null;
     try {
@@ -172,15 +174,15 @@ public class MakeLogEntry
         System.err.println("File DNE:  "+filename);
         return null;
       }
-      if (count>5) System.err.println("WAITCOUNT:  "+count);
+      if (count>5) System.err.println("MakeLogEntry.java:  WAITCOUNT1:  "+count);
       sleep(500);
       for (count=0; count<50; count++) {
-        imbuff=ImageIO.read(new File(filename));
+        imbuff=ImageIO.read(file);
         if (imbuff==null) sleep(200);
         else break;
       }
-      if (imbuff==null)
-        System.err.println("Error Reading Screenshot.");
+      if (count>5) System.err.println("MakeLogEntry.java:  WAITCOUNT2:  "+count);
+      if (imbuff==null) System.err.println("Error Reading Screenshot.");
     }
     catch (IOException e) { e.printStackTrace(); }
     return imbuff;
@@ -219,7 +221,7 @@ public class MakeLogEntry
 
   public JTextPane makeTextPane(String text,Color color)
   {
-    // don't remember why JTextPane instead of just JTextArea
+    // don't remember why JTextPane instead of just JTextArea (fg/bg color, bold font ...)
     JTextPane jtp = new JTextPane();
     StyledDocument doc = jtp.getStyledDocument();
     Style style = jtp.addStyle("a",null);

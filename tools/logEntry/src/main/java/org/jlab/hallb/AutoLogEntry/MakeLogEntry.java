@@ -15,17 +15,23 @@ import org.jlab.elog.LogEntry;
 
 public class MakeLogEntry
 {
-  String LOGBOOKNAME="TLOG";
+  String LOGBOOKNAME="TLOG"; // HBLOG
 
-  String RUNDBSESSION="clashps";
-  String RUNDBSERVER="clondb1:3306";
-  String RUNDBTABLE="daq_clasrun";
-  String RUNDBUSER="clasrun";
-  String RUNDBPASSWD="";
+//  String RUNDBSESSION=System.getenv("SESSION");
+//  String RUNDBEXPID=System.getenv("EXPID");
+//  String RUNDBTABLE="daq_"+RUNDBEXPID;
+//  String RUNDBUSER=RUNDBEXPID;
 
-  String SCREENSHOTDIR=System.getenv("HOME")+"/screenshots/";
+  String RUNDBSESSION="clashps";   // $SESSION, "clasprod"
+  String RUNDBTABLE="daq_clasrun"; // daq_$EXPID
+  
+  final String RUNDBHOST=System.getenv("MYSQL_HOST");
+  final String RUNDBPORT="3306";
+  final String RUNDBUSER="clasrun"; // $EXPID
+  final String RUNDBPASSWD="";
 
-  String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
+  final String SCREENSHOTDIR=System.getenv("HOME")+"/screenshots/";
+  final String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
   String IMGPATH; // Path of image to submit to logbook
 
   JTextArea LOGTEXT = new JTextArea("Comments", 20, 40);
@@ -35,8 +41,8 @@ public class MakeLogEntry
   JPanel BUTTONPANEL=null;
   JFrame FRAME;
 
-  int IMGHEIGHT=200;
-  int IMGWIDTH=300;
+  final int IMGHEIGHT=200;
+  final int IMGWIDTH=300;
 
   public static void main( String[] args )
   {
@@ -111,10 +117,10 @@ public class MakeLogEntry
     try { Class.forName("com.mysql.jdbc.Driver"); }
     catch (ClassNotFoundException e) { e.printStackTrace(); } 
     try {
-      Connection conn = DriverManager.getConnection(
-          "jdbc:mysql://"+RUNDBSERVER+"/"+RUNDBTABLE, RUNDBUSER, RUNDBPASSWD);
-      ResultSet rs = conn.createStatement().executeQuery(
-          "select runnumber from sessions where name=\""+RUNDBSESSION+"\" ;");
+      String host = "jdbc:mysql://"+RUNDBHOST+":"+RUNDBPORT+"/"+RUNDBTABLE;
+      String query = "select runnumber from sessions where name=\""+RUNDBSESSION+"\" ;";
+      Connection conn = DriverManager.getConnection(host,RUNDBUSER, RUNDBPASSWD);
+      ResultSet rs = conn.createStatement().executeQuery(query);
       while (rs.next()) runNumber=rs.getInt("runnumber");
     }
     catch (Exception e) { e.printStackTrace(); }
@@ -146,7 +152,7 @@ public class MakeLogEntry
     return imgPath;
   }
 
-  public void showScreenshot(String filename)
+  public BufferedImage readScreenshot(String filename)
   {
     // try/wait for file to register, and sleep before reading it:
     File file=null;
@@ -162,13 +168,19 @@ public class MakeLogEntry
       if (!goodFile) 
       {
         System.err.println("File DNE:  "+filename);
-        return;
+        return null;
       }
       if (count>5) System.err.println("WAITCOUNT:  "+count);
       sleep(500);
       imbuff=ImageIO.read(new File(filename));
     }
     catch (IOException e) { e.printStackTrace(); }
+    return imbuff;
+  }
+
+  public void showScreenshot(String filename)
+  {
+    BufferedImage imbuff = readScreenshot(filename);
     Image image = getScaledImage(imbuff);
     ImageIcon imicon=new ImageIcon(image);
     IMPANEL.removeAll();

@@ -172,7 +172,11 @@ public class MakeLogEntry
       }
       if (count>5) System.err.println("WAITCOUNT:  "+count);
       sleep(500);
-      imbuff=ImageIO.read(new File(filename));
+      for (count=0; count<50; count++) {
+        imbuff=ImageIO.read(new File(filename));
+        if (imbuff==null) sleep(200);
+        else break;
+      }
     }
     catch (IOException e) { e.printStackTrace(); }
     return imbuff;
@@ -180,12 +184,15 @@ public class MakeLogEntry
 
   public void showScreenshot(String filename)
   {
-    BufferedImage imbuff = readScreenshot(filename);
-    Image image = getScaledImage(imbuff);
-    ImageIcon imicon=new ImageIcon(image);
     IMPANEL.removeAll();
     IMPANEL.updateUI();
-    IMPANEL.add(new JLabel(imicon));
+    if (filename != null)
+    {
+      BufferedImage imbuff = readScreenshot(filename);
+      Image image = getScaledImage(imbuff);
+      ImageIcon imicon=new ImageIcon(image);
+      IMPANEL.add(new JLabel(imicon));
+    }
   }
 
   public Image getScaledImage(BufferedImage imbuff)
@@ -222,6 +229,18 @@ public class MakeLogEntry
     return jtp;
   }
 
+  public void initLogTitle()
+  {
+    LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
+    LOGTITLE.updateUI();
+  }
+  
+  public void initLogComments()
+  {
+    LOGTEXT.setText("Comments");
+    LOGTEXT.updateUI();
+  }
+
   public void makeGui()
   {
     FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
@@ -240,6 +259,7 @@ public class MakeLogEntry
     logTitleInst.setPreferredSize(new Dimension(200, 20));
 
     // log title entry:
+    initLogTitle();
     LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.setVisible(true);
     LOGTITLE.setEditable(true);
@@ -276,12 +296,16 @@ public class MakeLogEntry
     JButton butScreenshot = new JButton();
     butScreenshot.setText("Screenshot");
     butScreenshot.addActionListener(new screenshotAction());
+    JButton butClear = new JButton();
+    butClear.setText("Reset");
+    butClear.addActionListener(new clearAction());
     JButton butCancel = new JButton();
     butCancel.setText("Exit");
     butCancel.addActionListener(new exitAction());
     BUTTONPANEL = new JPanel();
     BUTTONPANEL.add(butScreenshot);
     BUTTONPANEL.add(butSubmit);
+    BUTTONPANEL.add(butClear);
     BUTTONPANEL.add(butCancel);
     BUTTONPANEL.add(STATUSTEXT);
 
@@ -389,6 +413,16 @@ public class MakeLogEntry
   class exitAction implements ActionListener
   {
     public void actionPerformed (ActionEvent e) { FRAME.dispose(); }
+  }
+  class clearAction implements ActionListener
+  {
+    public void actionPerformed (ActionEvent e) {
+      showScreenshot(null);
+      updateStatusPane("",Color.BLACK);
+      initLogTitle();
+      initLogComments();
+      IMGPATH=null;
+    }
   }
 
   private static class scrollablePanel extends JPanel implements Scrollable

@@ -10,6 +10,7 @@ import java.lang.Thread;
 import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.text.*;
+import javax.swing.border.*;
 
 import org.jlab.elog.LogEntry;
 
@@ -27,6 +28,7 @@ public class MakeLogEntry
   
   final String RUNDBHOST=System.getenv("MYSQL_HOST");
   final String RUNDBPORT="3306";
+
   final String RUNDBUSER="clasrun"; // $EXPID
   final String RUNDBPASSWD="";
 
@@ -177,6 +179,8 @@ public class MakeLogEntry
         if (imbuff==null) sleep(200);
         else break;
       }
+      if (imbuff==null)
+        System.err.println("Error Reading Screenshot.");
     }
     catch (IOException e) { e.printStackTrace(); }
     return imbuff;
@@ -249,6 +253,7 @@ public class MakeLogEntry
 
     // screenshot panel:
     IMPANEL.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
+    IMPANEL.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
     
     // status line:
     STATUSTEXT = makeTextPane("",Color.RED);
@@ -267,6 +272,8 @@ public class MakeLogEntry
     LOGTITLE.setFont(new Font("Diaglog.plain",0,15));
     LOGTITLE.setPreferredSize(new Dimension(400, 20));
     LOGTITLE.setMaximumSize(new Dimension(1000, 20));
+    LOGTITLE.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    FRAME.getRootPane().setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
     // log text instructions:
     JTextPane logTextInst = makeTextPane("Enter Log Content:",Color.DARK_GRAY);
@@ -288,6 +295,7 @@ public class MakeLogEntry
     jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     jsp.setPreferredSize(new Dimension(300,200));
+    jsp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
     // buttons:
     JButton butSubmit = new JButton();

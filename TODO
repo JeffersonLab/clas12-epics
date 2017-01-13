@@ -8,14 +8,14 @@
 # Annunciator
   * run cronjob for headless Annunciator (e.g. on clonpc17)
 
-# CS-Studio heap
-  * up to 2 GB - done for new 4.3.3 version
-
 # procServMgr
   * Update procServMgr with new paths to cfgs, etc (wmoore)  
   * Fix issue with procServMgr cron job not having correct environment
   ** affects iocs using snmp (iocvmeCrates, iocftaglv) due to LD_LIBRARY_PATH
   ** and scripts for iocftcFlasher due to PATH
+  * currently procServMgr requires user=wmoore
+  ** yet wmoore does not source $EPICS/.setup by default, and uses group div-acc by default
+  *** this is a nuisance for iocs that need, for example, EPICS_CA_ADDR_LIST for ops records
 
 # firefox/chrome
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics

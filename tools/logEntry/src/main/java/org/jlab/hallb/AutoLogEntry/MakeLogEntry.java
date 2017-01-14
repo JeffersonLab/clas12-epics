@@ -37,11 +37,10 @@ public class MakeLogEntry
   final String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
   String IMGPATH = null; // Path of image to submit to logbook
 
-  JTextArea LOGTEXT = new JTextArea("Comments", 20, 40);
+  JTextArea LOGTEXT = new JTextArea("Enter Comments Here", 20, 40);
   JTextArea LOGTITLE = new JTextArea("Title", 20, 40);
   JTextPane STATUSTEXT = null;
   JPanel IMPANEL=new JPanel();
-  JPanel BUTTONPANEL=null;
   JFrame FRAME;
 
   final int IMGHEIGHT = 200;
@@ -243,20 +242,16 @@ public class MakeLogEntry
   
   public void initLogComments()
   {
-    LOGTEXT.setText("Comments");
+    LOGTEXT.setText("Enter Comments Here");
     LOGTEXT.updateUI();
   }
 
   public void makeGui()
   {
-    FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
-    FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
-    FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    FRAME.getRootPane().setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-
     // screenshot panel:
     IMPANEL.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
     IMPANEL.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    IMPANEL.setOpaque(false);
     
     // status line:
     STATUSTEXT = makeTextPane("",Color.RED);
@@ -264,11 +259,10 @@ public class MakeLogEntry
 
     // log title entry:
     initLogTitle();
-    LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.setVisible(true);
     LOGTITLE.setEditable(true);
     LOGTITLE.setForeground(Color.BLUE);
-    LOGTITLE.setFont(new Font("Diaglog.plain",0,18));
+    LOGTITLE.setFont(new Font("Dialog.plain",0,18));
     LOGTITLE.setPreferredSize(new Dimension(400, 20));
     LOGTITLE.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
@@ -278,9 +272,10 @@ public class MakeLogEntry
     LOGTEXT.setMinimumSize(new Dimension(10, 10));
     LOGTEXT.setForeground(Color.BLUE);
     LOGTEXT.setFont(new Font("Dialog.plain", 0, 15));
+
+    // log text entry panel:
     scrollablePanel sp = new scrollablePanel();
-    BoxLayout layout = new BoxLayout(sp, BoxLayout.Y_AXIS);
-    sp.setLayout(layout);
+    sp.setLayout(new BoxLayout(sp, BoxLayout.Y_AXIS));
     sp.add(LOGTEXT);
     sp.add(Box.createRigidArea(new Dimension(0, 10)));
     JScrollPane jsp = new JScrollPane(sp);
@@ -289,6 +284,7 @@ public class MakeLogEntry
     jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     jsp.setPreferredSize(new Dimension(300,200));
     jsp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    jsp.setOpaque(false);
 
     // buttons:
     JButton butSubmit = new JButton();
@@ -303,40 +299,46 @@ public class MakeLogEntry
     JButton butCancel = new JButton();
     butCancel.setText("Exit");
     butCancel.addActionListener(new exitAction());
-    BUTTONPANEL = new JPanel();
-    BUTTONPANEL.add(butScreenshot);
-    BUTTONPANEL.add(butSubmit);
-    BUTTONPANEL.add(butClear);
-    BUTTONPANEL.add(butCancel);
-    BUTTONPANEL.add(STATUSTEXT);
 
     Border lbd=BorderFactory.createLineBorder(Color.GRAY);
+    
+    // button panel:
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(butScreenshot);
+    buttonPanel.add(butSubmit);
+    buttonPanel.add(butClear);
+    buttonPanel.add(butCancel);
+    buttonPanel.add(STATUSTEXT);
 
+    // comments panel:
     JPanel commentsPanel = new JPanel();
+    commentsPanel.setOpaque(false);
     commentsPanel.setLayout(new BoxLayout(commentsPanel,BoxLayout.PAGE_AXIS));
     commentsPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Comments"));
     commentsPanel.add(jsp);
-    
+
+    // screenshot panel:
     JPanel screenshotPanel = new JPanel();
+    screenshotPanel.setOpaque(false);
     screenshotPanel.setLayout(new BoxLayout(screenshotPanel,BoxLayout.PAGE_AXIS));
     screenshotPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshot"));
     screenshotPanel.add(IMPANEL);
 
+    // title panel:
     JPanel titlePanel = new JPanel();
+    titlePanel.setOpaque(false);
     titlePanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
     titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.LINE_AXIS));
     titlePanel.setPreferredSize(new Dimension(200, 50));
     titlePanel.add(LOGTITLE);
 
-    titlePanel.setOpaque(false);
-    jsp.setOpaque(false);
-    BUTTONPANEL.setOpaque(false);
-    screenshotPanel.setOpaque(false);
-    IMPANEL.setOpaque(false);
-    commentsPanel.setOpaque(false);
-
+    // main frame:
+    FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
+    FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
+    FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     FRAME.add(commentsPanel, BorderLayout.CENTER);
-    FRAME.add(BUTTONPANEL, "South");
+    FRAME.add(buttonPanel, "South");
     FRAME.add(titlePanel, "North");
     FRAME.add(screenshotPanel,"East");
     FRAME.pack();
@@ -349,9 +351,6 @@ public class MakeLogEntry
     STATUSTEXT.update(STATUSTEXT.getGraphics());
     STATUSTEXT.updateUI();
     STATUSTEXT.repaint();
-    BUTTONPANEL.update(BUTTONPANEL.getGraphics());
-    BUTTONPANEL.updateUI();
-    BUTTONPANEL.repaint();
     FRAME.update(FRAME.getGraphics());
     FRAME.revalidate();
     FRAME.repaint();

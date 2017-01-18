@@ -30,7 +30,7 @@ for (var sector=1; sector<=6; sector++) {
 }
 }
 
-iocs=["FTAG","CTOF0","LTCC0","DCa","DCb"];
+iocs=["FTAG","CTOF0","LTCC0","DCa","DCb","BLINE"];
 //,"HVTEST0"];
 for (var ii=0; ii<iocs.length; ii++) {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");

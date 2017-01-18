@@ -2,6 +2,10 @@
 # TODO List
 #
 
+# figure out why adl2boy doesn't work (DONE)
+#  -- it doesn't work if the adl is in CLAS_Share
+#  -- it DOES work if it is just in the workspace and not the share
+
 # caenHvApp/Db/caenhv.db
   * add stringin description record, human-readable, just for labelling purposes in multi-row screens
 
@@ -11,11 +15,11 @@
 # procServMgr
   * Update procServMgr with new paths to cfgs, etc (wmoore)  
   * Fix issue with procServMgr cron job not having correct environment
-  ** affects iocs using snmp (iocvmeCrates, iocftaglv) due to LD_LIBRARY_PATH
-  ** and scripts for iocftcFlasher due to PATH
-  * currently procServMgr requires user=wmoore
-  ** yet wmoore does not source $EPICS/.setup by default, and uses group div-acc by default
-  *** this is a nuisance for iocs that need, for example, EPICS_CA_ADDR_LIST for ops records
+  ** affects
+  *** iocs using snmp (iocvmeCrates, iocftaglv) due to LD_LIBRARY_PATH
+  *** iocs using ROOT (ioctorusDaq) due to LD_LIBRARY_PATH
+  *** iocs using accelerator channels (iocmcc) due to EPICS_CA_ADDR_LIST
+  *** scripts for iocftcFlasher due to PATH
 
 # firefox/chrome
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics

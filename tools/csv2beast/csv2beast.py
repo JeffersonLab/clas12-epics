@@ -120,19 +120,20 @@ for csvFile in csvFiles:
             vals = row
             i = 0
             if vals[i] == "":
-                # line looks empty, skipping...
+                # no pv defined, skipping...
                 continue
             while i < len(tags):
                 if tags[i].lower() == "pv":
                     pv = SubElement(comp, 'pv', name=vals[i])
                 elif (' ' in tags[i]):
-                    # sub elements
+                    # sub elements (ex. automated_action, display)
                     elem = tags[i].split()
                     sub0_name = elem[0]     # store to check for duplicates
                     sub1_name = elem[1]
-                    sub1 = SubElement(pv,   elem[0])
-                    sub2 = SubElement(sub1, elem[1])
-                    sub2.text = vals[i]
+                    if vals[i] != '':
+                        sub1 = SubElement(pv,   elem[0])
+                        sub2 = SubElement(sub1, elem[1])
+                        sub2.text = vals[i]
                     j = i+1
                     while j < len(tags):
                         # search until not a sub-element
@@ -145,16 +146,18 @@ for csvFile in csvFiles:
                                 # duplicate element (ex. multiple displays, etc)
                                 break
                             else:
-                                sub3 = SubElement(sub1, elem[1])
-                                sub3.text = vals[j]
+                                if vals[j] != '':
+                                    sub3 = SubElement(sub1, elem[1])
+                                    sub3.text = vals[j]
                                 j+=1
                         else:
                             break
                     i = j-1 # skip to this column
                 else:
-                    # pv elements
-                    elem = SubElement(pv, tags[i])
-                    elem.text = vals[i]
+                    # sub elements of pv
+                    if vals[i] != '':
+                        elem = SubElement(pv, tags[i])
+                        elem.text = vals[i]
                 i+=1
         rowNum += 1
 

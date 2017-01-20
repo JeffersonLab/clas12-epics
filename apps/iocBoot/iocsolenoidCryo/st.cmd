@@ -10,7 +10,7 @@ plc2epics_registerRecordDeviceDriver(pdbbase)
 
 ## Initialize EtherIP driver, define PLCs
 ## NOTE: if buffer limit is left at 500, read errors will occur.
-#EIP_buffer_limit(450)
+EIP_buffer_limit(450)
 drvEtherIP_init()
 drvEtherIP_define_PLC("PLC_SOL",  "129.57.96.30", 0)
 

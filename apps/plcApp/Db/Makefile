@@ -28,6 +28,7 @@ BEAST += torus_force_straingages.xml
 BEAST += torus_interlocks.xml
 BEAST += torus_LHe.xml
 BEAST += torus_LN2.xml
+BEAST += torus_import.xml
 BEAST += torus_vacuum.xml
 
 #----------------------------------------------------

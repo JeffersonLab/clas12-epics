@@ -1,0 +1,970 @@
+
+file {
+	name="/home/hovanes/EPICS_ALL/app/ls_hall_probes/medm/Hac_PS_LS450.adl"
+	version=020306
+}
+display {
+	object {
+		x=866
+		y=351
+		width=375
+		height=430
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=11
+		y=10
+		width=349
+		height=85
+	}
+	"basic attribute" {
+		clr=63
+		width=4
+	}
+}
+text {
+	object {
+		x=85
+		y=57
+		width=200
+		height=20
+	}
+	"basic attribute" {
+		clr=0
+		width=4
+	}
+	textix=" Hall Probe"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=85
+		y=27
+		width=200
+		height=20
+	}
+	"basic attribute" {
+		clr=0
+		width=4
+	}
+	textix="$(MAG) Magnet "
+	align="horiz. centered"
+}
+composite {
+	object {
+		x=12
+		y=10
+		width=30
+		height=84
+	}
+	"composite name"=""
+	children {
+		composite {
+			object {
+				x=12
+				y=10
+				width=30
+				height=84
+			}
+			"composite name"=""
+			children {
+				rectangle {
+					object {
+						x=12
+						y=10
+						width=30
+						height=83
+					}
+					"basic attribute" {
+						clr=4
+						width=2
+					}
+				}
+				composite {
+					object {
+						x=12
+						y=10
+						width=30
+						height=84
+					}
+					"composite name"=""
+					children {
+						polyline {
+							object {
+								x=12
+								y=10
+								width=30
+								height=84
+							}
+							"basic attribute" {
+								clr=0
+								width=2
+							}
+							points {
+								(41,11)
+								(13,11)
+								(13,92)
+							}
+						}
+						polyline {
+							object {
+								x=12
+								y=11
+								width=30
+								height=82
+							}
+							"basic attribute" {
+								clr=14
+								width=2
+							}
+							points {
+								(13,92)
+								(41,92)
+								(41,12)
+							}
+						}
+					}
+				}
+			}
+		}
+		composite {
+			object {
+				x=15
+				y=12
+				width=24
+				height=78
+			}
+			"composite name"=""
+			children {
+				rectangle {
+					object {
+						x=15
+						y=12
+						width=24
+						height=78
+					}
+					"basic attribute" {
+						clr=39
+					}
+				}
+				composite {
+					object {
+						x=18
+						y=15
+						width=18
+						height=72
+					}
+					"composite name"=""
+					children {
+						text {
+							object {
+								x=18
+								y=63
+								width=18
+								height=24
+							}
+							"basic attribute" {
+								clr=20
+							}
+							textix="C"
+							align="horiz. centered"
+						}
+						text {
+							object {
+								x=18
+								y=39
+								width=18
+								height=24
+							}
+							"basic attribute" {
+								clr=52
+							}
+							textix="A"
+							align="horiz. centered"
+						}
+						text {
+							object {
+								x=18
+								y=15
+								width=18
+								height=24
+							}
+							"basic attribute" {
+								clr=30
+							}
+							textix="H"
+							align="horiz. centered"
+						}
+					}
+				}
+			}
+		}
+	}
+}
+"message button" {
+	object {
+		x=255
+		y=181
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:UNIT"
+		clr=14
+		bclr=51
+	}
+	label="TESLA"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=183
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:UNITstat"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=183
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:UNITstat"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=181
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:UNIT"
+		clr=14
+		bclr=51
+	}
+	label="GAUSS"
+	press_msg="0"
+}
+rectangle {
+	object {
+		x=130
+		y=175
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=175
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,176)
+		(245,210)
+	}
+}
+text {
+	object {
+		x=11
+		y=183
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="UNITS"
+	align="horiz. right"
+}
+"message button" {
+	object {
+		x=255
+		y=222
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:AUTO"
+		clr=14
+		bclr=51
+	}
+	label="AUTO"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=224
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:AUTOrb"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=224
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:AUTOrb"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=222
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:AUTO"
+		clr=14
+		bclr=51
+	}
+	label="MANUAL"
+	press_msg="0"
+}
+rectangle {
+	object {
+		x=130
+		y=216
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=216
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,217)
+		(245,251)
+	}
+}
+"message button" {
+	object {
+		x=255
+		y=263
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:FCOMP"
+		clr=14
+		bclr=51
+	}
+	label="ON"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=265
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:FCOMPrb"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=265
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:FCOMPrb"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=263
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:FCOMP"
+		clr=14
+		bclr=51
+	}
+	label="OFF"
+	press_msg="0"
+}
+text {
+	object {
+		x=11
+		y=265
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="FIELD COMP."
+	align="horiz. right"
+}
+text {
+	object {
+		x=11
+		y=224
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="MODE"
+	align="horiz. right"
+}
+rectangle {
+	object {
+		x=130
+		y=257
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=257
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,258)
+		(245,292)
+	}
+}
+"message button" {
+	object {
+		x=255
+		y=304
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:TCOMP"
+		clr=14
+		bclr=51
+	}
+	label="ON"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=306
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:TCOMPrb"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=306
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:TCOMPrb"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=304
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:TCOMP"
+		clr=14
+		bclr=51
+	}
+	label="OFF"
+	press_msg="0"
+}
+rectangle {
+	object {
+		x=130
+		y=298
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=298
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,299)
+		(245,333)
+	}
+}
+"message button" {
+	object {
+		x=255
+		y=345
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:LOCK"
+		clr=14
+		bclr=51
+	}
+	label="LOCK"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=347
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:LOCKrb"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=347
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:LOCKrb"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=345
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:LOCK"
+		clr=14
+		bclr=51
+	}
+	label="UNLOCK"
+	press_msg="0"
+}
+rectangle {
+	object {
+		x=130
+		y=339
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=339
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,340)
+		(245,374)
+	}
+}
+"message button" {
+	object {
+		x=255
+		y=386
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:MODE"
+		clr=14
+		bclr=51
+	}
+	label="REMOTE"
+	press_msg="1"
+}
+rectangle {
+	object {
+		x=340
+		y=388
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if not zero"
+		chan="Hac_$(MAG)_LS450:MODErb"
+	}
+}
+rectangle {
+	object {
+		x=226
+		y=388
+		width=9
+		height=20
+	}
+	"basic attribute" {
+		clr=20
+		width=2
+	}
+	"dynamic attribute" {
+		vis="if zero"
+		chan="Hac_$(MAG)_LS450:MODErb"
+	}
+}
+"message button" {
+	object {
+		x=141
+		y=386
+		width=80
+		height=24
+	}
+	control {
+		chan="Hac_$(MAG)_LS450:MODE"
+		clr=14
+		bclr=51
+	}
+	label="LOCAL"
+	press_msg="0"
+}
+text {
+	object {
+		x=11
+		y=388
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="COMM."
+	align="horiz. right"
+}
+text {
+	object {
+		x=11
+		y=347
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="FRONT PANEL"
+	align="horiz. right"
+}
+text {
+	object {
+		x=11
+		y=306
+		width=110
+		height=16
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="TEMP. COMP."
+	align="horiz. right"
+}
+rectangle {
+	object {
+		x=130
+		y=380
+		width=230
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+}
+polyline {
+	object {
+		x=244
+		y=380
+		width=2
+		height=36
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+		width=2
+	}
+	points {
+		(245,381)
+		(245,415)
+	}
+}
+composite {
+	object {
+		x=11
+		y=157
+		width=349
+		height=5
+	}
+	"composite name"=""
+	children {
+		polyline {
+			object {
+				x=11
+				y=157
+				width=349
+				height=4
+			}
+			"basic attribute" {
+				clr=33
+				width=4
+			}
+			points {
+				(12,159)
+				(357,159)
+			}
+		}
+		polyline {
+			object {
+				x=11
+				y=160
+				width=348
+				height=2
+			}
+			"basic attribute" {
+				clr=14
+				width=2
+			}
+			points {
+				(11,161)
+				(357,161)
+			}
+		}
+	}
+}
+"text update" {
+	object {
+		x=26
+		y=117
+		width=318
+		height=30
+	}
+	monitor {
+		chan="Hac_$(MAG)_LS450:FLD_DATA"
+		clr=31
+		bclr=54
+	}
+	align="horiz. centered"
+	format="exponential"
+	limits {
+	}
+}

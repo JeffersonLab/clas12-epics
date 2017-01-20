@@ -13,7 +13,7 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 ## cRIO heartbeat alarms
 dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
-dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_HTCC_, DLY=60")
+# dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_HTCC_, DLY=60")
 dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_SVT_,  DLY=60")
 ## Detector Systems 
 dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_, R=HTCC_GAS_")

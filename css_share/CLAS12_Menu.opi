@@ -1110,22 +1110,6 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>High Voltage</description>
         </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/mccApp/bpm_alarms2.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>BPM Alarm Settings</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/mccApp/vacuum_alarms.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Vacuum Alarm Settings</description>
-        </action>
         <action type="EXECUTE_CMD">
           <command>stripTool.sh BLINE</command>
           <command_directory>$(user.home)</command_directory>
@@ -1161,6 +1145,30 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>BTA Config</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/struckDaqApp/struckDaqScaler.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Struck Daq</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/mccApp/bpm_alarms2.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>BPM Alarm Settings</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/mccApp/vacuum_alarms.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Vacuum Alarm Settings</description>
         </action>
       </actions>
       <font>
@@ -2278,16 +2286,22 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="EXECUTE_CMD">
+          <command>stripTool.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>StripTool - Live</description>
+        </action>
+        <action type="EXECUTE_CMD">
           <command>MyaViewer -type archive</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
           <description>MyaViewer - Archive</description>
         </action>
         <action type="EXECUTE_CMD">
-          <command>stripTool.sh</command>
+          <command>MyaViewer -type strip</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
-          <description>StripTool - Live</description>
+          <description>MyaViewer - Live</description>
         </action>
       </actions>
       <font>
@@ -2492,25 +2506,25 @@ $(pv_value)</tooltip>
         <description>ECAL</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command></command>
+        <command>notify_expert.pl tof_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>TOF</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command></command>
+        <command>notify_expert.pl dc_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>DC</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command></command>
+        <command>notify_expert.pl htcc_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>HTCC</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command></command>
+        <command>notify_expert.pl ltcc_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>LTCC</description>

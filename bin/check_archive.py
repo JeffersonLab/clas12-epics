@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 #
-# Check if PV(s) are currently being archived
+# Lists PVs that are not currently being archived.
+#
+# Usage:
+#  check_archive.py [file]...
+#
+#  If no files are specified, searches current directory for
+#  .txt and .list files.
 #
 # Author: Wesley Moore (wmoore@jlab.org)
 # Date:   June 2016
 #
-
 import sys
 import glob
 import os

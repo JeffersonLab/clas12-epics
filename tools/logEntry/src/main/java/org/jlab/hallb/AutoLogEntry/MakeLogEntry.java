@@ -1,5 +1,5 @@
 package org.jlab.hallb.AutoLogEntry;
-
+import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -43,8 +43,12 @@ public class MakeLogEntry
   JPanel IMPANEL=new JPanel();
   JFrame FRAME;
 
-  final int IMGHEIGHT = 200;
-  final int IMGWIDTH = 300;
+  ArrayList<JPanel> IMPANELS = new ArrayList<JPanel>();
+  ArrayList<String> IMPATHS = new ArrayList<String>();
+  JTabbedPane IMTABS;
+
+  int IMGHEIGHT = 200;
+  int IMGWIDTH = 300;
 
   public static void main( String[] args )
   {
@@ -197,12 +201,18 @@ public class MakeLogEntry
       Image image = getScaledImage(imbuff);
       ImageIcon imicon=new ImageIcon(image);
       IMPANEL.add(new JLabel(imicon));
+      
+      //final int ii=IMTABS.getSelectedIndex();
+      //if (ii>=0 && ii<IMPANELS.size())
+      //  IMPANELS.get(ii).add(new JLabel(imicon));
     }
   }
 
   public Image getScaledImage(BufferedImage imbuff)
   {
     // scale for snapshot, preserving the aspect ratio:
+    //IMGHEIGHT=IMPANEL.getHeight();
+    //IMGWIDTH=IMPANEL.getWidth();
     float height=imbuff.getHeight();
     float width=imbuff.getWidth();
     float aspectRatio=height/width;
@@ -322,7 +332,7 @@ public class MakeLogEntry
     JPanel screenshotPanel = new JPanel();
     screenshotPanel.setOpaque(false);
     screenshotPanel.setLayout(new BoxLayout(screenshotPanel,BoxLayout.PAGE_AXIS));
-    screenshotPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshot"));
+    //screenshotPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshot"));
     screenshotPanel.add(IMPANEL);
 
     // title panel:
@@ -333,6 +343,10 @@ public class MakeLogEntry
     titlePanel.setPreferredSize(new Dimension(200, 50));
     titlePanel.add(LOGTITLE);
 
+    //JPanel tabPanel = makeTabbedPane();
+    //tabPanel.add(screenshotPanel);
+    //tabPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshots"));
+
     // main frame:
     FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
     FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -340,9 +354,72 @@ public class MakeLogEntry
     FRAME.add(commentsPanel, BorderLayout.CENTER);
     FRAME.add(buttonPanel, "South");
     FRAME.add(titlePanel, "North");
+    //FRAME.add(tabPanel,"East");
     FRAME.add(screenshotPanel,"East");
     FRAME.pack();
     FRAME.setVisible(true);
+  }
+
+  public JPanel makeTabbedPane()
+  {
+    for (int ii=0; ii<10; ii++) {
+      JPanel jp=new JPanel();
+      jp.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
+      jp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+      jp.setOpaque(false);
+      IMPANELS.add(jp);
+    }
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
+		JButton shotButton = new JButton("Capture");
+		JButton addButton = new JButton("+");
+		JButton removeButton = new JButton("-");
+		buttonPanel.add(shotButton);
+		buttonPanel.add(addButton);
+		buttonPanel.add(removeButton);
+    IMTABS = new JTabbedPane();
+    SpringLayout layout = new SpringLayout();
+    JPanel tabPanel = new JPanel();
+    tabPanel.setLayout(layout);
+    tabPanel.add(IMTABS);
+    tabPanel.add(buttonPanel);
+		layout.putConstraint(SpringLayout.EAST, buttonPanel, 0, SpringLayout.EAST, tabPanel);
+		layout.putConstraint(SpringLayout.WEST, buttonPanel, 0, SpringLayout.WEST, tabPanel);
+		layout.putConstraint(SpringLayout.SOUTH, buttonPanel, 0, SpringLayout.SOUTH, tabPanel);
+		layout.putConstraint(SpringLayout.EAST, IMTABS, 0, SpringLayout.EAST, tabPanel);
+		layout.putConstraint(SpringLayout.WEST, IMTABS, 0, SpringLayout.WEST, tabPanel);
+		layout.putConstraint(SpringLayout.NORTH, IMTABS, 0, SpringLayout.NORTH, tabPanel);
+		layout.putConstraint(SpringLayout.SOUTH, IMTABS, -10, SpringLayout.NORTH, buttonPanel);
+		
+    addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+        int ii=IMTABS.getTabCount();
+        JPanel jj=IMPANELS.get(ii);
+				IMTABS.addTab("#" + (ii + 1), jj);
+				IMTABS.setSelectedIndex(IMTABS.getTabCount() - 1);
+			}
+		});
+    addButton.doClick();
+		removeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+        int ii=IMTABS.getSelectedIndex();
+				if (ii != -1) {
+					IMTABS.remove(ii);
+          IMPANELS.get(ii).removeAll();
+          IMPANELS.get(ii).updateUI();
+					for(int tabIndex = 0; tabIndex < IMTABS.getTabCount(); tabIndex++) {
+						IMTABS.setTitleAt(tabIndex, "#" + (tabIndex + 1));
+					}
+				}
+			}
+		});
+    shotButton.addActionListener(new screenshotAction());
+    buttonPanel.setOpaque(false);
+    tabPanel.setOpaque(false);
+    IMTABS.setOpaque(false);
+    buttonPanel.setBackground(Color.LIGHT_GRAY);
+    tabPanel.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
+    return tabPanel;
   }
 
   public void forceUpdateStatusPane()

@@ -42,7 +42,7 @@ if (type == "527")
 	
 	if ( ((1<<6)  & istatus)) { sstatus="Kill"; }
 	if ( ((1<<13) & istatus)) { sstatus="RDN"; }
-	if (!((1<<0)  & istatus)) { sstatus=("NotPrt"); }
+	if (!((1<<0)  & istatus)) { sstatus=("NoBrd"); }
 	
 //	widget.setPropertyValue("text",sstatus);
 		
@@ -57,7 +57,7 @@ if (type == "527")
   }
   else if (sstatus=="Kill")
   {
-    widget.setPropertyValue("background_color","MEDM_COLOR_24");
+    widget.setPropertyValue("background_color","MEDM_COLOR_24b");
 	  widget.setPropertyValue("foreground_color","Header_Foreground");
   }
   else if (sstatus=="RUP" || sstatus=="RDN")

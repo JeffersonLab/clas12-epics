@@ -7,6 +7,7 @@ var ss=[
   "UpstreamRight",
   "TaggerLeft",
   "TaggerRight",
+  "TaggerT2",
   "HPSLeft",
   "HPSRight",
   "ECalCosm1",
@@ -14,7 +15,6 @@ var ss=[
   "HPSTop",
   "HPSSC",
   "ECalCosm5",
-  "TaggerT2",
   "MollerRight",
   "MollerLeft",
   "BLM1",
@@ -26,6 +26,16 @@ var ss=[
   "DSHaloLeft",
   "DSHaloRight"
 ];
+
+function mkGap()
+{
+  var gap=WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
+  gap.setPropertyValue("width",1);
+  gap.setPropertyValue("height",10);
+  widget.addChildToBottom(gap);
+}
+
+mkGap();
 
 {
     for (var ii=0; ii<ss.length; ii++)
@@ -46,6 +56,14 @@ var ss=[
         lc.addMacro("C",ii);
         lc.addMacro("P",pv);
         widget.addChildToBottom(lc);
+
+        if (ss[ii]=="UpstreamRight" ||
+            ss[ii]=="TaggerT2" ||
+            ss[ii]=="ECalCosm5" ||
+            ss[ii]=="MollerLeft" ||
+            ss[ii]=="BLM4" ||
+            ss[ii]=="DSHaloRight")
+        { mkGap(); }
     }
 }
 

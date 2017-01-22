@@ -479,12 +479,14 @@ sy1527GetGroup(unsigned int id,unsigned int group)
   // if any slot/chan in group does not match expected, ignore this read:
   if (nchan<=0 || sy1527CheckChannelList(groupexp,nchan,slot,chan) != CAENHV_OK)
   {
-    time_t tnow;
-    char tbuff[26];
-    time(&tnow);
-    strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
-    if (nConsecutiveGoodReads < 10)
+    if (nConsecutiveGoodReads < 10) 
+    {
+      time_t tnow;
+      char tbuff[26];
+      time(&tnow);
+      strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
       printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads,tbuff);
+    }
     nConsecutiveGoodReads=0;
     return (CAENHV_SYSERR);
   }

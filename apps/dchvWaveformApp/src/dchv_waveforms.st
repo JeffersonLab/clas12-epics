@@ -7,6 +7,9 @@ string prefix = "B_DET_DC_HV";
 string suffixi = "imon";
 string suffixv = "vmon";
 
+// update period (seconds): 
+int delay=5;
+
 int nsfwires=8;
 int ngwires=2;
 string sfwires[8]={"01-08","09-16","17-24","25-32","33-48","49-64","65-80","81-112"};
@@ -175,12 +178,12 @@ ss seqDCHVwaveforms {
     when ()
     { 
       printf("** start state **************************\n");
-      sprintf(msg,"Assigning PVs");
+      sprintf(msg,"INIT - Assigning PVs");
       pvPut(msg);
 
       jj=0;
 
-      for (ii=0; ii<8; ii++)
+      for (ii=0; ii<nsfwires; ii++)
       {
         sprintf(stmp,"%s_SEC1_R1_SL1_S%s:%s",prefix,sfwires[ii],suffixi);
         pvAssign(s1r1l1i[jj],stmp);
@@ -340,7 +343,7 @@ ss seqDCHVwaveforms {
         jj++;
       }
 
-      for (ii=0; ii<8; ii++)
+      for (ii=0; ii<nsfwires; ii++)
       {
         sprintf(stmp,"%s_SEC1_R1_SL1_F%s:%s",prefix,sfwires[ii],suffixi);
         pvAssign(s1r1l1i[jj],stmp);
@@ -501,7 +504,7 @@ ss seqDCHVwaveforms {
         jj++;
       }
 
-      for (ii=0; ii<2; ii++)
+      for (ii=0; ii<ngwires; ii++)
       {
         sprintf(stmp,"%s_SEC1_R1_SL1_G%s:%s",prefix,gwires[ii],suffixi);
         pvAssign(s1r1l1i[jj],stmp);
@@ -677,10 +680,10 @@ ss seqDCHVwaveforms {
     when (pvConnectCount() < pvChannelCount())
     {
       printf("Waiting for PVs (%d/%d)\n",pvConnectCount(),pvChannelCount());
-      sprintf(msg,"Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
+      sprintf(msg,"ERROR - Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
       pvPut(msg);
       pvPut(msg);
-      epicsThreadSleep(1);
+      epicsThreadSleep(2);
     } state init
 
     when () {} state run
@@ -691,7 +694,7 @@ ss seqDCHVwaveforms {
     entry
     {
       printf("** run state ****************************\n");
-      sprintf(msg,"Running");
+      sprintf(msg,"OK - Running");
       pvPut(msg);
     }
 
@@ -849,6 +852,7 @@ ss seqDCHVwaveforms {
         s6r3l5vwf[ii]=s6r3l5v[ii];
         s6r3l6vwf[ii]=s6r3l6v[ii];
       }
+
       pvPut(s1r1l1iwf);
       pvPut(s1r1l2iwf);
       pvPut(s1r2l3iwf);
@@ -923,7 +927,7 @@ ss seqDCHVwaveforms {
       pvPut(s6r3l5vwf);
       pvPut(s6r3l6vwf);
 
-      epicsThreadSleep(5);
+      epicsThreadSleep(delay);
 
     } state run
   }

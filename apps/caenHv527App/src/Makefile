@@ -20,12 +20,14 @@ DBD += ioccaen527.dbd
 ioccaen527_SRCS += ioccaen527_registerRecordDeviceDriver.cpp
 ioccaen527_SRCS += bigsub.c
 ioccaen527_SRCS += devCAEN.c
+ioccaen527_SRCS += dchv_waveforms-S126.st
+ioccaen527_SRCS += dchv_waveforms-S345.st
 ioccaen527_SRCS_DEFAULT += ioccaen527Main.cpp
 ioccaen527_SRCS_vxWorks += -nil-
 
 USR_INCLUDES += -I$(TOP)/include
 
-
+ioccaen527_LIBS += seq pv
 ioccaen527_LIBS += sy527epics2
 ioccaen527_LIBS += caenhvwrapper
 ioccaen527_LIBS += hscaenet

@@ -8,8 +8,8 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-DB += caenhv-groups.db
-DB += caenhv-527.db
+DB    += $(wildcard ../*.db)
+DB    += $(wildcard ../*.substitutions)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

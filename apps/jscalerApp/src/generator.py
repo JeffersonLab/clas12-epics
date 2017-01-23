@@ -208,7 +208,8 @@ def mkChannelsLTCC(crateNumber,sector,system):
   return channels
 
 def mkChannelsCTOF(crateNumber):
-  firstSlot=13
+  firstSlot=3
+  #firstSlot=13
   channels=[]
   sides=['D','U']
   for chan in range(48):
@@ -397,7 +398,8 @@ def mkDetector(channels,subFileName,startupFileName):
 
 #for sector in range(6): mkSector(sector+1)
 
+mkDetector(mkChannelsCTOF(0),None,None)
 #mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-mkDetector(mkChannelsHTCC(0),'../Db/jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+#mkDetector(mkChannelsHTCC(0),'../Db/jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
 

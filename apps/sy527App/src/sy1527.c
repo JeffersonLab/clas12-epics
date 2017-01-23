@@ -33,8 +33,9 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define LOCK_MAINFRAME(id_m)   pthread_mutex_lock(&mainframe_mutex[id_m])
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
-
+const int maxConsecutiveBadReads=100;
 int nConsecutiveGoodReads=0;
+int nConsecutiveBadReads=0;
 
 /* flag to tell mainframe thread it is time to exit */
 static int force_exit[MAX_HVPS];
@@ -488,6 +489,7 @@ sy1527GetGroup(unsigned int id,unsigned int group)
       printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads,tbuff);
     }
     nConsecutiveGoodReads=0;
+    nConsecutiveBadReads++;
     return (CAENHV_SYSERR);
   }
 
@@ -516,7 +518,7 @@ sy1527GetGroup(unsigned int id,unsigned int group)
   UNLOCK_MAINFRAME(id);
 
   nConsecutiveGoodReads++;
-
+  nConsecutiveBadReads=0;
   return(CAENHV_OK);
 }
 
@@ -1829,6 +1831,7 @@ sy1527GetHeartBeat(unsigned int id, unsigned int board,
     if      (mainframes_disconnect[i10]==1)        absent_error=3;
     else if (Demand[id].board[board].nchannels==0) absent_error=2;
   }
+  if (nConsecutiveBadReads > maxConsecutiveBadReads) absent_error=4;
   return absent_error;
 }
 

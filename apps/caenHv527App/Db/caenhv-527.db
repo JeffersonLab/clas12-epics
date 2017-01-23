@@ -38,7 +38,7 @@ field(LOLO,"-10000")
    field(ASG,"EXPERT")
    alias("B_DET_$(Det)_$(Sys)_$(Element)")
    alias("B_SYS_$(Sys)_$(Det)_$(Element)")
-info(autosaveFields_pass1,"HIGH LOW")
+info(autosaveFields_pass1,"HSV LSV HIGH LOW DESC")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):crate")
 {
@@ -267,20 +267,20 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
 #else 
 #VAL = STAT (pas alarm status from bigsub)
   
-record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarm")
-{
-   alias("B_DET_$(Det)_$(Sys)_$(Element):alarm")   
-   field(INPA,"0.99")
-   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
-   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
-   field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).STAT")
-   field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
-   field(CALC,"((D=0)&&(E&1)&&(!(E&6))&&(C<A*B))?C:D")
-   field(HIGH,"1")
-   field(HIHI,"2")
-   field(HSV,"MINOR")
-   field(HHSV,"MAJOR")
-}
+#record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarm")
+#{
+#   alias("B_DET_$(Det)_$(Sys)_$(Element):alarm")   
+#   field(INPA,"0.99")
+#   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
+#   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+#   field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).STAT")
+#   field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+#   field(CALC,"((D=0)&&(E&1)&&(!(E&6))&&(C<A*B))?C:D")
+#   field(HIGH,"1")
+#   field(HIHI,"2")
+#   field(HSV,"MINOR")
+#   field(HHSV,"MAJOR")
+#}
 
 ##################################################################
 ##################################################################

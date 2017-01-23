@@ -4,7 +4,7 @@ cd ${TOP}
 
 Init_SCALERS()
 
-Start_SCALERS_CRATE("0","CTOF1")
+Start_SCALERS_CRATE("0","ADCCTOF1")
 
 
 ## Register all support components

@@ -163,7 +163,7 @@ extern "C" {
         // if(FLAG_BLOCK_INIT){
         while(!(co->is_crate_read))
         {  
-            sleep(1);printf("is_mainframe_read wait (crate=%d)\n",crate);
+            sleep(5);printf("is_mainframe_read wait (crate=%d)\n",crate);
         }
         // }
         //printf("INIT +++++++++++++++++++++++++++++++ value=%x\n",command);

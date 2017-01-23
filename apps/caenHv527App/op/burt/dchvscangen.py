@@ -20,7 +20,7 @@ Req File:
 SETTINGS=[]
 
 # load table from Mac:
-for line in open('dchvscan.txt','r').readlines():
+for line in open('dchvscan2.txt','r').readlines():
   if line.find('Region')>=0: continue
   region,setno,total,sense,field,guard=line.strip().split()
   thisset,newset={},True

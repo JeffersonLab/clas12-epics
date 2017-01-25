@@ -1,0 +1,83 @@
+
+# SENSE: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sa:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S01-08.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S09-16.L CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S17-24.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sb:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S25-32.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S33-48.L CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S49-64.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sc:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S65-80.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S81-112.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sa CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sb CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sc CPP")
+    field(CALC,"A=1 && B=1 && C=1")
+}
+
+
+# FIELD: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fa:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F01-08.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F09-16.L CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F17-24.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fb:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F25-32.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F33-48.L CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F49-64.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fc:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F65-80.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F81-112.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fa CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fb CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fc CPP")
+    field(CALC,"A=1 && B=1 && C=1")
+}
+
+
+# GUARD: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G:isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G01-32.L CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G33-112.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1")
+}
+
+
+# TOTAL: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L):isOn")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S:isOn CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F:isOn CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G:isOn CPP")
+    field(CALC,"A=1&&B=1&&C=1")
+}
+

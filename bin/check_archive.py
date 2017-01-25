@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 #
-# Lists PVs that are not currently being archived.
+# Lists PVs that are NOT currently being archived.
 #
 # Usage:
-#  check_archive.py [file]...
+#  check_archive.py [-r] [file]...
+#
+#  The -r option instead prints PVs that ARE archived.
 #
 #  If no files are specified, searches current directory for
 #  .txt and .list files.
@@ -18,11 +20,16 @@ import subprocess
 
 files = []
 not_archived = []
+is_archived = []
+printMissing = True
 
 if len(sys.argv) < 2:
     files = glob.glob("./*.txt")
     files += glob.glob("./*.list")
 else:
+    if sys.argv[1]=='-r':
+      printMissing = False
+      sys.argv.pop(1)
     for arg in sys.argv[1:]:
         if os.path.isfile(arg):
             files.append(arg)
@@ -55,13 +62,26 @@ for file in files:
             p = subprocess.check_output(["archive", pv])
             if "not archived" in p:
                 not_archived.append(pv)
+            else:
+                is_archived.append(pv)
 
-if len(not_archived) == 0:
-    print "All PVs are archived"
-    exit(0)
+if printMissing:
+    if len(not_archived) == 0:
+        print "All PVs are archived"
+        exit(0)
+    elif printMissing == True:
+        print "PVs not archived:"
+        not_archived.sort()
+        print '\n'.join(not_archived)
+        exit(1)
 else:
-    print "PVs not archived:"
-    not_archived.sort()
-    print '\n'.join(not_archived)
-    exit(1)
+    if len(is_archived) == 0:
+        print "No PVs are archived"
+        exit(0)
+    else:
+        print "PVs are archived:"
+        is_archived.sort()
+        print '\n'.join(is_archived)
+        exit(1)
+
 

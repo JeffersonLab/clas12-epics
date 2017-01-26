@@ -2,7 +2,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var hps=["hps1","hps2","hps11","hps12"];
 var test=["ltcc0","pcal0"];//,"highbtest3"];
-var dets=["adcctof1"];//,"adcft1","adcft2","adcft3"];//,"mtv1","trig1","trig2"];
+var dets=["adcctof1","svt1","svt2","svt3"];//,"adcft1","adcft2","adcft3"];//,"mtv1","trig1","trig2"];
 var dc=["dcrb1","dcrb2"];
 var ecal1=["adcecal1","adcecal2","adcecal3","adcecal4","adcecal5","adcecal6"];
 var ecal2=["tdcecal1","tdcecal2","tdcecal3","tdcecal4","tdcecal5","tdcecal6"];

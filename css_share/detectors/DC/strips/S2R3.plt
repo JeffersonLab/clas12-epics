@@ -12,9 +12,9 @@
     <end>now</end>
     <archive_rescale>STAGGER</archive_rescale>
     <background>
-      <red>221</red>
-      <green>221</green>
-      <blue>221</blue>
+      <red>240</red>
+      <green>240</green>
+      <blue>240</blue>
     </background>
     <title_font>Sans|15|1</title_font>
     <label_font>Sans|10|1</label_font>

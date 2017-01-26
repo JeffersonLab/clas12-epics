@@ -224,19 +224,19 @@ def mkChannelsCTOF(crateNumber):
 
 def mkChannelsHTCC(crateNumber):
   channels=[]
-  fSlot,fChan=3,0
+  fSlot,fChan=13,0
   for sec in range(6):
     for lr in ['L','R']:
       for ring in range(4):
-        fChan += 1
         if fChan>15:
           fChan=0
           fSlot += 1
           if fSlot==5: fSlot=7
-        channel={'Sl':'%.2d'%(fSlot),'Ch':'%.2d'%(fChan),'Side':lr,'CrName':'LTCC0','Det':'HTCC','Sys':'FADC'}
+        channel={'Sl':'%.2d'%(fSlot),'Ch':'%.2d'%(fChan),'Side':lr,'CrName':'CTOF1','Det':'HTCC','Sys':'FADC'}
         channel['Element']='SEC%d_%s%.1d'%(sec+1,lr,ring+1)
         setCodes(crateNumber,channel)
         channels.append(channel)
+        fChan += 1
   return channels
 
 def mkChannelsFTOF(crateNumber,sector,system):
@@ -398,7 +398,9 @@ def mkDetector(channels,subFileName,startupFileName):
 
 #for sector in range(6): mkSector(sector+1)
 
-mkDetector(mkChannelsCTOF(0),None,None)
+mkDetector(mkChannelsHTCC(0),None,None)
+#mkDetector(mkChannelsCTOF(0),None,None)
+
 #mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
 #mkDetector(mkChannelsHTCC(0),'../Db/jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 

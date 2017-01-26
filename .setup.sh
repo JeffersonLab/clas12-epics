@@ -53,7 +53,7 @@ fi
 export EPICS_HOST_ARCH
 export EPICS_SCRIPTS=${EPICS}/apps/scripts
 export EPICS_CA_AUTO_ADDR_LIST=no
-export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255 129.57.86.58 129.57.68.37 129.57.68.161"
+export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255"
 
 export PERL5LIB=${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86_64-linux-thread-multi
 

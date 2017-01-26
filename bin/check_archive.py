@@ -69,7 +69,7 @@ if printMissing:
     if len(not_archived) == 0:
         print "All PVs are archived"
         exit(0)
-    elif printMissing == True:
+    elif:
         print "PVs not archived:"
         not_archived.sort()
         print '\n'.join(not_archived)

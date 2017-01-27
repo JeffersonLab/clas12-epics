@@ -45,11 +45,18 @@ Fitter::Fitter(const TGWindow *p,UInt_t w,UInt_t h, string fname)
   counter_names_[7] = "Downstream Right";
   counter_names_[8] = "Downstream Top";
   counter_names_[9] = "Downstream Bottom";
-  counter_names_[10] = "HPS Left";
-  counter_names_[11] = "HPS Right";
-  counter_names_[12] = "HPS T";
-  counter_names_[13] = "HPS SC";
+  counter_names_[10] = "Mid Stream Left";
+  counter_names_[11] = "Mid Stream Right";
+  counter_names_[12] = "Mid Stream Top";
+  counter_names_[13] = "Mid Stream Bottom";
   counter_names_[14] = "Empty";
+
+  // For now counter names are commented, but I guess the reight way is for it to read from some database
+  // counter_names_[10] = "HPS Left";
+  // counter_names_[11] = "HPS Right";
+  // counter_names_[12] = "HPS T";
+  // counter_names_[13] = "HPS SC";
+  // counter_names_[14] = "Empty";
   //===========================================
 
   //====================== Allocate a memory for the TTimeStamp for the scan time ====================
@@ -146,9 +153,9 @@ void Fitter::InitData( string fname )
   fit_tagger = false;
   fit_2H02A = false;
   fit_2H00A = false;
+  fit_2H01 = false;
 
-  if(file_name.find("2c21") > 2 && file_name.find("2c21") < 50)
-  {
+  if(file_name.find("2c21") > 2 && file_name.find("2c21") < 50){
     fit_2c21 = true;
     harp_name = "harp_2c21";
     scale_Xaxis = 1.;
@@ -157,8 +164,7 @@ void Fitter::InitData( string fname )
     min_2nd_hist = 36.;
     max_2nd_hist = 41.;
   }
-  else if(file_name.find("tagger") > 2 && file_name.find("tagger") < 50)
-  {
+  else if(file_name.find("tagger") > 2 && file_name.find("tagger") < 50){
     fit_tagger = true;
     harp_name = "harp_tagger";
     scale_Xaxis = 1.;
@@ -170,8 +176,7 @@ void Fitter::InitData( string fname )
     max_3rd_hist = 37.5;
 
   }
-  else if( file_name.find("2H02A") > 2 && file_name.find("2H02A") < 50 )
-  {
+  else if( file_name.find("2H02A") > 2 && file_name.find("2H02A") < 50 ){
     fit_2H02A = true;
     harp_name = "harp_2H02A";
     scale_Xaxis = 10.;
@@ -181,10 +186,8 @@ void Fitter::InitData( string fname )
     max_2nd_hist = 47.;
     min_3rd_hist = 78.;
     max_3rd_hist = 85.;
-
   }
-  else if( file_name.find("2H00A") > 2 && file_name.find("2H00A") < 50 )
-  {
+  else if( file_name.find("2H00A") > 2 && file_name.find("2H00A") < 50 ){
     fit_2H00A = true;
     harp_name = "harp_2H00A";
     scale_Xaxis = 10.;
@@ -194,7 +197,16 @@ void Fitter::InitData( string fname )
     max_2nd_hist = 47.;
     min_3rd_hist = 78.;
     max_3rd_hist = 85.;
-
+  }else if( file_name.find("2H01") > 2 && file_name.find("2H01") < 50 ){
+    fit_2H01 = true;
+    harp_name = "harp_2H01";
+    scale_Xaxis = 10.;
+    min_1st_hist = 30.;
+    max_1st_hist = 35.;
+    min_2nd_hist = 41.;
+    max_2nd_hist = 47.;
+    min_3rd_hist = 78.;
+    max_3rd_hist = 85.;
   }
 
   //cout<<"fit_tagger = "<<fit_tagger<<endl;
@@ -291,13 +303,8 @@ void Fitter::FitData( bool manual_fit, bool preview )
     bool good_parameters = true;
     if( manual_fit )
     {
-
-      //	  pars_bgr_1st_peak[0] = First_peak_bgr->GetNumber(); pars_bgr_1st_peak[1] = First_peak_bgr_min->GetNumber(); pars_bgr_1st_peak[2] = First_peak_bgr_max->GetNumber();
-      // 	  pars_A_1st_peak[0] = First_peak_A->GetNumber(); pars_A_1st_peak[1] = First_peak_A_min->GetNumber(); pars_A_1st_peak[2] = First_peak_A_max->GetNumber();
-      // 	  pars_mean_1st_peak[0] = First_peak_mean->GetNumber(); pars_mean_1st_peak[1] = First_peak_mean_min->GetNumber(); pars_mean_1st_peak[2] = First_peak_mean_max->GetNumber();
-      // 	  pars_sigm_1st_peak[0] = First_peak_sigm->GetNumber(); pars_sigm_1st_peak[1] = First_peak_sigm_min->GetNumber(); pars_sigm_1st_peak[2] = First_peak_sigm_max->GetNumber();
-
-      if( fit_2H00A || fit_2H02A || fit_2c21 ){
+      
+      if( fit_2H01 || fit_2H00A || fit_2H02A || fit_2c21 ){
         range_1st_peak[0] = First_peak_range_min->GetNumber()*sqrt2; range_1st_peak[1] = First_peak_range_max->GetNumber()*sqrt2;
       }
       else{
@@ -331,11 +338,6 @@ void Fitter::FitData( bool manual_fit, bool preview )
       pars_sigm_1st_peak[0] = h_bgr_Subtr->GetRMS();
       pars_sigm_1st_peak[1] = 0.001*pars_sigm_1st_peak[0]; pars_sigm_1st_peak[2] = 1.1*pars_sigm_1st_peak[0];
 
-      //	  pars_bgr_2nd_peak[0] = Second_peak_bgr->GetNumber(); pars_bgr_2nd_peak[1] = Second_peak_bgr_min->GetNumber(); pars_bgr_2nd_peak[2] = Second_peak_bgr_max->GetNumber();
-      // 	  pars_A_2nd_peak[0] = Second_peak_A->GetNumber(); pars_A_2nd_peak[1] = Second_peak_A_min->GetNumber(); pars_A_2nd_peak[2] = Second_peak_A_max->GetNumber();
-      // 	  pars_mean_2nd_peak[0] = Second_peak_mean->GetNumber(); pars_mean_2nd_peak[1] = Second_peak_mean_min->GetNumber(); pars_mean_2nd_peak[2] = Second_peak_mean_max->GetNumber();
-      // 	  pars_sigm_2nd_peak[0] = Second_peak_sigm->GetNumber(); pars_sigm_2nd_peak[1] = Second_peak_sigm_min->GetNumber(); pars_sigm_2nd_peak[2] = Second_peak_sigm_max->GetNumber();
-
       // 2nd peak is always x or y, wire, therefore always should be multiplied by sqrt2
       range_2nd_peak[0] = Second_peak_range_min->GetNumber()*sqrt2; range_2nd_peak[1] = Second_peak_range_max->GetNumber()*sqrt2;
 
@@ -363,12 +365,8 @@ void Fitter::FitData( bool manual_fit, bool preview )
       pars_sigm_2nd_peak[0] = h_bgr_Subtr->GetRMS();
       pars_sigm_2nd_peak[1] = 0.; pars_sigm_2nd_peak[2] = 1.1*pars_sigm_2nd_peak[0];
 
-      if( fit_2H00A || fit_tagger || fit_2H02A )
+      if( fit_2H01 || fit_2H00A || fit_tagger || fit_2H02A )
       {
-        // 	      pars_bgr_3rd_peak[0] = Third_peak_bgr->GetNumber(); pars_bgr_3rd_peak[1] = Third_peak_bgr_min->GetNumber(); pars_bgr_3rd_peak[2] = Third_peak_bgr_max->GetNumber();
-        // 	      pars_A_3rd_peak[0] = Third_peak_A->GetNumber(); pars_A_3rd_peak[1] = Third_peak_A_min->GetNumber(); pars_A_3rd_peak[2] = Third_peak_A_max->GetNumber();
-        // 	      pars_mean_3rd_peak[0] = Third_peak_mean->GetNumber(); pars_mean_3rd_peak[1] = Third_peak_mean_min->GetNumber(); pars_mean_3rd_peak[2] = Third_peak_mean_max->GetNumber();
-        // 	      pars_sigm_3rd_peak[0] = Third_peak_sigm->GetNumber(); pars_sigm_3rd_peak[1] = Third_peak_sigm_min->GetNumber(); pars_sigm_3rd_peak[2] = Third_peak_sigm_max->GetNumber();
         if( fit_tagger ){
           range_3rd_peak[0] = Third_peak_range_min->GetNumber()*sqrt2; range_3rd_peak[1] = Third_peak_range_max->GetNumber()*sqrt2;
         }
@@ -401,7 +399,7 @@ void Fitter::FitData( bool manual_fit, bool preview )
     else
     {
       if( fit_2c21 ) { good_parameters = Search_2c21_peaks( gr_[counter_ind]); }
-      else if( fit_tagger || fit_2H02A || fit_2H00A ) { good_parameters = Search_three_peaks( gr_[counter_ind]);}
+      else if( fit_2H01 || fit_tagger || fit_2H02A || fit_2H00A ) { good_parameters = Search_three_peaks( gr_[counter_ind]);}
     }
 
     if( good_parameters )
@@ -414,7 +412,7 @@ void Fitter::FitData( bool manual_fit, bool preview )
       {
         Fit_tagger(gr_[counter_ind], counter_names_[counter_ind]);
       }
-      else if( fit_2H00A || fit_2H02A ) // Note: not very good way, but 2H02A and 2H00A harps are the same harp, therefore it will fit the same method
+      else if( fit_2H00A || fit_2H01 || fit_2H02A ) // Note: not a very good way, but 2H02A and 2H00A harps are the same harp, therefore it will fit the same method
       {
         Fit_2H02A(gr_[counter_ind], counter_names_[counter_ind]);
       }
@@ -424,7 +422,7 @@ void Fitter::FitData( bool manual_fit, bool preview )
       c1->cd(1)->Update();
       c1->cd(2)->Modified();
       c1->cd(2)->Update();
-      if( fit_tagger || fit_2H02A || fit_2H00A )
+      if( fit_tagger || fit_2H02A || fit_2H01 || fit_2H00A )
       {
         c1->cd(3)->Modified();
         c1->cd(3)->Update();
@@ -657,7 +655,7 @@ void Fitter::Set_Fit_Pars()
     f_Main_FitPars->AddFrame(f_1st_peak_Fit_Range, new TGLayoutHints(kLHintsTop,2,2,2,2));
     f_Main_FitPars->AddFrame(f_2nd_peak_Fit_Range, new TGLayoutHints(kLHintsTop,2,2,2,2));
 
-    if( fit_tagger || fit_2H02A || fit_2H00A )
+    if( fit_tagger || fit_2H02A || fit_2H00A || fit_2H01 )
     {
       f_Main_FitPars->AddFrame(f_3rd_peak_Fit_Range, new TGLayoutHints(kLHintsTop,2,2,2,2)); 
     }
@@ -699,7 +697,7 @@ void Fitter::Load_Fit_Pars()
   Second_peak_range_min->SetNumber(f_2nd_peak->GetParameter(1) - 3.);
   Second_peak_range_max->SetNumber(f_2nd_peak->GetParameter(1) + 3.);
 
-  if( fit_tagger || fit_2H02A || fit_2H00A )
+  if( fit_tagger || fit_2H02A || fit_2H00A || fit_2H01 )
   {
     Third_peak_bgr->SetNumber(f_3rd_peak->GetParameter(3));
     Third_peak_A->SetNumber(f_3rd_peak->GetParameter(0));
@@ -809,9 +807,9 @@ bool Fitter::Search_three_peaks(TGraph *gr)
   {
     h_gr = (TH1D*)Graph2Hist(gr, 1.); // 1 No need to convert to mm, motor position of 2c21 is already in mm
   }
-  else if( fit_2H02A || fit_2H00A )
+  else if( fit_2H02A || fit_2H00A || fit_2H01 )
   {
-    h_gr = (TH1D*)Graph2Hist(gr, 10.); // 10 is because 2H02A has motor position im cm, it should be converted into mm
+    h_gr = (TH1D*)Graph2Hist(gr, 10.); // 10 is because 2H02A has motor position in cm, it should be converted into mm
   }
 
 
@@ -1546,7 +1544,7 @@ void Fitter::CAPUT()
       system(Form("caput HB_BEAM:SCAN:tagger:unix_time %d", scan_time_in_sec));
       system(Form("caput HB_BEAM:SCAN:tagger:counter_num %d", counters_box->GetSelected()));
     }
-    else if( fit_2H02A || fit_2H00A )
+    else if( fit_2H02A || fit_2H00A || fit_2H01 )
     {
       int n_wires = 3;
       string wire_names_[3] = {"x", "y", "45"};

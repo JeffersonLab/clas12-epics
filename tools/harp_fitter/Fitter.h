@@ -47,6 +47,7 @@ class Fitter {
     bool fit_tagger;
     bool fit_2H02A;
     bool fit_2H00A;
+    bool fit_2H01;
     bool preview_mode;
     TGNumberEntry *First_peak_bgr, *First_peak_bgr_min, *First_peak_bgr_max;
     TGNumberEntry *First_peak_A, *First_peak_A_min, *First_peak_A_max;

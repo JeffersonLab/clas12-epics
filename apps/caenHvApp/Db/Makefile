@@ -13,7 +13,7 @@ DB    += HVDC_VSCAN.db
 DB    += $(wildcard ../*.substitutions)
 DB    += $(wildcard ../*sums*.db)
 
-BEAST += HValarm.xml HValarmDetBased.xml
+BEAST += HValarm.xml HValarmDetBased.xml HValarmBeamline.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

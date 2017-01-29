@@ -3,7 +3,7 @@
 # AKCP sensorProbe - Humidity Sensor
 #
 
-record(ai, "$(P)_Ch$(C):Humid") {
+record(ai, "$(P)_Ch$(C)_Humid") {
     field(DESC, "$(A):Humid")
     field(DTYP, "Snmp")
     field(INP,  "@$(HOST) public %(MIB)HumidityPercent.$(C) INTEGER: 100")
@@ -11,7 +11,7 @@ record(ai, "$(P)_Ch$(C):Humid") {
     field(SCAN, "10 second")
     field(PREC, "0")
     info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
-    alias("$(A):Humid")
+    alias("$(A)_Humid")
 }
 
 # Much of below doesn't work:

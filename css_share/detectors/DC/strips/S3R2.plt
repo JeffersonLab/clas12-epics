@@ -8,7 +8,7 @@
     <scroll>true</scroll>
     <update_period>1.0</update_period>
     <scroll_step>1</scroll_step>
-    <start>-10.0 m</start>
+    <start>-30.0 m</start>
     <end>now</end>
     <archive_rescale>STAGGER</archive_rescale>
     <background>

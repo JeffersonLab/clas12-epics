@@ -41,7 +41,7 @@
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>314</height>
+    <height>303</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -60,9 +60,9 @@
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>150</width>
-    <x>10</x>
+    <x>7</x>
     <name>Detectors</name>
-    <y>178</y>
+    <y>138</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -934,7 +934,7 @@ $(pv_value)</tooltip>
     <auto_size>false</auto_size>
     <image_file>common/images/clas12_negative.svg</image_file>
     <scripts />
-    <height>83</height>
+    <height>61</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -964,10 +964,10 @@ $(pv_value)</tooltip>
         <col>1.0</col>
       </row>
     </permutation_matrix>
-    <width>140</width>
-    <x>15</x>
+    <width>104</width>
+    <x>30</x>
     <name>Image_1</name>
-    <y>10</y>
+    <y>7</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -998,7 +998,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>360</height>
+    <height>383</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -1017,9 +1017,9 @@ $(pv_value)</tooltip>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>150</width>
-    <x>10</x>
+    <x>7</x>
     <name>Subsystems</name>
-    <y>491</y>
+    <y>440</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -1217,7 +1217,7 @@ $(pv_value)</tooltip>
       <border_color>
         <color name="GRID" red="90" green="90" blue="90" />
       </border_color>
-      <label>Gas</label>
+      <label>Gas Systems</label>
       <widget_type>Menu Button</widget_type>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
@@ -2080,16 +2080,24 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/cameras/cctv6.opi</path>
+          <path>/CLAS12_Share/cameras/cctv6expert.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>Beam Viewer</description>
+          <description>Beam Viewer - Crosshair Controls</description>
+        </action>
+        <action type="OPEN_WEBPAGE">
+          <hyperlink>http://cctv6</hyperlink>
+          <description>Beam Viewer - Web Browser</description>
+        </action>
+        <action type="OPEN_WEBPAGE">
+          <hyperlink>http://hallbcam07</hyperlink>
+          <description>HTCC Bubbler - Web Browser</description>
         </action>
         <action type="OPEN_WEBPAGE">
           <hyperlink>http://hallbcam02</hyperlink>
-          <description>hallbcam02</description>
+          <description>Hall Fisheye - Web Browser</description>
         </action>
       </actions>
       <font>
@@ -2179,6 +2187,59 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-4cffc683:159e783adf5:-6565</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Weather</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>Weather</name>
+      <y>319</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/apps/sensorProbeApp/hallWeather.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Hall Weather</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.gridLayout" version="1.0.0">
       <fill_grids>false</fill_grids>
       <number_of_columns>1</number_of_columns>
@@ -2216,9 +2277,9 @@ $(pv_value)</tooltip>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>150</width>
-    <x>10</x>
+    <x>7</x>
     <name>Tools</name>
-    <y>850</y>
+    <y>822</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -2409,7 +2470,7 @@ $(pv_value)</tooltip>
     <text>JMenu</text>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>30</height>
+    <height>25</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2427,10 +2488,10 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="240" green="240" blue="240" />
     </background_color>
-    <width>115</width>
-    <x>27</x>
+    <width>110</width>
+    <x>28</x>
     <name>Action Button</name>
-    <y>136</y>
+    <y>105</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -2461,7 +2522,7 @@ $(pv_value)</tooltip>
     <pv_value />
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>30</height>
+    <height>25</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2479,10 +2540,10 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="240" green="240" blue="240" />
     </background_color>
-    <width>115</width>
-    <x>27</x>
+    <width>110</width>
+    <x>28</x>
     <name>Menu Button</name>
-    <y>101</y>
+    <y>75</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -2500,18 +2561,6 @@ $(pv_value)</tooltip>
         <description>Physics Division Liason</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command>notify_expert.pl daq</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>DAQ</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl slowcont_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Slow Controls</description>
-      </action>
-      <action type="EXECUTE_CMD">
         <command>notify_expert.pl beamline_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
@@ -2524,22 +2573,28 @@ $(pv_value)</tooltip>
         <description>Engineering</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command>notify_expert.pl ecal_expert</command>
+        <command>notify_expert.pl slowcont_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
-        <description>ECAL</description>
+        <description>Slow Controls</description>
       </action>
       <action type="EXECUTE_CMD">
-        <command>notify_expert.pl tof_expert</command>
+        <command>notify_expert.pl daq</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
-        <description>TOF</description>
+        <description>DAQ</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>notify_expert.pl dc_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>DC</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>notify_expert.pl ecal_expert</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>ECAL</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>notify_expert.pl htcc_expert</command>
@@ -2558,6 +2613,12 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>SVT</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>notify_expert.pl tof_expert</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>TOF</description>
       </action>
     </actions>
     <font>

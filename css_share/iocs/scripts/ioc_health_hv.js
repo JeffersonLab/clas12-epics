@@ -9,8 +9,8 @@ var jj=0;
 for (var idet=0; idet<dets.length; idet++) {
 for (var sector=1; sector<=6; sector++) {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (jj%2==0) lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft.opi"); 
-    else         lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_light.opi"); 
+    if (jj%2==0) lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_autosave.opi"); 
+    else         lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_light_autosave.opi"); 
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);
@@ -34,8 +34,8 @@ iocs=["FTAG","CTOF0","LTCC0","DCa","DCb","BLINE"];
 //,"HVTEST0"];
 for (var ii=0; ii<iocs.length; ii++) {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (jj%2==0) lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft.opi"); 
-    else         lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_light.opi"); 
+    if (jj%2==0) lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_autosave.opi"); 
+    else         lc.setPropertyValue("opi_file","/CLAS12_Share/iocs/ioc_chan_soft_light_autosave.opi"); 
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);

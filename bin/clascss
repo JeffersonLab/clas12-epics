@@ -5,6 +5,13 @@
 #   - to guarantee standard startup user interface
 #   - to avoid users modifying the configuration
 
+host=`hostname`
+if [ "$host" == "clondb3" ] || [ "$host" == "clondb3.jlab.org" ]
+then
+  echo Not Allowed to run cs-studio on clondb3.
+  exit
+fi
+
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
 export PATH=$JAVA_HOME/bin:$PATH
 
@@ -42,6 +49,8 @@ cp -rf $plugin_profile $wsp
 #m=-Xmx1024m
 #m=-Xmx2048m
 m=-Xmx3072m
+
+sleep 1
 
 /usr/lib/jvm/java-1.8.0-oracle/bin/java -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar -os linux -ws gtk -arch x86_64 -launcher /usr/clas12/css/4.1.1/linux-x86_64/clas12-css/css -name Css --launcher.library /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.200.v20150204-1316/eclipse_1607.so -startup /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar --launcher.overrideVmargs -exitdata f0000 -data $wsp -pluginCustomization $wsp/plugin_customization.ini -share_link $share=/CLAS12_Share -vm /usr/lib/jvm/java-1.8.0-oracle/bin/java -vmargs -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
 

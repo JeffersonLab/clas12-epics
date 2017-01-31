@@ -7,25 +7,26 @@ var ss=[
   "UpstreamRight",
   "TaggerLeft",
   "TaggerRight",
-  "TaggerT2",
-  "HPSLeft",
-  "HPSRight",
-  "ECalCosm1",
-  "ECalCosm2",
-  "HPSTop",
-  "HPSSC",
-  "ECalCosm5",
+  "TaggerTop",
   "MollerRight",
   "MollerLeft",
-  "BLM1",
-  "BLM2",
-  "BLM3",
-  "BLM4",
-  "DSHaloBottom",
-  "DSHaloTop",
-  "DSHaloLeft",
-  "DSHaloRight"
+  "MidstreamBottom",
+  "MidstreamTop",
+  "MidstreamLeft",
+  "MidstreamRight",
+  "DownstreamBottom",
+  "DownstreamTop",
+  "DownstreamLeft",
+  "DownstreamRight"
+  "SLM"
 ];
+//  "HPSLeft",
+//  "HPSRight",
+//  "ECalCosm1",
+//  "ECalCosm2",
+//  "HPSTop",
+//  "HPSSC",
+//  "ECalCosm5",
 
 function mkGap()
 {
@@ -58,11 +59,12 @@ mkGap();
         widget.addChildToBottom(lc);
 
         if (ss[ii]=="UpstreamRight" ||
-            ss[ii]=="TaggerT2" ||
+            ss[ii]=="TaggerTop" ||
             ss[ii]=="ECalCosm5" ||
             ss[ii]=="MollerLeft" ||
             ss[ii]=="BLM4" ||
-            ss[ii]=="DSHaloRight")
+            ss[ii]=="MidstreamRight" ||
+            ss[ii]=="DownstreamRight")
         { mkGap(); }
     }
 }

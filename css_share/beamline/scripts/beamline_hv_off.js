@@ -5,24 +5,18 @@ var ss=[
   "UpstreamRight",
   "TaggerLeft",
   "TaggerRight",
-  "HPSLeft",
-  "HPSRight",
-  "ECalCosm1",
-  "ECalCosm2",
-  "HPSTop",
-  "HPSSC",
-  "ECalCosm5",
-  "TaggerT2",
+  "TaggerTop",
   "MollerRight",
   "MollerLeft",
-  "BLM1",
-  "BLM2",
-  "BLM3",
-  "BLM4",
-  "DSHaloBottom",
-  "DSHaloTop",
-  "DSHaloLeft",
-  "DSHaloRight"
+  "MidstreamBottom",
+  "MidstreamTop",
+  "MidstreamLeft",
+  "MidstreamRight",
+  "DownstreamBottom",
+  "DownstreamTop",
+  "DownstreamLeft",
+  "DownstreamRight"
+  "SLM"
 ];
 
 {

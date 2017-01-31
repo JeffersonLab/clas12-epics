@@ -12,14 +12,14 @@ var ss=[
   "TaggerTop",
   "MollerRight",
   "MollerLeft",
-  "MidstreamBottom",
-  "MidstreamTop",
   "MidstreamLeft",
   "MidstreamRight",
+  "MidstreamTop",
+  "MidstreamBottom",
   "DownstreamBottom",
   "DownstreamTop",
   "DownstreamLeft",
-  "DownstreamRight"
+  "DownstreamRight",
   "SLM"
 ];
 

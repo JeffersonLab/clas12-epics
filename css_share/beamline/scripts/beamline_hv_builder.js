@@ -8,16 +8,16 @@ var ss=[
   "TaggerLeft",
   "TaggerRight",
   "TaggerTop",
-  "MollerRight",
   "MollerLeft",
-  "MidstreamBottom",
-  "MidstreamTop",
+  "MollerRight",
   "MidstreamLeft",
   "MidstreamRight",
-  "DownstreamBottom",
-  "DownstreamTop",
+  "MidstreamTop",
+  "MidstreamBottom",
   "DownstreamLeft",
-  "DownstreamRight"
+  "DownstreamRight",
+  "DownstreamTop",
+  "DownstreamBottom",
   "SLM"
 ];
 //  "HPSLeft",
@@ -61,10 +61,10 @@ mkGap();
         if (ss[ii]=="UpstreamRight" ||
             ss[ii]=="TaggerTop" ||
             ss[ii]=="ECalCosm5" ||
-            ss[ii]=="MollerLeft" ||
+            ss[ii]=="MollerRight" ||
             ss[ii]=="BLM4" ||
-            ss[ii]=="MidstreamRight" ||
-            ss[ii]=="DownstreamRight")
+            ss[ii]=="MidstreamBottom" ||
+            ss[ii]=="DownstreamBottom")
         { mkGap(); }
     }
 }

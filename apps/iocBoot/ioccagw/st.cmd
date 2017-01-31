@@ -12,7 +12,7 @@ cagw_registerRecordDeviceDriver(pdbbase)
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/cagw.db", "P=B_CAGW:")
+dbLoadRecords("db/cagw.db", "P=B_CAGW_CLONDB3, RMT=hallb_cagw")
 
 cd "${TOP}/iocBoot/${IOC}"
 

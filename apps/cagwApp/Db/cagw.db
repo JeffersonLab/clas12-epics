@@ -1,165 +1,170 @@
-record(ao, "$(P)vctotal") {
-    field(DOL,  "hallb_cagw:vctotal")
+# File: cagw.db
+#
+# Desc: Workaround to map gateway PVs from remote systems.  Set 
+# EPICS_CA_ADDR_LIST on the IOC to the remote gateway host.
+#
+record(ao, "$(P):vctotal") {
+    field(DOL,  "$(RMT):vctotal")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)pvtotal") {
-    field(DOL,  "hallb_cagw:pvtotal")
+record(ao, "$(P):pvtotal") {
+    field(DOL,  "$(RMT):pvtotal")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)connected") {
-    field(DOL,  "hallb_cagw:connected")
+record(ao, "$(P):connected") {
+    field(DOL,  "$(RMT):connected")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)active") {
-    field(DOL,  "hallb_cagw:active")
+record(ao, "$(P):active") {
+    field(DOL,  "$(RMT):active")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)inactive") {
-    field(DOL,  "hallb_cagw:inactive")
+record(ao, "$(P):inactive") {
+    field(DOL,  "$(RMT):inactive")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)unconnected") {
-    field(DOL,  "hallb_cagw:unconnected")
+record(ao, "$(P):unconnected") {
+    field(DOL,  "$(RMT):unconnected")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)connecting") {
-    field(DOL,  "hallb_cagw:connecting")
+record(ao, "$(P):connecting") {
+    field(DOL,  "$(RMT):connecting")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)dead") {
-    field(DOL,  "hallb_cagw:dead")
+record(ao, "$(P):dead") {
+    field(DOL,  "$(RMT):dead")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)disconnected") {
-    field(DOL,  "hallb_cagw:disconnected")
+record(ao, "$(P):disconnected") {
+    field(DOL,  "$(RMT):disconnected")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)fd") {
-    field(DOL,  "hallb_cagw:fd")
+record(ao, "$(P):fd") {
+    field(DOL,  "$(RMT):fd")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)clientPostRate") {
-    field(DOL,  "hallb_cagw:clientPostRate")
-    field(OMSL, "closed_loop")
-    field(EGU,  "Hz")
-    field(PREC, "3")
-    field(SCAN, "1 second")
-}
-
-record(ao, "$(P)clientEventRate") {
-    field(DOL,  "hallb_cagw:clientEventRate")
+record(ao, "$(P):clientPostRate") {
+    field(DOL,  "$(RMT):clientPostRate")
     field(OMSL, "closed_loop")
     field(EGU,  "Hz")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)serverPostRate") {
-    field(DOL,  "hallb_cagw:serverPostRate")
+record(ao, "$(P):clientEventRate") {
+    field(DOL,  "$(RMT):clientEventRate")
     field(OMSL, "closed_loop")
     field(EGU,  "Hz")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)serverEventRate") {
-    field(DOL,  "hallb_cagw:serverEventRate")
+record(ao, "$(P):serverPostRate") {
+    field(DOL,  "$(RMT):serverPostRate")
     field(OMSL, "closed_loop")
     field(EGU,  "Hz")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)existTestRate") {
-    field(DOL,  "hallb_cagw:existTestRate")
+record(ao, "$(P):serverEventRate") {
+    field(DOL,  "$(RMT):serverEventRate")
     field(OMSL, "closed_loop")
     field(EGU,  "Hz")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)loopRate") {
-    field(DOL,  "hallb_cagw:loopRate")
+record(ao, "$(P):existTestRate") {
+    field(DOL,  "$(RMT):existTestRate")
     field(OMSL, "closed_loop")
     field(EGU,  "Hz")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)load") {
-    field(DOL,  "hallb_cagw:load")
+record(ao, "$(P):loopRate") {
+    field(DOL,  "$(RMT):loopRate")
+    field(OMSL, "closed_loop")
+    field(EGU,  "Hz")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(ao, "$(P):load") {
+    field(DOL,  "$(RMT):load")
     field(OMSL, "closed_loop")
     field(EGU,  "%")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)cpuFract") {
-    field(DOL,  "hallb_cagw:cpuFract")
+record(ao, "$(P):cpuFract") {
+    field(DOL,  "$(RMT):cpuFract")
     field(OMSL, "closed_loop")
     field(EGU,  "%")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)report1Flag") {
-    field(DOL,  "hallb_cagw:report1Flag")
+record(ao, "$(P):report1Flag") {
+    field(DOL,  "$(RMT):report1Flag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)report2Flag") {
-    field(DOL,  "hallb_cagw:report2Flag")
+record(ao, "$(P):report2Flag") {
+    field(DOL,  "$(RMT):report2Flag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)report3Flag") {
-    field(DOL,  "hallb_cagw:report3Flag")
+record(ao, "$(P):report3Flag") {
+    field(DOL,  "$(RMT):report3Flag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)newAsFlag") {
-    field(DOL,  "hallb_cagw:newAsFlag")
+record(ao, "$(P):newAsFlag") {
+    field(DOL,  "$(RMT):newAsFlag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)commandFlag") {
-    field(DOL,  "hallb_cagw:commandFlag")
+record(ao, "$(P):commandFlag") {
+    field(DOL,  "$(RMT):commandFlag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)quitFlag") {
-    field(DOL,  "hallb_cagw:quitFlag")
+record(ao, "$(P):quitFlag") {
+    field(DOL,  "$(RMT):quitFlag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }
 
-record(ao, "$(P)quitServerFlag") {
-    field(DOL,  "hallb_cagw:quitServerFlag")
+record(ao, "$(P):quitServerFlag") {
+    field(DOL,  "$(RMT):quitServerFlag")
     field(OMSL, "closed_loop")
     field(SCAN, "1 second")
 }

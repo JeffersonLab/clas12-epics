@@ -24,6 +24,8 @@ dbLoadRecords("db/caenhv_stat.db","SEC=4")
 dbLoadRecords("db/caenhv_stat.db","SEC=5")
 dbLoadRecords("db/caenhv_stat.db","SEC=6")
 
+dbLoadTemplate("db/caenhv_stat-DC.substitutions")
+
 dbLoadRecords("db/monitorApp_torus.db")
 
 dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")

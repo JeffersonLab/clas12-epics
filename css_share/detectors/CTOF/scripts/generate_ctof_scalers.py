@@ -141,16 +141,6 @@ for ii in range(1,49):
   uu=uu.replace('___YPOS___',str(int(yposU)))
   uu=uu.replace('___SIZE___','20')
 
-#  dd=led
-#  dd=dd.replace('aaaCHANaaa','D%.2d' % (ii))
-#  dd=dd.replace('aaaXPOSaaa',str(int(xposD)))
-#  dd=dd.replace('aaaYPOSaaa',str(int(yposD)))
-
-#  uu=led
-#  uu=uu.replace('aaaCHANaaa','U%.2d' % (ii))
-#  uu=uu.replace('aaaXPOSaaa',str(int(xposU)))
-#  uu=uu.replace('aaaYPOSaaa',str(int(yposU)))
-
   print dd
   print uu
 

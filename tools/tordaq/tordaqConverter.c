@@ -19,6 +19,8 @@ int main(int argc,char **argv)
         "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
+        "\t  -A (do synchronization analysis)\n"
+        "\t  -S (force synchronization)\n"
         "\t  -h (print usage)\n";
    
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";
@@ -57,7 +59,13 @@ int main(int argc,char **argv)
                 tdr.maxSamples=std::stoi(optarg);
                 break;
             case 'R':
-                tdr.rubenTime=1;
+                tdr.rubenTime=true;
+                break;
+            case 'A':
+                tdr.doSynchroAna=true;
+                break;
+            case 'S':
+                tdr.forceSynchro=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

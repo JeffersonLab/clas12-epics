@@ -32,6 +32,7 @@ public:
     TFile *outRootFile=NULL;
     TGHProgressBar *progressMeter=NULL;
     bool doSynchroAna=false;
+    bool forceSynchro=false;
     tordaqData tdData;
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
@@ -284,6 +285,11 @@ public:
 
             for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++)
             {
+                if (forceSynchro) {
+                    for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
+                        if (skipVars[iVar]) continue;
+                }
+
                 char sep[1]="";
                 for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
                 {
@@ -293,7 +299,8 @@ public:
                     if (!skipVars[iVar])
                     {
                         data = inTrees[iVar]->record_data[iSamp];
-                        time = inTrees[iVar]->getTime(iSamp);
+                        if (forceSynchro) time = inTrees[0]->getTime(iSamp);
+                        else              time = inTrees[iVar]->getTime(iSamp);
                         ntupleVars[2*iVar]=time;
                         ntupleVars[2*iVar+1]=data;
                         if (rubenTime)
@@ -331,7 +338,7 @@ public:
         if (doSynchroAna)
         {
             // print out duplicates and missing samples info:
-            std::cout<<std::endl<<std::endl;
+            std::cout<<std::endl<<std::endl<<"(# samples / fraction of samples)"<<std::endl;
             for (unsigned int ii=0; ii<sampleFills.size(); ii++)
             {
                 int nDuplicates=0,nMissing=0;

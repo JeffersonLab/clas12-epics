@@ -10,6 +10,7 @@ TString filename="";
 const char* dataDir="/logs/torus";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 bool doSynchroAna=false;
+bool forceSynchro=false;
 
 TString getTimeString(const Double_t time)
 {
@@ -506,14 +507,18 @@ int main(int argc, char **argv)
 {    
     int itmp;
     const char* usage="\ntordaqGui [options] [filename]\n"
-        "\t -s (do synchronization analysis - memory intensive)\n"
+        "\t -A (do synchronization analysis - memory intensive)\n"
+        "\t -F (force synchronization)\n"
         "\t -h (print usage)\n";
     while ( (itmp=getopt(argc,argv,"sh")) != -1 )
     {
         switch (itmp)
         {
-            case 's':
+            case 'A':
                 doSynchroAna=true;
+                break;
+            case 'S':
+                forceSynchro=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

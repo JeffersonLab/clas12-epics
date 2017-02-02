@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 
 #----------------------------------------------------
 DB += $(wildcard ../*.db)
-DB += $(wildcard ../*.sub)
+DB += $(wildcard ../*.substitutions)
 
 
 #----------------------------------------------------

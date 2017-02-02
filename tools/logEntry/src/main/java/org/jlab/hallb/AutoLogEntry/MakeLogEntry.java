@@ -16,16 +16,19 @@ import org.jlab.elog.LogEntry;
 
 public class MakeLogEntry
 {
-  String LOGBOOKNAME="TLOG"; // HBLOG
+  String LOGBOOKNAME="HBLOG";
 
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");
 //  String RUNDBTABLE="daq_"+RUNDBEXPID;
 //  String RUNDBUSER=RUNDBEXPID;
+  
+  String RUNDBSESSION="clasprod";
+  String RUNDBTABLE="daq_clasrun";
 
   // hps 2015 settings:
-  String RUNDBSESSION="clashps";
-  String RUNDBTABLE="daq_clasrun";
+  //String RUNDBSESSION="clashps";
+  //String RUNDBTABLE="daq_clasrun";
   
   final String RUNDBHOST=System.getenv("MYSQL_HOST");
   final String RUNDBPORT="3306";

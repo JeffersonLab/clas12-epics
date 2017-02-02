@@ -3,13 +3,33 @@
 cfg=""
 cfgDir=$EPICS/tools/stripCharts
 
-if [ -d "$cfgDir/$1" ]
+if [ "$1" != "" ]
 then
+
+  if [ -e "$cfgDir/$1" ]
+  then
+
+    cfg=$cfgDir/$1
+
+  elif [ -e "$1" ]
+  then
+
+    cfg=$1
+
+  elif [ -d "$cfgDir/$1" ]
+  then
     
     cd $cfgDir/$1
 
-elif ! [ -z "$1" ]
-then
+  else
+
+    cd $cfgDir
+
+  fi
+
+else
+
+    cd $cfgDir
 
     tmpdir=/tmp/StripTool
     if [[ ! -e $tmpdir ]]; then

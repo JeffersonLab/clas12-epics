@@ -113,9 +113,9 @@ def printPVsBurt(det,sector=None):
 
 def printPVsMya(det,sector=None):
   for channel in getChannels(det,sector):
-    if channel.find('_LV_'):
+    if channel.find('_LV_')>0:
       fieldMap=FIELDS_LV_MYA
-    elif channel.find('_HV_'):
+    elif channel.find('_HV_')>0:
       fieldMap=FIELDS_HV_MYA
     else:
       print 'UNKOWN HV/LV TYPE:  ',channel

@@ -307,3 +307,13 @@ record(calc, "$(P)$(R)IntlkCtrlRampSum2") {
     field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
 }
 
+#
+# DAQ Warning - If MPS On and DAQ Off, alarm
+#
+record(calc, "$(P)$(R)FastDAQ_Status") {
+    field(INPA, "$(P)$(R)OnOff CP")
+    field(INPB, "$(P)DAQ_REC:ctrl:daq_state CP")
+    field(CALC, "A=0&&B=1?1:0")
+    field(HIGH, "1")
+    field(HSV,  "MAJOR")
+}

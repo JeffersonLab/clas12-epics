@@ -4,7 +4,7 @@ iocName=widget.getMacroValue("ioc");
 
 // get rid of the "ioc" prefix, if it exists:
 host=iocName
-if (host.startsWith("ioc") host=iocName.slice(3)
+if (host.startsWith("ioc")) host=iocName.slice(3)
 
 if (GUIUtil.openConfirmDialog("Really Reboot "+iocName+" ?"))
 {

@@ -8,11 +8,9 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-# Create and install (or just install)
-# databases, templates, substitutions like this
-DB += abu_calc.db
-DB += bta.db
-DB += bta_suppl.db
+
+DB    += $(wildcard ../*.db)
+DB    += $(wildcard ../*.substitutions)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
@@ -21,4 +19,5 @@ DB += bta_suppl.db
 include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
+
 

@@ -14,6 +14,7 @@ dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/mcc_vacuum.db")
 dbLoadRecords("db/mcc_bpm.db")
 dbLoadRecords("db/mcc_cryo.db")
+dbLoadRecords("db/mcc_tagger.db")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 

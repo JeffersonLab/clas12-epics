@@ -15,6 +15,8 @@ dbLoadRecords("db/mcc_vacuum.db")
 dbLoadRecords("db/mcc_bpm.db")
 dbLoadRecords("db/mcc_cryo.db")
 dbLoadRecords("db/mcc_tagger.db")
+dbLoadRecords("db/mcc_fsd.db")
+dbLoadRecords("db/hall_target.db")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 

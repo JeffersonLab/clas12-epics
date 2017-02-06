@@ -1,8 +1,8 @@
 
 record(calc, "$(P)") {
   field(DESC, "$(DESC)") 
-  field(INPA, "$(CUR)") # measured current
-  field(INPB, "$(POS)") # measured position
+  field(INPA, "$(CUR) NPP NMS") # measured current
+  field(INPB, "$(POS) NPP NMS") # measured position
   field(INPC, "1")      # minimum current
   field(INPD, "0")      # mean position
   field(INPE, "0.1")    # MINOR alarm delta
@@ -19,188 +19,17 @@ record(calc, "$(P)") {
   info(autosaveFields_pass0, "HSV HHSV")
 }
 
-# Record of BPM coordinate alarm values, which will be  
-# 0, when the current on FCup or corresponding BPM
-# is smaller thean the threshold, othervise
-# they will be equal to their original PVs
-#record(calc, "hallb_IPM2H00_XPOS:alarm") {
-#        field(INPA, "scaler_calc1")
-#        field(INPB, "hallb_IPM2H00_XPOS")
-#        field(INPC, "0"
-#        field(SCAN, "1 second")
-#	field(CALC, "A>0.5?B:C")
-#	field(HIGH, "0.1")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.25")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.1")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.25")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "IPMhallb_2H00_YPOS:alarm") {
-#        field(INPA, "scaler_calc1")
-#        field(INPB, "hallb_IPM2H00_YPOS")
-#        field(INPC, "0")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>0.5?B:C")
-#	field(HIGH, "0.1")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.25")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.1")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.25")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2H01_XPOS:alarm") {
-#        field(INPA, "scaler_calc1 NPP")
-#        field(INPB, "hallb_IPM2H01_XPOS NPP")
-#        field(INPC, "0"
-#        field(SCAN, "1 second")
-#	field(CALC, "A>0.5?B:C")
-#	field(HIGH, "1.")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "2.")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-1")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-2.")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2H01_YPOS:alarm") {
-#        field(INPA, "scaler_calc1")
-#        field(INPB, "hallb_IPM2H01_YPOS")
-#        field(INPC, "0")
-#        field(SCAN, "1 second")
-#	field(CALC, "A>0.5?B:C")
-#	field(HIGH, "1.")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "2.")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-1")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-2.")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2H02_XPOS:alarm") {
-#        field(INPA, "scaler_calc1")
-#        field(INPB, "hallb_IPM2H02_XPOS")
-#        field(INPC, "-1")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>0.5?B:C")
-#	field(HIGH, "-0.9")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "-0.8")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-1.1")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-1.2")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2H02_YPOS:alarm") {
-#        field(INPA, "scaler_calc1 NPP")
-#        field(INPB, "hallb_IPM2H02_YPOS")
-#        field(INPC, "-0.85")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>0.5?B:C")
-#	field(HIGH, "-0.75")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "-0.7")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.95")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-1")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2C24A_XPOS:alarm") {
-#        field(INPA, "hallb_IPM2C24A_CUR")
-#        field(INPB, "hallb_IPM2C24A_XPOS")
-#        field(INPC, "0")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>1?B:C")
-#	field(HIGH, "0.4")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.6")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.4")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.6")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2C24A_YPOS:alarm") {
-#        field(INPA, "hallb_IPM2C24A_CUR")
-#        field(INPB, "hallb_IPM2C24A_YPOS")
-#        field(INPC, "0")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>1?B:C")
-#	field(HIGH, "0.4")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.6")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.4")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.6")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2C21A_XPOS:alarm") {
-#        field(INPA, "hallb_IPM2C21A_CUR")
-#        field(INPB, "hallb_IPM2C21A_XPOS")
-#        field(INPC, "0")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>1?B:C")
-#	field(HIGH, "0.4")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.6")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.4")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.6")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
-##
-#record(calc, "hallb_IPM2C21A_YPOS:alarm") {
-#        field(INPA, "hallb_IPM2C21A_CUR")
-#        field(INPB, "hallb_IPM2C21A_YPOS")
-#        field(INPC, "0")
-##        field(INPB, "IPM2C21.YPOS NPP MS")
-#        field(SCAN, "1 second")
-#        field(CALC, "A>1?B:C")
-#	field(HIGH, "0.4")
-#	field(HSV,  "MINOR")
-#	field(HIHI, "0.6")
-#	field(HHSV, "MAJOR")
-#	field(LOW, "-0.4")
-#	field(LSV,  "MINOR")
-#	field(LOLO, "-0.6")
-#	field(LLSV, "MAJOR")
-#        field(PREC, 3)
-#}
+
+##############################################################
+##############################################################
+##############################################################
+##############################################################
 #
-
-##############################################################
-##############################################################
-##############################################################
-##############################################################
-
-
+# $(P) is hallb_IPM*_[XY]POS. plus new records:
+# 1) ais to store means and deltas
+# 2) calcouts to update $(P).LOLOW/LO/HIGH/HIHI when means/deltas change
+# 3) $(P):alarm calc to only alarm when current is acceptable
+#
 #record(ai,"$(P):mean")
 #{
 #  info(autosaveFields, "VAL")
@@ -217,39 +46,19 @@ record(calc, "$(P)") {
 #{
 #  info(autosaveFields, "VAL")
 #}
-#
-#record(calc,"$(P):alarm")
-#{
-#  field(INPA,"$(CUR)")
-#  field(INPB,"$(POS)")
-#  field(INPC,"$(P):minCurrent")
-#  field(INPD,"$(P):mean")
-#  field(INPE,"$(P):minorDelta")
-#  field(INPF,"$(P):majorDelta")
-#  field(CALC, "A<C ? 0 : ( ABS(B-D) > F ? 2 : ( ABS(B-D) > E ? 1 : 0 ) )")
-#  field(HHSV, "MAJOR")
-#  field(HSV,  "MINOR")
-#  field(LSV,  "NO_ALARM")
-#  field(LLSV, "NO_ALARM")
-#  field(HIGH, "1")
-#  field(HIHI, "2")
-#  info(autosaveFields_pass0, "HSV HHSV")
-#  field(SCAN, "1 second")
-#}
-#
 ##record(calcout,"$(P):calcLO")
 ##{
 ##  field(INPA,"$(P):mean CPP")
 ##  field(INPB,"$(P):minorDelta CPP")
 ##  field(CALC,"A-B")
-##  field(OUT,"$(P).LO")
+##  field(OUT,"$(P).LOW")
 ##}
 ##record(calcout,"$(P):calcHI")
 ##{
 ##  field(INPA,"$(P):mean CPP")
 ##  field(INPB,"$(P):minorDelta CPP")
 ##  field(CALC,"A+B")
-##  field(OUT,"$(P).HI")
+##  field(OUT,"$(P).HIGH")
 ##}
 ##record(calcout,"$(P):calcLOLO")
 ##{
@@ -265,4 +74,24 @@ record(calc, "$(P)") {
 ##  field(CALC,"A+B")
 ##  field(OUT,"$(P).HIHI")
 ##}
+#
+#record(calc,"$(P):alarm")
+#{
+#  field(SCAN, "1 second")
+#  field(INPA,"$(CUR)")
+#  field(INPB,"$(POS)")
+#  field(INPC,"$(P):minCurrent")
+#  field(INPD,"$(P):mean")
+#  field(INPE,"$(P):minorDelta")
+#  field(INPF,"$(P):majorDelta")
+#  field(CALC, "A<C?0:(ABS(B-D)>F?2:(ABS(B-D)>E?1:0))")
+#  field(HHSV, "MAJOR")
+#  field(HSV,  "MINOR")
+#  field(LSV,  "NO_ALARM")
+#  field(LLSV, "NO_ALARM")
+#  field(HIGH, "1")
+#  field(HIHI, "2")
+#  info(autosaveFields_pass0, "HSV HHSV")
+#}
+#
 

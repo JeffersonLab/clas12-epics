@@ -12,6 +12,8 @@ include $(TOP)/configure/CONFIG
 DB    += $(wildcard ../*.db)
 DB    += $(wildcard ../*.substitutions)
 
+BEAST += ioc-alarms.xml
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

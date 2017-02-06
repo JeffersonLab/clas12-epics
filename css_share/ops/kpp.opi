@@ -39,7 +39,7 @@
     <enabled>true</enabled>
     <wuid>2da4dada:138bb0b2666:-7fee</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>120</height>
     <border_width>1</border_width>
@@ -62,7 +62,7 @@
     <width>219</width>
     <x>333</x>
     <name>Hall Weather</name>
-    <y>618</y>
+    <y>635</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -475,7 +475,7 @@ $(pv_value)</tooltip>
     <width>363</width>
     <x>5</x>
     <name>Halo Counters (Hz)</name>
-    <y>137</y>
+    <y>154</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -1300,7 +1300,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>22387f4d:15a01c1ac6d:-6a6a</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>107</height>
     <border_width>1</border_width>
@@ -1323,7 +1323,7 @@ $(pv_value)</tooltip>
     <width>155</width>
     <x>403</x>
     <name>Torus</name>
-    <y>16</y>
+    <y>33</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -1652,7 +1652,7 @@ $(pv_value)</tooltip>
     <width>532</width>
     <x>5</x>
     <name>FC Scaler Sums (Hz)</name>
-    <y>455</y>
+    <y>472</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -3704,7 +3704,7 @@ $(pv_value)</tooltip>
     <width>498</width>
     <x>5</x>
     <name>DC HV Current Sums (uA)</name>
-    <y>278</y>
+    <y>295</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -5027,7 +5027,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>22387f4d:15a01c1ac6d:-67ef</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>122</height>
     <border_width>1</border_width>
@@ -5050,7 +5050,7 @@ $(pv_value)</tooltip>
     <width>399</width>
     <x>5</x>
     <name>Beam Position / Current</name>
-    <y>16</y>
+    <y>33</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -5898,7 +5898,7 @@ $(pv_value)</tooltip>
     <width>329</width>
     <x>5</x>
     <name>Beamline Vacuum (torr)</name>
-    <y>618</y>
+    <y>635</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -6474,7 +6474,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>40a8ce8d:15a046b74d1:-7aed</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>53</height>
     <border_width>1</border_width>
@@ -6497,7 +6497,7 @@ $(pv_value)</tooltip>
     <width>161</width>
     <x>362</x>
     <name>SLM (Hz)</name>
-    <y>226</y>
+    <y>243</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -6590,7 +6590,7 @@ $(pv_value)</tooltip>
     <width>498</width>
     <x>5</x>
     <name>DC LV Currents (A)</name>
-    <y>394</y>
+    <y>411</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -6887,7 +6887,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>d92b279:15a0939ae70:-6ea8</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>105</height>
     <border_width>1</border_width>
@@ -6910,7 +6910,7 @@ $(pv_value)</tooltip>
     <width>155</width>
     <x>403</x>
     <name>Tagger</name>
-    <y>122</y>
+    <y>139</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -7158,5 +7158,68 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules>
+      <rule name="TEXT" prop_id="text" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>BEAM IS AVAILABLE</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>BEAM IS NOT AVAILABLE</value>
+        </exp>
+        <pv trig="true">HLB:bta_reg_bm</pv>
+      </rule>
+      <rule name="COLOR" prop_id="foreground_color" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>
+            <color name="On" red="0" green="255" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <pv trig="true">HLB:bta_reg_bm</pv>
+      </rule>
+    </rules>
+    <enabled>true</enabled>
+    <wuid>288a90e6:15a0c138b76:-7df5</wuid>
+    <transparent>false</transparent>
+    <auto_size>false</auto_size>
+    <text>BEAM AVAILABILE CALCULATION:</text>
+    <scripts />
+    <height>25</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>false</wrap_words>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>350</width>
+    <x>96</x>
+    <name>Label_5</name>
+    <y>3</y>
+    <foreground_color>
+      <color name="Write_Foreground" red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
   </widget>
 </display>

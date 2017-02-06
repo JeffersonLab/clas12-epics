@@ -6,11 +6,16 @@
 #   - to avoid users modifying the configuration
 
 host=`hostname`
-if [ "$host" == "clondb3" ] || [ "$host" == "clondb3.jlab.org" ]
-then
-  echo Not Allowed to run cs-studio on clondb3.
-  exit
-fi
+
+disallowedHosts=( clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 )
+for xx in "${disallowedHosts[@]}"
+do
+  if [ "$host" == "$xx" ] || [ "$host" == "$xx.jlab.org" ]
+  then
+    echo Not Allowed to run cs-studio on $xx.
+    exit
+  fi
+done
 
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
 export PATH=$JAVA_HOME/bin:$PATH

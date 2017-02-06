@@ -15,8 +15,6 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 
 #dbLoadRecords("db/bta_suppl.db","hall=Z,ioc=classc6");
 
-dbLoadRecords("db/mcc_fsd.db")
-
 cd "${TOP}/iocBoot/${IOC}"
 
 #< save_restore.cmd

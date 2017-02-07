@@ -508,27 +508,33 @@ int main(int argc, char **argv)
     int itmp;
     const char* usage="\ntordaqGui [options] [filename]\n"
         "\t -A (do synchronization analysis - memory intensive)\n"
-        "\t -F (force synchronization)\n"
+        "\t -S (force synchronization)\n"
         "\t -h (print usage)\n";
-    while ( (itmp=getopt(argc,argv,"sh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"ASh")) != -1 )
     {
         switch (itmp)
         {
             case 'A':
                 doSynchroAna=true;
+                std::cout<<"Performing synchronization analysis (memory intensive)."<<std::endl;
                 break;
             case 'S':
                 forceSynchro=true;
+                std::cout<<"Forcing synchronization."<<std::endl;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;
                 exit(0);
             default:
-                break;
+                std::cout<<"Invalid Argument:  -"<<itmp<<std::endl;
+                std::cout<<usage<<std::endl;
+                exit(0);
         }
     }
 
-    if (argc>1 && strcmp(argv[argc-1],"-s") && strcmp(argv[argc-1],"-h"))
+    if (argc>1 && strcmp(argv[argc-1],"-A") && 
+                  strcmp(argv[argc-1],"-S") &&
+                  strcmp(argv[argc-1],"-h"))
         filename=argv[argc-1];
     
     TApplication theApp("App", &argc, argv);

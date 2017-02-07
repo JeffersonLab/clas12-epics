@@ -31,7 +31,7 @@ int main(int argc,char **argv)
     std::string sStartTime="";
     std::string sEndTime="";
     
-    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:Rh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:RASh")) != -1 )
     {
         switch (itmp)
         {
@@ -71,6 +71,7 @@ int main(int argc,char **argv)
                 std::cout<<usage<<std::endl;
                 exit(0);
             default:
+                std::cout<<"Invalid Argument:  -"<<itmp<<std::endl;
                 std::cout<<usage<<std::endl;
                 exit(1);
         }

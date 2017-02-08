@@ -14,7 +14,7 @@ DBD += classc6.dbd
 
 # classc6.dbd will be made up from these files:
 classc6_DBD += base.dbd
-classc6_DBD += btaSupport.dbd
+#classc6_DBD += btaSupport.dbd
 #classc6_DBD += asSupport.dbd
 classc6_DBD += devIocStats.dbd
 

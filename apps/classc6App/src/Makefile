@@ -29,7 +29,7 @@ classc6_SRCS_vxWorks += classc6_registerRecordDeviceDriver.cpp
 classc6_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
-classc6_LIBS += btaSupport
+#classc6_LIBS += btaSupport
 classc6_LIBS += SIS38XX mca
 classc6_LIBS += calc
 classc6_LIBS += busy

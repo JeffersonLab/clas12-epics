@@ -385,9 +385,10 @@ public class MakeLogEntry
     FRAME.add(commentsPanel, BorderLayout.CENTER);
     FRAME.add(buttonPanel, "South");
     FRAME.add(titlePanel, "North");
-    if (DOTABS) FRAME.add(tabPanel,"East");
-    else        FRAME.add(screenshotPanel,"East");
+    if (DOTABS) FRAME.add(tabPanel,"West");
+    else        FRAME.add(screenshotPanel,"West");
     FRAME.pack();
+//    FRAME.setResizable(false);
     FRAME.setVisible(true);
   }
 
@@ -422,7 +423,7 @@ public class MakeLogEntry
 		layout.putConstraint(SpringLayout.EAST, IMTABS, 0, SpringLayout.EAST, tabPanel);
 		layout.putConstraint(SpringLayout.WEST, IMTABS, 0, SpringLayout.WEST, tabPanel);
 		layout.putConstraint(SpringLayout.NORTH, IMTABS, 0, SpringLayout.NORTH, tabPanel);
-		layout.putConstraint(SpringLayout.SOUTH, IMTABS, -10, SpringLayout.NORTH, buttonPanel);
+		layout.putConstraint(SpringLayout.SOUTH, IMTABS, 0, SpringLayout.NORTH, buttonPanel);
 		
     ADDTABBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {

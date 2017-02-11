@@ -84,6 +84,10 @@ set -f path=("${script_dir}" $path:q)
 
 if ( ! $?PYTHONPATH ) setenv PYTHONPATH 
 setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
+setenv PYTHONPATH "${PYTHONPATH}:${ROOTSYS}/lib"
 
 setenv EPICS_SCRIPTS "${script_dir}"
+
+## CS-Studio
+setenv DIIRT_HOME ${EPICS}/css_share/common/prefs/diirt
 

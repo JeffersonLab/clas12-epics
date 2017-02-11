@@ -50,6 +50,11 @@ then
   fi
 fi
 
+if ! [ -d "$ROOTSYS" ]
+then
+  source /apps/root/5.34.21/bin/thisroot.sh
+fi
+
 export EPICS_HOST_ARCH
 export EPICS_SCRIPTS=${EPICS}/apps/scripts
 export EPICS_CA_AUTO_ADDR_LIST=no
@@ -60,6 +65,7 @@ export PERL5LIB=${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86
 PYTHONPATH=${PYTHONPATH}:${EPICS_SCRIPTS}
 PYTHONPATH=${PYTHONPATH}:${EPICS}/css_share/common/scripts
 PYTHONPATH=${PYTHONPATH}:/usr/clas12/third-party-libs/pyepics-RHEL7
+PYTHONPATH=${PYTHONPATH}:${ROOTSYS}/lib
 export PYTHONPATH
 
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${ROOTSYS}/lib
@@ -76,6 +82,7 @@ PATH=${PATH}:/usr/clas12/css/pro/${EPICS_HOST_ARCH}/bin
 PATH=${PATH}:/usr/csite/certified/bin
 PATH=${PATH}:${EPICS_SCRIPTS}
 export PATH
+
 
 export MIBDIRS=/usr/clas12/R${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 export MIBS=ALL

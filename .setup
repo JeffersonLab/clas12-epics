@@ -82,6 +82,13 @@ set css_script_dir="${EPICS}/css_share/common/scripts"
 
 set -f path=("${script_dir}" $path:q)
 
+if ( ! $?ROOTSYS ) then
+  setenv ROOTSYS /apps/root/5.34.21
+  set -f path=("$ROOTSYS/bin" $path:q)
+  if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH 
+  setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$ROOTSYS/lib"
+endif
+
 if ( ! $?PYTHONPATH ) setenv PYTHONPATH 
 setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
 setenv PYTHONPATH "${PYTHONPATH}:${ROOTSYS}/lib"

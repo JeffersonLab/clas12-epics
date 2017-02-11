@@ -272,19 +272,30 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
 
   // this is what we alarm on:
   *delta=0;
+ 
+#define HRDWERROR  999999
+#define COMMERROR -999999
 
+  // If channel is ON, then delta is difference between measured and demand voltages.
+  // This should allow to alarm any time a channel is turned on or off, in addition
+  // to serving as a voltage tolerance alarm.
+  if ( ((int)property[PROP_ST] & (BIT_ON) ) )
+    *delta =  property[PROP_MV] - property[PROP_DV];
+/*
   // delta is difference between measured and demand voltages
   // if channel is OFF, or not ON, or RAMPING, do not set delta
   if( ! ((int)property[PROP_ST] & (BIT_OFF) ) )
     if ( ((int)property[PROP_ST] & (BIT_ON) ) )
       if ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
         *delta =  property[PROP_MV] - property[PROP_DV];
+*/
 
   // if ERROR bits are set, override delta with very big number
-  if( ((int)property[PROP_ST] & (BIT_INTTRIP |  BIT_OVERVOLT | BIT_OVERCUR )   ) ) *delta=99999;
+  if( ((int)property[PROP_ST] & (BIT_INTTRIP |  BIT_OVERVOLT | BIT_OVERCUR )   ) )
+    *delta=HRDWERROR;
 
   // if HEARTBEAT error, override delta with very big negative number
-  if( (int)property[PROP_HBEAT] ) *delta=-99999;
+  if( (int)property[PROP_HBEAT] ) *delta=COMMERROR;
 
   return(0);
 }

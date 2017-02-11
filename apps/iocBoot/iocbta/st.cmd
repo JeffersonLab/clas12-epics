@@ -4,6 +4,8 @@
 ## everywhere it appears in this file
 
 < envPaths
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255 129.57.242.4")
+
 cd "${TOP}"
 
 ## Register all support components

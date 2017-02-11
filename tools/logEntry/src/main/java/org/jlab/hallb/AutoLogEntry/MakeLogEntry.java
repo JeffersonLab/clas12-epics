@@ -299,8 +299,8 @@ public class MakeLogEntry
     LOGTITLE.setVisible(true);
     LOGTITLE.setEditable(true);
     LOGTITLE.setForeground(Color.BLUE);
-    LOGTITLE.setFont(new Font("Dialog.plain",0,18));
-    LOGTITLE.setPreferredSize(new Dimension(400, 20));
+    LOGTITLE.setFont(new Font("Dialog.plain",0,15));
+    LOGTITLE.setPreferredSize(new Dimension(400, 15));
     LOGTITLE.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 
     // log text entry:
@@ -367,7 +367,7 @@ public class MakeLogEntry
     titlePanel.setOpaque(false);
     titlePanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
     titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.LINE_AXIS));
-    titlePanel.setPreferredSize(new Dimension(200, 50));
+    titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
 
     JPanel tabPanel=null;

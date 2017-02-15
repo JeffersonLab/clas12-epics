@@ -44,11 +44,13 @@ dbLoadTemplate("db/jscalers_TDCFTOF4_RF.substitutions")
 dbLoadTemplate("db/jscalers_TDCPCAL4_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_TDCFTOF4_TRIG.substitutions")
 
+dbLoadRecords("db/jscalers_wf.db","S=4")
+
 cd ${TOP}/iocBoot/${IOC}
 
 iocInit
 
-#seq seqJscalersFC, "S=4"
+seq seqJscalers, "S=4"
 
 dbl > pv.list
 

@@ -43,8 +43,12 @@ dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=DISC,SEC=2,CH=3")
 dbLoadTemplate("db/jscalers_TDCPCAL2_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_TDCFTOF2_TRIG.substitutions")
 
+dbLoadRecords("db/jscalers_wf.db","S=2")
+
 cd ${TOP}/iocBoot/${IOC}
 
 iocInit
+
+seq seqJscalers, "S=2"
 
 dbl > pv.list

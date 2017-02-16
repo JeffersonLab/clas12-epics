@@ -23,7 +23,7 @@ iocscalers_SRCS += jscalers_ioc.cpp
 iocscalers_SRCS_DEFAULT += iocscalersMain.cpp
 iocscalers_SRCS_vxWorks += -nil-
 
-iocscalers_SRCS += jscalers.st
+iocscalers_SRCS += jscalersF.st
 iocscalers_SRCS += jscalersC.st
 iocscalers_LIBS += seq pv
 

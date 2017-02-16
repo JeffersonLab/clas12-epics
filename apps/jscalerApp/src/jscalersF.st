@@ -1,4 +1,4 @@
-program seqJscalers
+program seqJscalersF
 
 option -c;
 option -r;
@@ -56,7 +56,7 @@ int ilayer;
 int ii;
 string stmp;
 
-ss seqJscalers {
+ss seqJscalersF {
 
   state start
   {   

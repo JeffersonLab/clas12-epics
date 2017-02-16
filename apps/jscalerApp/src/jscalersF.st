@@ -33,19 +33,25 @@ int wfLengthP=0;
 int wfLengthF=0;
 int wfLengthL=0;
 
-string msg; assign msg to "B_SYS_DISC_SEC{S}:wfmsg";
+string msg; assign msg to "B_SYS_SEC{S}:wfmsg";
 
 float wfoE[216]; assign wfoE to "B_DET_ECAL_DISC_SEC{S}:wf";
 float wfiE[216]; assign wfiE to {};
-
 float wfoP[192]; assign wfoP to "B_DET_PCAL_DISC_SEC{S}:wf";
 float wfiP[192]; assign wfiP to {};
-
 float wfoF[180]; assign wfoF to "B_DET_FTOF_DISC_SEC{S}:wf";
 float wfiF[180]; assign wfiF to {};
-
 float wfoL[36]; assign wfoL to "B_DET_LTCC_DISC_SEC{S}:wf";
 float wfiL[36]; assign wfiL to {};
+
+//float wfoE[216]; assign wfoE to "B_DET_ECAL_FADC_SEC{S}:wf";
+//float wfiE[216]; assign wfiE to {};
+//float wfoP[192]; assign wfoP to "B_DET_PCAL_FADC_SEC{S}:wf";
+//float wfiP[192]; assign wfiP to {};
+//float wfoF[180]; assign wfoF to "B_DET_FTOF_FADC_SEC{S}:wf";
+//float wfiF[180]; assign wfiF to {};
+//float wfoL[36]; assign wfoL to "B_DET_LTCC_FADC_SEC{S}:wf";
+//float wfiL[36]; assign wfiL to {};
 
 int ipanel;
 int iside;

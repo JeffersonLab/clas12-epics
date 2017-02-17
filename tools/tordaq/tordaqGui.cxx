@@ -516,11 +516,9 @@ int main(int argc, char **argv)
         {
             case 'A':
                 doSynchroAna=true;
-                std::cout<<"Performing synchronization analysis (memory intensive)."<<std::endl;
                 break;
             case 'S':
                 forceSynchro=true;
-                std::cout<<"Forcing synchronization."<<std::endl;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

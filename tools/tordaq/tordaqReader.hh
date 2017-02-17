@@ -48,7 +48,7 @@ public:
             time_t now=time(0);
             timeRemain=float(time(0)-starttime)*(1/frac-1);
         }
-        if (frac>0.2)
+        if (frac>0.15)
         {
             if (timeRemain>0) printf("]  %d sec          \r",timeRemain);
             else              printf("]                  \r");
@@ -76,6 +76,7 @@ public:
 
     bool process()
     {
+        // open the input file:
         if (inFilename!="") {
             if (gSystem->AccessPathName(inFilename))
             {
@@ -139,7 +140,8 @@ public:
             }
         }
 
-        
+
+        // bin each histo independently based on its channels' min/max times:
         if (false && makeHistos)
         {
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
@@ -172,10 +174,11 @@ public:
                 }
             }
         }
-        
-        if (true && makeHistos)
+       
+        // use the same binning for all histos:
+        // NABO:  MODIFY TO USE ONLY inTrees[0]'s TIMESTAMPS IF forceSynchro=true
+        else if (true && makeHistos)
         {
-
             // choose time limits:
             Double_t time0=-1,time1=-1;
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
@@ -215,24 +218,38 @@ public:
             }
         }
 
+        // print warning messages about synchronization:
+        if (doSynchroAna)
+        {
+            std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
+            std::cout<<"So be COURTEOUS AND CLOSE tordaq WHEN FINISHED!"<<std::endl<<std::endl;
+        }
+        if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl<<std::endl;
+
+        // setup dynamically allocated stuff:
+        std::vector <double> lastUpdateTime;
         std::vector <bool> skipVars;
         std::vector < std::vector <int> > sampleFills;
+        std::vector < TH1* > updatePeriod;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) 
         {
             skipVars.push_back(false);
             if (doSynchroAna)
             {
+                // this is memory-intensive:
                 std::vector <int> mm;
                 for (int jj=0; jj<outHistos[ii]->GetNbinsX(); jj++) mm.push_back(0);
                 sampleFills.push_back(mm);
+                // this is harmless:
+                double kk=-1;
+                lastUpdateTime.push_back(kk);
+                updatePeriod.push_back(new TH1D(Form("hUpdatePeriod%s",inTrees[ii]->fChain->GetName()),"",200000,-100,100));
             }
         }
 
         static const int ASCIITIMELENGTH=26;
         char stime[ASCIITIMELENGTH];
-
         Double_t ntupleVars[1000];
-
         Long64_t jentry=-1;
         Long64_t nSamples=0;
         bool tooManySamples=0;
@@ -244,7 +261,7 @@ public:
         const time_t runStartTime=time(0);
 
         /*
-        // print header
+        // print a header row in the ascii file:
         if (outAsciiFile)
         {
             for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
@@ -254,6 +271,7 @@ public:
         }
         */
 
+        // the loop over all the data:
         while (1)
         {
             jentry++;
@@ -274,6 +292,12 @@ public:
                     const Double_t time = inTrees[iVar]->getTime(0);
                     if (endTime<0   || time<endTime)   allLate=0;
                     if (startTime<0 || time>startTime) allEarly=0;
+                    if (doSynchroAna)
+                    {
+                        if (lastUpdateTime[iVar]>0)
+                            updatePeriod[iVar]->Fill(time-lastUpdateTime[iVar]);
+                        lastUpdateTime[iVar]=time;
+                    }
                 }
             }
 
@@ -285,10 +309,10 @@ public:
 
             for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++)
             {
-                if (forceSynchro) {
+                // if forcing synchronization, require that all trees are good:
+                if (forceSynchro)
                     for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
                         if (skipVars[iVar]) continue;
-                }
 
                 char sep[1]="";
                 for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
@@ -298,11 +322,14 @@ public:
                     ntupleVars[2*iVar]=ntupleVars[2*iVar+1]=0;
                     if (!skipVars[iVar])
                     {
+                        // get time and data for this sample:
                         data = inTrees[iVar]->record_data[iSamp];
                         if (forceSynchro) time = inTrees[0]->getTime(iSamp);
                         else              time = inTrees[iVar]->getTime(iSamp);
                         ntupleVars[2*iVar]=time;
                         ntupleVars[2*iVar+1]=data;
+
+                        // convert to Ruben's time format:
                         if (rubenTime)
                         {
                             const time_t timet=(int)time;
@@ -310,6 +337,8 @@ public:
                             strftime(stime,ASCIITIMELENGTH,"%Y:%m:%d %H:%M:%S",structtm);
                             sprintf(stime,"%s %.4f",stime,time-(int)time);
                         }
+
+                        // fill histograms:
                         if (makeHistos)
                         {
                             const int bin=outHistos[iVar]->FindBin(time);
@@ -317,6 +346,8 @@ public:
                             if (doSynchroAna) sampleFills[iVar][bin-1]++;
                         }
                     }
+
+                    // print to the pointless ascii file:
                     if (outAsciiFile)
                     {
                         if (rubenTime) fprintf(outAsciiFile,"%s%s%s%12f",sep,stime,asciiDelimiter,data);
@@ -324,8 +355,12 @@ public:
                     }
                     strcpy(sep,asciiDelimiter);
                 }
+
+                // end-of-event closures:
                 if (outAsciiFile) fprintf(outAsciiFile,"\n");
                 if (outTree) outTree->Fill(ntupleVars);
+
+                // call it quits:
                 if (++nSamples>=maxSamples && maxSamples>0)
                 {
                     tooManySamples=1;
@@ -358,6 +393,10 @@ public:
                 }                
             }
             std::cout<<std::endl;
+            // This conflicts with other histos (renders them inaccessible):
+            //TFile fout("tordaqSynchroAna.root","RECREATE");
+            //for (unsigned int ii=0; ii<updatePeriod.size(); ii++) updatePeriod[ii]->Write();
+            //fout.Close();
         }
         
         std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl;
@@ -390,9 +429,7 @@ public:
 
             //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
             //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
-
             //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
-
             //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
 
             TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);

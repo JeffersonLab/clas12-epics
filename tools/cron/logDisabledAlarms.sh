@@ -2,12 +2,12 @@
 
 query='use ALARM; SELECT NAME FROM ALARM_TREE, PV WHERE (ALARM_TREE.COMPONENT_ID = PV.COMPONENT_ID) and (PV.STATUS_ID = 12);'
 
-#list=`mysql -h clondb3 -u alarm -p'$alarm' -e "$query"`
+result=`mysql -h clondb3 -u alarm -p'$alarm' -e "$query" | grep -v NAME`
 
-#list=`echo $list | sed 's/ /\r/'`
-#echo $list
+if [ -z $1 ]
+then
+  echo "$result"
+else
+  echo "$result" | logentry -l TLOG -t 'Disabled Alarm List' -b -
+fi
 
-#date && echo $list | logentry -l HBCONTROLS -t 'Disabled Alarm List' -b -
-
-mysql -h clondb3 -u alarm -p\$alarm -e "$query"
-  

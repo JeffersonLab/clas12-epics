@@ -317,3 +317,19 @@ record(calc, "$(P)$(R)FastDAQ_Status") {
     field(HIGH, "1")
     field(HSV,  "MAJOR")
 }
+
+#
+# Alarm for ramping or offset in requested current
+#
+record(calc, "$(P)$(R)I_WARNING") {
+    field(INPA, "$(P)$(R)OnOff CP")
+    field(INPB, "$(P)$(R)I_MPS CP")
+    field(INPC, "$(P)$(R)Iset CP")
+    # INPD = Tolerance
+    field(CALC, "A=0&&(abs(B-C)>D)?1:0")
+    field(PREC, "2")
+    field(HIGH, "1")
+    field(HSV,  "MAJOR")
+    info(autosaveFields_pass0, "D")
+
+}

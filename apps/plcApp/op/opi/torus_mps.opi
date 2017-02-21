@@ -546,13 +546,12 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="true" hook_all="true">
       <action type="OPEN_DISPLAY">
-        <path>../../alarms/aiaocalc_alarm_set.opi</path>
+        <path>torus_mps_alarm.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <sig>${pv_name}</sig>
         </macros>
         <replace>2</replace>
-        <description>Alarm Settings</description>
+        <description>Current Mismatch Alarm Settings</description>
       </action>
     </actions>
     <font>
@@ -963,7 +962,16 @@ $(pv_value)</tooltip>
     <confirm_message></confirm_message>
     <name>Text Update_64</name>
     <style>0</style>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="true">
+      <action type="OPEN_DISPLAY">
+        <path>torus_mps_alarm.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Mismatch Alarm Settings</description>
+      </action>
+    </actions>
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <enabled>true</enabled>
@@ -1563,6 +1571,14 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description>FastDAQ Live Data</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>torus_mps_alarm.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Mismatch Alarm Settings</description>
       </action>
     </actions>
     <font>

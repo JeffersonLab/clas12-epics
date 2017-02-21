@@ -1,6 +1,7 @@
-#!../../bin/linux-x86/plc2epics
+#!../../bin/linux-x86_64/plc2epics
 ############################################################################
 < envPaths
+epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES",1000000)
 ############################################################################
 cd ${TOP}
 
@@ -19,7 +20,11 @@ drvEtherIP_init()
 #EIP_verbosity(7)
 
 ## Load record instances
-dbLoadRecords("db/torus_interlock_sum.db","P=B_TORUS:,R=MPS:")
+dbLoadRecords("db/torus_wf_generic.db","P=B_TORUS:,R=WF1,NELM=1,PREC=2")
+dbLoadRecords("db/torus_wf_generic.db","P=B_TORUS:,R=WF10,NELM=10,PREC=2")
+dbLoadRecords("db/torus_wf_generic.db","P=B_TORUS:,R=WF100,NELM=100,PREC=2")
+dbLoadRecords("db/torus_wf_generic.db","P=B_TORUS:,R=WF2000,NELM=2000,PREC=2")
+dbLoadRecords("db/torus_wf_generic.db","P=B_TORUS:,R=WF5000,NELM=5000,PREC=2")
 
 cd ${TOP}/iocBoot/${IOC}
 

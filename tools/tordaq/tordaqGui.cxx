@@ -263,6 +263,7 @@ void tordaqGui::DoOpen(TString filename="")
         tdReader.makeHistos=true;
         //tdReader.progressMeter=progressBar;
         tdReader.doSynchroAna=doSynchroAna;
+        tdReader.forceSynchro=forceSynchro;
         if (!tdReader.process())
         {
             std::cerr<<"Error Reading WF2ROOT Trees in   "+filename<<std::endl;

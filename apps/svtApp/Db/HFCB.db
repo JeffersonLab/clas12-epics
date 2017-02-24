@@ -1,0 +1,53 @@
+record(ai,"B_SVT$(T)_$(H)$(S)raw") {
+	field(DESC,"32 bit raw read")
+	field(SCAN,"1 second")
+	field(DTYP,"V450")
+	field(FLNK,"B_SVT$(T)_$(H)$(S)v")
+	field(INP,"#C$(N) S$(A) @")
+	field(PREC,"0")
+	field(EGU,"counts")
+}
+record(calc,"B_SVT$(T)_$(H)$(S)") {
+	field(DESC,"HFCB Temp")
+	field(FLNK,"B_SVT$(T)_$(H)$(S)dly")
+	field(CALC,"((A*1000.0)-2100)/-10.9")
+	field(INPA,"B_SVT$(T)_$(H)$(S)v.VAL NPP NMS")
+	field(EGU,"C")
+	field(PREC,"2")
+	field(HIHI,"33")
+	field(LOLO,"10")
+	field(HIGH,"30")
+	field(LOW,"16")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"B_SVT$(T)_$(H)$(S)Alm") {
+	field(CALC,"D>4?(A*C*D*(-1)):(A*C*D)")
+	field(INPA,"B_SVT$(T)_$(H)$(S)dly NPP NMS")
+	field(INPC,"B_SVT$(T)_$(H)$(S).SEVR NPP NMS")
+	field(INPD,"B_SVT$(T)_$(H)$(S).STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"B_SVT$(T)_$(H)$(S)dly") {
+	field(FLNK,"B_SVT$(T)_$(H)$(S)Alm")
+	field(CALC,"B>10?A:0")
+	field(INPA,"B_SVT_LV_VD_$(LVD):onOff")
+	field(INPB,"B_SVT_LV_VD_$(LVD):onOff_db")
+}
+record(calc,"B_SVT$(T)_$(H)$(S)v") {
+	field(DESC,"V450 voltage out")
+	field(FLNK,"B_SVT$(T)_$(H)$(S)")
+	field(CALC,"A * 12.5/(2**31)")
+	field(INPA,"B_SVT$(T)_$(H)$(S)raw.VAL NPP NMS")
+	field(EGU,"V")
+	field(PREC,"3")
+}

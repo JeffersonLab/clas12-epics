@@ -20,6 +20,7 @@ iocBoot_DEPEND_DIRS    += $(filter %App,$(DIRS))
 # Set app dependencies
 #
 clasTreeApp_DEPEND_DIRS  += caenHvApp
+svtApp_DEPEND_DIRS += highlandV450App
 caenHvApp_DEPEND_DIRS  += syX527App
 classc1App_DEPEND_DIRS += bomApp harp_genericApp kepcoApp scalerApp	# vme crate
 classc4App_DEPEND_DIRS += harp_genericApp scalerApp sixtyHzApp 	# vme crate

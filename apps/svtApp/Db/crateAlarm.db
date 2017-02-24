@@ -1,0 +1,112 @@
+record(bo,"vmetlsvt5:CRATEPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"vmetlsvt4:CRATEPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"vmetlsvt3:CRATEPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"vmetlsvt2:CRATEPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"vmetlsvt1:CRATEPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"B_SVT_ALL_OFF") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_ALL_OFFdfan")
+	field(HIGH,"2")
+}
+record(calc,"vmetlsvt5:seqAlarm") {
+	field(SCAN,".5 second")
+	field(CALC,"A!=B?0:C+1")
+	field(INPA,"vmetlsvt5:crateoff_seq_htbt NPP NMS")
+	field(INPB,"vmetlsvt5:seqAlarm.LA NPP NMS")
+	field(INPC,"vmetlsvt5:seqAlarm NPP NMS")
+	field(HIHI,"4")
+	field(HHSV,"MAJOR")
+}
+record(calc,"vmetlsvt4:seqAlarm") {
+	field(SCAN,".5 second")
+	field(CALC,"A!=B?0:C+1")
+	field(INPA,"vmetlsvt4:crateoff_seq_htbt NPP NMS")
+	field(INPB,"vmetlsvt4:seqAlarm.LA NPP NMS")
+	field(INPC,"vmetlsvt4:seqAlarm NPP NMS")
+	field(HIHI,"4")
+	field(HHSV,"MAJOR")
+}
+record(calc,"vmetlsvt3:seqAlarm") {
+	field(SCAN,".5 second")
+	field(CALC,"A!=B?0:C+1")
+	field(INPA,"vmetlsvt3:crateoff_seq_htbt NPP NMS")
+	field(INPB,"vmetlsvt3:seqAlarm.LA NPP NMS")
+	field(INPC,"vmetlsvt3:seqAlarm NPP NMS")
+	field(HIHI,"4")
+	field(HHSV,"MAJOR")
+}
+record(calc,"vmetlsvt2:seqAlarm") {
+	field(SCAN,".5 second")
+	field(CALC,"A!=B?0:C+1")
+	field(INPA,"vmetlsvt2:crateoff_seq_htbt NPP NMS")
+	field(INPB,"vmetlsvt2:seqAlarm.LA NPP NMS")
+	field(INPC,"vmetlsvt2:seqAlarm NPP NMS")
+	field(HIHI,"4")
+	field(HHSV,"MAJOR")
+}
+record(calc,"vmetlsvt1:seqAlarm") {
+	field(SCAN,".5 second")
+	field(CALC,"A!=B?0:C+1")
+	field(INPA,"vmetlsvt1:crateoff_seq_htbt NPP NMS")
+	field(INPB,"vmetlsvt1:seqAlarm.LA NPP NMS")
+	field(INPC,"vmetlsvt1:seqAlarm NPP NMS")
+	field(HIHI,"4")
+	field(HHSV,"MAJOR")
+}
+record(dfanout,"B_SVT_ALL_OFFdfan") {
+	field(FLNK,"B_SVT_ALL_OFFfan")
+	field(OUTA,"vmetlsvt1:CRATEPB_OFF NPP NMS")
+	field(OUTB,"vmetlsvt2:CRATEPB_OFF NPP NMS")
+	field(OUTC,"vmetlsvt3:CRATEPB_OFF NPP NMS")
+	field(OUTD,"vmetlsvt4:CRATEPB_OFF NPP NMS")
+	field(OUTE,"vmetlsvt5:CRATEPB_OFF NPP NMS")
+	field(DOL,"B_SVT_ALL_OFF NPP NMS")
+	field(OMSL,"closed_loop")
+}
+record(fanout,"B_SVT_ALL_OFFfan") {
+	field(LNK1,"vmetlsvt1:CRATEPB_OFF")
+	field(LNK2,"vmetlsvt2:CRATEPB_OFF")
+	field(LNK3,"vmetlsvt3:CRATEPB_OFF")
+	field(LNK4,"vmetlsvt4:CRATEPB_OFF")
+	field(LNK5,"vmetlsvt5:CRATEPB_OFF")
+}
+record(longout,"vmetlsvt5:crateoff_seq_htbt") {
+	field(DTYP,"Soft Channel")
+}
+record(longout,"vmetlsvt4:crateoff_seq_htbt") {
+	field(DTYP,"Soft Channel")
+}
+record(longout,"vmetlsvt3:crateoff_seq_htbt") {
+	field(DTYP,"Soft Channel")
+}
+record(longout,"vmetlsvt2:crateoff_seq_htbt") {
+	field(DTYP,"Soft Channel")
+}
+record(longout,"vmetlsvt1:crateoff_seq_htbt") {
+	field(DTYP,"Soft Channel")
+}

@@ -1,0 +1,229 @@
+record(ai,"$(HOST):moduleAuxMeasTemp0$(MX)") {
+	field(DESC,"Measured module temperature of sensor 1")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleAuxiliaryMeasurementTemperature0.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"degree C")
+}
+record(ai,"$(HOST):moduleAuxMeasVoltage0$(MX)") {
+	field(DESC,"Measured module auxiliary voltage")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleAuxiliaryMeasurementVoltage0.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(HOST):moduleAuxMeasVoltage1$(MX)") {
+	field(DESC,"Measured module auxiliary voltage")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleAuxiliaryMeasurementVoltage1.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(HOST):moduleHardwareLimitCurrent$(MX)") {
+	field(DESC,"Module Hardware Voltage Limit")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleHardwareLimitCurrent.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(ai,"$(HOST):moduleHardwareLimitVoltage$(MX)") {
+	field(DESC,"Module Hardware Voltage Limit")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleHardwareLimitVoltage.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(ai,"$(HOST):moduleRampSpeedCurrentR$(MX)") {
+	field(DESC,"Module Current Ramp Speed")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleRampSpeedCurrent.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(ai,"$(HOST):moduleRampSpeedVoltageR$(MX)") {
+	field(DESC,"Module Voltage Ramp Speed")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleRampSpeedVoltage.$(MX) Float: 100")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(ao,"$(HOST):moduleRampSpeedCurrent$(MX)") {
+	field(DESC,"Module Current Ramp Speed ")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}moduleRampSpeedCurrent.$(MX) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(ao,"$(HOST):moduleRampSpeedVoltage$(MX)") {
+	field(DESC,"Module Voltage Ramp Speed ")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}moduleRampSpeedVoltage.$(MX) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"%")
+}
+record(bi,"$(HOST):moduleEventActive$(MX)") {
+	field(DESC,"Any event is active and mask is set")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleGood$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B4 NPP NMS")
+}
+record(bi,"$(HOST):moduleGood$(MX)") {
+	field(DESC,"Module state is good")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleSupplyGood$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B3 NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"State Error")
+	field(ONAM,"Ok")
+}
+record(bi,"$(HOST):moduleHdwLimVGood$(MX)") {
+	field(DESC,"Hardware limit voltage proper range")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleInputError$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).BA NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Out of range")
+	field(ONAM,"Proper Range")
+}
+record(bi,"$(HOST):moduleInputError$(MX)") {
+	field(DESC,"Input error connection w/module access")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleNoSumError$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B9 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ONAM,"Access Error")
+}
+record(bi,"$(HOST):moduleIsFineAdj$(MX)") {
+	field(DESC,"Module has reached state fine adjustment")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleLiveInsert$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).BF NPP NMS")
+	field(ONAM,"Fine Adjustment")
+}
+record(bi,"$(HOST):moduleKillEnable$(MX)") {
+	field(DESC,"Module state of kill enable")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(HOST):moduleStatus$(MX).B0 NPP NMS")
+	field(ZNAM,"Kill Disable")
+	field(ONAM,"Kill Enable")
+}
+record(bi,"$(HOST):moduleLiveInsert$(MX)") {
+	field(DESC,"Module is in state live insertion")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleNeedService$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).BD NPP NMS")
+	field(ONAM,"Live Insertion")
+}
+record(bi,"$(HOST):moduleNeedService$(MX)") {
+	field(DESC,"Hardware failure detected")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleHdwLimVGood$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).BB NPP NMS")
+	field(OSV,"MAJOR")
+	field(ONAM,"Hardware Failure")
+}
+record(bi,"$(HOST):moduleNoRamp$(MX)") {
+	field(DESC,"All channels stable, not ramping")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleSafetyLoopGood$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B6 NPP NMS")
+	field(ZNAM,"Ramping")
+	field(ONAM,"Stable")
+}
+record(bi,"$(HOST):moduleNoSumError$(MX)") {
+	field(DESC,"All channels without any failure")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleNoRamp$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B7 NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Failure")
+	field(ONAM,"Ok")
+}
+record(bi,"$(HOST):moduleSafetyLoopGood$(MX)") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleEventActive$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B5 NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Safety Error")
+	field(ONAM,"Ok")
+}
+record(bi,"$(HOST):moduleSupplyGood$(MX)") {
+	field(DESC,"Power supply is good")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleTempGood$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B2 NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Supply Error")
+	field(ONAM,"Ok")
+}
+record(bi,"$(HOST):moduleTempGood$(MX)") {
+	field(DESC,"Module temperature is good")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleKillEnable$(MX)")
+	field(INP,"$(HOST):moduleStatus$(MX).B1 NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Temp Error")
+	field(ONAM,"Ok")
+}
+record(calc,"$(HOST):moduleStatusc1$(MX)") {
+	field(FLNK,"$(HOST):moduleStatus$(MX)")
+	field(CALC,"(A &0xFFFF)")
+	field(INPA,"$(HOST):moduleStatuslong$(MX) NPP NMS")
+}
+record(longin,"$(HOST):moduleDoClearR$(MX)") {
+	field(DTYP,"Soft Channel")
+}
+record(longin,"$(HOST):moduleEventChStatus$(MX)") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleEventChannelStatus.$(MX) Hex-STRING: 80")
+}
+record(longin,"$(HOST):moduleEventChStatuslong$(MX)") {
+	field(SCAN,"10 second")
+	field(DTYP,"Soft Channel")
+}
+record(longin,"$(HOST):moduleEventStatuslong$(MX)") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HOST):moduleEventStatus$(MX)")
+	field(INP,"@$(HOST) public %{W}moduleEventStatus.$(MX) BITS: 100")
+}
+record(longin,"$(HOST):moduleIndex$(MX)") {
+	field(SCAN,"10 second")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleIndex.$(MX) ( 100")
+}
+record(longin,"$(HOST):moduleStatuslong$(MX)") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HOST):moduleStatusc1$(MX)")
+	field(INP,"@$(HOST) public %{W}moduleStatus.$(MX) BITS: 100 sh")
+}
+record(longout,"$(HOST):moduleDoClear$(MX)") {
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}moduleDoClear.$(MX) INTEGER: 100 i")
+}
+record(mbbiDirect,"$(HOST):moduleEventStatus$(MX)") {
+	field(DTYP,"Soft Channel")
+	field(INP,"$(HOST):moduleEventStatuslong$(MX) NPP NMS")
+}
+record(mbbiDirect,"$(HOST):moduleStatus$(MX)") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HOST):moduleIsFineAdj$(MX)")
+	field(INP,"$(HOST):moduleStatusc1$(MX) NPP NMS")
+}
+record(stringin,"$(HOST):moduleDesc$(MX)") {
+	field(DESC,"Module Description")
+	field(SCAN,"10 second")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}moduleDescription.$(MX) STRING: 80")
+}

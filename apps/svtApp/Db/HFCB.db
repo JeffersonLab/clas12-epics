@@ -1,0 +1,1747 @@
+record(ai,"$(HV):outputConfigMaxCurrentR") {
+	field(DESC,"Max possible output current")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputConfigMaxCurrent.$(HVCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"A")
+}
+record(ai,"$(HV):outputConfigMaxSenseVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputConfigMaxSenseVoltage.$(HVCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(HV):outputConfigMaxTermVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputConfigMaxTerminalVoltage.$(HVCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(HV):outputCurrentFallRateR") {
+	field(DESC,"output currernt decreasing slew rate")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputCurrentFallRate.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A/s")
+}
+record(ai,"$(HV):outputCurrentRC") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HV):outputCurrentR")
+	field(INP,"@$(HVHOST) public %{W}outputCurrent.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+}
+record(ai,"$(HV):outputCurrentRiseRateR") {
+	field(DESC,"output current increasing slew rate")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputCurrentRiseRate.$(HVCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"A/s")
+}
+record(ai,"$(HV):outputMeasCurrentC") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HV):outputMeasCurrent")
+	field(INP,"@$(HVHOST) public %{W}outputMeasurementCurrent.$(HVCH) Float: 100 Fn")
+	field(PREC,"7")
+	field(EGU,"A")
+	field(HOPR,"5")
+	field(HIHI,"0.000002")
+	field(HIGH,"0.0000007")
+	field(LOW,"0.0000002")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(HV):outputMeasSenseV") {
+	field(DESC,"Measured output voltage")
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HV):outputMeasSenseVAlm")
+	field(INP,"@$(HVHOST) public %{W}outputMeasurementSenseVoltage.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+	field(HOPR,"100")
+	field(HIHI,"95.0")
+	field(LOLO,"75.0")
+	field(HIGH,"90.0")
+	field(LOW,"80.0")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(HV):outputMeasTermVR") {
+	field(DESC,"Measured voltage output terminals")
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputMeasurementTerminalVoltage.$(HVCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"100")
+	field(HIHI,"95.0")
+	field(LOLO,"75.0")
+	field(HIGH,"90.0")
+	field(LOW,"80.0")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(HV):outputVoltageFallRateR") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputVoltageFallRate.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(HV):outputVoltageR") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputVoltage.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(HV):outputVoltageRiseRateR") {
+	field(DESC,"output voltage increasing slew rate")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputVoltageRiseRate.$(HVCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outSupMaxCurrentR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxCurrent.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+}
+record(ai,"$(LVA):outSupMaxPowerR") {
+	field(DESC,"measured power supervison trigger")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxPower.$(LVACH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"W")
+}
+record(ai,"$(LVA):outSupMaxSenseVR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxSenseVoltage.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outSupMaxTermVR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxTerminalVoltage.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outSupMinSenseVR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMinSenseVoltage.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outputConfigMaxCurrentR") {
+	field(DESC,"Max possible output current")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxCurrent.$(LVACH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"A")
+}
+record(ai,"$(LVA):outputConfigMaxSenseVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxSenseVoltage.$(LVACH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outputConfigMaxTermVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxTerminalVoltage.$(LVACH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outputCurrentR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputCurrent.$(LVACH) Float: 100")
+	field(PREC,"5")
+}
+record(ai,"$(LVA):outputMeasCurrent") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementCurrent.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"5")
+	field(HIHI,"0.5")
+	field(HIGH,"0.35")
+	field(LOW,"0.25")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVA):outputMeasSenseV") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementSenseVoltage.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"8")
+	field(HIHI,"4.0")
+	field(LOLO,"2.5")
+	field(HIGH,"3.5")
+	field(LOW,"2.75")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVA):outputMeasTermVR") {
+	field(DESC,"Measured voltage at output terminals")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementTerminalVoltage.$(LVACH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+	field(HIHI,"4.0")
+	field(LOLO,"2.5")
+	field(HIGH,"3.5")
+	field(LOW,"2.75")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVA):outputVoltageFallRateR") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltageFallRate.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outputVoltageR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltage.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVA):outputVoltageRiseRateR") {
+	field(DESC,"output voltage increasing slew rate")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltageRiseRate.$(LVACH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outSupMaxCurrentR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxCurrent.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+}
+record(ai,"$(LVD):outSupMaxPowerR") {
+	field(DESC,"measured power supervison trigger")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxPower.$(LVDCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"W")
+}
+record(ai,"$(LVD):outSupMaxSenseVR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxSenseVoltage.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outSupMaxTermVR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMaxTerminalVoltage.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outSupMinSenseVR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionMinSenseVoltage.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outputConfigMaxCurrentR") {
+	field(DESC,"Max possible output current")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxCurrent.$(LVDCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"A")
+}
+record(ai,"$(LVD):outputConfigMaxSenseVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxSenseVoltage.$(LVDCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outputConfigMaxTermVR") {
+	field(DESC,"Max possible output Termninal Voltage")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputConfigMaxTerminalVoltage.$(LVDCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outputCurrentR") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputCurrent.$(LVDCH) Float: 100")
+	field(PREC,"5")
+}
+record(ai,"$(LVD):outputMeasCurrent") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementCurrent.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"5")
+	field(HIHI,"0.5")
+	field(HIGH,"0.35")
+	field(LOW,"0.25")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVD):outputMeasSenseV") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementSenseVoltage.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"8")
+	field(HIHI,"4.0")
+	field(LOLO,"2.5")
+	field(HIGH,"3.5")
+	field(LOW,"2.75")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVD):outputMeasTermVR") {
+	field(DESC,"Measured voltage at output terminals")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementTerminalVoltage.$(LVDCH) Float: 100")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+	field(HIHI,"4.0")
+	field(LOLO,"2.5")
+	field(HIGH,"3.5")
+	field(LOW,"2.75")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(ai,"$(LVD):outputVoltageFallRateR") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltageFallRate.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outputVoltageR") {
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltage.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ai,"$(LVD):outputVoltageRiseRateR") {
+	field(DESC,"output voltage increasing slew rate")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputVoltageRiseRate.$(LVDCH) Float: 100")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(HV):LV_RampDelay") {
+	field(DTYP,"Soft Channel")
+	field(OUT,"$(module):MODOFF.DLY2")
+	field(DOL,"$(HV):LV_RampDelaycalc NPP NMS")
+	field(OMSL,"closed_loop")
+}
+record(ao,"$(HV):outputConfigMaxCurrent") {
+	field(DESC,"Max possible output current")
+	field(DTYP,"Soft Channel")
+	field(PREC,"6")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(HV):outputConfigMaxSenseV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Soft Channel")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(HV):outputConfigMaxTermV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Soft Channel")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(HV):outputCurrent") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outputCurrent_calc")
+	field(DOL,"4")
+	field(PREC,"5")
+	field(EGU,"uA")
+	field(HOPR,"5")
+}
+record(ao,"$(HV):outputCurrentC") {
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputCurrent.$(HVCH) Float: 100 F")
+	field(DOL,"$(HV):outputCurrent_calc NPP NMS")
+	field(OMSL,"closed_loop")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(HV):outputCurrentFallRate") {
+	field(DESC,"output current decreasing slew rate")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputCurrentFallRate.$(HVCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"A/s")
+	field(HOPR,"8")
+}
+record(ao,"$(HV):outputCurrentRiseRate") {
+	field(DESC,"output current increasing slew rate")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputCurrentRiseRate.$(HVCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"A/s")
+	field(HOPR,"8")
+}
+record(ao,"$(HV):outputVoltage") {
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputVoltage.$(HVCH) Float: 100 F")
+	field(DOL,"85")
+	field(PREC,"5")
+	field(EGU,"V")
+	field(HOPR,"100")
+}
+record(ao,"$(HV):outputVoltageFallRate") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputVoltageFallRate.$(HVCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(ao,"$(HV):outputVoltageRiseRate") {
+	field(DESC,"output voltage increasing slew rate")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputVoltageRiseRate.$(HVCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(ao,"$(LVA):outSupMaxCurrent") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outSupMaxCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxCurrent.$(LVACH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"A")
+}
+record(ao,"$(LVA):outSupMaxPower") {
+	field(DESC,"measured power supervision trigger")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outSupMaxPowerR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxPower.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"W")
+}
+record(ao,"$(LVA):outSupMaxSenseV") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outSupMaxSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxSenseVoltage.$(LVACH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVA):outSupMaxTermV") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outSupMaxTermVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxTerminalVoltage.$(LVACH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVA):outSupMinSenseV") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outSupMinSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMinSenseVoltage.$(LVACH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVA):outputConfigMaxCurrent") {
+	field(DESC,"Max possible output current")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputConfigMaxCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxCurrent.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(LVA):outputConfigMaxSenseV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputConfigMaxSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxSenseVoltage.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVA):outputConfigMaxTermV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputConfigMaxTermVR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxTerminalVoltage.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVA):outputCurrent") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputCurrent.$(LVACH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(LVA):outputVoltage") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputVoltageR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltage.$(LVACH) Float: 100 F")
+	field(DOL,"3.25")
+	field(PREC,"5")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVA):outputVoltageFallRate") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputVoltageFallRateR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltageFallRate.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(ao,"$(LVA):outputVoltageRiseRate") {
+	field(DESC,"output voltage increasing slew rate")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outputVoltageRiseRateR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltageRiseRate.$(LVACH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(ao,"$(LVD):outSupMaxCurrent") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outSupMaxCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxCurrent.$(LVDCH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"A")
+}
+record(ao,"$(LVD):outSupMaxPower") {
+	field(DESC,"measured power supervision trigger")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outSupMaxPowerR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxPower.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"W")
+}
+record(ao,"$(LVD):outSupMaxSenseV") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outSupMaxSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxSenseVoltage.$(LVDCH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVD):outSupMaxTermV") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outSupMaxTermVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMaxTerminalVoltage.$(LVDCH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVD):outSupMinSenseV") {
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outSupMinSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionMinSenseVoltage.$(LVDCH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"V")
+}
+record(ao,"$(LVD):outputConfigMaxCurrent") {
+	field(DESC,"Max possible output current")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputConfigMaxCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxCurrent.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(LVD):outputConfigMaxSenseV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputConfigMaxSenseVR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxSenseVoltage.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVD):outputConfigMaxTermV") {
+	field(DESC,"Max possible output terminal Voltage")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputConfigMaxTermVR")
+	field(OUT,"@$(HOST) guru %{W}outputConfigMaxTerminalVoltage.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVD):outputCurrent") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputCurrentR")
+	field(OUT,"@$(HOST) guru %{W}outputCurrent.$(LVDCH) Float: 100 F")
+	field(PREC,"5")
+	field(EGU,"A")
+	field(HOPR,"5")
+}
+record(ao,"$(LVD):outputVoltage") {
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputVoltageR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltage.$(LVDCH) Float: 100 F")
+	field(DOL,"3.25")
+	field(PREC,"5")
+	field(EGU,"V")
+	field(HOPR,"8")
+}
+record(ao,"$(LVD):outputVoltageFallRate") {
+	field(DESC,"output voltage decreasing slew rate")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputVoltageFallRateR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltageFallRate.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(ao,"$(LVD):outputVoltageRiseRate") {
+	field(DESC,"output voltage increasing slew rate")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outputVoltageRiseRateR")
+	field(OUT,"@$(HOST) guru %{W}outputVoltageRiseRate.$(LVDCH) Float: 100 F")
+	field(PREC,"6")
+	field(EGU,"V/s")
+	field(HOPR,"8")
+}
+record(bi,"$(HV):outAdjusting") {
+	field(DESC,"Fine adjustment is working")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(HV):outputStatus1.B0 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outConstantVoltage") {
+	field(DESC,"Constant Voltage Control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outVoltageBoundsX")
+	field(INP,"$(HV):outputStatus2.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outCurrentBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailCurrentLimit")
+	field(INP,"$(HV):outputStatus2.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bi,"$(HV):outCurrentLimit") {
+	field(DESC,"current limiting (constant current mode)")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMaxCurrent")
+	field(INP,"$(HV):outputStatus1.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outEmergencyOff") {
+	field(DESC,"EmergencyOff is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outAdjusting")
+	field(INP,"$(HV):outputStatus1.B1 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outEnableKill") {
+	field(DESC,"EnableKill is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outEmergencyOff")
+	field(INP,"$(HV):outputStatus1.B2 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outFailCurrentLimit") {
+	field(DESC,"Hardware current limit")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(HV):outputStatus2.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(HV):outFailMaxCurrent") {
+	field(DESC,"current is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outRampUp")
+	field(INP,"$(HV):outputStatus1.BA NPP NMS")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailMaxPower") {
+	field(DESC,"output power is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outEnableKill")
+	field(INP,"$(HV):outputStatus1.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailMaxSnsVlt") {
+	field(DESC,"sense voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailTimeout")
+	field(INP,"$(HV):outputStatus1.BC NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailMaxTVolt") {
+	field(DESC,"terminal voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outCurrentLimit")
+	field(INP,"$(HV):outputStatus1.BB NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailMaxTemp") {
+	field(DESC,"heat sink temperature is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outRampDown")
+	field(INP,"$(HV):outputStatus1.B9 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailMinSnsVlt") {
+	field(DESC,"sense voltage is too low")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMaxSnsVlt")
+	field(INP,"$(HV):outputStatus1.BD NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outFailTimeout") {
+	field(DESC,"comm timeout between channel & control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMaxTVolt")
+	field(INP,"$(HV):outputStatus1.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(HV):outInhibit") {
+	field(DESC,"external hardware inhibit of channel")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMinSnsVlt")
+	field(INP,"$(HV):outputStatus1.BE NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no inhibit")
+	field(ONAM,"inhibit")
+}
+record(bi,"$(HV):outOn") {
+	field(DESC,"System is switched on=1/off=0")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outInhibit")
+	field(INP,"$(HV):outputStatus1.BF NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Off")
+	field(ONAM,"On")
+}
+record(bi,"$(HV):outRampDown") {
+	field(DESC,"Output voltage decreasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMaxPower")
+	field(INP,"$(HV):outputStatus1.B3 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not decreasing")
+	field(ONAM,"decreasing")
+}
+record(bi,"$(HV):outRampUp") {
+	field(DESC,"output voltage increasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outFailMaxTemp")
+	field(INP,"$(HV):outputStatus1.B4 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not increasing")
+	field(ONAM,"increasing")
+}
+record(bi,"$(HV):outVoltageBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outCurrentBoundsX")
+	field(INP,"$(HV):outputStatus2.B7 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bi,"$(LVA):outAdjusting") {
+	field(DESC,"Fine adjustment is working")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVA):outputStatus1.B0 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outConstantVoltage") {
+	field(DESC,"Constant Voltage Control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outVoltageBoundsX")
+	field(INP,"$(LVA):outputStatus2.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outCurrentBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailCurrentLimit")
+	field(INP,"$(LVA):outputStatus2.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bi,"$(LVA):outCurrentLimit") {
+	field(DESC,"current limiting (constant current mode)")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMaxCurrent")
+	field(INP,"$(LVA):outputStatus1.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outEmergencyOff") {
+	field(DESC,"EmergencyOff is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outAdjusting")
+	field(INP,"$(LVA):outputStatus1.B1 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outEnableKill") {
+	field(DESC,"EnableKill is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outEmergencyOff")
+	field(INP,"$(LVA):outputStatus1.B2 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outFailCurrentLimit") {
+	field(DESC,"Hardware current limit")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVA):outputStatus2.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVA):outFailMaxCurrent") {
+	field(DESC,"current is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outRampUp")
+	field(INP,"$(LVA):outputStatus1.BA NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailMaxPower") {
+	field(DESC,"output power is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outEnableKill")
+	field(INP,"$(LVA):outputStatus1.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailMaxSnsVlt") {
+	field(DESC,"sense voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailTimeout")
+	field(INP,"$(LVA):outputStatus1.BC NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailMaxTVolt") {
+	field(DESC,"terminal voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outCurrentLimit")
+	field(INP,"$(LVA):outputStatus1.BB NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailMaxTemp") {
+	field(DESC,"heat sink temperature is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outRampDown")
+	field(INP,"$(LVA):outputStatus1.B9 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailMinSnsVlt") {
+	field(DESC,"sense voltage is too low")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMaxSnsVlt")
+	field(INP,"$(LVA):outputStatus1.BD NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outFailTimeout") {
+	field(DESC,"comm timeout between channel & control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMaxTVolt")
+	field(INP,"$(LVA):outputStatus1.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVA):outInhibit") {
+	field(DESC,"external hardware inhibit of channel")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMinSnsVlt")
+	field(INP,"$(LVA):outputStatus1.BE NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no inhibit")
+	field(ONAM,"inhibit")
+}
+record(bi,"$(LVA):outOn") {
+	field(DESC,"System is switched on=1/off=0")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outInhibit")
+	field(INP,"$(LVA):outputStatus1.BF NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Off")
+	field(ONAM,"On")
+}
+record(bi,"$(LVA):outRampDown") {
+	field(DESC,"Output voltage decreasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMaxPower")
+	field(INP,"$(LVA):outputStatus1.B3 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not decreasing")
+	field(ONAM,"decreasing")
+}
+record(bi,"$(LVA):outRampUp") {
+	field(DESC,"output voltage increasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outFailMaxTemp")
+	field(INP,"$(LVA):outputStatus1.B4 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not increasing")
+	field(ONAM,"increasing")
+}
+record(bi,"$(LVA):outVoltageBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outCurrentBoundsX")
+	field(INP,"$(LVA):outputStatus2.B7 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bi,"$(LVD):outAdjusting") {
+	field(DESC,"Fine adjustment is working")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVD):outputStatus1.B0 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outConstantVoltage") {
+	field(DESC,"Constant Voltage Control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outVoltageBoundsX")
+	field(INP,"$(LVD):outputStatus2.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outCurrentBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailCurrentLimit")
+	field(INP,"$(LVD):outputStatus2.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bi,"$(LVD):outCurrentLimit") {
+	field(DESC,"current limiting (constant current mode)")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMaxCurrent")
+	field(INP,"$(LVD):outputStatus1.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outEmergencyOff") {
+	field(DESC,"EmergencyOff is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outAdjusting")
+	field(INP,"$(LVD):outputStatus1.B1 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outEnableKill") {
+	field(DESC,"EnableKill is active")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outEmergencyOff")
+	field(INP,"$(LVD):outputStatus1.B2 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outFailCurrentLimit") {
+	field(DESC,"Hardware current limit")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVD):outputStatus2.B5 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not active")
+	field(ONAM,"active")
+}
+record(bi,"$(LVD):outFailMaxCurrent") {
+	field(DESC,"current is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outRampUp")
+	field(INP,"$(LVD):outputStatus1.BA NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailMaxPower") {
+	field(DESC,"output power is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outEnableKill")
+	field(INP,"$(LVD):outputStatus1.B8 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailMaxSnsVlt") {
+	field(DESC,"sense voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailTimeout")
+	field(INP,"$(LVD):outputStatus1.BC NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailMaxTVolt") {
+	field(DESC,"terminal voltage is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outCurrentLimit")
+	field(INP,"$(LVD):outputStatus1.BB NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailMaxTemp") {
+	field(DESC,"heat sink temperature is too high")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outRampDown")
+	field(INP,"$(LVD):outputStatus1.B9 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailMinSnsVlt") {
+	field(DESC,"sense voltage is too low")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMaxSnsVlt")
+	field(INP,"$(LVD):outputStatus1.BD NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outFailTimeout") {
+	field(DESC,"comm timeout between channel & control")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMaxTVolt")
+	field(INP,"$(LVD):outputStatus1.B6 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no failure")
+	field(ONAM,"failure")
+}
+record(bi,"$(LVD):outInhibit") {
+	field(DESC,"external hardware inhibit of channel")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMinSnsVlt")
+	field(INP,"$(LVD):outputStatus1.BE NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"no inhibit")
+	field(ONAM,"inhibit")
+}
+record(bi,"$(LVD):outOn") {
+	field(DESC,"System is switched on=1/off=0")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outInhibit")
+	field(INP,"$(LVD):outputStatus1.BF NPP NMS")
+	field(ZSV,"MAJOR")
+	field(ZNAM,"Off")
+	field(ONAM,"On")
+}
+record(bi,"$(LVD):outRampDown") {
+	field(DESC,"Output voltage decreasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMaxPower")
+	field(INP,"$(LVD):outputStatus1.B3 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not decreasing")
+	field(ONAM,"decreasing")
+}
+record(bi,"$(LVD):outRampUp") {
+	field(DESC,"output voltage increasing")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outFailMaxTemp")
+	field(INP,"$(LVD):outputStatus1.B4 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"not increasing")
+	field(ONAM,"increasing")
+}
+record(bi,"$(LVD):outVoltageBoundsX") {
+	field(DESC,"output Voltage out of bounds")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outCurrentBoundsX")
+	field(INP,"$(LVD):outputStatus2.B7 NPP NMS")
+	field(OSV,"MAJOR")
+	field(ZNAM,"Ok")
+	field(ONAM,"Exceeded")
+}
+record(bo,"$(module):HVPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"4")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"$(module):HVPB_ON") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"4")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"$(module):MODPB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(module):MODOFF")
+	field(HIGH,"2")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"$(module):PB_OFF") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"4")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(bo,"$(module):PB_ON") {
+	field(DTYP,"Soft Channel")
+	field(HIGH,"4")
+	field(ZNAM,"0")
+	field(ONAM,"1")
+}
+record(calc,"$(HV):LV_RampDelaycalc") {
+	field(SCAN,"5 second")
+	field(FLNK,"$(HV):LV_RampDelay")
+	field(CALC,"C*((B/A)+8)")
+	field(INPA,"$(HV):outputVoltageFallRate NPP NMS")
+	field(INPB,"$(HV):outputVoltageR NPP NMS")
+	field(INPC,"$(HV):outOn NPP NMS")
+}
+record(calc,"$(HV):RAMPING") {
+	field(DESC,"Module Ramping")
+	field(SCAN,".5 second")
+	field(CALC,"A || B")
+	field(INPA,"$(HV):outRampUp NPP NMS")
+	field(INPB,"$(HV):outRampDown NPP NMS")
+}
+record(calc,"$(HV):modErr") {
+	field(DESC,"channel Error")
+	field(SCAN,"1 second")
+	field(CALC,"(A&0x3f0000)||(B>1)||(D>1)")
+	field(INPA,"$(HV):outputStatuslong NPP NMS")
+	field(INPB,"$(HV):outputMeasSenseVAlm.SEVR NPP NMS")
+	field(INPD,"$(HV):outputMeasCurrentAlm.SEVR NPP NMS")
+	field(HIHI,".7")
+	field(HHSV,"MAJOR")
+}
+record(calc,"$(HV):outputCurrentR") {
+	field(CALC,"A*1e6")
+	field(INPA,"$(HV):outputCurrentRC NPP NMS")
+	field(EGU,"uA")
+	field(PREC,"5")
+}
+record(calc,"$(HV):outputCurrent_calc") {
+	field(FLNK,"$(HV):outputCurrentC")
+	field(CALC,"A*1.e-6")
+	field(INPA,"$(HV):outputCurrent NPP NMS")
+	field(EGU,"uA")
+	field(PREC,"5")
+}
+record(calc,"$(HV):outputMeasCurrent") {
+	field(FLNK,"$(HV):outputMeasCurrentAlm")
+	field(CALC,"A*1.e6")
+	field(INPA,"$(HV):outputMeasCurrentC NPP NMS")
+	field(EGU,"uA")
+	field(PREC,"5")
+	field(HOPR,"5")
+	field(HIHI,"2.0")
+	field(HIGH,"0.7")
+	field(LOW,"0.1")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"$(HV):outputMeasCurrentAlm") {
+	field(DESC,"Interlock alarm current")
+	field(CALC,"D>4?(A&&!B)*C*(-1)*D:(A&&!B)*C*D")
+	field(INPA,"$(HV):outOn NPP NMS")
+	field(INPB,"$(HV):RAMPING NPP NMS")
+	field(INPC,"$(HV):outputMeasCurrent.SEVR NPP NMS")
+	field(INPD,"$(HV):outputMeasCurrent.STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"$(HV):outputMeasSenseVAlm") {
+	field(DESC,"Interlock alarm current")
+	field(PINI,"RUNNING")
+	field(CALC,"(A && !B)&&(C<3)?C:0")
+	field(INPA,"$(HV):outOn NPP NMS")
+	field(INPB,"$(HV):RAMPING NPP NMS")
+	field(INPC,"$(HV):outputMeasSenseV.SEVR NPP NMS")
+	field(HIHI,"1.5")
+	field(HIGH,".5")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(calc,"$(HV):outputStatusc1") {
+	field(FLNK,"$(HV):outputStatus1")
+	field(CALC,"(A>>8)&(0xFFFF)")
+	field(INPA,"$(HV):outputStatuslong NPP NMS")
+}
+record(calc,"$(HV):outputStatusc2") {
+	field(FLNK,"$(HV):outputStatus2")
+	field(CALC,"A&(0x000FF)")
+	field(INPA,"$(HV):outputStatuslong NPP NMS")
+}
+record(calc,"$(LVA):RAMPING") {
+	field(DESC,"Module Ramping")
+	field(SCAN,".5 second")
+	field(CALC,"A || B")
+	field(INPA,"$(LVA):outRampUp NPP NMS")
+	field(INPB,"$(LVA):outRampDown NPP NMS")
+}
+record(calc,"$(LVA):modErr") {
+	field(DESC,"mpod channel alarm")
+	field(SCAN,"2 second")
+	field(CALC,"(A&63)||(C>1)||(D>1)")
+	field(INPA,"$(LVA):outputStatuslong NPP NMS")
+	field(INPC,"$(LVA):outputMeasSenseVAlm.SEVR NPP NMS")
+	field(INPD,"$(LVA):outputMeasCurrentAlm.SEVR NPP NMS")
+	field(HIHI,".7")
+	field(HHSV,"MAJOR")
+}
+record(calc,"$(LVA):onOff_db") {
+	field(SCAN,"1 second")
+	field(CALC,"A>100000?B:(C+1)*A")
+	field(INPA,"$(LVA):onOff NPP NMS")
+	field(INPB,"30")
+	field(INPC,"$(LVA):onOff_db NPP NMS")
+}
+record(calc,"$(LVA):outputMeasCurrentAlm") {
+	field(DESC,"Interlock alarm current")
+	field(SCAN,"2 second")
+	field(CALC,"D>4?(A && !B)*C*(-1)*D:(A&&!B)*C*D")
+	field(INPA,"$(LVA):outOn NPP NMS")
+	field(INPB,"$(LVA):RAMPING NPP NMS")
+	field(INPC,"$(LVA):outputMeasCurrent.SEVR NPP NMS")
+	field(INPD,"$(LVA):outputMeasCurrent.STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"$(LVA):outputMeasSenseVAlm") {
+	field(DESC,"Interlock alarm current")
+	field(SCAN,"2 second")
+	field(CALC,"(A&& !B)&&(C<3)?C:0")
+	field(INPA,"$(LVA):outOn NPP NMS")
+	field(INPB,"$(LVA):RAMPING NPP NMS")
+	field(INPC,"$(LVA):outputMeasSenseV.SEVR NPP NMS")
+	field(HIHI,"1.5")
+	field(HIGH,".5")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(calc,"$(LVA):outputStatusc1") {
+	field(FLNK,"$(LVA):outputStatus1")
+	field(CALC,"(A<<8)&(0xFFFF)")
+	field(INPA,"$(LVA):outputStatuslong NPP NMS")
+}
+record(calc,"$(LVA):outputStatusc2") {
+	field(FLNK,"$(LVA):outputStatus2")
+	field(CALC,"A&(0x000FF)")
+}
+record(calc,"$(LVD):RAMPING") {
+	field(DESC,"Module Ramping")
+	field(SCAN,".5 second")
+	field(CALC,"A || B")
+	field(INPA,"$(LVD):outRampUp NPP NMS")
+	field(INPB,"$(LVD):outRampDown NPP NMS")
+}
+record(calc,"$(LVD):modErr") {
+	field(DESC,"mpod channel alarm")
+	field(SCAN,"2 second")
+	field(CALC,"(A&63)||(C>1)||(D>1)")
+	field(INPA,"$(LVD):outputStatuslong NPP NMS")
+	field(INPC,"$(LVD):outputMeasSenseVAlm.SEVR NPP NMS")
+	field(INPD,"$(LVD):outputMeasCurrentAlm.SEVR NPP NMS")
+	field(HIHI,".7")
+	field(HHSV,"MAJOR")
+}
+record(calc,"$(LVD):onOff_db") {
+	field(SCAN,"1 second")
+	field(CALC,"A>100000?B:(C+1)*A")
+	field(INPA,"$(LVD):onOff NPP NMS")
+	field(INPB,"30")
+	field(INPC,"$(LVD):onOff_db NPP NMS")
+}
+record(calc,"$(LVD):outputMeasCurrentAlm") {
+	field(DESC,"Interlock alarm current")
+	field(SCAN,"2 second")
+	field(CALC,"D>4?(A && !B)*C*(-1)*D:(A&&!B)*C*D")
+	field(INPA,"$(LVD):outOn NPP NMS")
+	field(INPB,"$(LVD):RAMPING NPP NMS")
+	field(INPC,"$(LVD):outputMeasCurrent.SEVR NPP NMS")
+	field(INPD,"$(LVD):outputMeasCurrent.STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"$(LVD):outputMeasSenseVAlm") {
+	field(DESC,"Interlock alarm current")
+	field(SCAN,"2 second")
+	field(CALC,"(A&& !B)&&(C<3)?C:0")
+	field(INPA,"$(LVD):outOn NPP NMS")
+	field(INPB,"$(LVD):RAMPING NPP NMS")
+	field(INPC,"$(LVD):outputMeasSenseV.SEVR NPP NMS")
+	field(HIHI,"1.5")
+	field(HIGH,".5")
+	field(HHSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(calc,"$(LVD):outputStatusc1") {
+	field(FLNK,"$(LVD):outputStatus1")
+	field(CALC,"(A<<8)&(0xFFFF)")
+	field(INPA,"$(LVD):outputStatuslong NPP NMS")
+}
+record(calc,"$(LVD):outputStatusc2") {
+	field(FLNK,"$(LVD):outputStatus2")
+	field(CALC,"A&(0x000FF)")
+}
+record(fanout,"$(HV):outStatusfan1") {
+	field(FLNK,"$(HV):outputStatusc1")
+	field(LNK1,"$(HV):outputStatusc2")
+}
+record(fanout,"$(LVA):outStatusfan1") {
+	field(FLNK,"$(LVA):outputStatusc1")
+}
+record(fanout,"$(LVD):outStatusfan1") {
+	field(FLNK,"$(LVD):outputStatusc1")
+}
+record(longin,"$(HV):outSupervisionR") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 50")
+}
+record(longin,"$(HV):outputGroupR") {
+	field(DESC,"Group num assigned to each channel")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputGroup.$(HVCH) INTEGER: 80")
+}
+record(longin,"$(HV):outputIndex") {
+	field(DESC,"Unique number for module")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputIndex.$(HVCH) ( 30")
+}
+record(longin,"$(HV):outputMeasTemp") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputMeasurementTemperature.$(HVCH) INTEGER: 50")
+}
+record(longin,"$(HV):outputStatuslong") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HV):outStatusfan1")
+	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100 sh")
+}
+record(longin,"$(HV):outputTripTimeMaxCurrentR") {
+	field(DESC,"current trip time out")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputTripTimeMaxCurrent.$(HVCH) INTEGER: 80")
+	field(EGU,"ms")
+}
+record(longin,"$(HV):outputUserConfigR") {
+	field(DESC,"output channel behavior")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputUserConfig.$(HVCH) INTEGER: 80")
+}
+record(longin,"$(HV):outswitchRlong") {
+	field(DESC,"Channel switch 1=ENABLED,0=DISABLED")
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(HV):outswitchR")
+	field(INP,"@$(HVHOST) public %{W}outputSwitch.$(HVCH) ( 30")
+	field(LOLO,"0")
+	field(HIGH,"2")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(longin,"$(LVA):onOffR") {
+	field(DESC,"Channel switch 1=ENABLED,0=DISABLED")
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outswitchR")
+	field(INP,"@$(HOST) guru %{W}outputSwitch.$(LVACH) ( 30")
+	field(LOLO,"0")
+	field(HIGH,"2")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(longin,"$(LVA):outSupervisionR") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionBehavior.$(LVACH) INTEGER: 50")
+}
+record(longin,"$(LVA):outputGroupR") {
+	field(DESC,"Group num assigned to each channel")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputGroup.$(LVACH) INTEGER: 80")
+}
+record(longin,"$(LVA):outputIndex") {
+	field(DESC,"Unique number for module")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputIndex.$(LVACH) ( 30")
+}
+record(longin,"$(LVA):outputMeasTemp") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementTemperature.$(LVACH) INTEGER: 50")
+}
+record(longin,"$(LVA):outputStatuslong") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVA):outStatusfan1")
+	field(INP,"@$(HOST) guru %{W}outputStatus.$(LVACH) BITS: 100 sh")
+}
+record(longin,"$(LVA):outputUserConfigR") {
+	field(DESC,"output channel behavior")
+	field(SCAN,"10 second")
+	field(DTYP,"Soft Channel")
+}
+record(longin,"$(LVD):onOffR") {
+	field(DESC,"Channel switch 1=ENABLED,0=DISABLED")
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outswitchR")
+	field(INP,"@$(HOST) guru %{W}outputSwitch.$(LVDCH) ( 30")
+	field(LOLO,"0")
+	field(HIGH,"2")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+}
+record(longin,"$(LVD):outSupervisionR") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputSupervisionBehavior.$(LVDCH) INTEGER: 50")
+}
+record(longin,"$(LVD):outputGroupR") {
+	field(DESC,"Group num assigned to each channel")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputGroup.$(LVDCH) INTEGER: 80")
+}
+record(longin,"$(LVD):outputIndex") {
+	field(DESC,"Unique number for module")
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputIndex.$(LVDCH) ( 30")
+}
+record(longin,"$(LVD):outputMeasTemp") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) guru %{W}outputMeasurementTemperature.$(LVDCH) INTEGER: 50")
+}
+record(longin,"$(LVD):outputStatuslong") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(FLNK,"$(LVD):outStatusfan1")
+	field(INP,"@$(HOST) guru %{W}outputStatus.$(LVDCH) BITS: 100 sh")
+}
+record(longin,"$(LVD):outputUserConfigR") {
+	field(DESC,"output channel behavior")
+	field(SCAN,"10 second")
+	field(DTYP,"Soft Channel")
+}
+record(longout,"$(HV):outSupervision") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 50 i")
+}
+record(longout,"$(HV):outputGroup") {
+	field(DTYP,"Soft Channel")
+}
+record(longout,"$(HV):outputTripTimeMaxCurrent") {
+	field(DESC,"Current trip time out")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputTripTimeMaxCurrent.$(HVCH) INTEGER: 8 i")
+	field(EGU,"ms")
+}
+record(longout,"$(HV):outputUserConfig") {
+	field(DESC,"output channel behavior")
+	field(DTYP,"Soft Channel")
+}
+record(longout,"$(HV):outswitchlong") {
+	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputSwitch.$(HVCH) ( 30 i")
+	field(DOL,"$(HV):outSwitch NPP NMS")
+	field(OMSL,"closed_loop")
+}
+record(longout,"$(LVA):onOff") {
+	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputSwitch.$(LVACH) ( 30 i")
+}
+record(longout,"$(LVA):outSupervision") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionBehavior.$(LVACH) INTEGER: 50 i")
+}
+record(longout,"$(LVA):outputGroup") {
+	field(DESC,"Group num assigned to each channel")
+	field(DTYP,"Soft Channel")
+}
+record(longout,"$(LVA):outputUserConfig") {
+	field(DESC,"output channel behavior")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputUserConfig.$(LVACH) INTEGER: 80 i")
+}
+record(longout,"$(LVD):onOff") {
+	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputSwitch.$(LVDCH) ( 30 i")
+}
+record(longout,"$(LVD):outSupervision") {
+	field(DESC,"Bitfield Fail Behavior - see .db file")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputSupervisionBehavior.$(LVDCH) INTEGER: 50 i")
+}
+record(longout,"$(LVD):outputGroup") {
+	field(DESC,"Group num assigned to each channel")
+	field(DTYP,"Soft Channel")
+}
+record(longout,"$(LVD):outputUserConfig") {
+	field(DESC,"output channel behavior")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HOST) guru %{W}outputUserConfig.$(LVDCH) INTEGER: 80 i")
+}
+record(mbbi,"$(HV):outswitchR") {
+	field(DESC,"output channel state")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(HV):outswitchRlong NPP MS")
+	field(ZRST,"Off")
+	field(ONST,"On")
+	field(TWST,"resetEmergencyOff")
+	field(THST,"setEmergencyOff")
+	field(TEST,"clearEvents")
+}
+record(mbbi,"$(LVA):outswitchR") {
+	field(DESC,"output channel state")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVA):onOffR.VAL NPP MS")
+	field(ZRST,"Off")
+	field(ONST,"On")
+	field(TWST,"resetEmergencyOff")
+	field(THST,"setEmergencyOff")
+	field(TEST,"clearEvents")
+}
+record(mbbi,"$(LVD):outswitchR") {
+	field(DESC,"output channel state")
+	field(DTYP,"Soft Channel")
+	field(INP,"$(LVD):onOffR.VAL NPP MS")
+	field(ZRST,"Off")
+	field(ONST,"On")
+	field(TWST,"resetEmergencyOff")
+	field(THST,"setEmergencyOff")
+	field(TEST,"clearEvents")
+}
+record(mbbiDirect,"$(HV):outputStatus1") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outOn")
+	field(INP,"$(HV):outputStatusc1 NPP NMS")
+}
+record(mbbiDirect,"$(HV):outputStatus2") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outConstantVoltage")
+	field(INP,"$(HV):outputStatusc2 NPP NMS")
+}
+record(mbbiDirect,"$(LVA):outputStatus1") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outOn")
+	field(INP,"$(LVA):outputStatusc1 NPP NMS")
+}
+record(mbbiDirect,"$(LVA):outputStatus2") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVA):outConstantVoltage")
+	field(INP,"$(LVA):outputStatusc2 NPP NMS")
+}
+record(mbbiDirect,"$(LVD):outputStatus1") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outOn")
+	field(INP,"$(LVD):outputStatusc1 NPP NMS")
+}
+record(mbbiDirect,"$(LVD):outputStatus2") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(LVD):outConstantVoltage")
+	field(INP,"$(LVD):outputStatusc2 NPP NMS")
+}
+record(mbbo,"$(HV):outSwitch") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(HV):outswitchlong")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(TWVL,"2")
+	field(THVL,"3")
+	field(TEVL,"10")
+	field(ZRST,"OFF")
+	field(ONST,"ON")
+	field(TWST,"EMER_RESET")
+	field(THST,"EMER_OFF")
+	field(TEST,"CLEAR")
+}
+record(seq,"$(module):MODOFF") {
+	field(DOL1,"1")
+	field(LNK1,"$(module):HVPB_OFF PP NMS")
+	field(DOL2,"1")
+	field(LNK2,"$(module):PB_OFF PP NMS")
+	field(DOL3,"0")
+}
+record(stringin,"$(HV)") {
+	field(DTYP,"Soft Channel")
+}
+record(stringin,"$(HV):outputName") {
+	field(SCAN,"10 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputName.$(HVCH) STRING: 80")
+}
+record(stringin,"$(LVA)") {
+	field(DTYP,"Soft Channel")
+}
+record(stringin,"$(LVA):outputName") {
+	field(SCAN,"10 second")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputName.$(LVACH) STRING: 80")
+}
+record(stringin,"$(LVD)") {
+	field(DTYP,"Soft Channel")
+}
+record(stringin,"$(LVD):outputName") {
+	field(SCAN,"10 second")
+	field(PINI,"YES")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HOST) public %{W}outputName.$(LVDCH) STRING: 80")
+}
+record(stringin,"$(module):MODSTAT") {
+	field(SCAN,"1 second")
+	field(DTYP,"Soft Channel")
+}

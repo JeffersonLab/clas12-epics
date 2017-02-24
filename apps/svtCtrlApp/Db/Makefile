@@ -11,7 +11,7 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
 DB += crateAlarm.db
-DB += iocsoftsvtApps.db
+DB += svtApp.db
 DB += HFCB.db
 DB += alarm.db
 DB += hfcb_r1.substitutions

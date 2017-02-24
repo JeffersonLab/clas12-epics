@@ -13,7 +13,6 @@ private:
     const char* asciiDelimiter=",";
     TFile *inFile=NULL;
     std::vector <tordaqData*> inTrees;
-    std::vector <TH1*> outHistos;
 
 public:
     tordaqReader(){};
@@ -33,7 +32,9 @@ public:
     TGHProgressBar *progressMeter=NULL;
     bool doSynchroAna=false;
     bool forceSynchro=false;
+    bool saveSynchroPlots=false;
     tordaqData tdData;
+    std::vector <TH1*> outHistos;
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
@@ -216,14 +217,12 @@ public:
               std::cerr<<"Error Reading TTrees:  (no good times)."<<std::endl;
               return false;
             }
+            //for (unsigned int ii=0; ii<outHistos.size(); ii++)
+            //  outHistos[ii]->SetDirectory(0);
         }
 
         // print warning messages about synchronization:
-        if (doSynchroAna)
-        {
-            std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
-            std::cout<<"So be COURTEOUS AND CLOSE tordaq WHEN FINISHED!"<<std::endl<<std::endl;
-        }
+        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
         if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl<<std::endl;
 
         // setup dynamically allocated stuff:
@@ -393,24 +392,47 @@ public:
                 }                
             }
             std::cout<<std::endl;
-            // This conflicts with other histos (renders them inaccessible):
-            //TFile fout("tordaqSynchroAna.root","RECREATE");
-            //for (unsigned int ii=0; ii<updatePeriod.size(); ii++) updatePeriod[ii]->Write();
-            //fout.Close();
+            // free up memory:
+            for (unsigned int ii=0; ii<sampleFills.size(); ii++) 
+              sampleFills[ii].resize(0);
+            sampleFills.resize(0);
+            // write out synchro analysis plots:
+            if (saveSynchroPlots)
+            {
+              TFile *fout=new TFile("tordaqSynchroAna.root","RECREATE");
+              if (fout)
+              {
+                for (unsigned int ii=0; ii<updatePeriod.size(); ii++)
+                {
+                  updatePeriod[ii]->SetDirectory(fout);
+                  updatePeriod[ii]->Write();
+                }
+                fout->Close();
+              }
+            }
         }
         
-        std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl;
+        std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl<<std::endl;
 
         if (true && makeHistos)
         {
           std::cout<<"tordaqReader:  Making Comparators ..."<<std::endl;
           TH1 *hh[100];
           bool foundComparatorInputs=true;
+          for (unsigned int ii=0; ii<outHistos.size(); ii++)
+          {
+            for (int jj=1; jj<23; jj++)
+            {
+              if (strcmp(outHistos[ii]->GetName(),Form("hVT%d",jj))==0)
+              {
+                hh[jj]=outHistos[ii];
+                break;
+              }
+            }
+          }
           for (int ii=1; ii<23; ii++)
           {
-            if (gDirectory->Get(Form("hVT%d",ii)))
-              hh[ii]=(TH1*)gDirectory->Get(Form("hVT%d",ii));
-            else
+            if (!hh[ii])
             {
               std::cerr<<"tordaqReader:  Error finding comparator input:  "<<Form("VT%d",ii)<<std::endl;
               foundComparatorInputs=false;

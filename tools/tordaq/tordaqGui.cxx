@@ -11,6 +11,7 @@ const char* dataDir="/logs/torus";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 bool doSynchroAna=false;
 bool forceSynchro=false;
+bool saveSynchroPlots=false;
 
 TString getTimeString(const Double_t time)
 {
@@ -264,6 +265,7 @@ void tordaqGui::DoOpen(TString filename="")
         //tdReader.progressMeter=progressBar;
         tdReader.doSynchroAna=doSynchroAna;
         tdReader.forceSynchro=forceSynchro;
+        tdReader.saveSynchroPlots=saveSynchroPlots;
         if (!tdReader.process())
         {
             std::cerr<<"Error Reading WF2ROOT Trees in   "+filename<<std::endl;
@@ -275,23 +277,12 @@ void tordaqGui::DoOpen(TString filename="")
 
     histos1.clear();
     dataHistos1.clear();
-    for (unsigned int iv=0; iv<tdReader.tdData.VARNAMES.size(); iv++)
+    
+    for (unsigned int iv=0; iv<tdReader.outHistos.size(); iv++)
     {
-        const TString vn=tdReader.tdData.VARNAMES[iv];
-
-        //tdReader.ProgressMeter(tdReader.tdData.VARNAMES.size(),iv);
-
-        TObject* xx=gDirectory->Get("h"+vn);
-        if (!xx) 
-        {
-            std::cerr<<"tordaqGui:  Error Reading Histogram:  "<<vn<<std::endl;
-            continue;
-        }
-
-        // copy into memory (if on disk):
-        // TH1* hh=(TH1*)xx->Clone("hvt%d");
-
-        TH1* hh=(TH1*)xx;
+        TH1* hh=tdReader.outHistos[iv];
+        TString vn=hh->GetName();
+        vn.Replace(0,1,"");
 
         hh->GetXaxis()->SetTimeFormat("#splitline{}{#splitline{%b %d}{%H:%M:%S}}");
         hh->GetXaxis()->SetTimeDisplay(1);
@@ -509,9 +500,10 @@ int main(int argc, char **argv)
     int itmp;
     const char* usage="\ntordaqGui [options] [filename]\n"
         "\t -A (do synchronization analysis - memory intensive)\n"
+        "\t -H (save synchro analysis plots in tordaqSynchroAna.root)\n"
         "\t -S (force synchronization)\n"
         "\t -h (print usage)\n";
-    while ( (itmp=getopt(argc,argv,"ASh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"ASHh")) != -1 )
     {
         switch (itmp)
         {
@@ -520,6 +512,9 @@ int main(int argc, char **argv)
                 break;
             case 'S':
                 forceSynchro=true;
+                break;
+            case 'H':
+                saveSynchroPlots=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

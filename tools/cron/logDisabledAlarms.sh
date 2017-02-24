@@ -8,6 +8,6 @@ if [ -z $1 ]
 then
   echo "$result"
 else
-  echo "$result" | logentry -l TLOG -t 'Disabled Alarm List' -b -
+  echo "$result" | logentry -l HBCONTROLS -t 'Disabled Alarm List' -b -
 fi
 

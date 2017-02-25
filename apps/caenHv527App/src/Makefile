@@ -33,6 +33,7 @@ ioccaen527_LIBS += caenhvwrapper
 ioccaen527_LIBS += hscaenet
 ioccaen527_LIBS += devIocStats
 ioccaen527_LIBS += caPutLog
+ioccaen527_LIBS += autosave
 ioccaen527_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 sy1527epics1_DIR  += $(TOP)/lib/$(T_A)

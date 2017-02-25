@@ -103,7 +103,7 @@ if [ "$layer" != "0" ]; then
       echo -e "\nInvalid Region/Layer Combination:  $region/$layer\n\n$USAGE" ; exit
     fi
   elif [ "$region" == "3" ]; then
-    if [ "$layer" != "4" ] && [ "$layer" != "5" ]; then
+    if [ "$layer" != "5" ] && [ "$layer" != "6" ]; then
       echo -e "\nInvalid Region/Layer Combination:  $region/$layer\n\n$USAGE" ; exit
     fi
   fi

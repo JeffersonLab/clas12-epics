@@ -123,6 +123,7 @@ static long wf2rootDataProcess(aSubRecord *record) {
 			WriteRootFile(record->b, &posixTime, record->vala, record->noa);
 		} else {
 			printf("Buffer length exceeds 1000, exiting the program!");
+	    ((long*) record->vale)[0] = -9999;
 			return 1;
 		}
 	}

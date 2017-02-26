@@ -8,6 +8,8 @@
  *  Date: Mar 2016
  */
 
+#define MIN_FREE_DISK_GB 10
+
 #include "wf2rootManager.hh"
 #include "wf2rootFile.hh"
 
@@ -99,6 +101,12 @@ void wf2rootManager::StartDAQ(string dir, string prefix, string suffix,
 }
 
 void wf2rootManager::NewRootFile() {
+  // do not open the file if not enough disk space:
+  if (getFreeGB(prmDir.c_str()) < MIN_FREE_DISK_GB) 
+  {
+    std::cerr<<"Error Opening File.  Not enough disk space !!!!!!!!!!!!!!!!!!!"<<std::endl;
+    return;
+  }
 	// new filename
 	TDatime dtTime;
 	TString rsTime(dtTime.AsSQLString());
@@ -162,18 +170,26 @@ void *WriteThread(void *argument) {
 				//	pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
 			}
 
-			// write to disk
-			// pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
-			prmPtr->prmFile->FillTree(tmprecord.treename, tmprecord.record);
-			// pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
+      if (prmPtr->prmFile != 0 && prmPtr->prmFile->IsOpen()) {
+        // write to disk
+        // pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
+        prmPtr->prmFile->FillTree(tmprecord.treename, tmprecord.record);
+        // pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
 
-			// check file size, close if larger than tolerance
-			prmPtr->prmFileSize = prmPtr->prmFile->GetEND();
-			if (prmPtr->prmFileSize >= prmPtr->prmFileLimit) {
-			  // pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
-				prmPtr->prmFile->Close();
-				// pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
-			}
+        // check file size, close if larger than tolerance
+        prmPtr->prmFileSize = prmPtr->prmFile->GetEND();
+        if (prmPtr->prmFileSize >= prmPtr->prmFileLimit) {
+          // pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
+          prmPtr->prmFile->Close();
+          // pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
+        }
+      } else {
+        // no file open (probably due to insufficient disk space)
+        // clear the buffer
+        while (prmPtr->prmBuffer.size()) prmPtr->prmBuffer.pop();
+        sleep(1);
+        std::cerr<<"No File Open -- Discarding Data !!!!!!!!!!!!!!"<<std::endl;
+      }
 		} else
 			nanosleep(&sleeptime, &sleeptime);
 	}
@@ -190,10 +206,12 @@ void *WriteThread(void *argument) {
 			prmPtr->NewRootFile();
 			//	pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
 		}
-		// write to disk
-		// pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
-		prmPtr->prmFile->FillTree(tmprecord.treename, tmprecord.record);
-		// pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
+    if (prmPtr->prmFile != 0 && prmPtr->prmFile->IsOpen()) {
+      // write to disk
+      // pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
+      prmPtr->prmFile->FillTree(tmprecord.treename, tmprecord.record);
+      // pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
+    }
 	}
 
 	// pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);

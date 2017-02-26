@@ -8,7 +8,8 @@
  *  Date: Mar 2016
  */
 
-#define MIN_FREE_DISK_GB 10
+#define MIN_FREE_DISK_GB 20
+#define MIN_FREE_DISK_SLEEP 5
 
 #include "wf2rootManager.hh"
 #include "wf2rootFile.hh"
@@ -185,12 +186,12 @@ void *WriteThread(void *argument) {
         }
       } else {
         // no file open (probably due to insufficient disk space)
-        // clear the buffer
+        // just clear the buffer and sleep
         pthread_mutex_lock(prmPtr->prmMutex);
         while (prmPtr->prmBuffer.size()) prmPtr->prmBuffer.pop();
         pthread_mutex_unlock(prmPtr->prmMutex);
-        sleep(1);
         std::cerr<<"No File Open -- Discarding Data !!!!!!!!!!!!!!"<<std::endl;
+        sleep(MIN_FREE_DISK_SLEEP);
       }
 		} else
 			nanosleep(&sleeptime, &sleeptime);

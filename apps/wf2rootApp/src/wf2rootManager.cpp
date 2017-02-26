@@ -186,7 +186,9 @@ void *WriteThread(void *argument) {
       } else {
         // no file open (probably due to insufficient disk space)
         // clear the buffer
+        pthread_mutex_lock(prmPtr->prmMutex);
         while (prmPtr->prmBuffer.size()) prmPtr->prmBuffer.pop();
+        pthread_mutex_unlock(prmPtr->prmMutex);
         sleep(1);
         std::cerr<<"No File Open -- Discarding Data !!!!!!!!!!!!!!"<<std::endl;
       }

@@ -11,6 +11,31 @@
 #include "wf2rootManager.hh"
 #include "wf2rootFile.hh"
 
+#include "sys/statvfs.h"
+float getFreeGB(const char* path)
+{
+  // statvfs wants base directory only, so strip it out:
+  int istart=1;
+  std::string basePath=path;
+  while (true) {
+    const int ipos=basePath.find("/",istart);
+    if (ipos<0) break;
+    if (ipos==istart) istart++;
+    else {
+      // found the first "/" after the base directory:
+      basePath=basePath.substr(0,ipos);
+      break;
+    }
+  }
+  struct statvfs vstat;
+  // on error, return negative GB:
+  if (statvfs(basePath.c_str(),&vstat) != 0) return -1;
+  const unsigned long long blockSize    =vstat.f_bsize;
+  const unsigned long long nBlocksAvail =vstat.f_bavail;
+  // this empirically matches `df -h`:
+  return (double)(blockSize*nBlocksAvail)/1e9/pow(1.024,3);
+}
+
 wf2rootManager* wf2rootManager::selfPtr = 0;
 Int_t wf2rootManager::prmCompressFactor = 0; // no compression
 std::queue<recordBuffer> wf2rootManager::prmBuffer;

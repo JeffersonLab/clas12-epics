@@ -101,12 +101,12 @@ void wf2rootManager::StartDAQ(string dir, string prefix, string suffix,
 	return;
 }
 
-void wf2rootManager::NewRootFile() {
+bool wf2rootManager::NewRootFile() {
   // do not open the file if not enough disk space:
   if (getFreeGB(prmDir.c_str()) < MIN_FREE_DISK_GB) 
   {
     std::cerr<<"Error Opening File.  Not enough disk space !!!!!!!!!!!!!!!!!!!"<<std::endl;
-    return;
+    return false;
   }
 	// new filename
 	TDatime dtTime;
@@ -118,6 +118,7 @@ void wf2rootManager::NewRootFile() {
 	string fullpath = prmDir + prmFileName;
 	prmFile = new wf2rootFile(fullpath.c_str(), "RECREATE", "WF2 ROOT File",
 			prmCompressFactor);
+  return true;
 }
 
 void wf2rootManager::WriteFile(const char* channelName,
@@ -164,14 +165,16 @@ void *WriteThread(void *argument) {
 			prmPtr->prmBuffer.pop();
 			pthread_mutex_unlock(prmPtr->prmMutex);
 
+      bool isOpen = prmPtr->prmFile != 0 && prmPtr->prmFile->IsOpen();
+
 			// check if file open
-			if (prmPtr->prmFile == 0 || !prmPtr->prmFile->IsOpen()) {
+			if (!isOpen) {
 			  //	pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
-				prmPtr->NewRootFile();
+				isOpen=prmPtr->NewRootFile();
 				//	pthread_rwlock_unlock(gROOTSPY_RW_LOCK);
 			}
 
-      if (prmPtr->prmFile != 0 && prmPtr->prmFile->IsOpen()) {
+      if (isOpen) {
         // write to disk
         // pthread_rwlock_wrlock(gROOTSPY_RW_LOCK);
         prmPtr->prmFile->FillTree(tmprecord.treename, tmprecord.record);
@@ -187,9 +190,9 @@ void *WriteThread(void *argument) {
       } else {
         // no file open (probably due to insufficient disk space)
         // just clear the buffer and sleep
-        pthread_mutex_lock(prmPtr->prmMutex);
-        while (prmPtr->prmBuffer.size()) prmPtr->prmBuffer.pop();
-        pthread_mutex_unlock(prmPtr->prmMutex);
+        //pthread_mutex_lock(prmPtr->prmMutex);
+        //while (prmPtr->prmBuffer.size()) prmPtr->prmBuffer.pop();
+        //pthread_mutex_unlock(prmPtr->prmMutex);
         std::cerr<<"No File Open -- Discarding Data !!!!!!!!!!!!!!"<<std::endl;
         sleep(MIN_FREE_DISK_SLEEP);
       }

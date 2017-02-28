@@ -488,6 +488,10 @@ sy1527GetGroup(unsigned int id,unsigned int group)
       strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
       printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads[id],tbuff);
     }
+
+    // just don't let it overflow:
+    if (nConsecutiveBadReads[id]>1e6) nConsecutiveBadReads[id]=1e2;
+    
     nConsecutiveGoodReads[id]=0;
     nConsecutiveBadReads[id]++;
     return (CAENHV_SYSERR);
@@ -516,6 +520,9 @@ sy1527GetGroup(unsigned int id,unsigned int group)
     //Measure[id].board[ss].channel[cc].lval[Pdwn]   = 0;
   }
   UNLOCK_MAINFRAME(id);
+
+  // just don't let it overflow:
+  if (nConsecutiveGoodReads[id]>1e6) nConsecutiveGoodReads[id]=1e2;
 
   nConsecutiveGoodReads[id]++;
   nConsecutiveBadReads[id]=0;

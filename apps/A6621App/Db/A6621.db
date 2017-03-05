@@ -1,0 +1,202 @@
+#asyn is useful for debugging the communication
+record(asyn,"$(P):ASYN")
+{
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+    field(ADDR,"$(ADDR)")
+    field(OMAX,"$(OMAX)")
+    field(IMAX,"$(IMAX)")
+}
+
+record (ai, "$(P):v1mon")
+{
+    field (DESC, "Get voltage #1")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getVoltage1 $(PORT)")
+}
+record (ao, "$(P):v1set")
+{
+    field (DESC, "Set voltage #1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setVoltage1 $(PORT)")
+}
+record (ai, "$(P):i1mon")
+{
+    field (DESC, "Get current #1")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getCurrent1 $(PORT)")
+}
+record (ao, "$(P):i1set")
+{
+    field (DESC, "Set current #1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setCurrent1 $(PORT)")
+}
+record (ai, "$(P):v1setrbk")
+{
+    field (DESC, "Get voltage setpoint #1")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getVoltageSetpoint1 $(PORT)")
+}
+record (ai, "$(P):i1setrbk")
+{
+    field (DESC, "Get current setpoint #1")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getCurrentSetpoint1 $(PORT)")
+}
+
+
+record (bi, "$(P):pw1mon")
+{
+    field (DESC, "Get PW ON/OFF #1")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOnOff1 $(PORT)")
+}
+record (bo, "$(P):pw1set")
+{
+    field (DESC, "Set PW ON/OFF #1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setOnOff1 $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (bi, "$(P):oc1mon")
+{
+    field (DESC, "Get over-current protection ON/OFF #1")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOcOnOff1 $(PORT)")
+}
+record (bo, "$(P):oc1set")
+{
+    field (DESC, "Set over-current protection ON/OFF #1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setOcOnOff1 $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (ao, "$(P):oc1clear")
+{
+    field (DESC, "Clear over-current status #1")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto clearOC1 $(PORT)")
+}
+
+record (ai, "$(P):oc1stat")
+{
+    field (DESC, "Get over-current status #1")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOcStatus1 $(PORT)")
+}
+
+
+
+
+record (ai, "$(P):v2mon")
+{
+    field (DESC, "Get voltage #2")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getVoltage2 $(PORT)")
+}
+record (ao, "$(P):v2set")
+{
+    field (DESC, "Set voltage #2")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setVoltage2 $(PORT)")
+}
+record (ai, "$(P):i2mon")
+{
+    field (DESC, "Get current #2")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getCurrent2 $(PORT)")
+}
+record (ao, "$(P):i2set")
+{
+    field (DESC, "Set current #2")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setCurrent2 $(PORT)")
+}
+record (ai, "$(P):v2setrbk")
+{
+    field (DESC, "Get voltage setpoint #2")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getVoltageSetpoint2 $(PORT)")
+}
+record (ai, "$(P):i2setrbk")
+{
+    field (DESC, "Get current setpoint #2")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (PREC, 2)
+    field (INP,  "@A6621.proto getCurrentSetpoint2 $(PORT)")
+}
+
+
+record (bi, "$(P):pw2mon")
+{
+    field (DESC, "Get PW ON/OFF #2")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOnOff2 $(PORT)")
+}
+record (bo, "$(P):pw2set")
+{
+    field (DESC, "Set PW ON/OFF #2")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setOnOff2 $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (bi, "$(P):oc2mon")
+{
+    field (DESC, "Get over-current protection ON/OFF #2")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOcOnOff2 $(PORT)")
+}
+record (bo, "$(P):oc2set")
+{
+    field (DESC, "Set over-current protection ON/OFF #2")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto setOcOnOff2 $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
+}
+record (ao, "$(P):oc2clear")
+{
+    field (DESC, "Clear over-current #2")
+    field (DTYP, "stream")
+    field (OUT,  "@A6621.proto clearOC2 $(PORT)")
+}
+record (ai, "$(P):oc2stat")
+{
+    field (DESC, "Get over-current status #2")
+    field (DTYP, "stream")
+    field (SCAN, "5 second")
+    field (INP,  "@A6621.proto getOcStatus2 $(PORT)")
+}
+

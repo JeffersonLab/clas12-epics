@@ -1,0 +1,62 @@
+--------------------------------------------------------------------------------
+Omegabus D5000 Series 4-Channel Digital Transmitters
+
+*D5311 used for HPS thermocouples
+--------------------------------------------------------------------------------
+
+A. Power Requirements
+B. Wiring
+C. Default Settings
+D. HPS Configuration
+
+------------------------------
+A. Power Requirements
+------------------------------
++10-30 VDC
+
+------------------------------
+B. Wiring
+------------------------------
+Using standard Cat5/6 cable...
+
+For Moxa NPort
+    TxD - Blue
+    RxD - Blue/White
+    GND - Green
+
+For Laptop
+    TxD - Blue/White
+    RxD - Blue
+    GND - Green
+
+------------------------------
+C. Default Settings
+------------------------------
+Default Serial:     Baud 300, 8N1
+Default Address:    1
+Default Config:
+    Cmd:  $1RS      # returns 4-bytes for config settings
+    Resp: *31020080 # base addr 1 (0x31) pg. 36,
+                    # 300 baud (0x02) pg. 40,
+                    # 1-channel/echo off (0x00) pg. 42,
+                    # +XXXXX.X0/No filtering (0x80) pg. 45
+
+------------------------------
+D. HPS Configuration
+------------------------------
+Modules are assigned as channels A-T.  Below are the commands used to configure 
+the last module [Q-T]
+    
+    $1WE            # write enable
+    $1SU5102F480    # base addr Q (0x51) pg. 36, 
+                    # 9600 baud (0x02) pg. 40,
+                    # 4-channels enabled/echo on (0xF4) pg. 42,
+                    # +XXXXX.X0/No filtering (0x80) pg. 45
+    # Change terminal baud, then test.
+    $QRD            # read channel 1
+    $RRD            # read channel 2
+    $SRD            # read channel 3
+    $TRD            # read channel 4
+
+Remember after you execute the SU command, you have to use the new base address
+for configuration commands (ex. $QWE, $QSU...)

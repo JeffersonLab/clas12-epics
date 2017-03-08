@@ -1,8 +1,8 @@
 #!../../bin/linux-x86_64/svtChiller
-#################################################
+
 < envPaths
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
-#################################################
+
 cd "${TOP}"
 
 ## Register all support components

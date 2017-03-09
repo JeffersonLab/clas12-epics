@@ -84,6 +84,6 @@ PATH=${PATH}:${EPICS_SCRIPTS}
 export PATH
 
 
-export MIBDIRS=/usr/clas12/R${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
+export MIBDIRS=/usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 export MIBS=ALL
 

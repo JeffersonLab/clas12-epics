@@ -4,6 +4,7 @@
 
 epicsEnvSet("MIBDIRS","$(DEVSNMP)/mibs:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
+epicsEnvSet("W","WIENER-CRATE-MIB::")
 
 cd ${TOP}
 

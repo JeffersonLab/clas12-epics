@@ -31,6 +31,8 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 
 dbLoadTemplate("db/vmeCrates.substitutions")
 
+#epicsEnvSet("W","WIENER-CRATE-MIB::")
+#dbLoadRecords("svtWienerCrate.db","HOST=svtvme1")
 
 cd "${TOP}/iocBoot/${IOC}"
 

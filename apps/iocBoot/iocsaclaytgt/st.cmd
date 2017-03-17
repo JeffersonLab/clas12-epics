@@ -9,19 +9,22 @@ c370_registerRecordDeviceDriver pdbbase
 
 drvAsynIPPortConfigure("ETH1","hallb-moxa3:4001",0,0,1)
 
-#asynSetOption("ETH1",0,"baud","9600")
-#asynSetOption("ETH1",0,"parity","none")
-#asynSetOption("ETH1",0,"bits","8")
-#asynSetOption("ETH1",0,"stop","1")
+asynSetOption("ETH1",0,"baud","9600")
+asynSetOption("ETH1",0,"parity","none")
+asynSetOption("ETH1",0,"bits","8")
+asynSetOption("ETH1",0,"stop","1")
 
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
+#   linkType = 0/1/2 = TCPIP/RTU/ASCII
 #modbusInterposeConfig("ETH1",2,5000,0)
-modbusInterposeConfig("ETH1",1,5000,0)
+modbusInterposeConfig("ETH1",1,1000,0)
 #modbusInterposeConfig("ETH1",0,5000,0)
 
 # Debugging...
-asynSetTraceMask("ETH1",0,9)
-asynSetTraceIOMask("ETH1",0,4)
+#asynSetTraceMask("ETH1",0,9)
+#asynSetTraceIOMask("ETH1",0,4)
+asynSetTraceMask("ETH1",-1,0x09)
+asynSetTraceIOMask("ETH1",-1,0x02)
 
 #drvModbusAsynConfigure(
 #  "portName", "tcpPortName", slaveAddress, modbusFunction,
@@ -41,7 +44,7 @@ drvModbusAsynConfigure("C370",  "ETH1", 1, 3, 3800, 20, 0, 1000, "C370")
 # Load record instances
 #dbLoadRecords("db/save_restoreStatus.db", "P=BCALCHIL:")
 
-dbLoadTemplate("db/saclayTarget.substitutions")
+#dbLoadTemplate("db/saclayTarget.substitutions")
 
 
 cd ${TOP}/iocBoot/${IOC}
@@ -49,8 +52,17 @@ cd ${TOP}/iocBoot/${IOC}
 #  autosave setup
 #< save_restore.cmd
 
-#dbl > bcal_pv.list
 iocInit
+
+
+
+
+
+
+
+
+
+
 
 # autosave startup
 #create_monitor_set("watlow_settings.req", 30, "P=BCAL:,R=CHILL:")

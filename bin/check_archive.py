@@ -23,6 +23,8 @@ not_archived = []
 is_archived = []
 printMissing = True
 
+clipvs=[]
+
 if len(sys.argv) < 2:
     files = glob.glob("./*.txt")
     files += glob.glob("./*.list")
@@ -39,37 +41,45 @@ else:
             arg += "*.txt"
             files = glob.glob(arg)
         else:
-            print "Warning: " + arg + " not found"
+            print "Warning: " + arg + " not found, assuming it's a pv"
+            clipvs.append(arg)
 
 if len(files) == 0:
     print "No files to be processed"
-    exit(0)
 
-print "Processing files:"
-files.sort(key=str.lower)
+else:
+    print "Processing files:"
+    files.sort(key=str.lower)
 
-for file in files:
-    if os.stat(file).st_size == 0:
-        print "Warning: empty file, skipping " + file
-        continue
+    for file in files:
+        if os.stat(file).st_size == 0:
+            print "Warning: empty file, skipping " + file
+            continue
 
-    print "  " + file
-    pvlist = open(file, 'r')
-    for pv in pvlist:
-        pv = pv.split(' ', 1)[0]
-        pv = pv.split('\n',1)[0]
-        if pv != "":
-            p = subprocess.check_output(["archive", pv])
-            if "not archived" in p:
-                not_archived.append(pv)
-            else:
-                is_archived.append(pv)
+        print "  " + file
+        pvlist = open(file, 'r')
+        for pv in pvlist:
+            pv = pv.split(' ', 1)[0]
+            pv = pv.split('\n',1)[0]
+            if pv != "":
+                p = subprocess.check_output(["archive", pv])
+                if "not archived" in p:
+                    not_archived.append(pv)
+                else:
+                    is_archived.append(pv)
+
+for pv in clipvs:
+    p = subprocess.check_output(["archive", pv])
+    if "not archived" in p:
+        not_archived.append(pv)
+    else:
+        is_archived.append(pv)
 
 if printMissing:
     if len(not_archived) == 0:
         print "All PVs are archived"
         exit(0)
-    elif:
+    else:
         print "PVs not archived:"
         not_archived.sort()
         print '\n'.join(not_archived)

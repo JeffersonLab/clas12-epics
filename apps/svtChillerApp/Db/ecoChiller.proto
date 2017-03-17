@@ -1,0 +1,20 @@
+OutTerminator = CR LF;
+InTerminator = CR LF;
+ExtraInput = Ignore;
+
+#To read a simple string and get the reply
+getEcoString {out "\$1"; in "%s";};
+setEcoString {out "%s";};
+
+
+#Now the getters and setters
+getEcoValue {out "IN_\$1_\$2"; in "%g";};
+setEcoValue {out "OUT_\$1_\$2_%3.1f"; in "%*s";}
+
+getEcoInt {out "IN_\$1_\$2"; in "%d";}
+setEcoInt {out "OUT_\$1_\$2_%d"; in "%*s";}
+
+getEcoBinary {out "IN_\$1_\$2"; in "%{0|1}";};
+setEcoBinary {out "OUT_\$1_\$2_%{0|1}"; in "%s";};
+
+setEcoStandby {out "%{STOP|START}";};

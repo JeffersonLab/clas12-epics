@@ -14,6 +14,8 @@ include $(TOP)/configure/CONFIG
 DB += svtChiller.db
 DB += ecoChiller.db
 
+PROTO += ecoChiller.proto
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

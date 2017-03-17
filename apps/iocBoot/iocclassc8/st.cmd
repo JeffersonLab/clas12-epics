@@ -71,7 +71,10 @@ cd startup
 iocInit "../resource.def"
 
 ## Struck
-dbpf "struckDwell", "0.000015"
+#HPS:
+#dbpf "struckDwell", "0.000015"
+#CLAS12:
+dbpf "struckDwell", "0.0003"
 dbpf "struckReadAll.SCAN","Passive"
 seq &SIS38XX_SNL, "P=struck, R=Daq_, NUM_SIGNALS=5, FIELD=READ"
 

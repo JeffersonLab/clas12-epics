@@ -26,7 +26,16 @@ tmp_path=/tmp/CSS-Workspaces
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 share=$DIR/../css_share
 
-plugin_profile=$share/common/prefs/plugin_customization.ini
+plugin_dir=$share/common/prefs
+
+plugin_basename=plugin_customization.ini
+if [ "$1" == "alarmsu" ]
+then
+  plugin_basename=plugin_customization-alarmsu.ini
+fi
+
+plugin_profile=$plugin_dir/$plugin_basename
+
 #plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
 workspace=$share/common/workspaces/Default_Torus
 
@@ -42,7 +51,7 @@ cp -rf $plugin_profile $wsp
 
 # we want to run *everything* from the wsp workspace:
 css -data $wsp \
-    -pluginCustomization $wsp/plugin_customization.ini \
+    -pluginCustomization $wsp/$plugin_basename \
     -share_link $share=/CLAS12_Share \
     -nosplash
 

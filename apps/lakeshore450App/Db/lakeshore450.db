@@ -1,0 +1,199 @@
+#
+# Lakeshore Model 450 Gaussmeter
+# 
+# Notes:
+#   [Macros]
+#   P     - standard record prefix
+#   R     - standard record prefix
+#   PORT  - asyn port name
+# 
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct. 2014
+#
+
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+}
+
+#######################################
+# Interface Commands
+#######################################
+record(bi, "$(P)$(R)LOCK") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getLock $(PORT)")
+    field(ZNAM, "Unlocked")
+    field(ONAM, "Locked")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)LOCK:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setLock $(PORT)")
+    field(ZNAM, "Unlocked")
+    field(ONAM, "Locked")
+}
+
+record(mbbi, "$(P)$(R)MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getMode $(PORT)")
+    field(ZRST, "Local")
+    field(ONST, "Remote")
+    field(TWST, "Remote w/ Lockout")
+    field(SCAN, "1 second")
+}
+
+record(mbbo, "$(P)$(R)MODE:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setMode $(PORT)")
+    field(ZRST, "Local")
+    field(ONST, "Remote")
+    field(TWST, "Remote w/ Lockout")
+}
+
+#######################################
+# Device Specific Commands
+#######################################
+record(bi, "$(P)$(R)ACDC") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getACDC $(PORT)")
+    field(ZNAM, "DC")
+    field(ONAM, "AC")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)ACDC:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setACDC $(PORT)")
+    field(ZNAM, "DC")
+    field(ONAM, "AC")
+}
+
+record(bi, "$(P)$(R)AUTO_RANGE") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getAutoRange $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)AUTO_RANGE:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setAutoRange $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(ai, "$(P)$(R)FIELD:RAW") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getField $(PORT)")
+    field(PREC, "4")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)$(R)FIELD:MULT.PROC")
+}
+
+record(mbbi, "$(P)$(R)FIELD:MULT") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getFieldM $(PORT)")
+    field(ZRST, "u")
+    field(ONST, "m")
+    field(TWST, "k")
+    field(THST, " ")
+    field(FLNK, "$(P)$(R)FIELD")
+}
+
+record(sub, "$(P)$(R)FIELD") {
+    field(SNAM, "fieldCalc")
+    field(INPA, "$(P)$(R)FIELD:RAW")
+    field(INPB, "$(P)$(R)FIELD:MULT")
+    field(INPC, "$(P)$(R)UNITS")
+    field(PREC, "6")
+}
+
+record(bi, "$(P)$(R)UNITS") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getUnits $(PORT)")
+    field(ZNAM, "G")
+    field(ONAM, "T")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)UNITS:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setUnits $(PORT)")
+    field(ZNAM, "G")
+    field(ONAM, "T")
+}
+
+record(bi, "$(P)$(R)FILTER") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getFilt $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)FILTER:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setFilt $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(mbbi, "$(P)$(R)RANGE") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getRange $(PORT)")
+    field(SCAN, "1 second")
+}
+
+record(mbbo, "$(P)$(R)RANGE:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setRange $(PORT)")
+    field(ZRST, "0")
+    field(ONST, "1")
+    field(TWST, "2")
+    field(THST, "3")
+}
+
+#######################################
+# Probe Specific Commands
+#######################################
+record(mbbi, "$(P)$(R)PROBETYPE") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getProbeType $(PORT)")
+    field(PINI, "YES")
+    field(ZRST, "High Sensitivity")
+    field(ONST, "High Stability")
+    field(TWST, "Ultra-High Sens")
+    field(SCAN, "10 second")
+}
+
+record(bi, "$(P)$(R)FIELDCOMP") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getFieldComp $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)FIELDCOMP:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setFieldComp $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+
+record(bi, "$(P)$(R)TEMPCOMP") {
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore450.proto getTempComp $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bo, "$(P)$(R)TEMPCOMP:SET") {
+    field(DTYP, "stream")
+    field(OUT,  "@lakeshore450.proto setTempComp $(PORT)")
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+}
+

@@ -1,0 +1,18 @@
+# File omegaD5311.proto
+#
+# Omega D5000 Series Four Channel Digital Transmitters
+#
+#   Currently only used for thermocouple readbacks.
+#
+# Author: Wesley Moore
+# Date:   Oct 2014
+#
+
+OutTerminator = CR;
+
+
+getTemp {
+    out "$\$1RD";
+    in  "$\$1RD\r\00*%f\r";
+#    @mismatch {	in "%*39c\r"; }
+}

@@ -1,0 +1,119 @@
+# This is an example protocol file
+
+OutTerminator = CR LF;
+ExtraInput = Ignore;
+ReplyTimeout = 1500;
+
+getVoltage1 {
+   out "VOUT? 1"; in "%f"; 
+}
+getCurrent1 {
+   out "IOUT? 1"; in "%f"; 
+}
+
+getCurrentSetpoint1 {
+   out "ISET? 1"; in "%f"; 
+}
+getVoltageSetpoint1 {
+   out "VSET? 1"; in "%f"; 
+}
+
+setCurrent1 {
+    out "ISET 1 %f";
+    @init {getCurrentSetpoint1;}
+}
+setVoltage1 {
+    out "VSET 1 %f";
+    @init {getVoltageSetpoint1;}
+}
+
+
+getOnOff1 {
+    out "OUT? 1"; in "%d";
+}
+setOnOff1 {
+    out "OUT 1 %d";
+    @init {getOnOff1;}
+}
+
+getOcOnOff1 {
+    out "OCP? 1"; in "%d";
+}
+setOcOnOff1 {
+    out "OCP 1 %d";
+    @init {getOcOnOff1;}
+}
+
+clearOC1 {
+#    out "OUTP OFF";
+#    wait 1000;
+    out "OCP 1 0";
+#    wait 1000;
+    out "OCRST 1";
+#    wait 1000;
+#    out "OUTP ON";
+    wait 800;
+    out "OCP 1 1";
+}
+
+getOcStatus1 {
+    out "STS? 1"; in "%d";
+}
+
+
+
+getVoltage2 {
+   out "VOUT? 2"; in "%f"; 
+}
+getCurrent2 {
+   out "IOUT? 2"; in "%f"; 
+}
+
+getCurrentSetpoint2 {
+   out "ISET? 2"; in "%f"; 
+}
+getVoltageSetpoint2 {
+   out "VSET? 2"; in "%f"; 
+}
+
+setCurrent2 {
+    out "ISET 2 %f";
+    @init {getCurrentSetpoint2;}
+}
+setVoltage2 {
+    out "VSET 2 %f";
+    @init {getVoltageSetpoint2;}
+}
+
+
+getOnOff2 {
+    out "OUT? 2"; in "%d";
+}
+setOnOff2 {
+    out "OUT 2 %d";
+    @init {getOnOff2;}
+}
+
+getOcOnOff2 {
+    out "OCP? 2"; in "%d";
+}
+setOcOnOff2 {
+    out "OCP 2 %d";
+    @init {getOcOnOff2;}
+}
+
+clearOC2 {
+#    out "OUTP OFF";
+#    wait 1000;
+    out "OCP 2 0";
+#    wait 1000;
+    out "OCRST 2";
+#    wait 1000;
+#    out "OUTP ON";
+    wait 800;
+    out "OCP 2 1";
+}
+
+getOcStatus2 {
+    out "STS? 2"; in "%d";
+}

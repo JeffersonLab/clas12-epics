@@ -51,7 +51,16 @@ dbLoadRecords("db/caenhv-groups.db","Cr=HVDC4,CrNo=15,Gr=0")
 dbLoadRecords("db/dchvWaveformsGlobal-SX.db","S=345")
 dbLoadTemplate("db/dchvWaveforms-S345.substitutions")
 
+cd ${TOP}/iocBoot/${IOC}
+< save_restore.cmd
+
 iocInit()
+
+caPutLogInit("clonioc2:7011")
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req","","")
+create_monitor_set("info_settings.req","","")
 
 seq seqDCHVwaveforms345
 

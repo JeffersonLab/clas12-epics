@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0">
+  <x>362</x>
+  <y>94</y>
+  <width>470</width>
+  <height>350</height>
+  <font>
+    <fontdata fontName="helvetica" height="18" pixels="true" style="1"/>
+  </font>
+  <foreground_color>
+    <color blue="0" green="0" name="black-14" red="0"/>
+  </foreground_color>
+  <background_color>
+    <color blue="158" green="158" name="GLOBAL title" red="158"/>
+  </background_color>
+  <name>$(ioc) Releases</name>
+  <show_grid>true</show_grid>
+  <grid_space>5</grid_space>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <line_width>1</line_width>
+    <x>10</x>
+    <y>50</y>
+    <width>451</width>
+    <height>296</height>
+    <name>EDM Rectangle</name>
+    <line_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </line_color>
+    <transparent>false</transparent>
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <visible>true</visible>
+    <line_style>0</line_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <line_width>1</line_width>
+    <x>0</x>
+    <y>0</y>
+    <width>521</width>
+    <height>41</height>
+    <name>EDM Rectangle</name>
+    <line_color>
+      <color blue="159" green="223" name="VAC help" red="202"/>
+    </line_color>
+    <transparent>false</transparent>
+    <background_color>
+      <color blue="159" green="223" name="VAC help" red="202"/>
+    </background_color>
+    <visible>true</visible>
+    <line_style>0</line_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>5</x>
+    <y>0</y>
+    <width>293</width>
+    <height>32</height>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM Label</name>
+    <text>EPICS Software Module Releases - Page $(p)&#xd;$(ioc)</text>
+    <auto_size>true</auto_size>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </border_color>
+    <background_color>
+      <color blue="177" green="248" name="VAC title" red="225"/>
+    </background_color>
+    <foreground_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </foreground_color>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>410</x>
+    <y>10</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>51</width>
+    <height>26</height>
+    <name>EDM Exit Button</name>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_JAVASCRIPT">
+        <embedded>true</embedded>
+        <scriptText>importPackage(Packages.org.csstudio.opibuilder.scriptUtil);ScriptUtil.closeAssociatedOPI(widget);</scriptText>
+      </action>
+    </actions>
+    <text>Exit</text>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>305</x>
+    <y>10</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>96</width>
+    <height>26</height>
+    <name>EDM related display</name>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>monticello.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+        </macros>
+        <mode>8</mode>
+        <description/>
+      </action>
+    </actions>
+    <text>Home Screen...</text>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>79</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)1</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>104</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)2</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>129</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)3</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>154</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)4</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>179</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)5</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>204</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)6</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>229</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)7</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>254</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)8</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>279</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)9</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="70" green="70" name="grey-12" red="70"/>
+    </background_color>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>2</line_width>
+    <x>239</x>
+    <y>54</y>
+    <width>212</width>
+    <height>27</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)0</pv_name>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <border_width>2</border_width>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="224" name="green-16" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>55</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)0.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>80</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)1.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>240</x>
+    <y>315</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>211</width>
+    <height>26</height>
+    <name>EDM related display</name>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>system/ioc_stats_release.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <ioc>$(ioc)</ioc>
+          <idx>1</idx>
+          <p>2</p>
+        </macros>
+        <mode>8</mode>
+        <description/>
+      </action>
+    </actions>
+    <text>Release Versions (Page 2),,,</text>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>20</x>
+    <y>315</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>211</width>
+    <height>26</height>
+    <name>EDM related display</name>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>system/ioc_stats_release.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <ioc>$(ioc)</ioc>
+          <idx>0</idx>
+          <p>1</p>
+        </macros>
+        <mode>8</mode>
+        <description/>
+      </action>
+    </actions>
+    <text>Release Versions (Page 1),,,</text>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>105</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)2.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>130</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)3.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>155</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)4.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>180</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)5.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>205</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)6.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>230</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)7.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>255</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)8.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <line_width>1</line_width>
+    <x>20</x>
+    <y>280</y>
+    <width>211</width>
+    <height>21</height>
+    <name>EDM Text Update</name>
+    <pv_name>$(ioc):RELEASE$(idx)9.DESC</pv_name>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+    <border_width>0</border_width>
+    <border_style>1</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>true</show_units>
+    <format_type>0</format_type>
+    <precision>0</precision>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+  </widget>
+</display>

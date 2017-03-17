@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0">
+  <x>1785</x>
+  <y>206</y>
+  <width>240</width>
+  <height>136</height>
+  <font>
+    <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+  </font>
+  <foreground_color>
+    <color blue="0" green="0" name="black-14" red="0"/>
+  </foreground_color>
+  <background_color>
+    <color blue="145" green="145" name="grey-7" red="145"/>
+  </background_color>
+  <name>IOC Reboot Confirmation - $(ioc)</name>
+  <show_grid>true</show_grid>
+  <grid_space>8</grid_space>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <line_width>1</line_width>
+    <x>8</x>
+    <y>48</y>
+    <width>225</width>
+    <height>81</height>
+    <name>EDM Rectangle</name>
+    <line_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </line_color>
+    <transparent>false</transparent>
+    <background_color>
+      <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+    </background_color>
+    <visible>true</visible>
+    <line_style>0</line_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <line_width>1</line_width>
+    <x>0</x>
+    <y>0</y>
+    <width>241</width>
+    <height>41</height>
+    <name>EDM Rectangle</name>
+    <line_color>
+      <color blue="159" green="223" name="VAC help" red="202"/>
+    </line_color>
+    <transparent>false</transparent>
+    <background_color>
+      <color blue="159" green="223" name="VAC help" red="202"/>
+    </background_color>
+    <visible>true</visible>
+    <line_style>0</line_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>8</x>
+    <y>0</y>
+    <width>208</width>
+    <height>40</height>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <name>EDM Label</name>
+    <text>IOC Reboot Confirmation&#xd;$(ioc)</text>
+    <auto_size>false</auto_size>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <background_color>
+      <color blue="177" green="248" name="VAC title" red="225"/>
+    </background_color>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>184</x>
+    <y>8</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>49</width>
+    <height>25</height>
+    <name>EDM Exit Button</name>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_JAVASCRIPT">
+        <embedded>true</embedded>
+        <scriptText>importPackage(Packages.org.csstudio.opibuilder.scriptUtil);ScriptUtil.closeAssociatedOPI(widget);</scriptText>
+      </action>
+    </actions>
+    <text>Exit</text>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>8</x>
+    <y>48</y>
+    <width>224</width>
+    <height>48</height>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <name>EDM Label</name>
+    <text>Are you sure you want to&#xd;reboot $(ioc)?</text>
+    <auto_size>false</auto_size>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <background_color>
+      <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+    </background_color>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <transparent>true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>24</x>
+    <y>96</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>89</width>
+    <height>25</height>
+    <name>EDM Message Button</name>
+    <push_action_index>0</push_action_index>
+    <released_action_index>1</released_action_index>
+    <actions hook="true" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>$(ioc):SYSRESET.L</pv_name>
+        <value>1</value>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(ioc):SYSRESET.L</pv_name>
+        <value>0</value>
+      </action>
+    </actions>
+    <rules>
+      <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+        <exp bool_exp="widget.getValue() == 1">
+          <value>
+            <color blue="187" green="187" name="grey-4" red="187"/>
+          </value>
+        </exp>
+        <exp bool_exp="true">
+          <value>
+            <color blue="187" green="187" name="grey-4" red="187"/>
+          </value>
+        </exp>
+        <pv trig="true">$(ioc):SYSRESET.L</pv>
+      </rule>
+    </rules>
+    <show_led>false</show_led>
+    <show_boolean_label>true</show_boolean_label>
+    <square_button>true</square_button>
+    <on_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </on_color>
+    <off_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </off_color>
+    <on_label>Reboot Now!</on_label>
+    <off_label>Reboot Now!</off_label>
+    <toggle_button>false</toggle_button>
+    <show_confirm_dialog>0</show_confirm_dialog>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>128</x>
+    <y>96</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="187" green="187" name="grey-4" red="187"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+    </font>
+    <width>89</width>
+    <height>25</height>
+    <name>EDM Exit Button</name>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_JAVASCRIPT">
+        <embedded>true</embedded>
+        <scriptText>importPackage(Packages.org.csstudio.opibuilder.scriptUtil);ScriptUtil.closeAssociatedOPI(widget);</scriptText>
+      </action>
+    </actions>
+    <text>Cancel</text>
+  </widget>
+</display>

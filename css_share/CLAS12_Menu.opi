@@ -708,28 +708,6 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>detectors/SVT/svt_gas.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>SVT Gas</description>
-        </action>
-        <action type="EXECUTE_CMD">
-          <command>xterm -T SVT__EDM__SCREENS -e runSvtEdm.sh</command>
-          <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>SVT EDM Screens</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/SVT/edm2opi/mainMenu.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>SVT EDM-&gt;CSS</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>apps/mmfeuApp/mmFeu.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
@@ -737,6 +715,20 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>MVT FEU</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/SVT/edm2opi/mainMenu.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>SVT</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>xterm -T SVT__EDM__SCREENS -e runSvtEdm.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>SVT EDM</description>
         </action>
       </actions>
       <font>

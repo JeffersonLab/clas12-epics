@@ -18,6 +18,8 @@ dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt1")
 dbLoadRecords("db/svtCrateAlarm.db")
 dbLoadRecords("db/svtWatchdog.db")
 
+dbLoadRecords("db/svtWienerCrate2.db","HOST=svtvme1")
+
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 

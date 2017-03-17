@@ -12,10 +12,10 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
-dbLoadRecords("db/svtR1-mpv-iseg.substitutions")
-dbLoadRecords("db/svtR1-hfcb.substitutions")
+dbLoadTemplate("db/svtR1-mpv-iseg.substitutions")
+dbLoadTemplate("db/svtR1-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt1")
-dbLoadRecords("db/svtCrateAlarm.db"")
+dbLoadRecords("db/svtCrateAlarm.db")
 dbLoadRecords("db/svtWatchdog.db")
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")

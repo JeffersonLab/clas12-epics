@@ -12,8 +12,8 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
-dbLoadRecords("db/svtR2-mpv-iseg.substitutions")
-dbLoadRecords("db/svtR2-hfcb.substitutions")
+dbLoadTemplate("db/svtR2-mpv-iseg.substitutions")
+dbLoadTemplate("db/svtR2-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt4")
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")

@@ -3,6 +3,7 @@
 < envPaths
 
 epicsEnvSet("MIBDIRS","${TOP}/iocBoot/iocsoftsvtRX:/usr/share/snmp/mibs")
+
 epicsEnvSet("MIBS","ALL")
 epicsEnvSet("W","WIENER-CRATE-MIB::")
 
@@ -12,8 +13,8 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
-dbLoadRecords("db/svtR3-mpv-iseg.substitutions")
-dbLoadRecords("db/svtR3-hfcb.substitutions")
+dbLoadTemplate("db/svtR3-mpv-iseg.substitutions")
+dbLoadTemplate("db/svtR3-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt3")
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")

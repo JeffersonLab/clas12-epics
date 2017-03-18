@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>440</height>
+  <height>400</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -98,7 +98,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <label>Mpod Crates Montitoring &amp; Control</label>
+    <label>Crate Montitoring &amp; Control</label>
     <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -107,11 +107,28 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display</name>
-    <y>86</y>
+    <y>42</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>svtCrates.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>All Crates</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>vmeGenDebug.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>svtvme1</HOST>
+        </macros>
+        <replace>2</replace>
+        <description>VME Crate</description>
+      </action>
       <action type="OPEN_DISPLAY">
         <path>svtMpodCrate1b.opi</path>
         <macros>
@@ -120,7 +137,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtR1</ioc>
         </macros>
         <replace>2</replace>
-        <description>Mpod Crate #1 Monitoring &amp; Control</description>
+        <description>Mpod Crate #1</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>svtMpodCrate2b.opi</path>
@@ -130,7 +147,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtR4</ioc>
         </macros>
         <replace>2</replace>
-        <description>Mpod Crate #2 Monitoring &amp; Control</description>
+        <description>Mpod Crate #2</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>svtMpodCrate3b.opi</path>
@@ -140,7 +157,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtR3</ioc>
         </macros>
         <replace>2</replace>
-        <description>Mpod Crate #3 Monitoring &amp; Control</description>
+        <description>Mpod Crate #3</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>svtMpodCrate4b.opi</path>
@@ -150,7 +167,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtR2</ioc>
         </macros>
         <replace>2</replace>
-        <description>Mpod Crate #4 Monitoring &amp; Control</description>
+        <description>Mpod Crate #4</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>svtMpodCrate5b.opi</path>
@@ -160,7 +177,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtR4</ioc>
         </macros>
         <replace>2</replace>
-        <description>Mpod Crate #5 Monitoring &amp; Control</description>
+        <description>Mpod Crate #5</description>
       </action>
     </actions>
     <font>
@@ -202,7 +219,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display</name>
-    <y>126</y>
+    <y>82</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -288,7 +305,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display</name>
-    <y>166</y>
+    <y>122</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -343,7 +360,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM shell command</name>
-    <y>360</y>
+    <y>316</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -396,7 +413,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display</name>
-    <y>206</y>
+    <y>162</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -451,7 +468,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display</name>
-    <y>402</y>
+    <y>358</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -461,62 +478,6 @@ $(pv_value)</tooltip>
         <path>iocRestoreStatus.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description></description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-51fbf3c1:15a8f7a020e:-7ff4</wuid>
-    <pv_value />
-    <text>Vme Crate Monitoring &amp; Control</text>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>28</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <image></image>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Action Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="191" green="191" blue="191" />
-    </background_color>
-    <width>332</width>
-    <x>20</x>
-    <name>EDM related display</name>
-    <y>46</y>
-    <style>0</style>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>vmeGenDebug.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <HOST>svtvme1</HOST>
         </macros>
         <replace>2</replace>
         <description></description>
@@ -561,7 +522,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display_10</name>
-    <y>283</y>
+    <y>239</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -646,7 +607,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display_11</name>
-    <y>323</y>
+    <y>279</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -691,7 +652,7 @@ $(pv_value)</tooltip>
     <width>332</width>
     <x>20</x>
     <name>EDM related display_12</name>
-    <y>245</y>
+    <y>201</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />

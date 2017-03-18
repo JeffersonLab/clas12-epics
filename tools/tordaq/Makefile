@@ -8,11 +8,13 @@ all: clean $(STUB)Dict $(STUB)Gui $(STUB)Converter
 
 $(STUB)Dict:
 	rootcint -f $(DICT).cxx -c $(STUB)Gui.hh exLinkDef.h
+
 $(STUB)Gui:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(STUB)Gui $(STUB)Gui.cxx $(DICT).cxx
+
 $(STUB)Converter:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(STUB)Converter $(STUB)Converter.c
 
 clean:
-	rm -f tordaqConverter tordaqGui tordaqData_hh.so tordaqData_hh.d exDict.cxx exDict.h
+	rm -f $(STUB)Converter $(STUB)Gui $(STUB)Data_hh.so $(STUB)Data_hh.d $(DICT).cxx $(DICT).h $(DICT)_rdict.pcm 
 

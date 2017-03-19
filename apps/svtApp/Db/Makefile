@@ -10,15 +10,9 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-DB += V450.db
-DB += V450.substitutions
-DB += V450_1.db
-DB += V450_2.db
-DB += alarm.db
-DB += HFCB.db
-DB += RTDM.db
-DB += modTalarm.db
-DB += watchdog.db
+
+DB += $(wildcard ../*.substitutions)
+DB += $(wildcard ../*.db)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

@@ -22,6 +22,7 @@ svtCtrlApp_SRCS += seq_vmetlsvt2Off.st
 svtCtrlApp_SRCS += seq_vmetlsvt3Off.st
 svtCtrlApp_SRCS += seq_vmetlsvt4Off.st
 svtCtrlApp_SRCS += seq_vmetlsvt5Off.st
+svtCtrlApp_SRCS += seq_v450waveform.st
 svtCtrlApp_SRCS_DEFAULT += svtCtrlAppMain.cpp
 svtCtrlApp_SRCS_vxWorks += -nil-
 

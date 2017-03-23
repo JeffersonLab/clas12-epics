@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 DB += $(wildcard ../*.substitutions)
 DB += $(wildcard ../*.db)
 
+BEAST += svt-alarm.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

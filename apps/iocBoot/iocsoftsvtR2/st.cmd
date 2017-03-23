@@ -19,6 +19,9 @@ dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt4")
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
+dbLoadRecords("db/svtV450waveform.db")
+dbLoadRecords("db/svtmpodwaveform.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup
@@ -48,6 +51,9 @@ seq &modCntrl,"MODULE=R2S11,HS=10,LS=6"
 seq &modCntrl,"MODULE=R2S12,HS=10,LS=6"
 seq &modCntrl,"MODULE=R2S13,HS=10,LS=7"
 seq &modCntrl,"MODULE=R2S14,HS=10,LS=7"
+
+seq &seq_v450waveform
+seq &seq_mpodwaveform
 
 < R2_LV_VD_ntrlk.init
 epicsThreadSleep(5)

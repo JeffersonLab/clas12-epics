@@ -1,0 +1,42 @@
+
+####################################### testing ##########################
+#To test with softIOC run
+#softIOC st.cmd_svt_alhtest in this directory.
+#The channels of interest will be:
+#svt           :       The channel who's alarm state is monitored
+#svtAlmCmd     :       The calc record which decides if and when to send the OFF command 
+#svt:MODPB_OFF :       The channel to receive the OFF command
+
+#>camonitor svt:MODPB_OFF
+#caput svt 8     should result in a switch off (1 -> svt:MODPB_OFF) 
+#should latch until MODPB_OFF has been returned to zero.
+
+#These are for running in test mod
+#The PC to monitor to decide whether to switch something off
+record(ai, "svtV"){
+	field(HIHI,"105")
+        field(LOLO,"95")
+        field(HIGH,"103")
+        field(LOW,"97")
+        field(HHSV,"MAJOR")
+        field(LLSV,"MAJOR")
+        field(HSV,"MINOR")
+        field(LSV,"MINOR")
+        field(VAL,"100")
+}
+record(ai, "svtA"){
+	field(HIHI,"1.4")
+        field(LOLO,"1.0")
+        field(HIGH,"1.3")
+        field(LOW,"1.1")
+        field(HHSV,"MAJOR")
+        field(LLSV,"MAJOR")
+        field(HSV,"MINOR")
+        field(LSV,"MINOR")
+        field(VAL,"1.2")
+}
+
+#The pv to issue the OFF command to (assume we need to write a 1 to this).
+record(ao,"svt:MODPB_OFF"){
+}
+##########################################################################

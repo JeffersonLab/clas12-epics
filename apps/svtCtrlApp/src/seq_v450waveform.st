@@ -47,10 +47,8 @@ ss seq_v450waveform {
         for (jj=0; jj<nModulesPerRegion[ii]; jj++)
         {
           sprintf(stmp,"%s_R%dS%dT_Slot%d",prefix,ii+1,jj+1,slot);
-          printf(stmp);
           pvAssign(wfi[kk++],stmp); ll++;
           sprintf(stmp,"%s_R%dS%dB_Slot%d",prefix,ii+1,jj+1,slot);
-          printf(stmp);
           pvAssign(wfi[kk++],stmp); ll++;
           if (ll>=nChansPerSlot[slot-FIRSTSLOT]) 
           {

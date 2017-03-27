@@ -55,6 +55,7 @@ ss waveform {
           sprintf(wfnames[wfLength],"%s",stmp);
           wfLength++;
         }
+        pvPut(filename);
         pvPut(wfLength);
         pvPut(wfnames);
       }

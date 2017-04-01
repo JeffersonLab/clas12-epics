@@ -1,0 +1,41 @@
+record(calc,"B_SVT_LV_R$(R)S$(S):isOn")
+{
+  field(INPA,"B_SVT_LV_VA_R$(R)S$(S)T_Slot$(LSL):outswitchR CPP")
+  field(INPB,"B_SVT_LV_VA_R$(R)S$(S)B_Slot$(LSL):outswitchR CPP")
+  field(INPC,"B_SVT_LV_VD_R$(R)S$(S)T_Slot$(LSL):outswitchR CPP")
+  field(INPD,"B_SVT_LV_VD_R$(R)S$(S)B_Slot$(LSL):outswitchR CPP")
+  field(CALC,"(A=1 && B=1 && C=1 && D=1) ? 1 : 0")
+}
+record(calc,"B_SVT_LV_R$(R)S$(S):isOff")
+{
+  field(INPA,"B_SVT_LV_VA_R$(R)S$(S)T_Slot$(LSL):outswitchR CPP")
+  field(INPB,"B_SVT_LV_VA_R$(R)S$(S)B_Slot$(LSL):outswitchR CPP")
+  field(INPC,"B_SVT_LV_VD_R$(R)S$(S)T_Slot$(LSL):outswitchR CPP")
+  field(INPD,"B_SVT_LV_VD_R$(R)S$(S)B_Slot$(LSL):outswitchR CPP")
+  field(CALC,"(A=0 && B=0 && C=0 && D=0) ? 1 : 0")
+  field(HHSV,"MAJOR")
+  field(HIHI,"1")
+}
+record(calc,"B_SVT_HV_R$(R)S$(S):isOn")
+{
+  field(INPA,"B_SVT_HV_R$(R)S$(S)T_Slot$(HSL):outswitchR CPP")
+  field(INPB,"B_SVT_HV_R$(R)S$(S)B_Slot$(HSL):outswitchR CPP")
+  field(CALC,"(A=1 && B=1) ? 1 : 0")
+}
+record(calc,"B_SVT_HV_R$(R)S$(S):isOff")
+{
+  field(INPA,"B_SVT_HV_R$(R)S$(S)T_Slot$(HSL):outswitchR CPP")
+  field(INPB,"B_SVT_HV_R$(R)S$(S)B_Slot$(HSL):outswitchR CPP")
+  field(CALC,"(A=0 && B=0) ? 1 : 0")
+  field(HHSV,"MAJOR")
+  field(HIHI,"1")
+}
+record(calc,"B_SVT_R$(R)S$(S):alarm")
+{
+  field(INPA,"HV_R$(R)S$(S):alarm CPP")
+  field(INPB,"LV_R$(R)S$(S):alarm CPP")
+  field(INPC,"B_SVT_TEMP_R$(R)S$(S):alarm CPP")
+  field(CALC,"(A>=0&&A<0.7&&B>=0&&B<0.7&&C>=0&&C<0.7) ? 0 : 1")
+  field(HHSV,"MAJOR")
+  field(HIHI,"1")
+}

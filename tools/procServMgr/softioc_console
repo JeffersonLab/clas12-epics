@@ -230,6 +230,8 @@ if [ $ret = 1 ]; then
     echo "$1 was found disabled in the configuration file" 
     echo "     $CONFIG_FILE"
     echo "You may need to update this file before continuing"
+    echo
+    echo "Press Return to Continue ..."
     echo ""
     printconfig
     echo ""
@@ -250,7 +252,9 @@ if [ $ret = 0 ]; then
     echo "$1 was not found in the configuration file" 
     echo "     $CONFIG_FILE"
     echo "You may need to update this file before continuing"
-    echo ""
+    echo
+    echo "Press Return to Continue ..."
+    read a
     printconfig
     echo ""
     exit 1

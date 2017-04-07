@@ -3,16 +3,16 @@ program waveform
 option -c;
 option -r;
 
-#define MAXWFLEN  10000
-float wfi[MAXWFLEN];      assign wfi to {};
+#define MAXWFLEN  100000
+float wfIn[MAXWFLEN];     assign wfIn to {};
 
 #define NPVSTATIC 6
-float delay;              assign delay    to "{P}{R}period";
+float wfDelay;            assign wfDelay  to "{P}{R}period";
 int wfLength;             assign wfLength to "{P}{R}wflen";
 string msg;               assign msg      to "{P}{R}wfmsg";
 string filename;          assign filename to "{P}{R}filename";
-string wfnames[MAXWFLEN]; assign wfnames  to "{P}{R}wfnames";
-float wfo[MAXWFLEN];      assign wfo      to "{P}{R}wf";
+string wfNames[MAXWFLEN]; assign wfNames  to "{P}{R}wfnames";
+float wfOut[MAXWFLEN];    assign wfOut    to "{P}{R}wf";
 
 int ii;
 string stmp;
@@ -51,13 +51,14 @@ ss waveform {
             pvPut(msg);
             break;
           }
-          pvAssign(wfi[wfLength],stmp);
-          sprintf(wfnames[wfLength],"%s",stmp);
+          pvAssign(wfIn[wfLength],stmp);
+          pvMonitor(wfIn[wfLength]);
+          sprintf(wfNames[wfLength],"%s",stmp);
           wfLength++;
         }
         pvPut(filename);
         pvPut(wfLength);
-        pvPut(wfnames);
+        pvPut(wfNames);
       }
     } state init
 
@@ -91,13 +92,11 @@ ss waveform {
 
     when (pvConnectCount() < NPVSTATIC+wfLength) {} state init
 
-    when ()
+    when (delay(wfDelay))
     {
-      for (ii=0; ii<wfLength; ii++) pvGet(wfi[ii]);
-      for (ii=0; ii<wfLength; ii++) wfo[ii]=wfi[ii];
-      pvPut(wfo);
-      pvGet(delay);
-      epicsThreadSleep(delay);
+      for (ii=0; ii<wfLength; ii++) wfOut[ii]=wfIn[ii];
+      pvPut(wfOut);
+      pvGet(wfDelay);
     } state run
 
   }

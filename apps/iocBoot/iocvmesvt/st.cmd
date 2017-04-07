@@ -4,6 +4,8 @@ cd "$IOC_root_vmesvt"
 
 < ../network
 
+< ../nfsCommands
+
 cd topbin
 ld < svt.munch
 cd top
@@ -18,19 +20,19 @@ dbLoadRecords("db/V450_alarm.db")
 dbLoadRecords("db/svtWatchdogVme.db")
 
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocvmesvt")
-#dbLoadRecords("db/save_restoreStatus.db", "P=iocvmesvt:")
+dbLoadRecords("db/save_restoreStatus.db", "P=iocvmesvt:")
 
 cd startup
 
 ## autosave setup
-#< save_restore.cmd
+< save_restore.cmd
 
 iocInit "../resource.def"
 
 ## Handle autosave 'commands' contained in loaded databases.
-#makeAutosaveFiles()
-#create_monitor_set("info_positions.req", 5, "P=iocvmesvt:")
-#create_monitor_set("info_settings.req", 30, "P=iocvmesvt:")
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=iocvmesvt:")
+create_monitor_set("info_settings.req", 30, "P=iocvmesvt:")
 
 # Assign Temp to Humidity  for dewpoint calculation
 #   as per Brian Eng 9/26/2014

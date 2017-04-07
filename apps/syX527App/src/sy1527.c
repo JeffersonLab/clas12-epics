@@ -62,7 +62,7 @@ int NCFEDOWNERR[MAX_HVPS];
 
 static int  nA1520param = 16; // my: 16
 static int  nA1535param = 16;
-static int  nA1737param = 16;
+//static int  nA1737param = 16;
 static int  nA1536HDMparam = 18;
 
 //static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
@@ -74,9 +74,9 @@ static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
 static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
-static char A1737param[MAX_PARAM][MAX_CAEN_NAME] = {
-                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
-                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
+//static char A1737param[MAX_PARAM][MAX_CAEN_NAME] = {
+//                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
+//                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
 static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange","Pol"};
@@ -695,6 +695,7 @@ sy1527GetMap(unsigned int id)
         for(j=0; j<Demand[id].board[i].nchannels; j++)
           ChList[j] = (unsigned short)j;
         if(!strcmp(Measure[id].board[i].modelname,"A1535") ||
+           !strcmp(Measure[id].board[i].modelname,"A1536") ||
            !strcmp(Measure[id].board[i].modelname,"A1733") ||
            !strcmp(Measure[id].board[i].modelname,"A1737")) // my: was A1520
         {

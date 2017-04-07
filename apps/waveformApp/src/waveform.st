@@ -1,7 +1,7 @@
 program waveform
 
 option -c;
-option -r;
+option +r;
 
 #define MAXWFLEN  100000
 float wfIn[MAXWFLEN];     assign wfIn to {};

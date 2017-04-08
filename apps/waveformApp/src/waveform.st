@@ -15,16 +15,24 @@
 
 program waveform
 
+// allow sequencer to start before all PVs connected:
 option -c;
+
+// make reentrant (required for multiple instances):
 option +r;
+
+// run in safe mode:
 option +s;
+
+// Use epicsThreadSleep instead of delay:
+//#define USESLEEP
 
 #ifdef VXWORKS
 %%#include <vxWorks.h>
 %%#include <ioLib.h>
-int file
+int inFile
 #else
-%%FILE* file;
+%%FILE* inFile;
 #endif
 
 #define MAXLEN  100000
@@ -84,17 +92,17 @@ ss waveform {
       }
       printf("\n%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
-      file = open(filename,O_RDONLY);
+      inFile = open(filename,O_RDONLY);
 #else
-      file = fopen(filename,"r");
+      inFile = fopen(filename,"r");
 #endif
-      if (!file) {
+      if (!inFile) {
         sprintf(msg,"Error Reading %s",filename);
         pvPut(msg);
         printf("\n%s - %s\n",stub,msg);
       }
       else {
-        while ((fscanf(file,"%s",stmp))==1) {
+        while ((fscanf(inFile,"%s",stmp))==1) {
           if (wfLen >= wfRecLen) {
             sprintf(msg,"#PVs > NELM.  Truncating.");
             pvPut(msg);
@@ -114,7 +122,7 @@ ss waveform {
           sprintf(wfNames[wfLen],"%s",stmp);
           wfLen++;
         }
-        fclose(file);
+        fclose(inFile);
       }
       pvPut(wfLen);
       pvPut(wfNames);
@@ -153,12 +161,14 @@ ss waveform {
 
     when (pvConnectCount() < nPVs) {} state wait
 
-    // prefer epicsThreadSleep over delay (due to cpu usage)
-    //when (delay(wfDelay)) {
+#ifndef USESLEEP
+    when (delay(wfDelay)) {
+#else
     when () {
+      epicsThreadSleep(wfDelay);
+#endif
       for (ii=0; ii<wfLen; ii++) wfOut[ii]=wfIn[ii];
       pvPut(wfOut);
-      epicsThreadSleep(wfDelay);
     } state run
 
   }

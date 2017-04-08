@@ -83,7 +83,7 @@ ss waveform {
       }
       printf("\n%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
-			file = open(filename,O_RDONLY);
+      file = open(filename,O_RDONLY);
 #else
       file = fopen(filename,"r");
 #endif

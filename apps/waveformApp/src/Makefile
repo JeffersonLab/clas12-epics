@@ -13,7 +13,6 @@ PROD_IOC_Linux = waveformApp
 # <name>.dbd will be created from <name>Include.dbd
 DBD += waveformApp.dbd
 
-
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 waveformApp_SRCS += waveformApp_registerRecordDeviceDriver.cpp
 waveformApp_SRCS += waveform.st
@@ -25,10 +24,7 @@ waveformApp_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 #add a definition for each support application used by this application
 waveformApp_LIBS += devIocStats
-waveformApp_LIBS += devSnmp
-waveformApp_LIBS += caPutLog
 waveformApp_LIBS += seq pv
-waveformApp_LIBS += autosave
 waveformApp_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================

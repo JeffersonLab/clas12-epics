@@ -21,6 +21,9 @@ option +r;
 #ifdef VXWORKS
 %%#include <vxWorks.h>
 %%#include <ioLib.h>
+int file
+#else
+%%FILE* file;
 #endif
 
 #define MAXLEN  100000
@@ -36,12 +39,6 @@ int wfLen;              assign wfLen    to "{P}{R}wflen";
 int wfRecLen;           assign wfRecLen to "{P}{R}wf.NELM";
 
 monitor wfDelay;
-
-#ifdef VXWORKS
-int fd
-#else
-%%FILE* fd;
-#endif
 
 int ii;
 int nPVs;
@@ -86,17 +83,17 @@ ss waveform {
       }
       printf("\n%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
-			fd = open(filename,O_RDONLY);
+			file = open(filename,O_RDONLY);
 #else
-      fd = fopen(filename,"r");
+      file = fopen(filename,"r");
 #endif
-      if (!fd) {
+      if (!file) {
         sprintf(msg,"Error Reading %s",filename);
         pvPut(msg);
         printf("\n%s - %s\n",stub,msg);
       }
       else {
-        while ((fscanf(fd,"%s",stmp))==1) {
+        while ((fscanf(file,"%s",stmp))==1) {
           if (wfLen >= wfRecLen) {
             sprintf(msg,"#PVs > NELM.  Truncating.");
             pvPut(msg);
@@ -116,7 +113,7 @@ ss waveform {
           sprintf(wfNames[wfLen],"%s",stmp);
           wfLen++;
         }
-        fclose(fd);
+        fclose(file);
       }
       pvPut(wfLen);
       pvPut(wfNames);

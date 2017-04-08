@@ -1,8 +1,9 @@
-# example ioc startup commands.  can load multiple waveforms and sequencers in one ioc.
+# waveformApp
 
-# NELM just has to be at least as large as #PVs in FNAME
-dbLoadRecords("db/waveformApp.db","P=a:,R=a:,NELM=4,PERIOD=5,FNAME=dog.txt")
-dbLoadRecords("db/waveformApp.db","P=a:,R=b:,NELM=6,PERIOD=5,FNAME=dog2.txt")
-seq waveform, "P=a:,R=a:"
-seq waveform, "P=a:,R=b:"
+# example ioc startup commands:
+# (NELM should be at least as large as number of PVs in FNAME)
+dbLoadRecords("db/waveformApp.db","P=a:,R=1:,NELM=100,FTVL=FLOAT,PERIOD=5,FNAME=pvList1.txt")
+dbLoadRecords("db/waveformApp.db","P=a:,R=2:,NELM=800,FTVL=FLOAT,PERIOD=5,FNAME=pvList2.txt")
+seq waveform, "P=a:,R=1:"
+seq waveform, "P=a:,R=2:"
 

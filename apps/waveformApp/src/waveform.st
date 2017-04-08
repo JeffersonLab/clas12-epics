@@ -153,9 +153,12 @@ ss waveform {
 
     when (pvConnectCount() < nPVs) {} state wait
 
-    when (delay(wfDelay)) {
+    // prefer epicsThreadSleep over delay (due to cpu usage)
+    //when (delay(wfDelay)) {
+    when () {
       for (ii=0; ii<wfLen; ii++) wfOut[ii]=wfIn[ii];
       pvPut(wfOut);
+      epicsThreadSleep(wfDelay);
     } state run
 
   }

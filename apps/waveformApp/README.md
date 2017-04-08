@@ -15,11 +15,11 @@ and NELM should be at least as large as number of PVs in FNAME.
 
 ### Performance Test:
 In one IOC:
- * 52 simultaneous sequencers (one output waveform per sequencer)
+* 52 simultaneous sequencers (one output waveform per sequencer)
  * most with ~200 long waveforms
  * two with 5K long waveforms
  * one with a 20K long waveform
  * 40K total input PVs
- * Peak CPU usage of 4.6% (Intel Xeon E5-2620 2.4 GHz)
- * Memory usage of 1.4 GB
+* Peak CPU usage of 4.6% (Intel Xeon E5-2620 2.4 GHz)
+* Memory usage of 1.4 GB
 

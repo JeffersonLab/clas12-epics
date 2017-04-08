@@ -69,6 +69,8 @@ dbLoadRecords("db/waveformApp.db","P=vdc:,R=6:,NELM=108, FTVL=FLOAT,PERIOD=5,FNA
 dbLoadRecords("db/waveformApp.db","P=imisc:,R=0:,NELM=4176, FTVL=FLOAT,PERIOD=5,FNAME=pvlists/iMISC.txt")
 dbLoadRecords("db/waveformApp.db","P=vmisc:,R=0:,NELM=4176, FTVL=FLOAT,PERIOD=5,FNAME=pvlists/vMISC.txt")
 
+dbLoadRecords("db/waveformApp.db","P=all:,R=0:,NELM=20884, FTVL=FLOAT,PERIOD=5,FNAME=pvlists/ALL.txt")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 iocInit
@@ -133,6 +135,8 @@ seq waveform, "P=vdc:,R=6:"
 
 seq waveform, "P=imisc:,R=0:"
 seq waveform, "P=vmisc:,R=0:"
+
+seq waveform, "P=all:,R=0:"
 
 dbl > pv.list
 

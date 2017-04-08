@@ -1,8 +1,8 @@
-#!../../bin/linux-x86_64/waveformApp
+#!../../bin/linux-x86_64/testApp
 < envPaths
 cd ${TOP}
-dbLoadDatabase("dbd/waveformApp.dbd")
-waveformApp_registerRecordDeviceDriver pdbbase
+dbLoadDatabase("dbd/testApp.dbd")
+testApp_registerRecordDeviceDriver pdbbase
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 

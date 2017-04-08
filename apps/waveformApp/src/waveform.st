@@ -17,6 +17,7 @@ program waveform
 
 option -c;
 option +r;
+option +s;
 
 #ifdef VXWORKS
 %%#include <vxWorks.h>

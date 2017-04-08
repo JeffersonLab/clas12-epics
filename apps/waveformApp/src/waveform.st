@@ -18,6 +18,11 @@ program waveform
 option -c;
 option +r;
 
+#ifdef VXWORKS
+%%#include <vxWorks.h>
+%%#include <ioLib.h>
+#endif
+
 #define MAXLEN  100000
 float wfIn[MAXLEN];     assign wfIn to {};
 
@@ -31,6 +36,12 @@ int wfLen;              assign wfLen    to "{P}{R}wflen";
 int wfRecLen;           assign wfRecLen to "{P}{R}wf.NELM";
 
 monitor wfDelay;
+
+#ifdef VXWORKS
+int fd
+#else
+%%FILE* fd;
+#endif
 
 int ii;
 int nPVs;
@@ -74,7 +85,11 @@ ss waveform {
         printf("\n%s - WARNING:  %swf.NELM is greater than sequencer's MAXLEN\n",stub,prefix);
       }
       printf("\n%s - Opening file:  %s\n",stub,filename);
-      FILE* fd = fopen(filename,"r");
+#ifdef VXWORKS
+			fd = open(filename,O_RDONLY);
+#else
+      fd = fopen(filename,"r");
+#endif
       if (!fd) {
         sprintf(msg,"Error Reading %s",filename);
         pvPut(msg);

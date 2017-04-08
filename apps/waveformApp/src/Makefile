@@ -10,7 +10,7 @@ include $(TOP)/configure/CONFIG
 
 
 #PROD_IOC_Linux = waveformApp
-LIBRARY_IOC_Linux = waveformApp
+LIBRARY_IOC = waveformApp
 
 # <name>.dbd will be created from <name>Include.dbd
 DBD += waveformApp.dbd
@@ -18,7 +18,6 @@ DBD += waveformApp.dbd
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 waveformApp_SRCS += waveformApp_registerRecordDeviceDriver.cpp
 waveformApp_SRCS += waveform.st
-#waveformApp_SRCS_DEFAULT += waveformAppMain.cpp
 waveformApp_SRCS_vxWorks += -nil-
 
 #The following adds support from base/src/vxWorks

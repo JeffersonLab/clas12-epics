@@ -7,7 +7,7 @@ option +r;
 float wfIn[MAXWFLEN];     assign wfIn to {};
 
 #define NPVSTATIC 6
-float wfDelay;            assign wfDelay  to "{P}{R}period";
+float wfDelay;            assign wfDelay  to "{P}{R}period";  monitor wfDelay;
 int wfLength;             assign wfLength to "{P}{R}wflen";
 string msg;               assign msg      to "{P}{R}wfmsg";
 string filename;          assign filename to "{P}{R}filename";
@@ -96,7 +96,6 @@ ss waveform {
     {
       for (ii=0; ii<wfLength; ii++) wfOut[ii]=wfIn[ii];
       pvPut(wfOut);
-      pvGet(wfDelay);
     } state run
 
   }

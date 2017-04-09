@@ -23,7 +23,7 @@ In one IOC:
 * 40K total input PVs
 * Peak CPU usage of 4.6% (Intel Xeon E5-2620 2.4 GHz)
   * decreasing update period to 1 second increased CPU usage to 13%
-  * epicsThreadSleep instead of delay gives 10X CPU reduction
+  * epicsThreadSleep instead of delay gives 2X CPU reduction, scaling with #PVs and period
     * possible downside is missing pvMonitor updates
 * Memory usage of 1.4 GB
 

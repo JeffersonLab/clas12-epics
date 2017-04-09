@@ -11,6 +11,7 @@
    {P}{R}filename = name of file from which to read PV names
    {P}{R}wflen    = number of PV names read from file
    {P}{R}msg      = sequencer status message
+   {P}{R}sleep    = whether to use epicsThreadSleep instead of delay
 */
 
 program waveform
@@ -24,9 +25,6 @@ option +r;
 // run in safe mode:
 option +s;
 
-// Use epicsThreadSleep instead of delay:
-//#define USESLEEP
-
 #ifdef VXWORKS
 %%#include <vxWorks.h>
 %%#include <ioLib.h>
@@ -38,7 +36,7 @@ int inFile
 #define MAXLEN  100000
 float wfIn[MAXLEN];     assign wfIn to {};
 
-#define NPVSTATIC 7
+#define NPVSTATIC 8
 float wfOut[MAXLEN];    assign wfOut    to "{P}{R}wf";
 float wfDelay;          assign wfDelay  to "{P}{R}period";
 string wfNames[MAXLEN]; assign wfNames  to "{P}{R}wfnames";
@@ -46,8 +44,10 @@ string msg;             assign msg      to "{P}{R}msg";
 string filename;        assign filename to "{P}{R}filename";
 int wfLen;              assign wfLen    to "{P}{R}wflen";
 int wfRecLen;           assign wfRecLen to "{P}{R}wf.NELM";
+int doSleep;            assign doSleep  to "{P}{R}sleep";
 
 monitor wfDelay;
+monitor doSleep;
 
 int ii;
 int nPVs;
@@ -161,12 +161,8 @@ ss waveform {
 
     when (pvConnectCount() < nPVs) {} state wait
 
-#ifndef USESLEEP
-    when (delay(wfDelay)) {
-#else
-    when () {
-      epicsThreadSleep(wfDelay);
-#endif
+    when (doSleep || delay(wfDelay)) {
+      if (doSleep) epicsThreadSleep(wfDelay);
       for (ii=0; ii<wfLen; ii++) wfOut[ii]=wfIn[ii];
       pvPut(wfOut);
     } state run

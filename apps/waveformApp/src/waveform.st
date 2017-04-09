@@ -88,9 +88,9 @@ ss waveform {
       pvGet(filename);
       pvGet(wfRecLen);
       if (wfRecLen > MAXLEN) {
-        printf("\n%s - WARNING:  %swf.NELM is greater than sequencer's MAXLEN\n",stub,prefix);
+        printf("%s - WARNING:  %swf.NELM is greater than sequencer's MAXLEN\n",stub,prefix);
       }
-      printf("\n%s - Opening file:  %s\n",stub,filename);
+      printf("%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
       inFile = open(filename,O_RDONLY);
 #else
@@ -99,21 +99,21 @@ ss waveform {
       if (!inFile) {
         sprintf(msg,"Error Reading %s",filename);
         pvPut(msg);
-        printf("\n%s - %s\n",stub,msg);
+        printf("%s - %s\n",stub,msg);
       }
       else {
         while ((fscanf(inFile,"%s",stmp))==1) {
           if (wfLen >= wfRecLen) {
             sprintf(msg,"#PVs > NELM.  Truncating.");
             pvPut(msg);
-            printf("\n%s - %s\n",stub,msg);
+            printf("%s - %s\n",stub,msg);
             isTruncated=1;
             break;
           }
           else if (wfLen >= MAXLEN) {
             sprintf(msg,"#PVs > MAXLEN.  Truncating.");
             pvPut(msg);
-            printf("\n%s - %s\n",stub,msg);
+            printf("%s - %s\n",stub,msg);
             isTruncated=1;
             break;
           }
@@ -136,13 +136,13 @@ ss waveform {
     when (wfLen <= 0) {
       sprintf(msg,"Zero PVs Read from %s",filename);
       pvPut(msg);
-      printf("\n%s - %s - EXITING SEQUENCER\n",stub,msg);
+      printf("%s - %s - EXITING SEQUENCER\n",stub,msg);
     } exit
     
     when (pvConnectCount() < nPVs) {
       sprintf(msg,"Waiting for PVs (%d/%d)",pvConnectCount(),nPVs);
       pvPut(msg);
-      printf("\n%s - %s\n",stub,msg);
+      printf("%s - %s\n",stub,msg);
       epicsThreadSleep(1);
     } state wait
     
@@ -156,7 +156,7 @@ ss waveform {
       if (isTruncated) sprintf(msg,"OK - Running Truncated");
       else             sprintf(msg,"OK - Running");
       pvPut(msg);
-      printf("\n%s - %s\n",stub,msg);
+      printf("%s - %s\n",stub,msg);
     }
 
     when (pvConnectCount() < nPVs) {} state wait

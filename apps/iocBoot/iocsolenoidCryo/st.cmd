@@ -22,6 +22,8 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 ## PLC_SOL
 dbLoadTemplate("db/solenoid_LHe.substitutions")
+dbLoadRecords("db/solenoid_cryocon.db", "P=B_SOL:,R=PLC:,PLCID=PLC_SOL")
+
 ## CA Security
 #dbLoadRecords("db/cas.db", "P=B_SOL:,R=CRYO:,ASG=DEFAULT")
 #asSetFilename("${TOP}/iocBoot/acf/solenoid_cryo.acf")

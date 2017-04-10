@@ -20,6 +20,7 @@ REQ += datatype_straingage.req
 REQ += torus_force_settings.req
 REQ += torus_vacuum_settings.req
 
+BEAST += solenoid_LHe.xml
 BEAST += torus_cooldown_interlocks.xml
 BEAST += torus_cooldown.xml
 BEAST += torus_force_loadcells_contacts.xml

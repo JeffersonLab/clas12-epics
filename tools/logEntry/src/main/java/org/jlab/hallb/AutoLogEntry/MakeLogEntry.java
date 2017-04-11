@@ -275,9 +275,9 @@ public class MakeLogEntry
 
   public void initLogTitle()
   {
-    stockTitle=LOGTITLE.getText();
     LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.updateUI();
+    stockTitle=LOGTITLE.getText();
   }
   
   public void initLogComments()

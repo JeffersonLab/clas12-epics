@@ -49,6 +49,8 @@ public class MakeLogEntry
 
   final boolean DEBUG=false;
 
+  boolean isTitleUpdated=false;
+
   boolean DOTABS=true;
   ArrayList<JPanel> IMPANELS = new ArrayList<JPanel>();
   ArrayList<String> IMPATHS = new ArrayList<String>();
@@ -275,6 +277,7 @@ public class MakeLogEntry
   {
     LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.updateUI();
+    isTitleUpdated=false;
   }
   
   public void initLogComments()
@@ -513,7 +516,7 @@ public class MakeLogEntry
       }
       else if (!IMGPATH.equals("")) entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);
       entry.setTitle(LOGTITLE.getText());
-      entry.setBody(LOGTEXT.getText());
+      entry.setBody(LOGTEXT.getText().replaceFirst("Enter Comments Here",""));
       final long logNumber = entry.submitNow();
       //entry.submit();
       //System.out.println(entry.getXML());

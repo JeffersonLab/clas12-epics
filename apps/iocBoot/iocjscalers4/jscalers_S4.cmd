@@ -50,7 +50,7 @@ cd ${TOP}/iocBoot/${IOC}
 
 iocInit
 
-seq seqJscalers, "S=4"
+seq seqJscalersF, "S=4"
 
 dbl > pv.list
 

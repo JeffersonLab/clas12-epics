@@ -21,6 +21,7 @@ scanOnceSetQueueSize(5000)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_S1_ECAL_FADC.substitutions")
 dbLoadTemplate("db/jscalers_S1_PCAL_FADC.substitutions")
@@ -47,8 +48,14 @@ dbLoadRecords("db/jscalers_wf.db","S=1")
 
 cd ${TOP}/iocBoot/${IOC}
 
+< save_restore.cmd
+
 iocInit
 
-seq seqJscalers, "S=1"
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+seq seqJscalersF, "S=1"
 
 dbl > pv.list

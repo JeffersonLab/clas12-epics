@@ -29,6 +29,7 @@ devSnmpSetSnmpVersion("${AKCP2}",SNMP_VERSION_1)
 devSnmpSetSnmpVersion("${AKCP3}",SNMP_VERSION_1)
 
 dbLoadTemplate("db/hallWeather.substitutions")
+dbLoadRecords("db/weather_cRIO.db")
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
@@ -38,6 +39,7 @@ cd "${TOP}/iocBoot/${IOC}"
 < save_restore.cmd
 
 iocInit
+dbl > pv.list
 
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")

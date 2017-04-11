@@ -11,6 +11,7 @@ include $(TOP)/configure/CONFIG
 DB += $(wildcard ../*.db)
 DB += $(wildcard ../*.substitutions)
 
+BEAST += jscalers-alarm.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

@@ -49,7 +49,7 @@ public class MakeLogEntry
 
   final boolean DEBUG=false;
 
-  boolean isTitleUpdated=false;
+  String stockTitle="";
 
   boolean DOTABS=true;
   ArrayList<JPanel> IMPANELS = new ArrayList<JPanel>();
@@ -275,9 +275,9 @@ public class MakeLogEntry
 
   public void initLogTitle()
   {
+    stockTitle=LOGTITLE.getText();
     LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.updateUI();
-    isTitleUpdated=false;
   }
   
   public void initLogComments()
@@ -503,6 +503,12 @@ public class MakeLogEntry
 
   public void submitElog()
   {
+    if (LOGTITLE.getText().equals(stockTitle) ||
+        LOGTITLE.getText().equals(""))
+    {
+      updateStatusPane("ERROR:  Update Log Title Before Submitting.",Color.RED);
+      return;
+    }
     LogEntry entry = new LogEntry("", LOGBOOKNAME);
     //entry.setEmailNotify("rafopar@jlab.org");
     try {

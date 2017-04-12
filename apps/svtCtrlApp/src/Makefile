@@ -13,7 +13,6 @@ PROD_IOC_Linux = svtCtrlApp
 # <name>.dbd will be created from <name>Include.dbd
 DBD += svtCtrlApp.dbd
 
-
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 svtCtrlApp_SRCS += svtCtrlApp_registerRecordDeviceDriver.cpp
 svtCtrlApp_SRCS += modCntrl.st
@@ -36,6 +35,7 @@ svtCtrlApp_LIBS += devSnmp
 svtCtrlApp_LIBS += caPutLog
 svtCtrlApp_LIBS += seq pv
 svtCtrlApp_LIBS += autosave
+svtCtrlApp_LIBS += waveformApp
 svtCtrlApp_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #NOTES:

@@ -63,7 +63,7 @@ seq &modCntrl,"MODULE=R4S20,HS=10,LS=4"
 seq &modCntrl,"MODULE=R4S21,HS=10,LS=5"
 seq &modCntrl,"MODULE=R4S22,HS=10,LS=5"
 seq &modCntrl,"MODULE=R4S23,HS=10,LS=6"
-seq &modCntrl,"MODULE=R4S24,HS=10,LS=7"
+seq &modCntrl,"MODULE=R4S24,HS=10,LS=6"
 
 < R4_LV_VD_ntrlk.init
 epicsThreadSleep(5)

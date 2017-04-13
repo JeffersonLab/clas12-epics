@@ -13,6 +13,8 @@ dbLoadTemplate("db/svtIntlk.substitutions")
 dbLoadTemplate("db/svt-sums.substitutions")
 dbLoadRecords("db/svt-sums-alarm.db")
 
+dbLoadRecords("db/svtIntlkSummary.db")
+
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 cd "${TOP}/iocBoot/${IOC}"

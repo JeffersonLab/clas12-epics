@@ -2,6 +2,8 @@
 
 < envPaths
 
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.163.255")
+
 epicsEnvSet("MIBDIRS","${TOP}/iocBoot/iocsoftsvtRX:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
 epicsEnvSet("W","WIENER-CRATE-MIB::")
@@ -22,7 +24,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/svtV450waveform.db")
 dbLoadRecords("db/svtmpodwaveform.db")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_,R=V:,NELM=264,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-V.txt")
-dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_,R=I:,NELM=264,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-V.txt")
+dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_,R=I:,NELM=264,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-I.txt")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -56,8 +58,8 @@ seq &modCntrl,"MODULE=R2S14,HS=10,LS=7"
 
 seq &seq_v450waveform
 seq &seq_mpodwaveform
-seq &waveform, "P=B_SVT_LV_,R=V:"
-seq &waveform, "P=B_SVT_LV_,R=I:"
+seq waveform, "P=B_SVT_LV_,R=V:"
+seq waveform, "P=B_SVT_LV_,R=I:"
 
 < R2_LV_VD_ntrlk.init
 epicsThreadSleep(5)

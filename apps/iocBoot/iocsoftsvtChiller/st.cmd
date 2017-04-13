@@ -9,7 +9,8 @@ cd "${TOP}"
 dbLoadDatabase("dbd/svtChiller.dbd")
 svtChiller_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("L0",svtchiller1.acc.jlab.org:10001,0,0,0)
+#drvAsynIPPortConfigure("L0",svtchiller1.acc.jlab.org:10001,0,0,0)
+drvAsynIPPortConfigure("L0",svtchiller1.jlab.org:10001,0,0,0)
 
 ## debugging...
 #asynSetTraceMask("SER3",-1,0x09)

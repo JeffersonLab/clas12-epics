@@ -3,7 +3,7 @@
 # AKCP sensorProbe - Humidity Sensor
 #
 
-record(ai, "$(P)_Ch$(C)_Humid") {
+record(ai, "$(P)_Ch$(C)_HumidNC") {
     field(DESC, "$(A):Humid")
     field(DTYP, "Snmp")
     field(INP,  "@$(HOST) public %(MIB)HumidityPercent.$(C) INTEGER: 100")
@@ -11,10 +11,18 @@ record(ai, "$(P)_Ch$(C)_Humid") {
     field(SCAN, "10 second")
     field(PREC, "0")
     field(HYST, "1")
+    field(FLNK,"$(P)_Ch$(C)_Humid")
     info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
-    alias("$(A)_Humid")
+    alias("$(A)_HumidNC")
 }
 
+record(calc,"$(P)_Ch$(C)_Humid") {
+  field(DESC,"$(P)_Ch$(C)_Humid Corrected")
+  field(INPA,"$(P)_Ch$(C)_HumidNC MS")
+  field(INPB,"$(P)_Ch$(C)_Humid.MLST")
+  field(CALC,"A>200 || A<0 ? B : A")
+  alias("$(A)_Humid")
+}
 # Much of below doesn't work:
 
 #record(stringin, "$(P)_Humid:Desc") {

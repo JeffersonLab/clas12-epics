@@ -3,7 +3,7 @@
 # AKCP sensorProbe - Temperature Sensor
 #
 
-record(ai, "$(P)_Ch$(C)_Temp") {
+record(ai, "$(P)_Ch$(C)_TempNC") {
     field(DESC, "$(A):DESC")
     field(DTYP, "Snmp")
     field(INP,  "@$(HOST) public %(MIB)TempDegree.$(C) INTEGER: 100")
@@ -11,8 +11,17 @@ record(ai, "$(P)_Ch$(C)_Temp") {
     field(SCAN, "10 second")
     field(PREC, "0")
     field(HYST, "1")
+    field(FLNK, "$(P)_Ch$(C)_Temp")
     info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
-    alias("$(A)_Temp")
+    alias("$(A)_TempNC")
+}
+
+record(calc,"$(P)_Ch$(C)_Temp") {
+  field(DESC,"$(P)_Ch$(C)_Temp Corrected")
+  field(INPA,"$(P)_Ch$(C)_TempNC MS")
+  field(INPB,"$(P)_Ch$(C)_Temp.MLST")
+  field(CALC,"A>200 || A<0 ? B : A")
+  alias("$(A)_Temp")
 }
 
 # Much of below doesn't work:

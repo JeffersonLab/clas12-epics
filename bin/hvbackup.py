@@ -5,16 +5,19 @@ import getpass,grp,pwd
 import subprocess,re
 import epics
 
-def exit(text):
-  mess = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+def exit(text,parent):
+  mess = gtk.MessageDialog(parent=parent,buttons=gtk.BUTTONS_OK)
   mess.set_markup(text)
+  #mess.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
   mess.run()
+  #mess.move(parent.get_position())
   mess.destroy()
   #sys.exit(text)
 
 DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
-DETS=DETSHV+DETSLV
+DETSVT=['SVT']
+DETS=DETSHV+DETSLV+DETSVT
 
 FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 
@@ -26,10 +29,10 @@ DATADIR='/usr/clas12/DATA/burt'
 
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
 RELEASEPATH=re.search('(^.*/release/\d[\.\d]+)',SCRIPTPATH)
-if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path')
+if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path',None)
 RELEASEPATH=RELEASEPATH.group(1)
 REQDIR=RELEASEPATH+'/epics/tools/burtreq'
-if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR)
+if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR,None)
 
 def getChannels(det,sector=None):
   # THIS IS ONLY USED TO GENERATE THE REQ FILES
@@ -131,7 +134,7 @@ def printPVsMya(det,sector=None):
 
 def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
-  if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename)
+  if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename,None)
   burtopts='-f '+reqFilename+' -o '+snpFilename
   p = subprocess.Popen(['burtrb', burtopts], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
@@ -149,33 +152,35 @@ class SaveRestore:
   entry = gtk.Entry(max=0)
   progressBar = None
   filename = None
+  oldChooser = None
+  newChooser = None
 
   def chooseOldBackup(self,det):
-    chooser = gtk.FileChooserDialog(
+    self.oldChooser = gtk.FileChooserDialog(
       title='RESTORE HV BACKUP',
       parent=None,
       action=gtk.FILE_CHOOSER_ACTION_OPEN,
       buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
                gtk.STOCK_OPEN,  gtk.RESPONSE_OK)
       )
-    chooser.set_preview_widget_active(True)
-    chooser.set_default_size(800,300)
-    chooser.set_default_response(gtk.RESPONSE_CANCEL)
-    chooser.set_current_folder(DATADIR+'/'+det)
+    self.oldChooser.set_preview_widget_active(True)
+    self.oldChooser.set_default_size(800,300)
+    self.oldChooser.set_default_response(gtk.RESPONSE_CANCEL)
+    self.oldChooser.set_current_folder(DATADIR+'/'+det)
     self.filename = None
-    response = chooser.run()
-    if response == gtk.RESPONSE_OK: self.filename = chooser.get_filename()
-    chooser.destroy()
-    if self.filename==None: exit('RESTORE CANCELLED.')
-    if not os.path.exists(self.filename): exit('FILE D.N.E.\n\nRESTORE CANCELLED.')
+    response = self.oldChooser.run()
+    if response == gtk.RESPONSE_OK: self.filename = self.oldChooser.get_filename()
+    self.oldChooser.destroy()
+    if self.filename==None: exit('RESTORE CANCELLED.',None)
+    if not os.path.exists(self.filename): exit('FILE D.N.E.\n\nRESTORE CANCELLED.',None)
     return self.filename
 
   def chooseNewBackup(self,det,sec):
-    win = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    win.set_default_size(400,100)
-    win.set_title('CREATE HV BACKUP')
+    newChooser = gtk.Window(gtk.WINDOW_TOPLEVEL)
+    newChooser.set_default_size(400,100)
+    newChooser.set_title('CREATE HV BACKUP')
     box = gtk.VBox(False, 0)
-    win.add(box)
+    newChooser.add(box)
     box.show()
     text = gtk.Label()
     text2 = gtk.Label()
@@ -190,14 +195,14 @@ class SaveRestore:
     box.pack_start(self.entry,True,True,0)
     self.entry.show()
     button = gtk.Button(stock=gtk.STOCK_OK)
-    button.connect('clicked',self.readEntry,win)
+    button.connect('clicked',self.readEntry,newChooser)
     box.pack_start(button,True,True,0)
     button.show()
     self.progressBar=gtk.ProgressBar(adjustment=None)
     self.progressBar.show()
     box.pack_start(self.progressBar)
     self.filename = None
-    win.show()
+    newChooser.show()
     gtk.main()
 #        win.destroy()
     return DATADIR+'/'+det+'/'+self.filename
@@ -215,11 +220,11 @@ class SaveRestore:
 
   def saveBurt(self,snpFilename,det,sector):
     [out,err]=saveBurt(snpFilename,det,sector)
-    exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename)
+    exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename,self.newChooser)
 
   def restoreBurt(self,snpFilename):
     [out,err]=restoreBurt(snpFilename)
-    exit('RESTORED SETTINGS FROM\n\n'+snpFilename)
+    exit('RESTORED SETTINGS FROM\n\n'+snpFilename,None)
 
 #def getParent():
 #  os.getppid()

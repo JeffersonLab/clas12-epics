@@ -5,16 +5,19 @@
 #it writes a 1 to VAL
 #if VAL has changes, then after a delay of ODLY seconds it writes 1 ot OUT (to trigger procesing of another calc to
 #see it it's still MAJOR, and should initiate a switchoff.
-record(calcout,"$(CHAN)Calc"){
+record(calcout,"$(CHAN)$(KEN)Calc"){
+  field(SCAN,"2 second")
 	field(INPA,"$(CHAN).SEVR CPP")
 	field(CALC,"(A==2)?1:0")
-	field(OUT,"$(CHAN)Calc2.PROC CPP")
-	field (OOPT, "On Change")
+	field(OUT,"$(CHAN)$(KEN)Calc2.PROC")
+#field (OOPT, "On Change")
+	field (OOPT, "When Non-zero")
 	field(ODLY,"2.0")
 }
 
 #Triggered from the Major severity in above calc, also now checks that the STAT should cause a switchoff
-record(calcout,"$(CHAN)Calc2"){
+record(calcout,"$(CHAN)$(KEN)Calc2"){
+  field(SCAN,"Passive")
 	field(INPA,"$(CHAN).SEVR")
 	field(INPB,"$(CHAN).STAT")
 #can be either: Major severity && HIHI
@@ -23,7 +26,8 @@ record(calcout,"$(CHAN)Calc2"){
 #	field(CALC,"((A==2)&&((B==3)||(B==5)))?1:0")
 	field(CALC,"$(CAL)")
 	field(OUT,"$(OFF) CPP")
-	field (OOPT, "Transition To Non-zero")
+	field (OOPT, "When Non-zero")
+#Transition To Non-zero")
   field(TPRO,"1")
 }
 

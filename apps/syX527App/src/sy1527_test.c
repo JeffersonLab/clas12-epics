@@ -9,21 +9,26 @@
 
 #include "sy1527.h"
 
-int main()
+int main(int argc,char** argv)
 {
   int i, id = 0, board = 0, channel = 2;
-  char *ip_address="129.57.167.53";
+  char ip_address[100]="129.57.86.43";
   float u, uset, uget;
   unsigned int l, lget, active, onoff, alarm, itmp;
+
+  if (argc>1)
+    strcpy(ip_address,argv[1]);
 
   printf("\n\n=============== CAEN mainframe SY1527/SY4527 test ===============\n");
   printf("===== ip_address= %s =====\n\n\n",ip_address);
 
   sy1527Start(id, ip_address);
 
-  printf("====================== 333333333333\n");
-  sy1527PrintMap(id);
-  printf("====================== 444444444444\n");
+  //sy1527GetMap(id);
+  //printf("====================== 333333333333\n");
+  sy1527PrintParams(id);
+  //sy1527PrintMap(id);
+  //printf("====================== 444444444444\n");
 
   return(0);
 

@@ -82,6 +82,9 @@ int  CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
 int  CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
                       ushort ChNum, const ushort *ChList, void *ParValue);
 
+int  CAENHVGetChParamInfo(const char *SystemName, ushort slot, ushort Ch,
+                      char **ParNameList);
+
 int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
                       const char *ParName, const char *PropName, void *retval);
 
@@ -147,6 +150,8 @@ int
 sy1527GetMap(unsigned int id);
 int
 sy1527PrintMap(unsigned int id);
+int
+sy1527PrintParams(unsigned int id);
 void *
 sy1527MainframeThread(void *arg);
 int

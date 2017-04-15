@@ -80,6 +80,7 @@ static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
 static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange","Pol"};
+
 ///----------------- for HV parameters finding ------------------- 
 
 #include <linux/limits.h>
@@ -523,6 +524,85 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   return(CAENHV_OK);
 }
+int
+sy1527PrintParams(unsigned int id)
+{ 
+  unsigned short NrOfSl, NrOfPar, *SerNumList, *NrOfCh;
+  char *ModelList, *DescriptionList;
+  unsigned char	*FmwRelMinList, *FmwRelMaxList;
+  char name[MAX_CAEN_NAME];
+  int i, ret,j,k;
+  //unsigned long tipo;
+  //char ParName[MAX_CAEN_NAME];
+
+#define MAX_PARAM_NAME 10
+
+  char* PNL=(char*)NULL;
+  char (*PNL2)[MAX_PARAM_NAME];
+//  char parNames[100][MAX_PARAM_NAME];
+//  char parName[MAX_PARAM_NAME];
+
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+
+  printf("\nENTER  sy1527PrintParams(%d) *************************************\n\n",id);
+
+  ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
+                          &DescriptionList, &SerNumList,
+                          &FmwRelMinList, &FmwRelMaxList );
+  if(ret != CAENHV_OK)
+  {
+    printf("ERROR(sy1527): %s (num. %d)\n\n", CAENHVGetError(name), ret);
+    return(CAENHV_SYSERR);
+  }
+  
+  char *m = ModelList;
+  char *d = DescriptionList;
+
+  printf("NrofSl=%d\n",NrOfSl); // my:
+  for(i=0; i<NrOfSl; i++, m+=strlen(m)+1, d+=strlen(d)+1)
+  {
+    if(*m == '\0')
+    {
+      printf("Board %2d: Not Present\n", i);
+      continue;
+    }
+    
+    printf("Board %2d: %s %s  Nr. Ch: %d  Ser. %d   Rel. %d.%d\n",
+        i, m, d, NrOfCh[i], SerNumList[i], FmwRelMaxList[i], 
+        FmwRelMinList[i]);
+
+    ret=CAENHVGetChParamInfo(name,i,0,&PNL);
+    if (ret!=CAENHV_OK) {
+      printf("\nCAENHVGetChParamInfo(%s,%d,%d) ERROR:  %d\n",name,i,0,CAENHV_OK);
+      continue;
+    }
+    
+    PNL2=(char(*)[MAX_PARAM_NAME])PNL;
+    for (j=0;PNL2[j][0];j++) {}
+    NrOfPar=j;
+    printf("NrOfPar=%d:  ",NrOfPar);
+    for (j=0; j<NrOfPar; j++) {
+//      sprintf(parName,"");
+      for (k=0; k<MAX_PARAM_NAME;k++) {
+        if (!PNL2[j][k]) break;
+        printf("%c",PNL2[j][k]);
+//        strcat(parName,&PNL2[j][k]);
+      }
+//      strcpy(parNames[j],parName);
+      printf(" ");
+    }
+    printf("\n");
+//    for (j=0; j<NrOfPar; j++) printf("%s\n",parNames[j]);
+
+    if (PNL!=NULL) free(PNL);
+  
+  }
+  printf("\nLEAVE  sy1527PrintParams(%d) *************************************\n\n",id);
+  return(CAENHV_OK);
+}
+
 //==================================================================================================
 /* */
 int
@@ -539,6 +619,8 @@ sy1527GetMap(unsigned int id)
   CHECK_ID(id);
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
+
+  printf("\nENTER  sy1527GetMap(%d) *************************************\n\n",id);
 
   /*
   char *ParNameList, *plist;
@@ -699,6 +781,7 @@ sy1527GetMap(unsigned int id)
            !strcmp(Measure[id].board[i].modelname,"A1733") ||
            !strcmp(Measure[id].board[i].modelname,"A1737")) // my: was A1520
         {
+
           printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1535param;
           Demand[id].board[i].nparams = nA1535param;
@@ -798,6 +881,7 @@ sy1527GetMap(unsigned int id)
     // free(ParNameList); // my:
 
   }
+  printf("\nLEAVE  sy1527GetMap(%d) *************************************\n\n",id);
 
   return(CAENHV_OK);
 }
@@ -967,6 +1051,8 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   int id; ///my:
   char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME];
   int link, ret;
+  
+  printf("\nENTER  sy1527Start(%s) *************************************\n\n",ip_address);
 
   pthread_mutex_lock(&global_mutex);
 
@@ -1013,7 +1099,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   ret = CAENHVInitSystem(name, link, arg, userName, passwd);
 
   printf("my: id_index=%d id=%d name=%s", id, ret, name );
-  printf("\nCAENHVInitSystem error: %s (num. %d)\n\n", CAENHVGetError(name),ret);
+  printf("\nCAENHVInitSystem: %s (num. %d)\n\n", CAENHVGetError(name),ret);
 
   NCFEDOWNERR[id]=0;
 
@@ -1056,12 +1142,14 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   mainframes[nmainframes-1] = id; /// my: removed nmainframes++
   ///mainframes[id] = id;
 
-  printf("====================== 111111111111\n");
+//  printf("====================== 111111111111\n");
   /* get mainframe map */
   sy1527GetMap(id);
-  printf("====================== 222222222222\n");
+//  printf("====================== 222222222222\n");
 
   pthread_mutex_unlock(&global_mutex);
+  
+  printf("\nLEAVE  sy1527Start(%s) *************************************\n\n",ip_address);
 
   return(CAENHV_OK);
 }

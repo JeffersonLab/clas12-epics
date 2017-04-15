@@ -25,11 +25,11 @@ int main(int argc,char** argv)
   sy1527Start(id, ip_address);
 
   //sy1527GetMap(id);
-  //printf("====================== 333333333333\n");
+  
   sy1527PrintParams(id);
-  //sy1527PrintMap(id);
-  //printf("====================== 444444444444\n");
 
+  //sy1527PrintMap(id);
+  
   return(0);
 
 

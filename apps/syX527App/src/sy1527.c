@@ -24,15 +24,13 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define LOCK_MAINFRAME(id_m)   pthread_mutex_lock(&mainframe_mutex[id_m])
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
-
-
 /* flag to tell mainframe thread it is time to exit */
 static int force_exit[MAX_HVPS];
 
 /* mainframes */
-int nmainframes = -1;     // the number of active mainframes /// my: static removed
+int nmainframes = -1;     // the number of active mainframes
 int mainframes[MAX_HVPS]; /* list of active mainframes */
-int mainframes_disconnect[MAX_HVPS]; // my_n: indicate connect status  
+int mainframes_disconnect[MAX_HVPS];
 static HV Demand[MAX_HVPS];
 HV Measure[MAX_HVPS];
 int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before reading by driver
@@ -74,16 +72,9 @@ static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange","Pol"};
 
-///----------------- for HV parameters finding ------------------- 
-
-#include <linux/limits.h>
-char *g_parr;
-int g_parr_index[MAX_PARAM];
-FILE *fp_params=NULL;
 
 ///---------------------------------------------------------------
-/**********************/
-/* some usefun macros */
+/* some useful macros */
 
 /* check if 'id' is reasonable */
 #define CHECK_ID(id_m) \
@@ -148,9 +139,8 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   strcpy(name, Measure[id].name);
 
   for(i10=0;i10<nmainframes;i10++){
-   if(mainframes[i10]==id)break;
+    if(mainframes[i10]==id) break;
   }
-
 
   nXXXXXparam = Measure[id].board[board].nparams;
   for(i=0;i<nXXXXXparam;i++) XXXXparam[i]=Measure[id].board[board].parnames[i];
@@ -241,75 +231,6 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   return(CAENHV_OK);
 }
 
-int
-sy1527CrateSmiInit(char *smi_obj_name, unsigned int id){
-  int j, j10;
-  for(j=0;j<MAX_SLOT;j++){
-    for(j10=0;j10<MAX_BOARDPARTS;j10++){
-      //   printf("%d %d %d\n",i,j,j10);
-      boards_status[id][j][j10]=-1;
-    }
-  }
-  return 0;
-}
-
-int
-sy1527BoardSmiMonitor(char *epics_name, unsigned int id, unsigned int board, 
-unsigned int first_channel, unsigned int chs_number)
-{
-  char *tmp1, *tmp2=epics_name;
-  while((tmp1=strstr(tmp2,"_P"))){
-    tmp2=tmp1+1;
-  }
-  int board_part=first_channel; /// my_n_smi: atoi(tmp2-1+strlen("_P"));
-
-  int b_status=0, b_status_res=0;
-  int i, i10;
-  // id comes from db here.
-  // if not connection: id is absent in mainframes[] (in mainframes[] it is present as -1)
-  // if comment in startup.all: id is absent in mainframes[]
-  int absent_error=1;
-  for(i=0;i<nmainframes;i++){
-    if(mainframes[i]==id){absent_error=0;i10=i;break;}
-
-  }
-  if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
-  else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
-
-  LOCK_MAINFRAME(id);
-  for(i=first_channel; i<first_channel+chs_number; i++)
-  {
-    /// my: smi: accumulates all channels attuses into board status
-    b_status = b_status |  Measure[id].board[board].channel[i].lval[Status];
-    if(!(Measure[id].board[board].channel[i].lval[Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
-  }
-  /// my:smi
-  char smi_obj_name1[150];
-  char smi_command[150];
-  if(b_status & BIT_ON)b_status_res=BIT_ON;
-  if(b_status & (BIT_RAMPUP | BIT_RAMPDOWN ))b_status_res=BIT_RAMPUP;
-  if(b_status & BIT_OFF)b_status_res=BIT_OFF;
-  if(b_status & (BIT_INTTRIP | BIT_EXTTRIP | BIT_OVERCUR | BIT_OVERVOLT | BIT_UNDERVOLT )) b_status_res=BIT_INTTRIP;
-  if(b_status_res==BIT_ON)strcpy(smi_command,"SET_ON");
-  else if(b_status_res==BIT_RAMPUP)strcpy(smi_command,"SET_RAMP");
-  else if(b_status_res==BIT_OFF)strcpy(smi_command,"SET_OFF");
-  else if(b_status_res==BIT_INTTRIP)strcpy(smi_command,"SET_ERROR");
-  if(absent_error){
-    if(absent_error==1)b_status_res=BIT_CRATE_OFF;
-    else if(absent_error==2)b_status_res=BIT_BOARD_NOT_PRESENT;
-    else if(absent_error==3)b_status_res=BIT_CRATE_OFF_ON_WAY; 
-    strcpy(smi_command,"SET_ERROR");
-  }
-
-  if(b_status_res != boards_status[id][board][board_part]){
-    sprintf(smi_obj_name1, "CLAS12::%s", epics_name);
-    smiui_send_command(smi_obj_name1,  smi_command);
-    printf("smi:  smi_obj_name=%s  smi_command=%s id=%d board=%d chas=%d abs_error=%d \n", smi_obj_name1, smi_command, id, board, Demand[id].board[board].nchannels, absent_error);
-    boards_status[id][board][board_part]=b_status_res;
-  }
-  UNLOCK_MAINFRAME(id);
-  return(CAENHV_OK);
-}
 
 ///======================================================================================
 int
@@ -560,7 +481,7 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if( !strcmp(Measure[id].board[i].modelname,"A1520")) // my: was A1520
+        else if( !strcmp(Measure[id].board[i].modelname,"A1520"))
         {
           printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1520param;
@@ -587,7 +508,7 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if( !strcmp(Measure[id].board[i].modelname,"A1536HDM")) // my: was A1520
+        else if( !strcmp(Measure[id].board[i].modelname,"A1536HDM"))
         {
           printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1536HDMparam;
@@ -622,7 +543,7 @@ sy1527GetMap(unsigned int id)
         }
       }
     }
-    /*printf("\n");*/
+    
     free(SerNumList);
     free(ModelList);
     free(DescriptionList);
@@ -725,7 +646,6 @@ sy1527MainframeThread(void *arg)
       /* measure all active boards */
       if(Measure[id].board[i].nchannels > 0)
       {
-        /*printf("[%2d] reads out board %d\n",id,i);*/
         ret = sy1527GetBoard(id,i);
       }
     }
@@ -1020,39 +940,11 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
 }
 
 
-int
-sy1527BoardSmiControl(char *smi_obj_name, unsigned int id, unsigned int board, 
-    unsigned int first_channel, unsigned int chs_number, unsigned int onoff)
-{
-  pthread_mutex_lock(&global_mutex);
-  int chan;
-  char *tmp1, *tmp22;
-  char tmp2[81], tmp3[81+strlen("caput -w 6   ")];
-
-  strcpy(tmp2,smi_obj_name);
-  tmp22=tmp2;
-  while((tmp1=strstr(tmp22,"_Cf"))) tmp22=tmp1+1;
-  tmp2[strlen(tmp2)-strlen(tmp22)-1]=0;
-
-  for(chan=first_channel; chan < first_channel+chs_number; chan++)  /// my_n_smi
-  {
-    sprintf(tmp3,"caput -w 6 %s_Ch%d_pwonoff %d", tmp2,chan, onoff);
-    system(tmp3);
-    // CAEN_HVload(id, board, chan, "CHONOFF", value ); /// my:
-    /// SET_LVALUE(Pw, onoff); // now previous caput replaced this line: this is for case when whole board is on/off
-    /// and we need to see pwonoff value of each channel in gui.
-  }
-
-  pthread_mutex_unlock(&global_mutex);
-  return CAENHV_OK;
-
-}
 
 ///=======================================================================================
 int
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan){
-// id comes from db here.
 // if not connection: id is absent in nmainframes[] (in mainframes[] it is present as -1)
 // if comment in startup.all: id is absent in nmainframes[]
   int i, i10, absent_error=1;
@@ -1097,7 +989,6 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
       /* check if it is ON: loop over all boards and channels */
       /* and if at least one channel is ON, report mainframe  */
       /* status as ON, overwise report it as OFF */
-
       for(board=0; board<Measure[id].nslots; board++)
       {
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
@@ -1114,7 +1005,6 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
       retv=CAENHV_OK; // my:
     }
   }
-  ///smiui_send_command("", "");
   pthread_mutex_unlock(&global_mutex);
 
   return retv;
@@ -1294,8 +1184,6 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
 }
 
 
-
-
 #define SET_LVALUE1(prop_name_m, value_m) \
 printf("SET_LVALUE1: id=%d board=%d chan=%d\n",id,board,chan); \
 printf("SET_LVALUE1: prop=%d value=%d\n",prop_name_m, value_m); \
@@ -1303,7 +1191,6 @@ printf("SET_LVALUE1: prop=%d value=%d\n",prop_name_m, value_m); \
   Demand[id].board[board].channel[chan].setflag[prop_name_m] = 1; \
   Demand[id].board[board].setflag = 1; \
   Demand[id].setflag = 1
-
 
 /* sets enable/disable for one channel */
 int
@@ -1340,3 +1227,103 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
   return(u);
 }
 
+
+
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+// SMI:
+
+int
+sy1527CrateSmiInit(char *smi_obj_name, unsigned int id){
+  int j, j10;
+  for(j=0;j<MAX_SLOT;j++){
+    for(j10=0;j10<MAX_BOARDPARTS;j10++)
+      boards_status[id][j][j10]=-1;
+  }
+  return 0;
+}
+
+int
+sy1527BoardSmiMonitor(char *epics_name, unsigned int id, unsigned int board, 
+unsigned int first_channel, unsigned int chs_number)
+{
+  char *tmp1, *tmp2=epics_name;
+  while((tmp1=strstr(tmp2,"_P"))){
+    tmp2=tmp1+1;
+  }
+  int board_part=first_channel; /// my_n_smi: atoi(tmp2-1+strlen("_P"));
+
+  int b_status=0, b_status_res=0;
+  int i, i10;
+  // id comes from db here.
+  // if not connection: id is absent in mainframes[] (in mainframes[] it is present as -1)
+  // if comment in startup.all: id is absent in mainframes[]
+  int absent_error=1;
+  for(i=0;i<nmainframes;i++){
+    if(mainframes[i]==id){absent_error=0;i10=i;break;}
+  }
+  if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
+  else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
+
+  LOCK_MAINFRAME(id);
+  for(i=first_channel; i<first_channel+chs_number; i++)
+  {
+    /// my: smi: accumulates all channels attuses into board status
+    b_status = b_status |  Measure[id].board[board].channel[i].lval[Status];
+    if(!(Measure[id].board[board].channel[i].lval[Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
+  }
+
+  char smi_obj_name1[150];
+  char smi_command[150];
+  if(b_status & BIT_ON)b_status_res=BIT_ON;
+  if(b_status & (BIT_RAMPUP | BIT_RAMPDOWN ))b_status_res=BIT_RAMPUP;
+  if(b_status & BIT_OFF)b_status_res=BIT_OFF;
+  if(b_status & (BIT_INTTRIP | BIT_EXTTRIP | BIT_OVERCUR | BIT_OVERVOLT | BIT_UNDERVOLT )) b_status_res=BIT_INTTRIP;
+  if(b_status_res==BIT_ON)strcpy(smi_command,"SET_ON");
+  else if(b_status_res==BIT_RAMPUP)strcpy(smi_command,"SET_RAMP");
+  else if(b_status_res==BIT_OFF)strcpy(smi_command,"SET_OFF");
+  else if(b_status_res==BIT_INTTRIP)strcpy(smi_command,"SET_ERROR");
+  if(absent_error){
+    if(absent_error==1)b_status_res=BIT_CRATE_OFF;
+    else if(absent_error==2)b_status_res=BIT_BOARD_NOT_PRESENT;
+    else if(absent_error==3)b_status_res=BIT_CRATE_OFF_ON_WAY; 
+    strcpy(smi_command,"SET_ERROR");
+  }
+
+  if(b_status_res != boards_status[id][board][board_part]){
+    sprintf(smi_obj_name1, "CLAS12::%s", epics_name);
+    smiui_send_command(smi_obj_name1,  smi_command);
+    printf("smi:  smi_obj_name=%s  smi_command=%s id=%d board=%d chas=%d abs_error=%d \n", smi_obj_name1, smi_command, id, board, Demand[id].board[board].nchannels, absent_error);
+    boards_status[id][board][board_part]=b_status_res;
+  }
+  UNLOCK_MAINFRAME(id);
+  return(CAENHV_OK);
+}
+int
+sy1527BoardSmiControl(char *smi_obj_name, unsigned int id, unsigned int board, 
+    unsigned int first_channel, unsigned int chs_number, unsigned int onoff)
+{
+  pthread_mutex_lock(&global_mutex);
+  int chan;
+  char *tmp1, *tmp22;
+  char tmp2[81], tmp3[81+strlen("caput -w 6   ")];
+
+  strcpy(tmp2,smi_obj_name);
+  tmp22=tmp2;
+  while((tmp1=strstr(tmp22,"_Cf"))) tmp22=tmp1+1;
+  tmp2[strlen(tmp2)-strlen(tmp22)-1]=0;
+
+  for(chan=first_channel; chan < first_channel+chs_number; chan++)  /// my_n_smi
+  {
+    sprintf(tmp3,"caput -w 6 %s_Ch%d_pwonoff %d", tmp2,chan, onoff);
+    system(tmp3);
+    // CAEN_HVload(id, board, chan, "CHONOFF", value ); /// my:
+    /// SET_LVALUE(Pw, onoff); // now previous caput replaced this line: this is for case when whole board is on/off
+    /// and we need to see pwonoff value of each channel in gui.
+  }
+
+  pthread_mutex_unlock(&global_mutex);
+  return CAENHV_OK;
+
+}

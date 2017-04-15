@@ -62,21 +62,14 @@ int NCFEDOWNERR[MAX_HVPS];
 
 static int  nA1520param = 16; // my: 16
 static int  nA1535param = 16;
-//static int  nA1737param = 16;
 static int  nA1536HDMparam = 18;
 
-//static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
-//                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
-//                "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
 static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
 static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
-//static char A1737param[MAX_PARAM][MAX_CAEN_NAME] = {
-//                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
-//                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
 static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange","Pol"};
@@ -120,28 +113,25 @@ FILE *fp_params=NULL;
 /*****************************************************************************/
 /**************************** Low level functions ****************************/
 /*****************************************************************************/
-
-/* */
 int
 sy1527Measure2Demand(unsigned int id, unsigned int board)
 {
   printf("sy1527Measure2Demand: befor: %d %d\n",
-	 Demand[id].board[board].nchannels,Measure[id].board[board].nchannels);
+      Demand[id].board[board].nchannels,Measure[id].board[board].nchannels);
   memcpy((BOARD *)&Demand[id].board[board].nchannels,
-         (BOARD *)&Measure[id].board[board].nchannels,
-         sizeof(BOARD));
+      (BOARD *)&Measure[id].board[board].nchannels,
+      sizeof(BOARD));
   printf("sy1527Measure2Demand: after: %d %d\n",
-	 Demand[id].board[board].nchannels,Measure[id].board[board].nchannels);
+      Demand[id].board[board].nchannels,Measure[id].board[board].nchannels);
   return(CAENHV_OK);
 }
 
 /// ==============   sy1527GetBoard ==========================
-/* */
 int
 sy1527GetBoard(unsigned int id, unsigned int board)
 {
 
-  int b_status=0;/// b_status_res=0; /// my: smi
+  int b_status=0;/// b_status_res=0;
 
   int nXXXXXparam;
   char *XXXXparam[MAX_PARAM];
@@ -157,7 +147,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  for(i10=0;i10<nmainframes;i10++){ // my_n: hbeat
+  for(i10=0;i10<nmainframes;i10++){
    if(mainframes[i10]==id)break;
   }
 
@@ -180,34 +170,10 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Measure[id].board[board].partypes[ipar];
 
-   // if(!strcmp(ParName,"RUp"))printf("RUp type=%d %d\n",tipo,PARAM_TYPE_NUMERIC);
     if(tipo == PARAM_TYPE_NUMERIC)
-    {
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, fParValList);
-//if(!strcmp(ParName,"RUp")){ printf("%s %d %d \n",name, Slot, ChNum);
-//printf("RUp f %f\n",fParValList[0]);}
-    }
     else
-    {
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, lParValList);
-//if(!strcmp(ParName,"RUp"))printf("RUp l %d\n", lParValList);
-    }
-///-------------- simulator -------
-/**
-FILE *fps=fopen("/home/clasioc/flags","r");
-int flags; 
-//printf("pointer=%p\n",fps);
-fscanf(fps,"%d",&flags);//printf("%d\n",flags);
-//printf("%s\n",name);
-if(!strcmp(name,"B_HV009"))
-{
- ///printf("%d\n",flags);
- if(flags==1) { printf("==%d\n",flags); ret=4001;}
-}
-fclose(fps);
-*/
-///--------------------------------
-
 /*
      int ret1,ret2;
      int retA=CAENHVGetSysProp(Measure[id].name,"FanStat",&ret1);
@@ -219,74 +185,44 @@ fclose(fps);
     //     HvPwSM  returned 976304689/0 
 
 */
-/*
-   // Note: THIS WORKED!
-          if (++NCFEDOWNERR[id] > 1000)//MAXCFEDOWNERR)
-          {
-              NCFEDOWNERR[id]=0;
-              printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
-              sy1527Stop(id);
-              
-              if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
-              {
-                  printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 30s and RETRYING.\n");
-                  sleep(35);
-                  if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
-                  {
-                      printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
-                      exit(1);
-                  }
-              }
-              sy1527GetMap(id);
-              sy1527PrintMap(id);
-          }
-*/
     if(ret != CAENHV_OK)
     {
-     printf("CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
+      printf("CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
       mainframes_disconnect[i10]=1; /// my_n: hbeat
-    ///  mainframes[i10]=-1;
-
 
       // restart the connection:
       if (ret==5)
       {
-          if (++NCFEDOWNERR[id] > MAXCFEDOWNERR)
+        if (++NCFEDOWNERR[id] > MAXCFEDOWNERR)
+        {
+          printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
+          sy1527Stop(id);
+          sleep(10);
+
+          if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
           {
-              printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
-              sy1527Stop(id);
-              sleep(10);
-              
-              if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
-              {
-                  printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 45s and RETRYING.\n");
-                  sleep(45);
-                  if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
-                  {
-                      printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
-                      exit(1);
-                  }
-              }
-              sy1527GetMap(id);
-              sy1527PrintMap(id);
+            printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 45s and RETRYING.\n");
+            sleep(45);
+            if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+            {
+              printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
+              exit(1);
+            }
           }
+          sy1527GetMap(id);
+          sy1527PrintMap(id);
+        }
       }
       // only count consecutive errors:
       else NCFEDOWNERR[id]=0;
-    
+
     }
     else
     {
-   ///   mainframes_disconnect[i10]=0; /// my_n: hbeat
-      /*printf("PARAM VALUE\n");*/
       if(tipo == PARAM_TYPE_NUMERIC)
       {
         for(i=0; i<ChNum; i++)
-        {
           Measure[id].board[board].channel[i].fval[ipar] = fParValList[i];
-          /*printf("Slot: %2d  Ch: %3d  %s: %10.2f\n", Slot, ChList[i],
-            ParName, fParValList[i]);*/
-        }
       }
       else
       {
@@ -294,134 +230,88 @@ fclose(fps);
         {
           Measure[id].board[board].channel[i].lval[ipar] = lParValList[i];
           if(ipar==Status){
-          /// my: smi: accumulates all channels attuses into board status
-           b_status = b_status | lParValList[i];
-           if(!(lParValList[i] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
+            /// my: smi: accumulates all channels attuses into board status
+            b_status = b_status | lParValList[i];
+            if(!(lParValList[i] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
           }
-          /*printf("Slot: %2d  Ch: %3d  %s: %x\n", Slot, ChList[i],
-            ParName, lParValList[i]);*/ 
         }
       }
     }
   }
-  /// my:smi
-/*
-  char smi_obj_name1[150]; /// temporal
-  char smi_obj_name[150]; /// temporal
-  char smi_command[150];  /// temporal
-  if(b_status & BIT_ON)b_status_res=BIT_ON;
-  if(b_status & (BIT_RAMPUP | BIT_RAMPDOWN ))b_status_res=BIT_RAMPUP;
-  if(b_status & BIT_OFF)b_status_res=BIT_OFF;
-  if(b_status & (BIT_INTTRIP | BIT_EXTTRIP | BIT_OVERCUR | BIT_OVERVOLT | BIT_UNDERVOLT )) b_status_res=BIT_INTTRIP;
-
-  if(b_status_res==BIT_ON)strcpy(smi_command,"SET_ON");
-  else if(b_status_res==BIT_RAMPUP)strcpy(smi_command,"SET_ON");  /// temporal !!!
-  else if(b_status_res==BIT_OFF)strcpy(smi_command,"SET_OFF");
-  else if(b_status_res==BIT_INTTRIP)strcpy(smi_command,"SET_ERROR");
-
-  if(b_status_res != boards_status[id][board]){
-
-   sprintf(smi_obj_name1, CRATE_LABEL, id);
-   sprintf(smi_obj_name, "HV_TEST::%s_%d", smi_obj_name1, board);
-   smiui_send_command(smi_obj_name,  smi_command);
-   printf("smi:  smi_obj_name=%s  smi_command=%s \n", smi_obj_name, smi_command);
-   boards_status[id][board]=b_status_res;
-  }
-*/
   return(CAENHV_OK);
 }
-/// my_n_smi ======================================================================================
-int sy1527CrateSmiInit ///  my: smi  my_n_smi
-(char *smi_obj_name, unsigned int id){
 
-int j, j10;
-
-    for(j=0;j<MAX_SLOT;j++){
-
-     for(j10=0;j10<MAX_BOARDPARTS;j10++){
-   //   printf("%d %d %d\n",i,j,j10);
+int
+sy1527CrateSmiInit(char *smi_obj_name, unsigned int id){
+  int j, j10;
+  for(j=0;j<MAX_SLOT;j++){
+    for(j10=0;j10<MAX_BOARDPARTS;j10++){
+      //   printf("%d %d %d\n",i,j,j10);
       boards_status[id][j][j10]=-1;
-     }
     }
-
-return 0;
+  }
+  return 0;
 }
-/// my: smi ======================================================================================
-int sy1527BoardSmiMonitor(
-char *epics_name, unsigned int id, unsigned int board, 
+
+int
+sy1527BoardSmiMonitor(char *epics_name, unsigned int id, unsigned int board, 
 unsigned int first_channel, unsigned int chs_number)
 {
-
-  char *tmp1, *tmp2=epics_name; /// temporal
+  char *tmp1, *tmp2=epics_name;
   while((tmp1=strstr(tmp2,"_P"))){
-   tmp2=tmp1+1; /// my_n_smi: not used
+    tmp2=tmp1+1;
   }
   int board_part=first_channel; /// my_n_smi: atoi(tmp2-1+strlen("_P"));
 
-  int b_status=0, b_status_res=0; /// my: smi
+  int b_status=0, b_status_res=0;
   int i, i10;
-///-------- my_n:
-// id comes from db here.
-// if not connection: id is absent in mainframes[] (in mainframes[] it is present as -1)
-// if comment in startup.all: id is absent in mainframes[]
-int absent_error=1;
-for(i=0;i<nmainframes;i++){
- if(mainframes[i]==id){absent_error=0;i10=i;break;}
+  // id comes from db here.
+  // if not connection: id is absent in mainframes[] (in mainframes[] it is present as -1)
+  // if comment in startup.all: id is absent in mainframes[]
+  int absent_error=1;
+  for(i=0;i<nmainframes;i++){
+    if(mainframes[i]==id){absent_error=0;i10=i;break;}
 
-}
-if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
-else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
-
-///--------
+  }
+  if(absent_error==0 && mainframes_disconnect[i10]==1)absent_error=3;
+  else if(absent_error==0 && Demand[id].board[board].nchannels==0)absent_error=2;
 
   LOCK_MAINFRAME(id);
-  for(i=first_channel; i<first_channel+chs_number; i++)   /// my_n_smi
+  for(i=first_channel; i<first_channel+chs_number; i++)
   {
-          
     /// my: smi: accumulates all channels attuses into board status
     b_status = b_status |  Measure[id].board[board].channel[i].lval[Status];
     if(!(Measure[id].board[board].channel[i].lval[Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
-         
-          /*printf("Slot: %2d  Ch: %3d  %s: %x\n", Slot, ChList[i],
-            ParName, lParValList[i]);*/ 
   }
- /// my:smi
- char smi_obj_name1[150]; /// temporal
-  char smi_command[150];  /// temporal
+  /// my:smi
+  char smi_obj_name1[150];
+  char smi_command[150];
   if(b_status & BIT_ON)b_status_res=BIT_ON;
   if(b_status & (BIT_RAMPUP | BIT_RAMPDOWN ))b_status_res=BIT_RAMPUP;
   if(b_status & BIT_OFF)b_status_res=BIT_OFF;
   if(b_status & (BIT_INTTRIP | BIT_EXTTRIP | BIT_OVERCUR | BIT_OVERVOLT | BIT_UNDERVOLT )) b_status_res=BIT_INTTRIP;
-
   if(b_status_res==BIT_ON)strcpy(smi_command,"SET_ON");
-  else if(b_status_res==BIT_RAMPUP)strcpy(smi_command,"SET_RAMP");  /// temporal !!!
+  else if(b_status_res==BIT_RAMPUP)strcpy(smi_command,"SET_RAMP");
   else if(b_status_res==BIT_OFF)strcpy(smi_command,"SET_OFF");
   else if(b_status_res==BIT_INTTRIP)strcpy(smi_command,"SET_ERROR");
   if(absent_error){
     if(absent_error==1)b_status_res=BIT_CRATE_OFF;
     else if(absent_error==2)b_status_res=BIT_BOARD_NOT_PRESENT;
     else if(absent_error==3)b_status_res=BIT_CRATE_OFF_ON_WAY; 
-    strcpy(smi_command,"SET_ERROR"); // my_n:
-    //printf(">>> %s %d\n", epics_name, absent_error );
+    strcpy(smi_command,"SET_ERROR");
   }
 
   if(b_status_res != boards_status[id][board][board_part]){
-
- //  sprintf(smi_obj_name1, CRATE_LABEL, id);
- //  sprintf(smi_obj_name, "HV_TEST::%s_%d", smi_obj_name1, board);
- //  strncpy(smi_obj_name1, smi_obj_name, strlen(smi_obj_name) - strlen("_monitor"));
- //  smi_obj_name1[strlen(smi_obj_name) - strlen("_monitor")]=0;
-   sprintf(smi_obj_name1, "CLAS12::%s", epics_name);
-   smiui_send_command(smi_obj_name1,  smi_command);
-   printf("smi:  smi_obj_name=%s  smi_command=%s id=%d board=%d chas=%d abs_error=%d \n", smi_obj_name1, smi_command, id, board, Demand[id].board[board].nchannels, absent_error);
-   boards_status[id][board][board_part]=b_status_res;
+    sprintf(smi_obj_name1, "CLAS12::%s", epics_name);
+    smiui_send_command(smi_obj_name1,  smi_command);
+    printf("smi:  smi_obj_name=%s  smi_command=%s id=%d board=%d chas=%d abs_error=%d \n", smi_obj_name1, smi_command, id, board, Demand[id].board[board].nchannels, absent_error);
+    boards_status[id][board][board_part]=b_status_res;
   }
   UNLOCK_MAINFRAME(id);
   return(CAENHV_OK);
 }
 
 ///======================================================================================
-/* */
 int
 sy1527SetBoard(unsigned int id, unsigned int board)
 {
@@ -430,9 +320,9 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   char name[MAX_CAEN_NAME];
   int i, ipar, iparr, ret;
-  unsigned short Slot, ChNum, Ch; //ChList[MAX_CHAN];
-  float fParVal;///, fparval[MAX_CHAN];
-  unsigned long	tipo, lParVal;///, lparval[MAX_CHAN];
+  unsigned short Slot, ChNum, Ch;
+  float fParVal;
+  unsigned long	tipo, lParVal;
   char ParName[MAX_CAEN_NAME];
 
   CHECK_ID(id);
@@ -444,50 +334,18 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   Slot = board;
   ChNum = Demand[id].board[board].nchannels;
-  //for(i = 0; i<ChNum; i++) ChList[i] = (unsigned short)i;
 
   /* loop over parameters */
   for(iparr=0; iparr<nXXXXXparam; iparr++)
   {
 
-   // printf("iparr=%d n=%d\n", iparr, nXXXXXparam);
-	/* patch to make sure 'PwEn' always executed before 'Pw' */
+    /* patch to make sure 'PwEn' always executed before 'Pw' */
     if(iparr == Pw)        ipar = PwEn;
     else if(iparr == PwEn) ipar = Pw;
     else                   ipar = iparr;
 
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Demand[id].board[board].partypes[ipar];
-
-
-
-    /* will be good to do it this way, but is does not work
-    if(tipo == PARAM_TYPE_NUMERIC)
-    {
-      for(Ch=0; Ch<ChNum; Ch++)
-      {
-        fparval[Ch] = Demand[id].board[board].channel[Ch].fval[ipar];
-	fparval[Ch] = 1.0*Ch+1.0;
-        printf("Value %s: %f\n",ParName,fparval[Ch]);
-      }
-      ret = CAENHVSetChParam(name, Slot, ParName, ChNum, ChList, fparval);
-    }
-    else
-    {
-      for(Ch=0; Ch<ChNum; Ch++)
-      {
-        lparval[Ch] = Demand[id].board[board].channel[Ch].lval[ipar];
-        printf("Value %s: %ld\n",ParName,lparval[Ch]);
-      }
-      ret = CAENHVSetChParam(name, Slot, ParName, ChNum, ChList, lparval);
-    }
-
-    if(ret != CAENHV_OK)
-    {
-      printf("CAENHVSetChParam: %s (num. %d)\n",CAENHVGetError(name),ret);
-      return(CAENHV_SYSERR);
-    }
-    */
 
     /* loop over all channels */
     for(Ch=0; Ch<ChNum; Ch++)
@@ -503,7 +361,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
         else
         {
           lParVal = Demand[id].board[board].channel[Ch].lval[ipar];
- printf(">>>>>>>>>>>>>> Set Value parname=%s: value=%ld  ipar=%d iparr=%d channel=%d\n",XXXXparam[ipar],lParVal, ipar, iparr, Ch);
+          printf(">>>>>>>>>>>>>> Set Value parname=%s: value=%ld  ipar=%d iparr=%d channel=%d\n",XXXXparam[ipar],lParVal, ipar, iparr, Ch);
           ret = CAENHVSetChParam(name, Slot, ParName, 1, &Ch, &lParVal);
         }
 
@@ -532,15 +390,14 @@ sy1527PrintParams(unsigned int id)
   unsigned char	*FmwRelMinList, *FmwRelMaxList;
   char name[MAX_CAEN_NAME];
   int i, ret,j,k;
-  //unsigned long tipo;
-  //char ParName[MAX_CAEN_NAME];
+  unsigned long tipo;
 
+// important, taken from CEANHVWrapper.h:
 #define MAX_PARAM_NAME 10
 
-  char* PNL=(char*)NULL;
-  char (*PNL2)[MAX_PARAM_NAME];
-//  char parNames[100][MAX_PARAM_NAME];
-//  char parName[MAX_PARAM_NAME];
+  char*  parNames1=(char*)NULL;
+  char (*parNames2)[MAX_PARAM_NAME];
+  char   parNames3[100][MAX_PARAM_NAME];
 
   CHECK_ID(id);
   CHECK_OPEN(id);
@@ -560,7 +417,7 @@ sy1527PrintParams(unsigned int id)
   char *m = ModelList;
   char *d = DescriptionList;
 
-  printf("NrofSl=%d\n",NrOfSl); // my:
+  printf("NrofSl=%d\n",NrOfSl);
   for(i=0; i<NrOfSl; i++, m+=strlen(m)+1, d+=strlen(d)+1)
   {
     if(*m == '\0')
@@ -568,35 +425,38 @@ sy1527PrintParams(unsigned int id)
       printf("Board %2d: Not Present\n", i);
       continue;
     }
-    
     printf("Board %2d: %s %s  Nr. Ch: %d  Ser. %d   Rel. %d.%d\n",
         i, m, d, NrOfCh[i], SerNumList[i], FmwRelMaxList[i], 
         FmwRelMinList[i]);
 
-    ret=CAENHVGetChParamInfo(name,i,0,&PNL);
+    // retrieve parameter names (for first channel only):
+    ret=CAENHVGetChParamInfo(name,i,0,&parNames1);
     if (ret!=CAENHV_OK) {
       printf("\nCAENHVGetChParamInfo(%s,%d,%d) ERROR:  %d\n",name,i,0,CAENHV_OK);
       continue;
     }
-    
-    PNL2=(char(*)[MAX_PARAM_NAME])PNL;
-    for (j=0;PNL2[j][0];j++) {}
-    NrOfPar=j;
-    printf("NrOfPar=%d:  ",NrOfPar);
+    parNames2=(char(*)[MAX_PARAM_NAME])parNames1;
+    for (j=0;parNames2[j][0];j++) {}
+    printf("NrOfPar = %d\n",NrOfPar=j);
     for (j=0; j<NrOfPar; j++) {
-//      sprintf(parName,"");
       for (k=0; k<MAX_PARAM_NAME;k++) {
-        if (!PNL2[j][k]) break;
-        printf("%c",PNL2[j][k]);
-//        strcat(parName,&PNL2[j][k]);
+        if (!parNames2[j][k]) break;
+        parNames3[j][k]=parNames2[j][k];
       }
-//      strcpy(parNames[j],parName);
-      printf(" ");
+      parNames3[j][k]='\0';
+    }
+
+    // retrieve parameter types:
+    for (j=0; j<NrOfPar; j++) {
+            printf("\n%s,%d,%d,%s,%s\n",name,i,0,parNames3[j],"Type");
+      CAENHVGetChParamProp(name,i,0,parNames3[j],"Type",&tipo);
+      if (ret==CAENHV_OK) printf("%s(%d) ",parNames3[j],(int)tipo);
+      else printf("\nCAENHVGetChParamProp(%s,%d,%d,%s,%s) ERROR: %d\n",
+          name,i,0,parNames3[j],"Type",ret);
     }
     printf("\n");
-//    for (j=0; j<NrOfPar; j++) printf("%s\n",parNames[j]);
 
-    if (PNL!=NULL) free(PNL);
+    if (parNames1!=NULL) free(parNames1);
   
   }
   printf("\nLEAVE  sy1527PrintParams(%d) *************************************\n\n",id);
@@ -620,52 +480,8 @@ sy1527GetMap(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  printf("\nENTER  sy1527GetMap(%d) *************************************\n\n",id);
-
-  /*
-  char *ParNameList, *plist;
-  CAENHVGetChParamInfo(name,0,1,&ParNameList);
-  plist=ParNameList;
-  for(i=0;i<10;i++){
-    if(*plist == '\0'){printf("NULL %d\n",i);break;}
-    //if(ParNameList[i])
-    printf("param=%s %d\n",plist, i);
-    plist+=strlen(plist)+1;
-    //else printf("param number %d is NULL\n", i);
-  }
-  */
-
-  /*  
-  char **ParNameList;
-  CAENHVGetChParamInfo(name,1,0,ParNameList);
-  //  plist=ParNameList;
-  for(i=0;i<10;i++){
-    // if(*plist == '\0'){printf("NULL %d\n",i);break;}
-    if(ParNameList[i])
-    printf("param=%s %d\n",ParNameList[i], i);
-    //    plist+=strlen(plist)+1;
-    //else printf("param number %d is NULL\n", i);
-  }
-  */
-
-  /*
-  char *ParNameList, (*parnamelist)[100];
-  CAENHVGetChParamInfo(name,0,0,&ParNameList);
-  parnamelist=( char (*)[100])ParNameList;
-  int nj=0;
-  for(nj=0;parnamelist[nj][0];nj++);
-  printf("nj=%d\n",nj);
-  //  plist=ParNameList;
-  // for(i=0;i<10;i++){
-    // if(*plist == '\0'){printf("NULL %d\n",i);break;}
-  //  if(ParNameList[i])
-  //  printf("param=%s %d\n",ParNameList[i], i);
-    //    plist+=strlen(plist)+1;
-    //else printf("param number %d is NULL\n", i);
-    // }
-    */
-
-
+  printf("\nENTER  sy1527GetMap(%d/%s) *************************************\n\n",id,name);
+  
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
                           &FmwRelMinList, &FmwRelMaxList );
@@ -688,75 +504,9 @@ sy1527GetMap(unsigned int id)
       {
         Measure[id].board[i].nchannels = 0;
         Demand[id].board[i].nchannels = 0;
-        /*printf("Board %2d: Not Present\n", i);*/
       }
       else
       {
-
-///----------------- HV parameters finding piece ------------------- 
-/*
- // printf("name================================================%s\n",name);
-  int retv;
-  retv=CAENHVGetChParamInfo(name,i,0,&g_parr);
-
-  int nj=0;
-  int ni=0;
-  int index=0;
- while(1){
-
- if(!((nj)%10)){
-  if((*(g_parr+nj))==0){
-   g_parr_index[index++]=ni;
-  // printf("%s\n",g_parr+ni);
-   break;
-  }
-  else{
-   if(nj!=0){
-    // printf("%s\n",g_parr+ni);
-     g_parr_index[index++]=ni;
-     ni=nj;
-   }
-  }
- }
- nj++;
- //printf("%c %d\n",*(parr+nj), *(parr+nj));
- }
-
- int found=0;
- char tmp[PATH_MAX];
-
- strcpy(tmp,getenv("HOME"));
- strcat(tmp,"/.hv_params");
- if(!fp_params){
-  fp_params = fopen(tmp,"w+");
-  if(fp_params)
-  fprintf(fp_params, "This file contains not found parameters: \n");
-  fflush(fp_params);
- }
-
- // printf("nj================================================%d i=%d retv=%d %d\n",nj, i, retv,sizeof(A1520param));
-
- for(ni=0; ni < nA1520param; ni++){
-  found=0;
-  for(nj=0;nj<index;nj++){
-   if(!strcmp(A1520param[ni],g_parr+g_parr_index[nj]))found=1;
-  }
-  if(!found){
-   if(fp_params)
-   fprintf(fp_params, "parameter %s: NOT FOUND. CRATE=%s SLOT=%d \n",A1520param[ni], name, i);
-   printf("parameter %s: NOT FOUND. CRATE=%s SLOT=%d \n",A1520param[ni], name, i);
-   printf("found parameters are:\n");
-   for(nj=0;nj<index;nj++){
-    printf("%s \n",g_parr+g_parr_index[nj]);
-   }
-   //exit(1);
-  }
- }
-  // if(fp_params)
-  // fprintf(fp_params, "all parameters are found in crate:%s the slot: %d\n",name, i);
-*/
-///----------------- end of HV parameters finding piece ------------------- 
-
         strncpy(Measure[id].board[i].modelname,m,MAX_CAEN_NAME-1);
         strncpy(Measure[id].board[i].description,d,MAX_CAEN_NAME-1);
         Measure[id].board[i].nchannels = NrOfCh[i];
@@ -770,16 +520,16 @@ sy1527GetMap(unsigned int id)
         Demand[id].board[i].relmax = FmwRelMaxList[i];
         Demand[id].board[i].relmin = FmwRelMinList[i];
         printf("Board %2d: %s %s  Nr. Ch: %d  Ser. %d   Rel. %d.%d\n",
-                i, m, d, NrOfCh[i], SerNumList[i], FmwRelMaxList[i], 
-                FmwRelMinList[i]);
+            i, m, d, NrOfCh[i], SerNumList[i], FmwRelMaxList[i], 
+            FmwRelMinList[i]);
 
         /* get params info */
         for(j=0; j<Demand[id].board[i].nchannels; j++)
           ChList[j] = (unsigned short)j;
         if(!strcmp(Measure[id].board[i].modelname,"A1535") ||
-           !strcmp(Measure[id].board[i].modelname,"A1536") ||
-           !strcmp(Measure[id].board[i].modelname,"A1733") ||
-           !strcmp(Measure[id].board[i].modelname,"A1737")) // my: was A1520
+            !strcmp(Measure[id].board[i].modelname,"A1536") ||
+            !strcmp(Measure[id].board[i].modelname,"A1733") ||
+            !strcmp(Measure[id].board[i].modelname,"A1737")) // my: was A1520
         {
 
           printf("---> found board %s\n",Measure[id].board[i].modelname);
@@ -789,16 +539,19 @@ sy1527GetMap(unsigned int id)
           {
             strcpy(Measure[id].board[i].parnames[j],A1535param[j]);
             strcpy(Demand[id].board[i].parnames[j],A1535param[j]);
-
             strcpy(ParName,Measure[id].board[i].parnames[j]);
+
+            //printf("\n%s,%d,%d,%s,%s\n",name,i,ChList[0],ParName,"Type");
+            //strcpy(name,Measure[id].name);
+
             ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -822,10 +575,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -849,10 +602,10 @@ sy1527GetMap(unsigned int id)
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
-                     CAENHVGetError(name),ret,ParName);
+                  CAENHVGetError(name),ret,ParName);
               Measure[id].board[i].nchannels = 0;
               Demand[id].board[i].nchannels = 0;
-	          return(CAENHV_SYSERR);
+              return(CAENHV_SYSERR);
             }
             else
             {
@@ -876,25 +629,18 @@ sy1527GetMap(unsigned int id)
     free(FmwRelMinList);
     free(FmwRelMaxList);
     free(NrOfCh);
-
-
-    // free(ParNameList); // my:
-
   }
   printf("\nLEAVE  sy1527GetMap(%d) *************************************\n\n",id);
 
   return(CAENHV_OK);
 }
 //==================================================================================================
-/* */
 int
 sy1527PrintMap(unsigned int id)
 {
   int i, j;
-
   CHECK_ID(id);
   CHECK_OPEN(id);
-
   printf("\n\nMAP for mainframe %d, nslots=%d\n\n",id,Measure[id].nslots);
   for(i=0; i<Measure[id].nslots; i++)
   {
@@ -905,18 +651,18 @@ sy1527PrintMap(unsigned int id)
     else
     {
       printf("Board %2d: %s %s  Nr. Ch: %d  Ser. %d   Rel. %d.%d\n",
-              i,
-              Measure[id].board[i].modelname,
-              Measure[id].board[i].description,
-              Measure[id].board[i].nchannels,
-              Measure[id].board[i].sernum,
-              Measure[id].board[i].relmax,
-              Measure[id].board[i].relmin);
+          i,
+          Measure[id].board[i].modelname,
+          Measure[id].board[i].description,
+          Measure[id].board[i].nchannels,
+          Measure[id].board[i].sernum,
+          Measure[id].board[i].relmax,
+          Measure[id].board[i].relmin);
       printf("  nparams = %d\n",Measure[id].board[i].nparams);
       for(j=0; j<Measure[id].board[i].nparams; j++)
       {
         printf("    >%s<\t\t%ld",
-          Measure[id].board[i].parnames[j],Measure[id].board[i].partypes[j]);
+            Measure[id].board[i].parnames[j],Measure[id].board[i].partypes[j]);
         if(Measure[id].board[i].partypes[j]==PARAM_TYPE_NUMERIC)
           printf(" (PARAM_TYPE_NUMERIC)\n");
         else if(Measure[id].board[i].partypes[j]==PARAM_TYPE_ONOFF)
@@ -931,7 +677,6 @@ sy1527PrintMap(unsigned int id)
     }
   }
   printf("\n");
- 
   return(CAENHV_OK);
 }
 //==================================================================================================
@@ -941,24 +686,18 @@ sy1527MainframeThread(void *arg)
 {
   int id, i, ret, status;
 
-//printf("+++++++++++++++++++++++++starts 00\n");
   id=((THREAD *)arg)->threadid;
   printf("[%2d] starts thread +++ ++\n",id);
 
   while(1)
   {
-//printf("+++++++++++++++++++++++++starts 0\n");
     sleep(1);
-//printf("+++++++++++++++++++++++++starts 1\n");
     LOCK_MAINFRAME(id);
-//printf("+++++++++++++++++++++++++starts 2\n");
     if(force_exit[id])
     {
       pthread_mutex_unlock(&mainframe_mutex[id]);
       break;
     }
-
-    /***** talk to mainframe here *****/
 
     /* sets all existing boards in mainframe 'id' with 'setflag' */
     if(Demand[id].setflag == 1)
@@ -979,11 +718,10 @@ sy1527MainframeThread(void *arg)
       }
       if(status == CAENHV_OK) Demand[id].setflag = 0;
     }
-//printf("+++++++++++++++++++++++++starts 3\n");
+
     /* gets all existing boards in mainframe 'id' */
     for(i=0; i<Measure[id].nslots; i++)
     {
-      //      printf("[%2d] gets board %d nslots=%d\n",id,i,Measure[id].nslots); // my:
       /* measure all active boards */
       if(Measure[id].board[i].nchannels > 0)
       {
@@ -991,12 +729,10 @@ sy1527MainframeThread(void *arg)
         ret = sy1527GetBoard(id,i);
       }
     }
-    /**********************************/
 
     pthread_mutex_unlock(&mainframe_mutex[id]);
-//printf("+++++++++++++++++++++++++starts  %d\n",id);
     for(i=0; i<nmainframes; i++){
-     if(mainframes[i]==id)is_mainframe_read[i]=1;
+      if(mainframes[i]==id)is_mainframe_read[i]=1;
     }
   }
   printf("[%2d] exit thread\n",id);
@@ -1011,24 +747,21 @@ sy1527Init()
   int i,j,j10;
 
   nmainframes = 0;
-  memset(Measure,0,sizeof(HV)*MAX_HVPS); ///my: *MAX_HVPS
-  memset(Demand,0,sizeof(HV)*MAX_HVPS); ///my: *MAX_HVPS
+  memset(Measure,0,sizeof(HV)*MAX_HVPS);
+  memset(Demand,0,sizeof(HV)*MAX_HVPS);
   for(i=0; i<MAX_HVPS; i++)
   {
     Measure[i].id = -1;
     Demand[i].id = -1;
     mainframes[i] = -1;
-    mainframes_disconnect[i] = 0; // my_n:
+    mainframes_disconnect[i] = 0;
     is_mainframe_read[i]=0; // my: flag to prevent epics value init before reading by driver
 
-  // int mbp=MAX_BOARDPARTS;
-  // printf("MAXBOARDPARTS=%d\n",mbp);
     for(j=0;j<MAX_SLOT;j++){
 
-     for(j10=0;j10<MAX_BOARDPARTS;j10++){
-   //   printf("%d %d %d\n",i,j,j10);
-      boards_status[i][j][j10]=-1;
-     }
+      for(j10=0;j10<MAX_BOARDPARTS;j10++){
+        boards_status[i][j][j10]=-1;
+      }
     }
 
   }
@@ -1048,10 +781,10 @@ sy1527Init()
 int
 sy1527Start(unsigned id_nowused, char *ip_address)
 {
-  int id; ///my:
+  int id;
   char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME];
   int link, ret;
-  
+
   printf("\nENTER  sy1527Start(%s) *************************************\n\n",ip_address);
 
   pthread_mutex_lock(&global_mutex);
@@ -1059,11 +792,8 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   /* do global initialization on first call */
   if(nmainframes == -1) sy1527Init();
 
-  nmainframes++;///my:
-  ///id=nmainframes-1;///my:
-
-  ///if((id+1)>nmainframes)nmainframes=id+1;
-  id=id_nowused;///nmainframes-1;///my:
+  nmainframes++;
+  id=id_nowused;
 
   printf("++++++++++++++++++++++++++++++++++++++++++++++++ nmainframes=%d id=%d\n", nmainframes, id);
 
@@ -1081,18 +811,13 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   CHECK_ID(id);
   CHECK_FREE(id);
 
-/// my:  sprintf(name,"sy1527_%03d",id);
-  sprintf(name, CRATE_LABEL, id); /// my:
+  sprintf(name, CRATE_LABEL, id);
   printf("System Name set as >%s<\n",name);
 
   strcpy(arg,ip_address);
   printf("TCP/IP address set as >%s<\n",arg);
   link = LINKTYPE_TCPIP;
 
-  /*
-  strcpy(userName, "user");
-  strcpy(passwd, "user");
-  */
   strcpy(userName, "admin");
   strcpy(passwd, "admin");
 
@@ -1107,12 +832,13 @@ sy1527Start(unsigned id_nowused, char *ip_address)
 
   if(ret == CAENHV_OK)
   {
-    if(strlen(ip_address)>=MAX_CAEN_NAME){printf("too long mainfraime IP: exits now\n");exit(1);} /// my:
-    strcpy(Measure[id].IPADDR,ip_address); /// my:
+    if(strlen(ip_address)>=MAX_CAEN_NAME){printf("too long mainfraime IP: exits now\n");exit(1);}
+    strcpy(Measure[id].IPADDR,ip_address);
     Measure[id].id = ret;
     strcpy(Measure[id].name, name); 
     Demand[id].id = ret;
-    strcpy(Demand[id].name, name); 
+    strcpy(Demand[id].name, name);
+    //printf("aaaaaaaaaaaaaaaaaaaaaaa %s\n",Measure[id].name);
   }
   else
   {
@@ -1139,13 +865,10 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   }
 
   /* register mainframe */
-  mainframes[nmainframes-1] = id; /// my: removed nmainframes++
-  ///mainframes[id] = id;
+  mainframes[nmainframes-1] = id;
 
-//  printf("====================== 111111111111\n");
   /* get mainframe map */
   sy1527GetMap(id);
-//  printf("====================== 222222222222\n");
 
   pthread_mutex_unlock(&global_mutex);
   
@@ -1236,7 +959,7 @@ sy1527Stop(unsigned id)
 
 #define GET_LVALUE(prop_name_m, value_m) \
   value_m = Measure[id].board[board].channel[chan].lval[prop_name_m]
-//===================================================================================
+
 /* loop over all available channels and set them on or off */
 int
 sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
@@ -1245,26 +968,17 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
 
   pthread_mutex_lock(&global_mutex);
 
- // check if it is active 
+  // check if it is active 
 
-//printf("hjhjhjhjhjhjhhjh nmainframes,id, mainframes[i] %d %d %d\n",nmainframes,id, mainframes[i]);
   for(i=0; i<nmainframes; i++)
   {
-    /*printf("-> check mainframe %d\n",i);*/
     if(mainframes[i] == id)
     {
-//printf("hjhjhjhjhjhjhhjh 2\n");
-      /*printf("-> mainframe %d has id=%d, so loop over %d boards\n",
-        i,id,Measure[id].nslots);*/
       /* loop over all channels in all boards and set it to 'on_off' */
-
       for(board=0; board<Measure[id].nslots; board++)
       {
-        /*printf("-> slot %d: nchannels=%d\n",
-          board,Measure[id].board[board].nchannels);*/
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
         {
-         /// printf("-> set channel %d to %d\n",chan, on_off); /// my:
           SET_LVALUE(Pw, on_off);
         }
       }
@@ -1276,7 +990,6 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
   return(CAENHV_OK);
 }
 
-/// my: smi ============================================================================
 /* loop over all available channels and set them on or off */
 int
 sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
@@ -1285,29 +998,19 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
 
   pthread_mutex_lock(&global_mutex);
 
- // check if it is active 
+  // check if it is active 
 
-//printf("hjhjhjhjhjhjhhjh nmainframes,id, mainframes[i] %d %d %d\n",nmainframes,id, mainframes[i]);
   for(i=0; i<nmainframes; i++)
   {
     /*printf("-> check mainframe %d\n",i);*/
     if(mainframes[i] == id)
     {
-//printf("hjhjhjhjhjhjhhjh 2\n");
-      /*printf("-> mainframe %d has id=%d, so loop over %d boards\n",
-        i,id,Measure[id].nslots);*/
       /* loop over all channels in all boards and set it to 'on_off' */
-
-      /// for(board=0; board < Measure[id].nslots; board++)
-      ///{
-        /*printf("-> slot %d: nchannels=%d\n",
-          board,Measure[id].board[board].nchannels);*/
-        for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
-        {
-          printf("-> set channel %d to %d\n",chan, on_off); /// my:
-          SET_LVALUE(Pw, on_off);
-        }
-      ///}
+      for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
+      {
+        printf("-> set channel %d to %d\n",chan, on_off);
+        SET_LVALUE(Pw, on_off);
+      }
     }
   }
 
@@ -1316,45 +1019,37 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
   return(CAENHV_OK);
 }
 
-/// my: smi ============================================================================
 
-int sy1527BoardSmiControl ///  my: smi
-(char *smi_obj_name, unsigned int id, unsigned int board, 
-unsigned int first_channel, unsigned int chs_number, unsigned int onoff){
-pthread_mutex_lock(&global_mutex);
-    int chan;
-
-  // float value=onoff;
+int
+sy1527BoardSmiControl(char *smi_obj_name, unsigned int id, unsigned int board, 
+    unsigned int first_channel, unsigned int chs_number, unsigned int onoff)
+{
+  pthread_mutex_lock(&global_mutex);
+  int chan;
   char *tmp1, *tmp22;
-  char tmp2[81], tmp3[81+strlen("caput -w 6   ")]; /// temporal
-   
+  char tmp2[81], tmp3[81+strlen("caput -w 6   ")];
+
   strcpy(tmp2,smi_obj_name);
   tmp22=tmp2;
-  while((tmp1=strstr(tmp22,"_Cf"))){ /// my_n_smi
-   tmp22=tmp1+1;
-  }
+  while((tmp1=strstr(tmp22,"_Cf"))) tmp22=tmp1+1;
   tmp2[strlen(tmp2)-strlen(tmp22)-1]=0;
 
-        /*printf("-> slot %d: nchannels=%d\n",
-          board,Measure[id].board[board].nchannels);*/
-    for(chan=first_channel; chan < first_channel+chs_number; chan++)  /// my_n_smi
-    {
-      sprintf(tmp3,"caput -w 6 %s_Ch%d_pwonoff %d", tmp2,chan, onoff);
-      system(tmp3);
-     // CAEN_HVload(id, board, chan, "CHONOFF", value ); /// my:
-     // printf("-> %s\n",tmp3); /// my:
-     /// printf("-> set channel %d to %d\n",chan, onoff); /// my:
-      /// SET_LVALUE(Pw, onoff); // now previous caput replaced this line: this is for case when whole board is on/off
-      /// and we need to see pwonoff value of each channel in gui.
-    }
+  for(chan=first_channel; chan < first_channel+chs_number; chan++)  /// my_n_smi
+  {
+    sprintf(tmp3,"caput -w 6 %s_Ch%d_pwonoff %d", tmp2,chan, onoff);
+    system(tmp3);
+    // CAEN_HVload(id, board, chan, "CHONOFF", value ); /// my:
+    /// SET_LVALUE(Pw, onoff); // now previous caput replaced this line: this is for case when whole board is on/off
+    /// and we need to see pwonoff value of each channel in gui.
+  }
 
-pthread_mutex_unlock(&global_mutex);
-return CAENHV_OK;
+  pthread_mutex_unlock(&global_mutex);
+  return CAENHV_OK;
 
 }
 
 ///=======================================================================================
-int /// my_n: adding heart beat
+int
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan){
 // id comes from db here.
@@ -1399,7 +1094,6 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
     {
       *active = 1;
 
-
       /* check if it is ON: loop over all boards and channels */
       /* and if at least one channel is ON, report mainframe  */
       /* status as ON, overwise report it as OFF */
@@ -1417,10 +1111,10 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
           if(u & 0x200) *alarm = 1;
         }
       }
-    retv=CAENHV_OK; // my:
+      retv=CAENHV_OK; // my:
     }
   }
-///smiui_send_command("", "");
+  ///smiui_send_command("", "");
   pthread_mutex_unlock(&global_mutex);
 
   return retv;
@@ -1536,11 +1230,9 @@ float
 sy1527GetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan)
 {
   float u;
-//printf("===========================================id=%d board=%d chan=%d\n",id,board,chan);
   LOCK_MAINFRAME(id);
   GET_FVALUE(RUp, u);
   UNLOCK_MAINFRAME(id);
- //printf("===========================================id=%d board=%d chan=%d value=%f\n",id,board,chan,u);
   return(u);
 }
 
@@ -1590,20 +1282,14 @@ sy1527GetChannelOnOff(unsigned int id, unsigned int board,
   return(u);
 }
 
-/// my:
-
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan)
 {
   float u; 
   LOCK_MAINFRAME(id);
-  //GET_FVALUE(Trip, u);
-u=Measure[id].board[board].channel[chan].fval[Trip];
-//printf("trip time  %f %d %f\n", u, //Measure[id].board[board].channel[chan].lval[Trip],Measure[id].board[board].channel[chan].fval[Trip]);
+  u=Measure[id].board[board].channel[chan].fval[Trip];
   UNLOCK_MAINFRAME(id);
-
-//printf("trip time  %f\n", u);
   return u;
 }
 

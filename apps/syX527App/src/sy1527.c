@@ -369,7 +369,7 @@ sy1527PrintParams(unsigned int id)
 
     // retrieve parameter types:
     for (j=0; j<NrOfPar; j++) {
-            printf("\n%s,%d,%d,%s,%s\n",name,i,0,parNames3[j],"Type");
+      //printf("\n%s,%d,%d,%s,%s\n",name,i,0,parNames3[j],"Type");
       CAENHVGetChParamProp(name,i,0,parNames3[j],"Type",&tipo);
       if (ret==CAENHV_OK) printf("%s(%d) ",parNames3[j],(int)tipo);
       else printf("\nCAENHVGetChParamProp(%s,%d,%d,%s,%s) ERROR: %d\n",

@@ -47,18 +47,18 @@ int NCFEDOWNERR[MAX_HVPS];
 #define I1Set   3
 #define RUp     4
 #define RDWn    5
-#define Trip    6  // my: set trip time
-#define SVMax   7  // my: set software voltage limit
+#define Trip    6
+#define SVMax   7
 #define VMon    8
 #define IMon    9
 #define Status  10
-#define Pw      11  // my: set on or off
-#define PwEn    12 // my: POn and PwEn are the same, so the PwEn is kept here   
+#define Pw      11
+#define PwEn    12 // POn and PwEn are the same, so the PwEn is kept here   
 #define TripInt 13
 #define TripExt 14
-#define PDwn  15   // my: PDwn replaced Tdrift
+#define PDwn  15   // PDwn replaced Tdrift
 
-static int  nA1520param = 16; // my: 16
+static int  nA1520param = 16;
 static int  nA1535param = 16;
 static int  nA2518Aparam = 18;
 static int  nA1536HDMparam = 18;
@@ -182,7 +182,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     if(ret != CAENHV_OK)
     {
       printf("sy1527GetBoard:CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
-      mainframes_disconnect[i10]=1; /// my_n: hbeat
+      mainframes_disconnect[i10]=1;
 
       // restart the connection:
       if (ret==5)
@@ -307,6 +307,33 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
   return(CAENHV_OK);
 }
+int
+sy1527PrintSysProp(unsigned int id,const char* prop)
+{
+  char name[MAX_CAEN_NAME];
+  int ret;
+  char value[100];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  printf("sy1527PrintSysProp(%s,%s)=",name,prop);
+  ret=CAENHVGetSysProp(name,prop,value);
+  printf("%d  --  %s\n",ret,value);
+  return(CAENHV_OK);
+}
+int
+sy1527PrintSysProps(unsigned int id)
+{ 
+  sy1527PrintSysProp(id,"FanStat");
+  sy1527PrintSysProp(id,"HVFanStat");
+  sy1527PrintSysProp(id,"HvPwSM");
+  sy1527PrintSysProp(id,"HVFanSpeed");
+  sy1527PrintSysProp(id,"PWFanStat");
+  sy1527PrintSysProp(id,"PWVoltage");
+  sy1527PrintSysProp(id,"PWCurrrent");
+  return(CAENHV_OK);
+}
+
 int
 sy1527PrintParams(unsigned int id)
 { 

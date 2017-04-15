@@ -29,7 +29,9 @@ int main(int argc,char** argv)
   sy1527PrintParams(id);
 
   //sy1527PrintMap(id);
-  
+
+  sy1527PrintSysProps(id);
+
   return(0);
 
 

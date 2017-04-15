@@ -152,6 +152,10 @@ int
 sy1527PrintMap(unsigned int id);
 int
 sy1527PrintParams(unsigned int id);
+int
+sy1527PrintSysProp(unsigned int id,const char* prop);
+int
+sy1527PrintSysProps(unsigned int id);
 void *
 sy1527MainframeThread(void *arg);
 int

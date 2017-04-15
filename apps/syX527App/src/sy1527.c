@@ -159,7 +159,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   {
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Measure[id].board[board].partypes[ipar];
-
+  
     if(tipo == PARAM_TYPE_NUMERIC)
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, fParValList);
     else
@@ -177,7 +177,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
 */
     if(ret != CAENHV_OK)
     {
-      printf("CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
+      printf("sy1527GetBoard:CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
       mainframes_disconnect[i10]=1; /// my_n: hbeat
 
       // restart the connection:
@@ -324,7 +324,7 @@ sy1527PrintParams(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  printf("\nENTER  sy1527PrintParams(%d) *************************************\n\n",id);
+  printf("\nENTER  sy1527PrintParams(%d) *************************************\n",id);
 
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
@@ -380,7 +380,7 @@ sy1527PrintParams(unsigned int id)
     if (parNames1!=NULL) free(parNames1);
   
   }
-  printf("\nLEAVE  sy1527PrintParams(%d) *************************************\n\n",id);
+  printf("\nLEAVE  sy1527PrintParams(%d) *************************************\n",id);
   return(CAENHV_OK);
 }
 
@@ -401,7 +401,7 @@ sy1527GetMap(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  printf("\nENTER  sy1527GetMap(%d/%s) *************************************\n\n",id,name);
+  printf("\nENTER  sy1527GetMap(%d/%s) *************************************\n",id,name);
   
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
@@ -461,9 +461,6 @@ sy1527GetMap(unsigned int id)
             strcpy(Measure[id].board[i].parnames[j],A1535param[j]);
             strcpy(Demand[id].board[i].parnames[j],A1535param[j]);
             strcpy(ParName,Measure[id].board[i].parnames[j]);
-
-            //printf("\n%s,%d,%d,%s,%s\n",name,i,ChList[0],ParName,"Type");
-            //strcpy(name,Measure[id].name);
 
             ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
             if(ret != CAENHV_OK)
@@ -551,7 +548,7 @@ sy1527GetMap(unsigned int id)
     free(FmwRelMaxList);
     free(NrOfCh);
   }
-  printf("\nLEAVE  sy1527GetMap(%d) *************************************\n\n",id);
+  printf("\nLEAVE  sy1527GetMap(%d) *************************************\n",id);
 
   return(CAENHV_OK);
 }
@@ -705,7 +702,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME];
   int link, ret;
 
-  printf("\nENTER  sy1527Start(%s) *************************************\n\n",ip_address);
+  printf("\nENTER  sy1527Start(%s) *************************************\n",ip_address);
 
   pthread_mutex_lock(&global_mutex);
 
@@ -715,7 +712,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   nmainframes++;
   id=id_nowused;
 
-  printf("++++++++++++++++++++++++++++++++++++++++++++++++ nmainframes=%d id=%d\n", nmainframes, id);
+  printf("+++++++++  nmainframes=%d id=%d\n", nmainframes, id);
 
   /* lock global mutex to prevent other mainframes to be started
      until we are done with this one */
@@ -758,7 +755,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
     strcpy(Measure[id].name, name); 
     Demand[id].id = ret;
     strcpy(Demand[id].name, name);
-    //printf("aaaaaaaaaaaaaaaaaaaaaaa %s\n",Measure[id].name);
+    printf("aaaaaaaaaaaaaaaaaaaaaaa %s\n",Measure[id].name);
   }
   else
   {
@@ -792,7 +789,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
 
   pthread_mutex_unlock(&global_mutex);
   
-  printf("\nLEAVE  sy1527Start(%s) *************************************\n\n",ip_address);
+  printf("\nLEAVE  sy1527Start(%s) *************************************\n",ip_address);
 
   return(CAENHV_OK);
 }

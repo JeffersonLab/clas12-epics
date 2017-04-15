@@ -5,7 +5,7 @@
 
 #define MAX_CAEN_NAME  81
 #define MAX_SLOT  16
-#define MAX_CHAN  30
+#define MAX_CHAN  32
 #define MAX_PARAM 40
 /// my_n_smi:
 #define MAX_BOARDPARTS 24

@@ -107,7 +107,7 @@ typedef struct channel
   char          name[MAX_CAEN_NAME];
   float         fval[MAX_PARAM];
   unsigned long lval[MAX_PARAM];
-  int           setflag[MAX_PARAM]; /* if 1, need to write */
+  int           setflag[MAX_PARAM]; /* if 1, n:eed to write */
 } CHANNEL;
 
 typedef struct board
@@ -133,6 +133,13 @@ typedef struct sys
   BOARD board[MAX_SLOT];
   int   setflag; /* if 1, need to write */
   char  IPADDR[MAX_CAEN_NAME]; /// my:
+  char  ModelName[MAX_CAEN_NAME];
+  char  SwRelease[MAX_CAEN_NAME];
+  char  HVFanStat[MAX_CAEN_NAME];
+  char  HVFanSpeed[MAX_CAEN_NAME];
+  char  PWFanStat[MAX_CAEN_NAME];
+  char  HvPwSM[MAX_CAEN_NAME];
+  char  PWVoltage[MAX_CAEN_NAME];
 } HV;
 
 int boards_status[MAX_HVPS][MAX_SLOT][MAX_BOARDPARTS]; /// my: smi temporal: should be dynamic
@@ -156,6 +163,8 @@ int
 sy1527PrintSysProp(unsigned int id,const char* prop);
 int
 sy1527PrintSysProps(unsigned int id);
+int
+sy1527GetSystemProps(unsigned int id);
 void *
 sy1527MainframeThread(void *arg);
 int
@@ -165,27 +174,12 @@ sy1527Start(unsigned id, char *ip_address);
 int
 sy1527Stop(unsigned id);
 
-
 int
 sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off);
 
-int /// my_n: adding heart beat
+int
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan);
-
-int /// my: smi
-sy1527SetBoardOnOff(unsigned int id, unsigned int slot, unsigned int on_off); 
-
-int sy1527BoardSmiMonitor ///  my: smi
-(char *smi_obj_name, unsigned int id, unsigned int board, unsigned int first_channel, unsigned int ch_numbers);
-
-int sy1527CrateSmiInit ///  my: smi  my_n_smi
-(char *smi_obj_name, unsigned int id);
-
-int sy1527BoardSmiControl ///  my: smi
-(char *smi_obj_name, unsigned int id, unsigned int first_board,
-unsigned int first_channel, unsigned int ch_numbers, unsigned int onoff);
-
 int
 sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm);
 
@@ -242,3 +236,21 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
+
+
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+// SMI:
+int
+sy1527SetBoardOnOff(unsigned int id, unsigned int slot, unsigned int on_off); 
+
+int sy1527BoardSmiMonitor
+(char *smi_obj_name, unsigned int id, unsigned int board, unsigned int first_channel, unsigned int ch_numbers);
+
+int sy1527CrateSmiInit
+(char *smi_obj_name, unsigned int id);
+
+int sy1527BoardSmiControl
+(char *smi_obj_name, unsigned int id, unsigned int first_board,
+unsigned int first_channel, unsigned int ch_numbers, unsigned int onoff);
+

@@ -9,7 +9,6 @@
 
 #include "sy1527.h"
 
-#include "smiuirtl.h"
 //#include "CAENHVWrapper.h"
 
 /* mainframe threads id's and statistic structures */
@@ -56,7 +55,27 @@ int NCFEDOWNERR[MAX_HVPS];
 #define PwEn    12 // POn and PwEn are the same, so the PwEn is kept here   
 #define TripInt 13
 #define TripExt 14
-#define PDwn  15   // PDwn replaced Tdrift
+#define PDwn    15   // PDwn replaced Tdrift
+
+#define LV_V0Set     0
+#define LV_I0Set     1
+#define LV_RUpTime   2
+#define LV_RDwTime   3
+#define LV_UNVThr    4
+#define LV_OVVThr    5
+#define LV_VMon      6
+#define LV_VCon      7
+#define LV_IMon      8
+#define LV_Temp      9
+#define LV_Status    10
+#define LV_Pw        11
+#define LV_TripInt   12
+#define LV_TripExt   13
+#define LV_ChToGroup 14
+#define LV_OnGrDel   15
+#define LV_OffGrDel  16
+#define LV_Intck     17
+
 
 static int  nA1520param = 16;
 static int  nA1535param = 16;
@@ -168,17 +187,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, fParValList);
     else
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, lParValList);
-/*
-     int ret1,ret2;
-     int retA=CAENHVGetSysProp(Measure[id].name,"FanStat",&ret1);
-     int retB=CAENHVGetSysProp(Measure[id].name,"HvPwSM",&ret2);
-     printf("NABO2:  FAN=%d/%d PW=%d/%d\n",ret1,retA,ret2,retB);
 
-     // Note:  
-     //    FanStat returned 0/-1
-    //     HvPwSM  returned 976304689/0 
-
-*/
     if(ret != CAENHV_OK)
     {
       printf("sy1527GetBoard:CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
@@ -232,6 +241,32 @@ sy1527GetBoard(unsigned int id, unsigned int board)
       }
     }
   }
+  return(CAENHV_OK);
+}
+
+int
+sy1527GetSystemProps(unsigned int id)
+{
+  char name[MAX_CAEN_NAME];
+  char value[100];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+ 
+  if (strcmp("SY4527",Measure[id].ModelName)==0) {
+    if (CAENHVGetSysProp(name,"HVFanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].HVFanStat,value);
+    if (CAENHVGetSysProp(name,"PWFanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].PWFanStat,value);
+    if (CAENHVGetSysProp(name,"PWVoltage",value) == CAENHV_OK)
+      strcpy(Measure[id].PWVoltage,value);
+  }
+  else if (strcmp("SY1527",Measure[id].ModelName)==0) {
+    if (CAENHVGetSysProp(name,"FanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].HVFanStat,value);
+  }
+  if (CAENHVGetSysProp(name,"HvPwSM",value) == CAENHV_OK)
+    strcpy(Measure[id].HvPwSM,value);
   return(CAENHV_OK);
 }
 
@@ -324,6 +359,7 @@ sy1527PrintSysProp(unsigned int id,const char* prop)
 int
 sy1527PrintSysProps(unsigned int id)
 { 
+  sy1527PrintSysProp(id,"ModelName");
   sy1527PrintSysProp(id,"FanStat");
   sy1527PrintSysProp(id,"HVFanStat");
   sy1527PrintSysProp(id,"HvPwSM");
@@ -331,6 +367,7 @@ sy1527PrintSysProps(unsigned int id)
   sy1527PrintSysProp(id,"PWFanStat");
   sy1527PrintSysProp(id,"PWVoltage");
   sy1527PrintSysProp(id,"PWCurrrent");
+  sy1527PrintSysProp(id,"SwRelease");
   return(CAENHV_OK);
 }
 
@@ -703,6 +740,8 @@ sy1527MainframeThread(void *arg)
         ret = sy1527GetBoard(id,i);
       }
     }
+    
+    sy1527GetSystemProps(id);
 
     pthread_mutex_unlock(&mainframe_mutex[id]);
     for(i=0; i<nmainframes; i++){
@@ -756,7 +795,7 @@ int
 sy1527Start(unsigned id_nowused, char *ip_address)
 {
   int id;
-  char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME];
+  char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME], ctmp[MAX_CAEN_NAME];
   int link, ret;
 
   printf("\nENTER  sy1527Start(%s) *************************************\n",ip_address);
@@ -809,9 +848,16 @@ sy1527Start(unsigned id_nowused, char *ip_address)
     if(strlen(ip_address)>=MAX_CAEN_NAME){printf("too long mainfraime IP: exits now\n");exit(1);}
     strcpy(Measure[id].IPADDR,ip_address);
     Measure[id].id = ret;
-    strcpy(Measure[id].name, name); 
     Demand[id].id = ret;
+    strcpy(Measure[id].name, name); 
     strcpy(Demand[id].name, name);
+    ret=CAENHVGetSysProp(name,"ModelName",ctmp);
+    if (ret == CAENHV_OK) 
+      strcpy(Measure[id].ModelName,ctmp);
+    ret=CAENHVGetSysProp(name,"SwRelease",ctmp);
+    if (ret == CAENHV_OK) 
+      strcpy(Measure[id].SwRelease,ctmp);
+
   }
   else
   {
@@ -1286,6 +1332,7 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 // SMI:
+#include "smiuirtl.h"
 
 int
 sy1527CrateSmiInit(char *smi_obj_name, unsigned int id){

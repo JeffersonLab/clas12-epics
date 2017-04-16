@@ -39,23 +39,24 @@ static const int MAXCFEDOWNERR=100;
 int NCFEDOWNERR[MAX_HVPS];
 
 /* board-dependent parameter sets */
-
-#define V0Set   0
-#define I0Set   1
-#define V1Set   2
-#define I1Set   3
-#define RUp     4
-#define RDWn    5
-#define Trip    6
-#define SVMax   7
-#define VMon    8
-#define IMon    9
-#define Status  10
-#define Pw      11
-#define PwEn    12 // POn and PwEn are the same, so the PwEn is kept here   
-#define TripInt 13
-#define TripExt 14
-#define PDwn    15   // PDwn replaced Tdrift
+/*
+#define HV_V0Set   0
+#define HV_I0Set   1
+#define HV_V1Set   2
+#define HV_I1Set   3
+#define HV_RUp     4
+#define HV_RDWn    5
+#define HV_Trip    6
+#define HV_SVMax   7
+#define HV_VMon    8
+#define HV_IMon    9
+#define HV_Status  10
+#define HV_Pw      11
+#define HV_PwEn    12 // POn and PwEn are the same, so the PwEn is kept here   
+#define HV_POn     12 // POn and PwEn are the same, so the PwEn is kept here   
+#define HV_TripInt 13
+#define HV_TripExt 14
+#define HV_PDwn    15   // PDwn replaced Tdrift
 
 #define LV_V0Set     0
 #define LV_I0Set     1
@@ -75,7 +76,7 @@ int NCFEDOWNERR[MAX_HVPS];
 #define LV_OnGrDel   15
 #define LV_OffGrDel  16
 #define LV_Intck     17
-
+*/
 
 static int  nA1520param = 16;
 static int  nA1535param = 16;
@@ -182,11 +183,15 @@ sy1527GetBoard(unsigned int id, unsigned int board)
   {
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Measure[id].board[board].partypes[ipar];
-  
+ 
+    //printf("%s %d %s %d\n",name,(int)Slot,ParName,(int)ChNum);
+
     if(tipo == PARAM_TYPE_NUMERIC)
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, fParValList);
     else
       ret = CAENHVGetChParam(name, Slot, ParName, ChNum, ChList, lParValList);
+
+    //for (i=0; i<ChNum; i++) printf("%d %f\n",i,fParValList[i]);
 
     if(ret != CAENHV_OK)
     {
@@ -232,7 +237,8 @@ sy1527GetBoard(unsigned int id, unsigned int board)
         for(i=0; i<ChNum; i++)   
         {
           Measure[id].board[board].channel[i].lval[ipar] = lParValList[i];
-          if(ipar==Status){
+          //if(ipar==HV_Status){
+          if(ipar==Measure[id].board[board].Status){
             /// my: smi: accumulates all channels attuses into board status
             b_status = b_status | lParValList[i];
             if(!(lParValList[i] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
@@ -241,32 +247,6 @@ sy1527GetBoard(unsigned int id, unsigned int board)
       }
     }
   }
-  return(CAENHV_OK);
-}
-
-int
-sy1527GetSystemProps(unsigned int id)
-{
-  char name[MAX_CAEN_NAME];
-  char value[100];
-  CHECK_ID(id);
-  CHECK_OPEN(id);
-  strcpy(name, Measure[id].name);
- 
-  if (strcmp("SY4527",Measure[id].ModelName)==0) {
-    if (CAENHVGetSysProp(name,"HVFanStat",value) == CAENHV_OK)
-      strcpy(Measure[id].HVFanStat,value);
-    if (CAENHVGetSysProp(name,"PWFanStat",value) == CAENHV_OK)
-      strcpy(Measure[id].PWFanStat,value);
-    if (CAENHVGetSysProp(name,"PWVoltage",value) == CAENHV_OK)
-      strcpy(Measure[id].PWVoltage,value);
-  }
-  else if (strcmp("SY1527",Measure[id].ModelName)==0) {
-    if (CAENHVGetSysProp(name,"FanStat",value) == CAENHV_OK)
-      strcpy(Measure[id].HVFanStat,value);
-  }
-  if (CAENHVGetSysProp(name,"HvPwSM",value) == CAENHV_OK)
-    strcpy(Measure[id].HvPwSM,value);
   return(CAENHV_OK);
 }
 
@@ -300,9 +280,16 @@ sy1527SetBoard(unsigned int id, unsigned int board)
   {
 
     /* patch to make sure 'PwEn' always executed before 'Pw' */
-    if(iparr == Pw)        ipar = PwEn;
-    else if(iparr == PwEn) ipar = Pw;
-    else                   ipar = iparr;
+    //if(iparr == HV_Pw)        ipar = HV_PwEn;
+    //else if(iparr == HV_PwEn) ipar = HV_Pw;
+    //else                   ipar = iparr;
+    ipar=iparr;
+    if (Measure[id].board[board].PwEn >= 0) {
+        if (iparr == Measure[id].board[board].Pw)
+            ipar = Measure[id].board[board].PwEn;
+        else if (iparr == Measure[id].board[board].PwEn)
+            ipar = Measure[id].board[board].Pw;
+    }
 
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Demand[id].board[board].partypes[ipar];
@@ -315,7 +302,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
         if(tipo == PARAM_TYPE_NUMERIC)
         {
           fParVal = Demand[id].board[board].channel[Ch].fval[ipar];
-          /*printf("Set Value %s: %f\n",ParName,fParVal);*/
+          //printf("Set Value %d/%d/%d  %s: %f\n",(int)id,(int)board,(int)Ch,ParName,fParVal);
           ret = CAENHVSetChParam(name, Slot, ParName, 1, &Ch, &fParVal);
         }
         else
@@ -370,6 +357,31 @@ sy1527PrintSysProps(unsigned int id)
   sy1527PrintSysProp(id,"SwRelease");
   return(CAENHV_OK);
 }
+int
+sy1527GetSystemProps(unsigned int id)
+{
+  char name[MAX_CAEN_NAME];
+  char value[100];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  if (strcmp("SY4527",Measure[id].ModelName)==0) {
+    if (CAENHVGetSysProp(name,"HVFanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].HVFanStat,value);
+    if (CAENHVGetSysProp(name,"PWFanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].PWFanStat,value);
+    if (CAENHVGetSysProp(name,"PWVoltage",value) == CAENHV_OK)
+      strcpy(Measure[id].PWVoltage,value);
+  }
+  else if (strcmp("SY1527",Measure[id].ModelName)==0) {
+    if (CAENHVGetSysProp(name,"FanStat",value) == CAENHV_OK)
+      strcpy(Measure[id].HVFanStat,value);
+  }
+  if (CAENHVGetSysProp(name,"HvPwSM",value) == CAENHV_OK)
+    strcpy(Measure[id].HvPwSM,value);
+  return(CAENHV_OK);
+}
+
 
 int
 sy1527PrintParams(unsigned int id)
@@ -632,6 +644,7 @@ sy1527GetMap(unsigned int id)
           Measure[id].board[i].nchannels = 0;
           Demand[id].board[i].nchannels = 0;
         }
+        sy1527SetBoardParams(&Measure[id].board[i]);
       }
     }
     
@@ -742,6 +755,9 @@ sy1527MainframeThread(void *arg)
     }
     
     sy1527GetSystemProps(id);
+
+    //printBoard(Measure[id].board[8]);
+    //printBoard(Measure[id].board[11]);
 
     pthread_mutex_unlock(&mainframe_mutex[id]);
     for(i=0; i<nmainframes; i++){
@@ -998,7 +1014,8 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
       {
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
         {
-          SET_LVALUE(Pw, on_off);
+          //SET_LVALUE(HV_Pw, on_off);
+          SET_LVALUE(Measure[id].board[board].Pw, on_off);
         }
       }
     }
@@ -1028,7 +1045,8 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
       for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
       {
         printf("-> set channel %d to %d\n",chan, on_off);
-        SET_LVALUE(Pw, on_off);
+        //SET_LVALUE(HV_Pw, on_off);
+        SET_LVALUE(Measure[id].board[board].Pw, on_off);
       }
     }
   }
@@ -1093,11 +1111,13 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
         {
           /* check on/off status */
-          GET_LVALUE(Pw, u);
+          //GET_LVALUE(HV_Pw, u);
+          GET_LVALUE(Measure[id].board[board].Pw, u);
           if(u) *onoff = 1;
 
           /* check I-tripped bit */
-          GET_LVALUE(Status, u);
+          //GET_LVALUE(HV_Status, u);
+          GET_LVALUE(Measure[id].board[board].Status, u);
           if(u & 0x200) *alarm = 1;
         }
       }
@@ -1115,7 +1135,8 @@ sy1527SetChannelDemandVoltage(unsigned int id, unsigned int board,
                               unsigned int chan, float u)
 {
   LOCK_MAINFRAME(id);
-  SET_FVALUE(V0Set, u);
+  //SET_FVALUE(HV_V0Set, u);
+  SET_FVALUE(Measure[id].board[board].V0Set, u);
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1127,7 +1148,8 @@ sy1527GetChannelDemandVoltage(unsigned int id, unsigned int board,
 {
   float u;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(V0Set, u);
+  //GET_FVALUE(HV_V0Set, u);
+  GET_FVALUE(Measure[id].board[board].V0Set, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1137,8 +1159,14 @@ int
 sy1527SetChannelMaxVoltage(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
 {
+  if (Measure[id].board[board].SVMax < 0) {
+      printf("sy1527SetChannelMaxVoltage(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+      return 0;
+  }
   LOCK_MAINFRAME(id);
-  SET_FVALUE(SVMax, u);
+  //SET_FVALUE(HV_SVMax, u);
+  SET_FVALUE(Measure[id].board[board].SVMax, u);
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1148,11 +1176,98 @@ float
 sy1527GetChannelMaxVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
+  if (Measure[id].board[board].SVMax < 0) return 0;
   float u;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(SVMax, u);
+  //GET_FVALUE(HV_SVMax, u);
+  GET_FVALUE(Measure[id].board[board].SVMax, u);
   UNLOCK_MAINFRAME(id);
   return(u);
+}
+
+/* returns maximum voltage for one channel */
+float
+sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan)
+{
+  if (Measure[id].board[board].OVVThr < 0) return 0;
+  float u;
+  LOCK_MAINFRAME(id);
+  GET_FVALUE(Measure[id].board[board].OVVThr, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* sets maximum voltage for one channel */
+int
+sy1527SetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan, float u)
+{
+  if (Measure[id].board[board].OVVThr < 0) {
+      printf("sy1527SetChannelOverVoltage(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+      return 0;
+  }
+  LOCK_MAINFRAME(id);
+  SET_FVALUE(Measure[id].board[board].OVVThr, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
+
+/* returns connector voltage for one channel */
+float
+sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan)
+{
+  if (Measure[id].board[board].VCon < 0) return 0;
+  float u;
+  LOCK_MAINFRAME(id);
+  GET_FVALUE(Measure[id].board[board].VCon, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* returns temperature for one channel */
+float
+sy1527GetChannelTemperature(unsigned int id, unsigned int board,
+                           unsigned int chan)
+{
+  if (Measure[id].board[board].Temp < 0) return 0;
+  float u;
+  LOCK_MAINFRAME(id);
+  GET_FVALUE(Measure[id].board[board].Temp, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* returns minimum voltage for one channel */
+float
+sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan)
+{
+  if (Measure[id].board[board].UNVThr < 0) return 0;
+  float u;
+  LOCK_MAINFRAME(id);
+  GET_FVALUE(Measure[id].board[board].UNVThr, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* sets minimum voltage for one channel */
+int
+sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan, float u)
+{
+  if (Measure[id].board[board].UNVThr < 0)
+  {
+      printf("sy1527SetChannelUnderVoltage(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+      return 0;
+  }
+  LOCK_MAINFRAME(id);
+  SET_FVALUE(Measure[id].board[board].UNVThr, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
 }
 
 /* sets maximum current for one channel */
@@ -1161,7 +1276,8 @@ sy1527SetChannelMaxCurrent(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
 {
   LOCK_MAINFRAME(id);
-  SET_FVALUE(I0Set, u);
+  //SET_FVALUE(HV_I0Set, u);
+  SET_FVALUE(Measure[id].board[board].I0Set, u);
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1173,7 +1289,8 @@ sy1527GetChannelMaxCurrent(unsigned int id, unsigned int board,
 {
   float u;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(I0Set, u);
+  //GET_FVALUE(HV_I0Set, u);
+  GET_FVALUE(Measure[id].board[board].I0Set, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1185,7 +1302,8 @@ sy1527GetChannelMeasuredVoltage(unsigned int id, unsigned int board,
 {
   float u;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(VMon, u);
+  //GET_FVALUE(HV_VMon, u);
+  GET_FVALUE(Measure[id].board[board].VMon, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1194,10 +1312,11 @@ sy1527GetChannelMeasuredVoltage(unsigned int id, unsigned int board,
 float
 sy1527GetChannelMeasuredCurrent(unsigned int id, unsigned int board,
                                 unsigned int chan)
-{
+{ 
   float u;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(IMon, u);
+  //GET_FVALUE(HV_IMon, u);
+  GET_FVALUE(Measure[id].board[board].IMon, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1207,9 +1326,19 @@ int
 sy1527SetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan,
                        float u)
 {
-
   LOCK_MAINFRAME(id);
-  SET_FVALUE(RUp, u);
+  //SET_FVALUE(HV_RUp, u);
+  //SET_FVALUE(Measure[id].board[board].RUp, u);
+  if (Measure[id].board[board].RUp >= 0) {
+      SET_FVALUE(Measure[id].board[board].RUp, u);
+  }
+  else if (Measure[id].board[board].RUpTime >= 0) {
+      SET_FVALUE(Measure[id].board[board].RUpTime, u);
+  }
+  else {
+      printf("sy1527SetChannelRampUp(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+  }
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1218,9 +1347,20 @@ sy1527SetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan,
 float
 sy1527GetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan)
 {
-  float u;
+  float u=0;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(RUp, u);
+  //GET_FVALUE(HV_RUp, u);
+  //GET_FVALUE(Measure[id].board[board].RUp, u);
+  if (Measure[id].board[board].RUp >= 0) {
+      GET_FVALUE(Measure[id].board[board].RUp, u);
+  }
+  else if (Measure[id].board[board].RUpTime >= 0) {
+      GET_FVALUE(Measure[id].board[board].RUpTime, u);
+  }
+  else {
+      printf("sy1527GetChannelRampUp(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+  }
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1231,7 +1371,18 @@ sy1527SetChannelRampDown(unsigned int id, unsigned int board,
                          unsigned int chan, float u)
 {
   LOCK_MAINFRAME(id);
-  SET_FVALUE(RDWn, u);
+  //SET_FVALUE(HV_RDWn, u);
+  //SET_FVALUE(Measure[id].board[board].RDWn, u);
+  if (Measure[id].board[board].RDWn >=0 ) {
+      SET_FVALUE(Measure[id].board[board].RDWn, u);
+  }
+  else if (Measure[id].board[board].RDwTime >= 0) {
+      SET_FVALUE(Measure[id].board[board].RDwTime, u);
+  }
+  else {
+      printf("sy1527SetChannelRampDown(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+  }
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1241,9 +1392,20 @@ float
 sy1527GetChannelRampDown(unsigned int id, unsigned int board,
                          unsigned int chan)
 {
-  float u;
+  float u=0;
   LOCK_MAINFRAME(id);
-  GET_FVALUE(RDWn, u);
+  //GET_FVALUE(HV_RDWn, u);
+  //GET_FVALUE(Measure[id].board[board].RDWn, u);
+  if (Measure[id].board[board].RDWn >= 0) {
+      GET_FVALUE(Measure[id].board[board].RDWn, u);
+  }
+  else if (Measure[id].board[board].RDwTime >= 0) {
+      GET_FVALUE(Measure[id].board[board].RDwTime, u);
+  }
+  else {
+      printf("sy1527GetChannelRampDown(%d,%d,%d) - ERROR\n",
+              (int)id,(int)board,(int)chan);
+  }
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1254,7 +1416,8 @@ sy1527SetChannelOnOff(unsigned int id, unsigned int board,
                       unsigned int chan, unsigned int u)
 {
   LOCK_MAINFRAME(id);
-  SET_LVALUE(Pw, u);
+  //SET_LVALUE(HV_Pw, u);
+  SET_LVALUE(Measure[id].board[board].Pw, u);
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1266,7 +1429,8 @@ sy1527GetChannelOnOff(unsigned int id, unsigned int board,
 {
   unsigned int u;
   LOCK_MAINFRAME(id);
-  GET_LVALUE(Pw, u);
+  //GET_LVALUE(HV_Pw, u);
+  GET_LVALUE(Measure[id].board[board].Pw, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1275,9 +1439,12 @@ float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan)
 {
+  if (Measure[id].board[board].Trip < 0) return 0;
   float u; 
   LOCK_MAINFRAME(id);
-  u=Measure[id].board[board].channel[chan].fval[Trip];
+  //u=Measure[id].board[board].channel[chan].fval[HV_Trip];
+  //u=Measure[id].board[board].channel[chan].fval[Measure[id].board[board].Trip];
+  GET_FVALUE(Measure[id].board[board].Trip, u);
   UNLOCK_MAINFRAME(id);
   return u;
 }
@@ -1296,8 +1463,10 @@ int
 sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan, unsigned int u)
 {
+  if (Measure[id].board[board].PwEn < 0) return 0;
   LOCK_MAINFRAME(id);
-  SET_LVALUE1(PwEn, u);
+  //SET_LVALUE1(HV_PwEn, u);
+  SET_LVALUE1(Measure[id].board[board].PwEn, u);
   UNLOCK_MAINFRAME(id);
   return(0);
 }
@@ -1307,9 +1476,11 @@ unsigned int
 sy1527GetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan)
 {
+  if (Measure[id].board[board].PwEn < 0) return 0;
   unsigned int u;
   LOCK_MAINFRAME(id);
-  GET_LVALUE(PwEn, u);
+  //GET_LVALUE(HV_PwEn, u);
+  GET_LVALUE(Measure[id].board[board].PwEn, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1321,12 +1492,120 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 {
   unsigned int u;
   LOCK_MAINFRAME(id);
-  GET_LVALUE(Status, u);
+  //GET_LVALUE(HV_Status, u);
+  GET_LVALUE(Measure[id].board[board].Status, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
 
 
+void printBoard(BOARD bb) {
+    int ii,jj;
+    printf("--------- BOARD.print():  %s - %d channels\n",
+            bb.modelname,bb.nchannels);
+    printf("   "); for (ii=0; ii<bb.nparams; ii++) printf("%9d ",ii); printf("\n");
+    printf("   "); for (ii=0; ii<bb.nparams; ii++) printf("%9s ",bb.parnames[ii]); printf("\n");
+    for (ii=0; ii<bb.nchannels; ii++) {
+        printf("%2d ",ii);
+        for (jj=0; jj<bb.nparams; jj++) {
+            if (bb.partypes[jj]==PARAM_TYPE_NUMERIC)
+                printf("%9.3f ",bb.channel[ii].fval[jj]);
+            else 
+                printf("%9d ",(int)bb.channel[ii].lval[jj]);
+        }
+        printf("\n");
+    }
+    printf("V0Set=%d\n",bb.V0Set);
+    printf("I0Set=%d\n",bb.I0Set);
+    printf("V1Set=%d\n",bb.V1Set);
+    printf("I1Set=%d\n",bb.I1Set);
+    printf("RUp=%d\n",bb.RUp);
+    printf("RDWn=%d\n",bb.RDWn);
+    printf("Trip=%d\n",bb.Trip);
+    printf("SVMax=%d\n",bb.SVMax);
+    printf("VMon=%d\n",bb.VMon);
+    printf("IMon=%d\n",bb.IMon);
+    printf("Status=%d\n",bb.Status);
+    printf("Pw=%d\n",bb.Pw);
+    printf("PwEn=%d\n",bb.PwEn);
+    printf("TripInt=%d\n",bb.TripInt);
+    printf("TripExt=%d\n",bb.TripExt);
+    printf("PDwn=%d\n",bb.PDwn);
+    printf("Tdrift=%d\n",bb.Tdrift);
+    printf("RUpTime=%d\n",bb.RUpTime);
+    printf("RDwTime=%d\n",bb.RDwTime);
+    printf("UNVThr=%d\n",bb.UNVThr);
+    printf("OVVThr=%d\n",bb.OVVThr);
+    printf("VCon=%d\n",bb.VCon);
+    printf("Temp=%d\n",bb.Temp);
+    printf("ChToGroup=%d\n",bb.ChToGroup);
+    printf("OnGrDel=%d\n",bb.OnGrDel);
+    printf("OffGrDel=%d\n",bb.OffGrDel);
+    printf("Intck=%d\n",bb.Intck);
+    printf("--------- END BOARD.print()\n");
+}
+
+void sy1527SetBoardParams(BOARD *bb) {
+    int ii;
+    bb->V0Set=-1;
+    bb->I0Set=-1;
+    bb->V1Set=-1;
+    bb->I1Set=-1;
+    bb->RUp=-1;
+    bb->RDWn=-1;
+    bb->Trip=-1;
+    bb->SVMax=-1;
+    bb->VMon=-1;
+    bb->IMon=-1;
+    bb->Status=-1;
+    bb->Pw=-1;
+    bb->PwEn=-1;
+    bb->TripInt=-1;
+    bb->TripExt=-1;
+    bb->PDwn=-1;
+    bb->Tdrift=-1;
+    bb->RUpTime=-1;
+    bb->RDwTime=-1;
+    bb->UNVThr=-1;
+    bb->OVVThr=-1;
+    bb->VCon=-1;
+    bb->Temp=-1;
+    bb->ChToGroup=-1;
+    bb->OnGrDel=-1;
+    bb->OffGrDel=-1;
+    bb->Intck=-1;
+    for (ii=0; ii<bb->nparams; ii++)
+    {
+        if (strcmp(bb->parnames[ii],"V0Set")==0) bb->V0Set=ii;
+        if (strcmp(bb->parnames[ii],"I0Set")==0) bb->I0Set=ii;
+        if (strcmp(bb->parnames[ii],"V1Set")==0) bb->V1Set=ii;
+        if (strcmp(bb->parnames[ii],"I1Set")==0) bb->I1Set=ii;
+        if (strcmp(bb->parnames[ii],"RUp")==0) bb->RUp=ii;
+        if (strcmp(bb->parnames[ii],"RDWn")==0) bb->RDWn=ii;
+        if (strcmp(bb->parnames[ii],"Trip")==0) bb->Trip=ii;
+        if (strcmp(bb->parnames[ii],"SVMax")==0) bb->SVMax=ii;
+        if (strcmp(bb->parnames[ii],"VMon")==0) bb->VMon=ii;
+        if (strcmp(bb->parnames[ii],"IMon")==0) bb->IMon=ii;
+        if (strcmp(bb->parnames[ii],"Status")==0) bb->Status=ii;
+        if (strcmp(bb->parnames[ii],"Pw")==0) bb->Pw=ii;
+        if (strcmp(bb->parnames[ii],"POn")==0) bb->PwEn=ii;
+        if (strcmp(bb->parnames[ii],"PwEn")==0) bb->PwEn=ii;
+        if (strcmp(bb->parnames[ii],"TripInt")==0) bb->TripInt=ii;
+        if (strcmp(bb->parnames[ii],"TripExt")==0) bb->TripExt=ii;
+        if (strcmp(bb->parnames[ii],"PDwn")==0) bb->PDwn=ii;
+        if (strcmp(bb->parnames[ii],"Tdrift")==0) bb->Tdrift=ii;
+        if (strcmp(bb->parnames[ii],"RUpTime")==0) bb->RUpTime=ii;
+        if (strcmp(bb->parnames[ii],"RDwTime")==0) bb->RDwTime=ii;
+        if (strcmp(bb->parnames[ii],"UNVThr")==0) bb->UNVThr=ii;
+        if (strcmp(bb->parnames[ii],"OVVThr")==0) bb->OVVThr=ii;
+        if (strcmp(bb->parnames[ii],"VCon")==0) bb->VCon=ii;
+        if (strcmp(bb->parnames[ii],"Temp")==0) bb->Temp=ii;
+        if (strcmp(bb->parnames[ii],"ChToGroup")==0) bb->ChToGroup=ii;
+        if (strcmp(bb->parnames[ii],"OnGrDel")==0) bb->OnGrDel=ii;
+        if (strcmp(bb->parnames[ii],"OffGrDel")==0) bb->OffGrDel=ii;
+        if (strcmp(bb->parnames[ii],"Intck")==0) bb->Intck=ii;
+    }
+}
 
 
 /////////////////////////////////////////////////////////////////////
@@ -1370,8 +1649,10 @@ unsigned int first_channel, unsigned int chs_number)
   for(i=first_channel; i<first_channel+chs_number; i++)
   {
     /// my: smi: accumulates all channels attuses into board status
-    b_status = b_status |  Measure[id].board[board].channel[i].lval[Status];
-    if(!(Measure[id].board[board].channel[i].lval[Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
+    //b_status = b_status |  Measure[id].board[board].channel[i].lval[HV_Status];
+    //if(!(Measure[id].board[board].channel[i].lval[HV_Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
+    b_status = b_status |  Measure[id].board[board].channel[i].lval[Measure[id].board[board].Status];
+    if(!(Measure[id].board[board].channel[i].lval[Measure[id].board[board].Status] & 0x1))b_status = b_status | BIT_OFF; /// at least one channel in the board is OFF
   }
 
   char smi_obj_name1[150];

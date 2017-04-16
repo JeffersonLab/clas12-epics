@@ -246,7 +246,6 @@ STATUS
 CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
                 double *property, double *delta)
 {
-  /*  printf("CAEN_GetChannel reached\n"); */
   property[PROP_MC] = sy1527GetChannelMeasuredCurrent(id, slot, channel); // e
   property[PROP_MV] = sy1527GetChannelMeasuredVoltage(id, slot, channel); // f
   property[PROP_DV] = sy1527GetChannelDemandVoltage(id, slot, channel);   // g
@@ -255,11 +254,22 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_TC] = sy1527GetChannelMaxCurrent(id, slot, channel);      // j
   property[PROP_CE] = (float) sy1527GetChannelEnableDisable(id, slot, channel);  // k
   property[PROP_ST] = (float) sy1527GetChannelStatus(id, slot, channel);  // l
-  property[PROP_MVDZ] = 0.0;  // m
-  property[PROP_MCDZ] = 0.0;  // n
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
 
-  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// t
+  // used to have this:
+  //property[PROP_MVDZ] = 0.0;  // m
+  //property[PROP_MCDZ] = 0.0;  // n
+ 
+  // LV-Only:
+  property[PROP_UNVT] = sy1527GetChannelUnderVoltage(id, slot, channel); // m
+  property[PROP_OVVT] = sy1527GetChannelOverVoltage(id, slot, channel); // n
+  property[PROP_TEMP] = sy1527GetChannelTemperature(id, slot, channel); // p
+  property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // r
+
+  // BIPOLAR-Only:
+  //property[PROP_POL] = sy1527GetChannelPolarity(id, slot, channel); // s
+
+  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); // t
 
   // this is what we alarm on:
   *delta=0;

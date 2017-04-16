@@ -123,6 +123,33 @@ typedef struct board
   unsigned long partypes[MAX_PARAM];
   CHANNEL       channel[MAX_CHAN];
   int           setflag; /* if 1, need to write */
+  int V0Set;
+  int I0Set;
+  int V1Set;
+  int I1Set;
+  int RUp;
+  int RDWn;
+  int Trip;
+  int SVMax;
+  int VMon;
+  int IMon;
+  int Status;
+  int Pw;
+  int PwEn;
+  int TripInt;
+  int TripExt;
+  int PDwn;
+  int Tdrift;
+  int RUpTime;
+  int RDwTime;
+  int UNVThr;
+  int OVVThr;
+  int VCon;
+  int Temp;
+  int ChToGroup;
+  int OnGrDel;
+  int OffGrDel;
+  int Intck;
 } BOARD;
 
 typedef struct sys
@@ -144,6 +171,7 @@ typedef struct sys
 
 int boards_status[MAX_HVPS][MAX_SLOT][MAX_BOARDPARTS]; /// my: smi temporal: should be dynamic
 
+void printBoard(BOARD bb);
 
 /* functions */
 
@@ -237,6 +265,29 @@ float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
 
+
+float
+sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelTemperature(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+int
+sy1527SetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan,float u);
+int
+sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan,float u);
+
+
+void
+sy1527SetBoardParams(BOARD *bb);
 
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////

@@ -15,6 +15,18 @@
 #define PROP_MCDZ 9    /*  */
 #define PROP_HVL  10   /*  */
 
+// Low Voltage Modules:
+#define PROP_RUPT   3 // reusing RUP
+#define PROP_RDNT   4 // reusing RDN
+#define PROP_UNVT   8 // reusing MVDZ
+#define PROP_OVVT   9 // reusing MCDZ
+#define PROP_TEMP  11
+#define PROP_INTLK 12
+#define PROP_VCON  13
+
+// Bi-polar Modules:
+#define PROP_POL  14
+
 #define PROP_HBEAT  15   /*  */  /// my_n:
 
 #define STATUS int

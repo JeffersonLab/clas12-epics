@@ -11,10 +11,6 @@
 #include "sy1527epics1.h"
 #include <unistd.h>
 
-/* static structure to keep track of active channels */
-/// my: static double properties[MAX_HVPS][NUM_CAEN_PROP];
-
-
 /* open communication with mainframe under logical number 'id' */
 int
 CAEN_HVstart(unsigned id, char *ip_address)
@@ -31,18 +27,14 @@ CAEN_HVstop(unsigned id)
 
 /* returns 1 if mainframe is ON, otherwise returns 0 */
 int
-CAEN_GetHv(unsigned id, int *onoff1) // my: &onoff
+CAEN_GetHv(unsigned id, int *onoff1)
 {
  int active, onoff, alarm;
- /// int active, alarm;  /// my:
 
- int retv=  /// my:
- sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
+ int retv=sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
 
- //printf("============== %d\n", onoff); // my:
  *onoff1=onoff; 
- /// my: return(onoff)
- return retv; /// my:
+ return retv;
 }
 
 /* returns 1 if any channel is alarming, otherwise returns 0 */
@@ -241,11 +233,10 @@ CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
    /// printf("CAEN_GetProperty: request for HVL\n");
     *value = sy1527GetChannelMaxVoltage(id, slot, channel);
   }
-  else if(!strncmp("PRD",property,3))  /// my:
+  else if(!strncmp("PRD",property,3))
   {
    /// printf("CAEN_GetProperty: request for Trip Time\n");
     *value = sy1527GetChannelTripTime(id, slot, channel);
-//printf(" PRD *value=%f\n",v);
   }  
   return(0);
 }
@@ -268,7 +259,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_MCDZ] = 0.0;  // n
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
 
-  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// my_n:  // t
+  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// t
 
   // this is what we alarm on:
   *delta=0;

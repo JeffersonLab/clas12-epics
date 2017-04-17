@@ -9,6 +9,7 @@ include $(TOP)/configure/CONFIG
 
 #----------------------------------------------------
 DB    += caenhv.db
+DB    += caenlv.db
 DB    += HVDC_VSCAN.db
 DB    += $(wildcard ../*.substitutions)
 DB    += $(wildcard ../*sums*.db)

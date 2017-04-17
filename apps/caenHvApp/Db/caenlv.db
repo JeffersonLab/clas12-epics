@@ -113,14 +113,50 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):isetrbk")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):isetrbk")
 }   
 
-record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmaxrbk")
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):unvtrbk")
 {
-   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).O CPP NMS")
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).M CPP NMS")
    field(OMSL,"closed_loop")
    field(PREC,"2")
    field(EGU,"V")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):vmaxrbk")
-   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmaxrbk")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):unvtrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):unvtrbk")
+}   
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):ovvtrbk")
+{
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).N CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   field(EGU,"V")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):ovvtrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):ovvtrbk")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):intlkrbk")
+{
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).Q CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):intlkrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):intlkrbk")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):temp")
+{
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).P CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   field(EGU,"C")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):temp")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):temp")
+}   
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vconrbk")
+{
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).R CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   field(EGU,"V")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vconrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vconrbk")
 }   
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):ruprbk")

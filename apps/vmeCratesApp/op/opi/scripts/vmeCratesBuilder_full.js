@@ -32,7 +32,8 @@ for (var ii=0; ii<groups.length; ii++)
         lc.setPropertyValue("zoom_to_fit",false);
         lc.setPropertyValue("border_style",0);
         lc.setPropertyValue("background_color","OPI_Background");
-        lc.addMacro("P",crateName);
+        lc.addMacro("P","B+HW_+"crateName.toUpperCase());
+        lc.addMacro("L",crateName);
         widget.addChildToBottom(lc);
     }
 }

@@ -20,7 +20,8 @@ for (var rr=1; rr<=3; rr++)
         lc.setPropertyValue("zoom_to_fit",false);
         lc.setPropertyValue("border_style",0);
         lc.setPropertyValue("background_color","OPI_Background");
-        lc.addMacro("P",crateName);
+        lc.addMacro("P","B_HW_"+crateName.toUpperCase());
+        lc.addMacro("L",crateName);
         widget.addChildToBottom(lc);
     }
 }

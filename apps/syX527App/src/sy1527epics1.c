@@ -169,6 +169,16 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
     printf("CAEN_HVload: request for HVL\n");
     sy1527SetChannelMaxVoltage(id, slot, channel, value);
   }
+  else if(!strncmp("UNVT",property,3))
+  {
+    printf("CAEN_HVload: request for UNVT\n");
+    sy1527SetChannelUnderVoltage(id, slot, channel, value);
+  }
+  else if(!strncmp("OVVT",property,3))
+  {
+    printf("CAEN_HVload: request for OVVT\n");
+    sy1527SetChannelOverVoltage(id, slot, channel, value);
+  }
 
   return(0);
 }

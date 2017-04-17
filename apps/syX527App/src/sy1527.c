@@ -756,9 +756,6 @@ sy1527MainframeThread(void *arg)
     
     sy1527GetSystemProps(id);
 
-    //printBoard(Measure[id].board[8]);
-    //printBoard(Measure[id].board[11]);
-
     pthread_mutex_unlock(&mainframe_mutex[id]);
     for(i=0; i<nmainframes; i++){
       if(mainframes[i]==id)is_mainframe_read[i]=1;
@@ -1501,6 +1498,37 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
   GET_FVALUE(Measure[id].board[board].Trip, u);
   UNLOCK_MAINFRAME(id);
   return u;
+}
+
+void sy1527GetMainframeSwRelease(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].SwRelease);
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframeModelName(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].ModelName);
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframeHVFanStat(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].HVFanStat);
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframePWFanStat(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].PWFanStat);
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframePWVoltage(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].PWVoltage);
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframeHvPwSM(unsigned int id,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].HvPwSM);
+    UNLOCK_MAINFRAME(id);
 }
 
 

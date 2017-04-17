@@ -1435,6 +1435,47 @@ sy1527GetChannelOnOff(unsigned int id, unsigned int board,
   return(u);
 }
 
+/* returns interlock status for one channel */
+unsigned int
+sy1527GetChannelInterlock(unsigned int id, unsigned int board,
+                      unsigned int chan)
+{
+  if (Measure[id].board[board].Intck < 0) return 0;
+  unsigned int u;
+  LOCK_MAINFRAME(id);
+  //GET_LVALUE(HV_Pw, u);
+  GET_LVALUE(Measure[id].board[board].Intck, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* returns polarity for one channel */
+unsigned int
+sy1527GetChannelPolarity(unsigned int id, unsigned int board,
+                      unsigned int chan)
+{
+  if (Measure[id].board[board].Pol < 0) return 0;
+  unsigned int u;
+  LOCK_MAINFRAME(id);
+  //GET_LVALUE(HV_Pw, u);
+  GET_LVALUE(Measure[id].board[board].Pol, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* sets polarity for one channel */
+int
+sy1527SetChannelPolarity(unsigned int id, unsigned int board,
+                      unsigned int chan, unsigned int u)
+{
+  if (Measure[id].board[board].Pol < 0) return 0;
+  LOCK_MAINFRAME(id);
+  //SET_LVALUE(HV_Pw, u);
+  SET_LVALUE(Measure[id].board[board].Pol, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan)
@@ -1574,6 +1615,7 @@ void sy1527SetBoardParams(BOARD *bb) {
     bb->OnGrDel=-1;
     bb->OffGrDel=-1;
     bb->Intck=-1;
+    bb->Pol=-1;
     for (ii=0; ii<bb->nparams; ii++)
     {
         if (strcmp(bb->parnames[ii],"V0Set")==0) bb->V0Set=ii;
@@ -1604,6 +1646,7 @@ void sy1527SetBoardParams(BOARD *bb) {
         if (strcmp(bb->parnames[ii],"OnGrDel")==0) bb->OnGrDel=ii;
         if (strcmp(bb->parnames[ii],"OffGrDel")==0) bb->OffGrDel=ii;
         if (strcmp(bb->parnames[ii],"Intck")==0) bb->Intck=ii;
+        if (strcmp(bb->parnames[ii],"Pol")==0) bb->Pol=ii;
     }
 }
 

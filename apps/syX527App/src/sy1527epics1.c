@@ -237,7 +237,23 @@ CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
   {
    /// printf("CAEN_GetProperty: request for Trip Time\n");
     *value = sy1527GetChannelTripTime(id, slot, channel);
-  }  
+  }
+  else if (!strncmp("UNVT",property,4))
+  {
+      *value = sy1527GetChannelUnderVoltage(id, slot, channel);
+  }
+  else if (!strncmp("OVVT",property,4))
+  {
+      *value = sy1527GetChannelOverVoltage(id, slot, channel);
+  }
+  else if (!strncmp("POL",property,4))
+  {
+      *value = sy1527GetChannelPolarity(id, slot, channel);
+  }
+  else if (!strncmp("INTLK",property,5))
+  {
+      *value = sy1527GetChannelInterlock(id, slot, channel);
+  }
   return(0);
 }
 

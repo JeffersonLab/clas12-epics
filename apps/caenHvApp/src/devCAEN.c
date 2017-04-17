@@ -191,6 +191,9 @@ static long init_bo(struct boRecord  *pbo)
     pbo->rval=0; /// just init somehow
     ///printf("%s====================\n",tmp);
    }
+   else if (command == S_INTLK) {
+     pbo->rval = sy1527GetChannelInterlock(chassis, slot,channel);
+   }
   }
   return 0;
 }
@@ -262,6 +265,8 @@ static long write_bo(struct boRecord *pbo)
     else if (command == S_BDHV) /// my: smi set BD ON or OFF
       //status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval ); 
       status = sy1527SetBoardOnOff(chassis, slot, (unsigned char)pbo->rval ); /// my: smi
+//    else if (command == S_INTLK)
+//      status = sy1527SetBoardIntlk(chassis, slot, (unsigned char)pbo->rval );
     else status = ERROR;
 
   /* Alert if an error occures processing the request.
@@ -433,9 +438,11 @@ static long init_ao(struct aoRecord  *pao)
     case S_VMAX:
       status = CAEN_GetProperty(chassis, slot, channel, "HVL", &value); break;
     case S_PRD:
-      status = CAEN_GetProperty(chassis, slot, channel, "PRD", &value); 
- //printf("ttt value=%f\n",value);
-break;
+      status = CAEN_GetProperty(chassis, slot, channel, "PRD", &value); break;
+    case S_UNVT:
+      status = CAEN_GetProperty(chassis, slot, channel, "UNVT", &value); break;
+    case S_OVVT:
+      status = CAEN_GetProperty(chassis, slot, channel, "OVVT", &value); break;
     default: status = ERROR; break;
   }
 
@@ -550,6 +557,8 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
     case S_SOT:  property = "SOT"; break;
     case S_VMAX:  property = "HVL"; break;
     case S_PRD:  property = "PRD"; break;
+//    case S_UNVT: property = "UNVT"; break;
+//    case S_OVVT: property = "OVVT"; break;
     default: status = ERROR; break;
   }
 

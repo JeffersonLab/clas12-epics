@@ -150,6 +150,7 @@ typedef struct board
   int OnGrDel;
   int OffGrDel;
   int Intck;
+  int Pol;
 } BOARD;
 
 typedef struct sys
@@ -285,6 +286,19 @@ int
 sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
                            unsigned int chan,float u);
 
+int
+sy1527SetChannelPolarity(unsigned int id, unsigned int board,
+                           unsigned int chan, unsigned int u);
+unsigned int
+sy1527GetChannelPolarity(unsigned int id, unsigned int board,
+                           unsigned int chan);
+
+int
+sy1527SetChannelInterlock(unsigned int id, unsigned int board,
+                           unsigned int chan, unsigned int u);
+unsigned int
+sy1527GetChannelInterlock(unsigned int id, unsigned int board,
+                           unsigned int chan);
 
 void
 sy1527SetBoardParams(BOARD *bb);

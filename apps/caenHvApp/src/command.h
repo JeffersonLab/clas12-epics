@@ -19,4 +19,12 @@
 #define S_BDHV    0x0C    /* Set BOARD HV on/off            */ 
 #define S_VMAX    0x0D    /* Set MAX CHANNEL VOLATAGE       */ 
 
+// LV Boards:
+#define S_UNVT    0x10    /* Set Under Voltage Threshold    */
+#define S_OVVT    0x11    /* Set Over  Voltage Threshold    */
+#define S_INTLK   0x12    /* Set Interlock Status           */
+
+// Bipolar Boards:
+#define S_POL     0x20    /* Set Polarity                   */
+
 #endif

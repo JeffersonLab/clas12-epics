@@ -266,7 +266,7 @@ static long write_bo(struct boRecord *pbo)
       //status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval ); 
       status = sy1527SetBoardOnOff(chassis, slot, (unsigned char)pbo->rval ); /// my: smi
 //    else if (command == S_INTLK)
-//      status = sy1527SetBoardIntlk(chassis, slot, (unsigned char)pbo->rval );
+//      status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
     else status = ERROR;
 
   /* Alert if an error occures processing the request.
@@ -557,8 +557,8 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
     case S_SOT:  property = "SOT"; break;
     case S_VMAX:  property = "HVL"; break;
     case S_PRD:  property = "PRD"; break;
-//    case S_UNVT: property = "UNVT"; break;
-//    case S_OVVT: property = "OVVT"; break;
+    case S_UNVT: property = "UNVT"; break;
+    case S_OVVT: property = "OVVT"; break;
     default: status = ERROR; break;
   }
 

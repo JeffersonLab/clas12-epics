@@ -16,16 +16,16 @@
 #define PROP_HVL  10   /*  */
 
 // Low Voltage Modules:
-#define PROP_RUPT   3 // reusing RUP
-#define PROP_RDNT   4 // reusing RDN
-#define PROP_UNVT   8 // reusing MVDZ
-#define PROP_OVVT   9 // reusing MCDZ
-#define PROP_TEMP  11
-#define PROP_INTLK 12
-#define PROP_VCON  13
+#define PROP_RUPT   3 // ramp up time (reusing RUP)
+#define PROP_RDNT   4 // ramp down time (reusing RDN)
+#define PROP_UNVT   8 // under voltage threshold (reusing MVDZ)
+#define PROP_OVVT   9 // over voltage threshold (reusing MCDZ)
+#define PROP_TEMP  11 // temperature
+#define PROP_INTLK 12 // interlock
+#define PROP_VCON  13 // connector voltage
 
 // Bi-polar Modules:
-#define PROP_POL  14
+#define PROP_POL  14  // polarity
 
 #define PROP_HBEAT  15   /*  */  /// my_n:
 

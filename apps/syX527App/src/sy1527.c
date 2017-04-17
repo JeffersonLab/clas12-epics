@@ -1449,6 +1449,19 @@ sy1527GetChannelInterlock(unsigned int id, unsigned int board,
   return(u);
 }
 
+/* returns interlock status for one channel */
+int
+sy1527SetChannelInterlock(unsigned int id, unsigned int board,
+                      unsigned int chan,unsigned int u)
+{
+  if (Measure[id].board[board].Intck < 0) return 0;
+  LOCK_MAINFRAME(id);
+  //SET_LVALUE(HV_Pw, u);
+  SET_LVALUE(Measure[id].board[board].Intck, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
 /* returns polarity for one channel */
 unsigned int
 sy1527GetChannelPolarity(unsigned int id, unsigned int board,

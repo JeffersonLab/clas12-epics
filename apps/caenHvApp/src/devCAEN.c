@@ -265,8 +265,8 @@ static long write_bo(struct boRecord *pbo)
     else if (command == S_BDHV) /// my: smi set BD ON or OFF
       //status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval ); 
       status = sy1527SetBoardOnOff(chassis, slot, (unsigned char)pbo->rval ); /// my: smi
-//    else if (command == S_INTLK)
-//      status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
+    else if (command == S_INTLK)
+      status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
     else status = ERROR;
 
   /* Alert if an error occures processing the request.

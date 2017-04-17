@@ -291,6 +291,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_OVVT] = sy1527GetChannelOverVoltage(id, slot, channel); // n
   property[PROP_TEMP] = sy1527GetChannelTemperature(id, slot, channel); // p
   property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // r
+  property[PROP_INTLK] = sy1527GetChannelInterlock(id, slot, channel); // r
 
   // BIPOLAR-Only:
   //property[PROP_POL] = sy1527GetChannelPolarity(id, slot, channel); // s

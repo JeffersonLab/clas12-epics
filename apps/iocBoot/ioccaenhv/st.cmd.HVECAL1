@@ -25,6 +25,8 @@ Start_CAEN(6, "129.57.167.53")
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
+dbLoadRecords("db/caenchassis.db","CrName=HVECAL1,CScode=#C6")
+
 dbLoadTemplate("db/HVECAL1_SPARES.substitutions")
 dbLoadTemplate("db/HVECAL1_ECAL.substitutions")
 dbLoadTemplate("db/HVECAL1_LTCC.substitutions")
@@ -40,8 +42,6 @@ cd ${TOP}/iocBoot/${IOC}
 
 asSetFilename("../acf/caenhv.acf")
 
-#< save_restore.cmd
-
 iocInit()
 
 caPutLogInit("clonioc2:7011")
@@ -49,13 +49,5 @@ caPutLogInit("clonioc2:7011")
 makeAutosaveFiles()
 create_monitor_set("info_positions.req","","")
 create_monitor_set("info_settings.req","","")
-
-makeAutosaveFiles()
-create_monitor_set("info_positions.req","","")
-create_monitor_set("info_settings.req","","")
-
-#makeAutosaveFiles()
-#create_monitor_set("info_positions.req")
-#create_monitor_set("info_settings.req")
 
 #dbDumpRecord > st.cmd.HVECAL1.dump

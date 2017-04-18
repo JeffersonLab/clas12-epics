@@ -50,6 +50,7 @@ typedef int STATUS;
 #include <devSup.h>
 #include <boRecord.h>
 #include <biRecord.h>
+#include <stringinRecord.h>
 #include <aoRecord.h>
 #include <epicsExport.h> 
 #include "command.h"
@@ -63,6 +64,7 @@ int FLAG_BLOCK_INIT=1; // my:
 static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
 static long read_bi(struct biRecord *); 
+static long read_si(struct stringinRecord *); 
 static long write_bo(struct boRecord *);
 static long init_bo(struct boRecord *);
 
@@ -92,6 +94,15 @@ struct
   DEVSUPFUN read_bi;
 } devBiCAEN = {5, NULL, NULL, NULL, NULL, read_bi};
 epicsExportAddress(dset,devBiCAEN);
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN read_si;
+} devSiCAEN = {5, NULL, NULL, NULL, NULL, read_si};
+epicsExportAddress(dset,devSiCAEN);
 /*
 struct
 { long number;
@@ -359,6 +370,41 @@ static long read_bi(struct biRecord *pbi)
 		  chassis, command,  result ) ;
   */
 
+  return 0;  
+}
+
+
+static long read_si(struct stringinRecord *pbi)
+{
+  struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned slot = (*card)>>8;
+  unsigned chassis = (*card) - ((slot)<<8) ;
+
+  unsigned command = (*signal);//>>8;
+
+  if (command == G_HVFS)
+      sy1527GetMainframeHVFanStat(chassis,pbi->val); 
+  else if (command == G_PWFS)
+      sy1527GetMainframePWFanStat(chassis,pbi->val); 
+  else if (command == G_PWV)
+      sy1527GetMainframePWVoltage(chassis,pbi->val); 
+  else if (command == G_HVPW)
+      sy1527GetMainframeHvPwSM(chassis,pbi->val); 
+  else if (command == G_MOD)
+      sy1527GetMainframeModelName(chassis,pbi->val); 
+  else if (command == G_SWR)
+      sy1527GetMainframeSwRelease(chassis,pbi->val); 
+  else {
+      char alert[128];
+      sprintf(alert, "%s(%d): Chassis%d Command%d", __FILE__, __LINE__,
+              chassis,command);
+      recGblRecordError(S_db_badField, (void *) pbi, alert);
+      return(S_db_badField);
+  }
   return 0;  
 }
 

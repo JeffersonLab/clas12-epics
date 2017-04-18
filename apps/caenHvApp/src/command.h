@@ -27,4 +27,11 @@
 // Bipolar Boards:
 #define S_POL     0x20    /* Set Polarity                   */
 
+#define G_HVFS    0x01    /* HV Fan Stat                    */
+#define G_PWFS    0x02    /* PW Fan Stat                    */
+#define G_PWV     0x03    /* PW Voltage                     */
+#define G_HVPW    0x04    /* HvPwSM                         */
+#define G_MOD     0x05    /* Model Name                     */
+#define G_SWR     0x06    /* Sowftware Release              */
+
 #endif

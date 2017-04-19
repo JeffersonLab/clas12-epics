@@ -23,8 +23,14 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadRecords("db/svtV450waveform.db")
 dbLoadRecords("db/svtmpodwaveform.db")
+
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_,R=V:,NELM=264,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-V.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_,R=I:,NELM=264,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-I.txt")
+
+#dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_D_,R=V:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-D-V.txt")
+#dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_D_,R=I:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-D-I.txt")
+#dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_A_,R=V:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-A-V.txt")
+#dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_A_,R=I:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-A-I.txt")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -58,8 +64,14 @@ seq &modCntrl,"MODULE=R2S14,HS=10,LS=7"
 
 seq &seq_v450waveform
 seq &seq_mpodwaveform
+
 seq waveform, "P=B_SVT_LV_,R=V:"
 seq waveform, "P=B_SVT_LV_,R=I:"
+
+#seq waveform, "P=B_SVT_LV_D_,R=V:"
+#seq waveform, "P=B_SVT_LV_D_,R=I:"
+#seq waveform, "P=B_SVT_LV_A_,R=V:"
+#seq waveform, "P=B_SVT_LV_A_,R=I:"
 
 < R2_LV_VD_ntrlk.init
 epicsThreadSleep(5)

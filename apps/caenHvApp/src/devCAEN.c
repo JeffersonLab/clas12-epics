@@ -51,6 +51,7 @@ typedef int STATUS;
 #include <boRecord.h>
 #include <biRecord.h>
 #include <stringinRecord.h>
+#include <waveformRecord.h>
 #include <aoRecord.h>
 #include <epicsExport.h> 
 #include "command.h"
@@ -65,6 +66,7 @@ static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
 static long read_bi(struct biRecord *); 
 static long read_si(struct stringinRecord *); 
+static long read_waveform(struct waveformRecord *); 
 static long write_bo(struct boRecord *);
 static long init_bo(struct boRecord *);
 
@@ -103,6 +105,15 @@ struct
   DEVSUPFUN read_si;
 } devSiCAEN = {5, NULL, NULL, NULL, NULL, read_si};
 epicsExportAddress(dset,devSiCAEN);
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN read_waveform;
+} devWaveformCAEN = {5, NULL, NULL, NULL, NULL, read_waveform};
+epicsExportAddress(dset,devWaveformCAEN);
 /*
 struct
 { long number;
@@ -408,6 +419,41 @@ static long read_si(struct stringinRecord *pbi)
   return 0;  
 }
 
+static long read_waveform(struct waveformRecord *pbi)
+{
+  struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned slot = (*card)>>8;
+  unsigned chassis = (*card) - ((slot)<<8) ;
+
+  unsigned command = (*signal);//>>8;
+
+  float values[20];
+
+  if (command == G_HVFS)
+      sy1527GetMainframeHVFanStats(chassis,values); 
+  else if (command == G_PWFS)
+      sy1527GetMainframePWFanStats(chassis,values); 
+  else if (command == G_PWV)
+      sy1527GetMainframePWVoltages(chassis,values); 
+  else {
+      char alert[128];
+      sprintf(alert, "%s(%d): Chassis%d Command%d", __FILE__, __LINE__,
+              chassis,command);
+      recGblRecordError(S_db_badField, (void *) pbi, alert);
+      return(S_db_badField);
+  }
+
+  for (pbi->nord=0; pbi->nord<20; pbi->nord++) {
+      ((float*)pbi->bptr)[pbi->nord] = values[pbi->nord];
+  }
+
+
+  return 0;  
+}
 
 /* Name: init_ao                                                       *\
  | Parameters: pao - Ao record pointer                                 |

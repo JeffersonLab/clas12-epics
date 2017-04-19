@@ -163,11 +163,14 @@ typedef struct sys
   char  IPADDR[MAX_CAEN_NAME]; /// my:
   char  ModelName[MAX_CAEN_NAME];
   char  SwRelease[MAX_CAEN_NAME];
-  char  HVFanStat[MAX_CAEN_NAME];
-  char  HVFanSpeed[MAX_CAEN_NAME];
-  char  PWFanStat[MAX_CAEN_NAME];
-  char  HvPwSM[MAX_CAEN_NAME];
-  char  PWVoltage[MAX_CAEN_NAME];
+  char  HVFanStat[2*MAX_CAEN_NAME];
+  char  HVFanSpeed[2*MAX_CAEN_NAME];
+  char  PWFanStat[2*MAX_CAEN_NAME];
+  char  HvPwSM[2*MAX_CAEN_NAME];
+  char  PWVoltage[2*MAX_CAEN_NAME];
+  float HVFanStats[20];
+  float PWFanStats[20];
+  float PWVoltages[20];
 } HV;
 
 int boards_status[MAX_HVPS][MAX_SLOT][MAX_BOARDPARTS]; /// my: smi temporal: should be dynamic
@@ -306,6 +309,9 @@ void sy1527GetMainframeHVFanStat(unsigned int id,char* value);
 void sy1527GetMainframePWFanStat(unsigned int id,char* value);
 void sy1527GetMainframePWVoltage(unsigned int id,char* value);
 void sy1527GetMainframeHvPwSM(unsigned int id,char* value);
+void sy1527GetMainframeHVFanStats(unsigned int id,float* value);
+void sy1527GetMainframePWFanStats(unsigned int id,float* value);
+void sy1527GetMainframePWVoltages(unsigned int id,float* value);
 
 void
 sy1527SetBoardParams(BOARD *bb);

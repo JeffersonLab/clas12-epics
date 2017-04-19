@@ -6,6 +6,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "sy1527.h"
 
@@ -358,6 +359,20 @@ sy1527PrintSysProps(unsigned int id)
   return(CAENHV_OK);
 }
 int
+sy1527SetSystemProp(char* instring,float* outarray) {
+    unsigned int ii;
+    float value;
+    for (ii=0; ii<20; ii++) outarray[ii]=0;
+    ii=0;
+    char* ptr = (char*)strtok(instring,"V:\n");
+    while (ptr) {
+        value = atof(ptr);
+        if (!isnan(value)) outarray[ii++] = value;
+        ptr = (char*)strtok(NULL,"V:\n");
+    }
+    return(CAENHV_OK);
+}
+int
 sy1527GetSystemProps(unsigned int id)
 {
   char name[MAX_CAEN_NAME];
@@ -366,19 +381,29 @@ sy1527GetSystemProps(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
   if (strcmp("SY4527",Measure[id].ModelName)==0) {
-    if (CAENHVGetSysProp(name,"HVFanStat",value) == CAENHV_OK)
+    if (CAENHVGetSysProp(name,"HVFanStat",value) == CAENHV_OK) {
       strcpy(Measure[id].HVFanStat,value);
-    if (CAENHVGetSysProp(name,"PWFanStat",value) == CAENHV_OK)
+      sy1527SetSystemProp(value,Measure[id].HVFanStats);
+    }
+    if (CAENHVGetSysProp(name,"PWFanStat",value) == CAENHV_OK) {
       strcpy(Measure[id].PWFanStat,value);
-    if (CAENHVGetSysProp(name,"PWVoltage",value) == CAENHV_OK)
+      sy1527SetSystemProp(value,Measure[id].PWFanStats);
+    }
+    if (CAENHVGetSysProp(name,"PWVoltage",value) == CAENHV_OK) {
       strcpy(Measure[id].PWVoltage,value);
+      sy1527SetSystemProp(value,Measure[id].PWVoltages);
+    }
   }
   else if (strcmp("SY1527",Measure[id].ModelName)==0) {
-    if (CAENHVGetSysProp(name,"FanStat",value) == CAENHV_OK)
+    if (CAENHVGetSysProp(name,"FanStat",value) == CAENHV_OK) {
       strcpy(Measure[id].HVFanStat,value);
+      sy1527SetSystemProp(value,Measure[id].HVFanStats);
+    }
   }
-  if (CAENHVGetSysProp(name,"HvPwSM",value) == CAENHV_OK)
+  if (CAENHVGetSysProp(name,"HvPwSM",value) == CAENHV_OK) {
     strcpy(Measure[id].HvPwSM,value);
+  }
+
   return(CAENHV_OK);
 }
 
@@ -1530,7 +1555,24 @@ void sy1527GetMainframeHvPwSM(unsigned int id,char* value) {
     strcpy(value,Measure[id].HvPwSM);
     UNLOCK_MAINFRAME(id);
 }
-
+void sy1527GetMainframeHVFanStats(unsigned int id,float* value) {
+    unsigned int ii=0;
+    LOCK_MAINFRAME(id);
+    for (ii=0; ii<20; ii++) value[ii]=Measure[id].HVFanStats[ii];
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframePWFanStats(unsigned int id,float* value) {
+    unsigned int ii=0;
+    LOCK_MAINFRAME(id);
+    for (ii=0; ii<20; ii++) value[ii]=Measure[id].PWFanStats[ii];
+    UNLOCK_MAINFRAME(id);
+}
+void sy1527GetMainframePWVoltages(unsigned int id,float* value) {
+    unsigned int ii=0;
+    LOCK_MAINFRAME(id);
+    for (ii=0; ii<20; ii++) value[ii]=Measure[id].PWVoltages[ii];
+    UNLOCK_MAINFRAME(id);
+}
 
 #define SET_LVALUE1(prop_name_m, value_m) \
 printf("SET_LVALUE1: id=%d board=%d chan=%d\n",id,board,chan); \

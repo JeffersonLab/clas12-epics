@@ -15,6 +15,8 @@ dbLoadRecords("db/svt-sums-alarm.db")
 
 dbLoadRecords("db/svtIntlkSummary.db")
 
+dbLoadRecords("db/svt-sums-inhibits.db")
+
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 cd "${TOP}/iocBoot/${IOC}"

@@ -236,5 +236,36 @@ record(calc,"B_SVT_HV_R4:outInhibit") {
     field(HIHI,"1")
 }
 
+record(calc,"B_SVT_HV:outInhibit") {
+    field(INPA,"B_SVT_HV_R1:outInhibit CPP")
+    field(INPB,"B_SVT_HV_R2:outInhibit CPP")
+    field(INPC,"B_SVT_HV_R3:outInhibit CPP")
+    field(INPD,"B_SVT_HV_R4:outInhibit CPP")
+    field(CALC,"A+B+C+D > 0 ? 1 : 0")
+    field(HHSV,"MAJOR")
+    field(HIHI,"1")
+}
 
+record(calc,"B_SVT_HVLV:crateInhibit") {
+    field(INPA,"vmetlsvt1:mainInhibit CPP")
+    field(INPB,"vmetlsvt2:mainInhibit CPP")
+    field(INPC,"vmetlsvt3:mainInhibit CPP")
+    field(INPD,"vmetlsvt4:mainInhibit CPP")
+    field(INPE,"vmetlsvt5:mainInhibit CPP")
+    field(INPF,"vmetlsvt1:inputFail CPP")
+    field(INPG,"vmetlsvt2:inputFail CPP")
+    field(INPH,"vmetlsvt3:inputFail CPP")
+    field(INPI,"vmetlsvt4:inputFail CPP")
+    field(INPJ,"vmetlsvt5:inputFail CPP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J > 0 ? 1 : 0")
+    field(HHSV,"MAJOR")
+    field(HIHI,"1")
+}
+record(calc,"B_SVT_HVLV:inhibit") {
+    field(INPA,"B_SVT_HV:outInhibit CPP")
+    field(INPB,"B_SVT_HVLV:crateInhibit CPP")
+    field(CALC,"A+B > 0 ? 1 : 0")
+    field(HHSV,"MAJOR")
+    field(HIHI,"1")
+}
 

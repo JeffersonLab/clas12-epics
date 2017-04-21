@@ -51,7 +51,7 @@ seq &modCntrl,"MODULE=R1S8,HS=7,LS=4"
 seq &modCntrl,"MODULE=R1S9,HS=8,LS=5"
 seq &modCntrl,"MODULE=R1S10,HS=8,LS=5"
 
-< R1_LV_VD_ntrlk.init
+#< R1_LV_VD_ntrlk.init
 epicsThreadSleep(5)
 < R1_HV_setpt.init
 

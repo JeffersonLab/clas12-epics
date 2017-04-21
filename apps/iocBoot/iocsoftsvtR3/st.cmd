@@ -56,7 +56,7 @@ seq &modCntrl,"MODULE=R3S16,HS=9,LS=8"
 seq &modCntrl,"MODULE=R3S17,HS=10,LS=9"
 seq &modCntrl,"MODULE=R3S18,HS=10,LS=9"
 
-< R3_LV_VD_ntrlk.init
+#< R3_LV_VD_ntrlk.init
 epicsThreadSleep(5)
 < R3_HV_setpt.init
 

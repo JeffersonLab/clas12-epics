@@ -75,7 +75,7 @@ seq waveform, "P=B_SVT_LV_,R=I:"
 #seq waveform, "P=B_SVT_LV_A_,R=V:"
 #seq waveform, "P=B_SVT_LV_A_,R=I:"
 
-< R2_LV_VD_ntrlk.init
+#< R2_LV_VD_ntrlk.init
 epicsThreadSleep(5)
 < R2_HV_setpt.init
 

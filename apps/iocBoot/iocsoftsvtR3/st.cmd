@@ -7,6 +7,8 @@ epicsEnvSet("MIBDIRS","${TOP}/iocBoot/iocsoftsvtRX:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
 epicsEnvSet("W","WIENER-CRATE-MIB::")
 
+< svtVmeCrateAddresses.env
+
 cd ${TOP}
 
 dbLoadDatabase("dbd/svtCtrlApp.dbd")

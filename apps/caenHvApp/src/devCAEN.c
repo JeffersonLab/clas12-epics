@@ -159,8 +159,6 @@ static long init_bo(struct boRecord  *pbo)
 
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
-  ///char tmp[100];
-  ///strcpy(tmp, pvmeio->parm);
 
   unsigned slot = (*card)>>8;
   unsigned chassis = (*card) - ((slot)<<8) ;
@@ -170,27 +168,19 @@ static long init_bo(struct boRecord  *pbo)
 
   block_until_fraimworks_read(); // my:
 
-  // my: uncomment
-///  printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
-///		  (unsigned short)pvmeio->signal ); 
-///  printf( "Initialize : Slot is %d, Chassis is %d, Command is 0x%x, channel is %d \n", 
-///		  slot, chassis, command, channel ) ;
-  
-
   char tmp[81]; /// temporal
-  ///int retv;
   int first_channel=channel, chs_number=command;
-  if(strstr(pbo->desc,"smi")) {
+  if (strstr(pbo->desc,"smi")) {
     strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
     tmp[strlen(pbo->name)-strlen("_BO")]=0;
     //retv=sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
     sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
     pbo->rval = 0; /// means nothing
   }
-  else{
-   if (command == S_CE)
-   { if (CAEN_GetProperty(chassis, slot, channel, "CE", &value) == ERROR)
-     { char alert[128];
+  else {
+   if (command == S_CE) {
+     if (CAEN_GetProperty(chassis, slot, channel, "CE", &value) == ERROR) {
+       char alert[128];
        sprintf(alert, "CAEN init_bo - %s(%d): Card=%d Signal=%d",
                __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal) );
        recGblRecordError(S_db_badField, (void *) pbo, alert);
@@ -198,20 +188,18 @@ static long init_bo(struct boRecord  *pbo)
      }
      pbo->rval = value;
    }
-   else if (command == S_HV){
-     int onoff; /// my:
+   else if (command == S_HV) {
+     int onoff;
      //retv = CAEN_GetHv(chassis, &onoff); /// my:
      CAEN_GetHv(chassis, &onoff); /// my:
      pbo->rval = onoff;
-     //printf("ONOFF=%d\n", onoff); /// my:
    }
-   else if (command == S_CHHV){   /// my:
+   else if (command == S_CHHV) {
      int st=sy1527GetChannelStatus(chassis, slot,channel);
      pbo->rval = st & (1<<0); ///only1527
    }
-   else if (command == S_BDHV){   /// my: smi we do not need init here as it is used only in FSM tree
-    pbo->rval=0; /// just init somehow
-    ///printf("%s====================\n",tmp);
+   else if (command == S_BDHV) {   /// my: smi we do not need init here as it is used only in FSM tree
+     pbo->rval=0; /// just init somehow
    }
    else if (command == S_INTLK) {
      pbo->rval = sy1527GetChannelInterlock(chassis, slot,channel);
@@ -251,20 +239,9 @@ static long write_bo(struct boRecord *pbo)
 
   printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval); //my: 
 
-  /*
-  printf( "Card is %d, Signal is %d \n", 
-		  (unsigned short)pvmeio->card, (unsigned short)pvmeio->signal );
-  printf( "Write to : Slot is %d, Chassis is %d, Command is 0x%x, channel is %d, value %d \n", 
-	  slot, chassis, command, channel, pbo->rval ) ;
-  */
-
-  /* identify the type of Bo and issue a command to the desired chassis.
-   */
-  //int retv;
-  //char tmp1[10];
-  //int first_board, bds_number;
+  // identify the type of Bo and issue a command to the desired chassis.
   int first_channel=channel, chs_number=command;
-  if(strstr(pbo->desc,"smi")) {
+  if (strstr(pbo->desc,"smi")) {
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
 
@@ -272,7 +249,7 @@ static long write_bo(struct boRecord *pbo)
     sy1527BoardSmiControl(pbo->name, chassis, slot,  
     first_channel, chs_number, (unsigned char)pbo->rval);
   }
-  else if(strstr(pbo->desc,"crate_fsm_init")){ /// for any order of launch of ioc and fsm
+  else if (strstr(pbo->desc,"crate_fsm_init")) { /// for any order of launch of ioc and fsm
     //retv=sy1527CrateSmiInit(pbo->name, chassis);
     sy1527CrateSmiInit(pbo->name, chassis);
 
@@ -291,10 +268,9 @@ static long write_bo(struct boRecord *pbo)
       status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
     else status = ERROR;
 
-  /* Alert if an error occures processing the request.
-   */
-    if (status == ERROR)
-    { char alert[128];
+    // Alert if an error occures processing the request.
+    if (status == ERROR) {
+      char alert[128];
       sprintf(alert, "CAEN Bo - %s(%d): Card=%d Signal=%d",
               __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal) );
       recGblRecordError(S_db_badField, (void *) pbo, alert);
@@ -328,13 +304,6 @@ static long read_bi(struct biRecord *pbi)
    */
   struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
 
-  /*
-  unsigned char *card = (char *) &pvmeio->card;
-  unsigned char *signal = (char *) &pvmeio->signal;
-  unsigned chassis = *(card+1);
-  unsigned command = *signal;
-  */
-
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
 
@@ -349,37 +318,28 @@ static long read_bi(struct biRecord *pbi)
    */
   int onoff; /// my:
   int retv;
-  if(strstr(pbi->desc,"smi")) {
+  if (strstr(pbi->desc,"smi")) {
     retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
     pbi->rval = retv; /// means nothing
   }
-  else{
-    if (command == G_Valid) result = CAEN_GetValidity(chassis);
-    else if (command == G_HV) result = CAEN_GetHv(chassis, &onoff); /// my:
+  else {
+    if      (command == G_Valid) result = CAEN_GetValidity(chassis);
+    else if (command == G_HV)    result = CAEN_GetHv(chassis, &onoff); /// my:
     else if (command == G_Alarm) result = CAEN_GetAlarm(chassis);
-    else
-    { char alert[128];
+    else {
+      char alert[128];
       sprintf(alert, "%s(%d): Card=%d Signal=%d", __FILE__, __LINE__,
         (*(unsigned short*)card), (*(unsigned short*)signal) );
       recGblRecordError(S_db_badField, (void *) pbi, alert);
       return(S_db_badField);
     }
-//printf("READ_BI ======================================== name=%s %d %d %d\n",pbi->name,chassis,slot, result); //my:
-  /* Show error if the requested chassis does not exist.
-   */
-    if (result == -1)
-    { recGblRecordError(S_db_badField, (void *) pbi, "No such chassis");
+    // Show error if the requested chassis does not exist.
+    if (result == -1) {
+      recGblRecordError(S_db_badField, (void *) pbi, "No such chassis");
       return(S_db_badField);
     }
     else pbi->rval = onoff; /// my: was result;
   }
-
-  /*
-  printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
-		  (unsigned short)pvmeio->signal );
-   printf( "Read from :  Chassis is %d, Command is 0x%x,  value %d \n", 
-		  chassis, command,  result ) ;
-  */
 
   return 0;  
 }
@@ -477,16 +437,6 @@ static long init_ao(struct aoRecord  *pao)
    */
   struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
 
-  /* Comment this out because it messes with addresses */
-  /*
-  unsigned char *card = (char *) &pvmeio->card;
-  unsigned char *signal = (char *) &pvmeio->signal;
-  unsigned slot = *(card++);
-  unsigned chassis = *card;
-  unsigned command = *(signal++);
-  unsigned channel = *signal;
-  */
-
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
 
@@ -496,17 +446,9 @@ static long init_ao(struct aoRecord  *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-  /*
-  printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
-		  (unsigned short)pvmeio->signal );
-  printf( "Initialize : Slot is %d, Chassis is %d, Command is 0x%x, channel is %d \n", 
-	  slot, chassis, command, channel ) ;
-  */
+  // Initialize the record depending on the passed parameters.
 
-  /* Initialize the record depending on the passed parameters.
-   */
-
- block_until_fraimworks_read(); // my:
+  block_until_fraimworks_read(); // my:
 
   switch (command)
   { case S_DV:
@@ -514,9 +456,7 @@ static long init_ao(struct aoRecord  *pao)
     case S_RDN:
       status = CAEN_GetProperty(chassis, slot, channel, "RDN", &value); break;
     case S_RUP:
-      status = CAEN_GetProperty(chassis, slot, channel, "RUP", &value); /// break;
-//printf("INIT +++++++++++++++++++++++++++++++=== chassis, slot, channel, %d %d %d value=%f\n",chassis, slot, channel,value);
-      break;
+      status = CAEN_GetProperty(chassis, slot, channel, "RUP", &value); break;
     case S_TC:
       status = CAEN_GetProperty(chassis, slot, channel, "TC", &value); break;
     case S_MVDZ:
@@ -536,10 +476,6 @@ static long init_ao(struct aoRecord  *pao)
     default: status = ERROR; break;
   }
 
-  //printf("value=%f\n",value);
-  /* Report any failure to initialize
-   */
-
   // these result in setpoint initted to zero (and do not propogate to hw):
   //if (status ==OK) pao->val = value;
   //if (status ==OK) pao->oval = value;
@@ -548,14 +484,13 @@ static long init_ao(struct aoRecord  *pao)
   // since rval is an integer (and also does not propogate to hw):
   if (status ==OK) pao->rval = value;
 
-  else
-    {
-      char alert[128];
-      sprintf(alert, "init_ao - %s(%d): Card=%d Signal=%dx",
-	      __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal) );
-      recGblRecordError(S_db_badField, (void *) pao, alert);
-      return(S_db_badField);
-    }
+  else {
+    char alert[128];
+    sprintf(alert, "init_ao - %s(%d): Card=%d Signal=%dx",
+	    __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal) );
+    recGblRecordError(S_db_badField, (void *) pao, alert);
+    return(S_db_badField);
+  }
 
   return 0;  
 }
@@ -581,17 +516,6 @@ static long write_ao(struct aoRecord *pao)
      {card 0-7: chassis, 8-15: slot;  signal 0-7:channel, 8-15:command}.
    */
 
-  /* Comment this out because it messes with addresses */
-  /*
-  struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
-  unsigned char *card = (char *) &pvmeio->card;
-  unsigned char *signal = (char *) &pvmeio->signal;
-  unsigned slot = *(card++);
-  unsigned chassis = *card;
-  unsigned command = *(signal++);
-  unsigned channel = *signal;
-  */
-
   struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
@@ -602,9 +526,8 @@ static long write_ao(struct aoRecord *pao)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-
-  float value_f; /// my:
-  if(ALLSET_THROUGH_ONE){
+  float value_f;
+  if (ALLSET_THROUGH_ONE) {
    unsigned long long t=pao->val;
    chassis= 0xff & t; t = t >> 8;
    slot= 0xff & t; t = t >> 8;
@@ -613,30 +536,16 @@ static long write_ao(struct aoRecord *pao)
    value_f=(((double) t)/100.);
   }
 
-
-  /* Convert the record's assignment value to ASCII for passing to HVload.
-   */
-  /*
-  sprintf(value, "%7.1f", pao->val);
-  */
+  // Convert the record's assignment value to ASCII for passing to HVload.
 printf("WRITE_AO ======================================== name=%s %f %d\n",pao->name, pao->val, pao->rval); //my: 
 
-  if(ALLSET_THROUGH_ONE){
-   pao->val=value_f; /// my: not much meaning but to save in EPICS not a huge number, but real value
-  }
-  else{
-   value_f = pao->val ; /// my:
-  }
+  // my: not much meaning but to save in EPICS not a huge number, but real value
+  if (ALLSET_THROUGH_ONE) pao->val = value_f; 
+  else value_f = pao->val;
+
 printf("********************************** %d %d %d %d %f\n",chassis, slot, channel, command, value_f);
-  /*
-  printf( "Card is %d, Signal is %d \n", (unsigned short)pvmeio->card, 
-		  (unsigned short)pvmeio->signal );
-  printf( "Write to : Slot is %d, Chassis is %d, Command is 0x%x, channel is %d, value %f \n", 
-	  slot, chassis, command, channel, value_f ) ;
-  */
  
-  /* Set the property name for HVload, depending on the passed command code.
-   */
+  // Set the property name for HVload, depending on the passed command code.
   switch (command)
   { case S_DV:   property = "DV"; break;
     case S_RDN:  property = "RDN"; break;
@@ -655,26 +564,23 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
   /* Command the property of one channel on a HV module in a slot of the
    * chassis to the desired value.
    */
-  if (status == OK){
+  if (status == OK) {
     /*    status = CAEN_HVload(chassis, slot, channel, property, value);  */
     status = CAEN_HVload(chassis, slot, channel, property, value_f );
 
-  }else if(ALLSET_THROUGH_ONE){
-/** ------- peace taken from write_bo ------------ */ 
-  //pao->val=(int)pao->val ; /// my:
-
+  }
+  else if (ALLSET_THROUGH_ONE) {
    if (command == S_CE)
      status = CAEN_HVload(chassis, slot, channel, "CE", (float)pao->val );
-   else if (command == S_HV){
-   printf("=================== ***************** %d %d\n", chassis, (unsigned char)pao->val);
+   else if (command == S_HV) {
+     printf("=================== ***************** %d %d\n", chassis, (unsigned char)pao->val);
      status = CAEN_SetHV(chassis, (unsigned char)pao->val  );
    }
    else status = ERROR;
-/** ---------------------------------------------- */
   }
 
-  if (status == ERROR)
-  { char alert[128];
+  if (status == ERROR) {
+    char alert[128];
     sprintf(alert, "Ao - %s(%d): Card=%d Signal=%d",
             __FILE__, __LINE__, (*(unsigned short*)card), (*(unsigned short*)signal));
     recGblRecordError(S_db_badField, (void *) pao, alert);
@@ -686,34 +592,29 @@ printf("********************************** %d %d %d %d %f\n",chassis, slot, chan
 
 //=====================================================================================
 
-void block_until_fraimworks_read(){ ///my:
+void block_until_fraimworks_read(){
   int i;
- // printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ nmainframes=%d block=%d\n",nmainframes,FLAG_BLOCK_INIT);
   if(FLAG_BLOCK_INIT){
-   while(1)
-   {  
-    int allmfsareread=1;
-    for(i=0;i<nmainframes;i++){
-       if(is_mainframe_read[i] == 0 && mainframes[i]!=-1)
-       {allmfsareread=0;printf("is_mainframe_read wait %d %d\n",i,mainframes[i] );}
-  //    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ is_mainframe_read[%d]=%d\n",i,is_mainframe_read[i]);
+    while(1) {  
+      int allmfsareread=1;
+      for(i=0; i<nmainframes; i++) {
+        if (is_mainframe_read[i] == 0 && mainframes[i]!=-1) {
+          allmfsareread=0;
+          printf("is_mainframe_read wait %d %d\n",i,mainframes[i]);
+        }
+      }
+      if (allmfsareread) {
+        FLAG_BLOCK_INIT=0;
+        break;
+      }
+      sleep(1);
+      printf("is_mainframe_read wait\n");
     }
-  //printf("+++++++++++++++++++++++++++++++++++++++++++++++++++ allmfsareread=%d\n", allmfsareread);
-    if(allmfsareread){FLAG_BLOCK_INIT=0; break;}
-    sleep(1);printf("is_mainframe_read wait\n");
-   }
   }
-//printf("INIT +++++++++++++++++++++++++++++++ value=%x\n",command);
-
 }
 
 ///=======================================================================================================
 ///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-
 
 /* $Header: HVCAENx527/HVCAENx527App/src/HVCAENx527chMBBio.c 1.14 2007/06/01 13:32:58CST Ru Igarashi (igarasr) Exp Ru Igarashi (igarasr)(2007/06/01 13:32:58CST) $ 
  *
@@ -737,8 +638,8 @@ void setMbbiField (char* field, unsigned int id) {
 	mbbiRecord dummy;
 	n = sizeof(dummy.zrst);
 	if (id < MAX_HVPS) {
-		/// if (Crate[id].connected == 1) {
-                if (Measure[id].id != -1) {
+		// if (Crate[id].connected == 1) {
+        if (Measure[id].id != -1) {
 			strncpy(field, Measure[id].name, n);
 		}
 	} else {
@@ -826,11 +727,6 @@ epicsExportAddress(dset,devCAENx527MBBi);
 
 ///=======================================================================================================
 ///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-///=======================================================================================================
-
 
 ///#include "HVCAENx527.h"
 
@@ -845,7 +741,7 @@ epicsExportAddress(dset,devCAENx527MBBi);
 #include "recGbl.h"
 #include "devSup.h"
 #include "link.h"*/
-#include "stringinRecord.h"
+//#include "stringinRecord.h"
 ///#include "epicsExport.h"*
 
 /* Create the dset for devSiSoft */
@@ -869,24 +765,17 @@ struct {
 };
 epicsExportAddress(dset, devCAENx527Stringin);
 
-static long init_record_crate_stringin(stringinRecord *prec){
-
-	///struct instio *pinstio;
-	///char mf[64];
-	///int slot;
-
-    /* INP must be INST_IO */
+static long init_record_crate_stringin(stringinRecord *prec)
+{
     if (prec->inp.type != INST_IO) {
         recGblRecordError(S_db_badField, (void *)prec, "devCAENx527Stringin (init_record_crate_stringin) Illegal INP field");
         return S_db_badField;
     }
-
     return 0;
 }
 
 static long read_crate_stringin(stringinRecord *prec)
 {
-
     struct instio *pinstio;
 	char mf[64];
 	int slot;
@@ -900,20 +789,16 @@ static long read_crate_stringin(stringinRecord *prec)
 	}
 
 	int i;
-	/*for(i=0; i < MAX_CRATES; i++)
-		printf("i = %d name = %s pinstio->string = %s mf = %s slot = %d\n",i, Crate[i].name, pinstio->string, mf, slot);*/
 	i = 0;
-	while( i < MAX_HVPS  &&  strcmp(/** Crate[i].name*/Measure[i].name, mf) != 0) i++; /// my: MAX_CRATES
+	while ( i < MAX_HVPS && strcmp(/** Crate[i].name*/Measure[i].name, mf) != 0) i++; /// my: MAX_CRATES
 
-	if (i>=MAX_HVPS) {
-		//printf( "%s: Create not found: \"%s\"\n", prec->name, pinstio->string);
-		return(-1);
-	}
-	if(slot == -1) {
+	if (i>=MAX_HVPS) return(-1);
+	if (slot == -1) {
 		snprintf(prec->val, sizeof(prec->val),"%s", Measure[i].IPADDR /** Crate[i].IPaddr */);
-	} else if (slot>=0) {
+	}
+    else if (slot>=0) {
 		///if (Crate[i].hvchmap[slot].nchan) {
-                if (Measure[i].board[slot].nchannels) {
+        if (Measure[i].board[slot].nchannels) {
 			///snprintf(prec->val, sizeof(prec->val),"%s (%d ch)", Crate[i].hvchmap[slot].slname, Crate[i].hvchmap[slot].nchan);
 			snprintf(prec->val, sizeof(prec->val),"%s (%d ch)", Measure[i].board[slot].modelname, Measure[i].board[slot].nchannels);
 		} else {

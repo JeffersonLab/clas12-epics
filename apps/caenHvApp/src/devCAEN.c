@@ -431,7 +431,7 @@ static long read_waveform(struct waveformRecord *pbi)
 
   unsigned command = (*signal);//>>8;
 
-  float values[20];
+  float values[MAX_SYSPROPS];
 
   if (command == G_HVFS)
       sy1527GetMainframeHVFanStats(chassis,values); 
@@ -447,10 +447,8 @@ static long read_waveform(struct waveformRecord *pbi)
       return(S_db_badField);
   }
 
-  for (pbi->nord=0; pbi->nord<20; pbi->nord++) {
+  for (pbi->nord=0; pbi->nord<MAX_SYSPROPS; pbi->nord++)
       ((float*)pbi->bptr)[pbi->nord] = values[pbi->nord];
-  }
-
 
   return 0;  
 }

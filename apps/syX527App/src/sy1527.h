@@ -9,6 +9,7 @@
 #define MAX_PARAM 40
 /// my_n_smi:
 #define MAX_BOARDPARTS 24
+#define MAX_SYSPROPS 20
 
 #define MAX_HVPS        50
 #define CAENHV_OK       0
@@ -161,16 +162,16 @@ typedef struct sys
   BOARD board[MAX_SLOT];
   int   setflag; /* if 1, need to write */
   char  IPADDR[MAX_CAEN_NAME]; /// my:
-  char  ModelName[MAX_CAEN_NAME];
-  char  SwRelease[MAX_CAEN_NAME];
+  char  ModelName[2*MAX_CAEN_NAME];
+  char  SwRelease[2*MAX_CAEN_NAME];
   char  HVFanStat[2*MAX_CAEN_NAME];
   char  HVFanSpeed[2*MAX_CAEN_NAME];
   char  PWFanStat[2*MAX_CAEN_NAME];
   char  HvPwSM[2*MAX_CAEN_NAME];
   char  PWVoltage[2*MAX_CAEN_NAME];
-  float HVFanStats[20];
-  float PWFanStats[20];
-  float PWVoltages[20];
+  float HVFanStats[MAX_SYSPROPS];
+  float PWFanStats[MAX_SYSPROPS];
+  float PWVoltages[MAX_SYSPROPS];
 } HV;
 
 int boards_status[MAX_HVPS][MAX_SLOT][MAX_BOARDPARTS]; /// my: smi temporal: should be dynamic

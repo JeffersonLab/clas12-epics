@@ -204,18 +204,23 @@ sy1527GetBoard(unsigned int id, unsigned int board)
       {
         if (++NCFEDOWNERR[id] > MAXCFEDOWNERR)
         {
-          printf("@@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZING\n");
+          printf("\n@@@@@@@@@@@@@@@@@@@@ CFE FAILURE, RECONNECTING ...\n\n");
           sy1527Stop(id);
-          sleep(10);
+          sleep(20);
 
           if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
           {
-            printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED.  WAITING 45s and RETRYING.\n");
-            sleep(45);
+            printf("\n@@@@@@@@@@@@@@@@@@@@ RECONNECTION FAILED ONCE.  WAIT and RETRY ...\n\n");
+            sleep(40);
             if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
             {
-              printf("@@@@@@@@@@@@@@@@@@ NABO:  REINITIALIZION FAILED TWICE.  LET PROCSERVE RESTART IT.\n");
-              exit(1);
+              printf("\n@@@@@@@@@@@@@@@@@@@@ RECONNECTION FAILED TWICE.  WAIT and RETRY ...\n\n");
+              sleep(80);
+              if (sy1527Start(id,Measure[id].IPADDR) != CAENHV_OK)
+              {
+                printf("\n@@@@@@@@@@@@@@@@@@@@ RECONNECTION FAILED THRICE.  EXITING IOC ...\n\n");
+                exit(1);
+              }
             }
           }
           sy1527GetMap(id);
@@ -362,7 +367,7 @@ int
 sy1527SetSystemProp(char* instring,float* outarray) {
     unsigned int ii;
     float value;
-    for (ii=0; ii<20; ii++) outarray[ii]=0;
+    for (ii=0; ii<MAX_SYSPROPS; ii++) outarray[ii]=0;
     ii=0;
     char* ptr = (char*)strtok(instring,"V:\n");
     while (ptr) {
@@ -376,7 +381,7 @@ int
 sy1527GetSystemProps(unsigned int id)
 {
   char name[MAX_CAEN_NAME];
-  char value[100];
+  char value[2*MAX_CAEN_NAME];
   CHECK_ID(id);
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
@@ -429,7 +434,9 @@ sy1527PrintParams(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
+#ifdef DEBUG
   printf("\nENTER  sy1527PrintParams(%d) *************************************\n",id);
+#endif
 
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
@@ -485,7 +492,9 @@ sy1527PrintParams(unsigned int id)
     if (parNames1!=NULL) free(parNames1);
   
   }
+#ifdef DEBUG
   printf("\nLEAVE  sy1527PrintParams(%d) *************************************\n",id);
+#endif
   return(CAENHV_OK);
 }
 
@@ -506,8 +515,10 @@ sy1527GetMap(unsigned int id)
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
+#ifdef DEBUG
   printf("\nENTER  sy1527GetMap(%d/%s) *************************************\n",id,name);
-  
+#endif
+
   ret = CAENHVGetCrateMap(name, &NrOfSl, &NrOfCh, &ModelList,
                           &DescriptionList, &SerNumList,
                           &FmwRelMinList, &FmwRelMaxList );
@@ -519,10 +530,8 @@ sy1527GetMap(unsigned int id)
   {
     char *m = ModelList, *d = DescriptionList;
 
-    printf("Measure MAP:\n\n");// my:
-    printf("NrofSl=%d\n",NrOfSl); // my:
+    printf("\nsy1527GetMap:  id=%d, NrofSl=%d\n",id,NrOfSl);
     Measure[id].nslots = NrOfSl;
-    printf("=========================> %d %d\n",id,Measure[id].nslots); //my:
     Demand[id].nslots = NrOfSl;
     for(i=0; i<NrOfSl; i++, m+=strlen(m)+1, d+=strlen(d)+1)
     {
@@ -557,7 +566,7 @@ sy1527GetMap(unsigned int id)
             !strcmp(Measure[id].board[i].modelname,"A1733") ||
             !strcmp(Measure[id].board[i].modelname,"A1737"))
         {
-          printf("---> found board %s\n",Measure[id].board[i].modelname);
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1535param;
           Demand[id].board[i].nparams = nA1535param;
           for(j=0; j<Measure[id].board[i].nparams; j++)
@@ -584,7 +593,7 @@ sy1527GetMap(unsigned int id)
         }
         else if( !strcmp(Measure[id].board[i].modelname,"A1520"))
         {
-          printf("---> found board %s\n",Measure[id].board[i].modelname);
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1520param;
           Demand[id].board[i].nparams = nA1520param;
           for(j=0; j<Measure[id].board[i].nparams; j++)
@@ -611,7 +620,7 @@ sy1527GetMap(unsigned int id)
         }
         else if( !strcmp(Measure[id].board[i].modelname,"A1536HDM"))
         {
-          printf("---> found board %s\n",Measure[id].board[i].modelname);
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1536HDMparam;
           Demand[id].board[i].nparams = nA1536HDMparam;
           for(j=0; j<Measure[id].board[i].nparams; j++)
@@ -638,7 +647,7 @@ sy1527GetMap(unsigned int id)
         }
         else if(!strcmp(Measure[id].board[i].modelname,"A2518A"))
         {
-          printf("---> found board %s\n",Measure[id].board[i].modelname);
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA2518Aparam;
           Demand[id].board[i].nparams = nA2518Aparam;
           for(j=0; j<Measure[id].board[i].nparams; j++)
@@ -665,7 +674,7 @@ sy1527GetMap(unsigned int id)
         }
         else
         {
-          printf("Unknown board =%s\n",Measure[id].board[i].modelname);
+          printf("\nERROR: sy1527GetMap:  UNKNOWN BOARD = %s\n\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nchannels = 0;
           Demand[id].board[i].nchannels = 0;
         }
@@ -680,8 +689,9 @@ sy1527GetMap(unsigned int id)
     free(FmwRelMaxList);
     free(NrOfCh);
   }
+#ifdef DEBUG
   printf("\nLEAVE  sy1527GetMap(%d) *************************************\n",id);
-
+#endif
   return(CAENHV_OK);
 }
 //==================================================================================================
@@ -691,7 +701,7 @@ sy1527PrintMap(unsigned int id)
   int i, j;
   CHECK_ID(id);
   CHECK_OPEN(id);
-  printf("\n\nMAP for mainframe %d, nslots=%d\n\n",id,Measure[id].nslots);
+  printf("\nsy1527PrintMap: mainframe id=%d, nslots=%d\n",id,Measure[id].nslots);
   for(i=0; i<Measure[id].nslots; i++)
   {
     if(Measure[id].board[i].nchannels == 0)
@@ -737,7 +747,9 @@ sy1527MainframeThread(void *arg)
   int id, i, ret, status;
 
   id=((THREAD *)arg)->threadid;
-  printf("[%2d] starts thread +++ ++\n",id);
+#ifdef DEBUG
+  printf("\nENTER  sy1527MainframeThread, id=%d *****************************\n",id);
+#endif
 
   while(1)
   {
@@ -836,7 +848,14 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   char arg[30], userName[20], passwd[30], name[MAX_CAEN_NAME], ctmp[MAX_CAEN_NAME];
   int link, ret;
 
+  if (strlen(ip_address)>=MAX_CAEN_NAME) {
+    printf("ERROR:  sy1527Start:  too long mainframe IP, EXITING IOC.\n");
+    exit(1);
+  }
+
+#ifdef DEBUG
   printf("\nENTER  sy1527Start(%s) *************************************\n",ip_address);
+#endif
 
   pthread_mutex_lock(&global_mutex);
 
@@ -846,7 +865,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   nmainframes++;
   id=id_nowused;
 
-  printf("+++++++++  nmainframes=%d id=%d\n", nmainframes, id);
+  printf("\nsy1527Start:  nmainframes=%d id=%d\n", nmainframes, id);
 
   /* lock global mutex to prevent other mainframes to be started
      until we are done with this one */
@@ -863,46 +882,38 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   CHECK_FREE(id);
 
   sprintf(name, CRATE_LABEL, id);
-  printf("System Name set as >%s<\n",name);
-
   strcpy(arg,ip_address);
-  printf("TCP/IP address set as >%s<\n",arg);
   link = LINKTYPE_TCPIP;
-
   strcpy(userName, "admin");
   strcpy(passwd, "admin");
+  printf("sy1527Start:  Mainframe >id/name/ipaddr<: >%d/%s/%s<\n",id,name,arg);
 
   ret = CAENHVInitSystem(name, link, arg, userName, passwd);
 
-  printf("my: id_index=%d id=%d name=%s", id, ret, name );
-  printf("\nCAENHVInitSystem: %s (num. %d)\n\n", CAENHVGetError(name),ret);
-
-  NCFEDOWNERR[id]=0;
-
-  printf("\n\nRUNNING MODIFIED FOR CFE FIX.!!!!!!!!!!!!!!!!!!!!!!!\n\n");
-
-  if(ret == CAENHV_OK)
+  if (ret == CAENHV_OK)
   {
-    if(strlen(ip_address)>=MAX_CAEN_NAME){printf("too long mainfraime IP: exits now\n");exit(1);}
     strcpy(Measure[id].IPADDR,ip_address);
     Measure[id].id = ret;
     Demand[id].id = ret;
     strcpy(Measure[id].name, name); 
     strcpy(Demand[id].name, name);
     ret=CAENHVGetSysProp(name,"ModelName",ctmp);
-    if (ret == CAENHV_OK) 
-      strcpy(Measure[id].ModelName,ctmp);
+    if (ret == CAENHV_OK) strcpy(Measure[id].ModelName,ctmp);
+    else printf("ERROR Reading ModelName (id=%d)\n",id);
     ret=CAENHVGetSysProp(name,"SwRelease",ctmp);
-    if (ret == CAENHV_OK) 
-      strcpy(Measure[id].SwRelease,ctmp);
-
+    if (ret == CAENHV_OK) strcpy(Measure[id].SwRelease,ctmp);
+    else printf("ERROR Reading SwRelease (id=%d)\n",id);
   }
   else
   {
-    printf("\n CAENHVInitSystem returned %d\n\n",ret);    
+    printf("\nERROR CAENHVInitSystem: (id=%d) %s (#%d)\n\n",
+            id,CAENHVGetError(name),ret);
     pthread_mutex_unlock(&global_mutex);
     return(CAENHV_SYSERR);
   }
+  
+  NCFEDOWNERR[id]=0;
+  printf("\n@@@@@@@@@@@@@@@@@@@@ RUNNING MODIFIED FOR CFE FIX\n\n");
 
   /* init mainframe mutex */
   pthread_mutex_init(&mainframe_mutex[id], &mattr);
@@ -916,21 +927,20 @@ sy1527Start(unsigned id_nowused, char *ip_address)
     pthread_mutex_unlock(&global_mutex);
     return(CAENHV_SYSERR);
   }
-  else
-  {
-    printf("INFO: pthread_create(0x%08lx[%d],...) done\n",idth[id],id);
-  }
+  else printf("INFO: pthread_create(0x%08lx[%d],...) done\n",idth[id],id);
 
   /* register mainframe */
   mainframes[nmainframes-1] = id;
 
   /* get mainframe map */
-  sy1527GetMap(id);
+  // this was a duplicate (see caenHvApp/src/ioc_com_def.h)
+  //sy1527GetMap(id);
 
   pthread_mutex_unlock(&global_mutex);
   
+#ifdef DEBUG
   printf("\nLEAVE  sy1527Start(%s) *************************************\n",ip_address);
-
+#endif
   return(CAENHV_OK);
 }
 //===========================================================================
@@ -1558,19 +1568,22 @@ void sy1527GetMainframeHvPwSM(unsigned int id,char* value) {
 void sy1527GetMainframeHVFanStats(unsigned int id,float* value) {
     unsigned int ii=0;
     LOCK_MAINFRAME(id);
-    for (ii=0; ii<20; ii++) value[ii]=Measure[id].HVFanStats[ii];
+    for (ii=0; ii<MAX_SYSPROPS; ii++)
+        value[ii]=Measure[id].HVFanStats[ii];
     UNLOCK_MAINFRAME(id);
 }
 void sy1527GetMainframePWFanStats(unsigned int id,float* value) {
     unsigned int ii=0;
     LOCK_MAINFRAME(id);
-    for (ii=0; ii<20; ii++) value[ii]=Measure[id].PWFanStats[ii];
+    for (ii=0; ii<MAX_SYSPROPS; ii++)
+        value[ii]=Measure[id].PWFanStats[ii];
     UNLOCK_MAINFRAME(id);
 }
 void sy1527GetMainframePWVoltages(unsigned int id,float* value) {
     unsigned int ii=0;
     LOCK_MAINFRAME(id);
-    for (ii=0; ii<20; ii++) value[ii]=Measure[id].PWVoltages[ii];
+    for (ii=0; ii<MAX_SYSPROPS; ii++)
+        value[ii]=Measure[id].PWVoltages[ii];
     UNLOCK_MAINFRAME(id);
 }
 
@@ -1701,35 +1714,35 @@ void sy1527SetBoardParams(BOARD *bb) {
     bb->Pol=-1;
     for (ii=0; ii<bb->nparams; ii++)
     {
-        if (strcmp(bb->parnames[ii],"V0Set")==0) bb->V0Set=ii;
-        if (strcmp(bb->parnames[ii],"I0Set")==0) bb->I0Set=ii;
-        if (strcmp(bb->parnames[ii],"V1Set")==0) bb->V1Set=ii;
-        if (strcmp(bb->parnames[ii],"I1Set")==0) bb->I1Set=ii;
-        if (strcmp(bb->parnames[ii],"RUp")==0) bb->RUp=ii;
-        if (strcmp(bb->parnames[ii],"RDWn")==0) bb->RDWn=ii;
-        if (strcmp(bb->parnames[ii],"Trip")==0) bb->Trip=ii;
-        if (strcmp(bb->parnames[ii],"SVMax")==0) bb->SVMax=ii;
-        if (strcmp(bb->parnames[ii],"VMon")==0) bb->VMon=ii;
-        if (strcmp(bb->parnames[ii],"IMon")==0) bb->IMon=ii;
-        if (strcmp(bb->parnames[ii],"Status")==0) bb->Status=ii;
-        if (strcmp(bb->parnames[ii],"Pw")==0) bb->Pw=ii;
-        if (strcmp(bb->parnames[ii],"POn")==0) bb->PwEn=ii;
-        if (strcmp(bb->parnames[ii],"PwEn")==0) bb->PwEn=ii;
-        if (strcmp(bb->parnames[ii],"TripInt")==0) bb->TripInt=ii;
-        if (strcmp(bb->parnames[ii],"TripExt")==0) bb->TripExt=ii;
-        if (strcmp(bb->parnames[ii],"PDwn")==0) bb->PDwn=ii;
-        if (strcmp(bb->parnames[ii],"Tdrift")==0) bb->Tdrift=ii;
-        if (strcmp(bb->parnames[ii],"RUpTime")==0) bb->RUpTime=ii;
-        if (strcmp(bb->parnames[ii],"RDwTime")==0) bb->RDwTime=ii;
-        if (strcmp(bb->parnames[ii],"UNVThr")==0) bb->UNVThr=ii;
-        if (strcmp(bb->parnames[ii],"OVVThr")==0) bb->OVVThr=ii;
-        if (strcmp(bb->parnames[ii],"VCon")==0) bb->VCon=ii;
-        if (strcmp(bb->parnames[ii],"Temp")==0) bb->Temp=ii;
-        if (strcmp(bb->parnames[ii],"ChToGroup")==0) bb->ChToGroup=ii;
-        if (strcmp(bb->parnames[ii],"OnGrDel")==0) bb->OnGrDel=ii;
-        if (strcmp(bb->parnames[ii],"OffGrDel")==0) bb->OffGrDel=ii;
-        if (strcmp(bb->parnames[ii],"Intck")==0) bb->Intck=ii;
-        if (strcmp(bb->parnames[ii],"Pol")==0) bb->Pol=ii;
+        if      (strcmp(bb->parnames[ii],"V0Set")==0)     bb->V0Set=ii;
+        else if (strcmp(bb->parnames[ii],"I0Set")==0)     bb->I0Set=ii;
+        else if (strcmp(bb->parnames[ii],"V1Set")==0)     bb->V1Set=ii;
+        else if (strcmp(bb->parnames[ii],"I1Set")==0)     bb->I1Set=ii;
+        else if (strcmp(bb->parnames[ii],"RUp")==0)       bb->RUp=ii;
+        else if (strcmp(bb->parnames[ii],"RDWn")==0)      bb->RDWn=ii;
+        else if (strcmp(bb->parnames[ii],"Trip")==0)      bb->Trip=ii;
+        else if (strcmp(bb->parnames[ii],"SVMax")==0)     bb->SVMax=ii;
+        else if (strcmp(bb->parnames[ii],"VMon")==0)      bb->VMon=ii;
+        else if (strcmp(bb->parnames[ii],"IMon")==0)      bb->IMon=ii;
+        else if (strcmp(bb->parnames[ii],"Status")==0)    bb->Status=ii;
+        else if (strcmp(bb->parnames[ii],"Pw")==0)        bb->Pw=ii;
+        else if (strcmp(bb->parnames[ii],"POn")==0)       bb->PwEn=ii;
+        else if (strcmp(bb->parnames[ii],"PwEn")==0)      bb->PwEn=ii;
+        else if (strcmp(bb->parnames[ii],"TripInt")==0)   bb->TripInt=ii;
+        else if (strcmp(bb->parnames[ii],"TripExt")==0)   bb->TripExt=ii;
+        else if (strcmp(bb->parnames[ii],"PDwn")==0)      bb->PDwn=ii;
+        else if (strcmp(bb->parnames[ii],"Tdrift")==0)    bb->Tdrift=ii;
+        else if (strcmp(bb->parnames[ii],"RUpTime")==0)   bb->RUpTime=ii;
+        else if (strcmp(bb->parnames[ii],"RDwTime")==0)   bb->RDwTime=ii;
+        else if (strcmp(bb->parnames[ii],"UNVThr")==0)    bb->UNVThr=ii;
+        else if (strcmp(bb->parnames[ii],"OVVThr")==0)    bb->OVVThr=ii;
+        else if (strcmp(bb->parnames[ii],"VCon")==0)      bb->VCon=ii;
+        else if (strcmp(bb->parnames[ii],"Temp")==0)      bb->Temp=ii;
+        else if (strcmp(bb->parnames[ii],"ChToGroup")==0) bb->ChToGroup=ii;
+        else if (strcmp(bb->parnames[ii],"OnGrDel")==0)   bb->OnGrDel=ii;
+        else if (strcmp(bb->parnames[ii],"OffGrDel")==0)  bb->OffGrDel=ii;
+        else if (strcmp(bb->parnames[ii],"Intck")==0)     bb->Intck=ii;
+        else if (strcmp(bb->parnames[ii],"Pol")==0)       bb->Pol=ii;
     }
 }
 

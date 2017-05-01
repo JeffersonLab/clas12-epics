@@ -48,7 +48,7 @@ record(ai,"$(HV):outputCurrentRiseRateR") {
 	field(EGU,"A/s")
 }
 record(ai,"$(HV):outputMeasCurrentC") {
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(FLNK,"$(HV):outputMeasCurrent")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementCurrent.$(HVCH) Float: 100 Fn")
@@ -64,7 +64,7 @@ record(ai,"$(HV):outputMeasCurrentC") {
 }
 record(ai,"$(HV):outputMeasSenseV") {
 	field(DESC,"Measured output voltage")
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(FLNK,"$(HV):outputMeasSenseVAlm")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementSenseVoltage.$(HVCH) Float: 100")
@@ -83,7 +83,7 @@ info(autosaveFields_pass0,"HIHI LOLO HIGH LOW HHSV LLSV HSV LSV")
 }
 record(ai,"$(HV):outputMeasTermVR") {
 	field(DESC,"Measured voltage output terminals")
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementTerminalVoltage.$(HVCH) Float: 100")
 	field(PREC,"6")
@@ -186,7 +186,7 @@ record(ai,"$(LVA):outputCurrentR") {
 	field(PREC,"5")
 }
 record(ai,"$(LVA):outputMeasCurrent") {
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) guru %{W}outputMeasurementCurrent.$(LVACH) Float: 100")
 	field(PREC,"5")
@@ -201,7 +201,7 @@ field(LSV,"MINOR")
 info(autosaveFields_pass0,"HIHI LOLO HIGH LOW HHSV LLSV HSV LSV")
 }
 record(ai,"$(LVA):outputMeasSenseV") {
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) guru %{W}outputMeasurementSenseVoltage.$(LVACH) Float: 100")
 	field(PREC,"5")
@@ -321,7 +321,7 @@ record(ai,"$(LVD):outputCurrentR") {
 	field(PREC,"5")
 }
 record(ai,"$(LVD):outputMeasCurrent") {
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) guru %{W}outputMeasurementCurrent.$(LVDCH) Float: 100")
 	field(PREC,"5")
@@ -336,7 +336,7 @@ field(LSV,"MINOR")
 info(autosaveFields_pass0,"HIHI LOLO HIGH LOW HHSV LLSV HSV LSV")
 }
 record(ai,"$(LVD):outputMeasSenseV") {
-	field(SCAN,"1 second")
+	field(SCAN,"2 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) guru %{W}outputMeasurementSenseVoltage.$(LVDCH) Float: 100")
 	field(PREC,"5")

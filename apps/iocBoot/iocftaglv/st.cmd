@@ -2,6 +2,8 @@
 
 < envPaths
 
+#< lvCrateAddresses.env
+
 #
 epicsEnvSet("MIBDIRS","$(DEVSNMP)/mibs:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")

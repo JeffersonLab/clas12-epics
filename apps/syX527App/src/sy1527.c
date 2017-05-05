@@ -82,7 +82,7 @@ int NCFEDOWNERR[MAX_HVPS];
 static int  nA1520param = 16;
 static int  nA1535param = 16;
 static int  nA2518Aparam = 18;
-static int  nA1536HDparam = 18;
+static int  nA1536HDparam = 17;
 
 static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",

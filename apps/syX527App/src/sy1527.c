@@ -82,7 +82,7 @@ int NCFEDOWNERR[MAX_HVPS];
 static int  nA1520param = 16;
 static int  nA1535param = 16;
 static int  nA2518Aparam = 18;
-static int  nA1536HDMparam = 18;
+static int  nA1536HDparam = 18;
 
 static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
@@ -90,7 +90,7 @@ static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
 static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
-static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
+static char A1536HDparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange"};
 static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
@@ -564,7 +564,8 @@ sy1527GetMap(unsigned int id)
         if(!strcmp(Measure[id].board[i].modelname,"A1535") ||
             !strcmp(Measure[id].board[i].modelname,"A1536") ||
             !strcmp(Measure[id].board[i].modelname,"A1733") ||
-            !strcmp(Measure[id].board[i].modelname,"A1737"))
+            !strcmp(Measure[id].board[i].modelname,"A1737") ||
+            !strcmp(Measure[id].board[i].modelname,"A1821H"))
         {
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1535param;
@@ -618,15 +619,15 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if( !strcmp(Measure[id].board[i].modelname,"A1536HDM"))
+        else if( !strcmp(Measure[id].board[i].modelname,"A1536HD"))
         {
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
-          Measure[id].board[i].nparams = nA1536HDMparam;
-          Demand[id].board[i].nparams = nA1536HDMparam;
+          Measure[id].board[i].nparams = nA1536HDparam;
+          Demand[id].board[i].nparams = nA1536HDparam;
           for(j=0; j<Measure[id].board[i].nparams; j++)
           {
-            strcpy(Measure[id].board[i].parnames[j],A1536HDMparam[j]);
-            strcpy(Demand[id].board[i].parnames[j],A1536HDMparam[j]);
+            strcpy(Measure[id].board[i].parnames[j],A1536HDparam[j]);
+            strcpy(Demand[id].board[i].parnames[j],A1536HDparam[j]);
 
             strcpy(ParName,Measure[id].board[i].parnames[j]);
             ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);

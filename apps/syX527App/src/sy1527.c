@@ -92,7 +92,7 @@ static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
 static char A1536HDMparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
-                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange","Pol"};
+                "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn","ImRange"};
 static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","RUpTime","RDwTime","UNVThr","OVVThr","VMon",
                 "VCon","IMon","Temp","Status","Pw","TripInt","TripExt",

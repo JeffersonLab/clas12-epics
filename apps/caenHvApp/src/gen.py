@@ -28,7 +28,7 @@ for arg in sys.argv[1:]:
   G[key]=val
 
 print 'file "db/caenhv.db" {'
-print 'pattern {Cr,CrName,CrType,Sl,Ch,Sys,Det,Elecment,CScode,pwonoff,v0set,i0set,trip,rampup,rampdn,svmax,enable}'
+print 'pattern {Cr,CrName,CrType,Sl,Ch,Sys,Det,Element,CScode,pwonoff,v0set,i0set,trip,rampup,rampdn,svmax,enable}'
 
 for slot in range(G['NSLOT']):
   for chan in range(G['NCHAN']):
@@ -43,13 +43,15 @@ for slot in range(G['NSLOT']):
     print '"%s"'%(G['DET']),
     print '"%s_Sl%.2d_Ch%.2d"'%(G['ELSTUB'],slot,chan),
     print '"#C%d"'%(cscode),
-    print '"S%d"'%(G['pwonoff']*256+slot),
-    print '"S%d"'%(G['v0set']*256+slot),
-    print '"S%d"'%(G['i0set']*256+slot),
-    print '"S%d"'%(G['trip']*256+slot),
-    print '"S%d"'%(G['rampup']*256+slot),
-    print '"S%d"'%(G['rampdn']*256+slot),
-    print '"S%d"'%(G['svmax']*256+slot),
-    print '"S%d"'%(G['enable']*256+slot),
+    print '"S%d"'%(G['pwonoff']*256+chan),
+    print '"S%d"'%(G['v0set']*256+chan),
+    print '"S%d"'%(G['i0set']*256+chan),
+    print '"S%d"'%(G['trip']*256+chan),
+    print '"S%d"'%(G['rampup']*256+chan),
+    print '"S%d"'%(G['rampdn']*256+chan),
+    print '"S%d"'%(G['svmax']*256+chan),
+    print '"S%d"'%(G['enable']*256+chan),
     print '}'
+
+print '}'
 

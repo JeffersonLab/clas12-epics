@@ -1495,29 +1495,29 @@ sy1527SetChannelInterlock(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns polarity for one channel */
+/* returns range for one channel */
 unsigned int
-sy1527GetChannelPolarity(unsigned int id, unsigned int board,
+sy1527GetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan)
 {
-  if (Measure[id].board[board].Pol < 0) return 0;
+  if (Measure[id].board[board].ImRange < 0) return 0;
   unsigned int u;
   LOCK_MAINFRAME(id);
   //GET_LVALUE(HV_Pw, u);
-  GET_LVALUE(Measure[id].board[board].Pol, u);
+  GET_LVALUE(Measure[id].board[board].ImRange, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
 
-/* sets polarity for one channel */
+/* sets range for one channel */
 int
-sy1527SetChannelPolarity(unsigned int id, unsigned int board,
+sy1527SetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan, unsigned int u)
 {
-  if (Measure[id].board[board].Pol < 0) return 0;
+  if (Measure[id].board[board].ImRange < 0) return 0;
   LOCK_MAINFRAME(id);
   //SET_LVALUE(HV_Pw, u);
-  SET_LVALUE(Measure[id].board[board].Pol, u);
+  SET_LVALUE(Measure[id].board[board].ImRange, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }
@@ -1712,7 +1712,7 @@ void sy1527SetBoardParams(BOARD *bb) {
     bb->OnGrDel=-1;
     bb->OffGrDel=-1;
     bb->Intck=-1;
-    bb->Pol=-1;
+    bb->ImRange=-1;
     for (ii=0; ii<bb->nparams; ii++)
     {
         if      (strcmp(bb->parnames[ii],"V0Set")==0)     bb->V0Set=ii;
@@ -1743,7 +1743,7 @@ void sy1527SetBoardParams(BOARD *bb) {
         else if (strcmp(bb->parnames[ii],"OnGrDel")==0)   bb->OnGrDel=ii;
         else if (strcmp(bb->parnames[ii],"OffGrDel")==0)  bb->OffGrDel=ii;
         else if (strcmp(bb->parnames[ii],"Intck")==0)     bb->Intck=ii;
-        else if (strcmp(bb->parnames[ii],"Pol")==0)       bb->Pol=ii;
+        else if (strcmp(bb->parnames[ii],"ImRange")==0)   bb->ImRange=ii;
     }
 }
 

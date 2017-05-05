@@ -24,8 +24,8 @@
 #define PROP_INTLK 12 // interlock
 #define PROP_VCON  13 // connector voltage
 
-// Bi-polar Modules:
-#define PROP_POL  14  // polarity
+// Dual-range modules:
+#define PROP_RANGE  14  // current range
 
 #define PROP_HBEAT  15   /*  */  /// my_n:
 

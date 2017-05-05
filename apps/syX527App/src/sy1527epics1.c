@@ -256,9 +256,9 @@ CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
   {
       *value = sy1527GetChannelOverVoltage(id, slot, channel);
   }
-  else if (!strncmp("POL",property,4))
+  else if (!strncmp("RANGE",property,4))
   {
-      *value = sy1527GetChannelPolarity(id, slot, channel);
+      *value = sy1527GetChannelRange(id, slot, channel);
   }
   else if (!strncmp("INTLK",property,5))
   {
@@ -293,8 +293,8 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // r
   property[PROP_INTLK] = sy1527GetChannelInterlock(id, slot, channel); // r
 
-  // BIPOLAR-Only:
-  //property[PROP_POL] = sy1527GetChannelPolarity(id, slot, channel); // s
+  // Dual-Range Only:
+  property[PROP_RANGE] = sy1527GetChannelRange(id, slot, channel); // s
 
   property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); // t
 

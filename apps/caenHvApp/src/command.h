@@ -24,8 +24,8 @@
 #define S_OVVT    0x11    /* Set Over  Voltage Threshold    */
 #define S_INTLK   0x12    /* Set Interlock Status           */
 
-// Bipolar Boards:
-#define S_POL     0x20    /* Set Polarity                   */
+// Dual Range Boards:
+#define S_RANGE   0x20    /* Set Range                      */
 
 #define G_HVFS    0x01    /* HV Fan Stat                    */
 #define G_PWFS    0x02    /* PW Fan Stat                    */

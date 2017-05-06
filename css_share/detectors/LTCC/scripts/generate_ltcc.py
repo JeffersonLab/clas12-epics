@@ -137,7 +137,7 @@ $(pv_value)</tooltip>
 D2R=4*math.atan(1)/180
 globoff=[400,500]
 off=0.1
-scale=16
+scale=10
 
 slope=0.57735
 

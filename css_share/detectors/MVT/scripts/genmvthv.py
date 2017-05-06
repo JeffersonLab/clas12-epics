@@ -137,12 +137,12 @@ def getPoints(npoints,radius,center,thetaRange):
     theta=thetaRange[0]+ii*(thetaRange[1]-thetaRange[0])/npoints
     xx=center[0]+radius[0]*math.cos(theta*d2r)
     yy=center[1]+radius[0]*math.sin(theta*d2r)
-    pts.append([int(xx),int(yy)])
+    pts.append([int(round(xx)),int(round(yy))])
   for ii in range(npoints+1):
     theta=thetaRange[1]+ii*(thetaRange[0]-thetaRange[1])/npoints
     xx=center[0]+radius[1]*math.cos(theta*d2r)
     yy=center[1]+radius[1]*math.sin(theta*d2r)
-    pts.append([int(xx),int(yy)])
+    pts.append([int(round(xx)),int(round(yy))])
   return pts
 
 def getLimits(points):

@@ -183,24 +183,24 @@ def getWidget(specs):
   ww=ww.replace('---Y---',str(getY(specs['points'])))
   return ww
 
-NPTS=70
-OFFSET=[260,260]
-
-def getSector(prefix,angleRange):
+def getSector(prefix,npts,offset,angleRange):
   widgets,roff=[],0
   for ch in range(12):
     pv='%s%.2d'%(prefix,ch)
     radiiRange=[50+ch*15+roff,50+ch*15+12+roff]
-    points=getPoints(NPTS,radiiRange,OFFSET,angleRange)
+    points=getPoints(npts,radiiRange,offset,angleRange)
     widgets.append(getWidget({'pv':pv,'points':points}))
     if ch%2==1: roff+=4
   return widgets
 
 
+NPTS=13
+OFFSET=[260,260]
+
 WIDGETS=[]
-WIDGETS.append(getSector('B_HW_MVTHV_Sl06_Ch',[31,149]))
-WIDGETS.append(getSector('B_HW_MVTHV_Sl08_Ch',[151,269]))
-WIDGETS.append(getSector('B_HW_MVTHV_Sl10_Ch',[271,389]))
+WIDGETS.append(getSector('B_HW_MVTHV_Sl06_Ch',NPTS,OFFSET,[31,149]))
+WIDGETS.append(getSector('B_HW_MVTHV_Sl08_Ch',NPTS,OFFSET,[151,269]))
+WIDGETS.append(getSector('B_HW_MVTHV_Sl10_Ch',NPTS,OFFSET,[271,389]))
 
 print HEAD
 print WIDGETS

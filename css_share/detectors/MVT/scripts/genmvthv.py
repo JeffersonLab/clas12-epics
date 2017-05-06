@@ -187,10 +187,11 @@ def getSector(prefix,npts,offset,angleRange):
   widgets,roff=[],0
   for ch in range(12):
     pv='%s%.2d'%(prefix,ch)
-    radiiRange=[50+ch*15+roff,50+ch*15+12+roff]
+    radiiRange=[30+ch*11+roff,30+ch*11+9+roff]
+    #radiiRange=[50+ch*15+roff,50+ch*15+12+roff]
     points=getPoints(npts,radiiRange,offset,angleRange)
     widgets.append(getWidget({'pv':pv,'points':points}))
-    if ch%2==1: roff+=4
+    if ch%2==1: roff+=2
   return widgets
 
 

@@ -21,9 +21,24 @@ record(calc,"$(P)_Ch$(C)_Temp") {
   field(INPA,"$(P)_Ch$(C)_TempNC MS")
   field(INPB,"$(P)_Ch$(C)_Temp.MLST")
   field(CALC,"A>200 || A<0 ? B : A")
+#  field(FLNK,"$(P)_Ch$(C)_TempC1")
   info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
   alias("$(A)_Temp")
 }
+
+#record(compress,"$(P)_Ch$(C)_TempC1") {
+#    field(ALG,"Circular Buffer")
+#    field(NSAM,"20")
+#    field(INP,"$(P)_Ch$(C)_Temp")
+#}
+#record(compress,"$(P)_Ch$(C)_TempC2") {
+#    field(ALG,"N to 1 Average")
+#    field(NSAM,"20")
+#    field(N,"1")
+#    field(INP,"$(P)_Ch$(C)_TempC1")
+#}
+
+
 
 # Much of below doesn't work:
 

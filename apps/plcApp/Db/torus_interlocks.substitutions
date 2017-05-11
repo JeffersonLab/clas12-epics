@@ -44,6 +44,20 @@ file "db/torus_bi_generic.db" {
     { PLC_TORUS, B_TORUS:, MPS:, FlagHeater_OutRange, Ok, Fault, NO_ALARM, MAJOR, "Temp Sensor Failed" }
 }
 
+file "db/torus_bi_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_TORUS, B_TORUS:, MPS:, VCL_A_Flow,       CryoSum[0], Ok, Fault, NO_ALARM, MAJOR, "VCL A FLow" }
+    { PLC_TORUS, B_TORUS:, MPS:, VCL_B_Flow,        CryoSum[1], Ok, Fault, NO_ALARM, MAJOR, "VCL B FLow" }
+    { PLC_TORUS, B_TORUS:, MPS:, VCL_A_Overtemp,    CryoSum[2], Ok, Fault, NO_ALARM, MAJOR, "VCL A Over Temp (TD8121A)" }
+    { PLC_TORUS, B_TORUS:, MPS:, VCL_B_Overtemp,    CryoSum[3], Ok, Fault, NO_ALARM, MAJOR, "VCL B Over Temp (TD8121B)" }
+    { PLC_TORUS, B_TORUS:, MPS:, WCL_A_Overtemp,    CryoSum[4], Ok, Fault, NO_ALARM, MAJOR, "WCL A Over Temp" }
+    { PLC_TORUS, B_TORUS:, MPS:, WCL_B_Overtemp,    CryoSum[5], Ok, Fault, NO_ALARM, MAJOR, "WCL B Over Temp" }
+    { PLC_TORUS, B_TORUS:, MPS:, LHe_Tank_Overpres, CryoSum[6], Ok, Fault, NO_ALARM, MAJOR, "LHe Tank Over Pres (PT8120)" }
+    { PLC_TORUS, B_TORUS:, MPS:, SCC_Underpres,     CryoSum[7], Ok, Fault, NO_ALARM, MAJOR, "SuperCritical CCT Under Pres (PT8111)" }
+    { PLC_TORUS, B_TORUS:, MPS:, LHe_LL_Low_DP,     CryoSum[8], Ok, Fault, NO_ALARM, MAJOR, "LHe Liquid Level Low (LL8120DP)" }
+    { PLC_TORUS, B_TORUS:, MPS:, LHe_LL_Low_SC,     CryoSum[9], Ok, Fault, NO_ALARM, MAJOR, "LHe Liquid Level Low (LL8120SC)" }
+}
+
 file "db/torus_bo_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
     # Section 4, Comm Resets

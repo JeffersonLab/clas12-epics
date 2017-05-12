@@ -8,8 +8,9 @@ ExtraInput = Ignore;
 
 sendCommand { out "%s"; in "%(\$1:RESPONSE.VAL)s"; wait 10; };
 
-#These ones are for the whole board commands.
-#basic first
 getName { out "GET_PLC_NAME"; in "%s";wait 10; };
+getActiveCrates { out "GET_ACTIVE_CRATES"; in "NB_ACTIVE_CRATES=%d %(\$1:ActiveCrateIDs)40c"; wait 10; };
+getActiveSlots { out "GET_ACTIVE_SLOTS_IN_CRATE \$2"; in "NB_ACTIVE_SLOTS=%d SLOT %(\$1:ActiveSlotIDs)40c"; wait 10; };
 
-
+getInfo { out "GetInfo Crate \$2 Slot \$3"; in "%*s"; in "%(\$1:Cr)d%(\$1:Sl)d%(\$1:Sn)d%(\$1:MbId)d%(\$1:Adr)d:%(\$1:XCor1V0)d%(\$1:XAux2V5)d%(\$1:MCor1V0)d%(\$1:Mgtc1V0)d%(\$1:Mgtt1V2)d%(\$1:Fprm1V8)d%(\$1:Adc1V8)d%(\$1:MAux2V5)d%(\$1:Int2V7)d%(\$1:Glue3V3)d%(\$1:Current)d%(\$1:XTmpV6)d%(\$1:MTmpInt)d%(\$1:TmpSdX)d%(\$1:TmpSdA)d%(\$1:ObsTime)d"; wait 10;}
+#getInfo { out "GetInfo %(\$1:FEU_COM)s"; in "%*s"; in "%(\$1:Cr)d%(\$1:Sl)d%(\$1:Sn)d%(\$1:MbId)d%(\$1:Adr)d:%(\$1:XCor1V0)d%(\$1:XAux2V5)d%(\$1:MCor1V0)d%(\$1:Mgtc1V0)d%(\$1:Mgtt1V2)d%(\$1:Fprm1V8)d%(\$1:Adc1V8)d%(\$1:MAux2V5)d%(\$1:Int2V7)d%(\$1:Glue3V3)d%(\$1:Current)d%(\$1:XTmpV6)d%(\$1:MTmpInt)d%(\$1:TmpSdX)d%(\$1:TmpSdA)d%(\$1:ObsTime)d"; wait 10;}

@@ -12,6 +12,9 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 #DB += xxx.db
 DB    += mmfeu.db
+DB    += mmfeucrate.db
+DB    += mmfeuslot.db
+DB    += $(wildcard ../*.substitutions)
 PROTO += mmfeu.proto
 
 

@@ -30,6 +30,7 @@ jscalerApp_DEPEND_DIRS += jscalerDrvApp
 kepcoApp_DEPEND_DIRS   += DVME628App
 dynabcApp_DEPEND_DIRS  += XY240App
 taggerTempApp_DEPEND_DIRS += XY560App
+testApp_DEPEND_DIRS += waveformApp
 
 include $(TOP)/configure/RULES_TOP
 

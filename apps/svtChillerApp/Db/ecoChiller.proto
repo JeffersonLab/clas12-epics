@@ -9,7 +9,10 @@ setEcoString {out "%s";};
 
 #Now the getters and setters
 getEcoValue {out "IN_\$1_\$2"; in "%g";};
-setEcoValue {out "OUT_\$1_\$2_%3.1f"; in "%*s";}
+setEcoValue {
+    out "OUT_\$1_\$2_%3.1f"; in "%*s";
+#   @init { out "IN_\$1_\$2"; in "%g"; }
+}
 
 getEcoInt {out "IN_\$1_\$2"; in "%d";}
 setEcoInt {out "OUT_\$1_\$2_%d"; in "%*s";}
@@ -18,3 +21,4 @@ getEcoBinary {out "IN_\$1_\$2"; in "%{0|1}";};
 setEcoBinary {out "OUT_\$1_\$2_%{0|1}"; in "%s";};
 
 setEcoStandby {out "%{STOP|START}";};
+

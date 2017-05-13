@@ -782,13 +782,13 @@ static long read_uptime_Info(pStringIn)
     }
     else{
         if(!strcmp(pvmeio->parm,"SYSNAME"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.sysname);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.sysname);
         else if(!strcmp(pvmeio->parm,"RELEASE"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.release);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.release);
         else if(!strcmp(pvmeio->parm,"VERSION"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.version);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.version);
         else if(!strcmp(pvmeio->parm,"MACHINE"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.machine);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.machine);
     }
 
     /* if(!status) */ pStringIn->udf = FALSE;

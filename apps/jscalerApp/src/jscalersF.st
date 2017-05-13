@@ -4,6 +4,7 @@ option -c;
 option -r;
 
 string suffix = "c3";
+string suffixf = "c1";
 
 // update period (seconds): 
 int delay=1;
@@ -44,14 +45,14 @@ float wfiF[180]; assign wfiF to {};
 float wfoL[36]; assign wfoL to "B_DET_LTCC_DISC_SEC{S}:wf";
 float wfiL[36]; assign wfiL to {};
 
-//float wfoE[216]; assign wfoE to "B_DET_ECAL_FADC_SEC{S}:wf";
-//float wfiE[216]; assign wfiE to {};
-//float wfoP[192]; assign wfoP to "B_DET_PCAL_FADC_SEC{S}:wf";
-//float wfiP[192]; assign wfiP to {};
-//float wfoF[180]; assign wfoF to "B_DET_FTOF_FADC_SEC{S}:wf";
-//float wfiF[180]; assign wfiF to {};
-//float wfoL[36]; assign wfoL to "B_DET_LTCC_FADC_SEC{S}:wf";
-//float wfiL[36]; assign wfiL to {};
+float wfoEf[216]; assign wfoEf to "B_DET_ECAL_FADC_SEC{S}:wf";
+float wfiEf[216]; assign wfiEf to {};
+float wfoPf[192]; assign wfoPf to "B_DET_PCAL_FADC_SEC{S}:wf";
+float wfiPf[192]; assign wfiPf to {};
+float wfoFf[180]; assign wfoFf to "B_DET_FTOF_FADC_SEC{S}:wf";
+float wfiFf[180]; assign wfiFf to {};
+float wfoLf[36]; assign wfoLf to "B_DET_LTCC_FADC_SEC{S}:wf";
+float wfiLf[36]; assign wfiLf to {};
 
 int ipanel;
 int iside;
@@ -81,6 +82,8 @@ ss seqJscalersF {
         {
           for (ichan=1; ichan<=nchanE; ichan++)
           {
+            sprintf(stmp,"B_DET_ECAL_FADC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffixf);
+            pvAssignSubst(wfiEf[wfLengthE],stmp);
             sprintf(stmp,"B_DET_ECAL_DISC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffix);
             pvAssignSubst(wfiE[wfLengthE++],stmp);
           }
@@ -90,6 +93,8 @@ ss seqJscalersF {
       {
         for (ichan=1; ichan<=nchansP[iview]; ichan++)
         {
+          sprintf(stmp,"B_DET_PCAL_FADC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffixf);
+          pvAssignSubst(wfiPf[wfLengthP],stmp);
           sprintf(stmp,"B_DET_PCAL_DISC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffix);
           pvAssignSubst(wfiP[wfLengthP++],stmp);
         }
@@ -100,6 +105,8 @@ ss seqJscalersF {
         {
           for (iside=0; iside<nsideF; iside++)
           {
+            sprintf(stmp,"B_DET_FTOF_FADC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffixf);
+            pvAssignSubst(wfiFf[wfLengthF],stmp);
             sprintf(stmp,"B_DET_FTOF_DISC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffix);
             pvAssignSubst(wfiF[wfLengthF++],stmp);
           }
@@ -109,6 +116,8 @@ ss seqJscalersF {
       {
         for (iside=0; iside<nsideL; iside++)
         {
+          sprintf(stmp,"B_DET_LTCC_FADC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffixf);
+          pvAssignSubst(wfiLf[wfLengthL],stmp);
           sprintf(stmp,"B_DET_LTCC_DISC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffix);
           pvAssignSubst(wfiL[wfLengthL++],stmp);
         }
@@ -153,26 +162,38 @@ ss seqJscalersF {
       {
         pvGet(wfiE[ii]);
         wfoE[ii]=wfiE[ii];
+        pvGet(wfiEf[ii]);
+        wfoEf[ii]=wfiEf[ii];
       }
       for (ii=0; ii<wfLengthP; ii++)
       {
         pvGet(wfiP[ii]);
         wfoP[ii]=wfiP[ii];
+        pvGet(wfiPf[ii]);
+        wfoPf[ii]=wfiPf[ii];
       }
       for (ii=0; ii<wfLengthF; ii++)
       {
         pvGet(wfiF[ii]);
         wfoF[ii]=wfiF[ii];
+        pvGet(wfiFf[ii]);
+        wfoFf[ii]=wfiFf[ii];
       }
       for (ii=0; ii<wfLengthL; ii++)
       {
         pvGet(wfiL[ii]);
         wfoL[ii]=wfiL[ii];
+        pvGet(wfiLf[ii]);
+        wfoLf[ii]=wfiLf[ii];
       }
       pvPut(wfoE);
       pvPut(wfoP);
       pvPut(wfoF);
       pvPut(wfoL);
+      pvPut(wfoEf);
+      pvPut(wfoPf);
+      pvPut(wfoFf);
+      pvPut(wfoLf);
       epicsThreadSleep(delay);
     } state run
   }

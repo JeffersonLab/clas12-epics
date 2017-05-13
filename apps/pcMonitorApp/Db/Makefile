@@ -11,6 +11,8 @@ include $(TOP)/configure/CONFIG
 
 DB += $(wildcard ../*.db)
 
+BEAST += clonioc-alarm.xml
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

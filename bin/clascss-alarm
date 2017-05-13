@@ -28,16 +28,17 @@ share=$DIR/../css_share
 
 plugin_dir=$share/common/prefs
 
+workspace_basename=Default_Torus
 plugin_basename=plugin_customization.ini
 if [ "$1" == "alarmsu" ]
 then
   plugin_basename=plugin_customization-alarmsu.ini
+  workspace_basename=alarmsu
 fi
 
 plugin_profile=$plugin_dir/$plugin_basename
 
-#plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
-workspace=$share/common/workspaces/Default_Torus
+workspace=$share/common/workspaces/$workspace_basename
 
 # generate a temporary css workspace:
 #   Note: needs rw from all groups onliners, clas, etc.

@@ -15,9 +15,6 @@ for line in open('ftintlk.csv','r').readlines():
   for key in ICOLS.keys():
     vals[key]=cols[ICOLS[key]]
 
-  vals['desc'].replace('FTCalorimeter','FTC')
-  vals['desc'].replace('FTHodoscope','FTH')
-
   pvtype=None
   if   vals['type']=='Double': pvtype='a'
   elif vals['type']=='Boolean': pvtype='b'

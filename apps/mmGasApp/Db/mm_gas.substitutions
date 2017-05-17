@@ -13,10 +13,14 @@
 #}
 file "$(MODBUS)/db/bo_bit.template" { pattern 
 {P,             R,      PORT,   OFFSET, ZNAM,   ONAM}
-{B_DET_MM_GAS_, START,  MM502,  0,      "",     START}
+#{B_DET_MM_GAS_, START,  MM502,  0,      "",     START}
 #{B_DET_MM_GAS_, STOP,   MM502,  0,     "",     STOP}
 }
 
+file "$(MODBUS)/db/bi_bit.template" { pattern
+{P,             R,     PORT,          OFFSET,   ZNAM,   ONAM,  ZSV,       OSV,    SCAN}
+{B_DET_MM_GAS_, DIN01, MM502,         3,        Low,    High,  NO_ALARM,  MAJOR,  "I/O Intr"}
+}
 
 file "$(MODBUS)/db/bi_word.template" { pattern 
 {P,             R,      PORT,   OFFSET, MASK,   SCAN,       ZNAM,   ZSV,        ONAM,   OSV}

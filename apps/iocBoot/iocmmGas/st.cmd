@@ -26,7 +26,7 @@ modbusInterposeConfig("TCP502",0,5000,0)
 #                       modbusStartAddress, modbusLength, dataType, pollMsec,
 #                       "plcType")
 # 32-bit integers (Function code = 3)
-drvModbusAsynConfigure("MM502", "TCP502", 1, 1, 0, 16, 0, 1000, "Siemens")
+drvModbusAsynConfigure("MM502", "TCP502", 0, 1, 0, 16, 0, 1000, "Siemens")
 #drvModbusAsynConfigure("MM503", "TCP503", 1, 1, 0, 16, 0, 1000, "Siemens")
 #drvModbusAsynConfigure("MM504", "TCP504", 1, 4, 0,  5, 0, 1000, "Siemens")
 
@@ -42,7 +42,7 @@ cd "${TOP}/iocBoot/${IOC}"
 
 dbl > pv.list
 iocInit
-
+asynReport(5, "MM502")
 ## Handle autosave 'commands' contained in loaded databases.
 #makeAutosaveFiles()
 #create_monitor_set("info_positions.req", 5, "P=:")

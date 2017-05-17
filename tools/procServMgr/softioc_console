@@ -51,25 +51,22 @@ BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] [-R] iocname"
+    echo "usage: $SCRIPT_NAME [OPTIONS] [iocname]"
     echo ""
-    echo "[-h] Print Help"
-    echo "[-R] Reboot IOC Non-Interactively (send ctrl-X through netcat)"
+    echo "OPTIONS"
+    echo "    -h,  Print Help"
+    echo "    -p,  Print config file"
+    echo "    -R,  Reboot IOC Non-Interactively (send ctrl-X through netcat)"
     echo ""
-    echo "Examples:"
-    echo "$SCRIPT_NAME [-h]"
-    echo "$SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
+    echo "EXAMPLES"
+    echo "    $SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
     echo ""
-    echo "CONFIGURATION FILES:"
-    echo "--------------------"
+    echo "CONFIGURATION FILE(S)"
+    echo "---------------------"
     for FILE in $FILE_LIST     
     do
         echo $FILE
     done
-    
-    echo ""
-
-    printconfig
 }
 
 function checkfile {
@@ -147,6 +144,13 @@ function parseconfig {
 }
 
 function printconfig {
+    echo "CONFIGURATION FILE(S)"
+    echo "---------------------"
+    for FILE in $FILE_LIST     
+    do
+        echo $FILE
+    done
+    echo ""
     echo "IOC CONFIGURATION"
     echo "-----------------"
     for i in ${iocs[*]}
@@ -154,7 +158,6 @@ function printconfig {
         #echo IOC configured STATUS to run HOST:PORT
         echo "$i $(eval echo \$${i}_status) to run on $(eval echo \$${i}_host):$(eval echo \$${i}_port)"
         done
-    echo ""
 }
 
 #-----------------------------------------------------------------------
@@ -164,10 +167,13 @@ parseconfig
 
 reboot=0
 
-while getopts hR opt; do
+while getopts hpR opt; do
     case $opt in
         
     h) usage 
+       return 0
+       ;;
+    p) printconfig
        return 0
        ;;
    R) reboot=1

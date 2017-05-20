@@ -8,6 +8,8 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
+#dbLoadTemplate("db/V450-160subnet.substitutions")
+
 dbLoadTemplate("db/svtIntlk.substitutions")
 
 dbLoadTemplate("db/svt-sums.substitutions")

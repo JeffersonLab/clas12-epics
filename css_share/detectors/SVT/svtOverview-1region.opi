@@ -253,19 +253,18 @@
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
     <border_style>6</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
     <alarm_pulsing>false</alarm_pulsing>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
     <rules />
     <enabled>true</enabled>
-    <wuid>-16ac783c:15b2ab2092f:-7427</wuid>
+    <wuid>570ac234:15c2c04ae8b:-5d6a</wuid>
+    <transparent>false</transparent>
     <pv_value />
-    <text>Region $(R)</text>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <height>21</height>
@@ -275,22 +274,21 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <image></image>
     <visible>true</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <widget_type>Action Button</widget_type>
+    <label>Region $(R)</label>
+    <widget_type>Menu Button</widget_type>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
       <color red="191" green="191" blue="191" />
     </background_color>
     <width>85</width>
     <x>6</x>
-    <name>Action Button</name>
+    <name>Menu Button</name>
     <y>2</y>
-    <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -301,7 +299,31 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description></description>
+        <description>Open R$(R) Screen</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/SVT/svt-lvr$(R)on.snap</command>
+        <command_directory>$(opi.dir)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn ON R$(R) LV</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/SVT/svt-hvr$(R)on.snap</command>
+        <command_directory>$(opi.dir)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn ON R$(R) HV</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/SVT/svt-lvr$(R)off.snap</command>
+        <command_directory>$(opi.dir)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn OFF R$(R) LV</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/SVT/svt-hvr$(R)off.snap</command>
+        <command_directory>$(opi.dir)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn OFF R$(R) HV</description>
       </action>
     </actions>
     <font>

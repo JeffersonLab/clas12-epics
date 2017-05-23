@@ -141,7 +141,9 @@ ss seq_test {
             printf("\n%s - %s\n\n",stub,msg);
             pvPut(msg);
             epicsThreadSleep(2);
-        } state listen
+        } state init
+
+        when () {} state listen
     }
 
     state listen {

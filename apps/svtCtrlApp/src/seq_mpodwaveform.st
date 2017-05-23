@@ -83,7 +83,6 @@ ss seq_mpodwaveform {
       printf("\nmpodwaveform:  Waiting for PVs (%d/%d)\n\n",pvConnectCount(),pvChannelCount());
       sprintf(msg,"ERROR - Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
       pvPut(msg);
-      pvPut(msg);
       epicsThreadSleep(2);
     } state init
     when () {} state run

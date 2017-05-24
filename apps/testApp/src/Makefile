@@ -20,6 +20,9 @@ testApp_DBD += caPutLog.dbd
 
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 testApp_SRCS += testApp_registerRecordDeviceDriver.cpp
+testApp_SRCS += seq_test.st 
+testApp_SRCS += seq_test2.st 
+testApp_SRCS += seq_svtOnOff-1R.st 
 testApp_SRCS_DEFAULT += testAppMain.cpp
 testApp_SRCS_vxWorks += -nil-
 
@@ -32,6 +35,7 @@ testApp_LIBS += waveformApp
 testApp_LIBS += devIocStats
 testApp_LIBS += autosave
 testApp_LIBS += caPutLog
+testApp_LIBS += seq pv
 
 #===========================
 

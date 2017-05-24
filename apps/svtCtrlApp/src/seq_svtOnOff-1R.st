@@ -254,6 +254,7 @@ ss seq_svtOnOff_1R {
         } state listen
 
         when (delay(CHECKDELAY)) {
+            allGood=0;
             if (lv_isOn) {
                 allGood=1;
                 printf("lvOn: checking ... ");
@@ -269,7 +270,7 @@ ss seq_svtOnOff_1R {
                 }
                 printf("\n");
             }
-            epicsThreadSleep(RECHECKDELAY);
+            if (!allGood) epicsThreadSleep(RECHECKDELAY);
         } state lvOn
     }
 
@@ -306,6 +307,7 @@ ss seq_svtOnOff_1R {
         } state listen
 
         when (delay(CHECKDELAY)) {
+            allGood=0;
             if (hv_isOn) {
                 allGood=1;
                 printf("hvOn: checking ... ");
@@ -320,7 +322,7 @@ ss seq_svtOnOff_1R {
                 }
                 printf("\n");
             }
-            epicsThreadSleep(RECHECKDELAY);
+            if (!allGood) epicsThreadSleep(RECHECKDELAY);
         } state hvOn
     }
 
@@ -353,6 +355,7 @@ ss seq_svtOnOff_1R {
         } state listen
 
         when (delay(CHECKDELAY)) {
+            allGood=0;
             if (hv_isOff) {
                 allGood=1;
                 printf("hvOff: checking ... ");
@@ -367,7 +370,7 @@ ss seq_svtOnOff_1R {
                 }
                 printf("\n");
             }
-            epicsThreadSleep(RECHECKDELAY);
+            if (!allGood) epicsThreadSleep(RECHECKDELAY);
         } state hvOff
     }
     
@@ -403,6 +406,7 @@ ss seq_svtOnOff_1R {
         } state listen
 
         when (delay(CHECKDELAY)) {
+            allGood=0;
             if (lv_isOff) {
                 allGood=1;
                 printf("hvOff: checking ... ");
@@ -418,7 +422,7 @@ ss seq_svtOnOff_1R {
                 }
                 printf("\n");
             }
-            epicsThreadSleep(RECHECKDELAY);
+            if (!allGood) epicsThreadSleep(RECHECKDELAY);
         } state lvOff
     }
 

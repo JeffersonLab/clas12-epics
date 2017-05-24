@@ -22,6 +22,8 @@ dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt3")
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
+#dbLoadRecords("db/seq_svtOnOff.db","R=3")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup
@@ -35,6 +37,9 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq &seq_crate3Off
+
+#seq seq_svtOnOff, "R=3"
+
 epicsThreadSleep(5)
 
 seq &modCntrl,"MODULE=R3S1,HS=8,LS=1"

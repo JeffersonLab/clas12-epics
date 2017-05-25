@@ -7,6 +7,7 @@ record(calc,"LV_$(module):alarm") {
 	field(INPD,"$(LVDB):modErr")
 	field(HIHI,"0.7")
 	field(HHSV,"MAJOR")
+    field(FLNK,"LV_$(module):alarmmbbi")
 }
 record(calc,"HV_$(module):alarm") {
 	field(SCAN,"1 second")
@@ -15,20 +16,21 @@ record(calc,"HV_$(module):alarm") {
 	field(INPB,"$(HVB):modErr")
 	field(HIHI,"0.7")
 	field(HHSV,"MAJOR")
+    field(FLNK,"HV_$(module):alarmmbbi")
 }
 
-#record(mbbi,"LV_$(module):alarm") {
-#    field(INP,"LV_$(module):alarmCalc CPP")
-#    field(ZRST,"LV OK")
-#    field(ONST,"ALARM")
-#    field(ZRSV,"NO_ALARM")
-#    field(ONSV,"MAJOR")
-#}
-#record(mbbi,"HV_$(module):alarm") {
-#    field(INP,"HV_$(module):alarmCalc CPP")
-#    field(ZRST,"HV OK")
-#    field(ONST,"ALARM")
-#    field(ZRSV,"NO_ALARM")
-#    field(ONSV,"MAJOR")
-#}
+record(mbbi,"LV_$(module):alarmmbbi") {
+    field(INP,"LV_$(module):alarm")
+    field(ZRST,"LV OK")
+    field(ONST,"ALARM")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MAJOR")
+}
+record(mbbi,"HV_$(module):alarmmbbi") {
+    field(INP,"HV_$(module):alarm")
+    field(ZRST,"HV OK")
+    field(ONST,"ALARM")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MAJOR")
+}
 

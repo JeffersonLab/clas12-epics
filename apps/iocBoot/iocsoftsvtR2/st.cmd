@@ -16,12 +16,12 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
 dbLoadTemplate("db/svtR2-mpv-iseg.substitutions")
 dbLoadTemplate("db/svtR2-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt4")
-
-dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
-dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadRecords("db/svtV450waveform.db")
 dbLoadRecords("db/svtmpodwaveform.db")
@@ -33,6 +33,8 @@ dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_D_,R=V:,NELM=132,FTVL=FLOAT,PERIOD
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_D_,R=I:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-I-D.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_A_,R=V:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-V-A.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_A_,R=I:,NELM=132,FTVL=FLOAT,PERIOD=5,FNAME=svtLV-I-A.txt")
+
+dbLoadRecords("db/seq_svtOnOff-1R.db","R=2")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -47,6 +49,9 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq &seq_crate4Off
+
+#seq seq_svtOnOff_1R, "R=2"
+
 epicsThreadSleep(5)
 
 seq &modCntrl,"MODULE=R2S1,HS=9,LS=1"

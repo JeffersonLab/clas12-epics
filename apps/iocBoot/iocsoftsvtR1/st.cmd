@@ -14,6 +14,9 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
 dbLoadTemplate("db/svtR1-mpv-iseg.substitutions")
 dbLoadTemplate("db/svtR1-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt1")
@@ -22,8 +25,7 @@ dbLoadRecords("db/svtWatchdog.db")
 
 dbLoadRecords("db/svtWienerCrate2.db","HOST=svtvme1")
 
-dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
-dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+dbLoadRecords("db/seq_svtOnOff-1R.db","R=1")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -38,6 +40,9 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq &seq_crate1Off
+
+#seq seq_svtOnOff_1R, "R=1"
+
 epicsThreadSleep(5)
 
 seq &modCntrl,"MODULE=R1S1,HS=7,LS=1"

@@ -15,14 +15,14 @@ dbLoadDatabase("dbd/svtCtrlApp.dbd")
 
 svtCtrlApp_registerRecordDeviceDriver pdbbase
 
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
 dbLoadTemplate("db/svtR3-mpv-iseg.substitutions")
 dbLoadTemplate("db/svtR3-hfcb.substitutions")
 dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt3")
 
-dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
-dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
-
-#dbLoadRecords("db/seq_svtOnOff.db","R=3")
+dbLoadRecords("db/seq_svtOnOff-1R.db","R=3")
 
 cd "${TOP}/iocBoot/${IOC}"
 

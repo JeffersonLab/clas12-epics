@@ -187,8 +187,8 @@ ss seq_svtOnOff_1R {
             printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
             pvPut(msg);
             epicsThreadSleep(2);
-        } state listen
-        when () { epicsThreadSleep(2); } state wait
+        } state wait
+        when () {} state listen
     }
 
     //
@@ -240,6 +240,8 @@ ss seq_svtOnOff_1R {
             }
         }
        
+        when (pvConnectCount() < nPVs) {} state wait
+
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
         when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
         when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
@@ -302,6 +304,8 @@ ss seq_svtOnOff_1R {
             }
         }
         
+        when (pvConnectCount() < nPVs) {} state wait
+
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
         when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
         when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state hvOn
@@ -362,6 +366,8 @@ ss seq_svtOnOff_1R {
             }
         }
         
+        when (pvConnectCount() < nPVs) {} state wait
+
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
         when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
         when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
@@ -422,6 +428,8 @@ ss seq_svtOnOff_1R {
                 }
             }
         }
+
+        when (pvConnectCount() < nPVs) {} state wait
 
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
         when (btnOff) { btnOff=0; pvPut(btnOff); } state lvOff

@@ -17,11 +17,6 @@ short btnAbtAll; assign btnAbtAll to "B_SVT_SEQ:btnAbt"; monitor btnAbtAll;
 short btnOff[NREGIONS];  assign btnOff to {};
 short btnOn[NREGIONS];   assign btnOn  to {};
 
-//int lv_isOn[NREGIONS];   assign lv_isOn  to {};
-//int lv_isOff[NREGIONS];  assign lv_isOff to {};
-//int hv_isOn[NREGIONS];   assign hv_isOn  to {};
-//int hv_isOff[NREGIONS];  assign hv_isOff to {};
-
 // temporary variables:
 string stmp;
 int ii,iRegion;
@@ -40,19 +35,6 @@ ss seq_svtOnOff_All {
                 sprintf(stmp,"B_SVT_R%d_SEQ:btnOn",ii+1);
                 pvAssign(btnOn[ii],stmp);
                 sprintf(stmp,"B_SVT_HV_R%d:isOn",ii+1);
-                
-                //pvAssign(hv_isOn[ii],stmp);
-                //sprintf(stmp,"B_SVT_HV_R%d:isOff",ii+1);
-                //pvAssign(hv_isOff[ii],stmp);
-                //sprintf(stmp,"B_SVT_LV_R%d:isOn",ii+1);
-                //pvAssign(lv_isOn[ii],stmp);
-                //sprintf(stmp,"B_SVT_LV_R%d:isOff",ii+1);
-                //pvAssign(lv_isOff[ii],stmp);
-
-                //pvMonitor(hv_isOn[ii]);
-                //pvMonitor(lv_isOn[ii]);
-                //pvMonitor(hv_isOff[ii]);
-                //pvMonitor(lv_isOff[ii]);
             }
         }
         
@@ -90,6 +72,7 @@ ss seq_svtOnOff_All {
 
 
     state on {
+        
         option -t;
         entry {
             iRegion=0;
@@ -97,6 +80,8 @@ ss seq_svtOnOff_All {
             pvPut(btnOn[orderOn[iRegion]-1]);
             iRegion+=1;
         }
+        
+        when (pvConnectCount() < pvChannelCount()) {} state listen
         
         when (iRegion>=NREGIONS) {} state listen
         
@@ -124,6 +109,7 @@ ss seq_svtOnOff_All {
     }
 
     state off {
+        
         option -t;
         entry {
             iRegion=0;
@@ -131,6 +117,8 @@ ss seq_svtOnOff_All {
             pvPut(btnOn[orderOff[iRegion]-1]);
             iRegion+=1;
         }
+        
+        when (pvConnectCount() < pvChannelCount()) {} state listen
         
         when (iRegion>=NREGIONS) {} state listen
         
@@ -160,6 +148,23 @@ ss seq_svtOnOff_All {
 
 
 /*
+//int lv_isOn[NREGIONS];   assign lv_isOn  to {};
+//int lv_isOff[NREGIONS];  assign lv_isOff to {};
+//int hv_isOn[NREGIONS];   assign hv_isOn  to {};
+//int hv_isOff[NREGIONS];  assign hv_isOff to {};
+                //pvAssign(hv_isOn[ii],stmp);
+                //sprintf(stmp,"B_SVT_HV_R%d:isOff",ii+1);
+                //pvAssign(hv_isOff[ii],stmp);
+                //sprintf(stmp,"B_SVT_LV_R%d:isOn",ii+1);
+                //pvAssign(lv_isOn[ii],stmp);
+                //sprintf(stmp,"B_SVT_LV_R%d:isOff",ii+1);
+                //pvAssign(lv_isOff[ii],stmp);
+
+                //pvMonitor(hv_isOn[ii]);
+                //pvMonitor(lv_isOn[ii]);
+                //pvMonitor(hv_isOff[ii]);
+                //pvMonitor(lv_isOff[ii]);
+
     state on {
         
         entry {

@@ -22,8 +22,6 @@ dbLoadRecords("db/svtIntlkSummary.db")
 
 dbLoadRecords("db/svt-sums-inhibits.db")
 
-dbLoadRecords("db/seq_svtOnOff-All.db")
-
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

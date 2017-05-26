@@ -26,6 +26,7 @@ dbLoadRecords("db/svtWatchdog.db")
 dbLoadRecords("db/svtWienerCrate2.db","HOST=svtvme1")
 
 dbLoadRecords("db/seq_svtOnOff-1R.db","R=1")
+dbLoadRecords("db/seq_svtOnOff-All.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -42,6 +43,7 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 seq &seq_crate1Off
 
 #seq seq_svtOnOff_1R, "R=1"
+#seq seq_svtOnOff_ALL
 
 epicsThreadSleep(5)
 

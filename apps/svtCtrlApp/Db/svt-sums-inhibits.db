@@ -246,6 +246,17 @@ record(calc,"B_SVT_HV:outInhibit") {
     field(HIHI,"1")
 }
 
+record(calc,"B_SVT_HVLV:outputFail") {
+    field(INPA,"vmetlsvt1:outputFail CPP")
+    field(INPB,"vmetlsvt2:outputFail CPP")
+    field(INPC,"vmetlsvt3:outputFail CPP")
+    field(INPD,"vmetlsvt4:outputFail CPP")
+    field(INPE,"vmetlsvt5:outputFail CPP")
+    field(CALC,"A+B+C+D+E > 0 ? 1 : 0")
+    field(HHSV,"MAJOR")
+    field(HIHI,"1")
+}
+
 record(calc,"B_SVT_HVLV:crateInhibit") {
     field(INPA,"vmetlsvt1:mainInhibit CPP")
     field(INPB,"vmetlsvt2:mainInhibit CPP")
@@ -264,7 +275,8 @@ record(calc,"B_SVT_HVLV:crateInhibit") {
 record(calc,"B_SVT_HVLV:inhibit") {
     field(INPA,"B_SVT_HV:outInhibit CPP")
     field(INPB,"B_SVT_HVLV:crateInhibit CPP")
-    field(CALC,"A+B > 0 ? 1 : 0")
+    field(INPC,"B_SVT_HVLV:outputFail CPP")
+    field(CALC,"A+B+C > 0 ? 1 : 0")
     field(HHSV,"MAJOR")
     field(HIHI,"1")
 }

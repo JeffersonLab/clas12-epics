@@ -8,15 +8,10 @@ option -s;
 
 #define NREGIONS 4
 
-// There's no point in checking until SNMP poll cycle is finished.
-#define CHECKDELAY 16 // units=seconds
-
-// Go back to state=listen if we repeat in same on/off state this many times:
-#define MAXITER 100
-
 string msg;      assign msg       to "B_SVT_SEQ:msg";
 short btnOffAll; assign btnOffAll to "B_SVT_SEQ:btnOff"; monitor btnOffAll;
 short btnOnAll;  assign btnOnAll  to "B_SVT_SEQ:btnOn";  monitor btnOnAll;
+short btnAbtAll; assign btnAbtAll to "B_SVT_SEQ:btnAbt"; monitor btnAbtAll;
 
 short btnOff[NREGIONS];  assign btnOff   to {};
 short btnOn[NREGIONS];   assign btnOn    to {};

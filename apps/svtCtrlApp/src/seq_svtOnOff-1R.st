@@ -212,23 +212,16 @@ ss seq_svtOnOff_1R {
         }
 
         when (pvConnectCount() < nPVs) {} state wait
-        
-        when (btnOff) {
-            btnOff=0;  pvPut(btnOff);
-            btnOn=0;   pvPut(btnOn);
-        } state hvOff
 
-        when (btnOn) {
-            btnOn=0;   pvPut(btnOn);
-        } state lvOn
+        when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
+        when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
 
         when () { epicsThreadSleep(1); } state listen
     }
 
     state lvOn {
 
-        // do not reset timer unless previous state is different:
-        option -t;
+        option -t; // do not reset timer unless previous state is different
 
         entry {
             t0=0;
@@ -248,13 +241,8 @@ ss seq_svtOnOff_1R {
         }
        
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
-
-        when (btnOff) {
-            btnOff=0; pvPut(btnOff);
-            btnOn=0;  pvPut(btnOn);
-        } state hvOff
-
-        when (btnOn) { btnOn=0; pvPut(btnOn); } state lvOn
+        when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
+        when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
 
         when (allGood) {} state hvOn
 
@@ -294,8 +282,7 @@ ss seq_svtOnOff_1R {
 
     state hvOn {
         
-        // do not reset timer unless previous state is different:
-        option -t;
+        option -t; // do not reset timer unless previous state is different
 
         entry {
             t0=0;
@@ -316,13 +303,8 @@ ss seq_svtOnOff_1R {
         }
         
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
-
-        when (btnOff) {
-            btnOff=0;  pvPut(btnOff);
-            btnOn=0;   pvPut(btnOn);
-        } state hvOff
-
-        when (btnOn) { btnOn=0; pvPut(btnOn); } state hvOn
+        when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
+        when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state hvOn
 
         when (allGood) {} state listen
 
@@ -361,8 +343,7 @@ ss seq_svtOnOff_1R {
 
     state hvOff {
         
-        // do not reset timer unless previous state is different:
-        option -t;
+        option -t; // do not reset timer unless previous state is different
 
         entry {
             t0=0;
@@ -382,10 +363,8 @@ ss seq_svtOnOff_1R {
         }
         
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
-
         when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
-
-        when (btnOn) { btnOn=0; pvPut(btnOn); } state lvOn
+        when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
 
         when (allGood) {} state lvOff
 
@@ -424,8 +403,7 @@ ss seq_svtOnOff_1R {
     
     state lvOff {
         
-        // do not reset timer unless previous state is different:
-        option -t;
+        option -t; // do not reset timer unless previous state is different
 
         entry {
             t0=0;
@@ -446,10 +424,8 @@ ss seq_svtOnOff_1R {
         }
 
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
-
         when (btnOff) { btnOff=0; pvPut(btnOff); } state lvOff
-        
-        when (btnOn) { btnOn=0; pvPut(btnOn); } state lvOn
+        when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
 
         when (allGood) {} state listen
 

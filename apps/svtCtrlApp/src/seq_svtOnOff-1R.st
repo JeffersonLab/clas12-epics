@@ -6,17 +6,20 @@ option -s;
 
 %%#include <stdlib.h>
 
-// Refrain from rewriting/fixing for this long:
-#define FIXDELAY 11 // units=seconds
+// Duration (seconds) between between repeated checks (and rewrites):
+#define CHECKPERIOD 2
 
-// Delay between repeated checks between rewrites in a single on/off state:
-#define REFIXDELAY 2 // units=seconds
+// Duration (seconds) between initial write and first rewrite attempt:
+#define FIXDELAY 11
 
-// Abort on/off state if checks still uncessfull after this long:
-#define TIMEOUT 60 // units=seconds
+// Duration (seconds) after which to abort state if checks unsucessfull:
+#define TIMEOUT 60
 
-// Only write this many PVs at a time without delay:
-#define NCONSECWRITES 4
+// Number of PVs to write consecutively without delay:
+#define NCONSECWRITES 8
+
+// Delay (seconds) after writing NCONSECWRITES PVs:
+#define WRITEDELAY 1
 
 // Voltage thresholds for considering a channel ON (LARGE) or OFF (SMALL):
 #define HVSMALL 0.1
@@ -32,7 +35,7 @@ int nModulesPerRegion[NREGIONS]={10,14,18,24};
 int hv_slotsPerRegion[NREGIONS][4]={ { 7,8,9,10}, { 9,10,0,0}, { 8, 9,10,0}, { 8, 9,10,0} };
 int hv_nChansPerSlot[NREGIONS][4] ={ {16,4,0, 0}, {16,12,0,0}, {16,16, 4,0}, {16,16,16,0} };
 
-// These are "static" PVs (i.e. count known at compile-time):
+// Static PVs (i.e. count known at compile-time):
 #define NPVSTATIC 7
 string msg;    assign msg      to "B_SVT_R{R}_SEQ:msg";
 short btnOff;  assign btnOff   to "B_SVT_R{R}_SEQ:btnOff";  monitor btnOff;
@@ -42,9 +45,8 @@ int lv_isOn;   assign lv_isOn  to "B_SVT_LV_R{R}:isOn";     monitor lv_isOn;
 int lv_isOff;  assign lv_isOff to "B_SVT_LV_R{R}:isOff";    monitor lv_isOff;
 int hv_isOn;   assign hv_isOn  to "B_SVT_HV_R{R}:isOn";     monitor hv_isOn;
 int hv_isOff;  assign hv_isOff to "B_SVT_HV_R{R}:isOff";    monitor hv_isOff;
-//int watchdog;  assign watchdog to "B_SVT_R{R}_SEQ:heartbeat";
 
-// These are dynamically assigned PVs (i.e. count is defined at run-time)
+// Dynamic PVs (i.e. count defined at run-time)
 #define NCHANS 96
 double hv_vmon[NCHANS];   assign hv_vmon to {};
 double lva_vmon[NCHANS];  assign lva_vmon to {};
@@ -63,15 +65,23 @@ string lv_switchSuff=":PB_";
 string hv_switchOffSuff=":outSwitch";
 string lv_switchOffSuff=":onOff";
 
-// temporary variables:
-string stmp,sRegion;
-int hv_nChan,lv_nChan,nPVs,t0,doFix;
-int hv_iSlot,hv_nChanSlot,allGood;
-int ii,jj,kk,slot,iRegion,exitError;
+// Region# for this sequencer instance:
+int iRegion;
+
+// Number of hv/lv channels (region-dependent):
+int hv_nChan, lv_nChan;
+
+// Number of connected PVs (region-dependent):
+int nPVs;
+
+// Temporary variables:
+string stmp, sRegion;
+int t0, doFix, hv_iSlot, hv_nChanSlot;
+int ii, jj, kk, slot, exitError, allGood;
 
 ss seq_svtOnOff_1R {
 
-    state start { // check R macro and wait for static PVs
+    state start { // Check R macro, assign region#, wait for static PVs
         
         entry {
             exitError = 0;
@@ -102,7 +112,7 @@ ss seq_svtOnOff_1R {
         when () {} state init
     }
 
-    state init { // initialize and wait for dynamically-assigned PVs
+    state init { // Assign and wait for dynamic PVs
         
         entry {
             sprintf(msg,"init: Assigning PVs ...");
@@ -181,26 +191,25 @@ ss seq_svtOnOff_1R {
         when () {} state listen
     }
 
-    state wait {
+    state wait { // Wait for disconnected PVs
+
         when (pvConnectCount() < nPVs) {
             sprintf(msg,"wait: Waiting for PVs (%d/%d)",pvConnectCount(),nPVs);
             printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
             pvPut(msg);
             epicsThreadSleep(2);
         } state wait
+        
         when () {} state listen
     }
 
     //
-    // STATE FLOWCHART:
+    // Normal State Flow:
     //
     // listen --> lvOn --> hvOn --> listen
-    //            |           |
-    //            |-> hvOff   |-> hvOff
     //
     // listen --> hvOff --> lvOff --> listen
-    //            |           |
-    //            |-> lvOn    |-> lvOn
+    //
     //
     
     state listen {
@@ -221,8 +230,10 @@ ss seq_svtOnOff_1R {
 
     state lvOn {
 
-        option -t; // do not reset timer unless previous state is different
+        // Only reset timer if previous state is different:
+        option -t;
 
+        // Initialize state variables and write all on/off PVs:
         entry {
             t0=0;
             doFix=0;
@@ -234,20 +245,24 @@ ss seq_svtOnOff_1R {
                 lv_switchOn[ii]=1;
                 pvPut(lv_switchOn[ii]);
                 if ((ii+1)%NCONSECWRITES==0) {
-                    epicsThreadSleep(1);
-                    t0 += 1;
+                    epicsThreadSleep(WRITEDELAY);
+                    t0 += WRITEDELAY;
                 }
             }
         }
        
+        // Abort if lost PV connections: 
         when (pvConnectCount() < nPVs) {} state wait
 
+        // Honor user-intervention:
         when (btnAbt) { btnAbt=0; pvPut(btnAbt); } state listen
         when (btnOff) { btnOff=0; pvPut(btnOff); } state hvOff
         when (btnOn)  { btnOn=0;  pvPut(btnOn);  } state lvOn
 
+        // Success, proceed to next state:
         when (allGood) {} state hvOn
 
+        // Abort if no timely success:
         when (delay(t0+TIMEOUT)) {
             sprintf(msg,"lvOn:  TIMEOUT");
             printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
@@ -255,51 +270,66 @@ ss seq_svtOnOff_1R {
             epicsThreadSleep(5);
         } state listen
 
+        // Enable rewriting: 
         when (delay(t0+FIXDELAY) && !doFix) { doFix=1; } state lvOn
 
+        // Confirm results:
         when () {
-            allGood=0;
-            if (lv_isOn) {
-                allGood=1;
-                sprintf(msg,"lvOn: checking ... ");
-                printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
-                pvPut(msg);
-                for (ii=0; ii<lv_nChan; ii++) {
-                    pvGet(lva_vmon[ii]);
-                    pvGet(lvd_vmon[ii]);
-                    if (lva_vmon[ii]<LVLARGE || lvd_vmon[ii]<LVLARGE) {
-                        allGood=0;
-                        if (doFix) {
-                            printf("%d ",ii);
-                            lv_switchOn[ii]=1;
-                            pvPut(lv_switchOn[ii]);
-                        }
+
+            allGood=1;
+            sprintf(msg,"lvOn: checking ... ");
+            printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
+            pvPut(msg);
+
+            // Check monitored voltages:
+            for (ii=0; ii<lv_nChan; ii++) {
+                
+                pvGet(lva_vmon[ii]);
+                pvGet(lvd_vmon[ii]);
+                
+                if (lva_vmon[ii]<LVLARGE || lvd_vmon[ii]<LVLARGE) {
+                    allGood=0;
+                  
+                    // Rewrite, if enabled:
+                    if (doFix) {
+                        printf("%d ",ii);
+                        lv_switchOn[ii]=1;
+                        pvPut(lv_switchOn[ii]);
                     }
+
                 }
-                if (!allGood) printf("\n");
             }
-            if (!allGood) epicsThreadSleep(REFIXDELAY);
+            
+            // Require confirmation from global status PV:
+            if (!lv_isOn) allGood=0;
+            
+            // Failure, delay before next check: 
+            if (!allGood) {
+                if (doFix) printf("\n");
+                epicsThreadSleep(CHECKPERIOD);
+            }
+
         } state hvOn
     }
 
     state hvOn {
         
-        option -t; // do not reset timer unless previous state is different
+        option -t;
 
         entry {
             t0=0;
             doFix=0;
             allGood=0;
+            epicsThreadSleep(5); t0+=5;
             sprintf(msg,"hvOn ...");
             printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
             pvPut(msg);
-            epicsThreadSleep(5); t0+=5;
             for (ii=0; ii<hv_nChan; ii++) {
                 hv_switchOn[ii]=1;
                 pvPut(hv_switchOn[ii]);
                 if ((ii+1)%NCONSECWRITES==0) {
-                    epicsThreadSleep(1);
-                    t0 += 1;
+                    epicsThreadSleep(WRITEDELAY);
+                    t0 += WRITEDELAY;
                 }
             }
         }
@@ -322,32 +352,32 @@ ss seq_svtOnOff_1R {
         when (delay(t0+FIXDELAY) && !doFix) { doFix=1; } state hvOn
 
         when () {
-            allGood=0;
-            if (hv_isOn) {
-                allGood=1;
-                sprintf(msg,"hvOn: checking ... ");
-                printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
-                pvPut(msg);
-                for (ii=0; ii<hv_nChan; ii++) {
-                    pvGet(hv_vmon[ii]);
-                    if (hv_vmon[ii] < HVLARGE) {
-                        allGood=0;
-                        if (doFix) {
-                            printf("%d ",ii);
-                            hv_switchOn[ii]=1;
-                            pvPut(hv_switchOn[ii]);
-                        }
+            allGood=1;
+            sprintf(msg,"hvOn: checking ... ");
+            printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
+            pvPut(msg);
+            for (ii=0; ii<hv_nChan; ii++) {
+                pvGet(hv_vmon[ii]);
+                if (hv_vmon[ii] < HVLARGE) {
+                    allGood=0;
+                    if (doFix) {
+                        printf("%d ",ii);
+                        hv_switchOn[ii]=1;
+                        pvPut(hv_switchOn[ii]);
                     }
                 }
-                if (!allGood) printf("\n");
             }
-            if (!allGood) epicsThreadSleep(REFIXDELAY);
+            if (!hv_isOn) allGood=0;
+            if (!allGood) {
+                printf("\n");
+                epicsThreadSleep(CHECKPERIOD);
+            }
         } state hvOn
     }
 
     state hvOff {
         
-        option -t; // do not reset timer unless previous state is different
+        option -t;
 
         entry {
             t0=0;
@@ -360,8 +390,8 @@ ss seq_svtOnOff_1R {
                 hv_switchOff[ii]=1;
                 pvPut(hv_switchOff[ii]);
                 if ((ii+1)%NCONSECWRITES==0) {
-                    epicsThreadSleep(1);
-                    t0 += 1;
+                    epicsThreadSleep(WRITEDELAY);
+                    t0 += WRITEDELAY;
                 }
             }
         }
@@ -384,47 +414,47 @@ ss seq_svtOnOff_1R {
         when (delay(t0+FIXDELAY) && !doFix) { doFix=1; } state hvOff
 
         when () {
-            allGood=0;
-            if (hv_isOff) {
-                allGood=1;
-                sprintf(msg,"hvOff: checking ... ");
-                printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
-                pvPut(msg);
-                for (ii=0; ii<hv_nChan; ii++) {
-                    pvGet(hv_vmon[ii]);
-                    if (hv_vmon[ii] > HVSMALL) {
-                        allGood=0;
-                        if (doFix) {
-                            printf("%d ",ii);
-                            hv_switchOff[ii]=1;
-                            pvPut(hv_switchOff[ii]);
-                        }
+            allGood=1;
+            sprintf(msg,"hvOff: checking ... ");
+            printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
+            pvPut(msg);
+            for (ii=0; ii<hv_nChan; ii++) {
+                pvGet(hv_vmon[ii]);
+                if (hv_vmon[ii] > HVSMALL) {
+                    allGood=0;
+                    if (doFix) {
+                        printf("%d ",ii);
+                        hv_switchOff[ii]=1;
+                        pvPut(hv_switchOff[ii]);
                     }
                 }
-                if (!allGood) printf("\n");
             }
-            if (!allGood) epicsThreadSleep(REFIXDELAY);
+            if (!hv_isOff) allGood=0;
+            if (!allGood) {
+                printf("\n");
+                epicsThreadSleep(CHECKPERIOD);
+            }
         } state hvOff
     }
     
     state lvOff {
         
-        option -t; // do not reset timer unless previous state is different
+        option -t;
 
         entry {
             t0=0;
             doFix=0;
             allGood=0;
+            epicsThreadSleep(3); t0+=3;
             sprintf(msg,"lvOff ...");
             printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
             pvPut(msg);
-            epicsThreadSleep(3); t0+=3;
             for (ii=0; ii<lv_nChan; ii++) {
                 lv_switchOff[ii]=1;
                 pvPut(lv_switchOff[ii]);
                 if ((ii+1)%NCONSECWRITES==0) {
-                    epicsThreadSleep(1);
-                    t0 += 1;
+                    epicsThreadSleep(WRITEDELAY);
+                    t0 += WRITEDELAY;
                 }
             }
         }
@@ -447,27 +477,27 @@ ss seq_svtOnOff_1R {
         when (delay(t0+FIXDELAY) && !doFix) { doFix=1; } state lvOff
         
         when () {
-            allGood=0;
-            if (lv_isOff) {
-                allGood=1;
-                sprintf(msg,"lvOff: checking ... ");
-                printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
-                pvPut(msg);
-                for (ii=0; ii<lv_nChan; ii++) {
-                    pvGet(lva_vmon[ii]);
-                    pvGet(lvd_vmon[ii]);
-                    if (lva_vmon[ii]>LVSMALL || lvd_vmon[ii]>LVSMALL) {
-                        allGood=0;
-                        if (doFix) {
-                            printf("%d ",ii);
-                            lv_switchOff[ii]=1;
-                            pvPut(lv_switchOff[ii]);
-                        }
+            allGood=1;
+            sprintf(msg,"lvOff: checking ... ");
+            printf("seq_svtOnOff_1R(%d) - %s\n",iRegion,msg);
+            pvPut(msg);
+            for (ii=0; ii<lv_nChan; ii++) {
+                pvGet(lva_vmon[ii]);
+                pvGet(lvd_vmon[ii]);
+                if (lva_vmon[ii]>LVSMALL || lvd_vmon[ii]>LVSMALL) {
+                    allGood=0;
+                    if (doFix) {
+                        printf("%d ",ii);
+                        lv_switchOff[ii]=1;
+                        pvPut(lv_switchOff[ii]);
                     }
                 }
-                if (!allGood) printf("\n");
             }
-            if (!allGood) epicsThreadSleep(REFIXDELAY);
+            if (!lv_isOff) allGood=0;
+            if (!allGood) {
+                printf("\n");
+                epicsThreadSleep(CHECKPERIOD);
+            }
         } state lvOff
     }
 

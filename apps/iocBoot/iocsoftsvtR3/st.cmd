@@ -38,7 +38,7 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq &seq_crate3Off
 
-#seq seq_svtOnOff, "R=3"
+seq seq_svtOnOff_1R, "R=3"
 
 epicsThreadSleep(5)
 

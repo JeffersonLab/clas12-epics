@@ -29,6 +29,9 @@ ss seq_svtOnOff_All {
     state start {
         
         entry {
+            sprintf(msg,"start:");
+            printf("seq_svtOnOff_All() - %s\n",msg);
+            pvPut(msg);
             for (ii=0; ii<NREGIONS; ii++) {
                 sprintf(stmp,"B_SVT_R%d_SEQ:btnOff",ii+1);
                 pvAssign(btnOff[ii],stmp);
@@ -65,8 +68,8 @@ ss seq_svtOnOff_All {
             epicsThreadSleep(1);
         } state listen
         
+        when (btnAbtAll) { btnAbtAll=0; pvPut(btnAbtAll); } state listen
         when (btnOffAll) { btnOffAll=0; pvPut(btnOffAll); } state off
-        
         when (btnOnAll)  { btnOnAll=0;  pvPut(btnOnAll);  } state on
     }
 
@@ -78,6 +81,9 @@ ss seq_svtOnOff_All {
             iRegion=0;
             btnOn[orderOn[iRegion]-1]=1;
             pvPut(btnOn[orderOn[iRegion]-1]);
+            sprintf(msg,"on:  R%d",orderOn[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
             iRegion+=1;
         }
         
@@ -90,18 +96,27 @@ ss seq_svtOnOff_All {
         when (btnOnAll)  { btnOnAll=0;  pvPut(btnOnAll);  } state on
 
         when (delay(REGIONDELAY*1) && iRegion==1) {
+            sprintf(msg,"on:  R%d",orderOn[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
             btnOn[orderOn[iRegion]-1]=1;
             pvPut(btnOn[orderOn[iRegion]-1]);
             iRegion+=1;
         } state on
         
         when (delay(REGIONDELAY*2) && iRegion==2) {
+            sprintf(msg,"on:  R%d",orderOn[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
             btnOn[orderOn[iRegion]-1]=1;
             pvPut(btnOn[orderOn[iRegion]-1]);
             iRegion+=1;
         } state on
 
         when (delay(REGIONDELAY*3) && iRegion==3) {
+            sprintf(msg,"on:  R%d",orderOn[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
             btnOn[orderOn[iRegion]-1]=1;
             pvPut(btnOn[orderOn[iRegion]-1]);
             iRegion+=1;
@@ -114,7 +129,10 @@ ss seq_svtOnOff_All {
         entry {
             iRegion=0;
             btnOff[orderOff[iRegion]-1]=1;
-            pvPut(btnOn[orderOff[iRegion]-1]);
+            pvPut(btnOff[orderOff[iRegion]-1]);
+            sprintf(msg,"off:  R%d",orderOff[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
             iRegion+=1;
         }
         
@@ -127,19 +145,28 @@ ss seq_svtOnOff_All {
         when (btnOffAll) { btnOffAll=0; pvPut(btnOffAll); } state off
 
         when (delay(REGIONDELAY*1) && iRegion==1) {
-            btnOn[orderOff[iRegion]-1]=1;
+            sprintf(msg,"off:  R%d",orderOff[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
+            btnOff[orderOff[iRegion]-1]=1;
             pvPut(btnOff[orderOff[iRegion]-1]);
             iRegion+=1;
         } state off
         
         when (delay(REGIONDELAY*2) && iRegion==2) {
-            btnOn[orderOff[iRegion]-1]=1;
+            sprintf(msg,"off:  R%d",orderOff[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
+            btnOff[orderOff[iRegion]-1]=1;
             pvPut(btnOff[orderOff[iRegion]-1]);
             iRegion+=1;
         } state off
 
         when (delay(REGIONDELAY*3) && iRegion==3) {
-            btnOn[orderOff[iRegion]-1]=1;
+            sprintf(msg,"off:  R%d",orderOff[iRegion]);
+            printf("seq_svtOnOff-All - %s\n",msg);
+            pvPut(msg);
+            btnOff[orderOff[iRegion]-1]=1;
             pvPut(btnOff[orderOff[iRegion]-1]);
             iRegion+=1;
         } state listen

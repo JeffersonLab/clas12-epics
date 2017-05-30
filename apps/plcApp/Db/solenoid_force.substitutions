@@ -5,6 +5,13 @@
 # Date:   Nov 2016
 #
 
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,       Solenoid_CM.LoadCell[1],    lb, 2, "DS BL Radial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_RAMPDOWN,    Solenoid_CM.Limit1[1],      lb, 2, "DS BL Radial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FASTDUMP,    Solenoid_CM.Limit2[1],      lb, 2, "DS BL Radial Support Lower" }
+}
+
 file "db/torus_ai_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B,    lb,     2, "DS BL Radial Support Lower" }
@@ -24,7 +31,7 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B,    lb,     2, "US BR Axial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B,    lb,     2, "US BR Radial Support Lower" }
     #
-    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,    lb,     2, "DS BL Radial Support Lower" }
+    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,    lb,     2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_FORCE,    lb,     2, "DS BL Axial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_FORCE,    lb,     2, "DL BL Radial Support Upper" }
     { PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_FORCE,    lb,     2, "DS BL Axial Support Upper" }
@@ -45,7 +52,7 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, FOR:, RADIAL_US_LOAD:EM_FORCE,    lb,     2, "Total Radial US Load" }
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FORCE,    lb,     2, "Total Radial DS Load" }
     #
-    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_RAMPDOWN, lb,     2, "DS BL Radial Support Lower" }
+    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_RAMPDOWN, lb,     2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_RAMPDOWN, lb,     2, "DS BL Axial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_RAMPDOWN, lb,     2, "DL BL Radial Support Upper" }
     { PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_RAMPDOWN, lb,     2, "DS BL Axial Support Upper" }
@@ -66,7 +73,7 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, FOR:, RADIAL_US_LOAD:EM_RAMPDOWN, lb,     2, "Total Radial US Load" }
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_RAMPDOWN, lb,     2, "Total Radial DS Load" }
     #
-    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FASTDUMP, lb,     2, "DS BL Radial Support Lower" }
+    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FASTDUMP, lb,     2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_FASTDUMP, lb,     2, "DS BL Axial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_FASTDUMP, lb,     2, "DL BL Radial Support Upper" }
     { PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_FASTDUMP, lb,     2, "DS BL Axial Support Upper" }

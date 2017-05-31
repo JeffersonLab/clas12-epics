@@ -2,13 +2,16 @@ cd "$IOC_root_vmesvt"
 
 < cdCommands
 
-< ../network
+< ../network-86
 
 < ../nfsCommands
 
 cd topbin
 ld < svt.munch
 cd top
+
+putenv("EPICS_CA_AUTO_ADDR_LIST = NO")
+putenv("EPICS_CA_ADDR_LIST = 129.57.163.255")
 
 ## Register all support components
 dbLoadDatabase("dbd/svt.dbd")

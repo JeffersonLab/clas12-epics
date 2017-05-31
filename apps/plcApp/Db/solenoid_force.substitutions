@@ -5,6 +5,30 @@
 # Date:   Nov 2016
 #
 
+file "db/torus_ai_generic.db" {
+    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, FOR:, HS1,               G,      2, "Hall Sensor" }
+    { PLC_SOL, B_SOL:, FOR:, HS2,               G,      2, "Hall Sensor" }
+    { PLC_SOL, B_SOL:, FOR:, HS3,               G,      2, "Hall Sensor" }
+    #
+    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B,    lb,     2, "DS BL Radial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B,    lb,     2, "DS BL Axial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T,    lb,     2, "DL BL Radial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T,    lb,     2, "DS BL Axial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, RS86103DS_BR_T,    lb,     2, "DS BR Radial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86103DS_BR_T,    lb,     2, "DS BR Axial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, RS86102DS_BR_B,    lb,     2, "DS BR Radial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86102DS_BR_B,    lb,     2, "DS BR Axial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, RS86105US_BL_T,    lb,     2, "US BL Radial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86105US_BL_T,    lb,     2, "US BL Axial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, RS86108US_BL_B,    lb,     2, "US BL Radial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86108US_BL_B,    lb,     2, "US BL Axial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, RS86104US_BR_T,    lb,     2, "US BR Radial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86104US_BR_T,    lb,     2, "US BR Axial Support Upper" }
+    { PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B,    lb,     2, "US BR Axial Support Lower" }
+    { PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B,    lb,     2, "US BR Radial Support Lower" }
+}
+
 file "db/torus_ai_renamed.db" {
     pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,       RS86107DS_BL.value,     lb, 2, "DS BL Radial Support Lower" }
@@ -86,94 +110,6 @@ file "db/torus_ai_renamed.db" {
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FORCE,       RADIAL_DS_LOAD.value,   lb, 2, "Total Radial DS Load" }
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_RAMPDOWN,    RADIAL_DS_LOAD.Limit_1, lb, 2, "Total Radial DS Load" }
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FASTDUMP,    RADIAL_DS_LOAD.Limit_2, lb, 2, "Total Radial DS Load" }
-    #
-    
-
 }
 
-file "db/torus_ai_generic.db" {
-    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B,    lb,     2, "DS BL Radial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B,    lb,     2, "DS BL Axial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T,    lb,     2, "DL BL Radial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T,    lb,     2, "DS BL Axial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, RS86103DS_BR_T,    lb,     2, "DS BR Radial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86103DS_BR_T,    lb,     2, "DS BR Axial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, RS86102DS_BR_B,    lb,     2, "DS BR Radial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86102DS_BR_B,    lb,     2, "DS BR Axial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, RS86105US_BL_T,    lb,     2, "US BL Radial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86105US_BL_T,    lb,     2, "US BL Axial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, RS86108US_BL_B,    lb,     2, "US BL Radial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86108US_BL_B,    lb,     2, "US BL Axial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, RS86104US_BR_T,    lb,     2, "US BR Radial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86104US_BR_T,    lb,     2, "US BR Axial Support Upper" }
-    { PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B,    lb,     2, "US BR Axial Support Lower" }
-    { PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B,    lb,     2, "US BR Radial Support Lower" }
-    #
-    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,    lb,     2, "DS BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_FORCE,    lb,     2, "DS BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_FORCE,    lb,     2, "DL BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_FORCE,    lb,     2, "DS BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86103DS_BR_T:EM_FORCE,    lb,     2, "DS BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86103DS_BR_T:EM_FORCE,    lb,     2, "DS BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86102DS_BR_B:EM_FORCE,    lb,     2, "DS BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86102DS_BR_B:EM_FORCE,    lb,     2, "DS BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86105US_BL_T:EM_FORCE,    lb,     2, "US BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86105US_BL_T:EM_FORCE,    lb,     2, "US BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86108US_BL_B:EM_FORCE,    lb,     2, "US BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86108US_BL_B:EM_FORCE,    lb,     2, "US BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86104US_BR_T:EM_FORCE,    lb,     2, "US BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86104US_BR_T:EM_FORCE,    lb,     2, "US BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B:EM_FORCE,    lb,     2, "US BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B:EM_FORCE,    lb,     2, "US BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_US_LOAD:EM_FORCE,     lb,     2, "Total Axial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_DS_LOAD:EM_FORCE,     lb,     2, "Total Axial DS Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_US_LOAD:EM_FORCE,    lb,     2, "Total Radial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FORCE,    lb,     2, "Total Radial DS Load" }
-    #
-    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_RAMPDOWN, lb,     2, "DS BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_RAMPDOWN, lb,     2, "DS BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_RAMPDOWN, lb,     2, "DL BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_RAMPDOWN, lb,     2, "DS BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86103DS_BR_T:EM_RAMPDOWN, lb,     2, "DS BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86103DS_BR_T:EM_RAMPDOWN, lb,     2, "DS BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86102DS_BR_B:EM_RAMPDOWN, lb,     2, "DS BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86102DS_BR_B:EM_RAMPDOWN, lb,     2, "DS BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86105US_BL_T:EM_RAMPDOWN, lb,     2, "US BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86105US_BL_T:EM_RAMPDOWN, lb,     2, "US BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86108US_BL_B:EM_RAMPDOWN, lb,     2, "US BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86108US_BL_B:EM_RAMPDOWN, lb,     2, "US BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86104US_BR_T:EM_RAMPDOWN, lb,     2, "US BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86104US_BR_T:EM_RAMPDOWN, lb,     2, "US BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B:EM_RAMPDOWN, lb,     2, "US BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B:EM_RAMPDOWN, lb,     2, "US BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_US_LOAD:EM_RAMPDOWN,  lb,     2, "Total Axial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_DS_LOAD:EM_RAMPDOWN,  lb,     2, "Total Axial DS Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_US_LOAD:EM_RAMPDOWN, lb,     2, "Total Radial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_RAMPDOWN, lb,     2, "Total Radial DS Load" }
-    #
-    #{ PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FASTDUMP, lb,     2, "DS BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B:EM_FASTDUMP, lb,     2, "DS BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T:EM_FASTDUMP, lb,     2, "DL BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86106DS_BL_T:EM_FASTDUMP, lb,     2, "DS BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86103DS_BR_T:EM_FASTDUMP, lb,     2, "DS BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86103DS_BR_T:EM_FASTDUMP, lb,     2, "DS BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86102DS_BR_B:EM_FASTDUMP, lb,     2, "DS BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86102DS_BR_B:EM_FASTDUMP, lb,     2, "DS BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86105US_BL_T:EM_FASTDUMP, lb,     2, "US BL Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86105US_BL_T:EM_FASTDUMP, lb,     2, "US BL Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86108US_BL_B:EM_FASTDUMP, lb,     2, "US BL Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86108US_BL_B:EM_FASTDUMP, lb,     2, "US BL Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86104US_BR_T:EM_FASTDUMP, lb,     2, "US BR Radial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86104US_BR_T:EM_FASTDUMP, lb,     2, "US BR Axial Support Upper" }
-    #{ PLC_SOL, B_SOL:, FOR:, RS86101US_BR_B:EM_FASTDUMP, lb,     2, "US BR Axial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, ZS86101US_BR_B:EM_FASTDUMP, lb,     2, "US BR Radial Support Lower" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_US_LOAD:EM_FASTDUMP,  lb,     2, "Total Axial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, AXIAL_DS_LOAD:EM_FASTDUMP,  lb,     2, "Total Axial DS Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_US_LOAD:EM_FASTDUMP, lb,     2, "Total Radial US Load" }
-    #{ PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FASTDUMP, lb,     2, "Total Radial DS Load" }
-    #
-    { PLC_SOL, B_SOL:, FOR:, HS1,               G,      2, "Hall Sensor" }
-    { PLC_SOL, B_SOL:, FOR:, HS2,               G,      2, "Hall Sensor" }
-    { PLC_SOL, B_SOL:, FOR:, HS3,               G,      2, "Hall Sensor" }
-}
+

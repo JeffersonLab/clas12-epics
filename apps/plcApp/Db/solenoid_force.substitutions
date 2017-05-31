@@ -7,10 +7,6 @@
 
 file "db/torus_ai_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_SOL, B_SOL:, FOR:, HS1,               G,      2, "Hall Sensor" }
-    { PLC_SOL, B_SOL:, FOR:, HS2,               G,      2, "Hall Sensor" }
-    { PLC_SOL, B_SOL:, FOR:, HS3,               G,      2, "Hall Sensor" }
-    #
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B,    lb,     2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, ZS86107DS_BL_B,    lb,     2, "DS BL Axial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86106DS_BL_T,    lb,     2, "DL BL Radial Support Upper" }
@@ -31,6 +27,10 @@ file "db/torus_ai_generic.db" {
 
 file "db/torus_ai_renamed.db" {
     pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, FOR:, HallSensor1,   HS1,    G,  2,  "Hall Sensor" }
+    { PLC_SOL, B_SOL:, FOR:, HallSensor2,   HS2,    G,  2,  "Hall Sensor" }
+    { PLC_SOL, B_SOL:, FOR:, HallSensor3,   HS3,    G,  2,  "Hall Sensor" }
+    #
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FORCE,       RS86107DS_BL.value,     lb, 2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_RAMPDOWN,    RS86107DS_BL.Limit_1,   lb, 2, "DS BL Radial Support Lower" }
     { PLC_SOL, B_SOL:, FOR:, RS86107DS_BL_B:EM_FASTDUMP,    RS86107DS_BL.Limit_2,   lb, 2, "DS BL Radial Support Lower" }
@@ -111,5 +111,3 @@ file "db/torus_ai_renamed.db" {
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_RAMPDOWN,    RADIAL_DS_LOAD.Limit_1, lb, 2, "Total Radial DS Load" }
     { PLC_SOL, B_SOL:, FOR:, RADIAL_DS_LOAD:EM_FASTDUMP,    RADIAL_DS_LOAD.Limit_2, lb, 2, "Total Radial DS Load" }
 }
-
-

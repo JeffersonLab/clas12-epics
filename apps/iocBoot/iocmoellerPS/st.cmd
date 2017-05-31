@@ -9,7 +9,8 @@ cd "${TOP}"
 dbLoadDatabase("dbd/SCE410.dbd")
 SCE410_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("SER1", "hallb-moxa1:4001")
+drvAsynIPPortConfigure("SER1", "hallb-moxa2:4001")
+#drvAsynIPPortConfigure("SER1", "hallb-moxa1:4001")
 # drvAsynIPPortConfigure("SER2", "hallb-moxa1:4002")
 
 ## debugging...

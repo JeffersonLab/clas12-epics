@@ -2,14 +2,17 @@ OutTerminator = LF;
 InTerminator = LF;
 ExtraInput = Ignore;
 
+# units = milliseconds
 WriteTimeout = 500;
-ReadTimeout = 60000;
-ReplyTimeout = 60000;
+ReadTimeout = 5000;
+ReplyTimeout = 5000;
 
 cmd       { out "\$1"; }
-putInt    { out "\$1 %d"; }
-putFloat  { out "\$1 %f"; }
-putString { out "\$1 %s"; }
+
+putInt    { out "\$1 %d"; @init { wait 100; out "\$1?"; in "%d"; } }
+putFloat  { out "\$1 %f"; @init { wait 100; out "\$1?"; in "%f"; } }
+putString { out "\$1 %s"; @init { wait 100; out "\$1?"; in "%s"; } }
+
 getInt    { out "\$1?"; in "%d"; }
 getFloat  { out "\$1?"; in "%f"; }
 getString { out "\$1?"; in "%#s"; }

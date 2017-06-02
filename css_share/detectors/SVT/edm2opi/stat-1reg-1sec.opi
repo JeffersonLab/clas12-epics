@@ -72,69 +72,6 @@
       <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>1</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="textRule" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;0.7">
-          <value>LV OK</value>
-        </exp>
-        <exp bool_exp="true">
-          <value>ALARM</value>
-        </exp>
-        <pv trig="true">LV_R$(R)S$(S):alarm</pv>
-      </rule>
-      <rule name="colorRule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;0.7">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="true">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">LV_R$(R)S$(S):alarm</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>-5baa9537:15ab55a7cea:-70f1</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>LV OK</text>
-    <scripts />
-    <height>19</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
-    </background_color>
-    <width>70</width>
-    <x>80</x>
-    <name>EDM Label_2</name>
-    <y>138</y>
-    <foreground_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
     <toggle_button>false</toggle_button>
     <border_style>2</border_style>
@@ -1039,21 +976,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6e06</wuid>
     <transparent>false</transparent>
@@ -1079,11 +1002,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>159</x>
@@ -1105,21 +1028,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6e05</wuid>
     <transparent>false</transparent>
@@ -1145,11 +1054,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>22</x>
@@ -1171,21 +1080,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6e01</wuid>
     <transparent>false</transparent>
@@ -1211,11 +1106,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>23</x>
@@ -1237,21 +1132,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6dfa</wuid>
     <transparent>false</transparent>
@@ -1277,11 +1158,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>80</x>
@@ -1303,21 +1184,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6df9</wuid>
     <transparent>false</transparent>
@@ -1343,11 +1210,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>81</x>
@@ -1369,21 +1236,7 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0!=1">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">$(pv_name)</pv>
-      </rule>
-    </rules>
+    <rules />
     <enabled>true</enabled>
     <wuid>-5baa9537:15ab55a7cea:-6ddd</wuid>
     <transparent>false</transparent>
@@ -1409,11 +1262,11 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>40</width>
     <x>159</x>
@@ -1425,69 +1278,6 @@ $(pv_value)</tooltip>
     <actions hook="false" hook_all="false" />
     <font>
       <fontdata fontName="helvetica" height="12" style="0" />
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>1</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="textRule" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;0.7">
-          <value>HV OK</value>
-        </exp>
-        <exp bool_exp="true">
-          <value>ALARM</value>
-        </exp>
-        <pv trig="true">HV_R$(R)S$(S):alarm</pv>
-      </rule>
-      <rule name="colorRule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;0.7">
-          <value>
-            <color name="On" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="true">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <pv trig="true">HV_R$(R)S$(S):alarm</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>-5baa9537:15ab55a7cea:-6d95</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>HV OK</text>
-    <scripts />
-    <height>19</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
-    </background_color>
-    <width>70</width>
-    <x>7</x>
-    <name>EDM Label_16</name>
-    <y>138</y>
-    <foreground_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
@@ -1539,11 +1329,115 @@ $(pv_value)</tooltip>
     <widget_type>Label</widget_type>
     <wrap_words>false</wrap_words>
     <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
+      <color name="On" red="0" green="255" blue="0" />
     </background_color>
     <width>70</width>
     <x>156</x>
     <name>EDM Label_18</name>
+    <y>138</y>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>1</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>5b0cbe26:15c3be506b9:-4b4c</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>######</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>false</show_units>
+    <height>19</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>HV_R$(R)S$(S):alarmmbbi</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color name="Write_Foreground" red="0" green="0" blue="0" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="On" red="0" green="255" blue="0" />
+    </background_color>
+    <width>70</width>
+    <x>7</x>
+    <name>EDM TextInput_14</name>
+    <y>138</y>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>1</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>5b0cbe26:15c3be506b9:-4266</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>######</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>false</show_units>
+    <height>19</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>LV_R$(R)S$(S):alarmmbbi</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color name="Write_Foreground" red="0" green="0" blue="0" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="On" red="0" green="255" blue="0" />
+    </background_color>
+    <width>70</width>
+    <x>80</x>
+    <name>EDM TextInput_15</name>
     <y>138</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />

@@ -1,22 +1,20 @@
 record(aao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):thresh") {
     field(DTYP,"JLAB_SCALERS")
-    field(DESC,"scaler threshold")
+    field(DESC,"scaler thresholds")
     field(OUT,"#C$(CScode) S$(Thresh)")
     field(NELM,"10")
     field(FTVL,"DOUBLE")
     field(SCAN,"Passive")
     alias("B_DET_$(Det)_$(Sys)_$(Element):thresh")
-    info(autosaveFields_pass0,"DESC")
 }
 record(aao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):mode") {
     field(DTYP,"JLAB_SCALERS")
-    field(DESC,"scaler mode")
+    field(DESC,"scaler modes")
     field(OUT,"#C$(CScode) S$(Mode)")
     field(NELM,"10")
     field(FTVL,"DOUBLE")
     field(SCAN,"Passive")
     alias("B_DET_$(Det)_$(Sys)_$(Element):mode")
-    info(autosaveFields_pass0,"DESC")
 }
 record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") {
     field(DTYP,"JLAB_SCALERS") 
@@ -27,7 +25,6 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") {
     field(SCAN,"2 second") 
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cfanout")
     alias("B_DET_$(Det)_$(Sys)_$(Element)")
-    info(autosaveFields_pass0,"DESC")
 }
 record(fanout,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cfanout") {
     field(LNK1,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1")
@@ -43,7 +40,6 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):t12") {
     field(INDX,1)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):t12")
-    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):t34") {
     field(DTYP,"Soft Channel")
@@ -53,9 +49,9 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):t34") {
     field(INDX,2)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):t34")
-    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1") {
+    field(DESC,"TRG Gated")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
     field(NELM,1)
@@ -63,9 +59,9 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1") {
     field(INDX,0)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c1")
-    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c2") {
+    field(DESC,"TDC Gated")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
     field(NELM,1)
@@ -73,9 +69,9 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c2") {
     field(INDX,1)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c2")
-    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c3") {
+    field(DESC,"TRG")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
     field(NELM,1)
@@ -83,9 +79,9 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c3") {
     field(INDX,2)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c3")
-    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c4") {
+    field(DESC,"TDC")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
     field(NELM,1)
@@ -93,5 +89,4 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c4") {
     field(INDX,3)
     field(FTVL,"DOUBLE")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c4")
-    info(autosaveFields_pass0,"DESC")
 }

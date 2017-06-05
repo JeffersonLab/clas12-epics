@@ -11,8 +11,6 @@ svtCtrlApp_registerRecordDeviceDriver pdbbase
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
-#dbLoadTemplate("db/V450-160subnet.substitutions")
-
 dbLoadTemplate("db/svtIntlk.substitutions")
 
 dbLoadTemplate("db/svt-sums.substitutions")

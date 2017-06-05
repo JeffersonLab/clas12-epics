@@ -10,12 +10,16 @@ string prefix = "B_SVT_HV";
 string vsuff = ":outputMeasSenseV";
 string isuff = ":outputMeasCurrent";
 
-#define NREGIONS 4
+#define NREGIONS 3
 #define NCHANS 132
 
-int nModulesPerRegion[NREGIONS]={10,14,18,24};
-int slotsPerRegion[NREGIONS][4]={ {7,8,9,10}, {9,10,0,0}, {8,9,10,0}, {8,9,10,0} };
-int nChansPerSlot[NREGIONS][4]={ {16,4,0,0}, {16,12,0,0}, {16,16,4,0}, {16,16,16,0} };
+int nModulesPerRegion[NREGIONS]={10,14,18};
+int slotsPerRegion[NREGIONS][4]={ {7,8,9,10}, {9,10,0,0}, {8,9,10,0} };
+int nChansPerSlot[NREGIONS][4]={ {16,4,0,0}, {16,12,0,0}, {16,16,4,0} };
+
+//int nModulesPerRegion[NREGIONS]={10,14,18,24};
+//int slotsPerRegion[NREGIONS][4]={ {7,8,9,10}, {9,10,0,0}, {8,9,10,0} };
+//int nChansPerSlot[NREGIONS][4]={ {16,4,0,0}, {16,12,0,0}, {16,16,4,0} };
 
 float wfvo[NCHANS]; assign wfvo to "B_SVT_HV_V:wf";
 float wfio[NCHANS]; assign wfio to "B_SVT_HV_I:wf";

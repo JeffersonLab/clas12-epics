@@ -8,13 +8,14 @@ int delay=5;
 
 string prefix = "B_SVT_TEMP";
 
-#define NREGIONS 4
+#define NREGIONS 3
 #define NSLOTS 9
 #define FIRSTSLOT 2
 #define NTEMPS 132
 
 int nChansPerSlot[NSLOTS]={16,16,16,16,16,4,16,16,16};
-int nModulesPerRegion[NREGIONS]={10,14,18,24};
+int nModulesPerRegion[NREGIONS]={10,14,18};
+//int nModulesPerRegion[NREGIONS]={10,14,18,24};
 
 float wfo[NTEMPS]; assign wfo to "B_SVT_TEMP:wf";
 float wfi[NTEMPS]; assign wfi to {};

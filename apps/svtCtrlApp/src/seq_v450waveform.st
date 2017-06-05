@@ -11,7 +11,8 @@ string prefix = "B_SVT_TEMP";
 #define NREGIONS 3
 #define NSLOTS 9
 #define FIRSTSLOT 2
-#define NTEMPS 132
+//#define NTEMPS 132
+#define NTEMPS 84
 
 int nChansPerSlot[NSLOTS]={16,16,16,16,16,4,16,16,16};
 int nModulesPerRegion[NREGIONS]={10,14,18};

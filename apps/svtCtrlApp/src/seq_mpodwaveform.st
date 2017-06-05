@@ -11,7 +11,8 @@ string vsuff = ":outputMeasSenseV";
 string isuff = ":outputMeasCurrent";
 
 #define NREGIONS 3
-#define NCHANS 132
+//#define NCHANS 132
+#define NCHANS 84
 
 int nModulesPerRegion[NREGIONS]={10,14,18};
 int slotsPerRegion[NREGIONS][4]={ {7,8,9,10}, {9,10,0,0}, {8,9,10,0} };

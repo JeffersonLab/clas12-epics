@@ -140,6 +140,16 @@ $(pv_value)</tooltip>
         <description>Mpod Crate #1  (LV:R1 HV:R1,R2)</description>
       </action>
       <action type="OPEN_DISPLAY">
+        <path>edm2opi/svtMpodCrate2b.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>vmetlsvt2</HOST>
+          <ioc>iocsoftsvtR4</ioc>
+        </macros>
+        <replace>2</replace>
+        <description>Mpod Crate #2  (LV:R4S13-24)</description>
+      </action>
+      <action type="OPEN_DISPLAY">
         <path>edm2opi/svtMpodCrate3b.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
@@ -158,6 +168,16 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description>Mpod Crate #4  (LV:R2 HV:R3)</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>edm2opi/svtMpodCrate5b.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>vmetlsvt5</HOST>
+          <ioc>iocsoftsvtR4</ioc>
+        </macros>
+        <replace>2</replace>
+        <description>Mpod Crate #5  (HV:R4 LV:R4S1-12)</description>
       </action>
     </actions>
     <font>
@@ -235,6 +255,14 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description>Region 3</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>edm2opi/stat-reg4.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Region 4</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>edm2opi/leakageCurrents.opi</path>
@@ -622,6 +650,67 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
     <rules />
     <enabled>true</enabled>
+    <wuid>-6dccbc0f:15b3029e1de:-6c8e</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>28</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>IOCs</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="191" green="191" blue="191" />
+    </background_color>
+    <width>332</width>
+    <x>20</x>
+    <name>EDM related display_15</name>
+    <y>318</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>edm2opi/iocs/iocRestoreStatus.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Restore Status (Old)</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../iocs/KPP/ioc_health-SVT.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>IOC Health (New)</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
     <wuid>17680c27:15b6c8d8489:-7efb</wuid>
     <transparent>false</transparent>
     <pv_value />
@@ -664,61 +753,6 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>Restore</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-4c47813d:15c78c002fd:-7e9a</wuid>
-    <pv_value />
-    <text>IOCs</text>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>28</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <image></image>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Action Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="191" green="191" blue="191" />
-    </background_color>
-    <width>332</width>
-    <x>20</x>
-    <name>EDM related display_17</name>
-    <y>319</y>
-    <style>0</style>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>ioc_health-SVT.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description></description>
       </action>
     </actions>
     <font>

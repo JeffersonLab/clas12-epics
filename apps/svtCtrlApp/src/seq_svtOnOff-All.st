@@ -6,14 +6,14 @@ option -s;
 
 %%#include <stdlib.h>
 
-#define NREGIONS 4
+#define NREGIONS 3
 
 // Duration (seconds) between regions:
 #define REGIONDELAY 20
 
 // Region ordering:
-int orderOn[NREGIONS]={4,3,2,1};
-int orderOff[NREGIONS]={1,2,3,4};
+int orderOn[NREGIONS]={3,2,1};
+int orderOff[NREGIONS]={1,2,3};
 
 // seq_svtOnOff_All buttons:
 string msg;      assign msg       to "B_SVT_SEQ:msg";
@@ -121,15 +121,6 @@ ss seq_svtOnOff_All {
             btnOn[orderOn[iRegion]-1]=1;
             pvPut(btnOn[orderOn[iRegion]-1]);
             iRegion+=1;
-        } state on
-
-        when (iRegion==3 && delay(REGIONDELAY*iRegion)) {
-            sprintf(msg,"on:  R%d",orderOn[iRegion]);
-            printf("seq_svtOnOff-All - %s\n",msg);
-            pvPut(msg);
-            btnOn[orderOn[iRegion]-1]=1;
-            pvPut(btnOn[orderOn[iRegion]-1]);
-            iRegion+=1;
         } state listen
     }
 
@@ -176,100 +167,9 @@ ss seq_svtOnOff_All {
             btnOff[orderOff[iRegion]-1]=1;
             pvPut(btnOff[orderOff[iRegion]-1]);
             iRegion+=1;
-        } state off
-
-        when (iRegion==3 && delay(REGIONDELAY*iRegion)) {
-            sprintf(msg,"off:  R%d",orderOff[iRegion]);
-            printf("seq_svtOnOff-All - %s\n",msg);
-            pvPut(msg);
-            btnOff[orderOff[iRegion]-1]=1;
-            pvPut(btnOff[orderOff[iRegion]-1]);
-            iRegion+=1;
         } state listen
     }
 }
 
 
-/*
-//int lv_isOn[NREGIONS];   assign lv_isOn  to {};
-//int lv_isOff[NREGIONS];  assign lv_isOff to {};
-//int hv_isOn[NREGIONS];   assign hv_isOn  to {};
-//int hv_isOff[NREGIONS];  assign hv_isOff to {};
-                //pvAssign(hv_isOn[ii],stmp);
-                //sprintf(stmp,"B_SVT_HV_R%d:isOff",ii+1);
-                //pvAssign(hv_isOff[ii],stmp);
-                //sprintf(stmp,"B_SVT_LV_R%d:isOn",ii+1);
-                //pvAssign(lv_isOn[ii],stmp);
-                //sprintf(stmp,"B_SVT_LV_R%d:isOff",ii+1);
-                //pvAssign(lv_isOff[ii],stmp);
-
-                //pvMonitor(hv_isOn[ii]);
-                //pvMonitor(lv_isOn[ii]);
-                //pvMonitor(hv_isOff[ii]);
-                //pvMonitor(lv_isOff[ii]);
-
-    state on {
-        
-        entry {
-            nGood=0;
-            //nIter=0;
-            sprintf(msg,"on ...");
-            printf("seq_svtOnOff_All() - %s\n\n",msg);
-            pvPut(msg);
-        }
-
-        when (btnOffAll) {
-            btnOffAll=0; pvPut(btnOffAll);
-            btnOnAll=0;  pvPut(btnOnAll);
-        } state off
-
-        when (btnOnAll) { btnOnAll=0; pvPut(btnOnAll); } state on
-
-        when (nGood==NREGIONS) {} state listen
-        
-        when () {
-            nGood=0;
-            for (ii=0; ii<NREGIONS; ii++) {
-                iReg=orderOn[ii]-1;
-                if (lv_isOn[iReg] && hv_isOn[iReg]) {
-                    nGood++;
-                    continue;
-                }
-                btnOn[iReg]=1;
-                pvPut(btnOn[iReg]);
-                break;
-            }
-        } state on
-    }
-    
-    state off {
-        
-        entry {
-            nGood=0;
-            sprintf(msg,"off ...");
-            printf("\nseq_svtOnOff_All() - %s\n\n",msg);
-            pvPut(msg);
-        }
-
-        when (btnOffAll) { btnOffAll=0; pvPut(btnOffAll); } state off
-        
-        when (btnOnAll) { btnOnAll=0; pvPut(btnOnAll); } state on
-
-        when (nGood==NREGIONS) {} state listen
-        
-        when () {
-            nGood=0;
-            for (ii=0; ii<NREGIONS; ii++) {
-                iReg=orderOff[ii]-1;
-                if (lv_isOff[iReg] && hv_isOff[iReg]) {
-                    nGood++;
-                    continue;
-                }
-                btnOff[iReg]=1;
-                pvPut(btnOff[iReg]);
-                break;
-            }
-        } state off
-    }
-*/
 

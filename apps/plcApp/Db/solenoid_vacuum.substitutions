@@ -8,11 +8,15 @@
 file "db/torus_ai_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
     { PLC_SOL, B_SOL:, VAC:, CG8606,            torr,       2,  "Main CC" }
-    { PLC_SOL, B_SOL:, VAC:, CG8606_RATE,       "torr/hr",  2,  "Main CC" }
-    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG1HR,     "torr/hr",  2,  "Main CC" }
-    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG10HR,    "torr/hr",  2,  "Main CC" }
     { PLC_SOL, B_SOL:, VAC:, CG8600TB,          torr,       2,  "Main Turbo" }
     { PLC_SOL, B_SOL:, VAC:, TB8600,            "%",        2,  "Turbo Speed" }
+}
+
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_RATE,       CG8606_rate_hr,     "torr/hr",  2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG1HR,     CG8606_1hour_avg,   "torr/hr",  2,  "Main CC" }
+    { PLC_SOL, B_SOL:, VAC:, CG8606_AVG10HR,    CG8606_10hour_avg,  "torr/hr",  2,  "Main CC" }
 }
 
 file "db/torus_bi_generic.db" {

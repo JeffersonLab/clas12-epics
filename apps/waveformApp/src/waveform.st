@@ -90,7 +90,10 @@ ss waveform {
       if (wfRecLen > MAXLEN) {
         printf("%s - WARNING:  %swf.NELM is greater than sequencer's MAXLEN\n",stub,prefix);
       }
-      printf("%s - Opening file:  %s\n",stub,filename);
+      sprintf(msg,"Opening file:  %s",filename);
+      printf("%s - %s\n",stub,msg);
+      pvPut(msg);
+      //printf("%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
       inFile = open(filename,O_RDONLY);
 #else

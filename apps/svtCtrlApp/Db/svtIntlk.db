@@ -6,13 +6,13 @@
 #if VAL has changes, then after a delay of ODLY seconds it writes 1 ot OUT (to trigger procesing of another calc to
 #see it it's still MAJOR, and should initiate a switchoff.
 record(calcout,"$(CHAN):$(II):Calc1"){
-  field(SCAN,"2 second")
+  field(SCAN,"5 second")
 	field(INPA,"$(CHAN).SEVR CPP")
 	field(CALC,"(A==2)?1:0")
 	field(OUT,"$(CHAN):$(II):Calc2.PROC")
 #field (OOPT, "On Change")
 	field (OOPT, "When Non-zero")
-	field(ODLY,"2.0")
+	field(ODLY,"5.0")
 }
 
 #Triggered from the Major severity in above calc, also now checks that the STAT should cause a switchoff

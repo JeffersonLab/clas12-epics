@@ -20,7 +20,7 @@ PREFIX='B_SVT_HV_'
 VALS={}
 
 def getArguments():
-  global VALS
+  global VALS,DRYRUN,VERBOSE
   for arg in sys.argv[1:]:
     if arg=='-h': sys.exit(USAGE)
     elif arg=='-d': DRYRUN=True
@@ -57,7 +57,7 @@ def getPvList(hvs):
 def getPvValues(pvs,tag):
   for pv in pvs:
     # for outputs records, use the corresponding input:
-    if pv['name'].endsWith(':outputVoltage'):
+    if pv['name'].endswith(':outputVoltage'):
       epv=epics.pv.PV(pv['name']+'R')
     else:
       epv=epics.pv.PV(pv['name'])

@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += mm_gas_aiFloat64.template
+DB += mm_gas_bo_bit.template
 DB += mm_gas.substitutions
 DB += expected.template
 

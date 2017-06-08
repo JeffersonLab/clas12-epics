@@ -186,7 +186,10 @@ def getWidget(specs):
 def getSector(prefix,npts,offset,angleRange):
   widgets,roff=[],0
   for ch in range(12):
-    pv='%s%.2d'%(prefix,ch)
+    layer=ch/2+1
+    ds=['DRIFT','STRIP'][ch%2]
+#    pv='%s%.2d'%(prefix,ch)
+    pv='%s_L%d_%s'%(prefix,layer,ds)
     radiiRange=[30+ch*11+roff,30+ch*11+9+roff]
     #radiiRange=[50+ch*15+roff,50+ch*15+12+roff]
     points=getPoints(npts,radiiRange,offset,angleRange)
@@ -199,12 +202,12 @@ NPTS=13
 OFFSET=[260,260]
 
 WIDGETS=[]
-WIDGETS.append(getSector('B_HW_MVTHV_Sl06_Ch',NPTS,OFFSET,[31,149]))
-WIDGETS.append(getSector('B_HW_MVTHV_Sl08_Ch',NPTS,OFFSET,[151,269]))
-WIDGETS.append(getSector('B_HW_MVTHV_Sl10_Ch',NPTS,OFFSET,[271,389]))
+WIDGETS.extend(getSector('B_DET_BMT_HV_SEC1',NPTS,OFFSET,[31-60,149-60]))
+WIDGETS.extend(getSector('B_DET_BMT_HV_SEC2',NPTS,OFFSET,[151-60+120,269-60+120]))
+WIDGETS.extend(getSector('B_DET_BMT_HV_SEC3',NPTS,OFFSET,[271-60-120,389-60-120]))
 
 print HEAD
-print WIDGETS
+for ww in WIDGETS: print ww
 print TAIL
 
 

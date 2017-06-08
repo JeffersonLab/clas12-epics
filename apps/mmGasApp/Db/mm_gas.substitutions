@@ -3,7 +3,7 @@
 #
 #
 # Author: Wesley Moore (wmoore@jlab.org)
-# Date:   Dec 2016
+# Date:   June 2017
 #
 
 #file "$(MODBUS)/db/bo_bit.template" { pattern 
@@ -72,13 +72,25 @@ file "$(MODBUS)/db/mbbiDirect.template" { pattern
 }
 
 
-file "$(MODBUS)/db/aiFloat64.template" { pattern
-    {P,             R,              PORT,   OFFSET, DATA_TYPE,  LOPR, HOPR, PREC,   SCAN}
-    {B_DET_MM_GAS_, PRESS_WARN_SP,  R505,   0,      INT32_BE,    0,    0,    0,   "I/O Intr"}
-    {B_DET_MM_GAS_, PRESS_FAULT_SP, R505,   2,      INT16,       0,    0,    0,   "I/O Intr"}
-    {B_DET_MM_GAS_, INFLOW_WARN_SP, R505,   3,      FLOAT32_BE,  0,    0,    1,   "I/O Intr"}
-#    {MM_, WORD0,          R505,  0,      FLOAT32_LE,    0,    0,    0,   "I/O Intr"}
-#    {MM_, WORD4,          R505,  4,      FLOAT32_LE,    0,    0,    0,   "I/O Intr"}
+file "db/mm_gas_aiFloat64.template" { pattern
+    {P,             R,              PORT,   OFFSET, DATA_TYPE,  LOPR, HOPR, PREC,   EGU,    SCAN}
+    {B_DET_MM_GAS_, PRESS_WARN,     R505,   0,      FLOAT32_BE, 0,    0,    1,      mbar,   "I/O Intr"}
+    {B_DET_MM_GAS_, PRESS_FAULT,    R505,   2,      FLOAT32_BE, 0,    0,    1,      mbar,   "I/O Intr"}
+    {B_DET_MM_GAS_, IN_FLOW_WARN,    R505,  4,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, IN_FLOW_FAULT,   R505,  6,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, OVERPRESS_WARN, R505,   8,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, OVERPRESS_FAULT,R505,   10,     FLOAT32_BE, 0,    0,    1,      "%",    "I/O Intr"}
+    {B_DET_MM_GAS_, FLOW_DIFF_WARN, R505,   12,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, FLOW_DIFF_FAULT,R505,   14,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, SYS_TIME_CLEAR, R505,   16,     INT32_BE,   0,    0,    0,      min,    "I/O Intr"}
+    {B_DET_MM_GAS_, SETPT_TIME_CLEAR, R505, 18,     INT32_BE,   0,    0,    0,      min,    "I/O Intr"}
+    {B_DET_MM_GAS_, IN_FLOW_SP,      R505,  20,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, IN_FLOW_TIME,    R505,  22,     FLOAT32_BE, 0,    0,    1,      sec,    "I/O Intr"}
+    {B_DET_MM_GAS_, IN_PRESS,        R505,  24,     FLOAT32_BE, 0,    0,    2,      "",     "I/O Intr"}
+    {B_DET_MM_GAS_, IN_FLOW,         R505,  26,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, OUT_FLOW,        R505,  28,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, OVERPRESS_FLOW,  R505,  30,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_MM_GAS_, STATUS,          R505,  32,     INT16,      0,    0,    0,      "",     "I/O Intr"}
 }
 
 file "$(MODBUS)/db/aoFloat64.template" { pattern

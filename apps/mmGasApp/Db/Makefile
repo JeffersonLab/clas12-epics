@@ -4,6 +4,7 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Install databases, templates & substitutions like this
+DB += mm_gas_aiFloat64.template
 DB += mm_gas.substitutions
 DB += expected.template
 

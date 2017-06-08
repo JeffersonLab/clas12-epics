@@ -86,15 +86,15 @@ file "db/mm_gas_aiFloat64.template" { pattern
     {B_DET_MM_GAS_, SETPT_TIME_CLEAR, R505, 18,     INT32_BE,   0,    0,    0,      min,    "I/O Intr"}
     {B_DET_MM_GAS_, IN_FLOW_SP,      R505,  20,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
     {B_DET_MM_GAS_, IN_FLOW_TIME,    R505,  22,     FLOAT32_BE, 0,    0,    1,      sec,    "I/O Intr"}
-    {B_DET_MM_GAS_, IN_PRESS,        R505,  24,     FLOAT32_BE, 0,    0,    2,      "",     "I/O Intr"}
+    {B_DET_MM_GAS_, IN_PRESS,        R505,  24,     FLOAT32_BE, 0,    0,    2,      mbar,     "I/O Intr"}
     {B_DET_MM_GAS_, IN_FLOW,         R505,  26,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
     {B_DET_MM_GAS_, OUT_FLOW,        R505,  28,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
     {B_DET_MM_GAS_, OVERPRESS_FLOW,  R505,  30,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
     {B_DET_MM_GAS_, STATUS,          R505,  32,     INT16,      0,    0,    0,      "",     "I/O Intr"}
 }
 
-file "$(MODBUS)/db/aoFloat64.template" { pattern
-    {P,             R,              PORT,   OFFSET, DATA_TYPE,  LOPR, HOPR, PREC,   SCAN}
-#    {MM_, WORD0_SP,       W505,  0,      FLOAT32_LE,    0,    0,    0,   "I/O Intr"}
-#    {MM_, WORD4_SP,       W505,  4,      FLOAT32_LE,    0,    0,    0,   "I/O Intr"}
+file "$(MODBUS)/db/bo_bit.template" { pattern
+    {P,        R,           PORT    OFFSET, ZNAM,   ONAM}
+    {B_DET_MM_GAS_, START,  W505,   32,     "",     ""}
+    {B_DET_MM_GAS_, STOP,   W505,   4,      "",     ""}
 }

@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += mm_gas.substitutions
+DB += expected.template
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

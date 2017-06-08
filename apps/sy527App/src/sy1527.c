@@ -8,6 +8,8 @@
 // 2016, N. Baltzell, implemented group write, unfinished:
 //#define GROUPOPS_WRITE
 
+//#define BENCHMARK
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1413,9 +1415,9 @@ sy1527MainframeThread(void *arg)
     // Unlock for the WRITE queue:
     UNLOCK_MAINFRAME(id);
 
-
-//    Let's time read speed:
-//    clock_t diff, start = clock();
+#ifdef BENCHMARK
+    clock_t diff, start = clock();
+#endif
 
 #ifdef GROUPOPS_READ
 
@@ -1449,13 +1451,11 @@ sy1527MainframeThread(void *arg)
 //    if (ret != CAENHV_OK) nConsecutiveBadReads[id] ++;
 //    else                  nConsecutiveBadReads[id]=0;
 
-//    diff = clock() - start;
-//    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
-//#ifdef GROUPOPS_READ
-//    printf("sy1527MainframeThread:  [%d]  Group Read Time = %.0f ms\n",id,msec);
-//#else
-//    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
-//#endif
+#ifdef BENCHMARK
+    diff = clock() - start;
+    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
+    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
+#endif
 
     for (i=0; i<nmainframes; i++)
     {

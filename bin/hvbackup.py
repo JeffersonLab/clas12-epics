@@ -14,7 +14,7 @@ def exit(text,parent):
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
 DETSVT=['SVT']
 DETS=DETSHV+DETSLV+DETSVT
@@ -106,6 +106,14 @@ def getChannels(det,sector=None):
     for ss in sectors:
       for rr in [1,2,3]:
         prefixes.append('B_DET_DC_LV_SEC%d_R%d'%(ss,rr))
+  elif det=='MVT_HV':
+    for ll in [1,2,3,4,5,6]:
+      prefixes.append('B_DET_FMT_HV_IN_L%d_STRIP'%(ll))
+      prefixes.append('B_DET_FMT_HV_OUT_L%d_STRIP'%(ll))
+      prefixes.append('B_DET_FMT_HV_L%d_DRIFT'%(ll))
+      for ss in [1,2,3]:
+        prefixes.append('B_DET_BMT_HV_SEC%d_L%d_DRIFT'%(ss,ll))
+        prefixes.append('B_DET_BMT_HV_SEC%d_L%d_STRIP'%(ss,ll))
 
   return prefixes
 
@@ -135,14 +143,14 @@ def printPVsMya(det,sector=None):
 def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
   if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename,None)
-  burtopts='-f '+reqFilename+' -o '+snpFilename
-  p = subprocess.Popen(['burtrb', burtopts], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+  cmd=['burtrb','-f',reqFilename,'-o',snpFilename]
+  p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
   return [out,err]
 
 def restoreBurt(snpFilename):
-  burtopts='-f '+snpFilename
-  p = subprocess.Popen(['burtwb', burtopts], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+  cmd=['burtwb','-f',snpFilename]
+  p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
   return [out,err]
 
@@ -220,6 +228,7 @@ class SaveRestore:
 
   def saveBurt(self,snpFilename,det,sector):
     [out,err]=saveBurt(snpFilename,det,sector)
+    print out,err
     exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename,self.newChooser)
 
   def restoreBurt(self,snpFilename):

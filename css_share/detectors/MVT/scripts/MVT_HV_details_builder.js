@@ -15,8 +15,8 @@ var ichan=0;
 function makeWidget(pv)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice-nA.opi"); }
-    else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel-nA.opi"); }
+    if (novice>0) { lc.setPropertyValue("opi_file","../../apps/caenHvApp/caenhv_channel_novice-nA.opi"); }
+    else          { lc.setPropertyValue("opi_file","../../apps/caenHvApp/caenhv_channel-nA.opi"); }
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);

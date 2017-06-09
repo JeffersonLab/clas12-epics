@@ -41,6 +41,47 @@
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>14</border_style>
     <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>20bce753:15bdfb4a4a5:-7845</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>FMT HV</text>
+    <scripts />
+    <height>158</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>0</vertical_alignment>
+    <border_color>
+      <color red="127" green="127" blue="127" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>192</width>
+    <x>331</x>
+    <name>Label_14</name>
+    <y>7</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>14</border_style>
+    <tooltip></tooltip>
     <horizontal_alignment>0</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
@@ -111,47 +152,6 @@
     <x>7</x>
     <name>Label_12</name>
     <y>363</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>14</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>20bce753:15bdfb4a4a5:-7845</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>FMT HV</text>
-    <scripts />
-    <height>158</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>0</vertical_alignment>
-    <border_color>
-      <color red="127" green="127" blue="127" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
-    </background_color>
-    <width>162</width>
-    <x>361</x>
-    <name>Label_14</name>
-    <y>6</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -1448,16 +1448,6 @@ $(pv_value)</tooltip>
         <description>Channel Controls</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>../../apps/caenHvApp/status_crate_board_channel3.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <TYPE>1527</TYPE>
-          <ARGH>0</ARGH>
-        </macros>
-        <replace>2</replace>
-        <description>Mainframe Status</description>
-      </action>
-      <action type="OPEN_DISPLAY">
         <path>MVT_HV_currentsGeo.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
@@ -1472,6 +1462,18 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description>Current Monitoring - Tabular</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py save det=MVT_HV</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Save Settings</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py restore det=MVT_HV</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Restore Settings</description>
       </action>
     </actions>
     <font>
@@ -7499,6 +7501,64 @@ $(pv_value)</tooltip>
         <description>Turn Off</description>
       </action>
     </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+    <line_color>
+      <color red="128" green="0" blue="255" />
+    </line_color>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <line_width>0</line_width>
+    <horizontal_fill>true</horizontal_fill>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>3b58aeb:15c87a71803:33f4</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <alpha>255</alpha>
+    <bg_gradient_color>
+      <color red="255" green="255" blue="255" />
+    </bg_gradient_color>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>156</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <gradient>false</gradient>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <anti_alias>true</anti_alias>
+    <line_style>0</line_style>
+    <widget_type>Rectangle</widget_type>
+    <fg_gradient_color>
+      <color red="255" green="255" blue="255" />
+    </fg_gradient_color>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>11</width>
+    <x>351</x>
+    <name>Rectangle_21</name>
+    <y>8</y>
+    <fill_level>0.0</fill_level>
+    <foreground_color>
+      <color red="255" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

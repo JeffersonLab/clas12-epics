@@ -28,7 +28,7 @@
   </background_color>
   <width>940</width>
   <x>-1</x>
-  <name>FTC HV Controls</name>
+  <name>MVT HV Controls</name>
   <grid_space>1</grid_space>
   <show_ruler>true</show_ruler>
   <y>-1</y>
@@ -465,8 +465,8 @@
     <background_color>
       <color red="255" green="255" blue="255" />
     </background_color>
-    <width>381</width>
-    <x>113</x>
+    <width>331</width>
+    <x>244</x>
     <name>Label</name>
     <y>7</y>
     <foreground_color>
@@ -560,12 +560,228 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/MVT/MVT_HV_details_novice.opi</path>
+        <path>MVT_HV_details_novice.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>1</replace>
         <description>Open Novice Controls</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>3b58aeb:15c87a71803:4098</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>OFF Menu</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>90</width>
+    <x>80</x>
+    <name>Menu Button</name>
+    <y>10</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>B_DET_MVT_HV:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>MVT - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>BMT - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>FMT - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV_STRIP:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>BMT STRIP - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV_DRIFT:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>BMT DRIFT - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_STRIP:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>FMT STRIP - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_DRIFT:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>FMT DRIFT - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_IN_STRIP:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>FMT STRIP IN - OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_OUT_STRIP:pwoff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>FMT STRIP OUT - OFF</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>3b58aeb:15c87a71803:6547</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>ON Menu</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>90</width>
+    <x>172</x>
+    <name>Menu Button_1</name>
+    <y>10</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>B_DET_MVT_HV:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL MVT HV ON?</confirm_message>
+        <description>MVT - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL BMT HV ON?</confirm_message>
+        <description>BMT - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL FMT HV ON?</confirm_message>
+        <description>FMT - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV_STRIP:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL BMT STRIP HV ON?</confirm_message>
+        <description>BMT STRIP - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV_DRIFT:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL BMT DRIFT HV ON?</confirm_message>
+        <description>BMT DRIFT - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_STRIP:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL FMT STRIP HV ON?</confirm_message>
+        <description>FMT STRIP - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_DRIFT:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL FMT DRIFT HV ON?</confirm_message>
+        <description>FMT DRIFT - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_IN_STRIP:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL FMT STRIP IN HV ON?</confirm_message>
+        <description>FMT STRIP IN - ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_FMT_HV_OUT_STRIP:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn ALL FMT STRIP OUT HV ON?</confirm_message>
+        <description>FMT STRIP OUT - ON</description>
       </action>
     </actions>
     <font>

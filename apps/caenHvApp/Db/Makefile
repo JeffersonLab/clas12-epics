@@ -14,7 +14,8 @@ DB    += caenchassis.db
 DB    += HVDC_VSCAN.db
 DB    += $(wildcard ../*.substitutions)
 DB    += $(wildcard ../*sums*.db)
-DB    += $(wildcard ../mvtOnOff*)
+DB    += $(wildcard ../seq/*.db)
+DB    += $(wildcard ../seq/*.subsitutions)
 
 BEAST += HValarm.xml HValarmDetBased.xml HValarmBeamline.xml
 

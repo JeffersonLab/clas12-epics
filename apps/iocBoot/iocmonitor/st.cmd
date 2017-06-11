@@ -31,14 +31,21 @@ dbLoadRecords("db/monitorApp_torus.db")
 dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")
 dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
 
-dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
-dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
-
 dbLoadRecords("db/HVDC_VSCAN.db")
 
 dbLoadRecords("db/collimator_alarm.db")
 
 dbLoadRecords("db/htcc-gas-calc.db")
+
+dbLoadTemplate("db/ltccOnOff.substitutions")
+dbLoadTemplate("db/htccOnOff.substitutions")
+dbLoadTemplate("db/pcalOnOff.substitutions")
+dbLoadTemplate("db/ecalOnOff.substitutions")
+dbLoadTemplate("db/ftofOnOff.substitutions")
+dbLoadTemplate("db/hvOnOff.substitutions")
+
+dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 cd ${TOP}/iocBoot/${IOC}
 

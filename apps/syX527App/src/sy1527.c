@@ -963,6 +963,8 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   /* register mainframe */
   mainframes[nmainframes-1] = id;
 
+  mainframes_disconnect[nmainframes-1] = 0;
+
   /* get mainframe map */
   // this was a duplicate (see caenHvApp/src/ioc_com_def.h)
   //sy1527GetMap(id);

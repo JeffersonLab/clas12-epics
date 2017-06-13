@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>1100</height>
+  <height>900</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -41,7 +41,7 @@
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>303</height>
+    <height>289</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -72,18 +72,21 @@
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
-      <wuid>2da4dada:138bb0b2666:-7fed</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text></text>
+      <wuid>-2c0b3d7b:15913a3c670:-61cb</wuid>
+      <transparent>false</transparent>
+      <pv_value />
       <scripts />
-      <height>5</height>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -91,24 +94,33 @@
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
+      <pv_name></pv_name>
       <border_color>
-        <color red="0" green="128" blue="255" />
+        <color name="GRID" red="90" green="90" blue="90" />
       </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
+      <label>CND</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
-        <color red="255" green="255" blue="255" />
+        <color name="Button" red="240" green="240" blue="240" />
       </background_color>
-      <width>80</width>
+      <width>115</width>
       <x>0</x>
-      <name>spacer</name>
-      <y>5</y>
+      <name>CND</name>
+      <y>192</y>
       <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
+        <color red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <show_scrollbar>false</show_scrollbar>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/CND/CNDHV.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>CND HV</description>
+        </action>
+      </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
@@ -148,7 +160,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>CTOF</name>
-      <y>5</y>
+      <y>216</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -206,6 +218,84 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
+      <wuid>-4b759146:152f9e60eab:-2a4e</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>CVT</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>CVT</name>
+      <y>168</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/SVT/svtOverview.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>SVT Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/SVT/svtMainMenu.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>SVT Menu</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/MVT/MVT.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>MVT Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/mmfeuApp/mmFeu.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>B_DET_SVT_MM_FEU</P>
+          </macros>
+          <replace>2</replace>
+          <description>MVT FEU</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
       <wuid>-1c32a971:15101a0267d:-6240</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -232,7 +322,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>DC</name>
-      <y>29</y>
+      <y>0</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -377,7 +467,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>ECAL</name>
-      <y>53</y>
+      <y>24</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -442,321 +532,6 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
-      <wuid>-1c32a971:15101a0267d:-623f</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>FTOF</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>FTOF</name>
-      <y>101</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/FTOF/FTOF.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>FTOF HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/scalers/jscaler_ftof_disc.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SEC>1</SEC>
-            <S>4</S>
-          </macros>
-          <replace>2</replace>
-          <description>FTOF DISC Scalers</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/scalers/jscaler_ftof_fadc.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SEC>1</SEC>
-          </macros>
-          <replace>2</replace>
-          <description>FTOF FADC Scalers</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-1c32a971:15101a0267d:-623e</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>HTCC</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>HTCC</name>
-      <y>125</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/HTCC/htcc_hv.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>HTCC HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/HTCC/htcc_lv.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>HTCC LV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/HTCC/htcc_gas.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>HTCC Gas</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/genFlasherApp/genFlasherUser.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_HTCC_FLASHER</P>
-          </macros>
-          <replace>2</replace>
-          <description>HTCC Flasher</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_htcc_markov.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>HTCC FADC Scalers</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-4b759146:152f9e60eab:-2a5f</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>LTCC</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>LTCC</name>
-      <y>149</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/LTCC/ltcc_hv.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>LTCC HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/LTCC/ltcc_gas.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>LTCC Gas</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_ltcc_disc.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SEC>1</SEC>
-          </macros>
-          <replace>2</replace>
-          <description>LTCC DISC Scalers</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_ltcc_fadc.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SEC>1</SEC>
-          </macros>
-          <replace>2</replace>
-          <description>LTCC FADC Scalers</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-4b759146:152f9e60eab:-2a4e</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>CVT</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>SVT</name>
-      <y>197</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/SVT/svtOverview.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>SVT Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/SVT/svtMainMenu.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>SVT Menu</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/MVT/MVT.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>MVT Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/mmfeuApp/mmFeu.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_SVT_MM_FEU</P>
-          </macros>
-          <replace>2</replace>
-          <description>MVT FEU</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
       <wuid>-1c32a971:15101a0267d:-61b3</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -783,7 +558,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>FT</name>
-      <y>77</y>
+      <y>144</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -899,7 +674,7 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
-      <wuid>-2c0b3d7b:15913a3c670:-61cb</wuid>
+      <wuid>-1c32a971:15101a0267d:-623f</wuid>
       <transparent>false</transparent>
       <pv_value />
       <scripts />
@@ -916,7 +691,7 @@ $(pv_value)</tooltip>
       <border_color>
         <color name="GRID" red="90" green="90" blue="90" />
       </border_color>
-      <label>CND</label>
+      <label>FTOF</label>
       <widget_type>Menu Button</widget_type>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
@@ -924,19 +699,203 @@ $(pv_value)</tooltip>
       </background_color>
       <width>115</width>
       <x>0</x>
-      <name>CND</name>
-      <y>221</y>
+      <name>FTOF</name>
+      <y>48</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>detectors/CND/CNDHV.opi</path>
+          <path>detectors/FTOF/FTOF.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>CND HV</description>
+          <description>FTOF HV</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/scalers/jscaler_ftof_disc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>1</SEC>
+            <S>4</S>
+          </macros>
+          <replace>2</replace>
+          <description>FTOF DISC Scalers</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/scalers/jscaler_ftof_fadc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>1</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>FTOF FADC Scalers</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-1c32a971:15101a0267d:-623e</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>HTCC</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>HTCC</name>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/HTCC/htcc_hv.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HTCC HV</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/HTCC/htcc_lv.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HTCC LV</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/HTCC/htcc_gas.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HTCC Gas</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/genFlasherApp/genFlasherUser.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>B_DET_HTCC_FLASHER</P>
+          </macros>
+          <replace>2</replace>
+          <description>HTCC Flasher</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_htcc_markov.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HTCC FADC Scalers</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-4b759146:152f9e60eab:-2a5f</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>LTCC</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>LTCC</name>
+      <y>96</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/LTCC/ltcc_hv.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>LTCC HV</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/LTCC/ltcc_gas.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>LTCC Gas</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ltcc_disc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>1</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>LTCC DISC Scalers</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ltcc_fadc.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SEC>1</SEC>
+          </macros>
+          <replace>2</replace>
+          <description>LTCC FADC Scalers</description>
         </action>
       </actions>
       <font>
@@ -978,7 +937,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>RICH</name>
-      <y>173</y>
+      <y>120</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1099,7 +1058,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>383</height>
+    <height>344</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -1120,7 +1079,7 @@ $(pv_value)</tooltip>
     <width>150</width>
     <x>8</x>
     <name>Subsystems</name>
-    <y>453</y>
+    <y>439</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -1130,47 +1089,6 @@ $(pv_value)</tooltip>
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>2da4dada:138bb0b2666:-7fed</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text></text>
-      <scripts />
-      <height>5</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>80</width>
-      <x>0</x>
-      <name>spacer</name>
-      <y>5</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <show_scrollbar>false</show_scrollbar>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
       <border_style>6</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -1293,6 +1211,132 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
+      <wuid>6923f1be:1584950518a:ff3</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Cameras</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>Cameras</name>
+      <y>251</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/cameras/cctv6expert.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Beam Viewer - Crosshair Controls</description>
+        </action>
+        <action type="OPEN_WEBPAGE">
+          <hyperlink>http://cctv6</hyperlink>
+          <description>Beam Viewer - Web Browser</description>
+        </action>
+        <action type="OPEN_WEBPAGE">
+          <hyperlink>http://hallbcam07</hyperlink>
+          <description>HTCC Bubbler - Web Browser</description>
+        </action>
+        <action type="OPEN_WEBPAGE">
+          <hyperlink>http://hallbcam02</hyperlink>
+          <description>Hall Fisheye - Web Browser</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-4b759146:152f9e60eab:-2e88</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>DAQ</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>DAQ</name>
+      <y>227</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>apps/vmeCratesApp/vmeCrates_write_withHeader.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Crates</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/vmeCratesApp/vmeCrates_write_withHeader-DC.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>DC Crates</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
       <wuid>-4b759146:152f9e60eab:-2e87</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -1310,7 +1354,7 @@ $(pv_value)</tooltip>
       <border_color>
         <color name="GRID" red="90" green="90" blue="90" />
       </border_color>
-      <label>Gas Systems</label>
+      <label>Gas</label>
       <widget_type>Menu Button</widget_type>
       <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <background_color>
@@ -1319,7 +1363,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Gas System</name>
-      <y>63</y>
+      <y>29</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1420,7 +1464,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>HV</name>
-      <y>92</y>
+      <y>53</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1497,26 +1541,18 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>IOCs</name>
-      <y>121</y>
+      <y>77</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>iocs/KPP/ioc_heartbeats_all-KPP.opi</path>
+          <path>iocs/ioc_health.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>Heartbeats - KPP</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>iocs/KPP/ioc_health-KPP.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>IOC Health - KPP</description>
+          <description>IOC Health</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>iocs/ioc_health_hv.opi</path>
@@ -1569,20 +1605,28 @@ $(pv_value)</tooltip>
           <description>Heartbeats - FULL</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>iocs/ioc_health.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>IOC Health - FULL</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>apps/pcMonitorApp/pcMonitor_all.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
           <description>Clonioc Stats</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>iocs/KPP/ioc_heartbeats_all-KPP.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Heartbeats - KPP</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>iocs/KPP/ioc_health-KPP.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>IOC Health - KPP</description>
         </action>
       </actions>
       <font>
@@ -1624,7 +1668,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Moeller</name>
-      <y>295</y>
+      <y>101</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1716,7 +1760,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Motors</name>
-      <y>150</y>
+      <y>131</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1785,7 +1829,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Scalers</name>
-      <y>179</y>
+      <y>155</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1926,7 +1970,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Solenoid</name>
-      <y>237</y>
+      <y>203</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2059,7 +2103,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Torus</name>
-      <y>208</y>
+      <y>179</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2182,215 +2226,6 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
-      <wuid>-4b759146:152f9e60eab:-2e88</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>DAQ</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>Wiener Crates</name>
-      <y>266</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>apps/vmeCratesApp/vmeCrates_write_withHeader.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Crates</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/vmeCratesApp/vmeCrates_write_withHeader-DC.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>DC Crates</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>6923f1be:1584950518a:ff3</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>Cameras</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>Cameras</name>
-      <y>324</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/cameras/cctv6expert.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Beam Viewer - Crosshair Controls</description>
-        </action>
-        <action type="OPEN_WEBPAGE">
-          <hyperlink>http://cctv6</hyperlink>
-          <description>Beam Viewer - Web Browser</description>
-        </action>
-        <action type="OPEN_WEBPAGE">
-          <hyperlink>http://hallbcam07</hyperlink>
-          <description>HTCC Bubbler - Web Browser</description>
-        </action>
-        <action type="OPEN_WEBPAGE">
-          <hyperlink>http://hallbcam02</hyperlink>
-          <description>Hall Fisheye - Web Browser</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-4b759146:152f9e60eab:-2e8a</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>Devices</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>Devices</name>
-      <y>34</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>apps/chillerApp/Lauda_XT_expert.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC:</P>
-            <R>CHILLER:</R>
-          </macros>
-          <replace>2</replace>
-          <description>FTC Chiller (Lauda)</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/omegaCYD218App/omegaCYD218.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_HW_FTC:</P>
-            <R>CYD218_0:</R>
-          </macros>
-          <replace>2</replace>
-          <description>FTC Temps (CYD218_0)</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/omegaCYD218App/omegaCYD218.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_HW_FTC:</P>
-            <R>CYD218_1:</R>
-          </macros>
-          <replace>2</replace>
-          <description>FTC Temps (CYD218_1)</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/apps/prologixApp/prologix_all_slim.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Prologix GPIB-ETH</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
       <wuid>-4cffc683:159e783adf5:-6565</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -2417,7 +2252,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Weather</name>
-      <y>319</y>
+      <y>275</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2474,7 +2309,7 @@ $(pv_value)</tooltip>
     <width>150</width>
     <x>8</x>
     <name>Tools</name>
-    <y>835</y>
+    <y>782</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -2484,47 +2319,6 @@ $(pv_value)</tooltip>
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-44941da7:155a7aefbb2:-624c</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text></text>
-      <scripts />
-      <height>5</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>80</width>
-      <x>7</x>
-      <name>spacer</name>
-      <y>13</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <show_scrollbar>false</show_scrollbar>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
       <border_style>6</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>

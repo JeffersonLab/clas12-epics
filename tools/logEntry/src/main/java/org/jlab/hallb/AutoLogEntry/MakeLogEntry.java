@@ -18,6 +18,8 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
+  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HVSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC"};
+
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");
 //  String RUNDBTABLE="daq_"+RUNDBEXPID;
@@ -380,6 +382,9 @@ public class MakeLogEntry
       tabPanel.add(screenshotPanel);
       tabPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshots"));
     }
+
+    JComboBox<String> logbookChoice=new JComboBox<>(LOGBOOKS);
+    logbookChoice.setSelectedItem("HBLOG");
 
     // main frame:
     FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);

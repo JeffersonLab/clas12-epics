@@ -88,7 +88,22 @@ public class MakeLogEntry
         {
           if      (args[ii].equals("-w")) windowId = args[++ii];
           else if (args[ii].equals("-m")) screenName = args[++ii];
-          else if (args[ii].equals("-l")) LOGBOOKNAME = args[++ii];
+          else if (args[ii].equals("-l")) {
+              LOGBOOKNAME = args[++ii];
+              boolean found=false;
+              for (String ss : LOGBOOKS)
+              {
+                  if (LOGBOOKNAME.equals(ss)) {
+                      found=true;
+                      break;
+                  }
+                  
+              }
+              if (!found) {
+                  System.err.println("Invalid logbook name: "+LOGBOOKNAME);
+                  LOGBOOKNAME="HBLOG";
+              }
+          }
           else if (args[ii].equals("-s")) RUNDBSESSION = args[++ii];
           else if (args[ii].equals("-t")) DOTABS = Boolean.parseBoolean(args[++ii]);
           else System.err.println("Invalid Argument: >"+args[ii]+"<");
@@ -346,7 +361,7 @@ public class MakeLogEntry
 
     Border lbd=BorderFactory.createLineBorder(Color.GRAY);
     
-    LOGBOOKCHOICE.setSelectedItem("HBLOG");
+    LOGBOOKCHOICE.setSelectedItem(LOGBOOKNAME);
 
     // button panel:
     JPanel buttonPanel = new JPanel();

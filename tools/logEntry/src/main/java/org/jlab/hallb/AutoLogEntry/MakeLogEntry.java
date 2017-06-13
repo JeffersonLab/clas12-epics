@@ -18,7 +18,7 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
-  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HVSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC"};
+  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HVSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC","TLOG"};
 
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");
@@ -48,6 +48,8 @@ public class MakeLogEntry
   JTextPane STATUSTEXT = null;
   JPanel IMPANEL=new JPanel();
   JFrame FRAME;
+    
+  JComboBox<String> LOGBOOKCHOICE=new JComboBox<>(LOGBOOKS);
 
   final boolean DEBUG=false;
 
@@ -344,6 +346,8 @@ public class MakeLogEntry
 
     Border lbd=BorderFactory.createLineBorder(Color.GRAY);
     
+    LOGBOOKCHOICE.setSelectedItem("HBLOG");
+
     // button panel:
     JPanel buttonPanel = new JPanel();
     buttonPanel.setOpaque(false);
@@ -374,6 +378,7 @@ public class MakeLogEntry
     titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.LINE_AXIS));
     titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
+    titlePanel.add(LOGBOOKCHOICE);
 
     JPanel tabPanel=null;
     if (DOTABS)
@@ -383,11 +388,8 @@ public class MakeLogEntry
       tabPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshots"));
     }
 
-    JComboBox<String> logbookChoice=new JComboBox<>(LOGBOOKS);
-    logbookChoice.setSelectedItem("HBLOG");
-
     // main frame:
-    FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
+    FRAME = new JFrame("JLab Logbook Entry.");//:  "+LOGBOOKNAME);
     FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
     FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     FRAME.add(commentsPanel, BorderLayout.CENTER);
@@ -514,7 +516,8 @@ public class MakeLogEntry
       updateStatusPane("ERROR:  Update Log Title Before Submitting.",Color.RED);
       return;
     }
-    LogEntry entry = new LogEntry("", LOGBOOKNAME);
+    //LogEntry entry = new LogEntry("", LOGBOOKNAME);
+    LogEntry entry = new LogEntry("", (String)LOGBOOKCHOICE.getSelectedObjects()[0]);
     //entry.setEmailNotify("rafopar@jlab.org");
     try {
       if (DOTABS)

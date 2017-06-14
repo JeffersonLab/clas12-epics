@@ -1,0 +1,97 @@
+#
+# ANOVA Refrigerated and Heating Circulators - A Series
+# 
+# Author: Wesley Moore
+# Date:   June 2014
+#
+
+InTerminator  = "";   # differs for several readbacks...
+OutTerminator = CR;
+ReadTimeout = 1000;
+ReplyTimeout = 1000;
+
+#######################################
+# Status Commands
+#######################################
+getVersion {
+    out "version";
+    in  "version\rFirmware Version: %s\r\n\r";
+}
+
+getStatus {
+    out "status";
+    in  "status\r%s\r\n\r%#*s";
+}
+
+getError {
+    in "status\r%*s\r\n\r%#s\r\n\r";
+}
+
+setDefault {
+    out "default";
+    in  "%*s";
+}
+
+getBathTemp {
+    out "temp";
+    in  "temp\r %f\r";
+}
+
+#######################################
+# Control Commands
+#######################################
+start {
+    out "start";
+    in  "%*50c";
+}
+
+stop {
+    out "stop";
+    in  "%*39c";
+}
+
+clear {
+    out "clear";
+    in  "%*39c";
+}
+
+#######################################
+# Settings Commands
+#######################################
+getTemp {
+    out "get temp setting";
+    in  "get temp setting\r %f\r";
+}
+
+setTemp {
+    out "set temp %f";
+    in  "%*39c";
+}
+
+getHighLimit {
+    out "get highlimit setting";
+    in  "get highlimit setting\r%f\n\r";
+}
+
+setHighLimit {
+    out "set highlimit %f";
+    in  "%*39c";
+    @init { getHighLimit; }
+}
+
+getLowLimit {
+    out "get lowlimit setting";
+    in  "get lowlimit setting\r%f\n\r";
+}
+
+setLowLimit {
+    out "set lowlimit %f";
+    in  "%*39c";
+    @init { getLowLimit; }
+}
+
+setPumpSpd {
+    out "set pump speed %s";
+    in  "%*39c";
+}
+

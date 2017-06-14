@@ -4,9 +4,9 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Install databases, templates & substitutions like this
-DB += Lauda_XT.db
+DB += $(wildcard ../*.db)
+PROTO += $(wildcard ../*.proto)
 
-PROTO += Lauda_XT.proto
 REQ   += Lauda_XT_settings.req
 
 include $(TOP)/configure/RULES

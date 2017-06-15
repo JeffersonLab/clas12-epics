@@ -23,11 +23,11 @@ dbLoadRecords("db/svt-sums-inhibits.db")
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup
-#< save_restore.cmd
+< save_restore.cmd
 
 iocInit
 
-#makeAutosaveFiles()
-#create_monitor_set("info_positions.req", 5, "P=${IOC}:")
-#create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 

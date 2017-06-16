@@ -5,7 +5,9 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += $(wildcard ../*.db)
-PROTO += $(wildcard ../*.proto)
+
+PROTO += anova.proto
+PROTO += Lauda_XT.proto
 
 REQ   += Lauda_XT_settings.req
 

@@ -28,6 +28,7 @@ svtChiller_LIBS += devIocStats
 svtChiller_LIBS += autosave
 svtChiller_LIBS += caPutLog 
 svtChiller_LIBS += autosave 
+svtChiller_LIBS += calc
 svtChiller_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================

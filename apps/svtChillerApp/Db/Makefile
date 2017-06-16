@@ -14,6 +14,8 @@ include $(TOP)/configure/CONFIG
 DB += svtChiller.db
 DB += ecoChiller.db
 
+DB += svtChiller-anova2eco.db
+
 PROTO += ecoChiller.proto
 
 #----------------------------------------------------

@@ -23,6 +23,7 @@ Start_CAEN(19, "129.57.86.108")
 ## Load record instances
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 dbLoadRecords("db/caenchassis.db","CrName=HVFTAG,CScode=#C19")
 
@@ -38,10 +39,16 @@ dbLoadTemplate("db/HVFTAG_FTT.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 
+< save_restore.cmd
+
 asSetFilename("../acf/caenhv.acf")
 
 iocInit()
 
 caPutLogInit("clonioc2:7011")
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req","","")
+create_monitor_set("info_settings.req","","")
 
 #dbDumpRecord > st.cmd.HVFTAG.dump

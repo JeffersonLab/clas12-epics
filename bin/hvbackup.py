@@ -111,9 +111,15 @@ def getChannels(det,sector=None):
       prefixes.append('B_DET_FMT_HV_IN_L%d_STRIP'%(ll))
       prefixes.append('B_DET_FMT_HV_OUT_L%d_STRIP'%(ll))
       prefixes.append('B_DET_FMT_HV_L%d_DRIFT'%(ll))
-      for ss in [1,2,3]:
+    for ss in [1,2,3]:
+      for ll in [1,2,3,4,5,6]:
         prefixes.append('B_DET_BMT_HV_SEC%d_L%d_DRIFT'%(ss,ll))
         prefixes.append('B_DET_BMT_HV_SEC%d_L%d_STRIP'%(ss,ll))
+  elif det=='CND_HV':
+    for imo in ['Inner','Middle','Outer']:
+      for seg in range(1,25):
+        for ch in [1,2]:
+          prefixes.append('B_DET_CND_HV_%s_Seg%.2d_E%d'%(imo,seg,ch))
 
   return prefixes
 
@@ -139,6 +145,35 @@ def printPVsMya(det,sector=None):
         if   det=='FTC_HV': deadband=0.1
         elif det=='DC_HV':  deadband=0.1
       print channel+field,deadband
+
+def printPVsAlarm(det):
+  pvxml='''
+      <pv name="___PV___">
+        <description>___DESC___</description>
+        <latching>true</latching>
+        <annunciating>true</annunciating>
+        <delay>10.0</delay>
+        <count>0</count>
+        <guidance>
+          <title>Guidance</title>
+          <details>Try to reset the voltage channel using the GUI. If problem persists, contact the expert.</details>
+        </guidance>
+        <display>
+          <title>Open HV GUI</title>
+          <details>/CLAS12_Share/apps/clasTreeApp/HVMonitor.opi "TYPE=4527,P=___PREFIX___,E=___PV___"</details>
+        </display>
+      </pv>'''
+  detname=det.split('_')[0]
+  system=det.split('_')[1]
+  print '  <component name="'+detname+'">'
+  print '    <component name="'+system+'">'
+  for channel in getChannels(det):
+    xx=pvxml.replace('___DESC___',detname + ' ' + system)
+    xx=xx.replace('___PV___',channel)
+    xx=xx.replace('___PREFIX___','B_DET_'+detname+'_'+system)
+    print xx
+  print '    </component>'
+  print '  </component>'
 
 def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
@@ -250,6 +285,7 @@ def main():
   saverestore=None
   printMya=False
   printBurt=False
+  printAlarm=False
 
   for arg in sys.argv[:]:
     if arg=='-h' or arg=='--help':
@@ -259,6 +295,9 @@ def main():
       sys.argv.remove(arg)
     elif arg=='-b':
       printBurt=True
+      sys.argv.remove(arg)
+    elif arg=='-a':
+      printAlarm=True
       sys.argv.remove(arg)
     elif arg.find('=')>=0:
       (key,val)=arg.split('=',1)
@@ -276,6 +315,9 @@ def main():
     sys.exit()
   if printMya:
     printPVsMya(det)
+    sys.exit()
+  if printAlarm:
+    printPVsAlarm(det)
     sys.exit()
 
   if len(sys.argv)!=1: sys.exit(usage)

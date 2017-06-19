@@ -14,7 +14,7 @@ def exit(text,parent):
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','RICH_LV','MVT_LV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
 DETSVT=['SVT']
 DETS=DETSHV+DETSLV+DETSVT
@@ -120,6 +120,12 @@ def getChannels(det,sector=None):
       for seg in range(1,25):
         for ch in [1,2]:
           prefixes.append('B_DET_CND_HV_%s_Seg%.2d_E%d'%(imo,seg,ch))
+  elif det=='MVT_LV':
+    sys.exit('NOT READY FOR MVT_LV')
+  elif det=='RICH_HV':
+    sys.exit('NOT READY FOR RICH_HV')
+  elif det=='RICH_LV':
+    sys.exit('NOT READY FOR RICH_LV')
 
   return prefixes
 

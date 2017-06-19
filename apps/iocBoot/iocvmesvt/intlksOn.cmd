@@ -31,5 +31,3 @@ dbpf("B_SVT_Cool_Inlet_Flow:sel","1")
 dbpf("B_SVT_Cool_Outlet_Flow:sel","1")
 dbpf("B_SVT_Cool_Inlet_Temp:sel","1")
 
-dbpf("B_SVT_R4_Cool_Flow:sel","0")
-

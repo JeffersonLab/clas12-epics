@@ -19,11 +19,11 @@ record(ai,"B_SVT_Cool_Outlet_Flow:raw") {
 	field(PREC,"0")
 	field(EGU,"counts")
 }
-record(ai,"B_SVT_R4_Cool_Flow:raw") {
+record(ai,"B_SVT_Cool_Inlet_Flow:raw") {
 	field(DESC,"32 bit raw read")
 	field(SCAN,"1 second")
 	field(DTYP,"V450")
-	field(FLNK,"B_SVT_R4_Cool_Flow:v")
+	field(FLNK,"B_SVT_Cool_Inlet_Flow:v")
 	field(INP,"#C10 S4 @")
 	field(PREC,"0")
 	field(EGU,"counts")
@@ -36,9 +36,9 @@ record(bo,"B_SVT_Cool_Outlet_Flow:sel") {
 	field(DTYP,"Soft Channel")
 	field(FLNK,"B_SVT_Cool_Outlet_Flow:Alm")
 }
-record(bo,"B_SVT_R4_Cool_Flow:sel") {
+record(bo,"B_SVT_Cool_Inlet_Flow:sel") {
 	field(DTYP,"Soft Channel")
-	field(FLNK,"B_SVT_R4_Cool_Flow:Alm")
+	field(FLNK,"B_SVT_Cool_Inlet_Flow:Alm")
 }
 
 record(calc,"B_SVT_Cool_Inlet_Pres") {
@@ -124,18 +124,18 @@ record(calc,"B_SVT_Cool_Outlet_Flow:v") {
 	field(EGU,"V")
 	field(PREC,"3")
 }
-record(calc,"B_SVT_R4_Cool_Flow") {
+record(calc,"B_SVT_Cool_Inlet_Flow") {
 	field(DESC,"Coolant Flow (lpm)")
-	field(FLNK,"B_SVT_R4_Cool_Flow:Alm")
+	field(FLNK,"B_SVT_Cool_Inlet_Flow:Alm")
 	field(CALC,"A")
-	field(INPA,"B_SVT_R4_Cool_Flow:v NPP NMS")
+	field(INPA,"B_SVT_Cool_Inlet_Flow:v NPP NMS")
 	field(EGU,"LPM")
 	field(PREC,"2")
 }
-record(calc,"B_SVT_R4_Cool_Flow:Alm") {
+record(calc,"B_SVT_Cool_Inlet_Flow:Alm") {
 	field(CALC,"A>0?B:3")
-	field(INPA,"B_SVT_R4_Cool_Flow:sel.RVAL NPP NMS")
-	field(INPB,"B_SVT_R4_Cool_Flow NPP NMS")
+	field(INPA,"B_SVT_Cool_Inlet_Flow:sel.RVAL NPP NMS")
+	field(INPB,"B_SVT_Cool_Inlet_Flow NPP NMS")
 	field(PREC,"0")
 	field(HIHI,"10")
 	field(LOLO,".25")
@@ -147,19 +147,19 @@ record(calc,"B_SVT_R4_Cool_Flow:Alm") {
 	field(LSV,"MINOR")
 info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
-record(calc,"B_SVT_R4_Cool_Flow:gpm") {
+record(calc,"B_SVT_Cool_Inlet_Flow:gpm") {
 	field(DESC,"Coolant Flow (gpm)")
-	field(FLNK,"B_SVT_R4_Cool_Flow")
+	field(FLNK,"B_SVT_Cool_Inlet_Flow")
 	field(CALC,"A*.26417")
-	field(INPA,"B_SVT_R4_Cool_Flow:v NPP NMS")
+	field(INPA,"B_SVT_Cool_Inlet_Flow:v NPP NMS")
 	field(EGU,"GPM")
 	field(PREC,"2")
 }
-record(calc,"B_SVT_R4_Cool_Flow:v") {
+record(calc,"B_SVT_Cool_Inlet_Flow:v") {
 	field(DESC,"V450 voltage out")
-	field(FLNK,"B_SVT_R4_Cool_Flow:gpm")
+	field(FLNK,"B_SVT_Cool_Inlet_Flow:gpm")
 	field(CALC,"A * 12.5/(2**31)")
-	field(INPA,"B_SVT_R4_Cool_Flow:raw.VAL NPP NMS")
+	field(INPA,"B_SVT_Cool_Inlet_Flow:raw.VAL NPP NMS")
 	field(EGU,"V")
 	field(PREC,"3")
 }
@@ -171,6 +171,7 @@ record(longin,"B_SVT_V450_Slot12_SerNum") {
 
 
 
+# This was the original Inlet_Flow before it failed and was replaced with R4's channel:
 #record(ai,"B_SVT_Cool_Inlet_Flow:raw") {
 #	field(DESC,"32 bit raw read")
 #	field(SCAN,"1 second")

@@ -7,7 +7,6 @@ include $(TOP)/configure/CONFIG
 DB += mm_gas_aiFloat64.template
 DB += mm_gas_bo_bit.template
 DB += mm_gas.substitutions
-DB += expected.template
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

@@ -1,0 +1,35 @@
+#
+# mmgas_ftt.substitutions
+#
+# MM FTT gas PLC using ModbusTCP
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   June 2017
+#
+
+file "db/mmgas_asyn_aiFloat64.template" { pattern
+    {P,             R,                  PORT,   OFFSET, DATA_TYPE,  LOPR, HOPR, PREC,   EGU,    SCAN}
+    {B_DET_FTT_GAS_, PRES_WRN_SET,       R507,   0,      FLOAT32_BE, 0,    0,    1,      mbar,   "I/O Intr"}
+    {B_DET_FTT_GAS_, PRES_FLT_SET,       R507,   2,      FLOAT32_BE, 0,    0,    1,      mbar,   "I/O Intr"}
+    {B_DET_FTT_GAS_, INFLOW_WRN_SET,     R507,   4,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, INFLOW_FLT_SET,     R507,   6,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, OVRPRES_WRN_SET,    R507,   8,      FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, OVRPRES_FLT_SET,    R507,   10,     FLOAT32_BE, 0,    0,    1,      "%",    "I/O Intr"}
+    {B_DET_FTT_GAS_, FLOWDIFF_WRN_SET,   R507,   12,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, FLOWDIFF_FLT_SET,   R507,   14,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, START_TIME_CLR,     R507,   16,     INT32_BE,   0,    0,    0,      min,    "I/O Intr"}
+    {B_DET_FTT_GAS_, SETPT_TIME_CLR,     R507,   18,     INT32_BE,   0,    0,    0,      min,    "I/O Intr"}
+    {B_DET_FTT_GAS_, INFLOW_SET,         R507,   20,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, INFLOW_RAMP,        R507,   22,     FLOAT32_BE, 0,    0,    1,      sec,    "I/O Intr"}
+    {B_DET_FTT_GAS_, INFLOW,             R507,   24,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, OUTFLOW,            R507,   26,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, OVRFLOW,            R507,   28,     FLOAT32_BE, 0,    0,    1,      "L/h",  "I/O Intr"}
+    {B_DET_FTT_GAS_, PRES,               R507,   30,     FLOAT32_BE, 0,    0,    2,      mbar,   "I/O Intr"}
+    {B_DET_FTT_GAS_, STATUS,             R507,   32,     INT16,      0,    0,    0,      "",     "I/O Intr"}
+}
+
+file "db/mmgas_asyn_bo_bit.template" { pattern
+    {P,        R,           PORT    OFFSET, MASK,   HIGH,   ZNAM,           ONAM}
+    {B_DET_FTT_GAS_, START, W507,   0,      0x8,    1,      "Start Flow",   "Start Flow"}
+    {B_DET_FTT_GAS_, STOP,  W507,   0,      0x16,   1,      "Stop Flow",    "Stop Flow"}
+}

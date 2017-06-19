@@ -4,9 +4,12 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Install databases, templates & substitutions like this
-DB += mm_gas_aiFloat64.template
-DB += mm_gas_bo_bit.template
-DB += mm_gas.substitutions
+DB += mmgas_asyn_aiFloat64.template
+DB += mmgas_asyn_bo_bit.template
+
+DB += mmgas_bmt.substitutions
+DB += mmgas_fmt.substitutions
+DB += mmgas_ftt.substitutions
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

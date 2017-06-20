@@ -328,8 +328,10 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
     *delta = HRDWERROR;
   
   // Mismatch between ON/OFF request and status reported by hardware:
-  else if ( demandOn != ((int)property[PROP_ST] & (BIT_ON) ) )
+  else if ( demandOn && !((int)property[PROP_ST] & (BIT_ON)) ) {
+    printf("!!! %d %d\n",demandOn,(int)property[PROP_ST]);
     *delta = MISMERROR;
+  }
  
   // If channel is ON, then delta is difference between measured and demand voltages.
   // This should allow to alarm any time a channel is turned on or off, in addition

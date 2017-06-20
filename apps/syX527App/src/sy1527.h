@@ -51,7 +51,7 @@
 /// 10 Channel is in calibration error
 #define BIT_CALIBERROR 1 << 10 
 /// 11 Channel is unplugged
-#define BIT_CHUNPLAGGED 1 << 11
+#define BIT_CHUNPLUGGED 1 << 11
 /// my: 
 #define BIT_OFF 1 << 11
 /// my_n_smi:
@@ -60,7 +60,6 @@
 #define BIT_CRATE_OFF_ON_WAY 1 << 14
 
 /// 12 ... 31 Reserved, forced to 0
-
 
 
 ///==============================================================================
@@ -257,6 +256,9 @@ sy1527SetChannelOnOff(unsigned int id, unsigned int board,
 unsigned int
 sy1527GetChannelOnOff(unsigned int id, unsigned int board,
                       unsigned int chan);
+unsigned int
+sy1527GetChannelDemandOnOff(unsigned int id, unsigned int board,
+                            unsigned int chan);
 int
 sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan, unsigned int u);

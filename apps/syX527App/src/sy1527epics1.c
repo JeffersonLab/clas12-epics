@@ -272,6 +272,9 @@ STATUS
 CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
                 double *property, double *delta)
 {
+
+  const unsigned int demandOn = sy1527GetChannelDemandOnOff(id,slot,channel);
+
   property[PROP_MC] = sy1527GetChannelMeasuredCurrent(id, slot, channel); // e
   property[PROP_MV] = sy1527GetChannelMeasuredVoltage(id, slot, channel); // f
   property[PROP_DV] = sy1527GetChannelDemandVoltage(id, slot, channel);   // g
@@ -303,27 +306,39 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
  
 #define HRDWERROR  999999
 #define COMMERROR -999999
+#define MISMERROR -111111
+    
+//  printf("!!! BOO - %d\n",BITS_ANYHWERROR);
+  
+  // if HEARTBEAT error, override delta with very big negative number
+  if ( (int)property[PROP_HBEAT] )
+    *delta = COMMERROR;
 
+  // if ERROR bits are set, override delta with very big positive number
+  else if ( ( (int)property[PROP_ST] & 
+    (BIT_INTTRIP |
+     BIT_EXTTRIP |
+     BIT_OVERVOLT |
+     BIT_OVERCUR |
+     BIT_UNDERVOLT |
+     BIT_MAXVOLT |
+     BIT_EXTDISABLED |
+     BIT_CALIBERROR |
+     BIT_CHUNPLUGGED) ) )
+    *delta = HRDWERROR;
+  
+  // Mismatch between ON/OFF request and status reported by hardware:
+  else if ( demandOn != ((int)property[PROP_ST] & (BIT_ON) ) )
+    *delta = MISMERROR;
+ 
   // If channel is ON, then delta is difference between measured and demand voltages.
   // This should allow to alarm any time a channel is turned on or off, in addition
   // to serving as a voltage tolerance alarm.
-  if ( ((int)property[PROP_ST] & (BIT_ON) ) )
+  else if ( ((int)property[PROP_ST] & (BIT_ON) ) )
     *delta =  property[PROP_MV] - property[PROP_DV];
-/*
-  // delta is difference between measured and demand voltages
-  // if channel is OFF, or not ON, or RAMPING, do not set delta
-  if( ! ((int)property[PROP_ST] & (BIT_OFF) ) )
-    if ( ((int)property[PROP_ST] & (BIT_ON) ) )
-      if ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
-        *delta =  property[PROP_MV] - property[PROP_DV];
-*/
-
-  // if ERROR bits are set, override delta with very big number
-  if( ((int)property[PROP_ST] & (BIT_INTTRIP |  BIT_OVERVOLT | BIT_OVERCUR )   ) )
-    *delta=HRDWERROR;
-
-  // if HEARTBEAT error, override delta with very big negative number
-  if( (int)property[PROP_HBEAT] ) *delta=COMMERROR;
+ 
+  // We used to not set delta if in RUP/DRN state:
+  // ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
 
   return(0);
 }

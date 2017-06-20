@@ -1060,6 +1060,9 @@ sy1527Stop(unsigned id)
 #define GET_LVALUE(prop_name_m, value_m) \
   value_m = Measure[id].board[board].channel[chan].lval[prop_name_m]
 
+#define GET_DEMAND_LVALUE(prop_name_m, value_m) \
+  value_m = Demand[id].board[board].channel[chan].lval[prop_name_m]
+
 /* loop over all available channels and set them on or off */
 int
 sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
@@ -1496,6 +1499,18 @@ sy1527GetChannelOnOff(unsigned int id, unsigned int board,
   LOCK_MAINFRAME(id);
   //GET_LVALUE(HV_Pw, u);
   GET_LVALUE(Measure[id].board[board].Pw, u);
+  UNLOCK_MAINFRAME(id);
+  return(u);
+}
+
+/* returns on/off demand status for one channel */
+unsigned int
+sy1527GetChannelDemandOnOff(unsigned int id, unsigned int board,
+                            unsigned int chan)
+{
+  unsigned int u;
+  LOCK_MAINFRAME(id);
+  GET_DEMAND_LVALUE(Measure[id].board[board].Pw, u);
   UNLOCK_MAINFRAME(id);
   return(u);
 }

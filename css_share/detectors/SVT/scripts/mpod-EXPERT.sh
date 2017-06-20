@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+mib=WIENER-CRATE-MIB
+
+# Accelerator used a modified Wiener MIB file for SVT controls,
+# but the rest of Hall B uses the stock mfg's version.  Point
+# to the modified version via snmpbulket command-line instead of
+# messing with environment variable MIBDIRS:
+mibdirs=${EPICS}/apps/iocBoot/iocsoftsvtRX:/usr/share/snmp/mibs
+
 if [ "$#" -ne 3 ]; then
 	echo "Usage: $0 <location> <voltage> <value>"
 	echo
@@ -47,11 +55,11 @@ if [[ $val == 'status' || $val == "stat" ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch.U407`"
+			echo "`snmpbulkget -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch.U407`"
 			exit 0;;
 		esac
 		;;
@@ -59,11 +67,11 @@ if [[ $val == 'status' || $val == "stat" ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr56 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputSwitch`"
+			echo "`snmpbulkget -Cr56 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputSwitch`"
 			exit 0;;
 		"hv")
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch.U715`"
+			echo "`snmpbulkget -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch.U715`"
 			exit 0;;
 		esac
 		;;
@@ -71,12 +79,12 @@ if [[ $val == 'status' || $val == "stat" ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr56 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputSwitch`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputSwitch.U607`"
+			echo "`snmpbulkget -Cr56 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputSwitch`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputSwitch.U607`"
 			exit 0;;
 		"hv")
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputSwitch.U607`"
+			echo "`snmpbulkget -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputSwitch.U607`"
 			exit 0;;
 		esac
 		;;
@@ -84,20 +92,20 @@ if [[ $val == 'status' || $val == "stat" ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch`"
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr56 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputSwitch`"
+			echo "`snmpbulkget -Cr56 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputSwitch`"
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr56 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputSwitch`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputSwitch.U607`"
+			echo "`snmpbulkget -Cr56 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputSwitch`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputSwitch.U607`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch.U407`"
+			echo "`snmpbulkget -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch.U407`"
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputSwitch.U715`"
+			echo "`snmpbulkget -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputSwitch.U715`"
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputSwitch.U607`"
+			echo "`snmpbulkget -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputSwitch.U607`"
 			exit 0;;
 		esac
 		;;
@@ -113,11 +121,11 @@ if [[ $val == 'volt' || $val == 'voltage' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage.U407`"
+			echo "`snmpbulkget -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage.U407`"
 			exit 0;;
 		esac
 		;;
@@ -125,12 +133,12 @@ if [[ $val == 'volt' || $val == 'voltage' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage.U407`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage.U407`"
 			exit 0;;
 		"hv")
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage.U715`"
+			echo "`snmpbulkget -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage.U715`"
 			exit 0;;
 		esac
 		;;
@@ -138,12 +146,12 @@ if [[ $val == 'volt' || $val == 'voltage' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr48 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementSenseVoltage`"
-			echo "`~/snmpbulkget -Cr24 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementSenseVoltage.U507`"
+			echo "`snmpbulkget -Cr48 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr24 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementSenseVoltage.U507`"
 			exit 0;;
 		"hv")
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage.U607`"
+			echo "`snmpbulkget -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage.U607`"
 			exit 0;;
 		esac
 		;;
@@ -151,21 +159,21 @@ if [[ $val == 'volt' || $val == 'voltage' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage`"
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage.U407`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage.U407`"
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr48 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementSenseVoltage`"
-			echo "`~/snmpbulkget -Cr24 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementSenseVoltage.U507`"
+			echo "`snmpbulkget -Cr48 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementSenseVoltage`"
+			echo "`snmpbulkget -Cr24 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementSenseVoltage.U507`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage.U407`"
+			echo "`snmpbulkget -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage.U407`"
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementSenseVoltage.U715`"
+			echo "`snmpbulkget -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementSenseVoltage.U715`"
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementSenseVoltage.U607`"
+			echo "`snmpbulkget -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementSenseVoltage.U607`"
 			exit 0;;
 		esac
 		;;
@@ -181,11 +189,11 @@ if [[ $val == 'curr' || $val == 'current' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent.U407`"
+			echo "`snmpbulkget -Op 20.12 -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent.U407`"
 			exit 0;;
 		esac
 		;;
@@ -193,12 +201,12 @@ if [[ $val == 'curr' || $val == 'current' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent.U407`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent.U407`"
 			exit 0;;
 		"hv")
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent.U715`"
+			echo "`snmpbulkget -Op 20.12 -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent.U715`"
 			exit 0;;
 		esac
 		;;
@@ -206,12 +214,12 @@ if [[ $val == 'curr' || $val == 'current' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr48 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementCurrent`"
-			echo "`~/snmpbulkget -Cr24 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementCurrent.U507`"
+			echo "`snmpbulkget -Cr48 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr24 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementCurrent.U507`"
 			exit 0;;
 		"hv")
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent.U607`"
+			echo "`snmpbulkget -Op 20.12 -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent.U607`"
 			exit 0;;
 		esac
 		;;
@@ -219,21 +227,21 @@ if [[ $val == 'curr' || $val == 'current' ]]; then
 		case "$volt" in
 		"lv")
 			echo 'R1 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent`"
 			echo 'R2 LV'
-			echo "`~/snmpbulkget -Cr40 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent`"
-			echo "`~/snmpbulkget -Cr16 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent.U407`"
+			echo "`snmpbulkget -Cr40 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr16 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent.U407`"
 			echo 'R3 LV'
-			echo "`~/snmpbulkget -Cr48 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementCurrent`"
-			echo "`~/snmpbulkget -Cr24 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt3 outputMeasurementCurrent.U507`"
+			echo "`snmpbulkget -Cr48 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementCurrent`"
+			echo "`snmpbulkget -Cr24 -v2c -m +$mib -M $mibdirs -c public vmetlsvt3 outputMeasurementCurrent.U507`"
 			exit 0;;
 		"hv")
 			echo 'R1 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr20 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent.U407`"
+			echo "`snmpbulkget -Op 20.12 -Cr20 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent.U407`"
 			echo 'R2 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr28 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt1 outputMeasurementCurrent.U715`"
+			echo "`snmpbulkget -Op 20.12 -Cr28 -v2c -m +$mib -M $mibdirs -c public vmetlsvt1 outputMeasurementCurrent.U715`"
 			echo 'R3 HV'
-			echo "`~/snmpbulkget -Op 20.12 -Cr36 -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c public vmetlsvt4 outputMeasurementCurrent.U607`"
+			echo "`snmpbulkget -Op 20.12 -Cr36 -v2c -m +$mib -M $mibdirs -c public vmetlsvt4 outputMeasurementCurrent.U607`"
 			exit 0;;
 		esac
 		;;
@@ -246,7 +254,7 @@ fi
 # arg2 = ch
 # arg3 = on(1)/off(0)
 function ch_sw {
-	echo "`snmpset -v2c -m +WIENER-CRATE-MIB -M /usr/share/snmp/mibs -c guru $1 outputSwitch.U$2 i $3`"
+	echo "`snmpset -v2c -m +$mib -M $mibdirs -c guru $1 outputSwitch.U$2 i $3`"
 }
 
 function r1_lv {

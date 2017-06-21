@@ -121,10 +121,10 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, COIL_T_AVG,            K,  2, "Avg temp of coils" }
     { PLC_SOL, B_SOL:, LHe:, COIL_T_MAX,            K,  2, "Max temp of coils" }
     { PLC_SOL, B_SOL:, LHe:, C14_DT_MAX,            K,  2, "Max diff. temp of coils[1-4]" }
-    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAX,         K,  2, "Max diff. temp of coils[1-4]/bobin/cooling plate" }
+    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAX,         K,  2, "Max diff. temp of coils[1-4]/bobbin/CP" }
     { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAXSET,      K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAXPCT,      K,  2, "" }
-    { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAX,          K,  2, "Max diff. temp of coil 5/bobin" }
+    { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAX,          K,  2, "Max diff. temp of coil 5/bobbin" }
     { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAXSET,       K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAXPCT,       K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, CM_T_MAX,              K,  2, "Max temp of 4K cold mass" }
@@ -151,9 +151,12 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, SHLD_CD_DT,            K,  2, "Shield ctrl - TD8513S-AVG(TR8672,TR8673)" }
     { PLC_SOL, B_SOL:, LHe:, SHLD_DT_MAX,           K,  2, "Max diff. temp of shield" }
     { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAX,         K,  2, "Max diff. temp of 4K/shield" }
-    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,      K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXPCT,      K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, DT_MAX_PCT,            K,  2, "" }
+    { PLC_SOL, B_SOL:, LHe:, HE_CP_CD_DT,           K,  2, "" }
+    #
+    # end of cooldown
+    #
     { PLC_SOL, B_SOL:, LHe:, COIL1_T_EST,           K,  2, "Coil 1 Estimated Temp (calc.)" }
     { PLC_SOL, B_SOL:, LHe:, COIL2_T_EST,           K,  2, "Coil 2 Estimated Temp (calc.)" }
     { PLC_SOL, B_SOL:, LHe:, COIL3_T_EST,           K,  2, "Coil 3 Estimated Temp (calc.)" }
@@ -177,8 +180,13 @@ file "db/torus_bi_generic.db" {
 
 file "db/torus_ao_generic.db" {
     pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,        SLPM,  2, "FI8621A Setpoint" }
-    { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,        SLPM,  2, "FI8621B Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,       SLPM,   2,  "FI8621A Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,       SLPM,   2,  "FI8621B Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,  K,      2,  "Max Allowed DT" }
+    #
+    # DBX
+    #
+    #{ PLC_CRYO, B_SOL:, LHe:, PV8563_DP_OFFSET, "",     2,  "Pressure below 4K supply, assure no mixing" }
 }
 
 file "db/datatype_cpid.db" {

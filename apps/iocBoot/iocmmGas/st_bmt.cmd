@@ -35,7 +35,7 @@ cd "${TOP}/iocBoot/${IOC}"
 ## autosave setup
 # < save_restore.cmd
 
-dbl > pv.list
+dbl > pv_bmt.list
 iocInit
 
 ## Handle autosave 'commands' contained in loaded databases.

@@ -322,7 +322,8 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
 
 #define HRDWERROR  999999
 #define COMMERROR -999999
- 
+#define MISMERROR -111111
+
   const int prop=property[PROP_ST];
 
   // If channel is ON, then delta is difference between measured and demand voltages,
@@ -344,6 +345,9 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
 
   // if HEARTBEAT error, override delta with very big negative number
   if( (int)property[PROP_HBEAT] ) *delta=COMMERROR;
+
+  // negative status when comms error:
+  //if (property[PROP_HBEAT]) property[PROP_ST]=-property[PROP_ST];
 
   return(0);
 

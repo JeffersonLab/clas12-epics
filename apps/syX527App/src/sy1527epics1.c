@@ -307,8 +307,6 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
 #define HRDWERROR  999999
 #define COMMERROR -999999
 #define MISMERROR -111111
-    
-//  printf("!!! BOO - %d\n",BITS_ANYHWERROR);
   
   // if HEARTBEAT error, override delta with very big negative number
   if ( (int)property[PROP_HBEAT] )
@@ -341,6 +339,9 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
  
   // We used to not set delta if in RUP/DRN state:
   // ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
+
+  // negative status when comms error:
+  //if (property[PROP_HBEAT]) property[PROP_ST]=-property[PROP_ST];
 
   return(0);
 }

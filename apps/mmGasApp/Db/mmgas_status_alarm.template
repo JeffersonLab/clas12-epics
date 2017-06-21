@@ -1,0 +1,19 @@
+#
+# mmgas_status_alarm.template
+#
+# Read warning and fault levels and apply to HIGH/HIHI fields. 
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   June 2017
+#
+record(seq, "$(P)$(R)_ALM") {
+    field(DOL1, "$(P)$(R)_WRN_LVL CPP")
+    field(DOL2, "1")
+    field(LNK1, "$(P)$(R).HIGH")
+    field(LNK2, "$(P)$(R).HSV")
+    #
+    field(DOL3, "$(P)$(R)_FLT_LVL CPP")
+    field(DOL4, "2")
+    field(LNK3, "$(P)$(R).HIHI")
+    field(LNK4, "$(P)$(R).HHSV")
+}

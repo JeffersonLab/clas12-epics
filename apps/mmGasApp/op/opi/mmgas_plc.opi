@@ -9,7 +9,6 @@
   <height>550</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
-    <DET>BMT</DET>
   </macros>
   <boy_version>4.0.103.201511111440</boy_version>
   <show_edit_range>true</show_edit_range>
@@ -161,7 +160,7 @@ $(pv_value)</tooltip>
     </scale_options>
     <image></image>
     <visible>true</visible>
-    <pv_name>B_DET_BMT_GAS_FLOW_START</pv_name>
+    <pv_name>B_DET_$(DET)_GAS_FLOW_START</pv_name>
     <border_color>
       <color name="Text_Foreground" red="0" green="0" blue="0" />
     </border_color>
@@ -215,7 +214,7 @@ $(pv_value)</tooltip>
     </scale_options>
     <image></image>
     <visible>true</visible>
-    <pv_name>B_DET_BMT_GAS_FLOW_STOP</pv_name>
+    <pv_name>B_DET_$(DET)_GAS_FLOW_STOP</pv_name>
     <border_color>
       <color name="Text_Foreground" red="0" green="0" blue="0" />
     </border_color>
@@ -1613,8 +1612,8 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="173" green="127" blue="168" />
     </background_color>
-    <width>745</width>
-    <x>5</x>
+    <width>700</width>
+    <x>50</x>
     <name>Label_17</name>
     <y>5</y>
     <foreground_color>
@@ -1903,7 +1902,7 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_DET_BMT_GAS_STATUS</pv_name>
+      <pv_name>B_DET_$(DET)_GAS_STATUS</pv_name>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -3438,5 +3437,76 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>
     <off_label>OFF</off_label>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>Related Displays</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-786cc353:15cb2c3ab73:-5bf8</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>30</height>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <label>[...]</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>40</width>
+    <x>5</x>
+    <name>Action Button_4</name>
+    <y>5</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>mmgas_plc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <DET>BMT</DET>
+        </macros>
+        <replace>2</replace>
+        <description>BMT Gas System</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>mmgas_plc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <DET>FMT</DET>
+        </macros>
+        <replace>2</replace>
+        <description>FMT Gas System</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>mmgas_plc.opi</path>
+        <macros>
+          <include_parent_macros>false</include_parent_macros>
+          <DET>FTT</DET>
+        </macros>
+        <replace>2</replace>
+        <description>FTT Gas System</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
   </widget>
 </display>

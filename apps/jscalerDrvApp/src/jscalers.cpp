@@ -14,8 +14,8 @@ V.Sytnik 07/2014
 #include "jscalers.h"
 
 
-#undef JSCALER_DEBUG
-//#define JSCALER_DEBUG
+//#undef JSCALER_DEBUG
+#define JSCALER_DEBUG
 
 
 using namespace std;
@@ -254,7 +254,7 @@ void *crateThread(void *ptr) {
                     buffer[0]=(uint)(it->second)->genericSetBoards[j].values[1];
 
 #ifdef JSCALER_DEBUG
-                    printf("asdf partype=%d buffer[0]=%d \n",partype,buffer[0]);
+                    printf("QWERasdf partype=%d buffer[0]=%d \n",partype,buffer[0]);
 #endif
 
                     ret = ptr_c->crateMsgClient->SetChannelParams((it->second)->slotNumber, (it->second)->genericSetBoards[j].channelNumber,
@@ -302,6 +302,7 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
 
     (*buf)=0;
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
+    (void)ret;
 
     //printf("\n\n**************************AAA BoardType = %d\n",(it->second)->boardType);
     //printf("222 slot=%d msgclient_addr=%p buf_addr=%p len=%d\n",it->first,ptr_c->crateMsgClient, &buf, len);
@@ -310,7 +311,7 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
         printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
     }
     else if ((*buf)[16]<=0) {
-        printf("Fadc250ReadScalers:  odd normalization:  %.2f\n",(*buf)[16]);
+        printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
     }
     else {
         static const double ref1=488281.25f;

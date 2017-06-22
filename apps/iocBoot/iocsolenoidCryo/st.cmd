@@ -25,9 +25,9 @@ dbLoadTemplate("db/solenoid_LHe.substitutions")
 dbLoadRecords("db/solenoid_cryocon.db", "P=B_SOL:,R=PLC:,PLCID=PLC_SOL")
 
 ## CA Security
-#dbLoadRecords("db/cas.db", "P=B_SOL:,R=CRYO:,ASG=DEFAULT")
-#asSetFilename("${TOP}/iocBoot/acf/solenoid_cryo.acf")
-#asSetSubstitutions("P=B_SOL:,R=CRYO:")
+dbLoadRecords("db/cas.db", "P=B_SOL:,R=CRYO:,ASG=DEFAULT")
+asSetFilename("${TOP}/iocBoot/acf/solenoid_cryo.acf")
+asSetSubstitutions("P=B_SOL:,R=CRYO:")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -36,7 +36,7 @@ cd ${TOP}/iocBoot/${IOC}
 
 dbl > pv.list
 iocInit
-#caPutLogInit("clonioc1:7011")
+caPutLogInit("clonioc1:7011")
 
 ## autosave startup
 ## Handle autosave 'commands' contained in loaded databases.

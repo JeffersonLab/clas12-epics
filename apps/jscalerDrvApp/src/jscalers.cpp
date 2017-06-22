@@ -14,8 +14,8 @@ V.Sytnik 07/2014
 #include "jscalers.h"
 
 
-//#undef JSCALER_DEBUG
-#define JSCALER_DEBUG
+#undef JSCALER_DEBUG
+//#define JSCALER_DEBUG
 
 
 using namespace std;

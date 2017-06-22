@@ -152,7 +152,9 @@ void *crateThread(void *ptr) {
     unsigned int *buf[1];
     int partype;
 
+#ifdef JSCALER_DEBUG
     unsigned int niter=0;
+#endif
 
     while(1){
 

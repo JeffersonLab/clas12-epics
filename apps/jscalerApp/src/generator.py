@@ -6,8 +6,13 @@ import sys,os,stat,re
 # TODO: mkChannels* --> read from ccdb (?)
 #
 
-DBFILE='db/jscaler_channel.db'
-KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
+DBFILE_FADC='db/jscaler_channel_FADC.db'
+DBFILE_DISC='db/jscaler_channel_DISC.db'
+
+#KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
+
+KEYS_FADC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
+KEYS_DISC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','ThreshTRG','ThreshTDC','Mode','Counts']
 
 FTOF_SLOT_F2D={
     3:2,
@@ -104,18 +109,30 @@ iocInit
 '''
 
 
-def printSubstitutions(channels,fileName=None):
+def printSubstitutions(scalerType,channels,fileName=None):
+  if fileName!=None: fileName='./generator/'+fileName
+  if scalerType=='FADC':
+    dbFile=DBFILE_FADC
+    keys=KEYS_FADC
+  elif scalerType=='DISC':
+    dbFile=DBFILE_DISC
+    keys=KEYS_DISC
   if fileName!=None: file=open(fileName,'w')
   else:              file=sys.stdout
-  print >>file, 'file "'+DBFILE+'" {'
-  print >>file, 'pattern {',','.join(KEYS),'}'
+  print >>file, 'file "'+dbFile+'" {'
+  print >>file, 'pattern {',','.join(keys),'}'
   for cc in channels:
-    row=','.join(KEYS)
-    for kk in KEYS: row=row.replace(kk,'"%s"'%(cc[kk]))
+    row=','.join(keys)
+    for kk in keys:
+      if kk.find('Thresh')==0 or kk.find('Mode')==0 or kk.find('Counts')==0 or kk.find('CScode')==0:
+        row=row.replace(kk,'"0x%X"'%(int(cc[kk])))
+      else:
+        row=row.replace(kk,'"%s"'%(cc[kk]))
     print >>file, '{',row,'}'
   print >>file, '}'
 
 def printStartup(crates,fileName=None):
+  if fileName!=None: fileName='./generator/'+fileName
   if fileName!=None: file=open(fileName,'w')
   else:              file=sys.stdout
   startCrates,loadRecords='',''
@@ -146,6 +163,8 @@ def setCodes(crateNumber,channel):
   channel['Thresh']=int(channel['Ch'])+(0<<8)
   channel['Counts']=int(channel['Ch'])+(0<<8)
   channel['Mode']  =int(channel['Ch'])+(1<<8)
+  channel['ThreshTRG']=int(channel['Ch'])+(0<<8)
+  channel['ThreshTDC']=int(channel['Ch'])+(1<<8)
 
 def mkChannelsECAL(crateNumber,sector,system):
   if system=='FADC': crate='ADCECAL'+str(sector)
@@ -369,8 +388,8 @@ def printTriggerSubs(sector,CrNo,CrName):
       cc['Element']='SEC%d_P%.2d'%(sector,ch)
       setCodes(CrNo,cc)
       channels.append(cc)
-  subFileName='../Db/jscalers_%s_TRIG.substitutions'%(CrName)
-  printSubstitutions(channels,subFileName)
+  subFileName='jscalers_%s_TRIG.substitutions'%(CrName)
+  printSubstitutions('DISC',channels,subFileName)
 
 # make substution files and one startup per sector (per crate):
 def mkSector(sector):
@@ -380,8 +399,8 @@ def mkSector(sector):
     for detector in ['ECAL','LTCC','PCAL','FTOF']:
       if detector=='LTCC': iCrate-=1 # <--- HACK
       channels=mkChannels(detector,iCrate,sector,system)
-      subFileName='../Db/jscalers_S%d_%s_%s.substitutions'%(sector,detector,system)
-      printSubstitutions(channels,subFileName)
+      subFileName='jscalers_S%d_%s_%s.substitutions'%(sector,detector,system)
+      printSubstitutions(system,channels,subFileName)
       if system=='DISC' and (detector=='PCAL' or detector=='FTOF'):
         printTriggerSubs(sector,iCrate,'TDC'+detector+str(sector))
       crates.extend(mkCrates(channels,subFileName))
@@ -390,7 +409,7 @@ def mkSector(sector):
 
 # for detectors without a sector (really, where entire detector is in one crate):
 def mkDetector(channels,subFileName,startupFileName):
-  printSubstitutions(channels,subFileName)
+  printSubstitutions('FADC',channels,subFileName)
   crate=mkCrates(channels,subFileName)
   printStartup(crate,startupFileName)
 
@@ -398,10 +417,10 @@ def mkDetector(channels,subFileName,startupFileName):
 
 #for sector in range(6): mkSector(sector+1)
 
-mkDetector(mkChannelsHTCC(0),None,None)
+#mkDetector(mkChannelsHTCC(0),None,None)
 #mkDetector(mkChannelsCTOF(0),None,None)
 
-#mkDetector(mkChannelsCTOF(0),'../Db/jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-#mkDetector(mkChannelsHTCC(0),'../Db/jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
 

@@ -38,6 +38,7 @@ typedef int STATUS;
 #include <devSup.h>
 #include <boRecord.h>
 #include <biRecord.h>
+#include <aiRecord.h>
 #include <aoRecord.h>
 #include <aaoRecord.h>
 #include <waveformRecord.h>
@@ -54,6 +55,8 @@ int FLAG_BLOCK_INIT=1; // my:
 static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
 static long read_bi(struct biRecord *); 
+static long read_ai(struct aiRecord *); 
+static long init_ai(struct aiRecord *); 
 static long write_bo(struct boRecord *);
 static long init_bo(struct boRecord *);
 
@@ -89,6 +92,18 @@ struct
   DEVSUPFUN read_bi;
 } devBiSCALERS = {5, NULL, NULL, NULL, NULL, read_bi};
 epicsExportAddress(dset,devBiSCALERS);
+
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN read_ai;
+  DEVSUPFUN special_linconv;
+} devAiSCALERS = {6, NULL, NULL, init_ai, NULL, read_ai, NULL};
+epicsExportAddress(dset,devAiSCALERS);
+
 /*
 struct
 { long number;
@@ -223,6 +238,65 @@ write_bo(struct boRecord *pbo)
 
 }
 
+//===============================================================================================
+
+static long init_ai(struct aiRecord *pai) { return 0; }
+static long read_ai(struct aiRecord *pai)
+{
+  double values[200];
+
+  struct vmeio *pvmeio = (struct vmeio *) &(pai->inp.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned int slot = (*card)>>8;
+  unsigned int chassis = (*card) - ((slot)<<8) ;
+
+  unsigned int command = (*signal)>>8;
+  unsigned int channel = (*signal) - ((command)<<8);
+
+  //  printf("read_bi chassis=%d %s\n", chassis, pbi->name); 
+
+  if (command<2) {
+      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+      pai->rval = values[command];
+  }
+  else {
+    printf("read_ai:  ERROR, no command: %d\n",command);
+  }
+
+  return 0;  
+}
+//===============================================================================================
+static long init_ao(struct aoRecord  *pao) { return 0; }
+static long write_ao(struct aoRecord *pao)
+{
+  double values[200];
+
+  struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned int slot = (*card)>>8;
+  unsigned int chassis = (*card) - ((slot)<<8) ;
+
+  unsigned int command = (*signal)>>8;
+  unsigned int channel = (*signal) - ((command)<<8);
+
+  if (command<2) {
+      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+      values[command]=pao->val;
+      IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+  }
+  else {
+    printf("write_ao:  ERROR, no command: %d\n",command);
+  }
+
+  return 0;  
+}
+
 
 //===============================================================================================
 static long
@@ -266,13 +340,6 @@ read_bi(struct biRecord *pbi)
   return 0;  
 }
 
-//===============================================================================================
-static long
-init_ao(struct aoRecord  *pao)
-{
-
-  return 0;  
-}
 
 
 //===============================================================================================
@@ -476,12 +543,6 @@ read_waveform(struct waveformRecord *pwi)
 
 //===============================================================================================
 
-
-static long
-write_ao(struct aoRecord *pao)
-{
-  return 0;  
-}
 
 
 ///=======================================================================================================

@@ -29,6 +29,7 @@ extern "C" {
         if(command==JLAB_SET_THRESHOLD){
 
             if(dynamic_cast<JlabDisc2Board *>(sc)){
+            printf("DOGGIES %.1f %.1f\n",values[0],values[1]);
                 // printf("partype=%f buffer[0]=%f \n",values[0], values[1]);
                 ( (JlabDisc2Board *) ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot]) )->SetThreshold(channel, (int)values[0],(int) values[1]);
             }

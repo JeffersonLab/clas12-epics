@@ -5,13 +5,13 @@
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgSet") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"scaler threshold TRG")
-    field(OUT,"#C$(CScode) S$(Thresh)")
+    field(OUT,"#C$(CScode) S$(ThreshTRG)")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgSet")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"scaler threshold TDC")
-    field(OUT,"#C$(CScode) S$(Thresh)")
+    field(OUT,"#C$(CScode) S$(ThreshTDC)")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcSet")
 }
 
@@ -20,14 +20,14 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet") {
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrg") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"scaler threshold TRG")
-    field(INP,"#C$(CScode) S$(Thresh)")
+    field(INP,"#C$(CScode) S$(ThreshTRG)")
     field(SCAN,"10 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTrg")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"scaler threshold TDC")
-    field(INP,"#C$(CScode) S$(Thresh)")
+    field(INP,"#C$(CScode) S$(ThreshTDC)")
     field(SCAN,"10 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdc")
 }
@@ -94,27 +94,5 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c4") {
     alias("B_DET_$(Det)_$(Sys)_$(Element):c4")
     alias("B_DET_$(Det)_$(Sys)_$(Element):cTdc")
 }
-############################################################
-
-
-
-#record(aao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):thresh") {
-#    field(DTYP,"JLAB_SCALERS")
-#    field(DESC,"scaler thresholds")
-#    field(OUT,"#C$(CScode) S$(Thresh)")
-#    field(NELM,"10")
-#    field(FTVL,"DOUBLE")
-#    field(SCAN,"Passive")
-#    alias("B_DET_$(Det)_$(Sys)_$(Element):thresh")
-#}
-#record(aao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):mode") {
-#    field(DTYP,"JLAB_SCALERS")
-#    field(DESC,"scaler modes")
-#    field(OUT,"#C$(CScode) S$(Mode)")
-#    field(NELM,"10")
-#    field(FTVL,"DOUBLE")
-#    field(SCAN,"Passive")
-#    alias("B_DET_$(Det)_$(Sys)_$(Element):mode")
-#}
 
 

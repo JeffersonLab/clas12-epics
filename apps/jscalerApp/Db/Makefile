@@ -8,8 +8,8 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-#DB += $(wildcard ../*.db)
-#DB += $(wildcard ../*.substitutions)
+DB += $(wildcard ../*.db)
+DB += $(wildcard ../*.substitutions)
 
 BEAST += jscalers-alarm.xml
 

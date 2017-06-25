@@ -45,12 +45,12 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") {
     alias("B_DET_$(Det)_$(Sys)_$(Element)")
 }
 record(fanout,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cfanout") {
-    field(LNK1,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1")
-    field(LNK2,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c2")
-    field(LNK3,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c3")
-    field(LNK4,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c4")
+    field(LNK1,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrgG")
+    field(LNK2,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdcG")
+    field(LNK3,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrg")
+    field(LNK4,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdc")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrgG") {
     field(DESC,"TRG Gated")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
@@ -61,7 +61,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c1") {
     alias("B_DET_$(Det)_$(Sys)_$(Element):c1")
     alias("B_DET_$(Det)_$(Sys)_$(Element):cTrgG")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c2") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdcG") {
     field(DESC,"TDC Gated")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
@@ -72,7 +72,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c2") {
     alias("B_DET_$(Det)_$(Sys)_$(Element):c2")
     alias("B_DET_$(Det)_$(Sys)_$(Element):cTdcG")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c3") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrg") {
     field(DESC,"TRG")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
@@ -83,7 +83,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c3") {
     alias("B_DET_$(Det)_$(Sys)_$(Element):c3")
     alias("B_DET_$(Det)_$(Sys)_$(Element):cTrg")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c4") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdc") {
     field(DESC,"TDC")
     field(DTYP,"Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")

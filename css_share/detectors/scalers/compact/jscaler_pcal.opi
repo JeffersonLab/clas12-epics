@@ -23,7 +23,7 @@
   </background_color>
   <width>1325</width>
   <x>-1</x>
-  <name>PCAL Scalers S$(SEC) - $(TYPE) $(S)</name>
+  <name>PCAL Scalers S$(S)</name>
   <grid_space>6</grid_space>
   <show_ruler>true</show_ruler>
   <y>-1</y>
@@ -33,7 +33,7 @@
   </foreground_color>
   <actions hook="false" hook_all="false" />
   <widget typeId="org.csstudio.opibuilder.widgets.linkingContainer" version="1.0.0">
-    <opi_file>jscaler_3column.opi</opi_file>
+    <opi_file>jscaler_det_column.opi</opi_file>
     <border_style>0</border_style>
     <tooltip></tooltip>
     <rules />
@@ -49,8 +49,10 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_PCAL_$(TYPE)_SEC$(SEC)_U_E</P>
+      <P>B_DET_PCAL</P>
       <N>68</N>
+      <C>SEC$(S)_U_E</C>
+      <L>U </L>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -62,7 +64,7 @@
     <background_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>440</width>
+    <width>380</width>
     <x>12</x>
     <name>Linking Container</name>
     <y>30</y>
@@ -75,7 +77,7 @@
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.linkingContainer" version="1.0.0">
-    <opi_file>jscaler_3column.opi</opi_file>
+    <opi_file>jscaler_det_column.opi</opi_file>
     <border_style>0</border_style>
     <tooltip></tooltip>
     <rules />
@@ -91,8 +93,10 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_PCAL_$(TYPE)_SEC$(SEC)_V_E</P>
+      <P>B_DET_PCAL</P>
       <N>62</N>
+      <C>SEC$(S)_V_E</C>
+      <L>V </L>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -104,8 +108,8 @@
     <background_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>440</width>
-    <x>456</x>
+    <width>380</width>
+    <x>400</x>
     <name>Linking Container_1</name>
     <y>30</y>
     <foreground_color>
@@ -117,7 +121,7 @@
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.linkingContainer" version="1.0.0">
-    <opi_file>jscaler_3column.opi</opi_file>
+    <opi_file>jscaler_det_column.opi</opi_file>
     <border_style>0</border_style>
     <tooltip></tooltip>
     <rules />
@@ -133,8 +137,10 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_PCAL_$(TYPE)_SEC$(SEC)_W_E</P>
+      <P>B_DET_PCAL</P>
       <N>62</N>
+      <C>SEC$(S)_W_E</C>
+      <L>W </L>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -146,8 +152,8 @@
     <background_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>440</width>
-    <x>902</x>
+    <width>380</width>
+    <x>786</x>
     <name>Linking Container_2</name>
     <y>30</y>
     <foreground_color>
@@ -202,7 +208,7 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>1</SEC>
+          <S>1</S>
         </macros>
         <replace>1</replace>
         <description>Sector 1</description>
@@ -211,7 +217,7 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>2</SEC>
+          <S>2</S>
         </macros>
         <replace>1</replace>
         <description>Sector 2</description>
@@ -220,7 +226,7 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>3</SEC>
+          <S>3</S>
         </macros>
         <replace>1</replace>
         <description>Sector 3</description>
@@ -229,7 +235,7 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>4</SEC>
+          <S>4</S>
         </macros>
         <replace>1</replace>
         <description>Sector 4</description>
@@ -238,7 +244,7 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>5</SEC>
+          <S>5</S>
         </macros>
         <replace>1</replace>
         <description>Sector 5</description>
@@ -247,110 +253,10 @@ $(pv_value)</tooltip>
         <path>jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <SEC>6</SEC>
+          <S>6</S>
         </macros>
         <replace>1</replace>
         <description>Sector 6</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>686bfcac:15c7434026c:-43e2</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>19</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <label>Scaler Type</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>91</width>
-    <x>108</x>
-    <name>Menu Button_1</name>
-    <y>6</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>jscaler_pcal.opi</path>
-        <macros>
-          <include_parent_macros>false</include_parent_macros>
-          <SEC>$(SEC)</SEC>
-          <S>TrgG</S>
-          <TYPE>DISC</TYPE>
-        </macros>
-        <replace>1</replace>
-        <description>TRG Gated</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>jscaler_pcal.opi</path>
-        <macros>
-          <include_parent_macros>false</include_parent_macros>
-          <SEC>$(SEC)</SEC>
-          <S>TdcG</S>
-          <TYPE>DISC</TYPE>
-        </macros>
-        <replace>1</replace>
-        <description>TDC Gated</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>jscaler_pcal.opi</path>
-        <macros>
-          <include_parent_macros>false</include_parent_macros>
-          <SEC>$(SEC)</SEC>
-          <S>Trg</S>
-          <TYPE>DISC</TYPE>
-        </macros>
-        <replace>1</replace>
-        <description>TRG</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>jscaler_pcal.opi</path>
-        <macros>
-          <include_parent_macros>false</include_parent_macros>
-          <SEC>$(SEC)</SEC>
-          <S>Tdc</S>
-          <TYPE>DISC</TYPE>
-        </macros>
-        <replace>1</replace>
-        <description>TDC</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>jscaler_pcal.opi</path>
-        <macros>
-          <include_parent_macros>false</include_parent_macros>
-          <SEC>$(SEC)</SEC>
-          <S></S>
-          <TYPE>FADC</TYPE>
-        </macros>
-        <replace>1</replace>
-        <description>FADC</description>
       </action>
     </actions>
     <font>
@@ -366,7 +272,7 @@ $(pv_value)</tooltip>
     <wuid>-761980a4:15cdf9be075:-52a3</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>SECTOR $(SEC) - $(TYPE) $(S)</text>
+    <text>SECTOR $(S)</text>
     <scripts />
     <height>31</height>
     <border_width>1</border_width>
@@ -408,9 +314,9 @@ $(pv_value)</tooltip>
     <push_action_index>0</push_action_index>
     <rules />
     <enabled>true</enabled>
-    <wuid>-761980a4:15ce003accd:-7130</wuid>
+    <wuid>-761980a4:15cdff2da33:4ae7</wuid>
     <pv_value />
-    <text>Compact View</text>
+    <text>Hardware View</text>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
     <height>19</height>
@@ -432,7 +338,7 @@ $(pv_value)</tooltip>
       <color red="240" green="240" blue="240" />
     </background_color>
     <width>115</width>
-    <x>204</x>
+    <x>108</x>
     <name>Action Button</name>
     <y>6</y>
     <style>0</style>
@@ -441,10 +347,12 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>compact/jscaler_pcal.opi</path>
+        <path>../jscaler_pcal.opi</path>
         <macros>
           <include_parent_macros>false</include_parent_macros>
-          <S>$(SEC)</S>
+          <SEC>$(S)</SEC>
+          <TYPE>FADC</TYPE>
+          <S></S>
         </macros>
         <replace>1</replace>
         <description></description>

@@ -329,20 +329,29 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
 #################################################################
 
 
+# :hwstatmaxbitcalc
+#
 # This record just picks out the most significant non-zero bit
-# of the :stat hardware status record.  This is appropriate since
-# CAEN ordered their status bits such that most significant bit
-# is the most significant error.
+# of the :stat hardware status.  This is appropriate since CAEN
+# ordered their status bits such that most significant bit is
+# the most significant status (error).
+#
+# Note, CAEN leaves bit 12 unused.  If we do the same, we run out
+# of mbbi bits (16).  So, if :stat>=2^12, downshift by one bit.
+#
 record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc")
 {
     field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
-    field(CALC,"A=0 ? 0 : floor(log(A)/log(2))+1")
+    field(CALC,"A=0 ? 0 : floor(log(A)/log(2))+1-(A>=8192?0:1)")
     alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbitcalc")   
 }
 
-# This record just provides a mapping from CAEN status bits
-# to their corresponding string values and severities, using
-# only the most significant bit from statmaxbitcalc:
+# :hwstatmaxbit
+#
+# This record just provides a mapping from CAEN status bits to
+# their corresponding string values and severities, using only
+# the most significant bit from statmaxbitcalc.  Note the shift
+# explained above for stat>=2^12.
 record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
 {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc CPP")
@@ -375,6 +384,9 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(TEST,"InTrip")
     field(ELST,"Calib")
     field(TVST,"ChUnplug")
+    field(TTST,"OVP")
+    field(FTST,"PwFail")
+    field(FVST,"TempErr")
     field(ZRSV,"NO_ALARM")
     field(ONSV,"NO_ALARM")
     field(TWSV,"MINOR")
@@ -388,6 +400,9 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(TESV,"MAJOR")
     field(ELSV,"MAJOR")
     field(TVSV,"MAJOR")
+    field(TTSV,"MAJOR")
+    field(FTSV,"MAJOR")
+    field(FVSV,"MAJOR")
     alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbit")   
 }
 

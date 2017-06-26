@@ -416,6 +416,50 @@ sy1527GetSystemProps(unsigned int id)
   return(CAENHV_OK);
 }
 
+int
+sy1527PrintExecCommList(unsigned int id)
+{
+  unsigned short nn,ii;
+  char* vv;
+  int ret;
+  char name[MAX_CAEN_NAME];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  ret=CAENHVGetExecCommList(name,&nn,&vv);
+  if(ret != CAENHV_OK)
+  {
+    printf("ERROR(sy1527): %s (num. %d)\n\n", CAENHVGetError(name), ret);
+    return(CAENHV_SYSERR);
+  }
+  char *mm=vv;
+  for (ii=0; ii<nn; ii++,mm+=strlen(mm)+1) {
+      if (*mm == '\0') {
+          printf("Strange %d\n",ii);
+          continue;
+      }
+      printf("%d %s\n",ii,mm);
+  }
+  return CAENHV_OK;
+}
+
+int
+sy1527ExecComm(unsigned int id,const char* cmd)
+{
+  int ret;
+  char name[MAX_CAEN_NAME];
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  printf("sy1527ExecComm(%d,%s)\n",id,cmd);
+  ret=CAENHVExecComm(name,cmd);
+  if(ret != CAENHV_OK)
+  {
+    printf("ERROR(sy1527): %s (num. %d)\n\n", CAENHVGetError(name), ret);
+    return(CAENHV_SYSERR);
+  }
+  return CAENHV_OK;
+}
 
 int
 sy1527PrintParams(unsigned int id)

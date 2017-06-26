@@ -18,6 +18,7 @@
 #define S_CHHV    0x0B    /* Set CHANNEL HV on/off          */ 
 #define S_BDHV    0x0C    /* Set BOARD HV on/off            */ 
 #define S_VMAX    0x0D    /* Set MAX CHANNEL VOLATAGE       */ 
+#define S_CLR     0x0E    /* Clear Alarm (entire mainframe) */ 
 
 // LV Boards:
 #define S_UNVT    0x10    /* Set Under Voltage Threshold    */
@@ -33,5 +34,6 @@
 #define G_HVPW    0x04    /* HvPwSM                         */
 #define G_MOD     0x05    /* Model Name                     */
 #define G_SWR     0x06    /* Sowftware Release              */
+
 
 #endif

@@ -90,6 +90,9 @@ int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
 
 int  CAENHVGetSysProp(const char *SystemName, const char *PropName, void *Result);
 
+int  CAENHVGetExecCommList(const char *, ushort *, char **);
+int  CAENHVExecComm(const char *, const char *);
+
 ///==============================================================================
 
 
@@ -195,6 +198,10 @@ int
 sy1527PrintSysProp(unsigned int id,const char* prop);
 int
 sy1527PrintSysProps(unsigned int id);
+int
+sy1527PrintExecCommList(unsigned int id);
+int
+sy1527ExecComm(unsigned int id,const char* cmd);
 int
 sy1527GetSystemProps(unsigned int id);
 void *

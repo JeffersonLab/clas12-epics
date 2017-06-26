@@ -207,6 +207,9 @@ static long init_bo(struct boRecord  *pbo)
    else if (command == S_RANGE) {
      pbo->rval = sy1527GetChannelRange(chassis, slot,channel);
    }
+   else if (command == S_CLR) {
+     pbo->rval = 0;
+   }
   }
   return 0;
 }
@@ -271,6 +274,8 @@ static long write_bo(struct boRecord *pbo)
       status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
     else if (command == S_RANGE)
       status = sy1527SetChannelRange(chassis, slot, channel, (unsigned int)pbo->rval );
+    else if (command == S_CLR)
+      status = sy1527ExecComm(chassis,"ClearAlarm");
     else status = ERROR;
 
     // Alert if an error occures processing the request.

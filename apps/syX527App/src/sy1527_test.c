@@ -26,12 +26,20 @@ int main(int argc,char** argv)
 
   //sy1527GetMap(id);
   
+  printf("\n\n======= sy1527PrintParams =======\n");
   sy1527PrintParams(id);
 
   //sy1527PrintMap(id);
 
+  printf("\n\n======= sy1527PrintSysProps =======\n");
   sy1527PrintSysProps(id);
 
+  printf("\n\n======= sy1527PrintExecCommList =======\n");
+  sy1527PrintExecCommList(id);
+  
+  printf("\n\n======= sy1527ExecComm(ClearAlarm) =======\n");
+  sy1527ExecComm(id,"ClearAlarm");
+  
   return(0);
 
 

@@ -256,14 +256,8 @@ static long read_ai(struct aiRecord *pai)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
-  //  printf("read_bi chassis=%d %s\n", chassis, pbi->name); 
-
   if (command<2) {
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-      // We swap 0 and 1 here for now, to put scaler arrays and threshold arrays in
-      // the same Trg-Tdc order.  Proper fix is probably in DiagGuiServer, since
-      // jscaler(Drv)App keeps everything ordered as from server.
-      //pai->rval = values[(command+1)%2];
       pai->rval = values[command];
   }
   else {
@@ -273,8 +267,7 @@ static long read_ai(struct aiRecord *pai)
   return 0;  
 }
 //===============================================================================================
-static long init_ao(struct aoRecord  *pao) { return 0; }
-static long write_ao(struct aoRecord *pao)
+static long init_ao(struct aoRecord  *pao)
 {
   double values[200];
 
@@ -291,11 +284,36 @@ static long write_ao(struct aoRecord *pao)
 
   if (command<2) {
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-      // We swap 0 and 1 here for now, to put scaler arrays and threshold arrays in
-      // the same Trg-Tdc order.  Proper fix is probably in DiagGuiServer, since
-      // jscaler(Drv)App keeps everything ordered as from server.
-      //values[(command+1)%2]=pao->val;
-      values[command]=pao->val;
+      pao->rval = values[command];
+  }
+  else {
+    printf("read_ai:  ERROR, no command: %d\n",command);
+  }
+
+  return 0;  
+}
+static long write_ao(struct aoRecord *pao)
+{
+  double values[200];
+
+  double threshType,threshValue;
+
+  struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned int slot = (*card)>>8;
+  unsigned int chassis = (*card) - ((slot)<<8) ;
+
+  unsigned int command = (*signal)>>8;
+  unsigned int channel = (*signal) - ((command)<<8);
+
+  if (command<2) {
+      threshType = command;
+      threshValue = pao->val;
+      values[0] = threshType;
+      values[1] = threshValue;
       IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
   }
   else {

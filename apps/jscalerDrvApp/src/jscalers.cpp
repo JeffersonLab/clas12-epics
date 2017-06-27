@@ -208,6 +208,15 @@ void *crateThread(void *ptr) {
             partype = SCALER_PARTYPE_THRESHOLD;
             //printf("ioc:GetBoardParams\n");
             ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
+/*
+            if ((it->second)->boardType==SCALER_TYPE_DSC2)
+                printf("DSC2 Read Thresholdsd:  ");
+            else if ((it->second)->boardType==SCALER_TYPE_FADC250)
+                printf("FADC Read Thresholdsd:  ");
+            else
+                printf("???? Read Thresholdsd:  ");
+            if (ret) for (int i=0; i<len; i++) printf(" %d",(*buf)[i]); printf("\n");
+*/
             //printf("ioc:GetBoardParams2\n");
             if(ret)
                 for(int i=0;i<len;i++){ /// len is number of channels
@@ -546,10 +555,22 @@ void JlabBoard::GetThresholds( int threshType, double thresholds[] ){
 // type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
 void JlabBoard::GetThreshold(  int chanNumber, int threshType, double & threshold  ){
 
+    const unsigned int nn=scalerThresholds[chanNumber].size();
+
+    if (threshType < (int)nn) {
+        if (boardType == SCALER_TYPE_DSC2 && nn==NUMBER_OF_SCALER_THRESHOLDS) {
+            threshold=(scalerThresholds[chanNumber])[threshType];
+        }
+        else if (boardType == SCALER_TYPE_FADC250 && nn==1) {
+            threshold=(scalerThresholds[chanNumber])[threshType];
+        }
+    }
+/*
     //printf("%d %d %f \n",chanNumber,threshType,(scalerThresholds[chanNumber])[threshType]); 
     if((int)(scalerThresholds[chanNumber]).size() == NUMBER_OF_SCALER_THRESHOLDS){
         threshold=(scalerThresholds[chanNumber])[threshType];
     }
+*/
 
 }
 ///==================================================================================================================

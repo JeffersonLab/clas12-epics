@@ -163,8 +163,8 @@ def setCodes(crateNumber,channel):
   channel['Thresh']=int(channel['Ch'])+(0<<8)
   channel['Counts']=int(channel['Ch'])+(0<<8)
   channel['Mode']  =int(channel['Ch'])+(1<<8)
-  channel['ThreshTRG']=int(channel['Ch'])+(0<<8)
-  channel['ThreshTDC']=int(channel['Ch'])+(1<<8)
+  channel['ThreshTDC']=int(channel['Ch'])+(0<<8)
+  channel['ThreshTRG']=int(channel['Ch'])+(1<<8)
 
 def mkChannelsECAL(crateNumber,sector,system):
   if system=='FADC': crate='ADCECAL'+str(sector)
@@ -415,12 +415,12 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-#for sector in range(6): mkSector(sector+1)
+for sector in range(6): mkSector(sector+1)
 
 #mkDetector(mkChannelsHTCC(0),None,None)
 #mkDetector(mkChannelsCTOF(0),None,None)
 
-mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+#mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+#mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
 

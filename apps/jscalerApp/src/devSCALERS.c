@@ -263,7 +263,8 @@ static long read_ai(struct aiRecord *pai)
       // We swap 0 and 1 here for now, to put scaler arrays and threshold arrays in
       // the same Trg-Tdc order.  Proper fix is probably in DiagGuiServer, since
       // jscaler(Drv)App keeps everything ordered as from server.
-      pai->rval = values[(command+1)%2];
+      //pai->rval = values[(command+1)%2];
+      pai->rval = values[command];
   }
   else {
     printf("read_ai:  ERROR, no command: %d\n",command);
@@ -293,7 +294,8 @@ static long write_ao(struct aoRecord *pao)
       // We swap 0 and 1 here for now, to put scaler arrays and threshold arrays in
       // the same Trg-Tdc order.  Proper fix is probably in DiagGuiServer, since
       // jscaler(Drv)App keeps everything ordered as from server.
-      values[(command+1)%2]=pao->val;
+      //values[(command+1)%2]=pao->val;
+      values[command]=pao->val;
       IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
   }
   else {

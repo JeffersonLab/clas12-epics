@@ -13,7 +13,9 @@ DB    += caenlv.db
 DB    += caenchassis.db
 DB    += HVDC_VSCAN.db
 DB    += $(wildcard ../*.substitutions)
-DB    += $(wildcard ../*sums*.db)
+DB    += $(wildcard ../subs/*.substitutions)
+DB    += $(wildcard ../sums/*.db)
+DB    += $(wildcard ../sums/*.substitutions)
 DB    += $(wildcard ../seq/*.db)
 DB    += $(wildcard ../seq/*.subsitutions)
 

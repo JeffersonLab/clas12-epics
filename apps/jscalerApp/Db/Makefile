@@ -10,6 +10,10 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 #DB += $(wildcard ../*.db)
 #DB += $(wildcard ../*.substitutions)
+#DB += $(wildcard ../sums/*.db)
+#DB += $(wildcard ../subs/*.substitutions)
+#DB += $(wildcard ../wf/*.db)
+#DB += $(wildcard ../wf/*.substitutions)
 
 BEAST += jscalers-alarm.xml
 

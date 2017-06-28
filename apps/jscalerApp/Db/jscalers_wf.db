@@ -1,3 +1,5 @@
+
+##################################################
 record(waveform,"B_DET_ECAL_TRG_SEC$(S):wf")
 {
   field(NELM,216)
@@ -19,6 +21,7 @@ record(waveform,"B_DET_LTCC_TRG_SEC$(S):wf")
   field(FTVL,"FLOAT")
 }
 
+##################################################
 record(waveform,"B_DET_ECAL_TDC_SEC$(S):wf")
 {
   field(NELM,216)
@@ -40,6 +43,7 @@ record(waveform,"B_DET_LTCC_TDC_SEC$(S):wf")
   field(FTVL,"FLOAT")
 }
 
+##################################################
 record(waveform,"B_DET_ECAL_FADC_SEC$(S):wf")
 {
   field(NELM,216)
@@ -61,7 +65,116 @@ record(waveform,"B_DET_LTCC_FADC_SEC$(S):wf")
   field(FTVL,"FLOAT")
 }
 
+##################################################
 record(stringin,"B_SYS_SEC$(S):wfmsg")
 {
   field(VAL,"NOT Initialized")
 }
+
+
+
+##################################################
+record(compress,"B_DET_ECAL_TRG_SEC$(S):avg")
+{
+    field(INP,"B_DET_ECAL_TRG_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"216")
+    field(PREC,"1")
+}
+record(compress,"B_DET_ECAL_TDC_SEC$(S):avg")
+{
+    field(INP,"B_DET_ECAL_TDC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"216")
+    field(PREC,"1")
+}
+record(compress,"B_DET_ECAL_FADC_SEC$(S):avg")
+{
+    field(INP,"B_DET_ECAL_FADC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"216")
+    field(PREC,"1")
+}
+
+##################################################
+record(compress,"B_DET_FTOF_TRG_SEC$(S):avg")
+{
+    field(INP,"B_DET_FTOF_TRG_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"180")
+    field(PREC,"1")
+}
+record(compress,"B_DET_FTOF_TDC_SEC$(S):avg")
+{
+    field(INP,"B_DET_FTOF_TDC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"180")
+    field(PREC,"1")
+}
+record(compress,"B_DET_FTOF_FADC_SEC$(S):avg")
+{
+    field(INP,"B_DET_FTOF_FADC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"180")
+    field(PREC,"1")
+}
+
+##################################################
+record(compress,"B_DET_PCAL_TRG_SEC$(S):avg")
+{
+    field(INP,"B_DET_PCAL_TRG_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"192")
+    field(PREC,"1")
+}
+record(compress,"B_DET_PCAL_TDC_SEC$(S):avg")
+{
+    field(INP,"B_DET_PCAL_TDC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"192")
+    field(PREC,"1")
+}
+record(compress,"B_DET_PCAL_FADC_SEC$(S):avg")
+{
+    field(INP,"B_DET_PCAL_FADC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"192")
+    field(PREC,"1")
+}
+
+##################################################
+record(compress,"B_DET_LTCC_TRG_SEC$(S):avg")
+{
+    field(INP,"B_DET_LTCC_TRG_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"36")
+    field(PREC,"1")
+}
+record(compress,"B_DET_LTCC_TDC_SEC$(S):avg")
+{
+    field(INP,"B_DET_LTCC_TDC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"36")
+    field(PREC,"1")
+}
+record(compress,"B_DET_LTCC_FADC_SEC$(S):avg")
+{
+    field(INP,"B_DET_LTCC_TDC_SEC${S}:wf CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"36")
+    field(PREC,"1")
+}
+
+

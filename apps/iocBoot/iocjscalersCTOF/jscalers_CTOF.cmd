@@ -5,7 +5,8 @@ cd ${TOP}
 Init_SCALERS()
 
 Start_SCALERS_CRATE("0","ADCCTOF1")
-
+#Start_SCALERS_CRATE("1","ADCFT1")
+#Start_SCALERS_CRATE("2","ADCFT2")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -25,6 +26,8 @@ dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=3,TYPE=FADC")
 dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=4,TYPE=FADC")
 dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=5,TYPE=FADC")
 dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=6,TYPE=FADC")
+
+#dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
 
 
 cd ${TOP}/iocBoot/${IOC}

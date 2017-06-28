@@ -110,7 +110,7 @@ iocInit
 
 
 def printSubstitutions(scalerType,channels,fileName=None):
-  if fileName!=None: fileName='./generator/'+fileName
+  if fileName!=None: fileName='./output/'+fileName
   if scalerType=='FADC':
     dbFile=DBFILE_FADC
     keys=KEYS_FADC
@@ -132,7 +132,7 @@ def printSubstitutions(scalerType,channels,fileName=None):
   print >>file, '}'
 
 def printStartup(crates,fileName=None):
-  if fileName!=None: fileName='./generator/'+fileName
+  if fileName!=None: fileName='./output/'+fileName
   if fileName!=None: file=open(fileName,'w')
   else:              file=sys.stdout
   startCrates,loadRecords='',''
@@ -347,6 +347,33 @@ def mkChannelsFTOF(crateNumber,sector,system):
     channels.append(channel)
   return channels
 
+def mkChannelsFTC(firstCrateNumber,spreadsheet='ftc_channel_map.csv'):
+  channels=[]
+  crateNames={70:'ADCFT1',71:'ADCFT2'}
+  for line in open(spreadsheet,'r').readlines():
+    cols=line.strip().split(',')
+    if cols[0]!='FTCAL': continue
+    cr=int(cols[4])
+    sl=int(cols[5])
+    ch=int(cols[6])
+    xx=int(cols[7])
+    yy=int(cols[8])
+    xxx=int(cols[13])
+    yyy=int(cols[14])
+    if   cr==70: crno=firstCrateNumber
+    elif cr==71: crno=firstCrateNumber+1
+    else: sys.exit('Invalid FTC Crate Number: ',str(cr))
+    if   xx<0 and yy>0: qq=1
+    elif xx>0 and yy>0: qq=2
+    elif xx>0 and yy<0: qq=3
+    elif xx<0 and yy<0: qq=4
+    else: sys.exit('Invalid x/y: '+str(xx)+'/'+str(yy))
+    channel={'Sl':'%.2d'%(sl),'Ch':'%.2d'%(ch),'CrName':crateNames[cr],'Det':'FTC','Sys':'FADC'}
+    channel['Element']='Q%d_X%.2dY%.2d'%(qq,xxx,yyy)
+    setCodes(crno,channel)
+    channels.append(channel)
+  return channels
+
 def mkCrates(channels,subfileName):
   crates=[]
   for channel in channels:
@@ -415,7 +442,7 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-for sector in range(6): mkSector(sector+1)
+#for sector in range(6): mkSector(sector+1)
 
 #mkDetector(mkChannelsHTCC(0),None,None)
 #mkDetector(mkChannelsCTOF(0),None,None)
@@ -423,4 +450,5 @@ for sector in range(6): mkSector(sector+1)
 #mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
 #mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
+mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
 

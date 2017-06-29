@@ -19,12 +19,14 @@ c370_DBD += modbusSupport.dbd
 c370_DBD += asSupport.dbd
 c370_DBD += devIocStats.dbd
 c370_DBD += asyn.dbd
+c370_DBD += caPutLog.dbd
 
 # Add all the support libraries needed by this IOC
 c370_LIBS += autosave
 c370_LIBS += devIocStats
 c370_LIBS += modbus
 c370_LIBS += asyn
+c370_LIBS += caPutLog
 
 # c370_registerRecordDeviceDriver.cpp derives from c370.dbd
 c370_SRCS += c370_registerRecordDeviceDriver.cpp

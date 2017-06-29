@@ -13,10 +13,9 @@ include $(TOP)/configure/CONFIG
 DB_INSTALLS += $(ASYN)/db/asynRecord.db
 DB_INSTALLS += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
 
-DB += c370.template
-DB += c370_asyn.template
-DB += saclayTarget.substitutions
-#REQ += saclayTarget.req
+DB += $(wildcard ../*.template)
+DB += $(wildcard ../*.db)
+DB += $(wildcard ../*.substitutions)
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

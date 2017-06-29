@@ -25,6 +25,8 @@ cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
 
+asSetFilename("../acf/cas.acf")
+
 iocInit();
 
 caPutLogInit("clonioc1:7011")

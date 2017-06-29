@@ -18,6 +18,7 @@ dbLoadDatabase "dbd/mpodLv.dbd"
 mpodLv_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 devSnmpSetParam(DebugLevel,10)
 
@@ -29,8 +30,16 @@ dbLoadTemplate("db/fttrklv.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 
+< save_restore.cmd
 
-dbl > pv.list
+asSetFilename("../acf/cas.acf")
 
 iocInit
 
+caPutLogInit("clonioc1:7011")
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list

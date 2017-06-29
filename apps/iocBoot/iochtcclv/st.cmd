@@ -40,17 +40,22 @@ dbLoadRecords("db/sy2604.db","P=htcclv1,PORT=1,ADDR=24,IMAX=2000,OMAX=2000")
 #dbLoadRecords("db/sy2604.db","P=htcclv8,PORT=8,ADDR=24,IMAX=2000,OMAX=2000")
 
 
-#dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
-
 
 cd ${TOP}/iocBoot/${IOC}
 
-#< save_restore.cmd
+< save_restore.cmd
+
+asSetFilename("../acf/cas.acf")
 
 iocInit();
 
-# Why is IOC looking for iochtcclv.sav?
-#makeAutosaveFiles()
-#create_monitor_set("sy2604_settings.req",30,"P=htcclv1")
+caPutLogInit("clonioc1:7011")
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list
 

@@ -178,11 +178,24 @@ file "db/torus_bi_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, PV8674,      Closed, Open,   MAJOR, NO_ALARM, "Gate Valve" }
 }
 
-file "db/torus_ao_generic.db" {
-    pattern{ PLCID, P, R, TAG, EGU, PREC, DESC }
-    { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,       SLPM,   2,  "FI8621A Setpoint" }
-    { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,       SLPM,   2,  "FI8621B Setpoint" }
-    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,  K,      2,  "Max Allowed DT" }
+file "db/torus_bi_renamed.db" { pattern
+    { PLCID,    P,      R,      PV,             TAG,                ZNAM,       ONAM,       ZSV,    OSV,        DESC }
+    { PLC_CRYO, B_SOL:, LHe:,   PV8563_Permit,  PV8563_Permit_Sol,  Disabled,   Enabled,    MAJOR,  NO_ALARM,   "PV8563C/PV8563W Interlock" }
+}
+
+file "db/torus_ao_generic.db" { pattern
+    { PLCID,   P,      R,    TAG,                               EGU, PREC, DESC }
+    { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,                       SLPM,   2, "FI8621A Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,                       SLPM,   2, "FI8621B Setpoint" }
+    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,                  K,      2, "Max Allowed DT" }
+    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAX_Interlock_Threshold, K,      2, "C14ASY_DT_MAX Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, CM_DT_MAX_Interlock_Threshold,     K,      2, "CM_DT_MAX Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, HE_METAL_CD_DT_Interlock_Threshold, K,     2, "HE_METAL_CD_DT Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, HE_METAL_CD_DT2_Interlock_Threshold, K,    2, "HE_METAL_CD_DT2 Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, HE_METAL_WU_DT_Interlock_Threshold, K,     2, "HE_METAL_CD_DT Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, HE_METAL_WU_DT2_Interlock_Threshold, K,    2, "HE_METAL_CD_DT2 Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, LL8620SC_Interlock_Threshold,      K,      2, "LL8620SC Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, LL8670SC_Interlock_Threshold,      K,      2, "LL8670SC Threshold" }
     #
     # DBX
     #

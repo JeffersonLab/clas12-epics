@@ -122,7 +122,6 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, COIL_T_MAX,            K,  2, "Max temp of coils" }
     { PLC_SOL, B_SOL:, LHe:, C14_DT_MAX,            K,  2, "Max diff. temp of coils[1-4]" }
     { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAX,         K,  2, "Max diff. temp of coils[1-4]/bobbin/CP" }
-    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAXSET,      K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAXPCT,      K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAX,          K,  2, "Max diff. temp of coil 5/bobbin" }
     { PLC_SOL, B_SOL:, LHe:, C5BOB_DT_MAXSET,       K,  2, "" }
@@ -130,7 +129,6 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, CM_T_MAX,              K,  2, "Max temp of 4K cold mass" }
     { PLC_SOL, B_SOL:, LHe:, CM_T_MIN,              K,  2, "Min temp of 4K cold mass" }
     { PLC_SOL, B_SOL:, LHe:, CM_DT_MAX,             K,  2, "Max diff. temp of 4K cold mass" }
-    { PLC_SOL, B_SOL:, LHe:, CM_DT_MAXSET,          K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, CM_DT_MAXPCT,          K,  2, "" }
     { PLC_SOL, B_SOL:, LHe:, HE_METAL_CD_DT,        K,  2, "Diff. temp TR8610/metal (cooldown)" }
     { PLC_SOL, B_SOL:, LHe:, HE_METAL_WU_DT,        K,  2, "Diff. temp TR8610/metal (warmup)" }
@@ -171,11 +169,12 @@ file "db/torus_bi_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, SV8675BY,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
     { PLC_SOL, B_SOL:, LHe:, SV8678CR,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
     { PLC_SOL, B_SOL:, LHe:, SV8678DV,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
-    { PLC_SOL, B_SOL:, LHe:, HTR8620_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "Heater Permit" }
-    { PLC_SOL, B_SOL:, LHe:, HTR8672_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "Heater Permit" }
+    { PLC_SOL, B_SOL:, LHe:, HTR8620_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "HTR8620 Permit" }
+    { PLC_SOL, B_SOL:, LHe:, HTR8672_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "HTR8272 Permit" }
     { PLC_SOL, B_SOL:, LHe:, HTR8621A,    Disabled, Enabled,    NO_ALARM,   NO_ALARM,   "VCL Heater" }
     { PLC_SOL, B_SOL:, LHe:, HTR8621B,    Disabled, Enabled,    NO_ALARM,   NO_ALARM,   "VCL Heater" }
     { PLC_SOL, B_SOL:, LHe:, PV8674,      Closed, Open,   MAJOR, NO_ALARM, "Gate Valve" }
+    { PLC_SOL, B_SOL:, PLC:, DBoxCommError,  Ok,       Fault,   NO_ALARM, MAJOR,    "Comm from Solenoid to DBX PLC" }
 }
 
 file "db/torus_bi_renamed.db" { pattern
@@ -187,20 +186,21 @@ file "db/torus_ao_generic.db" { pattern
     { PLCID,   P,      R,    TAG,                               EGU, PREC, DESC }
     { PLC_SOL, B_SOL:, LHe:, FI8621A_OUT,                       SLPM,   2, "FI8621A Setpoint" }
     { PLC_SOL, B_SOL:, LHe:, FI8621B_OUT,                       SLPM,   2, "FI8621B Setpoint" }
-    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,                  K,      2, "Max Allowed DT" }
-    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAX_Interlock_Threshold, K,      2, "C14ASY_DT_MAX Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, CM_DT_MAX_Interlock_Threshold,     K,      2, "CM_DT_MAX Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, HE_METAL_CD_DT_Interlock_Threshold, K,     2, "HE_METAL_CD_DT Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, HE_METAL_CD_DT2_Interlock_Threshold, K,    2, "HE_METAL_CD_DT2 Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, HE_METAL_WU_DT_Interlock_Threshold, K,     2, "HE_METAL_CD_DT Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, HE_METAL_WU_DT2_Interlock_Threshold, K,    2, "HE_METAL_CD_DT2 Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, LL8620SC_Interlock_Threshold,      K,      2, "LL8620SC Threshold" }
-    { PLC_SOL, B_SOL:, LHe:, LL8670SC_Interlock_Threshold,      K,      2, "LL8670SC Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, SHLD4K_DT_MAXSET,                  K,      2, "SHLD4K_DT_MAX Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, C14ASY_DT_MAXSET,                  K,      2, "C14ASY_DT_MAX Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, CM_DT_MAXSET,                      K,      2, "CM_DT_MAX Threshold" }
     #
-    # DBX
-    #
-    #{ PLC_CRYO, B_SOL:, LHe:, PV8563_DP_OFFSET, "",     2,  "Pressure below 4K supply, assure no mixing" }
+    { PLC_DBX, B_SOL:, LHe:, HE_METAL_CD_DT_SET,                K,      2, "HE_METAL_CD_DT Threshold" }
+    { PLC_DBX, B_SOL:, LHe:, HE_METAL_CD_DT2_SET,               K,      2, "HE_METAL_CD_DT2 Threshold" }
+    { PLC_DBX, B_SOL:, LHe:, HE_METAL_WU_DT_SET,                K,      2, "HE_METAL_CD_DT Threshold" }
+    { PLC_DBX, B_SOL:, LHe:, HE_METAL_WU_DT2_SET,               K,      2, "HE_METAL_CD_DT2 Threshold" }
+    # TODO: READ-ONLY
+    { PLC_SOL, B_SOL:, LHe:, HTR8620_LL_SET,                    K,      2, "LL8620SC Threshold" }
+    { PLC_SOL, B_SOL:, LHe:, HTR8672_LL_SET,                    K,      2, "LL8670SC Threshold" }
 }
+
+
+
 
 file "db/datatype_cpid.db" {
     pattern{ PLCID, P, R, TAG }

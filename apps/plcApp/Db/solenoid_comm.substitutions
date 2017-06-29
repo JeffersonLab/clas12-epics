@@ -6,7 +6,9 @@
 #
 
 file "db/torus_bi_generic.db" { pattern
-    { PLCID,   P,      R,    TAG,            ZNAM,  ONAM,       ZSV,        OSV,    DESC }
-    { PLC_SOL, B_SOL:, MPS:, UPS_On_Battery, Ok,    Warning,    NO_ALARM,   MAJOR,  "PLC On UPS Battery" }
+    { PLCID,   P,      R,    TAG,             ZNAM,  ONAM,  ZSV,        OSV,        DESC }
+    { PLC_SOL, B_SOL:, COMM:, UPS_On_Battery, Ok,    Fault, NO_ALARM,   MAJOR,      "PLC On UPS Battery" }
+    { PLC_SOL, B_SOL:, COMM:, FAULT_24VDC,    Fault, Ok,    MAJOR,      NO_ALARM,   "Rhino 24VDC PSU Status" }
+    { PLC_SOL, B_SOL:, COMM:, FAULT_24VDC2,   Fault, Ok,    MAJOR,      NO_ALARM,   "Rhino 24VDC PSU Status" }
 }
 

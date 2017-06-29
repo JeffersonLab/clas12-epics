@@ -25,7 +25,11 @@ cd "${TOP}/iocBoot/${IOC}"
 ## autosave setup
 < save_restore.cmd
 
+asSetFilename("../acf/cas.acf")
+
 iocInit
+
+caPutLogInit("clonioc1:7011")
 
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")

@@ -1,1 +1,0 @@
-jscalers_HTCC.cmd

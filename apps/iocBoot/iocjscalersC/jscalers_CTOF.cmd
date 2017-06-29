@@ -16,21 +16,19 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 
 dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
-dbLoadRecords("db/jscalers_CTOF_FADC_sums.db","SIDE=U")
-dbLoadRecords("db/jscalers_CTOF_FADC_sums.db","SIDE=D")
-
 dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=1,TYPE=FADC")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=2,TYPE=FADC")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=3,TYPE=FADC")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=4,TYPE=FADC")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=5,TYPE=FADC")
-dbLoadRecords("db/jscalers_HTCC_sums.db","SEC=6,TYPE=FADC")
 
 #dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
+
+dbLoadRecords("db/jscalers_wfC.db")
+dbLoadRecords("db/jscalers_wf_averagesC.db")
 
 
 cd ${TOP}/iocBoot/${IOC}
 
 iocInit
+
+seq seqJscalersC
+
+dbl > pv.list
 

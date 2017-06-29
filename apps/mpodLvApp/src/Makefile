@@ -14,6 +14,7 @@ mpodLv_DBD += devSnmp.dbd
 mpodLv_DBD += asSupport.dbd
 mpodLv_DBD += devIocStats.dbd
 mpodLv_DBD += mpodLvInclude.dbd
+mpodLv_DBD += caPutLog.dbd
 
 # mpodLv_registerRecordDeviceDriver.cpp derives from mpodLv.dbd
 mpodLv_SRCS += mpodLv_registerRecordDeviceDriver.cpp
@@ -28,6 +29,7 @@ mpodLv_LIBS += $(EPICS_BASE_IOC_LIBS)
 mpodLv_LIBS += autosave
 mpodLv_LIBS += devIocStats
 mpodLv_LIBS += devSnmp
+mpodLv_LIBS += caPutLog
 
 include $(TOP)/configure/RULES
 

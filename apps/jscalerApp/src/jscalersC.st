@@ -22,10 +22,10 @@ int wfLengthH=0;
 
 string msg; assign msg to "B_SYS_FADC_CENTRAL:wfmsg";
 
-float wfoC[96]; assign wfoC to "B_DET_CTOF_FADC_SEC{S}:wf";
+float wfoC[96]; assign wfoC to "B_DET_CTOF_FADC:wf";
 float wfiC[96]; assign wfiC to {};
 
-float wfoH[48]; assign wfoH to "B_DET_HTCC_FADC_SEC{S}:wf";
+float wfoH[48]; assign wfoH to "B_DET_HTCC_FADC:wf";
 float wfiH[48]; assign wfiH to {};
 
 int isec;
@@ -60,7 +60,7 @@ ss seqJscalersC {
         {
           for (iside=0; iside<nsideH; iside++)
           {
-            sprintf(stmp,"B_DET_HTCC_FADC_SEC{S}_%s%.2d:%s",sidesH[iside],ichan,suffix);
+            sprintf(stmp,"B_DET_HTCC_FADC_SEC%d_%s%d:%s",isec,sidesH[iside],ichan,suffix);
             pvAssignSubst(wfiH[wfLengthH++],stmp);
           }
         }

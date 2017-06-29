@@ -32,15 +32,6 @@ dbLoadTemplate("db/jscalers_S2_PCAL_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S2_FTOF_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S2_LTCC_DISC.substitutions")
 
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=FADC,SEC=2,CH=1")
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=DISC,SEC=2,CH=3")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=FADC,SEC=2,CH=1")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=DISC,SEC=2,CH=3")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=FADC,SEC=2,CH=1")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=DISC,SEC=2,CH=3")
-dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=FADC,SEC=2,CH=1")
-dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=DISC,SEC=2,CH=3")
-
 dbLoadTemplate("db/jscalers_TDCPCAL2_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_TDCFTOF2_TRIG.substitutions")
 

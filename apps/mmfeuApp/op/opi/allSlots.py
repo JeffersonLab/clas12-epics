@@ -12,6 +12,8 @@ for n in range(0,len(slots)):
         newP = P+"_Cr"+C+"_Sl"+slots[n]
         #ConsoleUtil.writeInfo(newP)
         linkingContainer.addMacro("P",newP)
-        linkingContainer.setPropertyValue("resize_behaviour", 1)
+        linkingContainer.setPropertyValue("width", 862)
+        linkingContainer.setPropertyValue("height", 20)
+        linkingContainer.setPropertyValue("resize_behaviour", 2)
         #linkingContainer.setPropertyValue("border_style", 2)
         widget.addChildToBottom(linkingContainer)

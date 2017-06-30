@@ -160,6 +160,7 @@ init_bo(struct boRecord  *pbo)
    */
  //usleep(100000); 
 
+#ifdef USE_SMI
   struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value);  
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
@@ -175,7 +176,6 @@ init_bo(struct boRecord  *pbo)
   char tmp[81]; /// temporal
   int retv;
   int first_channel=channel, chs_number=command;
-#ifdef USE_SMI
   if(strstr(pbo->desc,"smi"))
   { 
     strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
@@ -203,6 +203,7 @@ write_bo(struct boRecord *pbo)
      {card 0-7: chassis, 8-15: slot;  signal 0-7:channel, 8-15:command}.
    */
 
+#ifdef USE_SMI
   struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value);  
   unsigned short* card    = (unsigned short*) &pvmeio->card;
   unsigned short* signal  = (unsigned short*) &pvmeio->signal;
@@ -215,7 +216,6 @@ write_bo(struct boRecord *pbo)
 
   int retv;
   int first_channel=channel, chs_number=command;
-#ifdef USE_SMI
   if(strstr(pbo->desc,"smi"))
   {
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
@@ -334,6 +334,7 @@ read_bi(struct biRecord *pbi)
      Note that slot and channel numbers are not used in this situation.
    */
 
+#ifdef USE_SMI
   struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
 
 
@@ -350,7 +351,6 @@ read_bi(struct biRecord *pbi)
  // printf("read_bi chassis=%d\n", chassis); 
   int retv;
   int first_channel=channel, chs_number=command;
-#ifdef USE_SMI
   if(strstr(pbi->desc,"smi"))
   {
     //printf("read_bi chassis=%d %s\n", chassis, pbi->name); 

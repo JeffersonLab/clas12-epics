@@ -43,7 +43,7 @@ typedef int STATUS;
 #include <aaoRecord.h>
 #include <waveformRecord.h>
 #include <epicsExport.h> 
-//#include "command.h"
+#include <cantProceed.h>
 
 #include "common.h"
 #include "CrateMsgTypes.h"

@@ -22,6 +22,7 @@ REQ += torus_vacuum_settings.req
 
 BEAST += solenoid_comm.xml
 BEAST += solenoid_cooldown.xml
+BEAST += solenoid_force.xml
 BEAST += solenoid_LHe.xml
 BEAST += solenoid_vacuum.xml
 

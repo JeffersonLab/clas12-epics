@@ -6,7 +6,7 @@
 < envPaths
 
 epicsEnvSet("EPICS_CA_AUTO_ADDR_LIST","NO")
-epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.160.179 129.57.163.255")
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.160.79 129.57.163.255")
 
 cd ${TOP}
 

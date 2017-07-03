@@ -1,16 +1,41 @@
 
 file "db/c370.template" { pattern
-{           P,     R,    PORT,   OFFSET,    DATA_TYPE,   LOPR,  HOPR,  PREC,        SCAN, EGU}
-{B_SACLAYTGT:,  TT_T,    C370,        0,   FLOAT32_LE,   -1e6,   1e6,     2,  "I/O Intr", "K"}
-}
+{           P,      R,     PORT,  OFFSET,   DATA_TYPE,  LOPR,  HOPR,  PREC,      SCAN, EGU }
 
-file "db/c370_asyn.template" { pattern
-{           P,          R,    PORT,   ADDR, TMOD,  IFACE}
-{B_SACLAYTGT:,  Asyn:C370,    C370,      0, Read,  asynInt32}
+{B_SACLAYTGT:, PT_2KH,   C370x600,    0,   FLOAT32_LE,   0,    3000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_5KH,   C370x600,    2,   FLOAT32_LE,   0,    3000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_HES,   C370x600,    4,   FLOAT32_LE,   0,    5000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_T,     C370x600,    6,   FLOAT32_LE,   0,    1e10,   2,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, TT_EBP,   C370x600,   26,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_E1,    C370x600,   28,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_ECR,   C370x600,   30,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, PT_D2S,   C370x600,   32,   FLOAT32_LE,   0,    3000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_H2S,   C370x600,   34,   FLOAT32_LE,   0,    3000,   1,  "I/O Intr", "mb"}
+
+{B_SACLAYTGT:, PT_VT,    C370x640,    0,   FLOAT32_LE,   1e-4, 1000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_CVP,   C370x640,    2,   FLOAT32_LE,   1e-4, 1000,   1,  "I/O Intr", "mb"}
+{B_SACLAYTGT:, PT_CVS,   C370x640,    4,   FLOAT32_LE,   1e-9, 0.01,   1,  "I/O Intr", "mb"}
+
+{B_SACLAYTGT:, JT_2K,    C370x702,    0,   FLOAT32_LE,   0,    100,    1,  "I/O Intr", "%"}
+
+{B_SACLAYTGT:, TT_T,     C370x3800,   0,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_ET,    C370x3800,   6,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_ER1,   C370x3800,  12,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_EGLTH, C370x3800,  14,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_EG2KH, C370x3800,  16,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+{B_SACLAYTGT:, TT_EG5KH, C370x3800,  18,   FLOAT32_LE,   0,    325,    2,  "I/O Intr", "K"}
+
 }
 
 file "db/asynRecord.db" { pattern
 {           P,     R,    PORT,   ADDR, IMAX, OMAX}
-{B_SACLAYTGT:,  Asyn,    C370,      0,   80,   80} 
+{B_SACLAYTGT:,  Asyn,    C370x600,      0,   80,   80} 
 }
+
+
+#file "db/c370_asyn.template" { pattern
+#{           P,          R,    PORT,   ADDR, TMOD,  IFACE}
+#{B_SACLAYTGT:,  Asyn:C370,    C370,      0, Read,  asynInt32}
+#}
+
 

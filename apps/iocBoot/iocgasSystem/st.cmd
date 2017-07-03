@@ -40,8 +40,12 @@ cd "${TOP}/iocBoot/${IOC}"
 ## autosave setup
 < save_restore.cmd
 
+asSetFilename("../acf/cas.acf")
+
 dbl > pv.list
 iocInit
+
+caPutLogInit("clonioc1:7011")
 
 ## autosave startup
 ## Handle autosave 'commands' contained in loaded databases.

@@ -18,6 +18,8 @@ function insertGap(size)
     widget.addChildToBottom(line);
 }
 
+var jj=0;
+
 for (var ii=0; ii<lines.length; ii++)
 {
     if (!lines[ii].startsWith("ioc")) {
@@ -35,7 +37,7 @@ for (var ii=0; ii<lines.length; ii++)
     }
 
     var opiFile = "ioc_chan_soft";
-    if (ii%2) opiFile += "_light";
+    if (jj%2) opiFile += "_light";
     if (autosave) opiFile += "_autosave";
     opiFile += ".opi";
 
@@ -51,5 +53,6 @@ for (var ii=0; ii<lines.length; ii++)
     widget.addChildToBottom(lc);
 
     insertGap(1);
+    jj++;
 }
 

@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &&  pwd )"
 # companion script:
 DGSRESTARTSCRIPT=$DIR/dgsRestart.sh
 
-USAGE='dgsiocRestart.sh [sector# OR crateName]'
+USAGE='dgsIocRestart.sh [sector# OR crateName]'
 
 CRATES=( adcecal tdcecal adcpcal tdcpcal adcftof tdcftof )
 

@@ -9,6 +9,7 @@ USAGE='dgsIocRestart.sh [sector# OR crateName]'
 
 CRATES=( adcecal tdcecal adcpcal tdcpcal adcftof tdcftof )
 
+# reboot ioc for given sector:
 function iocReboot
 {
     sector=$1
@@ -16,6 +17,15 @@ function iocReboot
     softioc_console -R iocjscalers$sector
 }
 
+# reboot diagguiserver for given crate:
+function dgsReboot
+{
+    crate=$1
+    echo Rebooting DiagGuiServer on $crate ...
+    ssh $crate $DGSRESTARTSCRIPT
+}
+
+# reboot ioc corresponding to given crate:
 function iocRebootByCrate
 {
     crate=$1
@@ -24,13 +34,7 @@ function iocRebootByCrate
     iocReboot $sector
 }
 
-function dgsReboot
-{
-    crate=$1
-    echo Rebooting DiagGuiServer on $crate ...
-    ssh $crate $DGSRESTARTSCRIPT
-}
-
+# reboot diagguiserver and ioc for given crate:
 function dgsAndIocRebootByCrate
 {
     crate=$1
@@ -39,6 +43,7 @@ function dgsAndIocRebootByCrate
     iocRebootByCrate $crate
 }
 
+# reboot all diagguiservers and ioc for given sector:
 function sectorReboot
 {
     sector=$1
@@ -49,6 +54,8 @@ function sectorReboot
     sleep 2
     iocReboot $sector
 }
+
+##################################################
 
 if [ -z $1 ] || ! [ -z $2 ]
 then
@@ -88,32 +95,4 @@ else
 
     dgsAndIocRebootByCrate $crate$sec
 fi
-
-
-
-
-#exit
-
-#crate=$1
-#
-#ii=$((${#crate}-1))
-#sector=${crate:$ii:1}
-#
-#echo ssh $crate 'echo 18 | xxd -r -p | nc localhost 20030'
-#echo softioc_console -R iocjscalersS$sector
-#
-#crates=( adcecal tdcecal adcpcal tdcpcal adcftof tdcftof )
-#
-#
-#sector=4
-#for crate in ${crates[@]}
-#do
-#    echo $crate
-#    echo ssh $crate$sector 'echo 18 | xxd -r -p | nc localhost 20030'
-##    rebootdgs $crate$sector
-#done
-#
-##rebootioc $sector
-
-
 

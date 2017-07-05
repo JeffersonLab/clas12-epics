@@ -14,6 +14,7 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
 dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
@@ -26,7 +27,13 @@ dbLoadRecords("db/jscalers_wf_averagesC.db")
 
 cd ${TOP}/iocBoot/${IOC}
 
+< save_restore.cmd
+
 iocInit
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq seqJscalersC
 

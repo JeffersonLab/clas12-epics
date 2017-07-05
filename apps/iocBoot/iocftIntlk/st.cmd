@@ -7,6 +7,9 @@ cd "${TOP}"
 dbLoadDatabase "dbd/ftIntlk.dbd"
 ftIntlk_registerRecordDeviceDriver pdbbase
 
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:"
+
 #dbLoadRecords("db/ftcIntlk_test.db")
 
 #dbLoadRecords("db/ftcIntlk_hvQ.db","P=B_DET_FTC_HV_Q1")
@@ -25,5 +28,11 @@ dbLoadRecords("db/ftcIntlk_lv2Q.db","P=B_DET_FTC_,Q1=2,Q2=3")
 
 cd "${TOP}/iocBoot/${IOC}"
 
+< save_restore.cmd
+
 iocInit
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 

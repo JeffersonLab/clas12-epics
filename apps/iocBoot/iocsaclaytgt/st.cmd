@@ -21,7 +21,7 @@ modbusInterposeConfig("ETH1",1,1000,0)
 # 32-bit integers (Function code = 3)
 
 
-drvModbusAsynConfigure("C370x600", "ETH1", 1, 3, 0x600,  36, 0, 2000, "C370")
+drvModbusAsynConfigure("C370x600", "ETH1", 1, 3, 0x600,  40, 0, 2000, "C370")
 drvModbusAsynConfigure("C370x640", "ETH1", 1, 3, 0x640,   6, 0, 2000, "C370")
 drvModbusAsynConfigure("C370x702", "ETH1", 1, 3, 0x702,   2, 0, 2000, "C370")
 drvModbusAsynConfigure("C370x3800","ETH1", 1, 3, 0x3800, 20, 0, 2000, "C370")
@@ -34,6 +34,8 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
+
+asSetFilename("../acf/cas.acf")
 
 iocInit()
 

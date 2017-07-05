@@ -1,5 +1,5 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-widget.removeAllChildren();
+//widget.removeAllChildren();
 
 // Macro "F" is the name of a file containing a list of ioc names, one per row.
 // If a line doesn't start with "ioc", insert a blank gap instead.  Additional
@@ -29,15 +29,21 @@ for (var ii=0; ii<lines.length; ii++)
 
     var iocName=lines[ii];
     var autosave=true;
+    var vxworks=false;
 
     columns=lines[ii].split(" ");
     if (columns.length>1) {
         iocName=columns[0];
-        if (columns[1].equals("noautosave")) autosave=false;
+        for (var kk=1; kk<columns.length; kk++) {
+            if (columns[kk].equals("noautosave")) autosave=false;
+            else if (columns[kk].equals("vxworks")) vxworks=true;
+        }
     }
 
-    var opiFile = "ioc_chan_soft";
-    if (jj%2) opiFile += "_light";
+    var opiFile = "ioc_chan";
+    if (!vxworks) opiFile += "_soft";
+    else opiFile += "_vxworks";
+    if (!vxworks && jj%2) opiFile += "_light";
     if (autosave) opiFile += "_autosave";
     opiFile += ".opi";
 

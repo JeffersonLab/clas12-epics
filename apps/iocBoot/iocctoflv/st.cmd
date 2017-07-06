@@ -24,7 +24,7 @@ devSnmpSetParam(DebugLevel,10)
 
 #MpodStatusParserDebug=1
 
-dbLoadTemplate("db/ctoflv.substitutions")
+#dbLoadTemplate("db/ctoflv.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 

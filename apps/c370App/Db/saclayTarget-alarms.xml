@@ -2,6 +2,13 @@
 <config name="HallB">
     <component name="Beamline">
         <component name="Saclay Cryotarget">
+            <!--
+            <automated_action>
+                <title>Auto Email (HB Eng. On-Call)</title>
+                <details>mailto:7577485048@messaging.sprintpcs.com</details>
+                <delay>300</delay>
+            </automated_action>
+            -->
             <pv name="B_SACLAYTGT:TT_T">
                 <description>Cryotarget Temperature</description>
                 <latching>true</latching>
@@ -30,6 +37,21 @@
                 <guidance>
                   <title>Saclay Cryotarget - Pressure Out of Range</title>
                   <description>Contact Hall B Engineering On-Call</description>
+                </guidance>
+            </pv>
+            <pv name="B_SACLAYTGT:HWALARM">
+                <description>Cryotarget Hardware (PLC) Alarm</description>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <delay>30</delay>
+                <count>0</count>
+                <display>
+                    <title>Open Saclay Cryotarget</title>
+                    <details>/CLAS12_Share/apps/c370App/saclayTarget-cryo.opi</details>
+                </display>
+                <guidance>
+                  <title>Saclay Cryotarget - PLC Alarm</title>
+                  <description>Log Cryotarget Status Bits and Contact Hall B Engineering On-Call</description>
                 </guidance>
             </pv>
         </component>

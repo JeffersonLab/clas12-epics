@@ -4,7 +4,7 @@
 ## everywhere it appears in this file
 
 < envPaths
-epicsEnvSet("IOC","iocfttfeu")
+epicsEnvSet("IOC","iocmmFeuMVT")
 
 cd "${TOP}"
 
@@ -19,7 +19,7 @@ dbLoadDatabase "dbd/mmfeu.dbd"
 mmfeu_registerRecordDeviceDriver pdbbase
 
 ## Configure devices
-drvAsynIPPortConfigure("L1","sedipcu181:15000",0,0,0)
+drvAsynIPPortConfigure("L1","sedipcu184:15000",0,0,0)
 
 
 ## Comment these for verbose output - for debugging purposes.
@@ -29,8 +29,9 @@ drvAsynIPPortConfigure("L1","sedipcu181:15000",0,0,0)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
-dbLoadRecords("db/mmfeu.db","P=B_DET_FT_MM_FEU,R=:asyn,PORT=L1");
-
+dbLoadRecords("db/mmfeu.db","P=B_DET_MVT_MM_FEU,R=:asyn,PORT=L1,CR_LOW=5,CR_HI=7");
+dbLoadTemplate("db/mmfeucrate.substitutions")	
+dbLoadTemplate("db/mmfeuslot.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit

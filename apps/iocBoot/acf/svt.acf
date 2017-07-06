@@ -1,0 +1,16 @@
+UAG(svt) { 
+    gotra,
+    beng,
+    baltzell
+}
+
+ASG(DEFAULT) {
+    INPA($(P)$(R)CAS_READWRITE)
+    RULE(1,READ)
+    RULE(1,WRITE,TRAPWRITE) {
+        UAG(svt)
+    }
+    RULE(1,WRITE,TRAPWRITE) {
+        CALC("A=1")
+    }
+}

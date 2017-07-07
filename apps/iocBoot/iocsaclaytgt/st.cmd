@@ -32,6 +32,8 @@ drvModbusAsynConfigure("C370x1920","ETH1", 1, 1, 0x1920, 21, 0, 2000, "C370")
 drvModbusAsynConfigure("C370x6622","ETH1", 1, 1, 0x6622, 32, 0, 2000, "C370")
 drvModbusAsynConfigure("C370x1C49","ETH1", 1, 1, 0x1C49,  1, 0, 2000, "C370")
 
+#drvModbusAsynConfigure("C370x1A80","ETH1", 1, 1, 0x1A80,  1, 0, 2000, "C370")
+
 dbLoadTemplate("db/saclayTarget.substitutions")
 dbLoadRecords("db/saclayTarget-aliases.db","P=B_SACLAYTGT:")
 dbLoadRecords("db/saclayTarget-alarm.db","P=B_SACLAYTGT:")

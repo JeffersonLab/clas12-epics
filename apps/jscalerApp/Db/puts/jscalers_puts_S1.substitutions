@@ -1,3 +1,5 @@
+
+######################################################
 file "db/jscalers_ECAL_putThresh-1uvw-1io-1sec.db" {
     pattern { SEC TYPE UVW IO T }
     { 1 DISC U I Trg }
@@ -36,5 +38,57 @@ file "db/jscalers_ECAL_putThresh-1sec.db" {
 file "db/jscalers_ECAL_putThresh-1sec.db" {
     pattern { SEC TYPE }
     { 1 FADC }
+}
+
+######################################################
+file "db/jscalers_PCAL_putThresh-1sec.db" {
+    pattern { SEC TYPE T }
+    { 1 DISC Trg }
+    { 1 DISC Tdc }
+}
+file "db/jscalers_PCAL_putThresh-1sec.db" {
+    pattern { SEC TYPE }
     { 1 FADC }
 }
+
+######################################################
+file "db/jscalers_FTOF_putThresh-1side-1sec.db" {
+    pattern { SEC TYPE LR T }
+    { 1 DISC L Trg }
+    { 1 DISC R Trg }
+    { 1 DISC L Tdc }
+    { 1 DISC R Tdc }
+}
+file "db/jscalers_FTOF_putThresh-1side-1sec.db" {
+    pattern { SEC TYPE LR }
+    { 1 FADC L }
+    { 1 FADC R }
+}
+file "db/jscalers_FTOF_putThresh-1sec.db" {
+    pattern { SEC TYPE T }
+    { 1 DISC Trg }
+    { 1 DISC Tdc }
+}
+file "db/jscalers_FTOF_putThresh-1sec.db" {
+    pattern { SEC TYPE }
+    { 1 FADC }
+}
+
+
+######################################################
+file "db/jscalers_putThresh.db" {
+    pattern { DET TYPE T }
+    { ECAL DISC Tdc }
+    { ECAL DISC Trg }
+    { PCAL DISC Tdc }
+    { PCAL DISC Trg }
+    { FTOF DISC Tdc }
+    { FTOF DISC Trg }
+}
+file "db/jscalers_putThresh.db" {
+    pattern { DET TYPE }
+    { ECAL FADC }
+    { PCAL FADC }
+    { FTOF FADC }
+}
+

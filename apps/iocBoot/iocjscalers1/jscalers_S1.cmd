@@ -39,6 +39,10 @@ dbLoadRecords("db/jscalers_wf.db","S=1")
 dbLoadTemplate("db/jscalers_wf_S1.substitutions")
 dbLoadTemplate("db/jscalers_puts_S1.substitutions")
 
+dbLoadRecords("db/jscalers_ECAL_putThresh.db","TYPE=DISC,T=Tdc")
+dbLoadRecords("db/jscalers_ECAL_putThresh.db","TYPE=DISC,T=Trg")
+dbLoadRecords("db/jscalers_ECAL_putThresh.db","TYPE=FADC")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

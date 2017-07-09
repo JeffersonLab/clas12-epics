@@ -37,6 +37,7 @@ dbLoadTemplate("db/jscalers_TDCFTOF3_TRIG.substitutions")
 
 dbLoadRecords("db/jscalers_wf.db","S=3")
 dbLoadTemplate("db/jscalers_wf_S3.substitutions")
+dbLoadTemplate("db/jscalers_puts_S3.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -12,6 +12,7 @@ plc2epics_registerRecordDeviceDriver(pdbbase)
 ## NOTE: if buffer limit is left at 500, read errors will occur.
 EIP_buffer_limit(450)
 drvEtherIP_init()
+drvEtherIP_define_PLC("PLC_DBX",  "129.57.96.17", 0)
 drvEtherIP_define_PLC("PLC_SOL",  "129.57.96.30", 0)
 
 ## Debugging [7-10]
@@ -22,6 +23,7 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 ## PLC_SOL
 dbLoadTemplate("db/solenoid_LHe.substitutions")
+dbLoadTemplate("db/solenoid_comm.substitutions")
 dbLoadRecords("db/solenoid_cryocon.db", "P=B_SOL:,R=PLC:,PLCID=PLC_SOL")
 
 ## CA Security

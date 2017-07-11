@@ -9,6 +9,24 @@ file "db/torus_bi_generic.db" { pattern
     { PLCID,     P,        R,       TAG,            ZNAM,  ONAM,    ZSV,        OSV,        DESC }
     { PLC_TORUS, B_TORUS:, COMM:,   UPS_On_Battery, Ok,    Warning, NO_ALARM,   MAJOR,      "PLC On UPS Battery" }
     { PLC_TORUS, B_TORUS:, COMM:,   FAULT_24VDC,    Fault, Ok,      MAJOR,      NO_ALARM,   "Rhino 24VDC PSU Status" }
-    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_24VDC2,   Fault, Ok,      MAJOR,      NO_ALARM,   "Rhino 24VDC PSU Status" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_24VDC2,   Fault, Ok,      MAJOR,      NO_ALARM,   "Rhino 24VDC PSU2 Status" }
 }
+
+file "db/torus_ai_renamed.db" { pattern
+    { PLCID,     P,        R,       PV,             TAG,                DESC }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_MAJOR,    Major_Fault_Bits,   "Major Fault Sum" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_MINOR,    Minor_Fault_Bits,   "Minor Fault Sum" }
+}
+
+file "db/torus_bi_renamed.db" { pattern
+    { PLCID,     P,        R,       PV,             TAG,                    ZNAM,   ONAM,   ZSV,    OSV,        DESC }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_PWRLOSS,  Major_Fault_Bits[1],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Power Loss Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_IO,       Major_Fault_Bits[3],    Ok,     Fault,  MAJOR,  NO_ALARM,   "I/O Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_EXE,      Major_Fault_Bits[4],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Instr Exec Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_HANDLER,  Major_Fault_Bits[5],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Fault Handler" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_WATCHDOG, Major_Fault_Bits[6],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Watchdog Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_STACK,    Major_Fault_Bits[7],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Stack Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_MODECHG,  Major_Fault_Bits[8],    Ok,     Fault,  MAJOR,  NO_ALARM,   "Mode Change Fault" }
+    { PLC_TORUS, B_TORUS:, COMM:,   FAULT_MOTION,   Major_Fault_Bits[11],   Ok,     Fault,  MAJOR,  NO_ALARM,   "Motion Fault" }
+}    
 

@@ -30,7 +30,8 @@ cd "${TOP}/iocBoot/${IOC}"
 # autosave setup
 < save_restore.cmd
 
-asSetFilename("../acf/cas.acf")
+asSetFilename("../acf/svt.acf")
+asSetSubstitutions("P=B_,R=SVT_")
 
 iocInit
 

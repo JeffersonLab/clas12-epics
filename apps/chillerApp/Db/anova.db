@@ -64,7 +64,8 @@ record(ai, "$(P)$(R)TEMP") {
     field(INP,  "@anova.proto getBathTemp $(PORT)")
     field(PREC, "2")
     field(SCAN, "Passive")
-    field(FLNK,"$(P)$(R)TEMP:RD_SP")
+    field(FLNK,"$(P)$(R)TEMP:RD_SP.PROC")
+    info(autosaveFields_pass0,"HIHI LOLO HIGH LOW HHSV LLSV HSV LSV")
 }
 
 ########################################
@@ -93,34 +94,34 @@ record(ai, "$(P)$(R)TEMP:RD_SP") {
 	field(INP, "@anova.proto getTemp $(PORT)")
 	field(PREC, "2")
 	field(SCAN, "Passive")
+    field(FLNK,"$(P)$(R)HIGHLIMIT.PROC")
 }
 
 record(ao, "$(P)$(R)TEMP:SP") {
 	field(DTYP, "stream")
 	field(OUT, "@anova.proto setTemp $(PORT)")
 	field(PREC, "2")
+    info(autosaveFields_pass0,"DRVH DRVL")
 }
 
 record(ai, "$(P)$(R)HIGHLIMIT") {
     field(DTYP, "stream")
     field(INP, "@anova.proto getHighLimit $(PORT)")
     field(PREC, "2")
-#field(SCAN, "10 second")
     field(PINI, "1")
+    field(FLNK,"$(P)$(R)LOWLIMIT.PROC")
 }
 
 record(ao, "$(P)$(R)HIGHLIMIT:SP") {
     field(DTYP, "stream")
     field(OUT, "@anova.proto setHighLimit $(PORT)")
     field(PREC, "2")
-	field(FLNK, "$(P)$(R)HIGHLIMIT.PROC")
 }
 
 record(ai, "$(P)$(R)LOWLIMIT") {
     field(DTYP, "stream")
     field(INP, "@anova.proto getLowLimit $(PORT)")
     field(PREC, "2")
-#field(SCAN, "10 second")
     field(PINI, "1")
 }
 
@@ -128,7 +129,6 @@ record(ao, "$(P)$(R)LOWLIMIT:SP") {
     field(DTYP, "stream")
     field(OUT, "@anova.proto setLowLimit $(PORT)")
     field(PREC, "2")
-	field(FLNK, "$(P)$(R)LOWLIMIT.PROC")
 }
 
 record(mbbo, "$(P)$(R)PUMPSPD_MENU") {

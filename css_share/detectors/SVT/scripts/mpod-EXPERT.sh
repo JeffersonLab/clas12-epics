@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Author: Brian Eng
+#
+# Slightly modified by baltzell for Hall-B setup
+#
 
 mib=WIENER-CRATE-MIB
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+# Author: baltzell
+
 import os,sys,epics
 
 USAGE='''Usage:  svt-sethv.py [options]

@@ -84,5 +84,7 @@ seq waveform, "P=B_SVT_LV_A_,R=I:"
 
 < R2_HV_setpt.init
 
+dbpf("${IOC}:SysReset.ASG","ALLWRITE")
+
 dbl > pv.list
 

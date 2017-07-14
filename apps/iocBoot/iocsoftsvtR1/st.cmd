@@ -68,5 +68,7 @@ seq &modCntrl,"MODULE=R1S10,HS=8,LS=5"
 
 < R1_HV_setpt.init
 
+dbpf("${IOC}:SysReset.ASG","ALLWRITE")
+
 dbl > pv.list
 

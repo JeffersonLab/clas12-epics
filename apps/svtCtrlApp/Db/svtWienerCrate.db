@@ -138,16 +138,19 @@ record(longout,"$(HOST):clearEvent") {
 	field(DESC,"Clear Events ")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HOST) guru %{W}groupsSwitch.0 INTEGER: 50 i")
+    field(ASG,"ALLWRITE")
 }
 record(longout,"$(HOST):sysHardwareReset") {
 	field(DESC,"Triggered Reset Watchdog or ResetLine")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HOST) guru %{W}sysHardwareReset.0 ( 100 i")
+    field(ASG,"ALLWRITE")
 }
 record(longout,"$(HOST):sysMainSwitch") {
 	field(DESC,"State of main switch. OFF=0, ON=1")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HOST) guru %{W}sysMainSwitch.0 ( 100 i")
+    field(ASG,"ALLWRITE")
 }
 record(mbbiDirect,"$(HOST):systemStatus") {
 	field(DTYP,"Soft Channel")

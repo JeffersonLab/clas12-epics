@@ -1190,12 +1190,14 @@ record(bo,"$(module):HVPB_OFF") {
 	field(HIGH,"4")
 	field(ZNAM,"0")
 	field(ONAM,"1")
+    field(ASG,"ALLWRITE")
 }
 record(bo,"$(module):HVPB_ON") {
 	field(DTYP,"Soft Channel")
 	field(HIGH,"4")
 	field(ZNAM,"0")
 	field(ONAM,"1")
+    field(ASG,"ALLWRITE")
 }
 record(bo,"$(module):MODPB_OFF") {
 	field(DTYP,"Soft Channel")
@@ -1203,18 +1205,21 @@ record(bo,"$(module):MODPB_OFF") {
 	field(HIGH,"2")
 	field(ZNAM,"0")
 	field(ONAM,"1")
+    field(ASG,"ALLWRITE")
 }
 record(bo,"$(module):PB_OFF") {
 	field(DTYP,"Soft Channel")
 	field(HIGH,"4")
 	field(ZNAM,"0")
 	field(ONAM,"1")
+    field(ASG,"ALLWRITE")
 }
 record(bo,"$(module):PB_ON") {
 	field(DTYP,"Soft Channel")
 	field(HIGH,"4")
 	field(ZNAM,"0")
 	field(ONAM,"1")
+    field(ASG,"ALLWRITE")
 }
 record(calc,"$(HV):LV_RampDelaycalc") {
 	field(SCAN,"5 second")
@@ -1608,11 +1613,13 @@ record(longout,"$(HV):outswitchlong") {
 	field(OUT,"@$(HVHOST) guru %{W}outputSwitch.$(HVCH) ( 30 i")
 	field(DOL,"$(HV):outSwitch NPP NMS")
 	field(OMSL,"closed_loop")
+    field(ASG,"ALLWRITE")
 }
 record(longout,"$(LVA):onOff") {
 	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HOST) guru %{W}outputSwitch.$(LVACH) ( 30 i")
+    field(ASG,"ALLWRITE")
 }
 record(longout,"$(LVA):outSupervision") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
@@ -1632,6 +1639,7 @@ record(longout,"$(LVD):onOff") {
 	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HOST) guru %{W}outputSwitch.$(LVDCH) ( 30 i")
+    field(ASG,"ALLWRITE")
 }
 record(longout,"$(LVD):outSupervision") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
@@ -1733,6 +1741,7 @@ record(mbbo,"$(HV):outSwitch") {
 	field(TWST,"EMER_RESET")
 	field(THST,"EMER_OFF")
 	field(TEST,"CLEAR")
+    field(ASG,"ALLWRITE")
 }
 record(seq,"$(module):MODOFF") {
 	field(DOL1,"1")
@@ -1740,6 +1749,7 @@ record(seq,"$(module):MODOFF") {
 	field(DOL2,"1")
 	field(LNK2,"$(module):PB_OFF PP NMS")
 	field(DOL3,"0")
+    field(ASG,"ALLWRITE")
 }
 record(stringin,"$(HV)") {
 	field(DTYP,"Soft Channel")

@@ -63,7 +63,26 @@ then
     exit
 fi
 
-if [[ $1 == 1 || $1 == 2 || $1 == 3 || $1 == 4 || $1 == 5 || $1 == 6 ]]
+if [[ $1 == "adcft1" || $1 == "adcft2" ]]
+then
+    dgsReboot $1
+    sleep 2
+    softioc_console -R iocjscalersC
+
+elif [[ $1 == "ft" ]]
+then
+    dgsReboot adcft1
+    dgsReboot adcft2
+    sleep 2
+    softioc_console -R iocjscalersC
+
+elif [[ $1 == "ctof" || $1 == "adcctof1" ]]
+then
+    dgsReboot adcctof1
+    sleep 2
+    softioc_console -R iocjscalersC
+
+elif [[ $1 == 1 || $1 == 2 || $1 == 3 || $1 == 4 || $1 == 5 || $1 == 6 ]]
 then
     sectorReboot $1
 else

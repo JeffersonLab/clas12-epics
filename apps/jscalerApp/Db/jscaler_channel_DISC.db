@@ -31,6 +31,49 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc") {
     field(SCAN,"2 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdc")
 }
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc CP")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase")
+    field(CALC,"B>0 ? B : A")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcBase")
+}
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrg CP")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase")
+    field(CALC,"B>0 ? B : A")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgBase")
+}
+
+############################################################
+# adjust thresholds:
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff") {
+    field(VAL,"0")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcOff")
+}
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase")
+    field(CALC,"A+B")
+    field(OOPT,"On Change")
+    field(DOPT,"Use CALC")
+    field(OUT,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet CPP")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcAdj")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff") {
+    field(VAL,"0")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgOff")
+}
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase")
+    field(CALC,"A+B")
+    field(OOPT,"On Change")
+    field(DOPT,"Use CALC")
+    field(OUT,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgSet CPP")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgAdj")
+}
 
 ############################################################
 # read scalers:

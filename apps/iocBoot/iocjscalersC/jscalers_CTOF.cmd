@@ -25,6 +25,7 @@ dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")
 
 dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,NELM=332,FTVL=FLOAT,PERIOD=5,FNAME=ftcfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:t:,NELM=332,FTVL=FLOAT,PERIOD=5,FNAME=ftcfadcT.txt")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -39,5 +40,6 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 seq seqJscalersC
 
 seq waveform, "P=B_DET_FTC_,R=FADC:"
+seq waveform, "P=B_DET_FTC_,R=FADC:t:"
 dbl > pv.list
 

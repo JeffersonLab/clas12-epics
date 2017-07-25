@@ -1,5 +1,4 @@
 
-
 ############################################################
 # set thresholds:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgSet") {
@@ -31,6 +30,9 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc") {
     field(SCAN,"2 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdc")
 }
+
+############################################################
+# "baseline" thresholds (value at IOC startup):
 record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase") {
     field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc CP")
     field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase")
@@ -45,11 +47,16 @@ record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase") {
 }
 
 ############################################################
-# adjust thresholds:
+# offset thresholds relative to baseline:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff") {
     field(VAL,"0")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj.PROC")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcOff")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff") {
+    field(VAL,"0")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgOff")
 }
 record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj") {
     field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff")
@@ -59,11 +66,6 @@ record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj") {
     field(DOPT,"Use CALC")
     field(OUT,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet CPP")
     alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcAdj")
-}
-record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff") {
-    field(VAL,"0")
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj.PROC")
-    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgOff")
 }
 record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj") {
     field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff")

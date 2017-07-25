@@ -1,5 +1,4 @@
 
-
 ############################################################
 # set threshold:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tSet") {
@@ -18,6 +17,9 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):t") {
     field(SCAN,"2 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):t")
 }
+
+############################################################
+# "baseline" threshold (value at IOC startup):
 record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tBase") {
     field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):t CP")
     field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tBase")
@@ -26,7 +28,7 @@ record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tBase") {
 }
 
 ############################################################
-# adjust threshold:
+# offset threshold relative to baseline:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tOff") {
     field(VAL,"0")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tAdj.PROC")

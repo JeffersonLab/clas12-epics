@@ -5646,6 +5646,12 @@ $(pv_value)</tooltip>
         <replace>2</replace>
         <description>FT Hard Interlocks</description>
       </action>
+      <action type="EXECUTE_CMD">
+        <command>/usr/clas12/release/pro/epics/css_share/detectors/FTC/scripts/ftc_scalers.py</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>FTC FADC Scalers</description>
+      </action>
     </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -5730,7 +5736,14 @@ $(trace_0_y_pv_value)</tooltip>
     <axis_1_grid_color>
       <color red="200" green="200" blue="200" />
     </axis_1_grid_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>/usr/clas12/release/pro/epics/css_share/detectors/FTC/scripts/ftc_scalers.py</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description></description>
+      </action>
+    </actions>
     <axis_0_log_scale>false</axis_0_log_scale>
     <trace_0_x_pv_value />
     <axis_0_auto_scale_threshold>0.0</axis_0_auto_scale_threshold>
@@ -5747,7 +5760,7 @@ $(trace_0_y_pv_value)</tooltip>
     <axis_0_auto_scale>false</axis_0_auto_scale>
     <axis_0_minimum>0.0</axis_0_minimum>
     <trace_1_update_delay>100</trace_1_update_delay>
-    <axis_1_axis_title>Counts / Pedestal</axis_1_axis_title>
+    <axis_1_axis_title>Counts / Threshold</axis_1_axis_title>
     <axis_1_auto_scale>false</axis_1_auto_scale>
     <trace_1_line_width>1</trace_1_line_width>
     <trace_1_plot_mode>0</trace_1_plot_mode>

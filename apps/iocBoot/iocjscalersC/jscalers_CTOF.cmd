@@ -5,8 +5,8 @@ cd ${TOP}
 Init_SCALERS()
 
 Start_SCALERS_CRATE("0","ADCCTOF1")
-#Start_SCALERS_CRATE("1","ADCFT1")
-#Start_SCALERS_CRATE("2","ADCFT2")
+Start_SCALERS_CRATE("1","ADCFT1")
+Start_SCALERS_CRATE("2","ADCFT2")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -19,7 +19,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
 dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
 
-#dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
+dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
 
 dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")

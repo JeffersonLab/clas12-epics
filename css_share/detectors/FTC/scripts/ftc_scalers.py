@@ -365,12 +365,13 @@ class ECalChannel:
     for ii in range(ncols):
 
       col=cols[ii]
-      key=keys[ii].upper()
+      key=keys[ii]#.upper()
 
       if   key=='X:1-22': self.vals[key]=int(col)
       elif key=='Y:1-22': self.vals[key]=int(col)
       elif key=='X':      self.vals[key]=int(col)
       elif key=='Y':      self.vals[key]=int(col)
+      else:               self.vals[key]=str(col)
 
     if self.vals['X']>0:
       if self.vals['Y']>0: self.vals['Q']=2
@@ -380,7 +381,8 @@ class ECalChannel:
       else:                self.vals['Q']=4
 
     self.vals['PVVAL']=0
-    self.vals['PVNAME']='B_DET_FTC_FADC_Q%d_X%.2dY%.2d:t'%(self.vals['Q'],self.vals['X:1-22'],self.vals['Y:1-22'])
+    self.vals['PVNAME']='B_DET_FTC_FADC_Q%d_X%.2dY%.2d:t' % \
+        (self.vals['Q'],self.vals['X:1-22'],self.vals['Y:1-22'])
     self.vals['PV']=pv.PV(self.vals['PVNAME'])
 
   def dump(self):
@@ -415,34 +417,15 @@ class ECalChannelCollection:
       self.chans.append(ECalChannel(self.keys,csvRow))
 
     nEcalChannels=len(self.chans)
-
     nNonEcalChannels = len(self.chans)-nEcalChannels
-
     print 'Loaded '+str(nEcalChannels)+' ECal Channels.'
     print 'Loaded '+str(nNonEcalChannels)+' Non-ECal Channels.'
 
-  def findChannel(self,keYVALS):
-    if type(keYVALS) is not tuple: return None
-    if len(keYVALS)%2 != 0:        return None
-    for chan in self.chans:
-      match=True
-      for ii in range(0,len(keYVALS),2):
-        key = keYVALS[ii]
-        val = keYVALS[ii+1]
-        if not key in chan.vals:
-          sys.exit('Missing Key:  '+key)
-        if chan.vals[key] != val:
-          match=False
-          break
-      if match:
-        return chan
-
   def findChannelXY(self,x,y):
-    return self.findChannel(('X',x,'Y',y))
-
-  def findChannelFADC(self,crate,slot,chan):
-    return self.findChannel(
-        ('FADCCRATE',crate,'FADCSLOT',slot,'FADCCHAN',chan))
+    for chan in self.chans:
+      if chan.vals['X']==x and chan.vals['Y']==y:
+        return chan
+    return None
 
 
 ###########################################
@@ -495,30 +478,30 @@ def setupPaveTexts(pts):
         pt.SetLineWidth(0)
 
 def pix2xy(pad):
-    px=gPad.GetEventX()
-    py=gPad.GetEventY()
-    tl=[74,44]
-    tr=[1346,44]
-    br=[1346,401]
-    bl=[74,401]
-    x=int(float(px-tl[0])/(tr[0]-tl[0])*46)-23+1
-    y=int(float(py-tl[1])/(bl[1]-tl[1])*11)-5
-    if x<=0: x-=1
-    return [x,-y]
+  px=gPad.GetEventX()
+  py=gPad.GetEventY()
+  # determined empirically (by clicking on canvas):
+  tl=[71,79]
+  tr=[709,44]
+  br=[709,716]
+  bl=[71,716]
+  x=int(float(px-tl[0])/(tr[0]-tl[0])*22)-11
+  y=int(float(py-tl[1])/(bl[1]-tl[1])*22)-11
+  if x>=0: x+=1
+  if y>=0: y+=1
+  y=-y
+  return [x,y]
 
 def printChannel(ee):
-  return ''
-#    return 'X/Y = %d/%d       FADC = %d/%d       JOUT = %s%d      HV = %s      LED = %d      ID = %s'%(
-#            ee.vals['X'],
-#            ee.vals['Y'],
-#            ee.vals['FADCSLOT'],
-#            ee.vals['FADCCHAN'],
-#            ee.vals['MB'],
-#            ee.vals['JOUT'],
-#            ee.vals['HVGROUP'],
-#            ee.vals['LEDCHAN'],
-#            ee.vals['DBID'])
-
+    return 'X/Y = %d/%d       FADC = %s/%s/%s       MB = %s      HV = %s      LED = %s'%(
+            ee.vals['X'],
+            ee.vals['Y'],
+            ee.vals['Crate'],
+            ee.vals['Slot'],
+            ee.vals['Channel'],
+            ee.vals['MoboSignal'],
+            ee.vals['HV Group'],
+            ee.vals['LED'])
 
 
 mf=TGMainFrame(gClient.GetRoot(),800,825)
@@ -533,8 +516,7 @@ cc2=rec2.GetCanvas()
 mf.SetEditable(0)
 mf.SetWindowName('Forward Tagger FADC SCALERS')
 mf.MapSubwindows()
-mf.Resize(801,801)# resize to get proper frame placement
-#mf.Resize(1501,476)# resize to get proper frame placement
+mf.Resize(801,826)# resize to get proper frame placement
 mf.MapWindow()
 mf.SetCleanup(ROOT.kDeepCleanup)
 

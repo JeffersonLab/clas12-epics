@@ -31,6 +31,8 @@ kepcoApp_DEPEND_DIRS   += DVME628App
 dynabcApp_DEPEND_DIRS  += XY240App
 taggerTempApp_DEPEND_DIRS += XY560App
 testApp_DEPEND_DIRS += waveformApp
+svtCtrlApp_DEPEND_DIRS += waveformApp
+jscalerApp_DEPEND_DIRS += waveformApp
 
 include $(TOP)/configure/RULES_TOP
 

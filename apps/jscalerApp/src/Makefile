@@ -31,6 +31,7 @@ iocscalers_LIBS += jscalers
 iocscalers_LIBS += rol
 iocscalers_LIBS += devIocStats
 iocscalers_LIBS += autosave
+iocscalers_LIBS += waveformApp
 iocscalers_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 rol_DIR         += $(ROL_LIB)

@@ -6,7 +6,12 @@ cfgDir=$EPICS/tools/stripCharts
 if [ "$1" != "" ]
 then
 
-  if [ -e "$cfgDir/$1" ]
+  if [ -d "$cfgDir/$1" ]
+  then
+    
+    cd $cfgDir/$1
+
+  elif [ -e "$cfgDir/$1" ]
   then
 
     cfg=$cfgDir/$1
@@ -15,11 +20,6 @@ then
   then
 
     cfg=$1
-
-  elif [ -d "$cfgDir/$1" ]
-  then
-    
-    cd $cfgDir/$1
 
   else
 

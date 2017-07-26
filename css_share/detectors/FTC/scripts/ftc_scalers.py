@@ -381,7 +381,7 @@ class ECalChannel:
       else:                self.vals['Q']=4
 
     self.vals['PVVAL']=0
-    self.vals['PVNAME']='B_DET_FTC_FADC_Q%d_X%.2dY%.2d:t' % \
+    self.vals['PVNAME']='B_DET_FTC_FADC_Q%d_X%.2dY%.2d:c' % \
         (self.vals['Q'],self.vals['X:1-22'],self.vals['Y:1-22'])
     self.vals['PV']=pv.PV(self.vals['PVNAME'])
 
@@ -418,8 +418,6 @@ class ECalChannelCollection:
 
     nEcalChannels=len(self.chans)
     nNonEcalChannels = len(self.chans)-nEcalChannels
-    print 'Loaded '+str(nEcalChannels)+' ECal Channels.'
-    print 'Loaded '+str(nNonEcalChannels)+' Non-ECal Channels.'
 
   def findChannelXY(self,x,y):
     for chan in self.chans:
@@ -433,11 +431,12 @@ class ECalChannelCollection:
 ECAL=ECalChannelCollection()
 
 def calcRates(chans):
-    top,bottom,maximum=0,0,0
+    total,maximum=0,0
     for ccc in chans:
+       total += ccc.vals['PVVAL']
        if ccc.vals['PVVAL']>maximum:
          maximum=ccc.vals['PVVAL']
-    return [top,bottom,maximum]
+    return [total,maximum]
 
 def setupHists(hhh):
     for hh in hhh:
@@ -503,6 +502,15 @@ def printChannel(ee):
             ee.vals['HV Group'],
             ee.vals['LED'])
 
+def loadPV(chan):
+  ch=chan.vals
+  ch['PVVAL']=ch['PV'].get()
+  if not type(ch['PVVAL']) is float:
+    ch['PVVAL']=ch['PVVAL'].tolist()
+    if type(ch['PVVAL']) is list:
+      ch['PVVAL']=ch['PVVAL'][0]
+  ch['PVVAL']/=1000
+
 
 mf=TGMainFrame(gClient.GetRoot(),800,825)
 gvf=TGVerticalFrame(mf,800,825)
@@ -552,7 +560,7 @@ def main():
     gPad.SetRightMargin(0.11)
 
     tt1=TPaveText(0.1,0.9,0.3,1.0,'NDC')
-    tt2=TPaveText(0.7,0.91,0.9,0.99,'NDC')
+    tt2=TPaveText(0.7,0.96,0.9,0.99,'NDC')
     ttT=TPaveText(-22+13+0.05,6-5,-22+22,7-5-0.05)
     ttB=TPaveText(-22+13+0.05,4-5+0.05,-22+22,5-5)
     ttM=TPaveText(-3+0+0.05,5-5+0.05,4,6-5.01)
@@ -560,6 +568,7 @@ def main():
     tchan=TPaveText(0,0,0.9,1)
     setupPaveTexts([tt1,tt2,ttT,ttB,ttM,ttime,tchan])
     ttM.SetTextColor(2)
+    ttM.SetFillStyle(0)
 
     tarrow=TText(14.5,0.3,'Beam Right')
     arrow=TArrow(19,0.5,23,0.5,0.02,'|>')
@@ -577,55 +586,27 @@ def main():
     tt.DrawTextNDC(0.2,0.92,'Forward Tagger FADC SCALERS')
 
     cc.cd()
-    ttM.SetFillStyle(0)
-    ttM.Draw()
-    ttime.Draw()
-    #for xx in [tt2,ttT,ttB,ttM,arrow,tarrow,ttime]: xx.Draw()
+    for xx in [ttM,tt2,ttime,arrow,tarrow]: xx.Draw()
     cc2.cd()
     tchan.Draw('NDC')
     cc.cd()
-
-    xmin,xmax=xax.GetXmin(),xax.GetXmax()
-    ymin,ymax=yax.GetXmin(),yax.GetXmax()
-
-    #ll=TLine()
-    #ll.DrawLine(xmin,ymin,xmax,ymin)
-    #ll.DrawLine(xmin,ymax,xmax,ymax)
-    #ll.DrawLine(xmin,ymin,xmin,0)
-    #ll.DrawLine(xmax,ymin,xmax,0)
-    #ll.DrawLine(xmin,ymax,xmin,1)
-    #ll.DrawLine(xmax,ymax,xmax,1)
-    #ll.DrawLine(xmax,0,0,0)
-    #ll.DrawLine(xmax,1,0,1)
-    #ll.DrawLine(xmin,0,-9,0)
-    #ll.DrawLine(xmin,1,-9,1)
-    #ll.DrawLine(-9,-1,0,-1)
-    #ll.DrawLine(-9,2,0,2)
-    #ll.DrawLine(-9,1,-9,2)
-    #ll.DrawLine(-9,-1,-9,0)
-    #ll.DrawLine(0,-1,0,0)
-    #ll.DrawLine(0,1,0,2)
 
     gPad.SetEditable(0)
 
     while True:
 
             for ch in ECAL.chans:
+              loadPV(ch)
               ch=ch.vals
-              ch['PVVAL']=ch['PV'].get()#/1000
               xx,yy=ch['X'],ch['Y']
-              if ch['X']<0: xx+=1
-              if ch['Y']<0: yy+=1
+              if xx<0: xx+=1
+              if yy<0: yy+=1
               hh.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
               hi.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
-#              hh.SetBinContent(xax.FindBin(ch['X']),yax.FindBin(ch['Y']),ch['PVVAL'])
-#              hi.SetBinContent(xax.FindBin(ch['X']),yax.FindBin(ch['Y']),ch['PVVAL'])
 
             for xx in [ttime,tt2,ttT,ttB,ttM]: xx.Clear()
-            [top,bottom,maximum]=calcRates(ECAL.chans)
-#            tt2.AddText('Total:  %.1f MHz'%((top+bottom)/1000))
-#            ttT.AddText('%.1f MHz'%(top/1000))
-#            ttB.AddText('%.1f MHz'%(bottom/1000))
+            [total,maximum]=calcRates(ECAL.chans)
+            tt2.AddText('Total:  %.1f MHz'%(total/1000))
             ttM.AddText('MAX = %.0f kHz'%(maximum))
             ttime.AddText(makeTime())
 

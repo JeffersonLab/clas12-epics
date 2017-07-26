@@ -341,7 +341,10 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   // ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
 
   // negative status when comms error (for archiving):
-  if (property[PROP_HBEAT]>1e-5) property[PROP_ST]=-property[PROP_ST];
+  if (property[PROP_HBEAT]>1e-5) {
+      if (property[PROP_ST]<1e-5) property[PROP_ST]=COMMERROR;
+      else                        property[PROP_ST]=-property[PROP_ST];
+  }
 
   return(0);
 }

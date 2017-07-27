@@ -1,13 +1,23 @@
 #!/bin/sh
 
+USAGE='dgsIocRestart.sh [sector# OR crateName]'
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &&  pwd )"
 
 # companion script:
 DGSRESTARTSCRIPT=$DIR/dgsRestart.sh
 
-USAGE='dgsIocRestart.sh [sector# OR crateName]'
-
 CRATES=( adcecal tdcecal adcpcal tdcpcal adcftof tdcftof )
+
+DGSOWNER=clasrun
+if [[ `whoami` != $DGSOWNER ]]
+then
+    echo
+    echo ERROR:  DiagGuiServer is owned by $DGSOWNER, but you are `whoami`.
+    echo Exiting ....
+    echo
+    exit
+fi
 
 # reboot ioc for given sector:
 function iocReboot

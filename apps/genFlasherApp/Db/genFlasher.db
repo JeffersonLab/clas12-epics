@@ -31,6 +31,11 @@ record(longout, "$(P):PO"){
     field(VAL,"0x010003")
 }
 
+#The numbering scheme is rather confusing.
+#J4,J3 as discussed in the manual by H. Dong relate to the top and bottom outputs on the front pannel respectivles.
+#Were appropriate these are aliased to 0 and 1 respectively, since the relate to bits 0 and 1 in R010 for switching off/on voltage.
+
+
 #Config regs in
 record(longin, "$(P):RI0"){
 }
@@ -63,20 +68,26 @@ record(longin, "$(P):RI11"){
 #Reg 0-5 voltages
 record(longout, "$(P):RO0"){
      field(FLNK,"$(P):REG_CALC")
+     alias("$(P):F0_V1_WRITE")
 }
 record(longout, "$(P):RO1"){
+     alias("$(P):F0_V2_WRITE")
      field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO2"){
+     alias("$(P):F0_VLED_WRITE")
      field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO3"){
+     alias("$(P):F1_V1_WRITE")
      field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO4"){
+     alias("$(P):F1_VLED_WRITE")
      field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO5"){
+     alias("$(P):F1_V2_WRITE")
      field(FLNK,"$(P):REG_CALC")
 }
 #timing - these are 2 register entities, the 2nd reg has 3MSB (18,17,16), of 19 bit time value, plus enable and mode bits.
@@ -86,12 +97,14 @@ record(longout, "$(P):RO6"){
     field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO7"){
+     alias("$(P):F0_TRIG")
      field(FLNK,"$(P):J4_CALC_LO")
 }
 record(longout, "$(P):RO8"){
      field(FLNK,"$(P):REG_CALC")
 }
 record(longout, "$(P):RO9"){
+     alias("$(P):F1_TRIG")
      field(FLNK,"$(P):J3_CALC_LO")
 }
 record(longout, "$(P):RO10"){
@@ -145,8 +158,10 @@ record(calcout,"$(P):REG_CALC"){
 }
 
 record(longin, "$(P):J4_FREQ"){
+     alias("$(P):F0_FREQ_WRITE")
 }
 record(longin, "$(P):J3_FREQ"){
+     alias("$(P):F1_FREQ_WRITE")
 }
 
 
@@ -223,29 +238,41 @@ record(ao, "$(P):SET_ALL_REGISTERS"){
 
 #Records for setting and reading back the physical quantities - get set from the calcouts below
 record(ao,"$(P):J4_V1_SET"){
+     alias("$(P):F0_V1_SET")
 }
 record(ai,"$(P):J4_V1_RBK"){
+     alias("$(P):F0_V1_RBK")
 }
 record(ao,"$(P):J4_V2_SET"){
+     alias("$(P):F0_V2_SET")
 }
 record(ai,"$(P):J4_V2_RBK"){
+     alias("$(P):F0_V2_RBK")
 }
-record(ao,"$(P):J4_LED_SET"){
+record(ao,"$(P):J4_VLED_SET"){
+     alias("$(P):F0_VLED_SET")
 }
-record(ai,"$(P):J4_LED_RBK"){
+record(ai,"$(P):J4_VLED_RBK"){
+     alias("$(P):F0_VLED_RBK")
 }
 
 record(ao,"$(P):J3_V1_SET"){
+     alias("$(P):F1_V1_SET")
 }
 record(ai,"$(P):J3_V1_RBK"){
+     alias("$(P):F1_V1_RBK")
 }
 record(ao,"$(P):J3_V2_SET"){
+     alias("$(P):F1_V2_SET")
 }
 record(ai,"$(P):J3_V2_RBK"){
+     alias("$(P):F1_V2_RBK")
 }
-record(ao,"$(P):J3_LED_SET"){
+record(ao,"$(P):J3_VLED_SET"){
+     alias("$(P):F1_VLED_SET")
 }
-record(ai,"$(P):J3_LED_RBK"){
+record(ai,"$(P):J3_VLED_RBK"){
+     alias("$(P):F1_VLED_RBK")
 }
 
 
@@ -254,7 +281,7 @@ record(calcout,"$(P):J4_V1_SET_CALC"){
 }
 record(calcout,"$(P):J4_V2_SET_CALC"){
 }
-record(calcout,"$(P):J4_LED_SET_CALC"){
+record(calcout,"$(P):J4_VLED_SET_CALC"){
 }
 #J4
 #bits 8-15 of S6 (right shift 8 bits)
@@ -270,9 +297,9 @@ record(calcout,"$(P):J4_V2_RBK_CALC"){
 	field(CALC,"(A&255)*5.5/256")
 }
 #bits 8-15 of S7 (right shift 8 bits)
-record(calcout,"$(P):J4_LED_RBK_CALC"){
+record(calcout,"$(P):J4_VLED_RBK_CALC"){
 	field(INPA,"$(P):S7 CPP ")
-	field(OUT,"$(P):J4_LED_RBK CPP ")
+	field(OUT,"$(P):J4_VLED_RBK CPP ")
 	field(CALC,"(A>>8)*8/256")
 }
 
@@ -290,17 +317,18 @@ record(calcout,"$(P):J3_V2_RBK_CALC"){
 	field(CALC,"(A&255)*5.5/256")
 }
 #bits 8-15 of S8 (right shift 8 bits)
-record(calcout,"$(P):J3_LED_RBK_CALC"){
+record(calcout,"$(P):J3_VLED_RBK_CALC"){
 	field(INPA,"$(P):S8 CPP ")
-	field(OUT,"$(P):J3_LED_RBK CPP ")
+	field(OUT,"$(P):J3_VLED_RBK CPP ")
 	field(CALC,"(A>>8)*8/256")
 }
 
 
 record(ai,"$(P):J4_FREQ_RBK"){
+     alias("$(P):F0_FREQ_RBK")
 }
 
-#int tig (R07 bit 15=0) show set value, if ext trig, show that value
+#int trig (R07 bit 15=0) show set value, if ext trig, show that value
 record(calcout,"$(P):J4_FREQ_RBK_CALC"){
 	field(INPA,"$(P):S10 CPP ")
 	field(INPB,"$(P):RO7 CPP ")
@@ -310,6 +338,7 @@ record(calcout,"$(P):J4_FREQ_RBK_CALC"){
 }
 
 record(ai,"$(P):J3_FREQ_RBK"){
+     alias("$(P):F1_FREQ_RBK")
 }
 
 record(calcout,"$(P):J3_FREQ_RBK_CALC"){
@@ -320,12 +349,22 @@ record(calcout,"$(P):J3_FREQ_RBK_CALC"){
 	field(CALC,"(B&32768)?A*10:C")
 }
 
-record(waveform, "$(P):DATA_FILE_SAVE"){
+record(waveform, "$(P):F0_DATA_FILE_SAVE"){
         field(DESC, "File to save settings")
         field(NELM, "256")
         field(FTVL, "CHAR")
 }
-record(waveform, "$(P):DATA_FILE_LOAD"){
+record(waveform, "$(P):F0_DATA_FILE_LOAD"){
+        field(DESC, "File to load settings")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+record(waveform, "$(P):F1_DATA_FILE_SAVE"){
+        field(DESC, "File to save settings")
+        field(NELM, "256")
+        field(FTVL, "CHAR")
+}
+record(waveform, "$(P):F1_DATA_FILE_LOAD"){
         field(DESC, "File to load settings")
         field(NELM, "256")
         field(FTVL, "CHAR")
@@ -343,7 +382,6 @@ record(ao,"$(P):J4_V2_SET"){
 }
 record(ao,"$(P):J4_VLED_SET"){
 }
-
 
 
 record(calcout, "$(P):J3_V1_SET_CALC"){
@@ -388,3 +426,49 @@ record(calcout, "$(P):J4_VLED_SET_CALC"){
 	field(OUT,"$(P):J4_VLED_SET CPP")
 	field(CALC,"1.25*(1+(B+(A*C))/(1.5e+3))+(60e-6)*(B+(A*C))")
 }
+
+
+#The F0 Voltage on/off status is bit 0 of Register10
+record (bi, "$(P):F0_VSTAT"){
+}
+
+record (calcout, "$(P):F0_VSTATCALC"){
+       field(INPA,"$(P):RI10 CPP")
+       field(CALC,"A&1")
+       field(OUT,"$(P):F0_VSTAT CPP")
+}
+#The F1 Voltage on/off status is bit 1 of Register10
+record (bi, "$(P):F1_VSTAT"){
+}
+
+record (calcout, "$(P):F1_VSTATCALC"){
+       field(INPA,"$(P):RI10 CPP")
+       field(CALC,"A&2")
+       field(OUT,"$(P):F1_VSTAT CPP")
+}
+
+
+#The F0 Voltage on/off status is bit 0 of Register10
+record (bo, "$(P):F0_VONOFF"){
+}
+
+#zero to bit 0 (AND with 65534), then OR bit 0 with F0_VONOFF
+record (calcout, "$(P):F0_ONOFFCALC"){
+       field(INPA,"$(P):RO10 CPP")
+       field(INPB,"$(P):F0_VONOFF CPP")
+       field(CALC,"(A&65534)|B")
+       field(OUT,"$(P):RO10 CPP")
+}
+
+#The F1 Voltage on/off status is bit 1 of Register10
+record (bo, "$(P):F1_VONOFF"){
+}
+
+#zero to bit 1 (AND with 65533), then OR bit 1 with F1_VONOFF
+record (calcout, "$(P):F1_ONOFFCALC"){
+       field(INPA,"$(P):RO10 CPP")
+       field(INPB,"$(P):F1_VONOFF CPP")
+       field(CALC,"(A&65533)|(B<<1)")
+       field(OUT,"$(P):RO10 CPP")
+}
+

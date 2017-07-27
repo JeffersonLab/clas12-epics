@@ -8,6 +8,7 @@
 #-----------------------------------------------------------------------
 # Version History
 #-----------------------------------------------------------------------
+# 2.62 2016       baltzell@jlab.org - added -R option to send ctrl-x
 # 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
 # 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
 # 1.00 2008/09/19 cuffe@jlab.org - inital revision
@@ -42,10 +43,11 @@ HOSTNAME='/bin/hostname'
 HOST=`hostname -s`
 ID='/usr/bin/id'
 TELNET='/usr/bin/telnet'
+NETCAT='/usr/bin/nc'
 SSH='/usr/bin/ssh -xt'
 APP_EXE=$APP_DIR/procServ
 
-BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
+BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE $NETCAT"
 
 #-----------------------------------------------------------------------
 # Global Functions
@@ -56,7 +58,7 @@ function usage {
     echo "OPTIONS"
     echo "    -h,  Print Help"
     echo "    -p,  Print config file"
-    echo "    -R,  Reboot IOC Non-Interactively (send ctrl-X through netcat)"
+    echo "    -R,  Reboot IOC Non-Interactively (send ctrl-x via netcat)"
     echo ""
     echo "EXAMPLES"
     echo "    $SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
@@ -265,7 +267,8 @@ if [ $ret = 0 ]; then
     echo ""
     exit 1
 fi
-      
+
+# This will send ctrl-x through netcat (doesn't work with telnet):
 rebootcmd="echo 18 | xxd -r -p | nc localhost $(eval echo \$${1}_port)"
 
 if [ "$(eval echo \$${1}_host)" = "$HOST" ] ; then

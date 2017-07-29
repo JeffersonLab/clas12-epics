@@ -8,6 +8,18 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var fileNames=widget.getMacroValue("F").split(",");
 
+function insertLine()
+{
+    var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Rectangle");
+    lc.setPropertyValue("border_style",1);
+    lc.setPropertyValue("line_width",0);
+    lc.setPropertyValue("height",5);
+    lc.setPropertyValue("width",1386);
+    lc.setPropertyValue("border_width",1);
+    lc.setPropertyValue("border_color","MEDM_COLOR_5");
+    lc.setPropertyValue("background_color","Read_Background");
+    widget.addChildToBottom(lc);
+}
 function insertGap(size)
 {
     var line = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
@@ -16,7 +28,6 @@ function insertGap(size)
     line.setPropertyValue("text","");
     widget.addChildToBottom(line);
 }
-
 function insertIoc(iocName,opiFile)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
@@ -31,6 +42,7 @@ function insertIoc(iocName,opiFile)
     widget.addChildToBottom(lc);
 }
 
+
 for (var iFile=0; iFile<fileNames.length; iFile++) {
 
     if (iFile>0) insertGap(15);
@@ -41,7 +53,9 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
         if (!lines[ii].startsWith("ioc")) {
-            insertGap(15);
+            insertGap(7);
+            insertLine();
+            insertGap(7);
             continue;
         }
 
@@ -70,4 +84,10 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         jj++;
     }
 }
+
+insertGap(7);
+insertLine();
+
+
+
 

@@ -24,8 +24,8 @@ dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
 dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")
 
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,NELM=332,FTVL=FLOAT,PERIOD=5,FNAME=ftcfadc.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:t:,NELM=332,FTVL=FLOAT,PERIOD=5,FNAME=ftcfadcT.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,NELM=332,FTVL=FLOAT,PERIOD=1,FNAME=ftcfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:t:,NELM=332,FTVL=FLOAT,PERIOD=1,FNAME=ftcfadcT.txt")
 
 cd ${TOP}/iocBoot/${IOC}
 

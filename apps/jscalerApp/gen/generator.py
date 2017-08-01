@@ -88,6 +88,7 @@ cd ${TOP}/iocBoot/${IOC}
 iocInit
 '''
 
+if not os.path.exists('./output'): os.mkdir('./output')
 
 def printSubstitutions(scalerType,channels,fileName=None):
   if fileName!=None: fileName='./output/'+fileName
@@ -434,11 +435,8 @@ def mkDetector(channels,subFileName,startupFileName):
 
 for sector in range(6): mkSector(sector+1)
 
-#mkDetector(mkChannelsHTCC(0),None,None)
-#mkDetector(mkChannelsCTOF(0),None,None)
+mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
-#mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-#mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
-
-#mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
 

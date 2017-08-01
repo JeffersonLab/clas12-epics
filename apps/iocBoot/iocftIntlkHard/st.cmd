@@ -1,7 +1,4 @@
-#!../../bin/linux-x86_64/ftIntlk
-
-## You may have to change ftIntlk to something else
-## everywhere it appears in this file
+#!../../bin/linux-x86_64/cRioIntlk
 
 < envPaths
 
@@ -12,11 +9,12 @@ epicsEnvSet("EPICS_CAS_BEACON_ADDR_LIST","129.57.163.255")
 cd ${TOP}
 
 ## Register all support components
-dbLoadDatabase "dbd/ftIntlk.dbd"
-ftIntlk_registerRecordDeviceDriver pdbbase
+dbLoadDatabase "dbd/cRioIntlk.dbd"
+cRioIntlk_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+
 dbLoadRecords("db/ftIntlkHard.db")
 
 cd ${TOP}/iocBoot/${IOC}

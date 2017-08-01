@@ -86,7 +86,7 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
-elif [[ $1 == "ctof" || $1 == "adcctof1" ]]
+elif [[ $1 == "htcc" || $1 == "ctof" || $1 == "adcctof1" ]]
 then
     dgsReboot adcctof1
     sleep 2

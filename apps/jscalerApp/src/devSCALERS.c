@@ -7,6 +7,9 @@ V.Sytnik 07/2014
 
 
 #define ALLSET_THROUGH_ONE 0
+
+//#define NOWAVEFORMS 1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +19,7 @@ V.Sytnik 07/2014
 #include <unistd.h>
 epicsShareFunc int errlogPrintf(const char *pFormat, ...); ///my:
 
+#include <signals.h>
 
 
 typedef int BOOL;
@@ -243,8 +247,6 @@ write_bo(struct boRecord *pbo)
 static long init_ai(struct aiRecord *pai) { return 0; }
 static long read_ai(struct aiRecord *pai)
 {
-  double values[200];
-
   struct vmeio *pvmeio = (struct vmeio *) &(pai->inp.value);  
 
   unsigned short* card    = (unsigned short*) &pvmeio->card;
@@ -256,20 +258,48 @@ static long read_ai(struct aiRecord *pai)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
+#ifdef NOWAVEFORMS
+  double *values;
+  int ret,len;
+  // thresholds:
+  if (command==FADCTET || command==TDCTET || command==TRGTET) { 
+      values = (double *) malloc(sizeof(double)*2);
+      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+      pai->rval = values[(command & 0xF)-1];
+      free(values);
+  }
+  // counts:
+  else if (command==FADCCNT ||
+           command==GTDCCNT || command==GTRGCNT ||
+           command==TDCCNT  || command==TRGCNT) {
+    ret=IocGetWaveformLength(chassis, slot, channel, &len);
+    if (ret==0) {
+        if (len > (command & 0xF)-3) {
+            values = (double *) malloc(sizeof(double)*len);
+            IocReadWaveform(chassis, slot, channel, len, values);
+            pai->rval = values[(command & 0xF)-3];
+            free(values);
+        }
+        else printf("read_ai:  ERROR, bad scaler array: %u/%u/%u/%x\n",chassis,slot,channel,command);
+    }
+    else printf("read_ai:  ERROR, bad slot status: %u/%u/%u/%x\n",chassis,slot,channel,command);
+  }
+  else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
+#else
+  double values[200];
   if (command<2) {
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
       pai->rval = values[command];
   }
-  else {
-    printf("read_ai:  ERROR, no command: %d\n",command);
-  }
+  else printf("read_ai:  ERROR, no command: %d\n",command);
+#endif
 
   return 0;  
 }
 //===============================================================================================
 static long init_ao(struct aoRecord  *pao)
 {
-  double values[200];
+  double values[20];
 
   struct vmeio *pvmeio = (struct vmeio *) &(pao->out.value);  
 
@@ -282,14 +312,19 @@ static long init_ao(struct aoRecord  *pao)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
+#ifdef NOWAVEFORMS
+  if (command==FADCTET || command==TDCTET || command==TRGTET) { 
+      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+      pao->rval = values[(command & 0xF)-1];
+  }
+  else printf("read_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
+#else
   if (command<2) {
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
       pao->rval = values[command];
   }
-  else {
-    printf("read_ai:  ERROR, no command: %d\n",command);
-  }
-
+  else printf("read_ao:  ERROR, no command: %u/%u/%u/%d\n",chassis,slot,channel,command);
+#endif
   return 0;  
 }
 static long write_ao(struct aoRecord *pao)
@@ -309,6 +344,16 @@ static long write_ao(struct aoRecord *pao)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
+#ifdef NOWAVEFORMS
+  if (command==FADCTET || command==TDCTET || command==TRGTET) { 
+      threshType = (command & 0xF) - 1;
+      threshValue = pao->val;
+      values[0] = threshType;
+      values[0] = threshValue;
+      IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
+  }
+  else printf("write_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
+#else
   if (command<2) {
       threshType = command;
       threshValue = pao->val;
@@ -316,10 +361,8 @@ static long write_ao(struct aoRecord *pao)
       values[1] = threshValue;
       IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
   }
-  else {
-    printf("write_ao:  ERROR, no command: %d\n",command);
-  }
-
+  else printf("write_ao:  ERROR, no command: %d\n",command);
+#endif
   return 0;  
 }
 

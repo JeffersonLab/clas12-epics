@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 import sys,os,stat,re
-
+#
 # N.Baltzell
 #
-# TODO: mkChannels* --> read from ccdb (?)
-#
+
+NOWAVEFORM=False
 
 DBFILE_FADC='db/jscaler_channel_FADC.db'
 DBFILE_DISC='db/jscaler_channel_DISC.db'
 
-#KEYS=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
-
 KEYS_FADC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','Thresh','Mode','Counts']
-KEYS_DISC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','ThreshTRG','ThreshTDC','Mode','Counts']
+KEYS_DISC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','ThreshTDC','ThreshTRG','Mode','Counts']
+
+if NOWAVEFORM:
+  KEYS_DISC=['CrNo','CrName','Sl','Ch','Det','Sys','Element','CScode','ThreshTDC','ThreshTRG','Mode','CountsGTDC','CountsGTRG','CountsTDC','CountsTRG','Counts']
 
 FTOF_SLOT_F2D={
     3:2,
@@ -28,26 +29,6 @@ FTOF_SLOT_F2D={
     15:18,
     16:20
 }
-
-#ECAL_SLOT_F2D={
-#    3:3,
-#    4:4,
-#    5:5,
-#    6:7,
-#    7:8,
-#    8:9,
-#    9:10,
-#    10:12,
-#    13:13,
-#    14:14,
-#    15:15,
-#    16:17,
-#    17:18,
-#    18:20,
-#    19:21,
-#    20:22
-#}
-
 ECAL_SLOT_F2D={
   3:2,
   4:3,
@@ -66,7 +47,6 @@ ECAL_SLOT_F2D={
   19:19,
   20:20
 }
-
 PCAL_SLOT_F2D={
     3:2,
     4:3,
@@ -165,6 +145,16 @@ def setCodes(crateNumber,channel):
   channel['Mode']  =int(channel['Ch'])+(1<<8)
   channel['ThreshTDC']=int(channel['Ch'])+(0<<8)
   channel['ThreshTRG']=int(channel['Ch'])+(1<<8)
+
+  if NOWAVEFORM:
+    channel['Thresh']    =int(channel['Ch'])+(0x01<<8)
+    channel['Counts']    =int(channel['Ch'])+(0x03<<8)
+    channel['ThreshTDC'] =int(channel['Ch'])+(0x11<<8)
+    channel['ThreshTRG'] =int(channel['Ch'])+(0x12<<8)
+    channel['CountsGTDC']=int(channel['Ch'])+(0x13<<8)
+    channel['CountsGTRG']=int(channel['Ch'])+(0x14<<8)
+    channel['CountsTDC'] =int(channel['Ch'])+(0x15<<8)
+    channel['CountsTRG'] =int(channel['Ch'])+(0x16<<8)
 
 def mkChannelsECAL(crateNumber,sector,system):
   if system=='FADC': crate='ADCECAL'+str(sector)
@@ -442,7 +432,7 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-#for sector in range(6): mkSector(sector+1)
+for sector in range(6): mkSector(sector+1)
 
 #mkDetector(mkChannelsHTCC(0),None,None)
 #mkDetector(mkChannelsCTOF(0),None,None)
@@ -450,5 +440,5 @@ def mkDetector(channels,subFileName,startupFileName):
 #mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
 #mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
-mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+#mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
 

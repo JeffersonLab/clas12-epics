@@ -443,7 +443,7 @@ record (bi, "$(P):F1_VSTAT"){
 
 record (calcout, "$(P):F1_VSTATCALC"){
        field(INPA,"$(P):RI10 CPP")
-       field(CALC,"A&2")
+       field(CALC,"(A&2)>>1")
        field(OUT,"$(P):F1_VSTAT CPP")
 }
 
@@ -460,7 +460,7 @@ record (calcout, "$(P):F0_ONOFFCALC"){
        field(OUT,"$(P):RO10 CPP")
 }
 
-#The F1 Voltage on/off status is bit 1 of Register10
+#The F1 Voltage on/off is bit 1 of Register10
 record (bo, "$(P):F1_VONOFF"){
 }
 
@@ -472,3 +472,80 @@ record (calcout, "$(P):F1_ONOFFCALC"){
        field(OUT,"$(P):RO10 CPP")
 }
 
+#The F0 Trig on/off is bit 14 of Register7
+record (bo, "$(P):F0_TRIGONOFF"){
+}
+#zero to bit 14 (AND with 49151), then OR bit 14 with F0_TRIGONOFF
+record (calcout, "$(P):F0_TRIGONOFFCALC"){
+       field(INPA,"$(P):RO7 CPP")
+       field(INPB,"$(P):F0_TRIGONOFF CPP")
+       field(CALC,"(A&49151)|(B<<14)")
+       field(OUT,"$(P):RO7 CPP")
+}
+
+#The F1 Trig on/off is bit 14 of Register9
+record (bo, "$(P):F1_TRIGONOFF"){
+}
+#zero to bit 14 (AND with 49151), then OR bit 14 with F1_TRIGONOFF
+record (calcout, "$(P):F1_TRIGONOFFCALC"){
+       field(INPA,"$(P):RO9 CPP")
+       field(INPB,"$(P):F1_TRIGONOFF CPP")
+       field(CALC,"(A&49151)|(B<<14)")
+       field(OUT,"$(P):RO9 CPP")
+}
+
+#The F0 Trig mode is bit 15 of Register7
+record (bo, "$(P):F0_TRIGMODE"){
+}
+#zero to bit 15 (AND with 32767), then OR bit 15 with F0_TRIGMODE
+record (calcout, "$(P):F0_TRIGMODECALC"){
+       field(INPA,"$(P):RO7 CPP")
+       field(INPB,"$(P):F0_TRIGMODE CPP")
+       field(CALC,"(A&32767)|(B<<15)")
+       field(OUT,"$(P):RO7 CPP")
+}
+
+#The F1 Trig mode is bit 15 of Register9
+record (bo, "$(P):F1_TRIGMODE"){
+}
+#zero to bit 15 (AND with 32767), then OR bit 15 with F1_TRIGMODE
+record (calcout, "$(P):F1_TRIGMODECALC"){
+       field(INPA,"$(P):RO9 CPP")
+       field(INPB,"$(P):F1_TRIGMODE CPP")
+       field(CALC,"(A&32767)|(B<<15)")
+       field(OUT,"$(P):RO9 CPP")
+}
+
+#The F0 Trig on/off is bit 14 of Register7
+record (bo, "$(P):F0_TRIGSTAT"){
+}
+record (calcout, "$(P):F0_TRIGSTATCALC"){
+       field(INPA,"$(P):RI7 CPP")
+       field(CALC,"(A&16384)>>14")
+       field(OUT,"$(P):F0_TRIGSTAT CPP")
+}
+#The F0 Trig mode is bit 15 of Register7
+record (bo, "$(P):F0_TRIGMODESTAT"){
+}
+record (calcout, "$(P):F0_TRIGMODESTATCALC"){
+       field(INPA,"$(P):RI7 CPP")
+       field(CALC,"(A&32768)>>15")
+       field(OUT,"$(P):F0_TRIGMODESTAT CPP")
+}
+
+#The F1 Trig on/off is bit 14 of Register9
+record (bo, "$(P):F1_TRIGSTAT"){
+}
+record (calcout, "$(P):F1_TRIGSTATCALC"){
+       field(INPA,"$(P):RI9 CPP")
+       field(CALC,"(A&16384)>>14")
+       field(OUT,"$(P):F1_TRIGSTAT CPP")
+}
+#The F0 Trig mode is bit 15 of Register7
+record (bo, "$(P):F1_TRIGMODESTAT"){
+}
+record (calcout, "$(P):F1_TRIGMODESTATCALC"){
+       field(INPA,"$(P):RI7 CPP")
+       field(CALC,"(A&32768)>>15")
+       field(OUT,"$(P):F1_TRIGMODESTAT CPP")
+}

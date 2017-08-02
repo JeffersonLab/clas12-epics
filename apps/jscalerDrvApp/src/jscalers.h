@@ -76,6 +76,7 @@ public:
 
   vector< double > *scalerThresholds; // order: SCALER_PARTYPE_THRESHOLD (Scaler Gr1), SCALER_PARTYPE_THRESHOLD2(Scaler Gr2)
   vector< double > *scalerModes; // not implemented
+  vector< double > *SSPData;
 
 
   JlabBoard(CrateMsgClient *msgClient, int slot, int type ) : crateMsgClient(msgClient), slotNumber(slot), boardType(type){
@@ -87,15 +88,17 @@ public:
    int partype = SCALER_PARTYPE_NCHANNELS;
    (*buf)=0;
    int ret = msgClient->GetBoardParams(slotNumber, partype, buf, &len);
-   if(ret)numberOfChannels=(*buf[0]);
+   printf("%d\n",(*buf)[0]);
+   if(ret)numberOfChannels=((*buf)[0]);
    printf("numberOfChannels===========%d slot=%d\n", numberOfChannels, slot);
    if(*buf)delete (*buf);
 
-
+   if(numberOfChannels>0){
      scalerCounts=new vector< double >[numberOfChannels];
      scalerCountsHz=new vector< double >[numberOfChannels];
      scalerThresholds=new vector< double >[numberOfChannels];
      scalerModes=new vector< double >[numberOfChannels];
+   }
   }
   virtual ~JlabBoard(){};
 
@@ -129,7 +132,6 @@ protected:
 	JlabDisc2Board(const JlabDisc2Board& board);
 	JlabDisc2Board& operator=(const JlabDisc2Board& board);
 public:
-
   JlabDisc2Board(CrateMsgClient *crateMsgClient, int slot, int type ) : JlabBoard(crateMsgClient, slot, type){}
   virtual ~JlabDisc2Board(){};
 
@@ -146,7 +148,32 @@ public:
 
 };
 ///============================================================================
-
+class JlabSSPBoard : public JlabBoard{
+protected:
+        // Prevent copying boards
+        JlabSSPBoard(const  JlabSSPBoard& board);
+        JlabSSPBoard& operator=(const  JlabSSPBoard& board);
+public:
+  JlabSSPBoard(CrateMsgClient *crateMsgClient, int slot, int type ) : JlabBoard(crateMsgClient,slot,type){
+	unsigned int *buf[1];
+	(*buf) = 0;
+	int len;
+	int numOfSSPChannels=0;
+	int ret = crateMsgClient->ReadScalers(slotNumber,buf,&len);
+	if(ret)
+		numOfSSPChannels = (*buf)[0];
+	printf("number of channels = %d\n",(*buf)[0]);
+        scalerCounts=new vector< double >[numOfSSPChannels];
+        scalerCountsHz=new vector< double >[numOfSSPChannels];
+	ret = crateMsgClient->ReadData(slotNumber,buf,&len);
+	if(ret) 
+		numOfSSPChannels = (*buf)[0];
+	SSPData=new vector< double >[numOfSSPChannels];
+}
+        virtual ~JlabSSPBoard(){};
+                                   
+};
+///============================================================================
 class VmeChassis{
 private:
   string HOSTNAME;

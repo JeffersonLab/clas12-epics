@@ -264,8 +264,10 @@ static long read_ai(struct aiRecord *pai)
   // thresholds:
   if (command==FADCTET || command==TDCTET || command==TRGTET) { 
       values = (double *) malloc(sizeof(double)*2);
-      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-      pai->rval = values[(command & 0xF)-1];
+      if (!IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values))
+          pai->rval = values[(command & 0xF)-1];
+      else
+          recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
       free(values);
   }
   // counts:
@@ -280,9 +282,11 @@ static long read_ai(struct aiRecord *pai)
             pai->rval = values[(command & 0xF)-3];
             free(values);
         }
-        else printf("read_ai:  ERROR, bad scaler array: %u/%u/%u/%x\n",chassis,slot,channel,command);
+        else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
+            //printf("read_ai:  ERROR, bad scaler array: %u/%u/%u/%x\n",chassis,slot,channel,command);
     }
-    else printf("read_ai:  ERROR, bad slot status: %u/%u/%u/%x\n",chassis,slot,channel,command);
+    else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
+        //printf("read_ai:  ERROR, bad slot status: %u/%u/%u/%x\n",chassis,slot,channel,command);
   }
   else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
 #else
@@ -317,13 +321,13 @@ static long init_ao(struct aoRecord  *pao)
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
       pao->rval = values[(command & 0xF)-1];
   }
-  else printf("read_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
+  else printf("init_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
 #else
   if (command<2) {
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
       pao->rval = values[command];
   }
-  else printf("read_ao:  ERROR, no command: %u/%u/%u/%d\n",chassis,slot,channel,command);
+  else printf("init_ao:  ERROR, no command: %u/%u/%u/%d\n",chassis,slot,channel,command);
 #endif
   return 0;  
 }

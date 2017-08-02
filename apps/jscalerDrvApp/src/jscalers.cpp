@@ -14,14 +14,15 @@ V.Sytnik 07/2014
 #include "jscalers.h"
 
 
-#undef JSCALER_DEBUG
-//#define JSCALER_DEBUG
+//#undef JSCALER_DEBUG
+#define JSCALER_DEBUG
 
 
 using namespace std;
 void *crateThread(void *);
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
+int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 ///=========================================================================================================
 ScalersSlowControl::ScalersSlowControl(){
 
@@ -89,9 +90,10 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){  /// id i
         */
 
         for(int i=0;i< numberOfSlots;i++){
-            //printf("boards slot=%d\n",i);
+            printf("boards slot=%d\n",i);
             if(board_types[i]==SCALER_TYPE_DSC2)crateBoards[i]= (new JlabDisc2Board(crateMsgClient, i, board_types[i] ));
             else if(board_types[i]==SCALER_TYPE_FADC250)crateBoards[i]=(new JlabFadc250Board(crateMsgClient, i, board_types[i] ));
+	    else if(board_types[i]==SCALER_TYPE_SSP)crateBoards[i]=(new JlabSSPBoard(crateMsgClient, i, board_types[i] ));
             else if(board_types[i]==JLAB_SLOT_IS_EMPTY )crateBoards[i]=0;
             else {printf("unknown board!\n");exit(1);} /// 
 
@@ -177,7 +179,7 @@ void *crateThread(void *ptr) {
             int nchannels = (it->second)->numberOfChannels;
 
             ///----------------------------------------------------------
-
+		printf("%d", (it->second)->boardType);
             if((it->second)->boardType==SCALER_TYPE_DSC2){
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersA\n");
@@ -195,6 +197,16 @@ void *crateThread(void *ptr) {
                 Fadc250ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerB\n");
+#endif
+            }
+
+            else if((it->second)->boardType==SCALER_TYPE_SSP){
+#ifdef JSCALER_DEBUG
+                fprintf(stderr,"ioc:SSPReadScalerA\n");
+#endif
+                SSPReadScalers(ptr_c, it, nchannels);
+#ifdef JSCALER_DEBUG
+                fprintf(stderr,"ioc:SSPReadScalerB\n");
 #endif
             }
 
@@ -343,6 +355,58 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
     return 0;
 }
 
+int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels){
+    int len=0;
+    unsigned int *buf[1];
+    int ret=0;
+    static const double ref1 = 125E6;
+
+    (*buf)=0;
+    ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
+    (void)ret;
+    const double ref = ref1/(*buf)[2];
+
+    //printf("\n\n**************************AAA BoardType = %d\n",(it->second)->boardType);
+    //printf("222 slot=%d msgclient_addr=%p buf_addr=%p len=%d\n",it->first,ptr_c->crateMsgClient, &buf, len);
+    //printf("%d   %d   %d  \n",(*buf)[0],(*buf)[1],(*buf)[2]);
+    if(len!= (signed int) *buf[0]){
+	printf("SSPScalers Lengths do not match. \n");
+	for(int ii=3;ii<len;ii++){
+                it->second->scalerCounts[ii-3].clear();
+                it->second->scalerCounts[ii-3].push_back(-1);
+        }
+    }
+    else{
+	    for(int ii=3;ii<len;ii++){
+		 //printf("scalers %d %d\n",(ii-3),(*buf)[ii]);
+		 it->second->scalerCounts[ii-3].clear();
+ 	  	 it->second->scalerCounts[ii-3].push_back((*buf)[ii]);
+		 it->second->scalerCountsHz[ii-3].clear();
+                 it->second->scalerCountsHz[ii-3].push_back((*buf)[ii]*ref);
+	    }
+    }
+
+    ret = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
+    (void)ret;
+    //printf("%d   %d   %d  \n",(*buf)[0],(*buf)[1],(*buf)[2]);
+    if(len!=(signed int) *buf[0]){
+	printf("SSPData Lengths do not match. \n");
+	for(int ii=3;ii<len;ii++){
+                it->second->SSPData[ii-3].clear();
+                it->second->SSPData[ii-3].push_back(-1);
+        }
+    }
+    else{
+	for(int ii=3;ii<len;ii++){
+		//printf("data %d %d \n",(ii-3),(*buf)[ii]);
+		it->second->SSPData[ii-3].clear();
+		it->second->SSPData[ii-3].push_back((*buf)[ii]);
+	}
+    }
+    if(*buf)delete *buf;
+    return 0;    
+}
+
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels){
 
     int len=0;
@@ -482,6 +546,7 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
 
     return 0;
 }
+
 ///==================================================================================================================
 
 //int command; /// e.g. setthresholds, set_some_mode_for_channel
@@ -566,13 +631,12 @@ void JlabBoard::GetThreshold(  int chanNumber, int threshType, double & threshol
         }
     }
 /*
-    //printf("%d %d %f \n",chanNumber,threshType,(scalerThresholds[chanNumber])[threshType]); 
-    if((int)(scalerThresholds[chanNumber]).size() == NUMBER_OF_SCALER_THRESHOLDS){
-        threshold=(scalerThresholds[chanNumber])[threshType];
-    }
+ *     //printf("%d %d %f \n",chanNumber,threshType,(scalerThresholds[chanNumber])[threshType]); 
+ *         if((int)(scalerThresholds[chanNumber]).size() == NUMBER_OF_SCALER_THRESHOLDS){
+ *                 threshold=(scalerThresholds[chanNumber])[threshType];
+	}
 */
-
-}
+}                    
 ///==================================================================================================================
 
 void JlabBoard::GetReadModes( double pars[]){ 

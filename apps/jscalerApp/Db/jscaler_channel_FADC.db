@@ -1,4 +1,3 @@
-
 ############################################################
 # set threshold:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tSet") {
@@ -46,24 +45,11 @@ record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tAdj") {
 
 ############################################################
 # read scaler:
-record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") {
-    field(DTYP,"JLAB_SCALERS") 
-    field(DESC,"scaler waveform") 
-    field(INP,"#C$(CScode) S$(Counts)") 
-    field(NELM,"1")
-    field(FTVL,"DOUBLE")  
-    field(SCAN,"2 second") 
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c")
-    alias("B_DET_$(Det)_$(Sys)_$(Element)")
-}
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c") {
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):c") {
     field(DESC,"fadc scaler")
-    field(DTYP,"Soft Channel")
-    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).VAL")
-    field(NELM,1)
-    field(MALM,1)
-    field(INDX,0)
-    field(FTVL,"DOUBLE")
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Counts)") 
+    field(SCAN,"2 second")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c")
     alias("B_DET_$(Det)_$(Sys)_$(Element):c1")
 }

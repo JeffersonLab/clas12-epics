@@ -4,7 +4,7 @@ import sys,os,stat,re
 # N.Baltzell
 #
 
-NOWAVEFORM=False
+NOWAVEFORM=True
 
 DBFILE_FADC='db/jscaler_channel_FADC.db'
 DBFILE_DISC='db/jscaler_channel_DISC.db'

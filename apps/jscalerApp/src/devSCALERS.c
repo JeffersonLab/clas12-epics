@@ -8,7 +8,7 @@ V.Sytnik 07/2014
 
 #define ALLSET_THROUGH_ONE 0
 
-//#define NOWAVEFORMS 1
+#define NOWAVEFORMS 1
 
 #include <stdio.h>
 #include <stdlib.h>

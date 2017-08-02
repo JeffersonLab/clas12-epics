@@ -1,0 +1,454 @@
+
+
+#
+# Records for board MPV.8008l
+#
+
+record(stringin, "$(PORT):name")
+{
+  field(DESC, "$(DETALIAS)")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  #field(INP,  "@$(HOST) guru %(WO)Name.u$(CH) STRING: 100")
+  alias("$(DETALIAS):name")
+}
+
+
+record(longin, "$(PORT):group")
+{
+  field(DESC, "Channel Group Number")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  #field(INP,  "@$(HOST) guru %(WO)Group.u$(CH) INTEGER: 100")
+  alias("$(DETALIAS):group")
+}
+
+record(longout, "$(PORT):switch")
+{
+  field(DESC, "Turn ON and OFF switch")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
+  field(ADEL, "1")
+  alias("$(DETALIAS):switch")
+}
+record(longin, "$(PORT):switch:fbk")
+{
+  field(DESC, "Turn ON and OFF switch")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)Switch.u$(CH) ( 100 i")
+  alias("$(DETALIAS):switch:fbk")
+}
+
+record(longin, "$(PORT):stat")
+{
+  field(DESC, "Channel Status")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+#  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
+#  field(ADEL, "1")
+  alias("$(DETALIAS):stat")
+}
+
+record(stringin, "$(PORT):stat_string")
+{
+  field(DESC, "Channel Status in String")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+#  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
+#  field(ADEL, "1")
+  alias("$(DETALIAS):stat_string")
+}
+
+record(ai, "$(PORT):i_rd")
+{
+  field(DESC, "Current Readback")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)MeasurementCurrent.u$(CH) Float: 100")
+  field(ADEL, "1.0")  
+  alias("$(DETALIAS):i_rd")
+}
+
+record(ao, "$(PORT):i_set")
+{
+  field(DESC, "Current Setpoint")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)Current.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):i_set")
+}
+record(ai, "$(PORT):i_set:fbk")
+{
+  field(DESC, "Current Setpoint")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)Current.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_set:fbk")
+}
+
+
+record(ao, "$(PORT):i_max_sup")
+{
+  field(DESC, "Supervision Maximum Currrent")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):i_max_sup")
+}
+record(ai, "$(PORT):i_max_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Currrent")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)SupervisionMaxCurrent.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_max_sup:fbk")
+}
+
+record(ao, "$(PORT):i_max_cfg")
+{
+  field(DESC, "Config Maximum Currrent")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):i_max_cfg")
+}
+record(ai, "$(PORT):i_max_cfg:fbk")
+{
+  field(DESC, "Config Maximum Currrent")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)ConfigMaxCurrent.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):i_max_cfg:fbk")
+}
+
+#record(ai, "$(PORT):i_lim_hw")
+#{
+#  field(DESC, "Hardware Limit for Currrent")
+#  field(DTYP, "Snmp")
+#  field(SCAN, "$(SCAN)")
+#  field(PREC, "3")
+#  field(EGU,  "")
+#  field(INP,  "@$(HOST) guru %(WO)HardwareLimitCurrent.u$(CH) Float: 100")
+#  field(ADEL, "1.0")
+#  alias("$(DETALIAS):i_lim_hw")
+#}
+
+
+record(longout, "$(PORT):i_trip_time")
+{
+  field(DESC, "Span for Time out Function.")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)TripTimeMaxCurrent.u$(CH) INTEGER: 100 i")
+  field(ADEL, "1")
+  alias("$(DETALIAS):i_trip_time")
+}
+record(longin, "$(PORT):i_trip_time:fbk")
+{
+  field(DESC, "Span for Time out Function.")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)TripTimeMaxCurrent.u$(CH) INTEGER: 100 i")
+  alias("$(DETALIAS):i_trip_time:fbk")
+}
+
+
+record(ao, "$(PORT):vrise")
+{
+  field(DESC, "Voltage  RampUp Rate")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)VoltageRiseRate.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):vrise")
+}
+record(ai, "$(PORT):vrise:fbk")
+{
+  field(DESC, "Voltage  RampUp Rate")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)VoltageRiseRate.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):vrise:fbk")
+}
+
+
+record(ao, "$(PORT):vfall")
+{
+  field(DESC, "Voltage RampDown Rate")
+ # field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)VoltageFallRate.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):vfall")
+}
+record(ai, "$(PORT):vfall:fbk")
+{
+  field(DESC, "Voltage RampDown Rate")
+ # field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+ # field(INP,  "@$(HOST) guru %(WO)VoltageFallRate.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):vfall:fbk")
+}
+
+
+record(ai, "$(PORT):v_sens")
+{
+  field(DESC, "Voltage Sensor Readback")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)MeasurementSenseVoltage.u$(CH) Float: 100")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_sens")
+}
+
+record(ai, "$(PORT):v_term")
+{
+  field(DESC, "Voltage Terminal Readback")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)MeasurementTerminalVoltage.u$(CH) Float: 100")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_term")
+}
+
+record(ao, "$(PORT):v_set")
+{
+  field(DESC, "Voltage Setpoint")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)Voltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_set")
+}
+record(ai, "$(PORT):v_set:fbk")
+{
+  field(DESC, "Voltage Setpoint")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)Voltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_set:fbk")
+}
+
+
+record(ao, "$(PORT):v_min_sens_sup")
+{
+  field(DESC, "Supervision Minimum Sensor Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)SupervisionMinSenseVoltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_min_sens_sup")
+}
+record(ai, "$(PORT):v_min_sens_sup:fbk")
+{
+  field(DESC, "Supervision Minimum Sensor Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)SupervisionMinSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_min_sens_sup:fbk")
+}
+
+
+record(ao, "$(PORT):v_max_sens_sup")
+{
+  field(DESC, "Supervision Maximum Sensor Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxSenseVoltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_sens_sup")
+}
+record(ai, "$(PORT):v_max_sens_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Sensor Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)SupervisionMaxSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_sens_sup:fbk")
+}
+
+
+record(ao, "$(PORT):v_max_term_sup")
+{
+  field(DESC, "Supervision Maximum Terminal Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_term_sup")
+}
+record(ai, "$(PORT):v_max_term_sup:fbk")
+{
+  field(DESC, "Supervision Maximum Terminal Voltage")
+ # field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+ # field(INP,  "@$(HOST) guru %(WO)SupervisionMaxTerminalVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_term_sup:fbk")
+}
+
+record(ao, "$(PORT):v_max_sens_cfg")
+{
+  field(DESC, "Config Maximum Sensor Voltage")
+ # field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+ # field(OUT,  "@$(HOST) guru %(WO)ConfigMaxSenseVoltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS)v_max_sens_cfg")
+}
+record(ai, "$(PORT):v_max_sens_cfg:fbk")
+{
+  field(DESC, "Config Maximum Sensor Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)ConfigMaxSenseVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_sens_cfg:fbk")
+}
+
+
+record(ao, "$(PORT):v_max_term_cfg")
+{
+  field(DESC, "Config Maximum Terminal Voltage")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(PREC, "3")
+  field(EGU,  "")
+  #field(OUT,  "@$(HOST) guru %(WO)ConfigMaxTerminalVoltage.u$(CH) Float: 100 F")
+  field(ADEL, "1.0")
+  alias("$(DETALIAS):v_max_term_cfg")
+}
+record(ai, "$(PORT):v_max_term_cfg:fbk")
+{
+  field(DESC, "Config Maximum Terminal Voltage")
+ # field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(PREC, "3")
+  field(EGU,  "")
+ # field(INP,  "@$(HOST) guru %(WO)ConfigMaxTerminalVoltage.u$(CH) Float: 100 F")
+  alias("$(DETALIAS):v_max_term_cfg:fbk")
+}
+
+
+#record(ai, "$(PORT):v_lim_hw")
+#{
+#  field(DESC, "Hardware Limit for Voltage")
+#  field(DTYP, "Snmp")
+#  field(SCAN, "$(SCAN)")
+#  field(PREC, "3")
+#  field(EGU,  "")
+#  field(INP,  "@$(HOST) guru %(WO)HardwareLimitVoltage.u$(CH) Float: 100")
+#  field(ADEL, "1.0")
+#  alias("$(DETALIAS):v_lim_hw")
+#}
+
+
+record(longin, "$(PORT):temp")
+{
+  field(DESC, "Hotspot Temperature")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  #field(INP,  "@$(HOST) guru %(WO)MeasurementTemperature.u$(CH) INTEGER: 100")
+  alias("$(DETALIAS):temp")
+}
+
+#record(longin, "$(PORT):max_temp_cfg")
+#{
+#  field(DESC, "Config Maximum Temperature")
+#  field(DTYP, "Snmp")
+#  field(SCAN, "$(SCAN)")
+#  field(INP,  "@$(HOST) guru %(WO)ConfigMaxTemperature.u$(CH) INTEGER: 100")
+#  alias("$(DETALIAS):max_temp_cfg")
+#}
+
+
+
+#record(longout, "$(PORT):regul")
+#{
+#  field(DESC, "Turn ON and OFF switch")
+#  field(DTYP, "Snmp")
+#  field(SCAN, "Passive")
+#  field(EGU,  "")
+#  field(OUT,  "@$(HOST) guru %(WO)RegulationMode.u$(CH) ( 100 i")
+#  field(ADEL, "1")
+#  alias("$(DETALIAS):regul")
+#}
+
+
+record(longout, "$(PORT):sup_behavior")
+{
+  field(DESC, "Supervision Behavior")
+  #field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  #field(OUT,  "@$(HOST) guru %(WO)SupervisionBehavior.u$(CH) INTEGER: 100 i")
+  field(ADEL, "1")
+  field(VAL,  "21780")
+  field(PINI, "YES")
+  alias("$(DETALIAS):sup_behavior")
+}
+
+record(longin, "$(PORT):sup_behavior:fbk")
+{
+  field(DESC, "Supervision Behavior readback")
+  #field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(EGU,  "")
+  #field(INP,  "@$(HOST) guru %(WO)SupervisionBehavior.u$(CH) INTEGER: 100 i")
+  field(PINI, "YES")
+  alias("$(DETALIAS):sup_behavior:fbk")
+}

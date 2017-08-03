@@ -15,7 +15,7 @@ V.Sytnik 07/2014
 
 
 //#undef JSCALER_DEBUG
-#define JSCALER_DEBUG
+//#define JSCALER_DEBUG
 
 
 using namespace std;
@@ -90,7 +90,7 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){  /// id i
         */
 
         for(int i=0;i< numberOfSlots;i++){
-            printf("boards slot=%d\n",i);
+            //printf("boards slot=%d\n",i);
             if(board_types[i]==SCALER_TYPE_DSC2)crateBoards[i]= (new JlabDisc2Board(crateMsgClient, i, board_types[i] ));
             else if(board_types[i]==SCALER_TYPE_FADC250)crateBoards[i]=(new JlabFadc250Board(crateMsgClient, i, board_types[i] ));
 	    else if(board_types[i]==SCALER_TYPE_SSP)crateBoards[i]=(new JlabSSPBoard(crateMsgClient, i, board_types[i] ));
@@ -179,7 +179,7 @@ void *crateThread(void *ptr) {
             int nchannels = (it->second)->numberOfChannels;
 
             ///----------------------------------------------------------
-		printf("%d", (it->second)->boardType);
+		//printf("%d", (it->second)->boardType);
             if((it->second)->boardType==SCALER_TYPE_DSC2){
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersA\n");

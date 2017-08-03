@@ -88,7 +88,7 @@ public:
    int partype = SCALER_PARTYPE_NCHANNELS;
    (*buf)=0;
    int ret = msgClient->GetBoardParams(slotNumber, partype, buf, &len);
-   printf("%d\n",(*buf)[0]);
+   //printf("%d\n",(*buf)[0]);
    if(ret)numberOfChannels=((*buf)[0]);
    printf("numberOfChannels===========%d slot=%d\n", numberOfChannels, slot);
    if(*buf)delete (*buf);

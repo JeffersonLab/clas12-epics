@@ -18,8 +18,8 @@
 #define FADCCNT 0x03
 #define TDCTET  0x11
 #define TRGTET  0x12
-#define GTDCCNT 0x13
-#define GTRGCNT 0x14
-#define TDCCNT  0x15
-#define TRGCNT  0x16
+#define GTRGCNT 0x13
+#define GTDCCNT 0x14
+#define TRGCNT  0x15
+#define TDCCNT  0x16
 

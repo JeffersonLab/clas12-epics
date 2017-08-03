@@ -152,10 +152,10 @@ def setCodes(crateNumber,channel):
     channel['Counts']    =int(channel['Ch'])+(0x03<<8)
     channel['ThreshTDC'] =int(channel['Ch'])+(0x11<<8)
     channel['ThreshTRG'] =int(channel['Ch'])+(0x12<<8)
-    channel['CountsGTDC']=int(channel['Ch'])+(0x13<<8)
-    channel['CountsGTRG']=int(channel['Ch'])+(0x14<<8)
-    channel['CountsTDC'] =int(channel['Ch'])+(0x15<<8)
-    channel['CountsTRG'] =int(channel['Ch'])+(0x16<<8)
+    channel['CountsGTRG']=int(channel['Ch'])+(0x13<<8)
+    channel['CountsGTDC']=int(channel['Ch'])+(0x14<<8)
+    channel['CountsTRG'] =int(channel['Ch'])+(0x15<<8)
+    channel['CountsTDC'] =int(channel['Ch'])+(0x16<<8)
 
 def mkChannelsECAL(crateNumber,sector,system):
   if system=='FADC': crate='ADCECAL'+str(sector)

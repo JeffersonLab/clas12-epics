@@ -14,6 +14,7 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 callbackSetQueueSize(5000)
 scanOnceSetQueueSize(5000)
 
+dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
 cd ${TOP}/iocBoot/${IOC}
 
 iocInit

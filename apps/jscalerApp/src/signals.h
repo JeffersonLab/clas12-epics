@@ -22,4 +22,5 @@
 #define GTDCCNT 0x14
 #define TRGCNT  0x15
 #define TDCCNT  0x16
-
+#define SSPSCAL 0x21
+#define SSPDATA 0x22

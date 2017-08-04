@@ -549,10 +549,10 @@ read_waveform(struct waveformRecord *pwi)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
- 
+
   int len, len_com;
   double *values;
-  int ret_status;
+  int ret_status=1;
 
 #ifdef USE_SMI
   if(strstr(pwi->desc,"smi"))
@@ -569,7 +569,14 @@ read_waveform(struct waveformRecord *pwi)
     //pwi->val=(unsigned long*) malloc(40);/// first=0; printf("p=%p\n",pwi->val);}
     ///IocReadWaveform(chassis, slot, channel, &len, values);
     // *((unsigned long*) (pwi->val))=5;
-    ret_status=IocGetWaveformLength(chassis, slot, channel, &len);
+    if(command==SSPSCAL || command==SSPDATA){
+	if((command & 0xF)==1) //check if SSP
+    		ret_status=IocGetWaveformLength(chassis, slot, channel, &len);
+    	else if((command & 0xF)==2) 
+		ret_status=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
+        }
+        else
+		ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
 
     //if(chassis==0 && slot==4 && channel==0)printf("ret_status=%d len=%d %d\n", ret_status, pwi->nelm, len);
 
@@ -579,12 +586,19 @@ read_waveform(struct waveformRecord *pwi)
     if(ret_status==0)
     {
       values = (double *) malloc(sizeof(double)*len);
-      IocReadWaveform(chassis, slot, channel, len, values);
+      if(command==SSPSCAL || command==SSPDATA){
+        if((command & 0xF)==1)
+                IocReadWaveform(chassis, slot, channel, len, values);
+        else if((command & 0xF)==2)
+                IocReadWaveformSSPData(chassis, slot, channel, len, values);
+        }
+        else
+                IocReadWaveform(chassis, slot, channel, len, values);   
       len_com=len;
     }
     else
 	{
-      len_com=pwi->nelm;
+        len_com=pwi->nelm;
 	}
  
     for (pwi->nord = 0; pwi->nord < len_com; pwi->nord++)

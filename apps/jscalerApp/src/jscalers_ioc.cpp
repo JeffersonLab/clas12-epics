@@ -97,8 +97,6 @@ extern "C" {
 }
 #endif
 
-///================================================
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -137,7 +135,7 @@ extern "C" {
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
 
         if(!((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])){(*len)=0;slot_status=BOARD_NOT_PRESENT;}
-        else (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCounts[channel]).size();
+        else (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel]).size();
 
 
 
@@ -147,13 +145,63 @@ extern "C" {
         return slot_status;
     }
 
+#ifdef __cplusplus
+}
+#endif
 
+///================================================
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    void IocReadWaveformSSPData(int crate, int slot, int channel, int len, double values[]){
+            if(scalersslowcontrol->vmecrates.count(crate)<=0) return;
+            pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+
+            for(int i=0;i<(len);i++){
+            values[i]=(((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->SSPData[channel])[i];
+            //printf("slot=%d %f %u %f\n", slot, (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCounts[channel])[i], ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerClocks[1], (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel])[i]);
+           //values[i]=(((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCounts[channel])[i];
+            }
+           //((scalersslowcontrol.vmecrates[crate])->crateBoards[slot])->genericSetBoards.push_back(gsb);
+            pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+    }
 
 #ifdef __cplusplus
 }
 #endif
 
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+   int IocGetWaveformLengthSSPData(int crate, int slot, int channel, int *len){
+
+        int slot_status=0;
+        if(scalersslowcontrol->vmecrates.count(crate)<=0) {*len=0;return CRATE_NOT_PRESENT;}
+        //if(crate==1)printf("crate=%d\n", crate);
+        pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        if(!((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])){(*len)=0;slot_status=BOARD_NOT_PRESENT;}
+        else (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->SSPData[channel]).size();
+   
+        
+        
+        //((scalersslowcontrol.vmecrates[crate])->crateBoards[slot])->genericSetBoards.push_back(gsb);
+       pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+       
+       return slot_status;
+                                                            }
+ 
+#ifdef __cplusplus
+}
+#endif
+        
+ 
 ///================================================
 #ifdef __cplusplus
 extern "C" {

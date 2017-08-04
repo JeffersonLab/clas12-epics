@@ -73,6 +73,8 @@ int IocGetValue(int crate, int slot, int channel, int command, double values[]);
 int IocSetValue(int crate, int slot, int channel, int command, double values[]);
 void IocReadWaveform(int crate, int slot, int channel, int len, double values[]);
 int IocGetWaveformLength(int crate, int slot, int channel, int *len);
+void IocReadWaveformSSPData(int crate, int slot, int channel, int len, double values[]);
+int IocGetWaveformLengthSSPData(int crate, int slot, int channel, int *len);
 void block_until_crate_read(int crate);
 
 int ScalerBoardSmiMonitor( int is_init, char *epics_name,

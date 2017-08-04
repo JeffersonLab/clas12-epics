@@ -3,9 +3,10 @@
 # Lists PVs that are NOT currently being archived.
 #
 # Usage:
-#  check_archive.py [-r] [file]...
+#  check_archive.py [-r] [-d] [file]...
 #
 #  The -r option instead prints PVs that ARE archived.
+#  The -d option instead prints PVs that are disconnected.
 #
 #  If no files are specified, searches current directory for
 #  .txt and .list files.
@@ -21,17 +22,28 @@ import subprocess
 files = []
 not_archived = []
 is_archived = []
+is_disconnected = []
+
 printMissing = True
+printDisconnected = False
 
 clipvs=[]
+
+# Nathan's arguments:
+if len(sys.argv)>1:
+    if sys.argv[1]=='-r':
+        printMissing = False
+        sys.argv.pop(1)
+    elif sys.argv[1]=='-d':
+        printDisconnected = True
+        sys.argv.pop(1)
+
 
 if len(sys.argv) < 2:
     files = glob.glob("./*.txt")
     files += glob.glob("./*.list")
 else:
-    if sys.argv[1]=='-r':
-      printMissing = False
-      sys.argv.pop(1)
+
     for arg in sys.argv[1:]:
         if os.path.isfile(arg):
             files.append(arg)
@@ -62,11 +74,20 @@ else:
             pv = pv.split(' ', 1)[0]
             pv = pv.split('\n',1)[0]
             if pv != "":
-                p = subprocess.check_output(["archive", pv])
-                if "not archived" in p:
-                    not_archived.append(pv)
+
+                if printDisconnected:
+                    try:
+                      fnull=open(os.devnull,'w')
+                      subprocess.check_output(['caget','-w','0.2',pv],stderr=fnull)
+                    except subprocess.CalledProcessError:
+                      is_disconnected.append(pv)
+
                 else:
-                    is_archived.append(pv)
+                    p = subprocess.check_output(["archive", pv])
+                    if "not archived" in p:
+                        not_archived.append(pv)
+                    else:
+                        is_archived.append(pv)
 
 for pv in clipvs:
     p = subprocess.check_output(["archive", pv])
@@ -75,7 +96,16 @@ for pv in clipvs:
     else:
         is_archived.append(pv)
 
-if printMissing:
+if printDisconnected:
+    if len(is_disconnected) == 0:
+        print "All PVs are connected"
+        exit(0)
+    else:
+        print "PVs are disconnected:"
+        print '\n'.join(is_disconnected)
+        exit(1)
+
+elif printMissing:
     if len(not_archived) == 0:
         print "All PVs are archived"
         exit(0)

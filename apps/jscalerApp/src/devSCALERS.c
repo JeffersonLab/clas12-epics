@@ -564,67 +564,35 @@ read_waveform(struct waveformRecord *pwi)
 #endif
   {
     pwi->rarm = 0;
-    ///if(pwi->ftvl==DBF_ULONG)
-    ///{
-    //pwi->val=(unsigned long*) malloc(40);/// first=0; printf("p=%p\n",pwi->val);}
-    ///IocReadWaveform(chassis, slot, channel, &len, values);
-    // *((unsigned long*) (pwi->val))=5;
-    if(command==SSPSCAL || command==SSPDATA){
-	if((command & 0xF)==1) //check if SSP
-    		ret_status=IocGetWaveformLength(chassis, slot, channel, &len);
-    	else if((command & 0xF)==2) 
-		ret_status=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
-        }
-        else
-		ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
-
-    //if(chassis==0 && slot==4 && channel==0)printf("ret_status=%d len=%d %d\n", ret_status, pwi->nelm, len);
-
-    ///-------------------- if(len<=0)return OK;
-    //values = (unsigned long *) malloc(sizeof(long)*len);
-
-    if(ret_status==0)
-    {
-      values = (double *) malloc(sizeof(double)*len);
-      if(command==SSPSCAL || command==SSPDATA){
-        if((command & 0xF)==1)
-                IocReadWaveform(chassis, slot, channel, len, values);
-        else if((command & 0xF)==2)
-                IocReadWaveformSSPData(chassis, slot, channel, len, values);
-        }
-        else
-                IocReadWaveform(chassis, slot, channel, len, values);   
-      len_com=len;
-    }
+    
+    if (command==SSPSCAL)
+        ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
+    else if (command==SSPDATA) 
+        ret_status = IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
     else
-	{
-        len_com=pwi->nelm;
-	}
- 
+        ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
+
+    if (ret_status==0) {
+        values = (double *) malloc(sizeof(double)*len);
+        if (command==SSPSCAL)
+            IocReadWaveform(chassis, slot, channel, len, values);
+        else if (command==SSPDATA)
+            IocReadWaveformSSPData(chassis, slot, channel, len, values);
+        else
+            IocReadWaveform(chassis, slot, channel, len, values);   
+        len_com=len;
+    }
+    else len_com=pwi->nelm;
+
     for (pwi->nord = 0; pwi->nord < len_com; pwi->nord++)
     {
-      /// *((unsigned long*) (pwi->bptr+pwi->nord))=5;
-    
-      //    ((unsigned long*)pwi->bptr)[pwi->nord]=values[pwi->nord];
-      if(ret_status==0){ ((double*)pwi->bptr)[pwi->nord]=values[pwi->nord]; }
-      else ((double*)pwi->bptr)[pwi->nord]=ret_status;
-
-      ///((unsigned long*)pwi->bptr)[pwi->nord]=5;
- 
-      /// if(len!=0){
-      ///   printf("%08lx %d %d %d len=%d val=%p\n", values[pwi->nord],chassis, slot, channel, len, pwi->val);
-   /// }
-  
-
-   //printf("READ_BI ======================================== name=%s %d %d %d\n",pbi->name,chassis,slot, result); //my:
-   // Show error if the requested chassis does not exist.
-   
- 
-     } ///for
-     if(ret_status==0)free(values);
-
-  } /// else
-  
+        if (ret_status==0) 
+            ((double*)pwi->bptr)[pwi->nord] = values[pwi->nord];
+        else
+            ((double*)pwi->bptr)[pwi->nord] = ret_status;
+    }
+    if (ret_status==0) free(values);
+  }
   return OK;
 }
 

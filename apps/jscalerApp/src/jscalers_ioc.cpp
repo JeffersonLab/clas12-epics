@@ -77,10 +77,15 @@ extern "C" {
             if (dynamic_cast<JlabDisc2Board *>(sc))
                 ((JlabDisc2Board *) ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot]))->GetReadMode(channel,values);
         }
+        else if (command==JLAB_GET_NFIBERS) {
+            if (dynamic_cast<JlabSSPBoard *>(sc)) {
+                values[0]=((JlabSSPBoard *) ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot]))->scalerFibers.size();
+                values[1]=((JlabSSPBoard *) ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot]))->dataFibers.size();
+            }
+        }
+        else printf("IocGetValue:  unknown command i%d/%d/%d/%d\n",crate,slot,channel,command);
 
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
-        //((scalersslowcontrol.vmecrates[crate])->crateBoards[slot])->genericSetBoards.push_back(gsb);
-
         return 0;
     }
 

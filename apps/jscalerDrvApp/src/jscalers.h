@@ -151,6 +151,8 @@ class JlabSSPBoard : public JlabBoard {
        
         int numOfSSPDataChannels;
         vector< double > *SSPData;
+        vector< int > scalerFibers;
+        vector< int > dataFibers;
 
         int getNumberOfScalerFibers() {
             unsigned int *buf[1];

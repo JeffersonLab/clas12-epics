@@ -24,3 +24,6 @@
 #define TDCCNT  0x16
 #define SSPSCAL 0x21
 #define SSPDATA 0x22
+#define SSPNSFIB 0x23
+#define SSPNDFIB 0x24
+

@@ -9,6 +9,7 @@ V.Sytnik 07/2014
 #define ALLSET_THROUGH_ONE 0
 
 #define NOWAVEFORMS 1
+#define RANDOMIZE 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -288,6 +289,14 @@ static long read_ai(struct aiRecord *pai)
     else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
         //printf("read_ai:  ERROR, bad slot status: %u/%u/%u/%x\n",chassis,slot,channel,command);
   }
+  else if (command==SSPNSFIB || command==SSPNDFIB) {
+      values = (double*) malloc(sizeof(double)*2);
+      if (!IocGetValue(chassis,slot,channel,JLAB_GET_NFIBERS,values))
+          pai->rval = values[(command & 0xF)-3];
+      else
+          recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
+      free(values);
+  }
   else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
 #else
   double values[200];
@@ -565,6 +574,11 @@ read_waveform(struct waveformRecord *pwi)
   {
 
     pwi->rarm = 0;
+
+//    for (pwi->nord=0; pwi->nord<pwi->nelm; pwi->nord++) {
+//        ((double*)pwi->bptr)[pwi->nord] = (double)rand()/RAND_MAX * 1e8;
+//    }
+//    return OK;
     
     if (command==SSPSCAL)
         ret_status = IocGetWaveformLength(chassis, slot, channel, &len);

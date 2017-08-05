@@ -278,6 +278,9 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
     int ii=0,jj=0,nFibers=0;
     double hz,thisRef;
 
+    sspBoard->scalerFibers.clear();
+    sspBoard->dataFibers.clear();
+
     // keep old lengths, initialize to error values:
     for (ii=0; ii<sspBoard->numberOfChannels; ii++) {
         for (jj=0; jj<(int)sspBoard->scalerCounts[ii].size(); jj++) 
@@ -303,6 +306,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
         thisLen = (*buf)[ii];
         thisFiber = (*buf)[ii+1];
         thisRef = (*buf)[ii+2];
+        sspBoard->scalerFibers.push_back(thisFiber);
 
         if (thisFiber<0 || thisFiber>sspBoard->numberOfChannels)
             printf("SSPReadScalers:  Invalid Scaler Fiber #:  %d\n",thisFiber);
@@ -339,6 +343,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
         thisLen = (*buf)[ii];
         thisFiber = (*buf)[ii+1];
         thisRef = (*buf)[ii+2];
+        sspBoard->dataFibers.push_back(thisFiber);
 
         if (thisFiber<0 || thisFiber>sspBoard->numOfSSPDataChannels)
             printf("SSPReadScalers:  Invalid Data Fiber #:  %d\n",thisFiber);

@@ -6,9 +6,15 @@ option -r;
 string suffixTrg = "cTrg";
 string suffixTdc = "cTdc";
 string suffixFadc = "c";
+string suffixTrgT = "tTrg";
+string suffixTdcT = "tTdc";
+string suffixFadcT = "t";
 
 // update period (seconds): 
 int delay=1;
+
+// threshold update period (number of scaler updates):
+int delayT=30;
 
 #define NECAL 216
 int nchanE=36;
@@ -68,6 +74,35 @@ float wfiFf[NFTOF]; assign wfiFf to {};
 float wfoLf[NLTCC]; assign wfoLf to "B_DET_LTCC_FADC_SEC{S}:wf";
 float wfiLf[NLTCC]; assign wfiLf to {};
 
+/*
+float wfoEtrgT[NECAL]; assign wfoEtrgT to "B_DET_ECAL_TRG_SEC{S}:t:wf";
+float wfiEtrgT[NECAL]; assign wfiEtrgT to {};
+float wfoPtrgT[NPCAL]; assign wfoPtrgT to "B_DET_PCAL_TRG_SEC{S}:t:wf";
+float wfiPtrgT[NPCAL]; assign wfiPtrgT to {};
+float wfoFtrgT[NFTOF]; assign wfoFtrgT to "B_DET_FTOF_TRG_SEC{S}:t:wf";
+float wfiFtrgT[NFTOF]; assign wfiFtrgT to {};
+float wfoLtrgT[NLTCC]; assign wfoLtrgT to "B_DET_LTCC_TRG_SEC{S}:t:wf";
+float wfiLtrgT[NLTCC]; assign wfiLtrgT to {};
+
+float wfoEtdcT[NECAL]; assign wfoEtdcT to "B_DET_ECAL_TDC_SEC{S}:t:wf";
+float wfiEtdcT[NECAL]; assign wfiEtdcT to {};
+float wfoPtdcT[NPCAL]; assign wfoPtdcT to "B_DET_PCAL_TDC_SEC{S}:t:wf";
+float wfiPtdcT[NPCAL]; assign wfiPtdcT to {};
+float wfoFtdcT[NFTOF]; assign wfoFtdcT to "B_DET_FTOF_TDC_SEC{S}:t:wf";
+float wfiFtdcT[NFTOF]; assign wfiFtdcT to {};
+float wfoLtdcT[NLTCC]; assign wfoLtdcT to "B_DET_LTCC_TDC_SEC{S}:t:wf";
+float wfiLtdcT[NLTCC]; assign wfiLtdcT to {};
+
+float wfoEfT[NECAL]; assign wfoEfT to "B_DET_ECAL_FADC_SEC{S}:t:wf";
+float wfiEfT[NECAL]; assign wfiEfT to {};
+float wfoPfT[NPCAL]; assign wfoPfT to "B_DET_PCAL_FADC_SEC{S}:t:wf";
+float wfiPfT[NPCAL]; assign wfiPfT to {};
+float wfoFfT[NFTOF]; assign wfoFfT to "B_DET_FTOF_FADC_SEC{S}:t:wf";
+float wfiFfT[NFTOF]; assign wfiFfT to {};
+float wfoLfT[NLTCC]; assign wfoLfT to "B_DET_LTCC_FADC_SEC{S}:t:wf";
+float wfiLfT[NLTCC]; assign wfiLfT to {};
+*/
+
 int ipanel;
 int iside;
 int ichan;
@@ -75,6 +110,7 @@ int iview;
 int ilayer;
 
 int ii;
+int nScalerUpdates;
 string stmp;
 
 ss seqJscalersF {
@@ -102,6 +138,14 @@ ss seqJscalersF {
             pvAssignSubst(wfiEtrg[wfLengthE],stmp);
             sprintf(stmp,"B_DET_ECAL_DISC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffixTdc);
             pvAssignSubst(wfiEtdc[wfLengthE],stmp);
+          /*
+            sprintf(stmp,"B_DET_ECAL_FADC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffixFadcT);
+            pvAssignSubst(wfiEfT[wfLengthE],stmp);
+            sprintf(stmp,"B_DET_ECAL_DISC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffixTrgT);
+            pvAssignSubst(wfiEtrgT[wfLengthE],stmp);
+            sprintf(stmp,"B_DET_ECAL_DISC_SEC{S}_%s%s_E%.2d:%s",viewsE[iview],layersE[ilayer],ichan,suffixTdcT);
+            pvAssignSubst(wfiEtdcT[wfLengthE],stmp);
+          */
             wfLengthE++;
           }
         }
@@ -116,6 +160,14 @@ ss seqJscalersF {
           pvAssignSubst(wfiPtrg[wfLengthP],stmp);
           sprintf(stmp,"B_DET_PCAL_DISC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffixTdc);
           pvAssignSubst(wfiPtdc[wfLengthP],stmp);
+          /*
+          sprintf(stmp,"B_DET_PCAL_FADC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffixFadcT);
+          pvAssignSubst(wfiPfT[wfLengthP],stmp);
+          sprintf(stmp,"B_DET_PCAL_DISC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffixTrgT);
+          pvAssignSubst(wfiPtrgT[wfLengthP],stmp);
+          sprintf(stmp,"B_DET_PCAL_DISC_SEC{S}_%s_E%.2d:%s",viewsP[iview],ichan,suffixTdcT);
+          pvAssignSubst(wfiPtdcT[wfLengthP],stmp);
+          */
           wfLengthP++;
         }
       }
@@ -131,6 +183,14 @@ ss seqJscalersF {
             pvAssignSubst(wfiFtrg[wfLengthF],stmp);
             sprintf(stmp,"B_DET_FTOF_DISC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffixTdc);
             pvAssignSubst(wfiFtdc[wfLengthF],stmp);
+          /*
+            sprintf(stmp,"B_DET_FTOF_FADC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffixFadcT);
+            pvAssignSubst(wfiFfT[wfLengthF],stmp);
+            sprintf(stmp,"B_DET_FTOF_DISC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffixTrgT);
+            pvAssignSubst(wfiFtrgT[wfLengthF],stmp);
+            sprintf(stmp,"B_DET_FTOF_DISC_SEC{S}_PANEL%s_%s_E%.2d:%s",panelsF[ipanel],sidesF[iside],ichan,suffixTdcT);
+            pvAssignSubst(wfiFtdcT[wfLengthF],stmp);
+          */
             wfLengthF++;
           }
         }
@@ -145,6 +205,14 @@ ss seqJscalersF {
           pvAssignSubst(wfiLtrg[wfLengthL],stmp);
           sprintf(stmp,"B_DET_LTCC_DISC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffixTdc);
           pvAssignSubst(wfiLtdc[wfLengthL],stmp);
+          /*
+          sprintf(stmp,"B_DET_LTCC_FADC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffixFadcT);
+          pvAssignSubst(wfiLfT[wfLengthL],stmp);
+          sprintf(stmp,"B_DET_LTCC_DISC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffixTrgT);
+          pvAssignSubst(wfiLtrgT[wfLengthL],stmp);
+          sprintf(stmp,"B_DET_LTCC_DISC_SEC{S}_%s_E%.2d:%s",sidesL[iside],ichan,suffixTdcT);
+          pvAssignSubst(wfiLtdcT[wfLengthL],stmp);
+          */
           wfLengthL++;
         }
       }
@@ -175,6 +243,7 @@ ss seqJscalersF {
   {
     entry
     {
+      nScalerUpdates=0;
       printf("** run state ****************************\n");
       sprintf(msg,"OK - Running");
       pvPut(msg);
@@ -220,7 +289,53 @@ ss seqJscalersF {
       pvPut(wfoPf);
       pvPut(wfoFf);
       pvPut(wfoLf);
+
+      /*
+      if (nScalerUpdates == 0) {
+          for (ii=0; ii<wfLengthE; ii++)
+          {
+              pvGet(wfiEtdcT[ii]); wfoEtdcT[ii]=wfiEtdcT[ii];
+              pvGet(wfiEtrgT[ii]); wfoEtrgT[ii]=wfiEtrgT[ii];
+              pvGet(wfiEfT[ii]);   wfoEfT[ii]=wfiEfT[ii];
+          }
+          for (ii=0; ii<wfLengthP; ii++)
+          {
+              pvGet(wfiPtdcT[ii]); wfoPtdcT[ii]=wfiPtdcT[ii];
+              pvGet(wfiPtrgT[ii]); wfoPtrgT[ii]=wfiPtrgT[ii];
+              pvGet(wfiPfT[ii]);   wfoPfT[ii]=wfiPfT[ii];
+          }
+          for (ii=0; ii<wfLengthF; ii++)
+          {
+              pvGet(wfiFtdcT[ii]); wfoFtdcT[ii]=wfiFtdcT[ii];
+              pvGet(wfiFtrgT[ii]); wfoFtrgT[ii]=wfiFtrgT[ii];
+              pvGet(wfiFfT[ii]);   wfoFfT[ii]=wfiFfT[ii];
+          }
+          for (ii=0; ii<wfLengthL; ii++)
+          {
+              pvGet(wfiLtdcT[ii]); wfoLtdcT[ii]=wfiLtdcT[ii];
+              pvGet(wfiLtrgT[ii]); wfoLtrgT[ii]=wfiLtrgT[ii];
+              pvGet(wfiLfT[ii]);   wfoLfT[ii]=wfiLfT[ii];
+          }
+          pvPut(wfoEtdcT);
+          pvPut(wfoPtdcT);
+          pvPut(wfoFtdcT);
+          pvPut(wfoLtdcT);
+          pvPut(wfoEtrgT);
+          pvPut(wfoPtrgT);
+          pvPut(wfoFtrgT);
+          pvPut(wfoLtrgT);
+          pvPut(wfoEfT);
+          pvPut(wfoPfT);
+          pvPut(wfoFfT);
+          pvPut(wfoLfT);
+      }
+      */
+
+      nScalerUpdates++;
+      if (nScalerUpdates>=delayT) nScalerUpdates=0;
+
       epicsThreadSleep(delay);
+
     } state run
   }
 

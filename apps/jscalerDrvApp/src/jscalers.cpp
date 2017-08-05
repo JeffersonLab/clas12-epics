@@ -275,14 +275,17 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
     }
 
     int thisLen,thisFiber;
-    int ii=0,nFibers=0;
+    int ii=0,jj=0,nFibers=0;
     double hz,thisRef;
 
-    sspBoard->scalerFibers.clear();
+    // keep old lengths, initialize to error values:
     for (ii=0; ii<sspBoard->numberOfChannels; ii++) {
-        sspBoard->scalerCounts[ii].clear();
-        sspBoard->scalerCountsHz[ii].clear();
-        sspBoard->SSPData[ii].clear();
+        for (jj=0; jj<(int)sspBoard->scalerCounts[ii].size(); jj++) 
+            sspBoard->scalerCounts[ii][jj]=NOT_PRESENT_VALUE;
+        for (jj=0; jj<(int)sspBoard->scalerCountsHz[ii].size(); jj++) 
+            sspBoard->scalerCountsHz[ii][jj]=NOT_PRESENT_VALUE;
+        for (jj=0; jj<(int)sspBoard->SSPData[ii].size(); jj++) 
+            sspBoard->SSPData[ii][jj]=NOT_PRESENT_VALUE;
     }
     
     // read scalers:
@@ -293,29 +296,26 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
     
         if (ii>=len) break;
         
-        if (nFibers > sspBoard->numberOfChannels) {
-            printf("Not ready for this\n");
-            break;
-        }
+        if (nFibers > sspBoard->numberOfChannels)
+            printf("SSPReadScalers:  # Scaler Fibers got larger!\n");
         
         // read header for this fiber:
         thisLen = (*buf)[ii];
         thisFiber = (*buf)[ii+1];
         thisRef = (*buf)[ii+2];
 
-        // store fiber number:
-        sspBoard->scalerFibers.push_back(thisFiber);
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // instead, let's change nFibers to fiber#
-        // then access in jscalers_ioc.cpp is simple (channel#=fiber#)
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // read scaler for this fiber:
-        for (int jj=ii+3; jj<ii+thisLen; jj++) {
-            hz=(*buf)[jj]*(sspBoard->CLOCKFREQ/thisRef);
-            sspBoard->scalerCounts[nFibers].push_back((*buf)[jj]);
-            sspBoard->scalerCountsHz[nFibers].push_back(hz);
+        if (thisFiber<0 || thisFiber>sspBoard->numberOfChannels)
+            printf("SSPReadScalers:  Invalid Scaler Fiber #:  %d\n",thisFiber);
+        
+        else {
+            // read scalers for this fiber:
+            sspBoard->scalerCounts[thisFiber].clear();
+            sspBoard->scalerCountsHz[thisFiber].clear();
+            for (jj=ii+3; jj<ii+thisLen; jj++) {
+                hz=(*buf)[jj]*(sspBoard->CLOCKFREQ/thisRef);
+                sspBoard->scalerCounts[thisFiber].push_back((*buf)[jj]);
+                sspBoard->scalerCountsHz[thisFiber].push_back(hz);
+            }
         }
 
         // move to next fiber:
@@ -327,34 +327,35 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &
     (*buf)=0;
     ret = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
     (void)ret;
+    nFibers=0;
     while (1) {
     
         if (ii>=len) break;
         
-        if (nFibers > sspBoard->numOfSSPDataChannels) {
-            printf("Not ready for this\n");
-            break;
-        }
+        if (nFibers > sspBoard->numOfSSPDataChannels)
+            printf("SSPReadScalers:  # Data Fibers got larger!\n");
         
         // reader header for this fiber:
         thisLen = (*buf)[ii];
         thisFiber = (*buf)[ii+1];
         thisRef = (*buf)[ii+2];
 
-        // check thisFiber matches that read from readScalers???
-        //if (thisFiber != sspBoard->scalerFibers[nFibers]) {
-        //    printf("fiber mismatch\n");
-        //}
+        if (thisFiber<0 || thisFiber>sspBoard->numOfSSPDataChannels)
+            printf("SSPReadScalers:  Invalid Data Fiber #:  %d\n",thisFiber);
 
-        // read data for this fiber:
-        for (int jj=ii+3; jj<ii+thisLen; jj++) {
-            sspBoard->SSPData[nFibers].push_back((*buf)[jj]);
+        else {
+            // read data for this fiber:
+            sspBoard->SSPData[ii].clear();
+            for (int jj=ii+3; jj<ii+thisLen; jj++) {
+                sspBoard->SSPData[thisFiber].push_back((*buf)[jj]);
+            }
         }
 
         // move to next fiber:
         ii+=thisLen;
         nFibers++;
     }
+
 /*
     const int offset=sspBoard->HEADEROFFSET;
 

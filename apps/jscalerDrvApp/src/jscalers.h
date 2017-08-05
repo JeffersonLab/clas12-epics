@@ -45,7 +45,6 @@ struct GenericSetBoard {
 class JlabBoard {
 
     private:
-        CrateMsgClient* crateMsgClient;
 
 
     protected:
@@ -54,9 +53,7 @@ class JlabBoard {
         JlabBoard& operator=(const JlabBoard& board);
     public:
 
-        //  map<string, int> smi_state; 
-        //  map<string, int> smi_state_prev; 
-
+        CrateMsgClient* crateMsgClient;
         int smi_state; 
         int smi_state_prev; 
 
@@ -146,6 +143,7 @@ class JlabSSPBoard : public JlabBoard {
         JlabSSPBoard(const  JlabSSPBoard& board);
         JlabSSPBoard& operator=(const  JlabSSPBoard& board);
     public:
+        static const int MAXFIBERS=8;
         static const int SCALERSPERFIBER=192;
         static const int DATAPERFIBER=5;
         static const int HEADEROFFSET=3;
@@ -153,49 +151,109 @@ class JlabSSPBoard : public JlabBoard {
        
         int numOfSSPDataChannels;
         vector< double > *SSPData;
-        vector< int > scalerFibers;
+
+        int getNumberOfScalerFibers() {
+            unsigned int *buf[1];
+            (*buf) = 0;
+            int len,ret,ii,thisLen;
+            int nChannels=0;
+            ret = crateMsgClient->ReadScalers(slotNumber,buf,&len);
+            if (ret) {
+                if (len % (SCALERSPERFIBER+HEADEROFFSET) != 0) 
+                    printf("JlabSSPBoard:  odd scaler array length1:  %d\n",len);
+                ii=0;
+                while (1) {
+                    if (ii>=len) break;
+                    thisLen = (*buf)[ii];
+                    if (thisLen != HEADEROFFSET+SCALERSPERFIBER)
+                        printf("JLabSSPBoard:  add scalar array length2:  %d\n",thisLen);
+                    ii+=thisLen;
+                    nChannels++;
+                }
+                if (ii!=len)
+                    printf("JLabSSPBoard:  add scalar array length3:  %d/%d\n",ii,len);
+            }
+            return nChannels;
+        }
+        int getNumberOfDataFibers() {
+            unsigned int *buf[1];
+            (*buf) = 0;
+            int len,ret,ii,thisLen;
+            int nChannels=0;
+            ret = crateMsgClient->ReadData(slotNumber,buf,&len);
+            if (ret) {
+                if (len % (DATAPERFIBER+HEADEROFFSET) != 0) 
+                    printf("JlabSSPBoard:  odd scaler array length1:  %d\n",len);
+                ii=0;
+                while (1) {
+                    if (ii>=len) break;
+                    thisLen = (*buf)[ii];
+                    if (thisLen != HEADEROFFSET+DATAPERFIBER)
+                        printf("JLabSSPBoard:  add scalar array length2:  %d\n",thisLen);
+                    ii+=thisLen;
+                    nChannels++;
+                }
+                if (ii!=len)
+                    printf("JLabSSPBoard:  add scalar array length3:  %d/%d\n",ii,len);
+            }
+            return nChannels;
+        }
 
         JlabSSPBoard(CrateMsgClient *crateMsgClient, int slot, int type ) : JlabBoard(crateMsgClient,slot,type){
             unsigned int *buf[1];
             (*buf) = 0;
+            
+            numberOfChannels     = getNumberOfScalerFibers();
+            numOfSSPDataChannels = getNumberOfScalerFibers();
+            printf("JLabSSPBoard:  number of scaler channels (%d) = %d\n",slot,numberOfChannels);
+            printf("JLabSSPBoard:  number of data channels (%d) = %d\n",slot,numOfSSPDataChannels);
+            
+            scalerCounts=new vector< double >[numberOfChannels];
+            scalerCountsHz=new vector< double >[numberOfChannels];
+            SSPData=new vector< double >[numOfSSPDataChannels];
+/*
             int len,ret,ii,thisLen;
-            
-            numberOfChannels=0;
-            
+            numberOfChannels = 0;
             ret = crateMsgClient->ReadScalers(slotNumber,buf,&len);
             if (ret) {
-                if ((*buf)[0] % (SCALERSPERFIBER+HEADEROFFSET) != 0) 
-                    printf("JlabSSPBoard:  odd scaler array length:  %d/%d\n",len,(*buf)[0]);
+                if (len % (SCALERSPERFIBER+HEADEROFFSET) != 0) 
+                    printf("JlabSSPBoard:  odd scaler array length1:  %d\n",len);
                 else {
                     ii=0;
                     while (1) {
                         if (ii>=len) break;
                         thisLen = (*buf)[ii];
+                        if (thisLen != HEADEROFFSET+SCALERSPERFIBER)
+                            printf("JLabSSPBoard:  add scalar array length2:  %d\n",thisLen);
                         ii+=thisLen;
                         numberOfChannels++;
                     }
-                    if (numberOfChannels !=
-                            (int)(*buf)[0] / (SCALERSPERFIBER+HEADEROFFSET)) {
-                        printf("JLabSSPBoard:  odd scaler array length:  %d/%d\n",len,(*buf)[0]);
-                    }
                 }
             }
-
             printf("JLabSSPBoard:  number of scaler channels (%d) = %d\n",slot,numberOfChannels);
-            scalerCounts=new vector< double >[numberOfChannels];
-            scalerCountsHz=new vector< double >[numberOfChannels];
 
+            // determine number of fibers for data:
             numOfSSPDataChannels = 0;
             ret = crateMsgClient->ReadData(slotNumber,buf,&len);
             if (ret) {
-                if ((*buf)[0] % (DATAPERFIBER+HEADEROFFSET) != 0) 
-                    printf("JlabSSPBoard:  odd data array length:  %d\n",(*buf)[0]);
-                else 
+                if (len % (DATAPERFIBER+HEADEROFFSET) != 0) 
+                    printf("JlabSSPBoard:  odd data array length1:  %d\n",(*buf)[0]);
+                else {
                     numOfSSPDataChannels = (*buf)[0] / (DATAPERFIBER+HEADEROFFSET);
+                    ii=0;
+                    while (1) {
+                        if (ii>=len) break;
+                        thisLen = (*buf)[ii];
+                        if (thisLen != HEADEROFFSET+DATAPERFIBER)
+                            printf("JLabSSPBoard:  odd data array length2:  %d\n",thisLen);
+                        ii+=thisLen;
+                        numOfSSPDataChannels++;
+                    }
+                }
             }
             printf("JLabSSPBoard:  number of data channels (%d) = %d\n",slot,numOfSSPDataChannels);
-            SSPData=new vector< double >[numOfSSPDataChannels];
-
+*/
+            
             if (*buf) delete (*buf);
         }
         virtual ~JlabSSPBoard(){};
@@ -219,22 +277,12 @@ class VmeChassis {
         map<int, JlabBoard *> crateBoards; // key is slot
         pthread_t threadC;
         int is_crate_read;
-
         int numberOfSlots;
-
-        /// this constructor is called in the IOC init macro (one macro per crate)
-        /// then the chassis object is added in the vmecrates
-        ///--------------------------------------------------------------------
-        //VmeChassis(int id, string &ip, int slots_number, int *board_types);  /// id is to talk from record
         VmeChassis(int id, string &hostname );  /// id is to talk from record
-
         bool IsCrateRead(){return is_crate_read;}
-        //int getBoards(int *board_types);
         int getPortFromDb(string &hostname); /// get port from db (not used now)
-
         int GetNumberOfSlots();
         map<int, JlabBoard*> *GetBoardMap(); // key is slot
-
 };
 ///===========================================================================
 

@@ -18,6 +18,7 @@ DBD += waveformApp.dbd
 # <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 waveformApp_SRCS += waveformApp_registerRecordDeviceDriver.cpp
 waveformApp_SRCS += waveform.st
+#waveformApp_SRCS += waveformN.st
 waveformApp_SRCS_vxWorks += -nil-
 
 #The following adds support from base/src/vxWorks

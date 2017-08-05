@@ -563,6 +563,7 @@ read_waveform(struct waveformRecord *pwi)
   else
 #endif
   {
+
     pwi->rarm = 0;
     
     if (command==SSPSCAL)
@@ -571,6 +572,9 @@ read_waveform(struct waveformRecord *pwi)
         ret_status = IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
     else
         ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
+
+//    printf("read_waveform:  %x/%x/%x/%x %d/%d\n",
+//            slot,chassis,command,channel,ret_status,len);
 
     if (ret_status==0) {
         values = (double *) malloc(sizeof(double)*len);

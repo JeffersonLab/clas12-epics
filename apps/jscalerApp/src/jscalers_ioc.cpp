@@ -95,14 +95,11 @@ extern "C" {
 #endif
 
     void IocReadWaveform(int crate, int slot, int channel, int len, double values[]){
+        //printf("IocReadWaveform %d/%d/%d/%d\n",crate,slot,channel,len);
         if(scalersslowcontrol->vmecrates.count(crate)<=0) return;
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
-
-        for(int i=0;i<(len);i++){
+        for(int i=0;i<(len);i++)
             values[i]=(((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel])[i];
-        }
-
-        //((scalersslowcontrol.vmecrates[crate])->crateBoards[slot])->genericSetBoards.push_back(gsb);
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
     }
 
@@ -142,6 +139,7 @@ extern "C" {
 #endif
 
     void IocReadWaveformSSPData(int crate, int slot, int channel, int len, double values[]){
+        //printf("IocReadWaveformSSPData %d/%d/%d/%d\n",crate,slot,channel,len);
         if (scalersslowcontrol->vmecrates.count(crate)<=0) return;
         JlabSSPBoard *board;
         if (!dynamic_cast<JlabSSPBoard*> (scalersslowcontrol->vmecrates[crate]->crateBoards[slot])) 
@@ -149,7 +147,10 @@ extern "C" {
         else
             board=(JlabSSPBoard*)(scalersslowcontrol->vmecrates[crate]->crateBoards[slot]); 
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
-        for (int i=0; i<(len); i++) values[i]=((board->SSPData[channel]))[i];
+        for (int i=0; i<(len); i++) {
+            values[i]=((board->SSPData[channel]))[i];
+            //printf("%d %.1f\n",i,values[i]);
+        }
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
     }
 

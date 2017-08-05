@@ -5,6 +5,8 @@ import sys,os,stat,re
 #
 
 NOWAVEFORM=True
+PRINTMYA=False
+if len(sys.argv)>1 and sys.argv[1]=='-M': PRINTMYA=True
 
 DBFILE_FADC='db/jscaler_channel_FADC.db'
 DBFILE_DISC='db/jscaler_channel_DISC.db'
@@ -102,6 +104,7 @@ def printSubstitutions(scalerType,channels,fileName=None):
   else:              file=sys.stdout
   print >>file, 'file "'+dbFile+'" {'
   print >>file, 'pattern {',','.join(keys),'}'
+  printThreshold=True
   for cc in channels:
     row=','.join(keys)
     for kk in keys:
@@ -110,6 +113,18 @@ def printSubstitutions(scalerType,channels,fileName=None):
       else:
         row=row.replace(kk,'"%s"'%(cc[kk]))
     print >>file, '{',row,'}'
+    prefix='B_DET_%s_%s_%s'%(cc['Det'],scalerType,cc['Element'])
+    if PRINTMYA:
+      deadBand='sqrt(4*abs(x)+0.0004*x*x)'
+      if scalerType=='FADC':
+        print prefix+':c '+deadBand
+      elif scalerType=='DISC':
+        print prefix+':cTrg '+deadBand
+        if printThreshold:
+          printThreshold=False
+          print prefix+':tTrg 0'
+          print prefix+':tTdc 0'
+
   print >>file, '}'
 
 def printStartup(crates,fileName=None):

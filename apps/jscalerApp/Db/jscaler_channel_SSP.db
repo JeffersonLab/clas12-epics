@@ -1,4 +1,5 @@
 
+########################################################################
 record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"scaler waveform")
@@ -6,7 +7,7 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(NELM,"192")
     field(FTVL,"DOUBLE")
     field(SCAN,"5 second")
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT1:scalers")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
     alias("B_DET_$(Det)_$(Sys)_$(Element):scalers")
 }
 
@@ -21,29 +22,64 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
     alias("B_DET_$(Det)_$(Sys)_$(Element):data")
 }
 
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT1:scalers") {
+########################################################################
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
     field(NELM,64)
     field(MALM,64)
     field(INDX,0)
     field(FTVL,"DOUBLE")
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT2:scalers")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers")
     alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT1:scalers")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT2:scalers") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
     field(NELM,64)
     field(MALM,128)
     field(INDX,64)
     field(FTVL,"DOUBLE")
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT3:scalers")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalers")
     alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT2:scalers")
 }
-record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT3:scalers") {
+record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
     field(NELM,64)
     field(MALM,192)
     field(INDX,128)
     field(FTVL,"DOUBLE")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg")
     alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT3:scalers")
 }
+
+########################################################################
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
+    field(ALG,"N to 1 Average")
+    field(NSAM,1)
+    field(N,64)
+    field(PREC,1)
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg")
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT1:scalersAvg")
+    info(autosaveFields_pass0,"HHSV HIHI")
+}
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers")
+    field(ALG,"N to 1 Average")
+    field(NSAM,1)
+    field(N,64)
+    field(PREC,1)
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalersAvg")
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT2:scalersAvg")
+    info(autosaveFields_pass0,"HHSV HIHI")
+}
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalersAvg") {
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalers")
+    field(ALG,"N to 1 Average")
+    field(NSAM,1)
+    field(N,64)
+    field(PREC,1)
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT3:scalersAvg")
+    info(autosaveFields_pass0,"HHSV HIHI")
+}
+
+

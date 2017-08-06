@@ -13,12 +13,9 @@
 #include <map>
 #include <pthread.h>
 
-
 #include "common.h"
 
-#ifndef SIMULATION
 #include "cratemsgclient.h"
-#endif
 
 using namespace std;
 
@@ -30,7 +27,6 @@ struct GenericSetBoard {
     int channelNumber; /// negative (-1) means to ussue a command for a whole board
 };
 
-///============================================================================
 ///============================================================================
 class JlabBoard {
 

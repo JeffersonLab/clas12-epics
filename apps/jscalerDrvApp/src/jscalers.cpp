@@ -1,8 +1,3 @@
-/**
-
-V.Sytnik 07/2014
-
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,13 +39,11 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
     crateMsgClient= new CrateMsgClient((const char*) HOSTNAME.c_str(), port);
 
-#ifndef SIMULATION 
     if (crateMsgClient->IsValid()) printf("Connected %p\n",crateMsgClient);
     else {
         printf("NOT CONNECTED - RETURN\n");
         return; 
     }
-#endif
 
     (*buf)=0;
     ret = crateMsgClient->GetCrateMap(buf, &len);
@@ -412,12 +405,8 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
     printf("111  slot=%d  msgclient_addr=%p buf_addr=%p len=%d\n",it->first, ptr_c->crateMsgClient, &buf,len);
 #endif
 
-#ifndef SIMULATION
-    if(ret <=0 ){
-        printf("error in scaler reading\n");
-    }
+    if (ret <=0 ) printf("error in scaler reading\n");
     else{
-#endif
 
         for(int i10=0;i10 < len; i10++){
 

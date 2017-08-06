@@ -1,8 +1,9 @@
 
 ########################################################################
+# all scalers from one fiber:
 record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(DTYP,"JLAB_SCALERS")
-    field(DESC,"scaler waveform")
+    field(DESC,"SSP scaler waveform")
     field(INP,"#C$(CScode) S$(Counts)")
     field(NELM,"192")
     field(FTVL,"DOUBLE")
@@ -10,19 +11,19 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
     alias("B_DET_$(Det)_$(Sys)_$(Element):scalers")
 }
-
+# all data from one fiber:
 record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
     field(DTYP,"JLAB_SCALERS")
-    field(DESC,"scaler waveform")
+    field(DESC,"SSP data waveform")
     field(INP,"#C$(CScode) S$(Data)")
     field(NELM,"8")
     field(FTVL,"DOUBLE")
     field(SCAN,"2 second")
-#    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)_Fi$(Ch)_PMT1:data")
     alias("B_DET_$(Det)_$(Sys)_$(Element):data")
 }
 
 ########################################################################
+# single-PMT scalers:
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
     field(NELM,64)
@@ -52,6 +53,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT3:scalers") {
 }
 
 ########################################################################
+# single-PMT scaler averages:
 record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
     field(ALG,"N to 1 Average")

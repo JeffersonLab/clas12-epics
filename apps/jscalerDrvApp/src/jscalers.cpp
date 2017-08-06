@@ -214,8 +214,6 @@ void *crateThread(void *ptr) {
                     if (ret<=0) printf("error in thresh set\n");
                     if (*buf) delete *buf;
                 }
-//                else if ((it->second)->genericSetBoards[j].command==JLAB_SET_READ_MODE){
-//                }
                 (it->second)->genericSetBoards[j].values.clear();
             }
             (it->second)->genericSetBoards.clear();
@@ -413,7 +411,6 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
     printf("\n\n**************************AAA BoardType = %d\n",(it->second)->boardType);
     printf("111  slot=%d  msgclient_addr=%p buf_addr=%p len=%d\n",it->first, ptr_c->crateMsgClient, &buf,len);
 #endif
-    ///  printf("len=%d\n",len);
 
 #ifndef SIMULATION
     if(ret <=0 ){
@@ -460,23 +457,14 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
                     for(int in10=0;in10< ((j/nchannels)+1);in10++ ) {
                         inn=0;
                         for(uint in=in11;in<SCALER_NUMBER_OF_SUBGROUPS;in++){
-                            //if(bit[in]==0 && ( it->second->scalerCounts[j10] ).size() <= ( (j%16)+1)  ){
                             in11=in+1;
                             if(bit[in]==0)inn++;
                             else {break;}
                         }
                     }
-                    for(int in=0;in<inn;in++){
+                    for(int in=0;in<inn;in++)
                         ( it->second->scalerCounts[j10] ).push_back(NOT_PRESENT_VALUE);
-                    }
-
                     ( it->second->scalerCounts[j10] ).push_back((*buf)[i10+1+j]);
-
-                        //     if(((j/16)+1)==received_ngroups)
-                        //     for(uint in=0;in<SCALER_NUMBER_OF_SUBGROUPS-received_ngroups;in++){
-                        //      ( it->second->scalerCounts[j10] ).push_back(-1);
-                        //     }      
-
                 }
 
                 uint ref_gr1=(*buf)[i10+scaler_len-ref_num+1];
@@ -485,47 +473,29 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
 #ifdef JSCALER_DEBUG
                 printf("ref_prescale=%u, ref=%u %u\n",ref_prescale,ref_gr1,ref_gr2);
 #endif
-                //ref_prescale=1;
                 uint ref;
                 (it->second->scalerClocks).clear();
                 (it->second->scalerClocks).push_back(ref_gr1);
                 (it->second->scalerClocks).push_back(ref_gr2);
-                //    printf("%08x %08x %d\n",ref_gr1,ref_gr2, i10+scaler_len+1);
                 for(int j10=0; j10< (it->second)->numberOfChannels; j10++){
-                    //     printf("=== %d %d\n",j10, (it->second->scalerCounts[j10]).size());
                     for(uint j=0; j< SCALER_NUMBER_OF_SUBGROUPS-(it->second->scalerCounts[j10]).size(); j++){
                         ( it->second->scalerCounts[j10] ).push_back(NOT_PRESENT_VALUE);
-                        //             printf("%d %08x\n",j, (it->second->scalerCounts[j10] )[j]);
                     }
                 }
 
                 for(int j10=0; j10< (it->second)->numberOfChannels; j10++){
-                    //     printf("=== %d %d\n",j10, (it->second->scalerCounts[j10]).size());
                     (it->second->scalerCountsHz[j10] ).clear();
                     for(uint j=0; j< (it->second->scalerCounts[j10]).size(); j++){
-
-                        /*sergey: always use ungated(biggest0 reference for normalization
-                          if(j < 2)ref=ref_gr1;
-                          else ref=ref_gr2;
-                          */
                         ref = (ref_gr1 > ref_gr2) ? ref_gr1 : ref_gr2;
-
-
-                        //int count_int=(int)(it->second->scalerCounts[j10])[j];
                         if(ref!=0 && (it->second->scalerCounts[j10])[j] >=0 )(it->second->scalerCountsHz[j10] ).push_back((it->second->scalerCounts[j10])[j] / (ref*ref_prescale/ScalerDsc2ClockFrequecy));
                         else (it->second->scalerCountsHz[j10] ).push_back(NOT_PRESENT_VALUE);
-
                     }
                 }
-
                 break;
             }
         }
     }
-
-
     if(*buf)delete *buf;
-
     return 0;
 }
 

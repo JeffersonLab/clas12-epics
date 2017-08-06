@@ -1,8 +1,3 @@
-/**
-
-V.Sytnik 07/2014
-
-*/
 #ifndef JSCALERS_DOT_H
 #define JSCALERS_DOT_H
 
@@ -25,11 +20,7 @@ V.Sytnik 07/2014
 #include "cratemsgclient.h"
 #endif
 
-
-
 using namespace std;
-
-
 
 ///============================================================================
 
@@ -39,13 +30,11 @@ struct GenericSetBoard {
     int channelNumber; /// negative (-1) means to ussue a command for a whole board
 };
 
-
 ///============================================================================
 ///============================================================================
 class JlabBoard {
 
     private:
-
 
     protected:
         // Prevent copying boards

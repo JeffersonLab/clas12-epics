@@ -1,4 +1,6 @@
 
+#define ALLSET_THROUGH_ONE 0
+
 #define NOWAVEFORMS 1
 
 #include <stdio.h>
@@ -21,6 +23,7 @@
 #include <recSup.h>
 #include <recGbl.h> 
 #include <devSup.h>
+#include <boRecord.h>
 #include <biRecord.h>
 #include <aiRecord.h>
 #include <aoRecord.h>
@@ -37,9 +40,32 @@ int FLAG_BLOCK_INIT=1;
 
 static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
+static long read_bi(struct biRecord *); 
 static long read_ai(struct aiRecord *); 
 static long init_ai(struct aiRecord *); 
+static long write_bo(struct boRecord *);
+static long init_bo(struct boRecord *);
 static long read_waveform(struct waveformRecord *);
+
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN write_bo;
+} devBoSCALERS = {5, NULL, NULL, init_bo, NULL, write_bo};
+epicsExportAddress(dset,devBoSCALERS);
+
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN read_bi;
+} devBiSCALERS = {5, NULL, NULL, NULL, NULL, read_bi};
+epicsExportAddress(dset,devBiSCALERS);
 
 struct
 { long number;
@@ -73,6 +99,72 @@ struct
 } devWaveformSCALERS = {5, NULL, NULL, NULL, NULL, read_waveform};
 epicsExportAddress(dset,devWaveformSCALERS);
 
+
+//===============================================================================================
+static long
+init_bo(struct boRecord  *pbo)
+{
+  /* Get the card & signal numbers from the record, pointed to by pbo.
+     These data items are not used as card/signal, but are defined as
+     {card 0-7: chassis, 8-15: slot;  signal 0-7:channel, 8-15:command}.
+   */
+
+#ifdef USE_SMI
+  struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value);  
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned slot = (*card)>>8;
+  unsigned chassis = (*card) - ((slot)<<8) ;
+
+  unsigned command = (*signal)>>8;
+  unsigned channel = (*signal) - ((command)<<8);
+
+  char tmp[81];
+  int retv;
+  int first_channel=channel, chs_number=command;
+  if(strstr(pbo->desc,"smi"))
+  { 
+    strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
+    tmp[strlen(pbo->name)-strlen("_BO")]=0;
+
+    retv=ScalerBoardSmiMonitor(1, tmp, chassis, slot, first_channel, chs_number);
+    pbo->rval = retv;
+  }
+#endif
+  return 0;
+}
+
+
+//===============================================================================================
+static long
+write_bo(struct boRecord *pbo)
+{
+#ifdef USE_SMI
+  struct vmeio *pvmeio = (struct vmeio *) &(pbo->out.value);  
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned slot = (*card)>>8;
+  unsigned chassis = (*card) - ((slot)<<8) ;
+
+  unsigned command = (*signal)>>8;
+  unsigned channel = (*signal) - ((command)<<8);
+
+  int retv;
+  int first_channel=channel, chs_number=command;
+  if(strstr(pbo->desc,"smi"))
+  {
+    retv=ScalerBoardSmiControl(pbo->name, chassis, slot,  
+    first_channel, chs_number, (unsigned char)pbo->rval);
+  }
+  else if(strstr(pbo->desc,"crate_fsm_init"))
+  { /// for any order of launch of ioc and fsm
+    retv=ScalerCrateSmiInit(pbo->name, chassis);
+  }
+#endif
+  return 0;  
+}
 
 //===============================================================================================
 static long init_ai(struct aiRecord *pai) { return 0; }
@@ -212,6 +304,35 @@ static long write_ao(struct aoRecord *pao)
 
 //===============================================================================================
 static long
+read_bi(struct biRecord *pbi)
+{
+#ifdef USE_SMI
+  struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned int slot = (*card)>>8;
+  unsigned int chassis = (*card) - ((slot)<<8) ;
+
+  unsigned int command = (*signal)>>8;
+  unsigned int channel = (*signal) - ((command)<<8);
+
+  int retv;
+  int first_channel=channel, chs_number=command;
+  if(strstr(pbi->desc,"smi"))
+  {
+    retv=ScalerBoardSmiMonitor(0, pbi->name, chassis, slot, first_channel, chs_number);
+    pbi->rval = retv; /// means nothing
+  }
+#endif
+
+  return 0;  
+}
+
+
+//===============================================================================================
+static long
 read_waveform(struct waveformRecord *pwi)
 {
   struct vmeio *pvmeio = (struct vmeio *) &(pwi->inp.value);  
@@ -229,6 +350,14 @@ read_waveform(struct waveformRecord *pwi)
   double *values;
   int ret_status=1;
 
+#ifdef USE_SMI
+  if(strstr(pwi->desc,"smi"))
+  {
+    ///retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
+    /// pbi->rval = retv; /// means nothing
+  }
+  else
+#endif
   {
     pwi->rarm = 0;
 

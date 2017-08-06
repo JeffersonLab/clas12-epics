@@ -5,12 +5,6 @@
 
 #define JLAB_SLOT_IS_EMPTY -1
 
-#define SMI_STATE_UNDEFINED_2 -2
-#define SMI_STATE_UNDEFINED -1
-#define SMI_STATE_OFF 0
-#define SMI_STATE_ON 1
-#define SMI_STATE_ERROR 2
-
 #define NUMBER_OF_SCALER_THRESHOLDS 2
 #define MODE_PARS_NUMBER 4
 
@@ -48,15 +42,6 @@ int IocGetWaveformLength(int crate, int slot, int channel, int *len);
 void IocReadWaveformSSPData(int crate, int slot, int channel, int len, double values[]);
 int IocGetWaveformLengthSSPData(int crate, int slot, int channel, int *len);
 void block_until_crate_read(int crate);
-
-int ScalerBoardSmiMonitor( int is_init, char *epics_name,
-unsigned int crate, unsigned int slot, unsigned int first_channel, unsigned int chs_number);
-
-int ScalerBoardSmiControl
-(char *smi_obj_name, unsigned int crate, unsigned int slot, 
-unsigned int first_channel, unsigned int chs_number, unsigned int onoff);
-
-int ScalerCrateSmiInit(char *smi_obj_name, unsigned int crate);
 
 #ifdef __cplusplus
 }

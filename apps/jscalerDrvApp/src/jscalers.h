@@ -39,8 +39,6 @@ class JlabBoard {
     public:
 
         CrateMsgClient* crateMsgClient;
-        int smi_state; 
-        int smi_state_prev; 
 
         vector<string> part_epics_names;
 
@@ -59,7 +57,6 @@ class JlabBoard {
 
         JlabBoard(CrateMsgClient *msgClient, int slot, int type ) : crateMsgClient(msgClient), slotNumber(slot), boardType(type){
             // types: SCALER_TYPE_DSC2, SCALER_TYPE_FADC250
-            smi_state_prev=SMI_STATE_UNDEFINED;
             unsigned int *buf[1];
             int len;
             int partype = SCALER_PARTYPE_NCHANNELS;

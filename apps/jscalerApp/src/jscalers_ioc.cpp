@@ -1,19 +1,7 @@
-/**
 
-V.Sytnik 07/2014
-
-*/
 #include "jscalers.h"
 
-
 ScalersSlowControl *scalersslowcontrol;
-
-///================================================
-///================================================
-///================== IOC part ====================
-///================================================
-///================================================
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,15 +29,12 @@ extern "C" {
         }
 
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
-        //((scalersslowcontrol.vmecrates[crate])->crateBoards[slot])->genericSetBoards.push_back(gsb);
-
         return 0;
     }
 
 #ifdef __cplusplus
 }
 #endif
-///================================================
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,8 +74,6 @@ extern "C" {
         return 0;
     }
 
-
-
 #ifdef __cplusplus
 }
 #endif
@@ -120,7 +103,6 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-///================================================
 
 #ifdef __cplusplus
 extern "C" {
@@ -215,8 +197,6 @@ extern "C" {
 }
 #endif
         
- 
-///================================================
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -232,5 +212,4 @@ extern "C" {
 }
 #endif
 
-///================================================
 

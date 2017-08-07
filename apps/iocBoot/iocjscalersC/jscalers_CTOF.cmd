@@ -16,8 +16,8 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
-#dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
-#dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
+dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
+dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
 
 dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
 
@@ -41,5 +41,6 @@ seq seqJscalersC
 
 seq waveform, "P=B_DET_FTC_,R=FADC:"
 seq waveform, "P=B_DET_FTC_,R=FADC:t:"
+
 dbl > pv.list
 

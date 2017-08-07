@@ -109,25 +109,28 @@ extern "C" {
 #endif
 
     int IocGetWaveformLength(int crate, int slot, int channel, int *len){
-        //fprintf(stderr,"IocReadWaveformLength %d/%d/%d/%d\n",crate,slot,channel,len);
-        int slot_status=0;
+        //fprintf(stderr,"IocReadWaveformLength %d/%d/%d\n",crate,slot,channel);
         if (scalersslowcontrol->vmecrates.count(crate)<=0) {
             *len=0;
             return CRATE_NOT_PRESENT;
+        }
+        if (slot >= scalersslowcontrol->vmecrates[crate]->numberOfSlots) {
+            (*len)=0;
+            return BOARD_NOT_PRESENT;
+        }
+        if (!((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])) {
+            (*len)=0;
+            return BOARD_NOT_PRESENT;
         }
         if (channel>=((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->numberOfChannels)  {
             *len=0;
             return NOT_PRESENT_VALUE;
         }
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
-        if (!((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])) {
-            (*len)=0;
-            slot_status=BOARD_NOT_PRESENT;
-        }
-        else (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel]).size();
+        (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel]).size();
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
         //fprintf(stderr,"IocReadWaveformLength DONE\n");
-        return slot_status;
+        return 0;
     }
 
 #ifdef __cplusplus

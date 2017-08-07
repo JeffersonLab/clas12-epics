@@ -82,6 +82,7 @@ int NCFEDOWNERR[MAX_HVPS];
 static int  nA1520param = 16;
 static int  nA1535param = 16;
 static int  nA2518Aparam = 18;
+static int  nA2518AparamV2 = 17;
 static int  nA1536HDparam = 17;
 static int  nA1536HDMparam = 18;
 
@@ -101,6 +102,10 @@ static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","RUpTime","RDwTime","UNVThr","OVVThr","VMon",
                 "VCon","IMon","Temp","Status","Pw","TripInt","TripExt",
                 "ChToGroup","OnGrDel","OffGrDel","Intck"};
+//static char A2518AparamV2[MAX_PARAM][MAX_CAEN_NAME] = {
+//                "V0Set","I0Set","RUpTime","RDwTime","UNVThr","OVVThr","VMon",
+//                "VCon","IMon","Temp","Status","Pw","TripInt","TripExt",
+//                "ChToGroup","OnGrDel","OffGrDel"};
 
 ///---------------------------------------------------------------
 /* some useful macros */
@@ -693,7 +698,8 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if( !strcmp(Measure[id].board[i].modelname,"A1536HD"))
+        else if( !strcmp(Measure[id].board[i].modelname,"A1536HD") ||
+                 !strcmp(Measure[id].board[i].modelname,"A7236N"))
         {
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1536HDparam;
@@ -720,11 +726,22 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if(!strcmp(Measure[id].board[i].modelname,"A2518A"))
+        else if(!strcmp(Measure[id].board[i].modelname,"A2518A") ||
+                !strcmp(Measure[id].board[i].modelname,"A2518") )
         {
+
+          // check whether this firmwawre version has single-channel interlocks:
+          ret=CAENHVGetChParamProp(name,i,ChList[0],"Intck","Type",&tipo);
+          if (ret == CAENHV_OK) {
+              Measure[id].board[i].nparams = nA2518Aparam;
+              Demand[id].board[i].nparams = nA2518Aparam;
+          }
+          else {
+              Measure[id].board[i].nparams = nA2518AparamV2;
+              Demand[id].board[i].nparams = nA2518AparamV2;
+          }
+
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
-          Measure[id].board[i].nparams = nA2518Aparam;
-          Demand[id].board[i].nparams = nA2518Aparam;
           for(j=0; j<Measure[id].board[i].nparams; j++)
           {
             strcpy(Measure[id].board[i].parnames[j],A2518Aparam[j]);
@@ -732,6 +749,7 @@ sy1527GetMap(unsigned int id)
             strcpy(ParName,Measure[id].board[i].parnames[j]);
 
             ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
+            
             if(ret != CAENHV_OK)
             {
               printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
@@ -1627,6 +1645,11 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
   return u;
 }
 
+void sy1527GetBoardModelName(unsigned int id,unsigned int slot,char* value) {
+    LOCK_MAINFRAME(id);
+    strcpy(value,Measure[id].board[slot].modelname);
+    UNLOCK_MAINFRAME(id);
+}
 void sy1527GetMainframeSwRelease(unsigned int id,char* value) {
     LOCK_MAINFRAME(id);
     strcpy(value,Measure[id].SwRelease);

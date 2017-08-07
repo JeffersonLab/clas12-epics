@@ -34,6 +34,6 @@
 #define G_HVPW    0x04    /* HvPwSM                         */
 #define G_MOD     0x05    /* Model Name                     */
 #define G_SWR     0x06    /* Sowftware Release              */
-
+#define G_BDMOD   0x07    /* Board Model Name               */
 
 #endif

@@ -10,6 +10,7 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 DB    += caenhv.db
 DB    += caenlv.db
+DB    += caenboard.db
 DB    += caenchassis.db
 DB    += accessControl.db
 

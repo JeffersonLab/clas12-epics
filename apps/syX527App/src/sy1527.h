@@ -313,6 +313,7 @@ unsigned int
 sy1527GetChannelInterlock(unsigned int id, unsigned int board,
                            unsigned int chan);
 
+void sy1527GetBoardModelName(unsigned int chassis,unsigned int slot,char* value);
 void sy1527GetMainframeSwRelease(unsigned int id,char* value);
 void sy1527GetMainframeModelName(unsigned int id,char* value);
 void sy1527GetMainframeHVFanStat(unsigned int id,char* value);

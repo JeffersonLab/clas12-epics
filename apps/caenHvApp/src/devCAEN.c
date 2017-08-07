@@ -378,7 +378,9 @@ static long read_si(struct stringinRecord *pbi)
   else if (command == G_MOD)
       sy1527GetMainframeModelName(chassis,pbi->val); 
   else if (command == G_SWR)
-      sy1527GetMainframeSwRelease(chassis,pbi->val); 
+      sy1527GetMainframeSwRelease(chassis,pbi->val);
+  else if (command == G_BDMOD)
+      sy1527GetBoardModelName(chassis,slot,pbi->val);
   else {
       char alert[128];
       sprintf(alert, "%s(%d): Chassis%d Command%d", __FILE__, __LINE__,

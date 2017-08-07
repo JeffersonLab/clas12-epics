@@ -451,7 +451,8 @@ def setupHists(hhh):
         hh.SetMinimum(0.1)
         xx,yy=-11,-11
         for ix in range(hh.GetNbinsX()):
-          hh.GetXaxis().SetBinLabel(ix+1,'%d'%(xx))
+          # swap x to make it downstream view:
+          hh.GetXaxis().SetBinLabel(ix+1,'%d'%(-xx))
           xx+=1
           if xx==0: xx+=1
         for iy in range(hh.GetNbinsY()):
@@ -488,7 +489,10 @@ def pix2xy(pad):
   y=int(float(py-tl[1])/(bl[1]-tl[1])*22)-11
   if x>=0: x+=1
   if y>=0: y+=1
+  # swap y because pixel-coordinate inverted:
   y=-y
+  # swap x to make it downstream view:
+  x=-x
   return [x,y]
 
 def printChannel(ee):
@@ -600,6 +604,8 @@ def main():
               xx,yy=ch['X'],ch['Y']
               if xx<0: xx+=1
               if yy<0: yy+=1
+              # swap x to make it downstream view:
+              xx=-xx
               hh.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
               hi.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
 

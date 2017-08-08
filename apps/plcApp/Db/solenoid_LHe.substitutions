@@ -166,14 +166,10 @@ file "db/torus_bi_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
     { PLC_SOL, B_SOL:, LHe:, SV8621,      Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
     { PLC_SOL, B_SOL:, LHe:, SV8622,      Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
-    { PLC_SOL, B_SOL:, LHe:, SV8675BY,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
-    { PLC_SOL, B_SOL:, LHe:, SV8678CR,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
-    { PLC_SOL, B_SOL:, LHe:, SV8678DV,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
     { PLC_SOL, B_SOL:, LHe:, HTR8620_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "HTR8620 Permit" }
     { PLC_SOL, B_SOL:, LHe:, HTR8672_Permit,    Disabled,   Enabled,    MAJOR, NO_ALARM, "HTR8272 Permit" }
     { PLC_SOL, B_SOL:, LHe:, HTR8621A,    Disabled, Enabled,    NO_ALARM,   NO_ALARM,   "VCL Heater" }
     { PLC_SOL, B_SOL:, LHe:, HTR8621B,    Disabled, Enabled,    NO_ALARM,   NO_ALARM,   "VCL Heater" }
-    { PLC_SOL, B_SOL:, LHe:, PV8674,      Closed, Open,   MAJOR, NO_ALARM, "Gate Valve" }
     { PLC_SOL, B_SOL:, PLC:, DBoxCommError,  Ok,       Fault,   NO_ALARM, MAJOR,    "Comm from Solenoid to DBX PLC" }
 }
 
@@ -199,8 +195,13 @@ file "db/torus_ao_generic.db" { pattern
     { PLC_SOL, B_SOL:, LHe:, HTR8672_LL_SET,                    K,      2, "LL8670SC Threshold" }
 }
 
-
-
+file "db/torus_bo_generic.db" {
+    pattern{ PLCID, P, R, TAG, ZNAM, ONAM, ZSV, OSV, DESC }
+    { PLC_SOL, B_SOL:, LHe:, SV8675BY,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8678CR,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, SV8678DV,    Closed, Open,   MAJOR, NO_ALARM, "Solenoid Valve" }
+    { PLC_SOL, B_SOL:, LHe:, PV8674,      Closed, Open,   MAJOR, NO_ALARM, "Gate Valve" }
+}
 
 file "db/datatype_cpid.db" {
     pattern{ PLCID, P, R, TAG }

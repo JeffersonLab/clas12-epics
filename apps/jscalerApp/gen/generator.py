@@ -115,7 +115,7 @@ def printSubstitutions(scalerType,channels,fileName=None):
     print >>file, '{',row,'}'
     prefix='B_DET_%s_%s_%s'%(cc['Det'],scalerType,cc['Element'])
     if PRINTMYA:
-      deadBand='sqrt(4*abs(x)+0.0004*x*x)'
+      deadBand='=$sqrt(4*$abs(x)+0.0004*x*x)'
       if scalerType=='FADC':
         print prefix+':c '+deadBand
       elif scalerType=='DISC':

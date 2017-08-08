@@ -126,9 +126,9 @@ class JlabSSPBoard : public JlabBoard {
         JlabSSPBoard(const  JlabSSPBoard& board);
         JlabSSPBoard& operator=(const  JlabSSPBoard& board);
     public:
-        static const int MAXFIBERS=8;
+        static const int MAXFIBERS=32;
         static const int SCALERSPERFIBER=192;
-        static const int DATAPERFIBER=5;
+        static const int DATAPERFIBER=8;
         static const int HEADEROFFSET=3;
         static const double CLOCKFREQ=125E6;
        
@@ -137,102 +137,7 @@ class JlabSSPBoard : public JlabBoard {
         vector< int > scalerFibers;
         vector< int > dataFibers;
 
-        int readScalers() {
-            scalerFibers.clear();
-            unsigned int *buf[1];
-            (*buf) = 0;
-            int len,ret,ii,jj,thisLen,thisFiber;
-            double hz,thisRef;
-            ret = crateMsgClient->ReadScalers(slotNumber,buf,&len);
-            if (ret) {
-                if (len % (SCALERSPERFIBER+HEADEROFFSET) != 0) 
-                    printf("SSP:readScalers:  Odd scaler array length1:  %d\n",len);
-                ii=0;
-                while (1) {
-                    if (ii>=len) break;
-                    thisLen = (*buf)[ii];
-                    if (ii+thisLen > len) {
-                        printf("SSP:readScalers:  Invalid scaler lengths.\n");
-                        break;
-                    }
-                    if (thisLen != HEADEROFFSET+SCALERSPERFIBER)
-                        printf("SSP:readScalers:  Odd scalar array length2:  %d\n",thisLen);
-                    if (thisLen <= HEADEROFFSET)
-                        printf("SSP:readScalers:  Bad scaler length:  %d\n",thisLen);
-                    else {
-                        thisFiber = (*buf)[ii+1];
-                        thisRef = (*buf)[ii+2];
-                        if (thisFiber<0 || thisFiber>=MAXFIBERS)
-                            printf("SSP:readScalers:  Invalid scaler fiber #:  %d\n",thisFiber);
-                        else {
-                            // read scalers for this fiber:
-                            scalerFibers.push_back(thisFiber);
-                            scalerCounts[thisFiber].clear();
-                            scalerCountsHz[thisFiber].clear();
-                            for (jj=ii+3; jj<ii+thisLen; jj++) {
-                                hz=(*buf)[jj]*(CLOCKFREQ/thisRef);
-                                scalerCounts[thisFiber].push_back((*buf)[jj]);
-                                scalerCountsHz[thisFiber].push_back(hz);
-                            }
-                        }
-                    }
-                    ii+=thisLen;
-                }
-                if (ii!=len)
-                    printf("SSP:readScalers:  Odd scalar array length3:  %d/%d\n",ii,len);
-            }
-            if (*buf) delete (*buf);
-            return scalerFibers.size();
-        }
-        int readData() {
-            dataFibers.clear();
-            unsigned int *buf[1];
-            (*buf) = 0;
-            int len,ret,ii,jj,thisLen,thisFiber;
-            ret = crateMsgClient->ReadData(slotNumber,buf,&len);
-            if (ret) {
-                if (len % (DATAPERFIBER+HEADEROFFSET) != 0) 
-                    printf("SSP:readData:  odd scaler array length1:  %d\n",len);
-                ii=0;
-                while (1) {
-                    if (ii>=len) break;
-                    thisLen = (*buf)[ii];
-                    if (ii+thisLen > len) {
-                        printf("SSP:readData:  Invalid data lengths.\n");
-                        break;
-                    }
-                    if (thisLen != HEADEROFFSET+DATAPERFIBER)
-                        printf("SSP:ReadData:  Odd scalar array length2:  %d\n",thisLen);
-                    if (thisLen <= HEADEROFFSET)
-                        printf("SSPReadScalers:  Bad scaler length:  %d\n",thisLen);
-                    else {
-                        thisFiber = (*buf)[ii+1];
-                        if (thisFiber<0 || thisFiber>=MAXFIBERS)
-                            printf("SSP:readData:  Invalid data fiber #:  %d\n",thisFiber);
-                        else {
-                            // read data for this fiber:
-                            dataFibers.push_back(thisFiber);
-                            SSPData[ii].clear();
-                            for (jj=ii+3; jj<ii+thisLen; jj++)
-                                SSPData[thisFiber].push_back((*buf)[jj]);
-                        }
-                    }
-                    ii+=thisLen;
-                }
-                if (ii!=len)
-                    printf("SSP:readData:  Odd scalar array length3:  %d/%d\n",ii,len);
-            }
-            if (*buf) delete (*buf);
-            return dataFibers.size();
-        }
-
         JlabSSPBoard(CrateMsgClient *crateMsgClient, int slot, int type ) : JlabBoard(crateMsgClient,slot,type){
-            
-            numberOfChannels     = readScalers();
-            numOfSSPDataChannels = readData();
-            printf("JLabSSPBoard:  number of scaler channels (%d) = %d\n",slot,numberOfChannels);
-            printf("JLabSSPBoard:  number of data channels (%d) = %d\n",slot,numOfSSPDataChannels);
-        
             // use max possible number of fibers to create vectors::
             scalerCounts=new vector< double >[MAXFIBERS];
             scalerCountsHz=new vector< double >[MAXFIBERS];

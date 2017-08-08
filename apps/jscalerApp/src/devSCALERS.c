@@ -225,13 +225,14 @@ read_waveform(struct waveformRecord *pwi)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-  int len, len_com;
+  int len, len_com,ii;
   double *values;
   int ret_status=1;
 
   {
     pwi->rarm = 0;
 
+// simulator:
 //    for (pwi->nord=0; pwi->nord<pwi->nelm; pwi->nord++) {
 //        ((double*)pwi->bptr)[pwi->nord] = (double)rand()/RAND_MAX * 1e8;
 //    }
@@ -244,7 +245,7 @@ read_waveform(struct waveformRecord *pwi)
     else
         ret_status = IocGetWaveformLength(chassis, slot, channel, &len);
 
-    //fprintf(stderr,"read_waveform:  %x/%x/%x/%x %d/%d\n",
+    //fprintf(stderr,"read_waveform:  %x/%x/%x/%d %d/%d\n",
     //        slot,chassis,command,channel,ret_status,len);
 
     if (ret_status==0) {
@@ -256,6 +257,7 @@ read_waveform(struct waveformRecord *pwi)
         else
             IocReadWaveform(chassis, slot, channel, len, values);   
         len_com=len;
+        //for (ii=0;ii<len;ii++) printf("--------- %f\n",values[ii]);
     }
     else len_com=pwi->nelm;
 

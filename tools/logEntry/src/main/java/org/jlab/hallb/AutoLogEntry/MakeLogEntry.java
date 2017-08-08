@@ -18,7 +18,7 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
-  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HVSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC","TLOG"};
+  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC","TLOG"};
 
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");

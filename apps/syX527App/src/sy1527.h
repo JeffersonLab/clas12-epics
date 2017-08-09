@@ -85,6 +85,9 @@ int  CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
 int  CAENHVGetChParamInfo(const char *SystemName, ushort slot, ushort Ch,
                       char **ParNameList);
 
+int  CAENHVGetBdParamInfo(const char *SystemName, ushort slot,
+                      char **ParNameList);
+
 int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
                       const char *ParName, const char *PropName, void *retval);
 
@@ -92,7 +95,7 @@ int  CAENHVGetSysProp(const char *SystemName, const char *PropName, void *Result
 
 int  CAENHVGetExecCommList(const char *, ushort *, char **);
 int  CAENHVExecComm(const char *, const char *);
-
+int  CAENHVSetBdParam(const char*,ushort,ushort*,const char*,void *);
 ///==============================================================================
 
 
@@ -326,6 +329,9 @@ void sy1527GetMainframePWVoltages(unsigned int id,float* value);
 
 void
 sy1527SetBoardParams(BOARD *bb);
+
+int sy1527BoardClearAlarm(unsigned int id,unsigned int slot);
+int sy1527PrintBoardProps(unsigned int id,unsigned int slot);
 
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////

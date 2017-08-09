@@ -12,6 +12,10 @@
 
 //#include "CAENHVWrapper.h"
 
+// important, taken from CEANHVWrapper.h:
+#define MAX_PARAM_NAME 10
+
+
 /* mainframe threads id's and statistic structures */
 static pthread_t idth[MAX_HVPS];
 static THREAD stat[MAX_HVPS];
@@ -373,6 +377,37 @@ sy1527PrintSysProps(unsigned int id)
   return(CAENHV_OK);
 }
 int
+sy1527PrintBoardProps(unsigned int id,unsigned int board)
+{
+  unsigned short NrOfPar;
+  char*  parNames1=(char*)NULL;
+  char (*parNames2)[MAX_PARAM_NAME];
+  char   parNames3[100][MAX_PARAM_NAME];
+  char name[MAX_CAEN_NAME];
+  int ret,j,k;
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  printf("sy1527PrintBoardProps(%s,%u)=",name,board);
+  ret=CAENHVGetBdParamInfo(name,board,&parNames1);
+  if (ret==CAENHV_OK) {
+    parNames2=(char(*)[MAX_PARAM_NAME])parNames1;
+    for (j=0;parNames2[j][0];j++) {}
+    printf("NrOfPar = %d\n",NrOfPar=j);
+    for (j=0; j<NrOfPar; j++) {
+      for (k=0; k<MAX_PARAM_NAME;k++) {
+        if (!parNames2[j][k]) break;
+        parNames3[j][k]=parNames2[j][k];
+      }
+      parNames3[j][k]='\0';
+    }
+    for (j=0;j<NrOfPar;j++)
+        printf("%s,",parNames3[j]);
+    printf("\n");
+  }
+  return(CAENHV_OK);
+}
+int
 sy1527SetSystemProp(char* instring,float* outarray) {
     unsigned int ii;
     float value;
@@ -467,6 +502,26 @@ sy1527ExecComm(unsigned int id,const char* cmd)
 }
 
 int
+sy1527BoardClearAlarm(unsigned int id,unsigned int slot)
+{
+  int ret;
+  char name[MAX_CAEN_NAME];
+  int nSlots=1;
+  unsigned short slots[1]={slot};
+  unsigned short value[1]={1};
+  CHECK_ID(id);
+  CHECK_OPEN(id);
+  strcpy(name, Measure[id].name);
+  ret=CAENHVSetBdParam(name,nSlots,slots,"Clr Alarm",(void*)value);
+  if(ret != CAENHV_OK)
+  {
+    printf("ERROR(sy1527): %s (num. %d)\n\n", CAENHVGetError(name), ret);
+    return(CAENHV_SYSERR);
+  }
+  return CAENHV_OK;
+}
+
+int
 sy1527PrintParams(unsigned int id)
 { 
   unsigned short NrOfSl, NrOfPar, *SerNumList, *NrOfCh;
@@ -475,9 +530,6 @@ sy1527PrintParams(unsigned int id)
   char name[MAX_CAEN_NAME];
   int i, ret,j,k;
   unsigned long tipo;
-
-// important, taken from CEANHVWrapper.h:
-#define MAX_PARAM_NAME 10
 
   char*  parNames1=(char*)NULL;
   char (*parNames2)[MAX_PARAM_NAME];

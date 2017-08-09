@@ -36,7 +36,27 @@ int main(int argc,char** argv)
 
   printf("\n\n======= sy1527PrintExecCommList =======\n");
   sy1527PrintExecCommList(id);
-  
+ 
+  printf("\n\n======= sy1527PrintBoardProps =======\n");
+  sy1527PrintBoardProps(id,0);
+  sy1527PrintBoardProps(id,1);
+  sy1527PrintBoardProps(id,2);
+  sy1527PrintBoardProps(id,3);
+  sy1527PrintBoardProps(id,4);
+  sy1527PrintBoardProps(id,5);
+  sy1527PrintBoardProps(id,6);
+  sy1527PrintBoardProps(id,7);
+  sy1527PrintBoardProps(id,8);
+  sy1527PrintBoardProps(id,9);
+  sy1527PrintBoardProps(id,10);
+  sy1527PrintBoardProps(id,11);
+  sy1527PrintBoardProps(id,12);
+  sy1527PrintBoardProps(id,13);
+  sy1527PrintBoardProps(id,14);
+  sy1527PrintBoardProps(id,15);
+
+  sy1527BoardClearAlarm(id,0);
+
   printf("\n\n======= sy1527ExecComm(ClearAlarm) =======\n");
   sy1527ExecComm(id,"ClearAlarm");
   

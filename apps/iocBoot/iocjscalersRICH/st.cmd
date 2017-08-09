@@ -14,9 +14,18 @@ iocscalers_registerRecordDeviceDriver(pdbbase)
 callbackSetQueueSize(5000)
 scanOnceSetQueueSize(5000)
 
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
 dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
 cd ${TOP}/iocBoot/${IOC}
 
+< save_restore.cmd
+
 iocInit
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list

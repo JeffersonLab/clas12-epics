@@ -48,39 +48,51 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers") {
     field(MALM,192)
     field(INDX,128)
     field(FTVL,"DOUBLE")
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvg")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC")
     alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT2:scalers")
 }
 
 ########################################################################
 # single-PMT scaler averages:
-record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvg") {
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalers")
     field(ALG,"N to 1 Average")
     field(NSAM,1)
     field(N,64)
     field(PREC,1)
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg")
-    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT0:scalersAvg")
-    info(autosaveFields_pass0,"HHSV HIHI")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT0:scalersAvgC")
 }
-record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
     field(ALG,"N to 1 Average")
     field(NSAM,1)
     field(N,64)
     field(PREC,1)
-    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg")
-    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT1:scalersAvg")
-    info(autosaveFields_pass0,"HHSV HIHI")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT1:scalersAvgC")
 }
-record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers")
     field(ALG,"N to 1 Average")
     field(NSAM,1)
     field(N,64)
     field(PREC,1)
-    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT2:scalersAvg")
+    alias("B_DET_$(Det)_$(Sys)_$(Element)_PMT2:scalersAvgC")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvg") {
+    field(OMSL,"closed_loop")
+    field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC CPP NMS")
+    info(autosaveFields_pass0,"HHSV HIHI")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
+    field(OMSL,"closed_loop")
+    field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC CPP NMS")
+    info(autosaveFields_pass0,"HHSV HIHI")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
+    field(OMSL,"closed_loop")
+    field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC CPP NMS")
     info(autosaveFields_pass0,"HHSV HIHI")
 }
 

@@ -127,6 +127,27 @@ static long read_ai(struct aiRecord *pai)
           recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
       free(values);
   }
+  else if (command==SSPTEMP1 || 
+           command==SSPTEMP2 || 
+           command==SSPTEMP3) {
+      fprintf(stderr,"read_ai:  not ready for ssp temperatures\n");
+      values = (double*) malloc(sizeof(double)*9);
+      IocReadWaveformSSPData(chassis,slot,channel,9,values);
+      pai->rval = values[(command & 0xF) - 5];
+      free(values);
+  }
+  else if (command==SSPVOLT1 || 
+           command==SSPVOLT2 || 
+           command==SSPVOLT3 || 
+           command==SSPVOLT4 || 
+           command==SSPVOLT5 || 
+           command==SSPVOLT6) {
+      fprintf(stderr,"read_ai:  not ready for ssp voltages\n");
+      values = (double*) malloc(sizeof(double)*9);
+      IocReadWaveformSSPData(chassis,slot,channel,9,values);
+      pai->rval = values[(command & 0xF) - 5];
+      free(values);
+  }
   else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
 #else
   double values[200];

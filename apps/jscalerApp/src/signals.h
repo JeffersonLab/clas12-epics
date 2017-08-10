@@ -14,16 +14,30 @@
 //                1=disc
 //                2=ssp
 
+
 #define FADCTET 0x01
 #define FADCCNT 0x03
+
 #define TDCTET  0x11
 #define TRGTET  0x12
 #define GTRGCNT 0x13
 #define GTDCCNT 0x14
 #define TRGCNT  0x15
 #define TDCCNT  0x16
+
 #define SSPSCAL 0x21
 #define SSPDATA 0x22
+
 #define SSPNSFIB 0x23
 #define SSPNDFIB 0x24
+
+#define SSPTEMP1 0x25
+#define SSPTEMP2 0x26
+#define SSPTEMP3 0x27
+#define SSPVOLT1 0x28
+#define SSPVOLT2 0x29
+#define SSPVOLT3 0x2A
+#define SSPVOLT4 0x2B
+#define SSPVOLT5 0x2C
+#define SSPVOLT6 0x2D
 

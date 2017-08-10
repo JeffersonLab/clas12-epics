@@ -137,9 +137,9 @@ static long read_ai(struct aiRecord *pai)
            command==SSPVOLT5 || 
            command==SSPVOLT6) {
       ret=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
-      if (len > (command &0xF) - 5) {
+      if (len > (command & 0xF) - 5) {
           values = (double*) malloc(sizeof(double)*len);
-          IocReadWaveformSSPData(chassis,slot,channel,9,values);
+          IocReadWaveformSSPData(chassis,slot,channel,len,values);
           pai->rval = values[(command & 0xF) - 5];
           free(values);
       }

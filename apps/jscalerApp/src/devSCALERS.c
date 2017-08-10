@@ -225,7 +225,7 @@ read_waveform(struct waveformRecord *pwi)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-  int len, len_com,ii;
+  int len, len_com;//,ii;
   double *values;
   int ret_status=1;
 

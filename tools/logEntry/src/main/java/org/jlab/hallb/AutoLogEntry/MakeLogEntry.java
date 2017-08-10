@@ -1,5 +1,7 @@
 package org.jlab.hallb.AutoLogEntry;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -51,6 +53,8 @@ public class MakeLogEntry
     
   JComboBox<String> LOGBOOKCHOICE=new JComboBox<>(LOGBOOKS);
 
+  //CheckComboBox LOGBOOKCHOICE;
+
   final boolean DEBUG=false;
 
   String stockTitle="";
@@ -63,6 +67,13 @@ public class MakeLogEntry
 
   int IMGHEIGHT = 200;
   int IMGWIDTH = 300;
+
+  public void MakeLogEntry() {
+      //Set dog=new LinkedHashSet();
+      //for (String ss : LOGBOOKS) dog.add(ss);
+      //LOGBOOKCHOICE=new CheckComboBox(dog);
+  }
+
 
   public static void main( String[] args )
   {

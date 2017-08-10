@@ -112,17 +112,17 @@ extern "C" {
         //fprintf(stderr,"IocReadWaveformLength %d/%d/%d\n",crate,slot,channel);
         if (scalersslowcontrol->vmecrates.count(crate)<=0) {
             *len=0;
-            fprintf(stderr,"::A\n");
+//            fprintf(stderr,"::A\n");
             return CRATE_NOT_PRESENT;
         }
         if (slot >= scalersslowcontrol->vmecrates[crate]->numberOfSlots) {
             (*len)=0;
-            fprintf(stderr,"::B\n");
+//            fprintf(stderr,"::B\n");
             return BOARD_NOT_PRESENT;
         }
         if (!((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])) {
             (*len)=0;
-            fprintf(stderr,"::C\n");
+//            fprintf(stderr,"::C\n");
             return BOARD_NOT_PRESENT;
         }
         //if (channel>=((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->numberOfChannels)  {

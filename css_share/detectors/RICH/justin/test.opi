@@ -32,18 +32,26 @@
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
   <actions hook="false" hook_all="false" />
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>0</border_style>
-    <tooltip></tooltip>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
     <horizontal_alignment>0</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
-    <wuid>3760820c:156e6cc1c51:-6413</wuid>
-    <transparent>true</transparent>
+    <wuid>-6afefa1f:15dc84fb9df:-7529</wuid>
+    <transparent>false</transparent>
+    <pv_value />
     <auto_size>false</auto_size>
-    <text>Label</text>
+    <text>##.###</text>
+    <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <height>25</height>
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <show_units>true</show_units>
+    <height>20</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -51,24 +59,37 @@
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
+    <pv_name>B_HW_FEVME1_Sl10_Fi9_PMT2:scalersAvg</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
     <background_color>
-      <color red="255" green="255" blue="255" />
+      <color name="Read_Background" red="77" green="77" blue="77" />
     </background_color>
-    <width>67</width>
-    <x>234</x>
-    <name>Label</name>
-    <y>132</y>
+    <width>20</width>
+    <x>284</x>
+    <name>Text Update_1</name>
+    <y>158</y>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>MAPMTScalers.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <P>$(pv_name)</P>
+        </macros>
+        <replace>2</replace>
+        <description></description>
+      </action>
+    </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

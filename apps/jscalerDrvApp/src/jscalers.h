@@ -128,8 +128,9 @@ class JlabSSPBoard : public JlabBoard {
     public:
         static const int MAXFIBERS=32;
         static const int SCALERSPERFIBER=192;
-        static const int DATAPERFIBER=8;
-        static const int HEADEROFFSET=3;
+        static const int DATAPERFIBER=9;
+        static const int SCALERHEADEROFFSET=3;
+        static const int DATAHEADEROFFSET=2;
         static const double CLOCKFREQ=125E6;
        
         int numOfSSPDataChannels;

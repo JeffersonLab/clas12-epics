@@ -295,9 +295,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
-        if (thisLen != sspBoard->SCALERSPERFIBER+sspBoard->HEADEROFFSET)
-            printf("SSPReadScalers:  Odd Scaler length:  %d\n",thisLen);
-        if (thisLen <= sspBoard->HEADEROFFSET)
+        if (thisLen <= sspBoard->SCALERHEADEROFFSET)
             printf("SSPReadScalers:  Bad Scaler length:  %d\n",thisLen);
         else {
             thisFiber = (*buf)[ii+1];
@@ -309,7 +307,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
                 sspBoard->scalerFibers.push_back(thisFiber);
                 sspBoard->scalerCounts[thisFiber].clear();
                 sspBoard->scalerCountsHz[thisFiber].clear();
-                for (jj=ii+sspBoard->HEADEROFFSET; jj<ii+thisLen; jj++) {
+                for (jj=ii+sspBoard->SCALERHEADEROFFSET; jj<ii+thisLen; jj++) {
                     hz=(*buf)[jj]*(sspBoard->CLOCKFREQ/thisRef);
                     sspBoard->scalerCounts[thisFiber].push_back((*buf)[jj]);
                     sspBoard->scalerCountsHz[thisFiber].push_back(hz);
@@ -337,9 +335,9 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
-        if (thisLen != sspBoard->DATAPERFIBER+sspBoard->HEADEROFFSET)
+        if (thisLen != sspBoard->DATAPERFIBER+sspBoard->DATAHEADEROFFSET)
             printf("SSPReadScalers:  Odd Data length:  %d\n",thisLen);
-        if (thisLen <= sspBoard->HEADEROFFSET)
+        if (thisLen <= sspBoard->DATAHEADEROFFSET)
             printf("SSPReadScalers:  Bad Data length:  %d\n",thisLen);
         else {
             thisFiber = (*buf)[ii+1];
@@ -350,7 +348,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
                 // read data for this fiber:
                 sspBoard->dataFibers.push_back(thisFiber);
                 sspBoard->SSPData[thisFiber].clear();
-                for (int jj=ii+sspBoard->HEADEROFFSET; jj<ii+thisLen; jj++) {
+                for (int jj=ii+sspBoard->DATAHEADEROFFSET; jj<ii+thisLen; jj++) {
                     sspBoard->SSPData[thisFiber].push_back((float)(*buf)[jj]);
 //                    printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,(float)(*buf)[jj]);
                 }

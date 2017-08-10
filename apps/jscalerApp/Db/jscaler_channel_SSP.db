@@ -10,13 +10,60 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(SCAN,"2 second")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalers")
 }
-# all data from one fiber:
+# all data from one fiber (we're deprecating this):
 record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
     field(DTYP,"JLAB_SCALERS")
     field(DESC,"SSP data waveform")
     field(INP,"#C$(CScode) S$(Data)")
     field(NELM,"9")
     field(FTVL,"DOUBLE")
+    field(SCAN,"2 second")
+}
+
+# individual temperatures and voltages (todo: replace temp#/volt# suffix with proper name):
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp1") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Temp1)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp2") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Temp2)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp3") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Temp3)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt1") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt1)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt2") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt2)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt3") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt3)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt4") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt4)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt5") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt5)")
+    field(SCAN,"2 second")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt6") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Volt6)")
     field(SCAN,"2 second")
 }
 

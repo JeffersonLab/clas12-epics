@@ -1,5 +1,5 @@
 
-// 1st hexdigit:  threshold/counts type
+// 1st hexdigit:  threshold/counts/sspdata type
 //                1 = fadc OR tdc threshold
 //                2 = trg threshold
 //                3 = fadc OR tdc-gated counts
@@ -8,6 +8,8 @@
 //                6 = trg counts
 //            (subtracting 1 gives threshold index: 0,1)
 //            (subtracting 3 gives counts index: 0,1,2,3)
+//            (subtracting 3 gives ssp fiber count)
+//            (subtracting 5 gives ssp data index)
 //
 // 2nd hexdigit:  board type 
 //                0=fadc

@@ -114,11 +114,10 @@ static long read_ai(struct aiRecord *pai)
             free(values);
         }
         else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
-            //printf("read_ai:  ERROR, bad scaler array: %u/%u/%u/%x\n",chassis,slot,channel,command);
     }
     else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
-        //printf("read_ai:  ERROR, bad slot status: %u/%u/%u/%x\n",chassis,slot,channel,command);
   }
+  // SSP # fibers:
   else if (command==SSPNSFIB || command==SSPNDFIB) {
       values = (double*) malloc(sizeof(double)*2);
       if (!IocGetValue(chassis,slot,channel,JLAB_GET_NFIBERS,values))
@@ -127,26 +126,24 @@ static long read_ai(struct aiRecord *pai)
           recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
       free(values);
   }
+  // SSP temperatures/voltages:
   else if (command==SSPTEMP1 || 
            command==SSPTEMP2 || 
-           command==SSPTEMP3) {
-      fprintf(stderr,"read_ai:  not ready for ssp temperatures\n");
-      values = (double*) malloc(sizeof(double)*9);
-      IocReadWaveformSSPData(chassis,slot,channel,9,values);
-      pai->rval = values[(command & 0xF) - 5];
-      free(values);
-  }
-  else if (command==SSPVOLT1 || 
+           command==SSPTEMP3 ||
+           command==SSPVOLT1 || 
            command==SSPVOLT2 || 
            command==SSPVOLT3 || 
            command==SSPVOLT4 || 
            command==SSPVOLT5 || 
            command==SSPVOLT6) {
-      fprintf(stderr,"read_ai:  not ready for ssp voltages\n");
-      values = (double*) malloc(sizeof(double)*9);
-      IocReadWaveformSSPData(chassis,slot,channel,9,values);
-      pai->rval = values[(command & 0xF) - 5];
-      free(values);
+      ret=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
+      if (len > (command &0xF) - 5) {
+          values = (double*) malloc(sizeof(double)*len);
+          IocReadWaveformSSPData(chassis,slot,channel,9,values);
+          pai->rval = values[(command & 0xF) - 5];
+          free(values);
+      }
+      else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
   }
   else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
 #else

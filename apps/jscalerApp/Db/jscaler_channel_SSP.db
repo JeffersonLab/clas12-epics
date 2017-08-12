@@ -10,15 +10,15 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(SCAN,"2 second")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalers")
 }
-# all data from one fiber (we're deprecating this):
-record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
-    field(DTYP,"JLAB_SCALERS")
-    field(DESC,"SSP data waveform")
-    field(INP,"#C$(CScode) S$(Data)")
-    field(NELM,"9")
-    field(FTVL,"DOUBLE")
-    field(SCAN,"2 second")
-}
+## all data from one fiber (we're deprecating this):
+#record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
+#    field(DTYP,"JLAB_SCALERS")
+#    field(DESC,"SSP data waveform")
+#    field(INP,"#C$(CScode) S$(Data)")
+#    field(NELM,"9")
+#    field(FTVL,"DOUBLE")
+#    field(SCAN,"2 second")
+#}
 
 # individual temperatures and voltages (todo: replace temp#/volt# suffix with proper name):
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:fpga") {
@@ -30,6 +30,15 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:fpga") {
     field(ESLO,0.001)
     field(PREC,2)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    field(HIHI,85)
+    field(HIGH,75)
+    field(LOW,40)
+    field(LOLO,10)
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg0") {
     field(DTYP,"JLAB_SCALERS")
@@ -39,6 +48,15 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg0") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    field(HIHI,85)
+    field(HIGH,75)
+    field(LOW,40)
+    field(LOLO,10)
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg1") {
     field(DTYP,"JLAB_SCALERS")
@@ -49,6 +67,15 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg1") {
     field(ESLO,0.001)
     field(PREC,2)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    field(HIHI,85)
+    field(HIGH,75)
+    field(LOW,40)
+    field(LOLO,10)
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb5") {
     field(DTYP,"JLAB_SCALERS")
@@ -58,7 +85,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb5") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,4.5)
+    field(LOW,4.75)
+    field(HIGH,5.25)
+    field(HIHI,5.50)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb3_3") {
     field(DTYP,"JLAB_SCALERS")
@@ -68,7 +104,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb3_3") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,2.97)
+    field(LOW,3.14)
+    field(HIGH,3.47)
+    field(HIHI,3.63)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:int1") {
     field(DTYP,"JLAB_SCALERS")
@@ -78,7 +123,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:int1") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,0.90)
+    field(LOW,0.95)
+    field(HIGH,1.05)
+    field(HIHI,1.10)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:aux1_8") {
     field(DTYP,"JLAB_SCALERS")
@@ -88,7 +142,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:aux1_8") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,1.62)
+    field(LOW,1.71)
+    field(HIGH,1.89)
+    field(HIHI,1.98)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1") {
     field(DTYP,"JLAB_SCALERS")
@@ -98,7 +161,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,0.90)
+    field(LOW,0.95)
+    field(HIGH,1.05)
+    field(HIHI,1.10)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1_2") {
     field(DTYP,"JLAB_SCALERS")
@@ -108,7 +180,16 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1_2") {
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,3)
+    field(LOLO,1.08)
+    field(LOW,1.14)
+    field(HIGH,1.05)
+    field(HIHI,1.10)
     field(LINR,"LINEAR")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(LLSV,"MAJOR")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
 }
 
 ########################################################################
@@ -164,50 +245,72 @@ record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC") {
     field(N,64)
     field(PREC,1)
 }
+
+# ao records for scaler averages, just to be able to set alarm limits:
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvg") {
     field(OMSL,"closed_loop")
     field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
     field(OMSL,"closed_loop")
     field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
     field(OMSL,"closed_loop")
     field(DOL,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
+
+# convert to kHz:
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgK") {
     field(DTYP,"Raw Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,2)
     field(LINR,"LINEAR")
     field(EGU,"kHz")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgK") {
     field(DTYP,"Raw Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,2)
     field(LINR,"LINEAR")
     field(EGU,"kHz")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgK") {
     field(DTYP,"Raw Soft Channel")
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC CPP NMS")
-    info(autosaveFields_pass0,"HHSV HIHI")
     field(EGUL,0)
     field(ESLO,0.001)
     field(PREC,2)
     field(LINR,"LINEAR")
     field(EGU,"kHz")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(LLSV,"INVALID")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
 }
 
 

@@ -92,6 +92,12 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
+elif [[ $1 == "rich" || $1 == "fevme1" ]]
+then
+    dgsReboot fevme1
+    sleep 2
+    softioc_console -R iocjscalersRICH
+
 elif [[ $1 == 1 || $1 == 2 || $1 == 3 || $1 == 4 || $1 == 5 || $1 == 6 ]]
 then
     sectorReboot $1

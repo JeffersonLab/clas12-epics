@@ -34,7 +34,7 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
-#seq waveform, "P=B_DET_RICH_SCALERS_,R=ROWS:"
-#seq waveform, "P=B_DET_RICH_SCALERS_,R=PMTS:"
+seq waveform, "P=B_DET_RICH_SCALERS_,R=ROWS:"
+seq waveform, "P=B_DET_RICH_SCALERS_,R=PMTS:"
 
 dbl > pv.list

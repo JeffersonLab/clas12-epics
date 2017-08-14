@@ -201,6 +201,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalers") {
     field(INDX,0)
     field(FTVL,"DOUBLE")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
+    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
@@ -209,6 +210,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers") {
     field(INDX,64)
     field(FTVL,"DOUBLE")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers")
+    info(autosaveFields_pass0,"DESC")
 }
 record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers")
@@ -217,6 +219,7 @@ record(subArray, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers") {
     field(INDX,128)
     field(FTVL,"DOUBLE")
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC")
+    info(autosaveFields_pass0,"DESC")
 }
 
 ########################################################################
@@ -228,6 +231,7 @@ record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgC") {
     field(N,64)
     field(PREC,1)
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC")
+    info(autosaveFields_pass0,"DESC")
 }
 record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalers")
@@ -236,6 +240,7 @@ record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgC") {
     field(N,64)
     field(PREC,1)
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC")
+    info(autosaveFields_pass0,"DESC")
 }
 record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC") {
     field(INP,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalers")
@@ -243,6 +248,7 @@ record(compress, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgC") {
     field(NSAM,1)
     field(N,64)
     field(PREC,1)
+    info(autosaveFields_pass0,"DESC")
 }
 
 # ao records for scaler averages, just to be able to set alarm limits:
@@ -258,7 +264,7 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvg") {
     field(LOW,"0")
     field(LOLO,"-1")
     field(EGU,"Hz")
-    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO DESC")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
     field(OMSL,"closed_loop")
@@ -272,7 +278,7 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvg") {
     field(LOW,"0")
     field(LOLO,"-1")
     field(EGU,"Hz")
-    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO DESC")
 }
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
     field(OMSL,"closed_loop")
@@ -286,7 +292,7 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvg") {
     field(LOW,"0")
     field(LOLO,"-1")
     field(EGU,"Hz")
-    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO DESC")
 }
 
 # convert to kHz:
@@ -304,7 +310,7 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalersAvgK") {
     field(LOLO,"-1e-3")
     field(HIHI,"1e4")
     field(HIGH,"1e3")
-    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO DESC")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgK") {
     field(DTYP,"Raw Soft Channel")
@@ -320,7 +326,7 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT1:scalersAvgK") {
     field(LOLO,"-1e-3")
     field(HIHI,"1e4")
     field(HIGH,"1e3")
-    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO DESC")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgK") {
     field(DTYP,"Raw Soft Channel")
@@ -336,7 +342,7 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgK") {
     field(LOLO,"-1e-3")
     field(HIHI,"1e4")
     field(HIGH,"1e3")
-    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO")
+    info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO DESC")
 }
 
 

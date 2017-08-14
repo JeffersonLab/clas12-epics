@@ -37,4 +37,6 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 seq waveform, "P=B_DET_RICH_SCALERS_,R=ROWS:"
 seq waveform, "P=B_DET_RICH_SCALERS_,R=PMTS:"
 
+< richPmt-setDesc.cmd
+
 dbl > pv.list

@@ -134,6 +134,7 @@ extern "C" {
         (*len) = (((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel]).size();
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
         //fprintf(stderr,"IocReadWaveformLength DONE\n");
+        if ((*len)<=0) return NOT_PRESENT_VALUE;
         return 0;
     }
 

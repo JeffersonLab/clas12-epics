@@ -210,7 +210,7 @@ static long write_ao(struct aoRecord *pao)
       threshType = (command & 0xF) - 1;
       threshValue = pao->val;
       values[0] = threshType;
-      values[0] = threshValue;
+      values[1] = threshValue;
       IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
   }
   else printf("write_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);

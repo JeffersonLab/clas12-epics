@@ -10,7 +10,7 @@ for (var chan=0; chan<nchan; chan++)
     var pvprefix = "B_HW_" + crate + "_Sl" + slot + "_Fi" + chan;
 
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    lc.setPropertyValue("opi_file","/CLAS12_Share/apps/jscalerApp/ssp_fiber.opi");
+    lc.setPropertyValue("opi_file","ssp_fiber.opi");
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);

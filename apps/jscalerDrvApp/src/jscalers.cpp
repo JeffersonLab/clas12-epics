@@ -256,29 +256,29 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
 int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     int len=0,ret=0;
     unsigned int *buf[1];
-    int thisLen,thisFiber,ii,jj;
+    int thisLen,thisFiber,ii,jj,marocID,pixelID,pmtID,fiberPixelID;
     double hz,thisRef;
 
-    JlabSSPBoard *sspBoard=NULL;
+    JlabSSPBoard *ssp=NULL;
     if (dynamic_cast <JlabSSPBoard*> (it->second))
-        sspBoard=(JlabSSPBoard*)it->second;
+        ssp=(JlabSSPBoard*)it->second;
     else {
         printf("SSPReadScalers:  NOT an SSP board");
         return 0;
     }
     
     // clear fiber# vectors:
-    sspBoard->scalerFibers.clear();
-    sspBoard->dataFibers.clear();
+    ssp->scalerFibers.clear();
+    ssp->dataFibers.clear();
 
     // initialize data vectors to error values:
-    for (ii=0; ii<sspBoard->MAXFIBERS; ii++) {
-        for (jj=0; jj<(int)sspBoard->scalerCounts[ii].size(); jj++) 
-            sspBoard->scalerCounts[ii][jj]=NOT_PRESENT_VALUE;
-        for (jj=0; jj<(int)sspBoard->scalerCountsHz[ii].size(); jj++) 
-            sspBoard->scalerCountsHz[ii][jj]=NOT_PRESENT_VALUE;
-        for (jj=0; jj<(int)sspBoard->SSPData[ii].size(); jj++) 
-            sspBoard->SSPData[ii][jj]=NOT_PRESENT_VALUE;
+    for (ii=0; ii<ssp->MAXFIBERS; ii++) {
+        for (jj=0; jj<(int)ssp->scalerCounts[ii].size(); jj++)
+            ssp->scalerCounts[ii][jj]=NOT_PRESENT_VALUE;
+        for (jj=0; jj<(int)ssp->scalerCountsHz[ii].size(); jj++)
+            ssp->scalerCountsHz[ii][jj]=NOT_PRESENT_VALUE;
+        for (jj=0; jj<(int)ssp->SSPData[ii].size(); jj++)
+            ssp->SSPData[ii][jj]=NOT_PRESENT_VALUE;
     }
 
     // read scalers:::::::::::::::::::::::::::::::::::::::::::
@@ -295,23 +295,53 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
-        if (thisLen <= sspBoard->SCALERHEADEROFFSET)
+        if (thisLen <= ssp->SCALERHEADEROFFSET)
             printf("SSPReadScalers:  Bad Scaler length:  %d\n",thisLen);
         else {
             thisFiber = (*buf)[ii+1];
             thisRef = (*buf)[ii+2];
-            if (thisFiber<0 || thisFiber>=sspBoard->MAXFIBERS)
+            if (thisFiber<0 || thisFiber>=ssp->MAXFIBERS)
                 printf("SSPReadScalers:  Invalid Scaler Fiber #:  %d\n",thisFiber);
             else {
                 // read scalers for this fiber:
-                sspBoard->scalerFibers.push_back(thisFiber);
-                sspBoard->scalerCounts[thisFiber].clear();
-                sspBoard->scalerCountsHz[thisFiber].clear();
-                for (jj=ii+sspBoard->SCALERHEADEROFFSET; jj<ii+thisLen; jj++) {
-                    hz=(*buf)[jj]*(sspBoard->CLOCKFREQ/thisRef);
-                    sspBoard->scalerCounts[thisFiber].push_back((*buf)[jj]);
-                    sspBoard->scalerCountsHz[thisFiber].push_back(hz);
-//                    printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,hz);
+                ssp->scalerFibers.push_back(thisFiber);
+                
+                // without maroc<->pixel remapping:
+                //ssp->scalerCounts[thisFiber].clear();
+                //ssp->scalerCountsHz[thisFiber].clear();
+
+                // with maroc<->pixel remapping (FIXME):
+                for (jj=ssp->scalerCounts[thisFiber].size(); jj<ssp->SCALERSPERFIBER; jj++)
+                    ssp->scalerCounts[thisFiber].push_back(NOT_PRESENT_VALUE);
+                for (jj=ssp->scalerCountsHz[thisFiber].size(); jj<ssp->SCALERSPERFIBER; jj++)
+                    ssp->scalerCountsHz[thisFiber].push_back(NOT_PRESENT_VALUE);
+
+                for (jj=ii+ssp->SCALERHEADEROFFSET; jj<ii+thisLen; jj++) {
+                    hz=(*buf)[jj]*(ssp->CLOCKFREQ/thisRef);
+                   
+                    // without maroc<->pixel remapping:
+                    //ssp->scalerCounts[thisFiber].push_back((*buf)[jj]);
+                    //ssp->scalerCountsHz[thisFiber].push_back(hz);
+                   
+                    // with maroc<->pixel remapping:
+                    pmtID = (jj-ii-ssp->SCALERHEADEROFFSET) / ssp->SCALERSPERPMT;
+                    marocID = (jj-ii-ssp->SCALERHEADEROFFSET) % ssp->SCALERSPERPMT;
+                    pixelID = ssp->Maroc2Pixel(marocID);
+                    fiberPixelID = pixelID + pmtID * ssp->SCALERSPERPMT;
+                    // sanity checks (maybe mathematically impossible to fail):
+                    if (pmtID<0        || pmtID>=ssp->PMTSPERFIBER ||
+                        marocID<0      || marocID>=ssp->SCALERSPERPMT ||
+                        pixelID<0      || pixelID>=ssp->SCALERSPERPMT ||
+                        fiberPixelID<0 || fiberPixelID>ssp->SCALERSPERFIBER) {
+                        printf("SSPReadScalers:  Invalid Maroc\n");
+                    }
+                    else {
+                        ssp->scalerCounts[thisFiber][fiberPixelID]=(*buf)[jj];
+                        ssp->scalerCountsHz[thisFiber][fiberPixelID]=hz;
+                    }
+
+                    //printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,hz);
+                    //printf("%d %d %d %d ---- %d %d %d %d ---- %f\n",len,thisLen,thisFiber,jj,pmtID,marocID,pixelID,pixelID+pmtID*64,hz);
                 }
             }
         }
@@ -335,21 +365,21 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
-        if (thisLen != sspBoard->DATAPERFIBER+sspBoard->DATAHEADEROFFSET)
+        if (thisLen != ssp->DATAPERFIBER+ssp->DATAHEADEROFFSET)
             printf("SSPReadScalers:  Odd Data length:  %d\n",thisLen);
-        if (thisLen <= sspBoard->DATAHEADEROFFSET)
+        if (thisLen <= ssp->DATAHEADEROFFSET)
             printf("SSPReadScalers:  Bad Data length:  %d\n",thisLen);
         else {
             thisFiber = (*buf)[ii+1];
             thisRef = (*buf)[ii+2];
-            if (thisFiber<0 || thisFiber>=sspBoard->MAXFIBERS)
+            if (thisFiber<0 || thisFiber>=ssp->MAXFIBERS)
                 printf("SSPReadScalers:  Invalid Data Fiber #:  %d\n",thisFiber);
             else {
                 // read data for this fiber:
-                sspBoard->dataFibers.push_back(thisFiber);
-                sspBoard->SSPData[thisFiber].clear();
-                for (int jj=ii+sspBoard->DATAHEADEROFFSET; jj<ii+thisLen; jj++) {
-                    sspBoard->SSPData[thisFiber].push_back((float)(*buf)[jj]);
+                ssp->dataFibers.push_back(thisFiber);
+                ssp->SSPData[thisFiber].clear();
+                for (int jj=ii+ssp->DATAHEADEROFFSET; jj<ii+thisLen; jj++) {
+                    ssp->SSPData[thisFiber].push_back((float)(*buf)[jj]);
 //                    printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,(float)(*buf)[jj]);
                 }
             }
@@ -362,15 +392,15 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
 
 /*
     // print warnings if # of fibers changed:
-    if ((int)sspBoard->scalerFibers.size() != sspBoard->numberOfChannels) {
+    if ((int)ssp->scalerFibers.size() != ssp->numberOfChannels) {
         printf("SSPReadScalers:  Number of Fibers Changed: %d -> %d\n",
-                sspBoard->numberOfChannels,(int)sspBoard->scalerFibers.size());
-        sspBoard->numberOfChannels = sspBoard->scalerFibers.size();
+                ssp->numberOfChannels,(int)ssp->scalerFibers.size());
+        ssp->numberOfChannels = ssp->scalerFibers.size();
     }
-    if ((int)sspBoard->dataFibers.size() != sspBoard->numOfSSPDataChannels) {
+    if ((int)ssp->dataFibers.size() != ssp->numOfSSPDataChannels) {
         printf("SSPReadScalers:  Number of Fibers Changed: %d -> %d\n",
-                sspBoard->numOfSSPDataChannels,(int)sspBoard->dataFibers.size());
-        sspBoard->numOfSSPDataChannels = sspBoard->dataFibers.size();
+                ssp->numOfSSPDataChannels,(int)ssp->dataFibers.size());
+        ssp->numOfSSPDataChannels = ssp->dataFibers.size();
     }
 */
 

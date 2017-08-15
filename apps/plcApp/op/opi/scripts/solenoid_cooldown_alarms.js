@@ -22,6 +22,7 @@ var R = [
 	"CM_DT_MAX",
 	"CM_DT_MAXPCT",
 	"HE_CP_CD_DT",
+	"HE_CP_CD_DT2",
 	"HE_METAL_CD_DT",
 	"HE_METAL_CD_DT2",
 	"HE_METAL_WU_DT",

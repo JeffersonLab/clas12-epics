@@ -10,7 +10,7 @@ for (var ss=1; ss<=6; ss++)
 
 for (var rr=1; rr<=3; rr++)
 {
-  var crateName="dc"+ss+rr;
+  var crateName="DC"+ss+rr;
 
         var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
         lc.setPropertyValue("opi_file","vmeCrate_stats.opi");

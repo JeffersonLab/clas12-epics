@@ -7340,6 +7340,19 @@ $(pv_value)</tooltip>
         <replace>1</replace>
         <description>Voltage - Mgt 1.2</description>
       </action>
+      <action type="WRITE_PV">
+        <pv_name>iocjscalersRICH:SysReset</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Restart iocjscalersRICH</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>stripTool.sh RICH</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Strip Charts</description>
+      </action>
     </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>

@@ -1,6 +1,3 @@
-
-#define NOWAVEFORMS 1
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -89,7 +86,6 @@ static long read_ai(struct aiRecord *pai)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
-#ifdef NOWAVEFORMS
   double *values;
   int ret,len;
   // thresholds:
@@ -146,14 +142,6 @@ static long read_ai(struct aiRecord *pai)
       else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
   }
   else printf("read_ai:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
-#else
-  double values[200];
-  if (command<2) {
-      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-      pai->rval = values[command];
-  }
-  else printf("read_ai:  ERROR, no command: %d\n",command);
-#endif
 
   return 0;  
 }
@@ -173,19 +161,11 @@ static long init_ao(struct aoRecord  *pao)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
-#ifdef NOWAVEFORMS
   if (command==FADCTET || command==TDCTET || command==TRGTET) { 
       IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
       pao->rval = values[(command & 0xF)-1];
   }
   else printf("init_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
-#else
-  if (command<2) {
-      IocGetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-      pao->rval = values[command];
-  }
-  else printf("init_ao:  ERROR, no command: %u/%u/%u/%d\n",chassis,slot,channel,command);
-#endif
   return 0;  
 }
 static long write_ao(struct aoRecord *pao)
@@ -205,7 +185,6 @@ static long write_ao(struct aoRecord *pao)
   unsigned int command = (*signal)>>8;
   unsigned int channel = (*signal) - ((command)<<8);
 
-#ifdef NOWAVEFORMS
   if (command==FADCTET || command==TDCTET || command==TRGTET) { 
       threshType = (command & 0xF) - 1;
       threshValue = pao->val;
@@ -214,16 +193,6 @@ static long write_ao(struct aoRecord *pao)
       IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
   }
   else printf("write_ao:  ERROR, no command:  %u/%u/%u/%x\n",chassis,slot,channel,command);
-#else
-  if (command<2) {
-      threshType = command;
-      threshValue = pao->val;
-      values[0] = threshType;
-      values[1] = threshValue;
-      IocSetValue(chassis,slot,channel,JLAB_SET_THRESHOLD,values);
-  }
-  else printf("write_ao:  ERROR, no command: %d\n",command);
-#endif
   return 0;  
 }
 

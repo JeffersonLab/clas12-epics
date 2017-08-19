@@ -46,17 +46,13 @@ class JlabBoard {
         int boardType;
         int numberOfChannels;
         vector<GenericSetBoard> genericSetBoards;   
-        vector< double > *scalerCounts; // order: ThreshTrig_Gr1, ThreshTDC_Gr1, ThreshTrig_Gr2, ThreshTDC_Gr2 
-        // -1 (negative) means no data
-        vector< double > *scalerCountsHz; // order: ScalerThreshTrig_Gr1, ScalerThreshTDC_Gr1, ScalerThreshTrig_Gr2, ScalerThreshTDC_Gr2 
-        // -1 (negative) means no data or reference is zero
-        vector< uint > scalerClocks; // order: SCALER_PARTYPE_THRESHOLD (Scaler Gr1), SCALER_PARTYPE_THRESHOLD2(Scaler Gr2)
-
-        vector< double > *scalerThresholds; // order: SCALER_PARTYPE_THRESHOLD (Scaler Gr1), SCALER_PARTYPE_THRESHOLD2(Scaler Gr2)
-        vector< double > *scalerModes; // not implemented
+        vector< double > *scalerCounts;
+        vector< double > *scalerCountsHz;
+        vector< uint > scalerClocks;
+        vector< double > *scalerThresholds;
+        vector< double > *scalerModes;
 
         JlabBoard(CrateMsgClient *msgClient, int slot, int type ) : crateMsgClient(msgClient), slotNumber(slot), boardType(type){
-            // types: SCALER_TYPE_DSC2, SCALER_TYPE_FADC250
             unsigned int *buf[1];
             int len;
             int partype = SCALER_PARTYPE_NCHANNELS;
@@ -76,24 +72,19 @@ class JlabBoard {
 
         virtual int GetNumberOfChannels();
 
-        virtual vector<double> *GetScalerCounts
-            ( int chanNumber, bool inHz = true ); // returns scalerCountsHz or scalerCounts: order: ThreshTrig_Gr1, ThreshTDC_Gr1, ThreshTrig_Gr2, ThreshTDC_Gr2 
-        // negative values means there is no data 
+        virtual vector<double> *GetScalerCounts( int chanNumber, bool inHz = true );
+        virtual double GetScalerCount( int chanNumber, int type, bool inHz = true );
+        virtual uint GetClockCounts( int type );
 
-        virtual double GetScalerCount
-            ( int chanNumber, int type, bool inHz = true ); // type range: ScalerThreshTrig_Gr1, ScalerThreshTDC_Gr1, ScalerThreshTrig_Gr2, ScalerThreshTDC_Gr2
-        // returns negative if there is no data 
-        virtual uint GetClockCounts( int type );  // type range:  (Scaler_Gr1), (Scaler_Gr2)
+        virtual void SetThresholds( int threshType, double threshold  );
+        virtual void SetThreshold( int chanNumber, int threshType, double threshold  );
+        virtual void GetThresholds( int threshType, double threshold[]   );
+        virtual void GetThreshold( int chanNumber, int threshType, double & threshold  );
 
-        virtual void SetThresholds( int threshType, double threshold  );  // type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
-        virtual void SetThreshold( int chanNumber, int threshType, double threshold  );  // type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
-        virtual void GetThresholds( int threshType, double threshold[]   );  // type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
-        virtual void GetThreshold( int chanNumber, int threshType, double & threshold  );  // type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
-
-        virtual void SetReadModes(double values[]); // not implemented completely
-        virtual void SetReadMode(const unsigned chanNumber, double values[]); // not implemented completely
-        virtual void GetReadModes(double values[]); // not implemented completely
-        virtual void GetReadMode(const unsigned chanNumber, double values[]); // not implemented completely
+        //virtual void SetReadModes(double values[]); // not implemented completely
+        //virtual void SetReadMode(const unsigned chanNumber, double values[]); // not implemented completely
+        //virtual void GetReadModes(double values[]); // not implemented completely
+        //virtual void GetReadMode(const unsigned chanNumber, double values[]); // not implemented completely
 };
 
 ///============================================================================

@@ -506,16 +506,9 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
 
 ///==================================================================================================================
 
-// Set thresholds for particlular type of thresholds for all channels
-// type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
 void JlabBoard::SetThresholds( int threshType, double threshold){ 
  for (int i=0; i<numberOfChannels; i++) SetThreshold( i, threshType, threshold );
 }
-
-///==================================================================================================================
-
-// Set thresholds for particular type of threshold for a single channel
-// type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
 void JlabBoard::SetThreshold(  int chanNumber, int threshType, double threshold  ){
     GenericSetBoard gsb;
     gsb.command=JLAB_SET_THRESHOLD;
@@ -525,14 +518,12 @@ void JlabBoard::SetThreshold(  int chanNumber, int threshType, double threshold 
     genericSetBoards.push_back(gsb);
 
 }
-///==================================================================================================================
 
+///==================================================================================================================
+/*
 void JlabBoard::SetReadModes( double par[]){ 
     for (int i=0; i<numberOfChannels; i++) SetReadMode( i, par);
 }
-
-///==================================================================================================================
-
 void JlabBoard::SetReadMode( const unsigned chanNumber, double par[]){
     GenericSetBoard gsb;
     gsb.command=JLAB_SET_READ_MODE;
@@ -542,12 +533,10 @@ void JlabBoard::SetReadMode( const unsigned chanNumber, double par[]){
     gsb.channelNumber=chanNumber; 
     genericSetBoards.push_back(gsb);
 }
+*/
 
 ///==================================================================================================================
-///==================================================================================================================
 
-// Get thresholds of particlular type of thresholds for all channels
-// type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
 void JlabBoard::GetThresholds( int threshType, double thresholds[] ){ 
     double threshold;
     for(int i=0;i<numberOfChannels;i++){
@@ -555,11 +544,6 @@ void JlabBoard::GetThresholds( int threshType, double thresholds[] ){
         thresholds[i]=threshold;
     }
 }
-
-///==================================================================================================================
-
-// Get threshold of particular type of threshold for a single channel
-// type range: SCALER_PARTYPE_THRESHOLD (), SCALER_PARTYPE_THRESHOLD2()
 void JlabBoard::GetThreshold( int chanNumber, int threshType, double & threshold  ){
     const unsigned int nn=scalerThresholds[chanNumber].size();
     if (threshType < (int)nn) {
@@ -570,16 +554,14 @@ void JlabBoard::GetThreshold( int chanNumber, int threshType, double & threshold
             threshold=(scalerThresholds[chanNumber])[threshType];
         }
     }
-}                    
-///==================================================================================================================
+}
 
+///==================================================================================================================
+/*
 void JlabBoard::GetReadModes( double pars[]) { 
     for (int i=0; i<numberOfChannels; i++)
         GetReadMode(i, pars+i*MODE_PARS_NUMBER);
 }
-
-///==================================================================================================================
-
 void JlabBoard::GetReadMode( const unsigned chanNumber, double par[]){
 
     if ( (scalerModes[chanNumber]).size() >= MODE_PARS_NUMBER) {
@@ -587,9 +569,9 @@ void JlabBoard::GetReadMode( const unsigned chanNumber, double par[]){
             par[i]=(scalerModes[chanNumber])[i];
     }
 }
+*/
 
 ///==================================================================================================================
-// type range: ScalerThreshTrig_Gr1, ScalerThreshTDC_Gr1, ScalerThreshTrig_Gr2, ScalerThreshTDC_Gr2
 double JlabBoard::GetScalerCount
 ( int chanNumber, int type, bool inHz ){ 
     double ret;
@@ -629,7 +611,6 @@ double JlabBoard::GetScalerCount
 
 }
 ///==================================================================================================================
-// type range: ScalerThreshTrig_Gr1, ScalerThreshTDC_Gr1, ScalerThreshTrig_Gr2, ScalerThreshTDC_Gr2
 vector<double> *JlabBoard::GetScalerCounts
 ( int chanNumber, bool inHz ){ 
     if (inHz) return &(scalerCountsHz[chanNumber]);
@@ -637,7 +618,6 @@ vector<double> *JlabBoard::GetScalerCounts
 }
 
 ///==================================================================================================================
-// type range: SCALER_PARTYPE_THRESHOLD, SCALER_PARTYPE_THRESHOLD2
 uint JlabBoard::GetClockCounts( int type ){  
     if      (type==SCALER_GROUP_1) return  scalerClocks[0];
     else if (type==SCALER_GROUP_2) return  scalerClocks[1];

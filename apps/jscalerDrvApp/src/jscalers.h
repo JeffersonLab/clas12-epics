@@ -70,17 +70,15 @@ class JlabBoard {
         }
         virtual ~JlabBoard(){};
 
-        virtual int GetNumberOfChannels();
-
-        virtual vector<double> *GetScalerCounts( int chanNumber, bool inHz = true );
-        virtual double GetScalerCount( int chanNumber, int type, bool inHz = true );
-        virtual uint GetClockCounts( int type );
-
         virtual void SetThresholds( int threshType, double threshold  );
         virtual void SetThreshold( int chanNumber, int threshType, double threshold  );
         virtual void GetThresholds( int threshType, double threshold[]   );
         virtual void GetThreshold( int chanNumber, int threshType, double & threshold  );
 
+        //virtual int GetNumberOfChannels();
+        //virtual vector<double> *GetScalerCounts( int chanNumber, bool inHz = true );
+        //virtual double GetScalerCount( int chanNumber, int type, bool inHz = true );
+        //virtual uint GetClockCounts( int type );
         //virtual void SetReadModes(double values[]); // not implemented completely
         //virtual void SetReadMode(const unsigned chanNumber, double values[]); // not implemented completely
         //virtual void GetReadModes(double values[]); // not implemented completely

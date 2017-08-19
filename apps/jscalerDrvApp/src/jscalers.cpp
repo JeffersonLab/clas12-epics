@@ -88,9 +88,6 @@ int VmeChassis::getPortFromDb(string &HOSTNAME){
 
 ///=========================================================================================================
 
-int JlabBoard::GetNumberOfChannels(){
- return numberOfChannels;
-}
 ///=========================================================================================================
 
 map<int, JlabBoard*> *VmeChassis::GetBoardMap(){
@@ -520,22 +517,6 @@ void JlabBoard::SetThreshold(  int chanNumber, int threshType, double threshold 
 }
 
 ///==================================================================================================================
-/*
-void JlabBoard::SetReadModes( double par[]){ 
-    for (int i=0; i<numberOfChannels; i++) SetReadMode( i, par);
-}
-void JlabBoard::SetReadMode( const unsigned chanNumber, double par[]){
-    GenericSetBoard gsb;
-    gsb.command=JLAB_SET_READ_MODE;
-    gsb.values.push_back(par[0]); /// read mode itself
-    gsb.values.push_back(par[1]); /// additional parameter (interval ???)
-    gsb.values.push_back(par[2]); /// additional parameter ???
-    gsb.channelNumber=chanNumber; 
-    genericSetBoards.push_back(gsb);
-}
-*/
-
-///==================================================================================================================
 
 void JlabBoard::GetThresholds( int threshType, double thresholds[] ){ 
     double threshold;
@@ -558,6 +539,19 @@ void JlabBoard::GetThreshold( int chanNumber, int threshType, double & threshold
 
 ///==================================================================================================================
 /*
+void JlabBoard::SetReadModes( double par[]){ 
+    for (int i=0; i<numberOfChannels; i++) SetReadMode( i, par);
+}
+void JlabBoard::SetReadMode( const unsigned chanNumber, double par[]){
+    GenericSetBoard gsb;
+    gsb.command=JLAB_SET_READ_MODE;
+    gsb.values.push_back(par[0]); /// read mode itself
+    gsb.values.push_back(par[1]); /// additional parameter (interval ???)
+    gsb.values.push_back(par[2]); /// additional parameter ???
+    gsb.channelNumber=chanNumber; 
+    genericSetBoards.push_back(gsb);
+}
+
 void JlabBoard::GetReadModes( double pars[]) { 
     for (int i=0; i<numberOfChannels; i++)
         GetReadMode(i, pars+i*MODE_PARS_NUMBER);
@@ -569,9 +563,10 @@ void JlabBoard::GetReadMode( const unsigned chanNumber, double par[]){
             par[i]=(scalerModes[chanNumber])[i];
     }
 }
-*/
 
-///==================================================================================================================
+int JlabBoard::GetNumberOfChannels(){
+ return numberOfChannels;
+}
 double JlabBoard::GetScalerCount
 ( int chanNumber, int type, bool inHz ){ 
     double ret;
@@ -610,20 +605,19 @@ double JlabBoard::GetScalerCount
     return ret;
 
 }
-///==================================================================================================================
+
 vector<double> *JlabBoard::GetScalerCounts
 ( int chanNumber, bool inHz ){ 
     if (inHz) return &(scalerCountsHz[chanNumber]);
     else      return &(scalerCounts[chanNumber]);
 }
 
-///==================================================================================================================
 uint JlabBoard::GetClockCounts( int type ){  
     if      (type==SCALER_GROUP_1) return  scalerClocks[0];
     else if (type==SCALER_GROUP_2) return  scalerClocks[1];
     return -1;
 }
 ///==================================================================================================================
-
+*/
 
 

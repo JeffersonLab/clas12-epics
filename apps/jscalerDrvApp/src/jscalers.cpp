@@ -10,6 +10,7 @@
 //#define JSCALER_DEBUG
 
 #define DGSPORTNO 6102
+#define MAXNPORTS 10 // maximum number of ports to try before failure
 
 using namespace std;
 void *crateThread(void *);
@@ -29,16 +30,26 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
     pthread_mutex_init(&IOmutex, NULL);
 
     is_crate_read=0;
-    port=getPortFromDb(HOSTNAME);
-    printf("1==  %s %d \n", HOSTNAME.c_str(), port);
-    numberOfSlots=0;
 
-    crateMsgClient= new CrateMsgClient((const char*) HOSTNAME.c_str(), port);
+    // search for the server's port:
+    for (int iPort=0; iPort<MAXNPORTS; iPort++) {
 
-    if (crateMsgClient->IsValid()) printf("Connected %p\n",crateMsgClient);
-    else {
-        printf("NOT CONNECTED - RETURN\n");
-        return; 
+        port=getPortFromDb(HOSTNAME)+iPort;
+        printf("Trying %s:%d: ....\n", HOSTNAME.c_str(), port);
+        
+        numberOfSlots=0;
+        crateMsgClient= new CrateMsgClient((const char*) HOSTNAME.c_str(), port);
+
+        if (crateMsgClient->IsValid()) {
+            printf("Connected %p\n",crateMsgClient);
+            break;
+        }
+        if (crateMsgClient) delete(crateMsgClient);
+        printf("NOT CONNECTED - Trying next port ...\n");
+    }
+    if (!crateMsgClient->IsValid()) {
+        printf("FAILED TO CONNECT to %s after trying %d ports, must restart IOC to retry\n", HOSTNAME.c_str(),MAXNPORTS);
+        return;
     }
 
     (*buf)=0;
@@ -86,6 +97,19 @@ void *crateThread(void *ptr) {
     int partype;
 
     while(1){
+        /*
+        bool testing=false;
+        if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) testing=true;
+        if (testing) fprintf(stderr,"Enter crateThread ADCECAL1\n");
+
+        if (!(ptr_c->crateMsgClient->IsValid()) ||
+            !(ptr_c->crateMsgClient->CheckConnection("foo"))) {
+            fprintf(stderr,"jscalers:crateThread Error %s\n",ptr_c->getHostname().c_str());
+            //ptr_c->crateMsgClient=new CrateMsgClient((const char*)ptr_c->getHostname().c_str(),ptr_c->port);
+            sleep(10);
+            continue;
+        }
+        */
 
         sleep(SCALERS_READ_INTERVAL);
         pthread_mutex_lock(&(ptr_c->IOmutex));
@@ -93,6 +117,8 @@ void *crateThread(void *ptr) {
         ///----------------------------- read part--------------------------------------
 
         for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
+
+            //if (testing) fprintf(stderr,"%d\n",it->first);
 
             if(!(it->second))continue;
             int nchannels = (it->second)->numberOfChannels;
@@ -176,6 +202,8 @@ void *crateThread(void *ptr) {
         pthread_mutex_unlock(&(ptr_c->IOmutex));
         ptr_c->is_crate_read=1;
 
+        
+        //if (testing) fprintf(stderr,"Leave crateThread ADCECAL1\n");
     }
     return NULL;
 }

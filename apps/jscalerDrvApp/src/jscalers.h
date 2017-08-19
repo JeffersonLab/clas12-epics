@@ -163,6 +163,7 @@ class VmeChassis {
 
     public:
 
+        string getHostname() {return HOSTNAME;}
         int port;  /// should be gotten from the databses (not used at the moment)
         CrateMsgClient* crateMsgClient;
         pthread_mutex_t IOmutex;// = PTHREAD_MUTEX_INITIALIZER;

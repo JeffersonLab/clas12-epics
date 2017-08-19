@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,12 +16,9 @@ void *crateThread(void *);
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it);
-///=========================================================================================================
 ScalersSlowControl::ScalersSlowControl(){}
-map<int, VmeChassis*> *ScalersSlowControl::GetChassisMap(){
-    return &vmecrates;
-}
-///=========================================================================================================
+map<int, VmeChassis*> *ScalersSlowControl::GetChassisMap(){ return &vmecrates; }
+
 VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
     int *board_types;
@@ -76,23 +72,9 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
     }
 }
 ///=========================================================================================================
-int VmeChassis::GetNumberOfSlots(){
- return numberOfSlots;
-}
-
-///=========================================================================================================
-
-int VmeChassis::getPortFromDb(string &HOSTNAME){
- return DGSPORTNO;
-}
-
-///=========================================================================================================
-
-///=========================================================================================================
-
-map<int, JlabBoard*> *VmeChassis::GetBoardMap(){
- return &crateBoards;
-}
+int VmeChassis::GetNumberOfSlots() { return numberOfSlots; }
+int VmeChassis::getPortFromDb(string &HOSTNAME) { return DGSPORTNO; }
+map<int, JlabBoard*> *VmeChassis::GetBoardMap() { return &crateBoards; }
 
 ///=========================================================================================================
 void *crateThread(void *ptr) {
@@ -103,15 +85,7 @@ void *crateThread(void *ptr) {
     unsigned int *buf[1];
     int partype;
 
-#ifdef JSCALER_DEBUG
-    unsigned int niter=0;
-#endif
-
     while(1){
-
-#ifdef JSCALER_DEBUG
-        fprintf(stderr,"CrateThreadBegin %d\n",niter);
-#endif
 
         sleep(SCALERS_READ_INTERVAL);
         pthread_mutex_lock(&(ptr_c->IOmutex));
@@ -155,10 +129,8 @@ void *crateThread(void *ptr) {
             }
 
             ///-------------------  thresholds ------------------------------------
-
             for (int i=0; i<it->second->numberOfChannels; i++)
                 it->second->scalerThresholds[i].clear();
-
             (*buf)=0;
             partype = SCALER_PARTYPE_THRESHOLD;
             ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
@@ -173,8 +145,6 @@ void *crateThread(void *ptr) {
                 for (int i=0; i<len; i++)
                     ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
             if (*buf) delete *buf;
-
-
 #ifdef JSCALER_DEBUG 
             for (int i=0; i<it->second->numberOfChannels; i++) {  
                 int size1 = ( it->second->scalerThresholds[i] ).size();
@@ -185,21 +155,15 @@ void *crateThread(void *ptr) {
         }
 
         ///-------------------------- request part -----------------------------------------
-
         unsigned int buffer[100];
         for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
             if (!(it->second))continue;
-
             for (unsigned int j=0; j<(it->second)->genericSetBoards.size(); j++) {
-
                 if ((it->second)->genericSetBoards[j].command==JLAB_SET_THRESHOLD) {
                     (*buf)=0;
                     len=1;
                     partype = (int) ((it->second)->genericSetBoards[j].values[0]);
                     buffer[0]=(uint)(it->second)->genericSetBoards[j].values[1];
-#ifdef JSCALER_DEBUG
-                    printf("QWERasdf partype=%d buffer[0]=%d \n",partype,buffer[0]);
-#endif
                     ret = ptr_c->crateMsgClient->SetChannelParams((it->second)->slotNumber, (it->second)->genericSetBoards[j].channelNumber,
                             partype, buffer, len );
                     if (ret<=0) printf("error in thresh set\n");
@@ -209,13 +173,9 @@ void *crateThread(void *ptr) {
             }
             (it->second)->genericSetBoards.clear();
         }
-
         pthread_mutex_unlock(&(ptr_c->IOmutex));
         ptr_c->is_crate_read=1;
 
-#ifdef JSCALER_DEBUG
-        fprintf(stderr,"CrateThreadEnd %d\n",niter++);
-#endif
     }
     return NULL;
 }
@@ -227,11 +187,9 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
     int len=0;
     unsigned int *buf[1];
     int ret=0;
-
     (*buf)=0;
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
     (void)ret;
-
     if (len!=17) printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
     else if ((*buf)[16]<=0) printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
     else {
@@ -336,7 +294,6 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
                         ssp->scalerCounts[thisFiber][fiberPixelID]=(*buf)[jj];
                         ssp->scalerCountsHz[thisFiber][fiberPixelID]=hz;
                     }
-
                     //printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,hz);
                     //printf("%d %d %d %d ---- %d %d %d %d ---- %f\n",len,thisLen,thisFiber,jj,pmtID,marocID,pixelID,pixelID+pmtID*64,hz);
                 }

@@ -8,6 +8,7 @@ oldFile='../Db/jscaler_RICH_ChannelMap.db'
 suffixes=['scalers','scalersAvg','scalersAvgK']
 
 pmtsNew=[]
+slotFiber=[]
 for line in open(matteoFile,'r').readlines():
   line=line.strip()
   slot,fiber,asic,pmt=line.split()
@@ -18,8 +19,16 @@ for line in open(matteoFile,'r').readlines():
   pmt='%.3d'%(int(pmt))
   pmtsNew.append({'slot':slot,'fiber':fiber,'asic':asic,'pmt':pmt,'pv':pv,'alias':alias})
 
-  for suffix in suffixes:
-    print 'alias("%s:%s","%s:%s")'%(pv,suffix,alias,suffix)
+  if not {'slot':slot,'fiber':fiber} in slotFiber:
+    slotFiber.append({'slot':slot,'fiber':fiber})
+
+#  for suffix in suffixes:
+#    print 'alias("%s:%s","%s:%s")'%(pv,suffix,alias,suffix)
+
+for sf in slotFiber:
+  pv='B_HW_FEVME1_Sl%s_Fi%s'%(sf['slot'],sf['fiber'])
+  print pv+':temp:fpga 0.2'
+  print pv+':volt:pcb5 0.05'
 
 pmtsOld=[]
 for line in open(oldFile,'r').readlines():

@@ -12,10 +12,15 @@
     <end>now</end>
     <archive_rescale>STAGGER</archive_rescale>
     <background>
-      <red>55</red>
-      <green>55</green>
-      <blue>55</blue>
+      <red>65</red>
+      <green>65</green>
+      <blue>65</blue>
     </background>
+    <foreground>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+    </foreground>
     <title_font>Sans|15|1</title_font>
     <label_font>Sans|10|1</label_font>
     <scale_font>Sans|8|0</scale_font>

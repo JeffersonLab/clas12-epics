@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import re
+import re,sys
 
 matteoFile='sspRich_mapFIBER2PMT_sortbyPMT.txt'
 
@@ -24,6 +24,28 @@ for line in open(matteoFile,'r').readlines():
 
 #  for suffix in suffixes:
 #    print 'alias("%s:%s","%s:%s")'%(pv,suffix,alias,suffix)
+
+for line in open('../../iocBoot/iocjscalersRICH/richPmt-setDesc.cmd','r').readlines():
+  if line.find('dbpf')!=0: continue
+  cols=line.strip().split('"')
+  pv,oldDesc=cols[1],cols[3]
+  mm=re.match('B_DET_RICH_SSP_PMT(\d\d\d)',pv)
+  pmt=mm.group(1)
+  found=False
+  for xx in pmtsNew:
+    if pmt==xx['pmt']:
+      found=True
+      pmt=xx
+      break
+  if not found:
+    sys.exit('asdf:  '+str(pmt))
+
+  newDesc='RICH Scalers - Sl%s, Fi%s.%s, Pmt#%s'%(xx['slot'],xx['fiber'],xx['asic'],xx['pmt'])
+
+  print 'dbpf("'+pv+'","'+newDesc+'")'
+
+
+sys.exit()
 
 for sf in slotFiber:
   pv='B_HW_FEVME1_Sl%s_Fi%s'%(sf['slot'],sf['fiber'])

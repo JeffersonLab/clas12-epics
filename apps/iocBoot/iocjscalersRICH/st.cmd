@@ -19,6 +19,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
 dbLoadRecords("db/jscaler_RICH_ChannelMap.db")
+dbLoadRecords("db/jscaler_RICH_TileMap.db")
 dbLoadRecords("db/jscalers_RICH_sums.db")
 
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=ROWS:,NELM=23,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/rows.txt")

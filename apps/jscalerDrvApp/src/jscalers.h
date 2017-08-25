@@ -154,7 +154,6 @@ class JlabSSPBoard : public JlabBoard {
 ///============================================================================
 class VmeChassis {
     private:
-        string HOSTNAME;
 
     protected:
         // Prevent copying boards
@@ -162,13 +161,14 @@ class VmeChassis {
         VmeChassis& operator=(const VmeChassis& chassis);
 
     public:
+        string HOSTNAME;
 
         string getHostname() {return HOSTNAME;}
         int port;  /// should be gotten from the databses (not used at the moment)
         CrateMsgClient* crateMsgClient;
         pthread_mutex_t IOmutex;// = PTHREAD_MUTEX_INITIALIZER;
         map<int, JlabBoard *> crateBoards; // key is slot
-        pthread_t threadC;
+        pthread_t threadC,threadCmon;
         int is_crate_read;
         int numberOfSlots;
         VmeChassis(int id, string &hostname );  /// id is to talk from record

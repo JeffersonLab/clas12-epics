@@ -14,6 +14,7 @@
 
 using namespace std;
 void *crateThread(void *);
+void *crateThreadMon(void *);
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it);
@@ -81,6 +82,25 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
         perror("Creating the Server Analysis Thread failed");
         exit(3);
     }
+   
+    // try to use another thread to restart threadC if crashed:
+    //rval = pthread_create(&threadCmon, NULL, crateThreadMon, (void*)this);
+}
+
+
+void* crateThreadMon(void *ptr) {
+    VmeChassis *ptr_c=(VmeChassis *)ptr;
+    while (1) {
+        pthread_join(ptr_c->threadC,NULL);
+        printf("Thread Crashed for %s, Respawning in 10 seconds ....\n",ptr_c->HOSTNAME.c_str());
+        sleep(10);
+        int rval = pthread_create(&(ptr_c->threadC), NULL, crateThread, (void *) ptr );
+        if (rval != 0) {
+            perror("Creating the Server Analysis Thread failed");
+            exit(3);
+        }
+    }
+
 }
 ///=========================================================================================================
 int VmeChassis::GetNumberOfSlots() { return numberOfSlots; }
@@ -97,11 +117,11 @@ void *crateThread(void *ptr) {
     int partype;
 
     while(1){
-        /*
-        bool testing=false;
-        if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) testing=true;
-        if (testing) fprintf(stderr,"Enter crateThread ADCECAL1\n");
-
+        
+        //bool testing=false;
+        //if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) testing=true;
+        //if (testing) fprintf(stderr,"Enter crateThread ADCECAL1\n");
+/*
         if (!(ptr_c->crateMsgClient->IsValid()) ||
             !(ptr_c->crateMsgClient->CheckConnection("foo"))) {
             fprintf(stderr,"jscalers:crateThread Error %s\n",ptr_c->getHostname().c_str());
@@ -109,7 +129,7 @@ void *crateThread(void *ptr) {
             sleep(10);
             continue;
         }
-        */
+*/
 
         sleep(SCALERS_READ_INTERVAL);
         pthread_mutex_lock(&(ptr_c->IOmutex));
@@ -121,12 +141,16 @@ void *crateThread(void *ptr) {
             //if (testing) fprintf(stderr,"%d\n",it->first);
 
             if(!(it->second))continue;
+
             int nchannels = (it->second)->numberOfChannels;
+            
+            //if (testing) fprintf(stderr,"%d %d\n",it->first,nchannels);
 
             if((it->second)->boardType==SCALER_TYPE_DSC2){
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersA\n");
 #endif
+                //if (testing) fprintf(stderr,"Read Disc Scalers ...\n");
                 Dsc2ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersB\n");
@@ -137,6 +161,7 @@ void *crateThread(void *ptr) {
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerA\n");
 #endif
+                //if (testing) fprintf(stderr,"Read Fadc Scalers ...\n");
                 Fadc250ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerB\n");
@@ -153,6 +178,8 @@ void *crateThread(void *ptr) {
                 fprintf(stderr,"ioc:SSPReadScalerB\n");
 #endif
             }
+                
+            //if (testing) fprintf(stderr,"Done Reading Scalers.\n");
 
             ///-------------------  thresholds ------------------------------------
             for (int i=0; i<it->second->numberOfChannels; i++)
@@ -216,10 +243,37 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
     unsigned int *buf[1];
     int ret=0;
     (*buf)=0;
+    /*
+    if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) { 
+        fprintf(stderr,"Fadc250ReadScalersA\n");
+        if (!ptr_c->crateMsgClient) {
+            fprintf(stderr,"Fadc250ReadScalers: found null pointer\n");
+            return 0;
+        }
+        if (!(ptr_c->crateMsgClient->IsValid())) {
+            fprintf(stderr,"Fadc250ReadScalers: found invalid\n");
+            return 0;
+        }
+        if (!(ptr_c->crateMsgClient->CheckConnection("foo"))) {
+            fprintf(stderr,"Fadc250ReadScalers: found bad conn\n");
+            return 0;
+        }
+    }
+    */
+    // NABO:  THREAD CRASHES HERE IF DGS IS KILLED
+    if (ptr_c && ptr_c->crateMsgClient && ptr_c->crateMsgClient->IsValid() && ptr_c->crateMsgClient->CheckConnection("foo"))
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
+    /*
+    if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) 
+        fprintf(stderr,"Fadc250ReadScalersB\n");
+    */
     (void)ret;
-    if (len!=17) printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
-    else if ((*buf)[16]<=0) printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
+    if (len!=17) {
+        printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
+    }
+    else if ((*buf)[16]<=0) {
+        printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
+    }
     else {
         static const double ref1=488281.25f;
         static const double ref2=1;

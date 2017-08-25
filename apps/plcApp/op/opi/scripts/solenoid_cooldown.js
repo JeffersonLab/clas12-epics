@@ -18,12 +18,15 @@ var R = [
 	"C14_DT_MAX",
 	"C14ASY_DT_MAX",
 	"C14ASY_DT_MAXSET",
+	"C14ASY_DT_MAXDSG",
 	"C14ASY_DT_MAXPCT",
 	"C5BOB_DT_MAX",
+	"C5BOB_DT_MAXDSG",
 	"C5BOB_DT_MAXPCT",
 	"CM_T_MAX",
 	"CM_T_MIN",
 	"CM_DT_MAX",
+	"CM_DT_MAXDSG",
 	"CM_DT_MAXPCT",
 	"HE_CP_CD_DT",
 	"HE_CP_CD_DT2",
@@ -46,6 +49,7 @@ var R = [
 	"SHLD_CD_DT",
 	"SHLD_DT_MAX",
 	"SHLD4K_DT_MAX",
+	"SHLD4K_DT_MAXDSG",
 	"SHLD4K_DT_MAXPCT",
 	"DT_MAX_PCT",
 	"HTR8620",
@@ -57,7 +61,11 @@ var col2 = widget.getWidget("col2");
 
 for (var i=0; i<R.length; i++) {
 	var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-	lc.setPropertyValue("opi_file","./solenoid_cooldown_row.opi");
+    if (~R[i].indexOf('MAXDSG')) {
+		lc.setPropertyValue("opi_file","./solenoid_cooldown_row_out.opi");
+	} else {
+		lc.setPropertyValue("opi_file","./solenoid_cooldown_row.opi");
+	}
 	lc.setPropertyValue("auto_size",true);
 	lc.setPropertyValue("zoom_to_fit",false);
 	lc.setPropertyValue("border_style",0);

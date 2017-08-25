@@ -193,7 +193,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     fStatusBar->Draw3DCorner(kFALSE);
     AddFrame(fStatusBar, new TGLayoutHints(kLHintsExpandX, 0, 0, 10, 0));
 
-    SetWindowName("Hall-B Torus Analysis");
+    SetWindowName("Hall-B VT Analyzer");
     MapSubwindows();
     Resize(GetDefaultSize());
     MapWindow();

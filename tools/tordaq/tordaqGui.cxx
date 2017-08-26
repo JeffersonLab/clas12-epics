@@ -96,6 +96,19 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     
     leftFrame->AddFrame(selectFrame,new TGLayoutHints(kLHintsExpandX | kLHintsTop,1,1,5,1));
     
+    TGLabel *yPanLabel = new TGLabel(leftFrame, "Y-Pan");
+    yPanLabel->SetTextJustify(kTextCenterX | kLHintsExpandX | kTextCenterY);
+    yPanLabel->SetWrapLength(-1);
+    TGHorizontalFrame *yPanFrame = new TGHorizontalFrame(leftFrame, 100, 60);
+    yPanUpBtn = new TGTextButton(yPanFrame, "Up");
+    yPanUpBtn->Connect("Released()","tordaqGui",this,"yPanUp()");
+    yPanUpBtn->Resize(60,20);
+    yPanFrame->AddFrame(yPanUpBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+    yPanDownBtn = new TGTextButton(yPanFrame, "Down");
+    yPanDownBtn->Connect("Released()","tordaqGui",this,"yPanDown()");
+    yPanDownBtn->Resize(60,20);
+    yPanFrame->AddFrame(yPanDownBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
+   
     TGLabel *yZoomLabel = new TGLabel(leftFrame, "Y-Zoom");
     yZoomLabel->SetTextJustify(kTextCenterX | kTextCenterY);
     yZoomLabel->SetWrapLength(-1);
@@ -142,6 +155,8 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     leftFrame->AddFrame(xZoomLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
     leftFrame->AddFrame(yZoomFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
     leftFrame->AddFrame(yZoomLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
+    leftFrame->AddFrame(yPanFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
+    leftFrame->AddFrame(yPanLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
 
     //denoiseCheck=new TGCheckButton(leftFrame,"Denoise");
     //leftFrame->AddFrame(denoiseCheck,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1,1,1,1));
@@ -391,8 +406,11 @@ void tordaqGui::Draw1()
     legend1->Draw();
     ctmp->Update();
 }
-void tordaqGui::Update1(const double xmin=0,const double xmax=-1)
+void tordaqGui::Update1(const double xmin=0,const double xmax=-1,
+                        const double ymin=0,const double ymax=-1)
 {
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     if (xmax>xmin)
     {
         for (unsigned int ii=0; ii<histos1.size(); ii++)
@@ -406,35 +424,49 @@ void tordaqGui::Update1(const double xmin=0,const double xmax=-1)
         }
         zoomSlider->SetPosition(xmin);
     }
+    if (ymax>ymin) {
+        for (unsigned int ii=0; ii<histos1.size(); ii++)
+        {
+            histos1[ii]->GetYaxis()->SetRangeUser(ymin,ymax);
+            //histos1[ii]=tordaqUtil::zoomHisto(histos1[ii],
+            //            Form("%s_zoom",histos1[ii]->GetName()),
+            //            xmin,
+            //            xmax);
+            //histos1[ii]->Draw(ii==0?"":"SAME");
+        }
+    }
     canvas1->GetCanvas()->Modified();
     canvas1->GetCanvas()->Update();
 }
 void tordaqGui::ZoomIn1()
 {
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=0.45;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
     Update1(xlo,xhi);
 }
 void tordaqGui::ZoomOut1()
 {
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=1.0;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
     Update1(xlo,xhi);
 }
 void tordaqGui::yZoomIn1()
 {
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=0.2;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double ylo=y1+(y2-y1)*frac;
     const double yhi=y2-(y2-y1)*frac;
     histos1[0]->SetMinimum(ylo);
@@ -443,10 +475,11 @@ void tordaqGui::yZoomIn1()
 }
 void tordaqGui::yZoomOut1()
 {
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=1.0;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double ylo=y1-(y2-y1)*frac;
     const double yhi=y2+(y2-y1)*frac;
     histos1[0]->SetMinimum(ylo);
@@ -458,13 +491,11 @@ void tordaqGui::doZoomSlider1()
     const int pos=zoomSlider->GetPosition();
     double x1,x2,y1,y2;
     TCanvas *ctmp=canvas1->GetCanvas();
-    if (!ctmp || histos1.size()<1)
-    {
+    if (!ctmp || histos1.size()<1) {
         // invalid
         zoomSlider->SetPosition(zoomSlider->GetMinPosition());
     }
-    else
-    {
+    else {
         ctmp->GetRangeAxis(x1,y1,x2,y2);
         if (pos>=histos1[0]->GetXaxis()->GetXmax()
                 || pos<histos1[0]->GetXaxis()->GetXmin())
@@ -473,13 +504,35 @@ void tordaqGui::doZoomSlider1()
             Update1(pos,pos+(x2-x1));
     }
 }
+void tordaqGui::yPanUp()
+{
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
+    static const double frac=0.2;
+    double x1,x2,y1,y2;
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
+    const double ylo=y1+(y2-y1)*frac;
+    const double yhi=y2+(y2-y1)*frac;
+    Update1(x1,x2,ylo,yhi);
+}
+void tordaqGui::yPanDown()
+{
+    if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
+    static const double frac=0.2;
+    double x1,x2,y1,y2;
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
+    const double ylo=y1-(y2-y1)*frac;
+    const double yhi=y2-(y2-y1)*frac;
+    Update1(x1,x2,ylo,yhi);
+}
 void tordaqGui::PanLeft1()
 {
     if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=0.5;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1-(x2-x1)*frac;
     const double xhi=x2-(x2-x1)*frac;
     Update1(xlo,xhi);
@@ -487,10 +540,10 @@ void tordaqGui::PanLeft1()
 void tordaqGui::PanRight1()
 {
     if (histos1.size()<1) return;
+    if (!canvas1 || !canvas1->GetCanvas()) return;
     static const double frac=0.5;
     double x1,x2,y1,y2;
-    TCanvas *ctmp=canvas1->GetCanvas();
-    ctmp->GetRangeAxis(x1,y1,x2,y2);
+    canvas1->GetCanvas()->GetRangeAxis(x1,y1,x2,y2);
     const double xlo=x1+(x2-x1)*frac;
     const double xhi=x2+(x2-x1)*frac;
     Update1(xlo,xhi);

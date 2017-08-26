@@ -58,6 +58,8 @@ class tordaqGui: public TGMainFrame {
         TGTextButton *yZoomoutBtn;
         TGTextButton *yZoominBtn;
         TGTextButton *panleftBtn;
+        TGTextButton *yPanUpBtn;
+        TGTextButton *yPanDownBtn;
         TGTextButton *panrightBtn;
         TGCheckButton *denoiseCheck;
         TGHSlider *zoomSlider;
@@ -89,13 +91,15 @@ class tordaqGui: public TGMainFrame {
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
         void Draw1();
-        void Update1(const double,const double);
+        void Update1(const double,const double,const double,const double);
         void ZoomIn1();
         void ZoomOut1();
         void yZoomIn1();
         void yZoomOut1();
         void PanLeft1();
         void PanRight1();
+        void yPanUp();
+        void yPanDown();
         void doZoomSlider1();
         void SetStyle()
         {

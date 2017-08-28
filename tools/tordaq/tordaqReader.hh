@@ -84,8 +84,13 @@ public:
                 std::cerr<<"Missing input file:  "<<inFilename<<std::endl;
                 return false;
             }
+            if (inFile) inFile->Close();
             inFile=new TFile(inFilename,"READ");
         }
+
+        // stop leaking memory upon opening another file:
+        for (unsigned int ii=0; ii<outHistos.size(); ii++) 
+            if (outHistos[ii]) delete outHistos[ii];
 
         // determine the variable names based on file contents:
         tdData.setTreeNames();
@@ -93,6 +98,8 @@ public:
         //std::vector <std::string> VARNAMES=tdData.getTreeNames();
         
         // find the input TTrees:
+        inTrees.clear();
+        outHistos.clear();
         std::vector <std::string> missingTrees;
         for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
         {
@@ -444,6 +451,9 @@ public:
           }
           else
           {
+
+              // !!!!we need to be able to delete this upon opening new file!!!!!!
+
             TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
             TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
             TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);

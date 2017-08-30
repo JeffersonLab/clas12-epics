@@ -389,6 +389,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     
     // read data::::::::::::::::::::::::::::::::::::::::::::::
     (*buf)=0;
+    len=0;
     ret = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
     ii=0;
     while (1) {

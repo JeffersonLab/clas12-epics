@@ -30,9 +30,9 @@ drvModbusAsynConfigure("C370x3800","ETH1", 1, 3, 0x3800, 20, 0, 2000, "C370")
 #drvModbusAsynConfigure("C370x1880","ETH1", 1, 1, 0x1880, 24, 0, 2000, "C370")
 #drvModbusAsynConfigure("C370x1920","ETH1", 1, 1, 0x1920, 21, 0, 2000, "C370")
 #drvModbusAsynConfigure("C370x6622","ETH1", 1, 1, 0x6622, 32, 0, 2000, "C370")
-#drvModbusAsynConfigure("C370x1C49","ETH1", 1, 1, 0x1C49,  1, 0, 2000, "C370")
 #drvModbusAsynConfigure("C370x1900","ETH1", 1, 1, 0x1900,  1, 0, 2000, "C370")
 #drvModbusAsynConfigure("C370x1A80","ETH1", 1, 1, 0x1A80,  1, 0, 2000, "C370")
+drvModbusAsynConfigure("C370x1C49","ETH1", 1, 1, 0x1C49,  1, 0, 2000, "C370")
 
 # NEW complete bits (saclayTarget-bits.substitutions):
 drvModbusAsynConfigure("C370x1880","ETH1",1, 1, 0x1880,  32, 0, 2000, "C370")

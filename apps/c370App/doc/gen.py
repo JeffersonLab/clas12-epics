@@ -122,10 +122,11 @@ for line in open(csvFile,'r').readlines():
 
   # override defaults on new record: 
   if variableGroup.find('valve')>=0: znam,onam='CLOSED','OPEN'
-  if name.find('FV')==0: znam,onam='OPEN','CLOSED'
+  if name.find('FV')==0: znam,onam='CLOSED','OPEN'
   if name.find('AL')==0: osv='MAJOR'
   if name=='LS_TB': osv='MAJOR'
   if name=='LS_TH': osv='MAJOR'
+  if name.find('PUMP')>=0: znam,onam='OFF','ON'
   if name in descriptions.keys(): desc=descriptions[name]
 
   # print record

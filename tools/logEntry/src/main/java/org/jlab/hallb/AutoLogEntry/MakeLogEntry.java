@@ -1,4 +1,5 @@
 package org.jlab.hallb.AutoLogEntry;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
-  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","RICH","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC","TLOG"};
+  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","LTCC","RICH","TLOG"};
 
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");

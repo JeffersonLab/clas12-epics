@@ -95,8 +95,8 @@ then
 elif [[ $1 == "rich" || $1 == "fevme1" ]]
 then
     dgsReboot fevme1
-    echo Sleeping 10 seconds before rebooting IOC ...
-    sleep 10
+    echo Sleeping 30 seconds before rebooting IOC ...
+    sleep 30
     softioc_console -R iocjscalersRICH
 
 elif [[ $1 == 1 || $1 == 2 || $1 == 3 || $1 == 4 || $1 == 5 || $1 == 6 ]]

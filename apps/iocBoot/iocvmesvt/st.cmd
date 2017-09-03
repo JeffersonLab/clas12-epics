@@ -1,9 +1,7 @@
 cd "$IOC_root_vmesvt"
 
 < cdCommands
-
 < ../network-86
-
 < ../nfsCommands
 
 cd topbin
@@ -30,7 +28,11 @@ cd startup
 ## autosave setup
 < save_restore.cmd
 
-iocInit "../resource.def"
+asSetFilename("./svt.acf")
+asSetSubstitutions("P=B_,R=SVT_")
+
+#iocInit "../resource.def"
+iocInit
 
 ## Handle autosave 'commands' contained in loaded databases.
 makeAutosaveFiles()
@@ -38,6 +40,9 @@ create_monitor_set("info_positions.req", 5, "P=iocvmesvt:")
 create_monitor_set("info_settings.req", 30, "P=iocvmesvt:")
 
 < tempToHumidity.cmd
-
 < intlksOn.cmd
+
+dbpf("${IOC}:SysReset.ASG","ALLWRITE")
+
+#dbl > pv.list
 

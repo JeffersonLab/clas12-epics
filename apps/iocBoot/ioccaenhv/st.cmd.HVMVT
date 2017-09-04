@@ -29,9 +29,15 @@ dbLoadRecords("db/caenchassis.db","CrName=MVTHV,CScode=#C0")
 
 dbLoadTemplate("db/HVMVT.substitutions")
 
+# global on/offs:
 dbLoadTemplate("db/mvtOnOff-bmt.substitutions")
 dbLoadTemplate("db/mvtOnOff-fmt.substitutions")
 dbLoadRecords("db/mvtOnOff.db")
+
+# global statuses:
+dbLoadTemplate("db/caenhv_MVT_isOnOffComm.substitutions")
+dbLoadRecords("db/caenhv_BMT_isOnOffComm.db")
+dbLoadRecords("db/caenhv_FMT_isOnOffComm.db")
 
 cd ${TOP}/iocBoot/${IOC}
 

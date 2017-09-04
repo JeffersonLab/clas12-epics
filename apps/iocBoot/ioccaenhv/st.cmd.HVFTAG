@@ -32,10 +32,13 @@ dbLoadTemplate("db/HVFTAG_FTC.substitutions")
 dbLoadTemplate("db/HVFTAG_FTH.substitutions")
 dbLoadTemplate("db/HVFTAG_FTT.substitutions")
 
-#PVs for unused slots, channels which may be available in the above crates
-#Comment in as required
+# global status records:
+dbLoadRecords("db/caenhv_FTC_isOnOffComm.db")
+dbLoadRecords("db/caenhv_FTH_isOnOffComm.db")
+dbLoadRecords("db/caenhv_FTT_isOnOffComm.db")
 
-#dbLoadTemplate("db/HVFTAG_SPARES.substitutions")
+# global on/off records
+dbLoadTemplate("db/fttfthOnOff.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

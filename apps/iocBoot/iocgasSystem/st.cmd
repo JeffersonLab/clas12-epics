@@ -23,7 +23,7 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_HTCC_, DLY=60")
 # dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_SVT_,  DLY=60")
 ## Detector Systems
 dbLoadRecords("db/gas_cRIO_DC.db",      "P=B_DET_,R=DC_GAS_")
-dbLoadRecords("db/gas_cRIO_FTC.db",     "P=B_DET_,R=FTC_GAS_")
+#dbLoadRecords("db/gas_cRIO_FTC.db",     "P=B_DET_,R=FTC_GAS_")
 dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_,R=HTCC_GAS_")
 dbLoadRecords("db/gas_cRIO_LTCC.db",    "P=B_DET_,R=LTCC_GAS_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_GAS_,SEC=S1_")

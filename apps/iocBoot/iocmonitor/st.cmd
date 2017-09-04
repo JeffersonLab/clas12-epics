@@ -45,6 +45,7 @@ dbLoadTemplate("db/ftofOnOff.substitutions")
 dbLoadTemplate("db/hvOnOff.substitutions")
 
 dbLoadTemplate("db/ctofcndOnOff.substitutions")
+dbLoadTemplate("db/fttfthOnOff.substitutions")
 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

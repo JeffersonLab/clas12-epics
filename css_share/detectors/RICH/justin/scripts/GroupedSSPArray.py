@@ -72,7 +72,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>B_HW_FEVME1_Sl^^^SLOTNUM^^^_Fi^^^FIBNUM^^^:$(SCREEN)</pv_name>
+    <pv_name>B_HW_FEVME1_TILE^^^TILENUM^^^:$(SCREEN)</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -102,14 +102,13 @@ $(pv_value)</tooltip>
   '''
  
 		
-def genRec(x,y,w,h,slot,Fi):
+def genRec(x,y,w,h,tilenum):
 	asdf = REC
 	asdf=asdf.replace('^^^HEIGHT^^^','%d'%(h))
 	asdf=asdf.replace('^^^WIDTH^^^','%d'%(w))
 	asdf=asdf.replace('^^^XPOS^^^','%d'%(x))
 	asdf=asdf.replace('^^^YPOS^^^','%d'%(y))
-	asdf=asdf.replace('^^^SLOTNUM^^^','%02d'%(slot))
-	asdf=asdf.replace('^^^FIBNUM^^^','%02d'%(Fi))
+	asdf=asdf.replace('^^^TILENUM^^^','%03d'%(tilenum))
 	asdf=asdf.replace('^^^PREFIX^^^',PREFIX)
 	print asdf
 
@@ -120,62 +119,56 @@ def genLine(x,y):
 	print asdf
 
 def genSector(xoff,yoff):
-#0x(Size)(Sl)(Fi)	
-	a = [[0x270D,0x370E,0x3704,0x3705,0x3706,0x3707,0x3700,0x3701,0x3702,0x2703],
-		[0x370C,0x361C,0x361D,0x361E,0x361F,0x3618,0x3619,0x361A,0x361B],
-		[0x2709,0x3614,0x3615,0x3616,0x3617,0x3610,0x3611,0x3612,0x3613],
-		[0x2708,0x360C,0x360D,0x360E,0x360F,0x3608,0x3609,0x360A,0x260B],
-		[0x3604,0x3605,0x3606,0x3607,0x3600,0x3601,0x3602,0x3603],
-		[0x251C,0x351D,0x351E,0x351F,0x3518,0x3519,0x351A,0x351B],
-		[0x2514,0x3515,0x3516,0x3517,0x3510,0x3511,0x3512,0x2513],
-		[0x350C,0x350D,0x350E,0x3508,0x3509,0x350A,0x350B],
-		[0x2504,0x3505,0x3506,0x3500,0x3501,0x3502,0x3503],
-		[0x241B,0x341E,0x341F,0x3414,0x3415,0x3416,0x2417],
-		[0x341A,0x341D,0x3410,0x3411,0x3412,0x3413],
-		[0x2419,0x341C,0x340C,0x340D,0x340E,0x340F],
-		[0x2418,0x340B,0x3404,0x3405,0x3406,0x2407],
-		[0x340A,0x3400,0x3401,0x3402,0x3403],
-		[0x2409,0x331C,0x331D,0x331E,0x331F],
-		[0x2408,0x3318,0x3319,0x331A,0x231B],
-		[0x3314,0x3315,0x3316,0x3317],
-		[0x2310,0x3311,0x3312,0x3313],
-		[0x230C,0x330D,0x330E,0x230F],
-		[0x3308,0x3309,0x330A],
-		[0x3304,0x2305,0x3306],
-		[0x2302,0x3303,0x2307],
-		[0x3300,0x3301]]
 		
+	a = [[2,3,3,3,3,3,3,3,3,2],
+		[3,3,3,3,3,3,3,3,3],
+		[2,3,3,3,3,3,3,3,3],
+		[2,3,3,3,3,3,3,3,2],
+		[3,3,3,3,3,3,3,3],
+		[2,3,3,3,3,3,3,3],
+		[2,3,3,3,3,3,3,2],
+		[3,3,3,3,3,3,3],
+		[2,3,3,3,3,3,3],
+		[2,3,3,3,3,3,2],
+		[3,3,3,3,3,3],
+		[2,3,3,3,3,3],
+		[2,3,3,3,3,2],
+		[3,3,3,3,3],
+		[2,3,3,3,3],
+		[2,3,3,3,2],
+		[3,3,3,3],
+		[2,3,3,3],
+		[2,3,3,2],
+		[3,3,3],
+		[3,2,3],
+		[2,3,2],
+		[3,3]]
 	x = xoff
 	y = yoff
 	h = 20
 	rowcount=0
 	widthPMT = 20
-	panelnum=1
+	tilenum=138
 	
 	for i in a:
 		for j in i:
-			Fi = (0xFF & j)
-			sizeslot = (j-Fi)>>8
-			slot = (sizeslot & 0xF)
-			size = (sizeslot-slot)>>4
 			#print size, slot, Fi
-			if size == 2:
+			if j == 2:
 				w = 2*widthPMT
-				genRec(x,y,w,h,slot,Fi)
+				genRec(x,y,w,h,tilenum)
 				#genLine(x+widthPMT,y)
 			
 				x+=w+3
-			if size==3:
+			if j == 3:
 				w=3*widthPMT
-				genRec(x,y,w,h,slot,Fi)
+				genRec(x,y,w,h,tilenum)
 				#genLine(x+widthPMT,y)
 				#genLine(x+2*widthPMT,y)
 				x+=w+3
-			panelnum+=1
+			tilenum-=1
 		y+=h+3
 		x=xoff+(rowcount+1)*(widthPMT+1)/2
 		rowcount+=1
-		panelnum=1
 
 
 print HEAD

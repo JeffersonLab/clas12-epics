@@ -18,10 +18,14 @@ dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
-dbLoadRecords("db/jscaler_RICH_PmtMap.db")
-dbLoadRecords("db/jscaler_RICH_TileMap.db")
+
+# these are just aliases from HW to DET:
+dbLoadRecords("db/jscaler_RICH_Maps.db")
+
+# averaging scalers over 8x8 PMTs:
 dbLoadRecords("db/jscalers_RICH_sums.db")
 
+# make waveforms: 
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=ROWS:,NELM=23,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/rows.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=PMTS:,NELM=391,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/pmts.txt")
 

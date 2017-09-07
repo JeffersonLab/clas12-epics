@@ -69,7 +69,7 @@ pmtSuffixes=[
     ":scalersAvg",
     ":scalersAvgK"]
 
-if True:
+if False:
   # generate TILE/PMT aliases:
   # NOTE, aliases have to be loaded in the IOC
   for xx in tiles:
@@ -83,22 +83,18 @@ if True:
     for suff in pmtSuffixes:
       print 'alias("%s%s","%s%s")'%(hwpv,suff,depv,suff)
 
-if False:
+if True:
   # generate DESC fields:
   # NOTE, fields can be be loaded after IOC init (e.g. via caputs), and .DESC fields are autosaved
   for xx in pmts:
     for yy in pmtSuffixes:
       pv='B_DET_RICH_SSP_PMT%.3d%s.DESC'%(xx['pmt'],yy)
-      #print 'dbpf("%s","RICH Scalers - Sl%.2d, Fi%.2d.%d, Tile#%.3d, Pmt#%.3d")' % \
-      #  (pv,xx['slot'],xx['fiber'],xx['asic'],xx['tile'],xx['pmt'])
-      print 'caput %s \'RICH Scalers - Sl%.2d, Fi%.2d.%d, Tile#%.3d, Pmt#%.3d")\'' % \
-        (pv,xx['slot'],xx['fiber'],xx['asic'],xx['tile'],xx['pmt'])
+      print 'caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d\'' % \
+        (pv,xx['slot'],xx['fiber'],xx['tile'],xx['pmt'])
   for xx in tiles:
     for yy in tileSuffixes:
       pv='B_DET_RICH_SSP_TILE%.3d%s.DESC'%(xx['tile'],yy)
-      #print 'dbpf("%s","RICH FPGA - Sl%.2d, Fi%.2d, Tile#%.3d")' % \
-      #  (pv,xx['slot'],xx['fiber'],xx['tile'])
-      print 'caput %s \'RICH FPGA - Sl%.2d, Fi%.2d, Tile#%.3d")\''% \
+      print 'caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d\''% \
         (pv,xx['slot'],xx['fiber'],xx['tile'])
 
 

@@ -32,7 +32,7 @@ dbLoadTemplate("db/jscalers_S4_PCAL_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S4_FTOF_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S4_LTCC_DISC.substitutions")
 
-#dbLoadTemplate("db/jscalers_TDCFTOF4_RF.substitutions")
+dbLoadTemplate("db/jscalers_TDCFTOF4_RF.substitutions")
 dbLoadTemplate("db/jscalers_TDCPCAL4_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_TDCFTOF4_TRIG.substitutions")
 

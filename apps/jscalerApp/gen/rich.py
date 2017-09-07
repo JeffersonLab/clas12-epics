@@ -1,80 +1,104 @@
 #!/usr/bin/env python
-import re,sys
 
-matteoFile='sspRich_mapFIBER2PMT_sortbyPMT.txt'
+# for full RICH:
+#mappingFile='./SspRich_cabling.txt'
 
-oldFile='../Db/jscaler_RICH_ChannelMap.db'
+# for cosmic RICH:
+mappingFile='./SspRich_cabling_cosmic_ILA.txt'
 
-suffixes=['scalers','scalersAvg','scalersAvgK']
+tiles=[]
+pmts=[]
 
-pmtsNew=[]
-slotFiber=[]
-for line in open(matteoFile,'r').readlines():
+###################################################################
+###################################################################
+# load Matteo's mapping:
+for line in open(mappingFile,'r').readlines():
+
   line=line.strip()
-  slot,fiber,asic,pmt=line.split()
-  pv='B_HW_FEVME1_Sl%.2d_Fi%.2d_PMT%d'%(int(slot),int(fiber),int(asic))
-  alias='B_DET_RICH_SSP_PMT%.3d'%(int(pmt))
-  slot='%.2d'%(int(slot))
-  fiber='%.2d'%(int(fiber))
-  pmt='%.3d'%(int(pmt))
-  pmtsNew.append({'slot':slot,'fiber':fiber,'asic':asic,'pmt':pmt,'pv':pv,'alias':alias})
 
-  if not {'slot':slot,'fiber':fiber} in slotFiber:
-    slotFiber.append({'slot':slot,'fiber':fiber})
+  # ignore the extra columns introduced in later versions of Matteo's file:
+  hack=line.find('A')
+  line=line[0:hack]
 
-#  for suffix in suffixes:
-#    print 'alias("%s:%s","%s:%s")'%(pv,suffix,alias,suffix)
+  # PMT### uses a different seperator than everything else,
+  # if we don't find it then move on:
+  if line.find('[')<0: continue
+  if line.find(']')<0: continue
 
-for line in open('../../iocBoot/iocjscalersRICH/richPmt-setDesc.cmd','r').readlines():
-  if line.find('dbpf')!=0: continue
-  cols=line.strip().split('"')
-  pv,oldDesc=cols[1],cols[3]
-  mm=re.match('B_DET_RICH_SSP_PMT(\d\d\d)',pv)
-  pmt=mm.group(1)
-  found=False
-  for xx in pmtsNew:
-    if pmt==xx['pmt']:
-      found=True
-      pmt=xx
-      break
-  if not found:
-    sys.exit('asdf:  '+str(pmt))
+  # use the [] characters to designate PMTs:
+  a,b=line.find('['),line.find(']')
+  if a<0 or b<0: sys.exit('NOPE, MISSING []')
 
-  newDesc='RICH Scalers - Sl%s, Fi%s.%s, Pmt#%s'%(xx['slot'],xx['fiber'],xx['asic'],xx['pmt'])
+  # look at lefter columns to get slot/fiber/cable/maroc: 
+  slot,fiber,cable,maroc=line[0:a].split()
+  slot=int(slot)
+  fiber=int(fiber)
 
-  print 'dbpf("'+pv+'","'+newDesc+'")'
+  # look at righter columns to get tile:
+  tile=int(line[b+1:])
+
+  # fill 3-long array of pmts per tile:
+  tilePmts=line[a+1:b].split(',')
+  for ii in range(len(tilePmts)):
+    tilePmts[ii]=int(tilePmts[ii].strip())
+
+  # fill map per tile:
+  tiles.append({'slot':slot,'fiber':fiber,'tile':tile,
+    'pmt1':tilePmts[0],
+    'pmt2':tilePmts[1],
+    'pmt3':tilePmts[2]})
+
+  # fill map per pmt:
+  for ii in range(len(tilePmts)):
+    if tilePmts[ii]==0: continue #empty asic
+    pmts.append({'slot':slot,'fiber':fiber,'asic':ii,'tile':tile,'pmt':tilePmts[ii]})
 
 
-sys.exit()
+###################################################################
+###################################################################
+# now that maps are loaded, printout the maps to EPICS syntax:
 
-for sf in slotFiber:
-  pv='B_HW_FEVME1_Sl%s_Fi%s'%(sf['slot'],sf['fiber'])
-  print pv+':temp:fpga 0.2'
-  print pv+':volt:pcb5 0.05'
+tileSuffixes=[
+    ':temp:fpga',
+    ':temp:reg0',':temp:reg1',
+    ':volt:pcb5',':volt:pcb3_3',
+    ':volt:int1',':volt:aux1_8',
+    ':volt:mgt1',':volt:mgt1_2']
+pmtSuffixes=[
+    ":scalers",
+    ":scalersAvg",
+    ":scalersAvgK"]
 
-pmtsOld=[]
-for line in open(oldFile,'r').readlines():
-  line=line.strip()
-  if line.find('alias')!=0: continue
+if True:
+  # generate TILE/PMT aliases:
+  # NOTE, aliases have to be loaded in the IOC
+  for xx in tiles:
+    hwpv='B_HW_FEVME1_Sl%.2d_Fi%.2d'%(xx['slot'],xx['fiber'])
+    depv='B_DET_RICH_SSP_TILE%.3d'%(xx['tile'])
+    for suff in tileSuffixes:
+      print 'alias("%s%s","%s%s")'%(hwpv,suff,depv,suff)
+  for xx in pmts:
+    hwpv='B_HW_FEVME1_Sl%.2d_Fi%.2d_PMT%d'%(xx['slot'],xx['fiber'],xx['asic'])
+    depv='B_DET_RICH_SSP_PMT%.3d'%(xx['pmt'])
+    for suff in pmtSuffixes:
+      print 'alias("%s%s","%s%s")'%(hwpv,suff,depv,suff)
 
-  pv,alias=line.split(',')
-  pv=pv.split('"')[1]
-  alias=alias.split('"')[1]
-  mm=re.match('B_DET_RICH_SSP_PMT(\d\d\d)',alias)
-  pmt=mm.group(1)
-  mm=re.match('B_HW_FEVME1_Sl(\d\d)_Fi(\d\d)_PMT(\d)',pv)
-  slot,fiber,asic=mm.group(1),mm.group(2),mm.group(3)
-  pmtsOld.append({'slot':slot,'fiber':fiber,'asic':asic,'pmt':pmt})
+if False:
+  # generate DESC fields:
+  # NOTE, fields can be be loaded after IOC init (e.g. via caputs), and .DESC fields are autosaved
+  for xx in pmts:
+    for yy in pmtSuffixes:
+      pv='B_DET_RICH_SSP_PMT%.3d%s.DESC'%(xx['pmt'],yy)
+      #print 'dbpf("%s","RICH Scalers - Sl%.2d, Fi%.2d.%d, Tile#%.3d, Pmt#%.3d")' % \
+      #  (pv,xx['slot'],xx['fiber'],xx['asic'],xx['tile'],xx['pmt'])
+      print 'caput %s \'RICH Scalers - Sl%.2d, Fi%.2d.%d, Tile#%.3d, Pmt#%.3d")\'' % \
+        (pv,xx['slot'],xx['fiber'],xx['asic'],xx['tile'],xx['pmt'])
+  for xx in tiles:
+    for yy in tileSuffixes:
+      pv='B_DET_RICH_SSP_TILE%.3d%s.DESC'%(xx['tile'],yy)
+      #print 'dbpf("%s","RICH FPGA - Sl%.2d, Fi%.2d, Tile#%.3d")' % \
+      #  (pv,xx['slot'],xx['fiber'],xx['tile'])
+      print 'caput %s \'RICH FPGA - Sl%.2d, Fi%.2d, Tile#%.3d")\''% \
+        (pv,xx['slot'],xx['fiber'],xx['tile'])
 
-for pmtOld in pmtsOld:
-  pmtNew=None
-  for new in pmtsNew:
-    if new['slot']!=pmtOld['slot']: continue
-    if new['fiber']!=pmtOld['fiber']: continue
-    if new['asic']!=pmtOld['asic']: continue
-    pmtNew=new
-    break
-
-#  if not pmtNew:
-#    print pmtOld
 

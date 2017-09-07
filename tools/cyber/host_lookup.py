@@ -47,7 +47,7 @@ for hostfile in filelist:
             if '/' not in ip:
                 print ip, lookup(ip)[0]
             else:
-                print ip, "IP RANGE"
+                print ip, "<<< IP RANGE >>>"
                 ip_range = ip.split('/')[1]
                 if ip_range == 24:
                     for i in 255:

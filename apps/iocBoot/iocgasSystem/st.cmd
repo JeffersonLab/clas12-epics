@@ -32,7 +32,7 @@ dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_GAS_,SEC=S3_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_GAS_,SEC=S4_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_GAS_,SEC=S5_")
 dbLoadRecords("db/gas_cRIO_LTCC_SEC.db","P=B_DET_,R=LTCC_GAS_,SEC=S6_")
-dbLoadRecords("db/gas_cRIO_RICH.db",    "P=B_DET_,R=RICH_GAS_")
+# dbLoadRecords("db/gas_cRIO_RICH.db",    "P=B_DET_,R=RICH_GAS_")
 # dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_,R=SVT_GAS_")
 
 cd "${TOP}/iocBoot/${IOC}"

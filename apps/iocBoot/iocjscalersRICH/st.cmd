@@ -25,6 +25,9 @@ dbLoadRecords("db/jscaler_RICH_Maps.db")
 # averaging scalers over 8x8 PMTs:
 dbLoadRecords("db/jscalers_RICH_sums.db")
 
+# average temps over all tiles (just for alarm propogation):
+dbLoadTemplate("db/jscalers_RICH_sums_tempvolt.substitutions")
+
 # global alarm limit setters:
 dbLoadTemplate("db/jscalers_puts_RICH.substitutions")
 

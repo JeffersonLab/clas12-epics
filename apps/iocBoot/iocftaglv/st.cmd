@@ -27,6 +27,7 @@ devSnmpSetParam(DebugLevel,10)
 dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")
 dbLoadTemplate("db/fttrklv.substitutions")
+dbLoadTemplate("db/lvctof.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 
@@ -42,4 +43,5 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
-dbl > pv.list
+dbl > pv.lis
+

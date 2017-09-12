@@ -44,7 +44,8 @@
 
 class tordaqGui: public TGMainFrame {
     private:
-        int colors[5];
+        static const int NCOLORS=5;
+        int colors[NCOLORS];
         TRootEmbeddedCanvas *canvas1;
         TRootEmbeddedCanvas *canvas2;
         TGStatusBar          *fStatusBar;

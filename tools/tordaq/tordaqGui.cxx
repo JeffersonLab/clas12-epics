@@ -82,7 +82,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
         combos1[combos1.size()-1]->AddEntry(" ",0);
         selectFrame->AddFrame(combos1[combos1.size()-1],new TGLayoutHints(kLHintsCenterX | kLHintsExpandX | kLHintsTop,2,2,2,2));
         combos1[combos1.size()-1]->Resize(60,20);
-        combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
+        //combos1[combos1.size()-1]->SetForegroundColor(colors[ii]);
     }
     
     showAllCheck=new TGCheckButton(selectFrame,"Show All");
@@ -396,8 +396,8 @@ void tordaqGui::Draw1()
             histos1.push_back(hh);
            
             hh->SetLineWidth(2);
-            hh->SetLineColor(colors[(histos1.size()-1)%5]);
-            hh->SetLineStyle((histos1.size()-1)/5+1);
+            hh->SetLineColor(colors[(histos1.size()-1)%NCOLORS]);
+            hh->SetLineStyle((histos1.size()-1)/NCOLORS+1);
             legend1->AddEntry(hh,hh->GetTitle(),"L");
             hh->Draw(histos1.size()==1?"":"SAME");
         }

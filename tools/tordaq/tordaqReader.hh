@@ -51,10 +51,10 @@ public:
         }
         if (frac>0.15)
         {
-            if (timeRemain>0) printf("]  %d sec          \r",timeRemain);
+            if (timeRemain>0) printf("]  ETA:  %d sec          \r",timeRemain);
             else              printf("]                  \r");
         }
-        else                  printf("]  ?? sec          \r");
+        else                  printf("]  ETA:  ?? sec          \r");
         fflush(stdout);
         if (progressMeter)
         {
@@ -229,7 +229,7 @@ public:
         }
 
         // print warning messages about synchronization:
-        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
+        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl<<std::endl;
         if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl<<std::endl;
 
         // setup dynamically allocated stuff:
@@ -379,7 +379,19 @@ public:
         if (doSynchroAna)
         {
             // print out duplicates and missing samples info:
-            std::cout<<std::endl<<std::endl<<"(# samples / fraction of samples)"<<std::endl;
+            std::cout<<std::endl<<std::endl<<std::endl;
+            std::cout<<"######################################################################"<<std::endl;
+            std::cout<<"######################################################################"<<std::endl;
+            std::cout<<"* Syncrhonization Analysis Report:"<<std::endl;
+            std::cout<<"*"<<std::endl;
+            std::cout<<"* If Missed is significantly greater than Overlaps,"<<std::endl;
+            std::cout<<"*\tthen there is data loss."<<std::endl;
+            std::cout<<"*"<<std::endl;
+            std::cout<<"* If Missed and Overlaps are similar and small,"<<std::endl;
+            std::cout<<"*\tthen that is just due to timestamp jitter (see -S option)."<<std::endl;
+            std::cout<<"*"<<std::endl;
+            std::cout<<"* Output format:  (# samples / fraction of samples)"<<std::endl;
+            std::cout<<"*"<<std::endl;
             for (unsigned int ii=0; ii<sampleFills.size(); ii++)
             {
                 int nDuplicates=0,nMissing=0;
@@ -392,17 +404,22 @@ public:
                 {
                     const double fracDuplicates=100*(double)nDuplicates/outHistos[ii]->GetNbinsX();
                     const double fracMissing   =100*(double)nMissing   /outHistos[ii]->GetNbinsX();
-                    fprintf(stdout,"%10s:   Overlaps = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
+                    fprintf(stdout,"*%7s:   Overlaps = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
                             inTrees[ii]->fChain->GetName(),
                             (float)nDuplicates,fracDuplicates,
                             (float)nMissing,fracMissing);
                 }                
             }
+            std::cout<<"*"<<std::endl;
+            std::cout<<"######################################################################"<<std::endl;
+            std::cout<<"######################################################################"<<std::endl;
             std::cout<<std::endl;
+
             // free up memory:
             for (unsigned int ii=0; ii<sampleFills.size(); ii++) 
               sampleFills[ii].resize(0);
             sampleFills.resize(0);
+            
             // write out synchro analysis plots:
             if (saveSynchroPlots)
             {
@@ -419,7 +436,7 @@ public:
             }
         }
         
-        std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl<<std::endl;
+        std::cout<<"tordaqReader:  Finished Reading File."<<std::endl<<std::endl;
 
         if (true && makeHistos)
         {

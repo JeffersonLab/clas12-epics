@@ -58,6 +58,9 @@ main(int argc,char** argv)
   unsigned char	*FmwRelMinList, *FmwRelMaxList;
   char name[MAX_NAME];
   int i, ret;
+  
+  int slotArr[MAX_SLOT*MAX_CHAN]={};
+  int chanArr[MAX_SLOT*MAX_CHAN]={};
 
   char caenetAddr[100]="sy527_0x100000_3";
 
@@ -117,6 +120,13 @@ if (argc>1)
   printf("\n-----------------------------------------------------------------\n");
   printf("\n      START GROUP STUFF                      \n");
   printf("\n-----------------------------------------------------------------\n\n");
+
+  ret = CAENHVGetGroupList("TestSetup",0,slotArr,chanArr);
+  for (i=0; i<ret; i++) {
+      printf("()(()()()()()%d - %d %d\n",i,slotArr[i],chanArr[i]);
+  }
+
+  
 
 #define BUFSIZE 2048
 

@@ -1152,11 +1152,14 @@ sy1527GetMap(unsigned int id)
           }
         }
 #ifdef USE_CAEN527
-        else if(strstr(Measure[id].board[i].modelname,"A944") || strstr(Measure[id].board[i].modelname,"A934") ) // my:
+        else if(strstr(Measure[id].board[i].modelname,"A944") || 
+                strstr(Measure[id].board[i].modelname,"A934") ||
+                strstr(Measure[id].board[i].modelname,"A734") )
         {
 
-          if(strstr(Measure[id].board[i].modelname,"A944") )printf("found board A944\n"); //my:
-          else if(strstr(Measure[id].board[i].modelname,"A934") )printf("found board A934\n"); //my:
+          if      (strstr(Measure[id].board[i].modelname,"A944") )printf("found board A944\n");
+          else if (strstr(Measure[id].board[i].modelname,"A934") )printf("found board A934\n");
+          else if (strstr(Measure[id].board[i].modelname,"A734") )printf("found board A734\n");
 
           Measure[id].board[i].nparams = nA944param;
           Demand[id].board[i].nparams = nA944param;

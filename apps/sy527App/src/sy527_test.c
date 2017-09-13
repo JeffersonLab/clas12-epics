@@ -18,7 +18,7 @@ int
 main()
 {
   int i, id = 0, board = 0, channel = 2;
-  char *ip_address="sy527_0x100000_3";
+  char *ip_address="sy527_0x100000_1";
 
   float u, uset, uget;
   unsigned int l, lget, active, onoff, alarm, itmp;

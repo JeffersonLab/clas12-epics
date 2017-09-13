@@ -70,6 +70,7 @@ public class MakeLogEntry
   int IMGWIDTH = 300;
 
   public void MakeLogEntry() {
+
       //Set dog=new LinkedHashSet();
       //for (String ss : LOGBOOKS) dog.add(ss);
       //LOGBOOKCHOICE=new CheckComboBox(dog);
@@ -88,6 +89,10 @@ public class MakeLogEntry
 
   public void run(String[] args)
   {
+      System.out.println(SCREENSHOTDIR);
+      File fff= new File(SCREENSHOTDIR);
+      fff.mkdir();
+
     try {
       // interpret arguments:
       String screenName=null;

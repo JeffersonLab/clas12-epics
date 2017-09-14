@@ -33,6 +33,8 @@ public:
     bool doSynchroAna=false;
     bool forceSynchro=false;
     bool saveSynchroPlots=false;
+    bool isTorus=true;
+    bool isSolenoid=true;
     tordaqData tdData;
     std::vector <TH1*> outHistos;
 
@@ -85,6 +87,7 @@ public:
                 return false;
             }
             if (inFile) inFile->Close();
+            std::cout<<"tordaqReader:  Reading "+inFilename+" ....."<<std::endl;
             inFile=new TFile(inFilename,"READ");
         }
 
@@ -177,7 +180,7 @@ public:
                 }
                 else
                 {
-                    std::cerr<<"Error Reading TTree:  "<<inTrees[ii]->fChain->GetName()<<std::endl;
+                    std::cerr<<"tordaqReader:  Error Reading TTree:  "<<inTrees[ii]->fChain->GetName()<<std::endl;
                     return false;
                 }
             }
@@ -221,7 +224,7 @@ public:
             }
             else
             {
-              std::cerr<<"Error Reading TTrees:  (no good times)."<<std::endl;
+              std::cerr<<"tordaqReader:  Error Reading TTrees:  (no good times)."<<std::endl;
               return false;
             }
             //for (unsigned int ii=0; ii<outHistos.size(); ii++)
@@ -436,16 +439,16 @@ public:
             }
         }
         
-        std::cout<<"tordaqReader:  Finished Reading File."<<std::endl<<std::endl;
+        std::cout<<std::endl<<"tordaqReader:  Finished Reading File."<<std::endl;
 
         if (true && makeHistos)
         {
-          std::cout<<"tordaqReader:  Making Comparators ..."<<std::endl;
+          std::cout<<"tordaqReader:  Making Comparators ... ";
           TH1 *hh[100];
           bool foundComparatorInputs=true;
           for (unsigned int ii=0; ii<outHistos.size(); ii++)
           {
-            for (int jj=1; jj<23; jj++)
+            for (int jj=1; jj<22; jj++)
             {
               if (strcmp(outHistos[ii]->GetName(),Form("hVT%d",jj))==0)
               {
@@ -454,53 +457,133 @@ public:
               }
             }
           }
-          for (int ii=1; ii<23; ii++)
+          for (int ii=1; ii<22; ii++)
           {
             if (!hh[ii])
             {
-              std::cerr<<"tordaqReader:  Error finding comparator input:  "<<Form("VT%d",ii)<<std::endl;
+              std::cerr<<std::endl<<"tordaqReader:  Error finding comparator input:  "<<Form("VT%d",ii)<<std::endl;
               foundComparatorInputs=false;
             }
           }
           if (!foundComparatorInputs)
           {
-            std::cerr<<"tordaqReader:  Proceeding without making comparators."<<std::endl;
+            std::cerr<<std::endl<<"tordaqReader:  Proceeding without making comparators."<<std::endl;
           }
           else
           {
 
               // !!!!we need to be able to delete this upon opening new file!!!!!!
 
-            TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
-            TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
-            TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);
-            TH1* hV4 =(TH1*)hh[11]->Clone("hV4"); hV4->Add(hh[12]); hV4->Add(hh[13]);
+            if (isTorus) {
 
-            //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
-            //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
-            //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
-            //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
+                std::cout<<" C4"<<std::flush;
 
-            TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);
-            TH1* hV34 =(TH1*)hV3->Clone("hV34"); hV34->Add(hV4);
-            //TH1* hV56 =(TH1*)hV5->Clone("hV56"); hV56->Add(hV6);
+                TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
+                TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
+                TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);
+                TH1* hV4 =(TH1*)hh[11]->Clone("hV4"); hV4->Add(hh[12]); hV4->Add(hh[13]);
 
-            //TH1* hC1 =(TH1*)hV1->Clone("hC1");  hC1->Add(hV2,-1);
-            //TH1* hC2 =(TH1*)hV3->Clone("hC2");  hC2->Add(hV4,-1);
-            //TH1* hC3 =(TH1*)hV5->Clone("hC3");  hC3->Add(hV6,-1);
-            TH1* hC4 =(TH1*)hV12->Clone("hC4"); hC4->Add(hV34,-1);
-            //TH1* hC5 =(TH1*)hV34->Clone("hC5"); hC5->Add(hV56,-1);
-            //TH1* hC6 =(TH1*)hV56->Clone("hC6"); hC6->Add(hV12,-1);
-            //TH1* hC7 =(TH1*)hV7->Clone("hC7");  hC7->Add(hV15,-1);
+                //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
+                //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
+                //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
+                //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
 
-            //TH1* hC8  =(TH1*)hh[3]->Clone("hC8");  hC8->Add(hh[19],-1);
-            //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
-            //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
+                TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);
+                TH1* hV34 =(TH1*)hV3->Clone("hV34"); hV34->Add(hV4);
+                //TH1* hV56 =(TH1*)hV5->Clone("hV56"); hV56->Add(hV6);
 
-            tdData.VARNAMES.push_back("C4");
-            outHistos.push_back(hC4);
+                //TH1* hC1 =(TH1*)hV1->Clone("hC1");  hC1->Add(hV2,-1);
+                //TH1* hC2 =(TH1*)hV3->Clone("hC2");  hC2->Add(hV4,-1);
+                //TH1* hC3 =(TH1*)hV5->Clone("hC3");  hC3->Add(hV6,-1);
+                TH1* hC4 =(TH1*)hV12->Clone("hC4"); hC4->Add(hV34,-1);
+                //TH1* hC5 =(TH1*)hV34->Clone("hC5"); hC5->Add(hV56,-1);
+                //TH1* hC6 =(TH1*)hV56->Clone("hC6"); hC6->Add(hV12,-1);
+                //TH1* hC7 =(TH1*)hV7->Clone("hC7");  hC7->Add(hV15,-1);
 
-            std::cout<<"tordaqReader:  Finished Making Comparators."<<std::endl;
+                //TH1* hC8  =(TH1*)hh[3]->Clone("hC8");  hC8->Add(hh[19],-1);
+                //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
+                //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
+
+                tdData.VARNAMES.push_back("C4");
+                outHistos.push_back(hC4);
+            }
+
+/*
+               Sol_QD1 :  (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) - (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
+               Sol_QD2 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ ) - (VT9_DAQ+VT10_DAQ+VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
+               Sol_QD3 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ)
+               Sol_QD4 : (VT17_DAQ+VT18_DAQ+VT19_DAQ)
+               Sol_QD5 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ+VT1_DAQ)
+               Sol_QD6 : (VT3_DAQ+VT2_DAQ+VT1_DAQ)
+               Sol_QD7 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ)
+               Sol_QD8 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ)
+*/
+
+            if (isSolenoid) {
+                std::cout<<" QD1"<<std::flush;
+                TH1* hQD1=(TH1*)hh[11]->Clone("hQD1");
+                hQD1->Add(hh[12]);
+                hQD1->Add(hh[13]);
+                hQD1->Add(hh[14]);
+                hQD1->Add(hh[5],-1);
+                hQD1->Add(hh[6],-1);
+                hQD1->Add(hh[7],-1);
+                hQD1->Add(hh[8],-1);
+                hQD1->Add(hh[9],-1);
+                hQD1->Add(hh[10],-1);
+                std::cout<<",QD2"<<std::flush;
+                TH1* hQD2=(TH1*)hh[5]->Clone("hQD2");
+                hQD2->Add(hh[6]);
+                hQD2->Add(hh[7]);
+                hQD2->Add(hh[8]);
+                hQD2->Add(hh[9], -1);
+                hQD2->Add(hh[10], -1);
+                hQD2->Add(hh[11],-1);
+                hQD2->Add(hh[12],-1);
+                hQD2->Add(hh[13],-1);
+                hQD2->Add(hh[14],-1);
+                std::cout<<",QD3"<<std::flush;
+                TH1* hQD3=(TH1*)hh[15]->Clone("hQD3");
+                hQD3->Add(hh[16]);
+                hQD3->Add(hh[17]);
+                hQD3->Add(hh[18]);
+                hQD3->Add(hh[19]);
+                std::cout<<",QD4"<<std::flush;
+                TH1* hQD4=(TH1*)hh[17]->Clone("hQD4");
+                hQD4->Add(hh[18]);
+                hQD4->Add(hh[19]);
+                std::cout<<",QD5"<<std::flush;
+                TH1* hQD5=(TH1*)hh[1]->Clone("hQD5");
+                hQD5->Add(hh[2]);
+                hQD5->Add(hh[3]);
+                hQD5->Add(hh[4]);
+                hQD5->Add(hh[5]);
+                std::cout<<",QD6"<<std::flush;
+                TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
+                hQD6->Add(hh[2]);
+                hQD6->Add(hh[3]);
+                std::cout<<",QD7";
+                TH1* hQD7=(TH1*)hh[2]->Clone("hQD7");
+                hQD7->Add(hh[3]);
+                hQD7->Add(hh[4]);
+                hQD7->Add(hh[5]);
+                std::cout<<",QD8"<<std::flush;
+                TH1* hQD8=(TH1*)hh[15]->Clone("hQD8");
+                hQD8->Add(hh[16]);
+                hQD8->Add(hh[17]);
+                hQD8->Add(hh[18]);
+
+                tdData.VARNAMES.push_back("QD1");  outHistos.push_back(hQD1);
+                tdData.VARNAMES.push_back("QD2");  outHistos.push_back(hQD2);
+                tdData.VARNAMES.push_back("QD3");  outHistos.push_back(hQD3);
+                tdData.VARNAMES.push_back("QD4");  outHistos.push_back(hQD4);
+                tdData.VARNAMES.push_back("QD5");  outHistos.push_back(hQD5);
+                tdData.VARNAMES.push_back("QD6");  outHistos.push_back(hQD6);
+                tdData.VARNAMES.push_back("QD7");  outHistos.push_back(hQD7);
+                tdData.VARNAMES.push_back("QD8");  outHistos.push_back(hQD8);
+            }
+
+            std::cout<<std::endl<<"tordaqReader:  Finished Making Comparators."<<std::endl;
           }
         }
 

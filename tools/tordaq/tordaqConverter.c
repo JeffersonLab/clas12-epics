@@ -19,7 +19,7 @@ int main(int argc,char **argv)
         "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
-        "\t  -S (force synchronization)\n"
+        "\t  -S (force synchronization - EXPERT ONLY)\n"
         "\t  -h (print usage)\n";
    
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";

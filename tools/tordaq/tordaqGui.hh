@@ -61,6 +61,8 @@ class tordaqGui: public TGMainFrame {
         TGTextButton *panleftBtn;
         TGTextButton *yPanUpBtn;
         TGTextButton *yPanDownBtn;
+        TGTextButton *xSyncUpBtn;
+        TGTextButton *xSyncDownBtn;
         TGTextButton *panrightBtn;
         TGCheckButton *denoiseCheck;
         TGHSlider *zoomSlider;
@@ -68,19 +70,18 @@ class tordaqGui: public TGMainFrame {
         TGLabel *zoomSliderLabelMin;
         TGLabel *zoomSliderLabelMid;
         TGLabel *zoomSliderLabelMax;
-        TGCheckButton* showAllCheck;
-        std::vector <TGCheckButton*> selectors1;
-        std::vector <TGCheckButton*> selectors2;
+        TGCheckButton* showAllCheck=NULL;
         std::vector <TGComboBox*> combos1;
+        std::vector <TGComboBox*> combos2;
         std::vector <TH1*> histos1;
+        std::vector <TH1*> histos2;
         TLegend *legend1;
-        TGComboBox *combo2;
+        TLegend *legend2;
         TFile *datafile;
         TTree *datatree;
         TTimeStamp starttime;
         std::vector <TH1*> dataHistos1;
-        std::vector <TH1*> dataHistos1N;
-        std::vector <TH1*> dataHistos1S;
+        std::vector <TH1*> dataHistos2;
         tordaqReader tdReader;
         //tordaqData tdData;
 
@@ -99,6 +100,8 @@ class tordaqGui: public TGMainFrame {
         void yZoomOut1();
         void PanLeft1();
         void PanRight1();
+        void xSyncUp();
+        void xSyncDown();
         void yPanUp();
         void yPanDown();
         void doZoomSlider1();

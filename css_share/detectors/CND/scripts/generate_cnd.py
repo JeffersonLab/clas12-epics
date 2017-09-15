@@ -190,9 +190,9 @@ print head
 for ii in range(48):
   foo,bar=int(ii/2)+1,ii%2+1
   phi=float(ii-1)*2*math.pi/48
-  oo=getCircle(radO,phi,'Outer_Seg%dE%d'%(foo,bar))
-  mm=getCircle(radM,phi,'Middle_Seg%dE%d'%(foo,bar))
-  ii=getCircle(radI,phi,'Inner_Seg%dE%d'%(foo,bar))
+  oo=getCircle(radO,phi,'Outer_Seg%d_E%d'%(foo,bar))
+  mm=getCircle(radM,phi,'Middle_Seg%d_E%d'%(foo,bar))
+  ii=getCircle(radI,phi,'Inner_Seg%d_E%d'%(foo,bar))
   print oo,mm,ii
 print tail
 

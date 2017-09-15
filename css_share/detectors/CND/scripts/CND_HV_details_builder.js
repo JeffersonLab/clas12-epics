@@ -15,7 +15,7 @@ for (var seg=1; seg<=24; seg++)
     {
         var ch=ich;
         //if (ich<10) ch="0"+ich;
-        var pvprefix="B_DET_CND_HV_"+IMO[imo]+"_Seg"+seg+"E"+ch;
+        var pvprefix="B_DET_CND_HV_"+IMO[imo]+"_Seg"+seg+"_E"+ch;
         
         var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
         if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }

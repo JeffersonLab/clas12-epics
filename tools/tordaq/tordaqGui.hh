@@ -94,12 +94,12 @@ class tordaqGui: public TGMainFrame {
         inline void DoOpen() { DoOpen(""); }
         void Draw1();
         void Update1(const double,const double,const double,const double);
-        void ZoomIn1();
-        void ZoomOut1();
+        void xZoomIn1();
+        void xZoomOut1();
         void yZoomIn1();
         void yZoomOut1();
-        void PanLeft1();
-        void PanRight1();
+        void xPanLeft1();
+        void xPanRight1();
         void xSyncUp();
         void xSyncDown();
         void yPanUp();

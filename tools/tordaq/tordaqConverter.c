@@ -19,7 +19,6 @@ int main(int argc,char **argv)
         "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
-        "\t  -S (force synchronization - EXPERT ONLY)\n"
         "\t  -h (print usage)\n";
    
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";
@@ -59,9 +58,6 @@ int main(int argc,char **argv)
                 break;
             case 'R':
                 tdr.rubenTime=true;
-                break;
-            case 'S':
-                tdr.forceSynchro=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

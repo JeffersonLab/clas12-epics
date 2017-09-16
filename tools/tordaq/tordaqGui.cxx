@@ -102,7 +102,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     }
     
     redrawBtn = new TGTextButton(selectFrame, "&Draw");
-    redrawBtn->Connect("Released()","tordaqGui",this,"Draw1()");
+    redrawBtn->Connect("Released()","tordaqGui",this,"Draw()");
     redrawBtn->Resize(60,20);
    
     const int drawOff = TWOPLOTS ? 20 : 1;
@@ -145,11 +145,11 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     yZoomLabel->SetWrapLength(-1);
     TGHorizontalFrame *yZoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     yZoominBtn = new TGTextButton(yZoomFrame, "In");
-    yZoominBtn->Connect("Released()","tordaqGui",this,"yZoomIn1()");
+    yZoominBtn->Connect("Released()","tordaqGui",this,"yZoomIn()");
     yZoominBtn->Resize(60,20);
     yZoomFrame->AddFrame(yZoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
     yZoomoutBtn = new TGTextButton(yZoomFrame, "Out");
-    yZoomoutBtn->Connect("Released()","tordaqGui",this,"yZoomOut1()");
+    yZoomoutBtn->Connect("Released()","tordaqGui",this,"yZoomOut()");
     yZoomoutBtn->Resize(60,20);
     yZoomFrame->AddFrame(yZoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
 
@@ -158,11 +158,11 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     xZoomLabel->SetWrapLength(-1);
     TGHorizontalFrame *xZoomFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     xZoominBtn = new TGTextButton(xZoomFrame, "In");
-    xZoominBtn->Connect("Released()","tordaqGui",this,"xZoomIn1()");
+    xZoominBtn->Connect("Released()","tordaqGui",this,"xZoomIn()");
     xZoominBtn->Resize(60,20);
     xZoomFrame->AddFrame(xZoominBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
     xZoomoutBtn = new TGTextButton(xZoomFrame, "Out");
-    xZoomoutBtn->Connect("Released()","tordaqGui",this,"xZoomOut1()");
+    xZoomoutBtn->Connect("Released()","tordaqGui",this,"xZoomOut()");
     xZoomoutBtn->Resize(60,20);
     xZoomFrame->AddFrame(xZoomoutBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
 
@@ -171,11 +171,11 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     panLabel->SetWrapLength(-1);
     TGHorizontalFrame *panFrame = new TGHorizontalFrame(leftFrame, 100, 60);
     panleftBtn = new TGTextButton(panFrame, "Left");
-    panleftBtn->Connect("Released()","tordaqGui",this,"xPanLeft1()");
+    panleftBtn->Connect("Released()","tordaqGui",this,"xPanLeft()");
     panleftBtn->Resize(60,20);
     panFrame->AddFrame(panleftBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
     panrightBtn = new TGTextButton(panFrame, "Right");
-    panrightBtn->Connect("Released()","tordaqGui",this,"xPanRight1()");
+    panrightBtn->Connect("Released()","tordaqGui",this,"xPanRight()");
     panrightBtn->Resize(60,20);
     panFrame->AddFrame(panrightBtn,new TGLayoutHints(kLHintsExpandX | kLHintsBottom, 1, 1, 1, 1));
    
@@ -190,7 +190,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     leftFrame->AddFrame(yPanLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
     
     if (TWOPLOTS) {
-        leftFrame->AddFrame(xSyncFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,8));
+        leftFrame->AddFrame(xSyncFrame,new TGLayoutHints(kLHintsExpandX | kLHintsBottom,1,1,1,20));
         leftFrame->AddFrame(xSyncLabel,new TGLayoutHints(kLHintsCenterX | kLHintsBottom, 1, 1, 1, 1));
     }
 
@@ -214,7 +214,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     TGVerticalFrame *sliderFrame = new TGVerticalFrame(rightFrame, 1600, 40);
     
     zoomSlider = new TGHSlider(sliderFrame);
-    zoomSlider->Connect("Released()", "tordaqGui", this, "doZoomSlider1()");
+    zoomSlider->Connect("Released()", "tordaqGui", this, "doZoomSlider()");
     //zoomSlider->Connect("PositionChanged(Int_t)", "tordaqGui", this, "doZoomSlider1()");
     zoomSlider->SetPosition(0);
     sliderFrame->AddFrame(zoomSlider,new TGLayoutHints(kLHintsLeft | kLHintsBottom |kLHintsExpandX, 20,20,0,0));
@@ -351,6 +351,7 @@ void tordaqGui::DoOpen(TString filename="")
     }
 
     histos1.clear();
+    histos2.clear();
     dataHistos1.clear();
     dataHistos2.clear();
     
@@ -393,7 +394,7 @@ void tordaqGui::DoOpen(TString filename="")
     this->Layout();
 }
 
-void tordaqGui::Draw1()
+void tordaqGui::Draw()
 {
     if (dataHistos1.size()<1)
     {
@@ -565,6 +566,8 @@ int main(int argc, char **argv)
 
     if (argc>1 && strcmp(argv[argc-1],"-A") && 
                   strcmp(argv[argc-1],"-S") &&
+                  strcmp(argv[argc-1],"-H") &&
+                  strcmp(argv[argc-1],"-2") &&
                   strcmp(argv[argc-1],"-h"))
         filename=argv[argc-1];
             

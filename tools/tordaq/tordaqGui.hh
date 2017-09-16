@@ -46,8 +46,8 @@ class tordaqGui: public TGMainFrame {
     private:
         static const int NCOLORS=5;
         int colors[NCOLORS];
-        TRootEmbeddedCanvas *canvas1;
-        TRootEmbeddedCanvas *canvas2;
+        TRootEmbeddedCanvas *canvas1=NULL;
+        TRootEmbeddedCanvas *canvas2=NULL;
         TGStatusBar          *fStatusBar;
         TGLabel *fileLabel;
         TGNumberEntryField *delayField;
@@ -92,19 +92,24 @@ class tordaqGui: public TGMainFrame {
         void *DoOpen1(void *ptr);
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
-        void Draw1();
-        void Update1(const double,const double,const double,const double);
-        void xZoomIn1();
-        void xZoomOut1();
-        void yZoomIn1();
-        void yZoomOut1();
-        void xPanLeft1();
-        void xPanRight1();
+        void Draw();
+        void Update(const double,const double,const double,const double);
+        void Update(TCanvas *,std::vector<TH1*>*,const double,const double,const double,const double);
+        void xZoomIn();
+        void xZoomOut();
+        void yZoomIn();
+        void yZoomOut();
+        void xPanLeft();
+        void xPanRight();
         void xSyncUp();
         void xSyncDown();
         void yPanUp();
         void yPanDown();
-        void doZoomSlider1();
+        void yPanUp(TCanvas *,std::vector<TH1*>*);
+        void yPanDown(TCanvas *,std::vector<TH1*>*);
+        void yZoomIn(TCanvas *,std::vector<TH1*>*);
+        void yZoomOut(TCanvas *,std::vector<TH1*>*);
+        void doZoomSlider();
         void SetStyle()
         {
             // Fill color

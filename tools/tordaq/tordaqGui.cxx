@@ -335,7 +335,7 @@ void tordaqGui::DoOpen(TString filename="")
     }
 
     // generate the hitsos if not already there:
-    if (!gDirectory->Get(("h"+tdReader.tdData.VARNAMES[0]).c_str()))
+    if (!gDirectory->Get(("h"+tdReader.tdData.varstubs[0]).c_str()))
     {
         tdReader.isTorus=isTorus;
         tdReader.isSolenoid=isSolenoid;

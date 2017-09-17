@@ -9,36 +9,6 @@
 #include <vector>
 #include <string>
 
-// names of the TTrees in the wf2root ROOT files (deprecated):
-static const char* CVARNAMES[]={
-    "VT1",
-    "VT2",
-    "VT3",
-    "VT4",
-    "VT5",
-    "VT6",
-    "VT7",
-    "VT8",
-    "VT9",
-    "VT10",
-    "VT11",
-    "VT12",
-    "VT13",
-    "VT14",
-    "VT15",
-    "VT16",
-    "VT17",
-    "VT18",
-    "VT19",
-    "VT20",
-    "VT21",
-    "VT22",
-    "VT23",
-    "IDCCT1",
-    NULL
-};
-
-// names of the possible TTree stubs:
 // (will keep them in this order, and then numerical order)
 static const char* VARSTUBS[]={"VT","IDCCT",NULL};
 
@@ -46,8 +16,9 @@ class tordaqData {
 private:
 
 public :
-
+   
    std::vector <std::string> VARNAMES;
+   std::vector <std::string> varstubs;
 
    // Frequency (Hz) of samples in EPICS waveform: 
    static const int FREQUENCY=10000;
@@ -57,7 +28,7 @@ public :
 
    // EPICS update period (nanoseconds):
    static const Long64_t UPDATEPERIOD = 1e9*WFLENGTH/FREQUENCY;
-   
+
    TTree          *fChain=NULL;
    Int_t           fCurrent;
    Long64_t        record_tsec;
@@ -67,27 +38,24 @@ public :
    Long64_t        first_sec; 
    Long64_t        first_nsec; 
 
-   TH1* getHisto()
+   tordaqData() {
+       varstubs = getTreeStubs();
+   }
+
+   tordaqData(TTree *tree) : fChain(0) 
    {
-       if (fChain == 0) return NULL;
-       fChain->LoadTree(0);
-       fChain->GetEntry(0);
-       const double tMin=getTime(0);
-       fChain->LoadTree(fChain->GetEntriesFast()-1);
-       fChain->GetEntry(fChain->GetEntriesFast()-1);
-       const double tMax=getTime(WFLENGTH-1);
-       const int nBins=(tMax-tMin)/FREQUENCY;
-       TH1F *hh=new TH1F(Form("h%d",fChain->GetName()),"",nBins,tMin,tMax);
-       for (Long64_t jentry=0; jentry<fChain->GetEntriesFast(); jentry++) {
-           if (LoadTree(jentry)) break;
-           fChain->GetEntry(jentry);
-           for (int ii=0; ii<WFLENGTH; ii++)
-           {
-               const Double_t tt=getTime(ii);
-               hh->SetBinContent(hh->GetXaxis()->FindBin(tt),record_data[ii]);
-           }
+       varstubs = getTreeStubs();
+
+       if (tree)
+       {
+           fChain = tree;
+           fCurrent = -1;
+           fChain->SetMakeClass(1);
+           fChain->SetBranchAddress("record", &record_tsec, &b_record);
        }
-       return hh;
+       else std::cerr<<"tordaqData:: Error Reading tree"<<std::endl;
+       
+       storeFirstTimestamp();
    }
 
    Double_t getTime(Long64_t sec,Long64_t nsec,Int_t iSample)
@@ -132,14 +100,7 @@ public :
    {
        return getJitterlessTime(record_tsec,record_tnsec,iSample);
    }
- 
-   void initVarNames()
-   {
-       int ii=0;
-       VARNAMES.clear();
-       while (CVARNAMES[ii]) VARNAMES.push_back(CVARNAMES[ii++]);
-   }
-
+   
    void storeFirstTimestamp()
    {
        LoadTree(0);
@@ -148,25 +109,33 @@ public :
        first_nsec = record_tnsec;
    }
 
-   tordaqData()
+   static std::vector <std::string> getTreeNames()
    {
-       initVarNames();
+       int ii=0;
+       std::vector <std::string> ss;
+       while (VARSTUBS[ii])
+       {
+           for (int jj=0; jj<100; jj++)
+               if (gDirectory->Get(Form("%s%d",VARSTUBS[ii],jj)))
+                   ss.push_back(Form("%s%d",VARSTUBS[ii],jj));
+           ii++;
+       }
+       return ss;
+   }
+   
+   static std::vector <std::string> getTreeStubs()
+   {
+       int ii=0;
+       std::vector <std::string> ss;
+       while (VARSTUBS[ii])
+       {
+           ss.push_back(Form("%s",VARSTUBS[ii]));
+           ii++;
+       }
+       return ss;
    }
 
-   tordaqData(TTree *tree) : fChain(0) 
-   {
-       initVarNames();
-       if (tree)
-       {
-           fChain = tree;
-           fCurrent = -1;
-           fChain->SetMakeClass(1);
-           fChain->SetBranchAddress("record", &record_tsec, &b_record);
-       }
-       else std::cerr<<"tordaqData:: Error Reading tree"<<std::endl;
-       
-       storeFirstTimestamp();
-   }
+   void setTreeNames() { VARNAMES=getTreeNames(); }
 
    ~tordaqData()
    {
@@ -200,21 +169,28 @@ public :
        }
    }
 
-   static std::vector <std::string> getTreeNames()
+   TH1* getHisto()
    {
-       int ii=0;
-       std::vector <std::string> ss;
-       while (VARSTUBS[ii])
-       {
-           for (int jj=0; jj<100; jj++)
-               if (gDirectory->Get(Form("%s%d",VARSTUBS[ii],jj)))
-                   ss.push_back(Form("%s%d",VARSTUBS[ii],jj));
-           ii++;
+       if (fChain == 0) return NULL;
+       fChain->LoadTree(0);
+       fChain->GetEntry(0);
+       const double tMin=getTime(0);
+       fChain->LoadTree(fChain->GetEntriesFast()-1);
+       fChain->GetEntry(fChain->GetEntriesFast()-1);
+       const double tMax=getTime(WFLENGTH-1);
+       const int nBins=(tMax-tMin)/FREQUENCY;
+       TH1F *hh=new TH1F(Form("h%d",fChain->GetName()),"",nBins,tMin,tMax);
+       for (Long64_t jentry=0; jentry<fChain->GetEntriesFast(); jentry++) {
+           if (LoadTree(jentry)) break;
+           fChain->GetEntry(jentry);
+           for (int ii=0; ii<WFLENGTH; ii++)
+           {
+               const Double_t tt=getTime(ii);
+               hh->SetBinContent(hh->GetXaxis()->FindBin(tt),record_data[ii]);
+           }
        }
-       return ss;
+       return hh;
    }
-
-   void setTreeNames() { VARNAMES=getTreeNames(); }
 
 };
 #endif

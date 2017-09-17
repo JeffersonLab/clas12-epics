@@ -80,6 +80,17 @@ public:
 
     bool process()
     {
+        // forceSynchro option is not always OK unless combined with with removeJitter
+        if (forceSynchro && !removeJitter) {
+            std::cout<<std::endl;
+            std::cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+            std::cout<<"!! tordaqReader:  DANGER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+            std::cout<<"!!  You requested forcing-synchronization but not removing-jitter. !!"<<std::endl;
+            std::cout<<"!!  Results will depend on synchronicity in recorded data stream.  !!"<<std::endl;
+            std::cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
+            std::cout<<std::endl;
+        }
+
         // open the input file:
         if (inFilename!="") {
             if (gSystem->AccessPathName(inFilename))

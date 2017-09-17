@@ -80,6 +80,12 @@ public:
 
     bool process()
     {
+        // print warning messages about synchronization:
+        if (doSynchroAna) std::cout<<std::endl<<"tordaqReader:  Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
+        if (forceSynchro) std::cout<<std::endl<<"tordaqReader:  FORCING SYNCHRONIZATION!"<<std::endl;
+        if (removeJitter) std::cout<<std::endl<<"tordaqReader:  REMOVING JITTER!"<<std::endl;
+        std::cout<<std::endl;
+
         // forceSynchro option is not always OK unless combined with with removeJitter
         if (forceSynchro && !removeJitter) {
             std::cout<<std::endl;
@@ -240,12 +246,6 @@ public:
               return false;
             }
         }
-
-        // print warning messages about synchronization:
-        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
-        if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl;
-        if (removeJitter) std::cout<<std::endl<<"REMOVING JITTER!"<<std::endl;
-        std::cout<<std::endl;
 
         // setup dynamically allocated stuff:
         std::vector <double> lastUpdateTime;

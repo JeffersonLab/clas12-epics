@@ -6,7 +6,6 @@
 ClassImp(tordaqGui);
 
 TString filename="";
-//const char* dataDir="/usr/clas12/DATA/wf2root";
 const char* dataDir="/logs/torus";
 const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 bool doSynchroAna=false;
@@ -252,8 +251,11 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     fStatusBar->Draw3DCorner(kFALSE);
     AddFrame(fStatusBar, new TGLayoutHints(kLHintsExpandX, 0, 0, 10, 0));
 
-    if (forceSynchro) SetWindowName("Hall-B VT Analyzer - FORCING SYNCHRONIZATION!!!");
+    TString winnam="Hall-B VT Analyzer";
+    if (forceSynchro) winnam += " - SYNCHRO";
+    if (removeJitter) winnam += " - NOJITTER";
     else  SetWindowName("Hall-B VT Analyzer");
+    SetWindowName(winnam);
 
     MapSubwindows();
     Resize(GetDefaultSize());
@@ -538,8 +540,8 @@ int main(int argc, char **argv)
         "\t -2 (display two plots instead of one)\n"
         "\t -A (do synchronization analysis - memory intensive)\n"
         "\t -H (save synchro analysis plots in tordaqSynchroAna.root)\n"
-        "\t -S (force synchronization - EXPERT ONLY)\n"
-        "\t -J (remove jitter - EXPERIMENTAL)\n"
+        "\t -S (force synchronization to VT1)\n"
+        "\t -J (remove jitter)\n"
         "\t -h (print usage)\n";
     while ( (itmp=getopt(argc,argv,"ASH2Jh")) != -1 )
     {
@@ -570,6 +572,7 @@ int main(int argc, char **argv)
         }
     }
 
+    // see if last argument is filename:
     if (argc>1 && strcmp(argv[argc-1],"-A") && 
                   strcmp(argv[argc-1],"-S") &&
                   strcmp(argv[argc-1],"-H") &&
@@ -577,13 +580,13 @@ int main(int argc, char **argv)
                   strcmp(argv[argc-1],"-J") &&
                   strcmp(argv[argc-1],"-h"))
         filename=argv[argc-1];
-    
+  
     if (forceSynchro && doSynchroAna) {
         std::cerr<<"Simultaneously forcing synchro (-S) and doing syncrho analysis (-A) is not supported."<<std::endl;
         return 1;
     }
     if (saveSynchroPlots && !doSynchroAna) {
-        std::cerr<<"Saving synchro plots (-H) requires doing synchro analysis (-A)."<<std::endl;
+        std::cerr<<"Saving synchro plots (-H) requires also doing synchro analysis (-A).  Aborting."<<std::endl;
         return 1;
     }
 

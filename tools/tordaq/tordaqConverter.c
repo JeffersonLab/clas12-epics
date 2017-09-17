@@ -19,17 +19,23 @@ int main(int argc,char **argv)
         "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
+        "\t  -S (force synchronization to VT1)\n"
+        "\t  -J (remove jitter)\n"
         "\t  -h (print usage)\n";
    
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";
 
     tordaqReader tdr;
-   
+
+    // converter doesn't need to generate comparators:
+    tdr.isTorus=false;
+    tdr.isSolenoid=false;
+
     int itmp;
     std::string sStartTime="";
     std::string sEndTime="";
     
-    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:RSh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:RSJh")) != -1 )
     {
         switch (itmp)
         {
@@ -58,6 +64,12 @@ int main(int argc,char **argv)
                 break;
             case 'R':
                 tdr.rubenTime=true;
+                break;
+            case 'S':
+                tdr.forceSynchro=true;
+                break;
+            case 'J':
+                tdr.removeJitter=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

@@ -152,9 +152,9 @@ public:
             }
         }
 
-
+/*
         // bin each histo independently based on its channels' min/max times:
-        if (false && makeHistos)
+        if (makeHistos)
         {
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
             {
@@ -177,7 +177,7 @@ public:
                     const Double_t t1 = time1 + 0.5/tordaqData::FREQUENCY;
                     const int nBins=(t1-t0)*tordaqData::FREQUENCY;
                     const TString vn=inTrees[ii]->fChain->GetName();
-                    outHistos.push_back(new TH1F("h"+vn,";;"+vn,nBins,t0,t1));
+                    outHistos.push_back(new TH1F("h"+vn,";;"+vn,nBins,t0,t0+(double)nBins/tordaqData::FREQUENCY));
                 }
                 else
                 {
@@ -186,10 +186,10 @@ public:
                 }
             }
         }
-       
+*/       
         // use the same binning for all histos:
         // NABO:  MODIFY TO USE ONLY inTrees[0]'s TIMESTAMPS IF forceSynchro=true
-        else if (true && makeHistos)
+        if (makeHistos)
         {
             // choose time limits:
             Double_t time0=-1,time1=-1;
@@ -218,9 +218,9 @@ public:
               {
                 const Double_t t0 = time0 - 0.5/tordaqData::FREQUENCY;
                 const Double_t t1 = time1 + 0.5/tordaqData::FREQUENCY;
-                const int nBins=(t1-t0)*tordaqData::FREQUENCY;
+                const int nBins=(t1-t0)*tordaqData::FREQUENCY+1;
                 const TString vn=inTrees[ii]->fChain->GetName();
-                outHistos.push_back(new TH1F("h"+vn,";;"+vn,nBins,t0,t1));
+                outHistos.push_back(new TH1F("h"+vn,";;"+vn,nBins,t0,t0+(double)nBins/tordaqData::FREQUENCY));
               }
             }
             else
@@ -228,8 +228,6 @@ public:
               std::cerr<<"tordaqReader:  Error Reading TTrees:  (no good times)."<<std::endl;
               return false;
             }
-            //for (unsigned int ii=0; ii<outHistos.size(); ii++)
-            //  outHistos[ii]->SetDirectory(0);
         }
 
         // print warning messages about synchronization:
@@ -337,13 +335,17 @@ public:
                         // get time and data for this sample:
                         data = inTrees[iVar]->record_data[iSamp];
                         if (removeJitter) {
-                            if (forceSynchro) time = inTrees[0]->getJitterlessTime(iSamp);
+                            if (forceSynchro) time = inTrees[0]->getJitterlessTime(
+                                                                 inTrees[iVar]->record_tsec,
+                                                                 inTrees[iVar]->record_tnsec,
+                                                                 iSamp);
                             else              time = inTrees[iVar]->getJitterlessTime(iSamp);
                         }
                         else {
                             if (forceSynchro) time = inTrees[0]->getTime(iSamp);
                             else              time = inTrees[iVar]->getTime(iSamp);
                         }
+
                         ntupleVars[2*iVar]=time;
                         ntupleVars[2*iVar+1]=data;
 
@@ -536,7 +538,7 @@ public:
             }
 
 /*
-               Sol_QD1 :  (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) - (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
+               Sol_QD1 : -(VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) + (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
                Sol_QD2 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ ) - (VT9_DAQ+VT10_DAQ+VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
                Sol_QD3 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ)
                Sol_QD4 : (VT17_DAQ+VT18_DAQ+VT19_DAQ)

@@ -90,11 +90,11 @@ public :
        return hh;
    }
 
-   Double_t getTime(Long64_t sec,Long64_t nsec,Int_t wfLength,Int_t iSample)
+   Double_t getTime(Long64_t sec,Long64_t nsec,Int_t iSample)
    {
        // Assume the waveform is sampled at wfLength Hz
        // and updated at 1 Hz (i.e. no deadtime).
-       // return sec + nsec/1e9 + (Double_t)iSample/wfLength;
+       // return sec + nsec/1e9 + (Double_t)iSample/WFLENGTH;
 
        // Assume time between waveform samples is 1/FREQUENCY:
        return sec + nsec/1e9 + (Double_t)iSample/FREQUENCY;
@@ -102,7 +102,7 @@ public :
    
    Double_t getTime(Int_t iSample)
    {
-       return getTime(record_tsec,record_tnsec,WFLENGTH,iSample);
+       return getTime(record_tsec,record_tnsec,iSample);
    }
 
    // getJitterlessTime
@@ -112,21 +112,25 @@ public :
    // based on assumption that period between readouts is
    // always a fixed multiple of UPDATEPERIOD.
    //
-   // This correction only needs to operate on the nanosecond
-   // portion of the timestamp.
+   // This jitter correction only needs to operate on the
+   // nanosecond portion of the timestamp.
    //
-   Double_t getJitterlessTime(Int_t iSample)
+   Double_t getJitterlessTime(Long64_t sec,Long64_t nsec,Int_t iSample)
    {
        // relative time since first reading, offset by a number of periods:
-       const Long64_t relative_nsec = record_tnsec - first_nsec + 10*UPDATEPERIOD;
+       const Long64_t relative_nsec = nsec - first_nsec + 10*UPDATEPERIOD;
 
        // take modulus to get jitter (with half-periods to wrap properly):
        const Long64_t jitter = (relative_nsec + UPDATEPERIOD/2) % UPDATEPERIOD - UPDATEPERIOD/2;
 
        // correct time for jitter:
-       const Long64_t jitterless_tnsec = record_tnsec - jitter;
+       const Long64_t jitterless_nsec = nsec - jitter;
 
-       return getTime(record_tsec,jitterless_tnsec,WFLENGTH,iSample);
+       return getTime(sec,jitterless_nsec,iSample);
+   }
+   Double_t getJitterlessTime(Int_t iSample)
+   {
+       return getJitterlessTime(record_tsec,record_tnsec,iSample);
    }
  
    void initVarNames()

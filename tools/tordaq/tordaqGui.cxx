@@ -12,6 +12,7 @@ const char *filetypes[] = { "ROOT files", "*.root", 0, 0 };
 bool doSynchroAna=false;
 bool forceSynchro=false;
 bool saveSynchroPlots=false;
+bool removeJitter=false;
 bool TWOPLOTS=false;
 
 TString getTimeString(const Double_t time)
@@ -340,6 +341,7 @@ void tordaqGui::DoOpen(TString filename="")
         //tdReader.progressMeter=progressBar;
         tdReader.doSynchroAna=doSynchroAna;
         tdReader.forceSynchro=forceSynchro;
+        tdReader.removeJitter=removeJitter;
         tdReader.saveSynchroPlots=saveSynchroPlots;
         if (!tdReader.process())
         {
@@ -537,8 +539,9 @@ int main(int argc, char **argv)
         "\t -A (do synchronization analysis - memory intensive)\n"
         "\t -H (save synchro analysis plots in tordaqSynchroAna.root)\n"
         "\t -S (force synchronization - EXPERT ONLY)\n"
+        "\t -J (remove jitter - EXPERIMENTAL)\n"
         "\t -h (print usage)\n";
-    while ( (itmp=getopt(argc,argv,"ASH2h")) != -1 )
+    while ( (itmp=getopt(argc,argv,"ASH2Jh")) != -1 )
     {
         switch (itmp)
         {
@@ -554,6 +557,9 @@ int main(int argc, char **argv)
             case '2':
                 TWOPLOTS=true;
                 break;
+            case 'J':
+                removeJitter=true;
+                break;
             case 'h':
                 std::cout<<usage<<std::endl;
                 exit(0);
@@ -568,9 +574,19 @@ int main(int argc, char **argv)
                   strcmp(argv[argc-1],"-S") &&
                   strcmp(argv[argc-1],"-H") &&
                   strcmp(argv[argc-1],"-2") &&
+                  strcmp(argv[argc-1],"-J") &&
                   strcmp(argv[argc-1],"-h"))
         filename=argv[argc-1];
-            
+    
+    if (forceSynchro && doSynchroAna) {
+        std::cerr<<"Simultaneously forcing synchro (-S) and doing syncrho analysis (-A) is not supported."<<std::endl;
+        return 1;
+    }
+    if (saveSynchroPlots && !doSynchroAna) {
+        std::cerr<<"Saving synchro plots (-H) requires doing synchro analysis (-A)."<<std::endl;
+        return 1;
+    }
+
     TApplication theApp("App", &argc, argv);
     tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 2000, 600);
     theApp.Run();

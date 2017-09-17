@@ -32,6 +32,7 @@ public:
     TGHProgressBar *progressMeter=NULL;
     bool doSynchroAna=false;
     bool forceSynchro=false;
+    bool removeJitter=false;
     bool saveSynchroPlots=false;
     bool isTorus=true;
     bool isSolenoid=true;
@@ -232,8 +233,10 @@ public:
         }
 
         // print warning messages about synchronization:
-        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl<<std::endl;
-        if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl<<std::endl;
+        if (doSynchroAna) std::cout<<std::endl<<"Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
+        if (forceSynchro) std::cout<<std::endl<<"FORCING SYNCHRONIZATION!"<<std::endl;
+        if (removeJitter) std::cout<<std::endl<<"REMOVING JITTER!"<<std::endl;
+        std::cout<<std::endl;
 
         // setup dynamically allocated stuff:
         std::vector <double> lastUpdateTime;
@@ -333,8 +336,14 @@ public:
                     {
                         // get time and data for this sample:
                         data = inTrees[iVar]->record_data[iSamp];
-                        if (forceSynchro) time = inTrees[0]->getTime(iSamp);
-                        else              time = inTrees[iVar]->getTime(iSamp);
+                        if (removeJitter) {
+                            if (forceSynchro) time = inTrees[0]->getJitterlessTime(iSamp);
+                            else              time = inTrees[iVar]->getJitterlessTime(iSamp);
+                        }
+                        else {
+                            if (forceSynchro) time = inTrees[0]->getTime(iSamp);
+                            else              time = inTrees[iVar]->getTime(iSamp);
+                        }
                         ntupleVars[2*iVar]=time;
                         ntupleVars[2*iVar+1]=data;
 
@@ -379,21 +388,39 @@ public:
             if (tooManySamples) break;
         }
 
+
+
         if (doSynchroAna)
         {
             // print out duplicates and missing samples info:
             std::cout<<std::endl<<std::endl<<std::endl;
-            std::cout<<"######################################################################"<<std::endl;
-            std::cout<<"######################################################################"<<std::endl;
-            std::cout<<"* Syncrhonization Analysis Report:"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*################# Syncrhonization Analysis Report #########################"<<std::endl;
             std::cout<<"*"<<std::endl;
-            std::cout<<"* If Missed is significantly greater than Overlaps,"<<std::endl;
-            std::cout<<"*\tthen there is data loss."<<std::endl;
+            std::cout<<"* Output format:  (Number of Occurences / Fraction of Total)"<<std::endl;
             std::cout<<"*"<<std::endl;
-            std::cout<<"* If Missed and Overlaps are similar and small,"<<std::endl;
-            std::cout<<"*\tthen that is just due to timestamp jitter (see -S option)."<<std::endl;
-            std::cout<<"*"<<std::endl;
-            std::cout<<"* Output format:  (# samples / fraction of samples)"<<std::endl;
+            std::cout<<"*###################### Timestamps #########################################"<<std::endl;
+            std::cout<<"* "<<std::endl;
+            std::cout<<"* These should all be exactly zero.  Anything non-zero is a problem."<<std::endl;
+            std::cout<<"* "<<std::endl;
+            for (unsigned int ii=0; ii<updatePeriod.size(); ii++)
+            {
+                TH1* h=updatePeriod[ii];
+                const double total=h->GetEntries();
+                const double duplicates=h->Integral(h->FindBin(-0.1),h->FindBin(0.1));
+                const double misses=h->Integral(h->FindBin(0.3),h->GetNbinsX());
+                fprintf(stdout,"*%7s:   Duplicates = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
+                        inTrees[ii]->fChain->GetName(),
+                        duplicates,100*duplicates/total,
+                        misses,100*misses/total);
+            }
+            std::cout<<"* "<<std::endl;
+            std::cout<<"* "<<std::endl;
+            std::cout<<"*####################### Samples ###########################################"<<std::endl;
+            std::cout<<"* "<<std::endl;
+            std::cout<<"* Here if Missed and Overlaps are similar and small,"<<std::endl;
+            std::cout<<"*\tthen that *can* be due just to timestamp jitter."<<std::endl;
             std::cout<<"*"<<std::endl;
             for (unsigned int ii=0; ii<sampleFills.size(); ii++)
             {
@@ -414,8 +441,8 @@ public:
                 }                
             }
             std::cout<<"*"<<std::endl;
-            std::cout<<"######################################################################"<<std::endl;
-            std::cout<<"######################################################################"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
             std::cout<<std::endl;
 
             // free up memory:

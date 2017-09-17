@@ -55,12 +55,17 @@ public :
    // EPICS waveform length:
    static const int WFLENGTH=2000;
 
+   // EPICS update period (nanoseconds):
+   static const Long64_t UPDATEPERIOD = 1e9*WFLENGTH/FREQUENCY;
+   
    TTree          *fChain=NULL;
    Int_t           fCurrent;
    Long64_t        record_tsec;
    Long64_t        record_tnsec;
    Float_t         record_data[WFLENGTH];
    TBranch        *b_record;
+   Long64_t        first_sec; 
+   Long64_t        first_nsec; 
 
    TH1* getHisto()
    {
@@ -99,12 +104,44 @@ public :
    {
        return getTime(record_tsec,record_tnsec,WFLENGTH,iSample);
    }
+
+   // getJitterlessTime
+   //
+   // Assume the first timestamp in the file to be exact,
+   // and use it to remove jitter from all future timestamps,
+   // based on assumption that period between readouts is
+   // always a fixed multiple of UPDATEPERIOD.
+   //
+   // This correction only needs to operate on the nanosecond
+   // portion of the timestamp.
+   //
+   Double_t getJitterlessTime(Int_t iSample)
+   {
+       // relative time since first reading, offset by a number of periods:
+       const Long64_t relative_nsec = record_tnsec - first_nsec + 10*UPDATEPERIOD;
+
+       // take modulus to get jitter (with half-periods to wrap properly):
+       const Long64_t jitter = (relative_nsec + UPDATEPERIOD/2) % UPDATEPERIOD - UPDATEPERIOD/2;
+
+       // correct time for jitter:
+       const Long64_t jitterless_tnsec = record_tnsec - jitter;
+
+       return getTime(record_tsec,jitterless_tnsec,WFLENGTH,iSample);
+   }
  
    void initVarNames()
    {
        int ii=0;
        VARNAMES.clear();
        while (CVARNAMES[ii]) VARNAMES.push_back(CVARNAMES[ii++]);
+   }
+
+   void storeFirstTimestamp()
+   {
+       LoadTree(0);
+       fChain->GetEntry(0);
+       first_sec = record_tsec;
+       first_nsec = record_tnsec;
    }
 
    tordaqData()
@@ -123,6 +160,8 @@ public :
            fChain->SetBranchAddress("record", &record_tsec, &b_record);
        }
        else std::cerr<<"tordaqData:: Error Reading tree"<<std::endl;
+       
+       storeFirstTimestamp();
    }
 
    ~tordaqData()

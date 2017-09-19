@@ -17,7 +17,7 @@ private:
 
 public :
    
-   std::vector <std::string> VARNAMES;
+   std::vector <std::string> varnames;
    std::vector <std::string> varstubs;
 
    // Frequency (Hz) of samples in EPICS waveform: 
@@ -60,11 +60,8 @@ public :
 
    Double_t getTime(Long64_t sec,Long64_t nsec,Int_t iSample)
    {
-       // Assume the waveform is sampled at wfLength Hz
-       // and updated at 1 Hz (i.e. no deadtime).
-       // return sec + nsec/1e9 + (Double_t)iSample/WFLENGTH;
-
-       // Assume time between waveform samples is 1/FREQUENCY:
+       // Reported timestamp corresponds to first sample of waveform.
+       // Assume time between waveform samples is 1/FREQUENCY.
        return sec + nsec/1e9 + (Double_t)iSample/FREQUENCY;
    }
    
@@ -135,7 +132,7 @@ public :
        return ss;
    }
 
-   void setTreeNames() { VARNAMES=getTreeNames(); }
+   void setTreeNames() { varnames=getTreeNames(); }
 
    ~tordaqData()
    {

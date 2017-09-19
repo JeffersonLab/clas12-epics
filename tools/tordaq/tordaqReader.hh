@@ -116,22 +116,20 @@ public:
         // determine the variable names based on file contents:
         tdData.setTreeNames();
 
-        //std::vector <std::string> VARNAMES=tdData.getTreeNames();
-        
         // find the input TTrees:
         inTrees.clear();
         outHistos.clear();
         std::vector <std::string> missingTrees;
-        for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
+        for (unsigned int ii=0; ii<tdData.varnames.size(); ii++)
         {
-            TTree *tt=(TTree*)gDirectory->Get(tdData.VARNAMES[ii].c_str());
+            TTree *tt=(TTree*)gDirectory->Get(tdData.varnames[ii].c_str());
             if (tt) inTrees.push_back(new tordaqData(tt));
-            else missingTrees.push_back(tdData.VARNAMES[ii]);
+            else missingTrees.push_back(tdData.varnames[ii]);
         }
         for (unsigned int ii=0; ii<missingTrees.size(); ii++)
             std::cerr<<"Missing Tree:   "<<missingTrees[ii]<<std::endl;
         if (missingTrees.size()>0) return false;
-        if (tdData.VARNAMES.size() != inTrees.size())
+        if (tdData.varnames.size() != inTrees.size())
         {
             std::cerr<<"Unkown missing trees (this should be impossible)."<<std::endl;
             return false;
@@ -158,10 +156,10 @@ public:
             {
                 std::string sep="";
                 std::string varnames="";
-                for (unsigned int ii=0; ii<tdData.VARNAMES.size(); ii++)
+                for (unsigned int ii=0; ii<tdData.varnames.size(); ii++)
                 {
-                    varnames += sep+"t"+tdData.VARNAMES[ii];
-                    varnames += ":"+tdData.VARNAMES[ii];
+                    varnames += sep+"t"+tdData.varnames[ii];
+                    varnames += ":"+tdData.varnames[ii];
                     sep=":";
                 }
                 std::cerr<<varnames<<std::endl;
@@ -285,9 +283,13 @@ public:
         // print a header row in the ascii file:
         if (outAsciiFile)
         {
+            char sep[1]="";
             for (unsigned int iVar=0; iVar<inTrees.size(); iVar++)
             {
-                fprintf(outAsciiFile,"%s%s%s%12f",inTrees[iVar].GetName());
+                TString headTime = "t"+inTrees[iVar].GetName();
+                TString headData = inTrees[iVar].GetName();
+                fprintf(outAsciiFile,"%s%s%s%12f",sep,headTime.Data(),asciiDelimiter,headData.Data());
+                strcpy(sep,asciiDelimiter);
             }
         }
         */
@@ -544,7 +546,7 @@ public:
                 //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
                 //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
 
-                tdData.VARNAMES.push_back("C4");
+                tdData.varnames.push_back("C4");
                 outHistos.push_back(hC4);
             }
 
@@ -613,14 +615,14 @@ public:
                 hQD8->Add(hh[17]);
                 hQD8->Add(hh[18]);
 
-                tdData.VARNAMES.push_back("QD1");  outHistos.push_back(hQD1);
-                tdData.VARNAMES.push_back("QD2");  outHistos.push_back(hQD2);
-                tdData.VARNAMES.push_back("QD3");  outHistos.push_back(hQD3);
-                tdData.VARNAMES.push_back("QD4");  outHistos.push_back(hQD4);
-                tdData.VARNAMES.push_back("QD5");  outHistos.push_back(hQD5);
-                tdData.VARNAMES.push_back("QD6");  outHistos.push_back(hQD6);
-                tdData.VARNAMES.push_back("QD7");  outHistos.push_back(hQD7);
-                tdData.VARNAMES.push_back("QD8");  outHistos.push_back(hQD8);
+                tdData.varnames.push_back("QD1");  outHistos.push_back(hQD1);
+                tdData.varnames.push_back("QD2");  outHistos.push_back(hQD2);
+                tdData.varnames.push_back("QD3");  outHistos.push_back(hQD3);
+                tdData.varnames.push_back("QD4");  outHistos.push_back(hQD4);
+                tdData.varnames.push_back("QD5");  outHistos.push_back(hQD5);
+                tdData.varnames.push_back("QD6");  outHistos.push_back(hQD6);
+                tdData.varnames.push_back("QD7");  outHistos.push_back(hQD7);
+                tdData.varnames.push_back("QD8");  outHistos.push_back(hQD8);
             }
 
             std::cout<<std::endl<<"tordaqReader:  Finished Making Comparators."<<std::endl;

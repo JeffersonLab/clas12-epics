@@ -392,7 +392,7 @@ void tordaqGui::DoOpen(TString filename="")
         }
     }
     
-    if (dataHistos1.size() != tdReader.tdData.VARNAMES.size())
+    if (dataHistos1.size() != tdReader.tdData.varnames.size())
          fileLabel->ChangeText(filename + " --   ERROR READING HISTOS.");
     else fileLabel->ChangeText(filename);
     this->Layout();

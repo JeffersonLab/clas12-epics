@@ -17,7 +17,9 @@ cRioIntlk_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
+
 dbLoadRecords("db/richIntlk.db")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_, R=CRIO_RICH_, DLY=60")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += cRIO_heartbeat.db
+DB += cRIO_heartbeat_bi.db
 
 DB += gas_cRIO_DC.db
 DB += gas_cRIO_FTC.db

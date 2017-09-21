@@ -1,6 +1,6 @@
 
-/* sy1527epics1.c - EPICS driver support for CAEN SY1527 HV mainframe */
-/*                  (a la Lecroy)                                     */
+// sy1527epics1.c - EPICS driver support for CAEN SY1527 HV mainframe
+//                  (a la Lecroy)                                    
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,21 +11,21 @@
 #include "sy1527epics1.h"
 #include <unistd.h>
 
-/* open communication with mainframe under logical number 'id' */
+// open communication with mainframe under logical number 'id'
 int
 CAEN_HVstart(unsigned id, char *ip_address)
 {
   return(sy1527Start(id,ip_address));
 }
 
-/* close communication with mainframe under logical number 'id' */
+// close communication with mainframe under logical number 'id'
 int
 CAEN_HVstop(unsigned id)
 {
   return(sy1527Stop(id));
 }
 
-/* returns 1 if mainframe is ON, otherwise returns 0 */
+// returns 1 if mainframe is ON, otherwise returns 0
 int
 CAEN_GetHv(unsigned id, int *onoff1)
 {
@@ -37,7 +37,7 @@ CAEN_GetHv(unsigned id, int *onoff1)
  return retv;
 }
 
-/* returns 1 if any channel is alarming, otherwise returns 0 */
+// returns 1 if any channel is alarming, otherwise returns 0
 int
 CAEN_GetAlarm(unsigned id)
 {
@@ -48,7 +48,6 @@ CAEN_GetAlarm(unsigned id)
   return(alarm);
 }
 
-/* */
 int
 CAEN_GetValidity(unsigned id)
 {
@@ -59,7 +58,7 @@ CAEN_GetValidity(unsigned id)
   return(active);
 }
 
-/* set HV on/off for whole mainframe */
+// set HV on/off for whole mainframe
 int
 CAEN_SetHV(unsigned id, unsigned char on_off)
 {
@@ -70,7 +69,6 @@ CAEN_SetHV(unsigned id, unsigned char on_off)
   return(0);
 }
 
-/* */
 STATUS
 CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
             char *property, float value)
@@ -111,11 +109,11 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
       id,slot,channel,value);
     if(value > 0.5)
     {
-      /* enable the channel */
+      // enable the channel
       sy1527SetChannelEnableDisable(id, slot, channel, 1);
       sleep(2);
 
-      /* if mainframe is ON, turn channel ON */
+      // if mainframe is ON, turn channel ON
 	  {
         int active, onoff, alarm;
         sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
@@ -128,7 +126,7 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
 	}
     else
     {
-      /* disable the channel */
+      // disable the channel
       sy1527SetChannelOnOff(id, slot, channel, 0);
       sleep(2);
       sy1527SetChannelEnableDisable(id, slot, channel, 0);
@@ -183,7 +181,6 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
   return(0);
 }
 
-/* */
 STATUS
 CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
                  char *property, float *value)
@@ -267,7 +264,7 @@ CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
   return(0);
 }
 
-/* returns all values for one channel */
+// returns all values for one channel
 STATUS
 CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
                 double *property, double *delta)

@@ -16,11 +16,11 @@
 #define MAX_PARAM_NAME 10
 
 
-/* mainframe threads id's and statistic structures */
+// mainframe threads id's and statistic structures
 static pthread_t idth[MAX_HVPS];
 static THREAD stat[MAX_HVPS];
 
-/* mutexes */
+// mutexes
 static pthread_mutexattr_t mattr;
 static pthread_mutex_t global_mutex;       /* to access inter-mainframe info */
 static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
@@ -28,12 +28,12 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define LOCK_MAINFRAME(id_m)   pthread_mutex_lock(&mainframe_mutex[id_m])
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
-/* flag to tell mainframe thread it is time to exit */
+// flag to tell mainframe thread it is time to exitD */
 static int force_exit[MAX_HVPS];
 
-/* mainframes */
+// mainframes
 int nmainframes = -1;     // the number of active mainframes
-int mainframes[MAX_HVPS]; /* list of active mainframes */
+int mainframes[MAX_HVPS]; // list of active mainframes
 int mainframes_disconnect[MAX_HVPS];
 static HV Demand[MAX_HVPS];
 HV Measure[MAX_HVPS];
@@ -43,7 +43,7 @@ int is_mainframe_read[MAX_HVPS]; // my: flag to prevent epics value init before 
 static const int MAXCFEDOWNERR=100;
 int NCFEDOWNERR[MAX_HVPS];
 
-/* board-dependent parameter sets */
+// board-dependent parameter sets
 /*
 #define HV_V0Set   0
 #define HV_I0Set   1
@@ -112,9 +112,9 @@ static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
 //                "ChToGroup","OnGrDel","OffGrDel"};
 
 ///---------------------------------------------------------------
-/* some useful macros */
+// some useful macros
 
-/* check if 'id' is reasonable */
+// check if 'id' is reasonable
 #define CHECK_ID(id_m) \
   if(id_m < 0 || id_m >= MAX_HVPS) \
   { \
@@ -122,7 +122,7 @@ static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
     return(CAENHV_SYSERR); \
   }
 
-/* check if that channel is free */
+// check if that channel is free
 #define CHECK_FREE(id_m) \
   if(Measure[id_m].id != -1) \
   { \
@@ -130,7 +130,7 @@ static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
     return(CAENHV_SYSERR); \
   }
 
-/* check if that channel is opened */
+// check if that channel is opened
 #define CHECK_OPEN(id_m) \
   if(Measure[id_m].id == -1) \
   { \
@@ -192,7 +192,7 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     ChList[i] = (unsigned short)Ch;
   }
 
-  /* loop over parameters */
+  // loop over parameters
   for(ipar=0; ipar<nXXXXXparam; ipar++)
   {
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
@@ -294,11 +294,11 @@ sy1527SetBoard(unsigned int id, unsigned int board)
   Slot = board;
   ChNum = Demand[id].board[board].nchannels;
 
-  /* loop over parameters */
+  // loop over parameters
   for(iparr=0; iparr<nXXXXXparam; iparr++)
   {
 
-    /* patch to make sure 'PwEn' always executed before 'Pw' */
+    // patch to make sure 'PwEn' always executed before 'Pw'
     //if(iparr == HV_Pw)        ipar = HV_PwEn;
     //else if(iparr == HV_PwEn) ipar = HV_Pw;
     //else                   ipar = iparr;
@@ -313,7 +313,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
     strcpy(ParName,XXXXparam[ipar]); /* Param name */
     tipo = Demand[id].board[board].partypes[ipar];
 
-    /* loop over all channels */
+    // loop over all channels
     for(Ch=0; Ch<ChNum; Ch++)
     {
       if(Demand[id].board[board].channel[Ch].setflag[ipar] == 1)
@@ -333,13 +333,13 @@ sy1527SetBoard(unsigned int id, unsigned int board)
 
         if(ret != CAENHV_OK)
         {
-          /* set was unsuccessful so return error */
+          // set was unsuccessful so return error
           printf("CAENHVSetChParam error: %s (num. %d)\n",CAENHVGetError(name),ret);
           return(CAENHV_SYSERR);
         }
         else
         {
-          /* set was successful so cleanup setflag */
+          // set was successful so cleanup setflag
           Demand[id].board[board].channel[Ch].setflag[ipar] = 0;
         }
       }
@@ -604,7 +604,6 @@ sy1527PrintParams(unsigned int id)
 }
 
 //==================================================================================================
-/* */
 int
 sy1527GetMap(unsigned int id)
 { 
@@ -663,7 +662,7 @@ sy1527GetMap(unsigned int id)
             i, m, d, NrOfCh[i], SerNumList[i], FmwRelMaxList[i], 
             FmwRelMinList[i]);
 
-        /* get params info */
+        // get params info
         for(j=0; j<Demand[id].board[i].nchannels; j++)
           ChList[j] = (unsigned short)j;
         if(!strcmp(Measure[id].board[i].modelname,"A1535") ||
@@ -885,7 +884,7 @@ sy1527PrintMap(unsigned int id)
   return(CAENHV_OK);
 }
 //==================================================================================================
-/* mainframe thread */
+// mainframe thread
 void *
 sy1527MainframeThread(void *arg)
 {
@@ -906,7 +905,7 @@ sy1527MainframeThread(void *arg)
       break;
     }
 
-    /* sets all existing boards in mainframe 'id' with 'setflag' */
+    // sets all existing boards in mainframe 'id' with 'setflag'
     if(Demand[id].setflag == 1)
     {
       status = CAENHV_OK;
@@ -926,10 +925,10 @@ sy1527MainframeThread(void *arg)
       if(status == CAENHV_OK) Demand[id].setflag = 0;
     }
 
-    /* gets all existing boards in mainframe 'id' */
+    // gets all existing boards in mainframe 'id'
     for(i=0; i<Measure[id].nslots; i++)
     {
-      /* measure all active boards */
+      // measure all active boards
       if(Measure[id].board[i].nchannels > 0)
       {
         ret = sy1527GetBoard(id,i);
@@ -948,7 +947,6 @@ sy1527MainframeThread(void *arg)
   return NULL;
 }
 //==================================================================================================
-/* initialization */
 int
 sy1527Init()
 {
@@ -974,18 +972,18 @@ sy1527Init()
 
   }
 
-  /* set mutex attributes */
+  // set mutex attributes
   pthread_mutexattr_init(&mattr);
   pthread_mutexattr_setpshared(&mattr, PTHREAD_PROCESS_SHARED);
 
-  /* init global mutex */
+  // init global mutex
   pthread_mutex_init(&global_mutex, &mattr);
 
   return(CAENHV_OK);
 }
 //===========================================================================
-/* open communication with mainframe under logical number 'id',
-   do all necessary initialization and start thread */
+// open communication with mainframe under logical number 'id',
+//   do all necessary initialization and start thread
 int
 sy1527Start(unsigned id_nowused, char *ip_address)
 {
@@ -1004,7 +1002,7 @@ sy1527Start(unsigned id_nowused, char *ip_address)
 
   pthread_mutex_lock(&global_mutex);
 
-  /* do global initialization on first call */
+  // do global initialization on first call
   if(nmainframes == -1) sy1527Init();
 
   nmainframes++;
@@ -1012,8 +1010,8 @@ sy1527Start(unsigned id_nowused, char *ip_address)
 
   printf("\nsy1527Start:  nmainframes=%d id=%d\n", nmainframes, id);
 
-  /* lock global mutex to prevent other mainframes to be started
-     until we are done with this one */
+  // lock global mutex to prevent other mainframes to be started
+  //   until we are done with this one
   /// my: move upward - pthread_mutex_lock(&global_mutex); otherwise many sy1527Init() are possible
 
   if(nmainframes >= MAX_HVPS)
@@ -1060,10 +1058,10 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   NCFEDOWNERR[id]=0;
   printf("\n@@@@@@@@@@@@@@@@@@@@ RUNNING MODIFIED FOR CFE FIX\n\n");
 
-  /* init mainframe mutex */
+  // init mainframe mutex
   pthread_mutex_init(&mainframe_mutex[id], &mattr);
 
-  /* start thread */
+  // start thread
   stat[id].threadid = id;
   force_exit[id] = 0;
   if(pthread_create(&idth[id],NULL,sy1527MainframeThread,(void *)&stat[id])!=0)
@@ -1074,12 +1072,12 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   }
   else printf("INFO: pthread_create(0x%08lx[%d],...) done\n",idth[id],id);
 
-  /* register mainframe */
+  // register mainframe
   mainframes[nmainframes-1] = id;
 
   mainframes_disconnect[nmainframes-1] = 0;
 
-  /* get mainframe map */
+  // get mainframe map
   // this was a duplicate (see caenHvApp/src/ioc_com_def.h)
   //sy1527GetMap(id);
 
@@ -1091,23 +1089,23 @@ sy1527Start(unsigned id_nowused, char *ip_address)
   return(CAENHV_OK);
 }
 //===========================================================================
-/* close communication with mainframe under logical number 'id'
-   and stop thread */
+// close communication with mainframe under logical number 'id'
+//   and stop thread
 int
 sy1527Stop(unsigned id)
 {
   char name[MAX_CAEN_NAME];
   int i, j, ret;
 
-  /* lock global mutex to prevent other mainframes to be stoped
-     until we are done with this one */
+  // lock global mutex to prevent other mainframes to be stoped
+  //   until we are done with this one
   pthread_mutex_lock(&global_mutex);
 
   CHECK_ID(id);
   CHECK_OPEN(id);
   strcpy(name, Measure[id].name);
 
-  /* stop thread */
+  // stop thread
   force_exit[id] = 1;
 
   ret = CAENHVDeinitSystem(name);
@@ -1124,7 +1122,7 @@ sy1527Stop(unsigned id)
     return(CAENHV_SYSERR);
   }
 
-  /* unregister mainframe */
+  // unregister mainframe
   j = -1;
   for(i=0; i<nmainframes; i++)
   {
@@ -1155,7 +1153,7 @@ sy1527Stop(unsigned id)
 /*** CAN BE BOARD-DEPENDANT STUFF HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ***/
 /*****************************************************************************/
 
-/* some useful macros */
+// some useful macros
 #define SET_FVALUE(prop_name_m, value_m) \
   Demand[id].board[board].channel[chan].fval[prop_name_m] = value_m; \
   Demand[id].board[board].channel[chan].setflag[prop_name_m] = 1; \
@@ -1177,7 +1175,7 @@ sy1527Stop(unsigned id)
 #define GET_DEMAND_LVALUE(prop_name_m, value_m) \
   value_m = Demand[id].board[board].channel[chan].lval[prop_name_m]
 
-/* loop over all available channels and set them on or off */
+// loop over all available channels and set them on or off
 int
 sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
 {
@@ -1191,7 +1189,7 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
   {
     if(mainframes[i] == id)
     {
-      /* loop over all channels in all boards and set it to 'on_off' */
+      // loop over all channels in all boards and set it to 'on_off'
       for(board=0; board<Measure[id].nslots; board++)
       {
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
@@ -1208,7 +1206,7 @@ sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off)
   return(CAENHV_OK);
 }
 
-/* loop over all available channels and set them on or off */
+// loop over all available channels and set them on or off
 int
 sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
 {
@@ -1220,10 +1218,9 @@ sy1527SetBoardOnOff(unsigned int id, unsigned int board, unsigned int on_off)
 
   for(i=0; i<nmainframes; i++)
   {
-    /*printf("-> check mainframe %d\n",i);*/
     if(mainframes[i] == id)
     {
-      /* loop over all channels in all boards and set it to 'on_off' */
+      // loop over all channels in all boards and set it to 'on_off'
       for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
       {
         printf("-> set channel %d to %d\n",chan, on_off);
@@ -1278,26 +1275,26 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
 
   *active = *onoff = *alarm = 0;
 
-  /* check if it is active */
+  // check if it is active
   for(i=0; i<nmainframes; i++)
   {
     if(mainframes[i] == id)
     {
       *active = 1;
 
-      /* check if it is ON: loop over all boards and channels */
-      /* and if at least one channel is ON, report mainframe  */
-      /* status as ON, overwise report it as OFF */
+      // check if it is ON: loop over all boards and channels
+      // and if at least one channel is ON, report mainframe
+      // status as ON, overwise report it as OFF
       for(board=0; board<Measure[id].nslots; board++)
       {
         for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
         {
-          /* check on/off status */
+          // check on/off status
           //GET_LVALUE(HV_Pw, u);
           GET_LVALUE(Measure[id].board[board].Pw, u);
           if(u) *onoff = 1;
 
-          /* check I-tripped bit */
+          // check I-tripped bit
           //GET_LVALUE(HV_Status, u);
           GET_LVALUE(Measure[id].board[board].Status, u);
           if(u & 0x200) *alarm = 1;
@@ -1311,7 +1308,7 @@ sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
   return retv;
 }
 
-/* sets demand voltage for one channel */
+// sets demand voltage for one channel
 int
 sy1527SetChannelDemandVoltage(unsigned int id, unsigned int board,
                               unsigned int chan, float u)
@@ -1323,7 +1320,7 @@ sy1527SetChannelDemandVoltage(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns demand voltage for one channel */
+// returns demand voltage for one channel
 float
 sy1527GetChannelDemandVoltage(unsigned int id, unsigned int board,
                               unsigned int chan)
@@ -1336,7 +1333,7 @@ sy1527GetChannelDemandVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets maximum voltage for one channel */
+// sets maximum voltage for one channel
 int
 sy1527SetChannelMaxVoltage(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
@@ -1353,7 +1350,7 @@ sy1527SetChannelMaxVoltage(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns maximum voltage for one channel */
+// returns maximum voltage for one channel
 float
 sy1527GetChannelMaxVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1367,7 +1364,7 @@ sy1527GetChannelMaxVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns maximum voltage for one channel */
+// returns maximum voltage for one channel
 float
 sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1380,7 +1377,7 @@ sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets maximum voltage for one channel */
+// sets maximum voltage for one channel
 int
 sy1527SetChannelOverVoltage(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
@@ -1396,7 +1393,7 @@ sy1527SetChannelOverVoltage(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns connector voltage for one channel */
+// returns connector voltage for one channel
 float
 sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1409,7 +1406,7 @@ sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns temperature for one channel */
+// returns temperature for one channel
 float
 sy1527GetChannelTemperature(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1422,7 +1419,7 @@ sy1527GetChannelTemperature(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns minimum voltage for one channel */
+// returns minimum voltage for one channel
 float
 sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1435,7 +1432,7 @@ sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets minimum voltage for one channel */
+// sets minimum voltage for one channel
 int
 sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
@@ -1452,7 +1449,7 @@ sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* sets maximum current for one channel */
+// sets maximum current for one channel
 int
 sy1527SetChannelMaxCurrent(unsigned int id, unsigned int board,
                            unsigned int chan, float u)
@@ -1464,7 +1461,7 @@ sy1527SetChannelMaxCurrent(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns maximum current for one channel */
+// returns maximum current for one channel
 float
 sy1527GetChannelMaxCurrent(unsigned int id, unsigned int board,
                            unsigned int chan)
@@ -1477,7 +1474,7 @@ sy1527GetChannelMaxCurrent(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns measured voltage for one channel */
+// returns measured voltage for one channel
 float
 sy1527GetChannelMeasuredVoltage(unsigned int id, unsigned int board,
                                 unsigned int chan)
@@ -1490,7 +1487,7 @@ sy1527GetChannelMeasuredVoltage(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns measured current for one channel */
+// returns measured current for one channel
 float
 sy1527GetChannelMeasuredCurrent(unsigned int id, unsigned int board,
                                 unsigned int chan)
@@ -1503,7 +1500,7 @@ sy1527GetChannelMeasuredCurrent(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets Ramp-up speed for one channel */
+// sets Ramp-up speed for one channel
 int
 sy1527SetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan,
                        float u)
@@ -1525,7 +1522,7 @@ sy1527SetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan,
   return(0);
 }
 
-/* returns Ramp-up speed for one channel */
+// returns Ramp-up speed for one channel
 float
 sy1527GetChannelRampUp(unsigned int id, unsigned int board, unsigned int chan)
 {
@@ -1569,7 +1566,7 @@ sy1527SetChannelRampDown(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns Ramp-down speed for one channel */
+// returns Ramp-down speed for one channel
 float
 sy1527GetChannelRampDown(unsigned int id, unsigned int board,
                          unsigned int chan)
@@ -1592,7 +1589,7 @@ sy1527GetChannelRampDown(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets on/off status for one channel */
+// sets on/off status for one channel
 int
 sy1527SetChannelOnOff(unsigned int id, unsigned int board,
                       unsigned int chan, unsigned int u)
@@ -1604,7 +1601,7 @@ sy1527SetChannelOnOff(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns on/off status for one channel */
+// returns on/off status for one channel
 unsigned int
 sy1527GetChannelOnOff(unsigned int id, unsigned int board,
                       unsigned int chan)
@@ -1617,7 +1614,7 @@ sy1527GetChannelOnOff(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns on/off demand status for one channel */
+// returns on/off demand status for one channel
 unsigned int
 sy1527GetChannelDemandOnOff(unsigned int id, unsigned int board,
                             unsigned int chan)
@@ -1629,7 +1626,7 @@ sy1527GetChannelDemandOnOff(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns interlock status for one channel */
+// returns interlock status for one channel
 unsigned int
 sy1527GetChannelInterlock(unsigned int id, unsigned int board,
                       unsigned int chan)
@@ -1643,7 +1640,7 @@ sy1527GetChannelInterlock(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns interlock status for one channel */
+// returns interlock status for one channel
 int
 sy1527SetChannelInterlock(unsigned int id, unsigned int board,
                       unsigned int chan,unsigned int u)
@@ -1656,7 +1653,7 @@ sy1527SetChannelInterlock(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns range for one channel */
+// returns range for one channel
 unsigned int
 sy1527GetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan)
@@ -1670,7 +1667,7 @@ sy1527GetChannelRange(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* sets range for one channel */
+// sets range for one channel
 int
 sy1527SetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan, unsigned int u)
@@ -1762,7 +1759,7 @@ printf("SET_LVALUE1: prop=%d value=%d\n",prop_name_m, value_m); \
   Demand[id].board[board].setflag = 1; \
   Demand[id].setflag = 1
 
-/* sets enable/disable for one channel */
+// sets enable/disable for one channel
 int
 sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan, unsigned int u)
@@ -1775,7 +1772,7 @@ sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
   return(0);
 }
 
-/* returns enable/disable for one channel */
+// returns enable/disable for one channel
 unsigned int
 sy1527GetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan)
@@ -1789,7 +1786,7 @@ sy1527GetChannelEnableDisable(unsigned int id, unsigned int board,
   return(u);
 }
 
-/* returns status for one channel */
+// returns status for one channel
 unsigned int
 sy1527GetChannelStatus(unsigned int id, unsigned int board,
                        unsigned int chan)

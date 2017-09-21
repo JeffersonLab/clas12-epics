@@ -9,6 +9,7 @@ var nch=0;
 
 for (var seg=1; seg<=24; seg++)
 {
+        if (seg<10) seg="0"+seg;
   for (var imo=0; imo<IMO.length; imo++)
   {
     for (var ich=1; ich<=2; ich++)

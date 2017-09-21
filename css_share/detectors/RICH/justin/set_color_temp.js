@@ -10,7 +10,7 @@ catch (ee) { }
 
 var min=0;
 var max=100;
-var nbins =10;
+var nbins=10;
 
 
 var temp = PVUtil.getDouble(pvs[0]);
@@ -21,7 +21,6 @@ bin = Math.floor((temp-min)/(max-min)*nbins);
 
 //java.lang.System.out.println(bin);
 
-
-var bgcolors=["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10"];
+var bgcolors=["MEDM_COLOR_28","MEDM_COLOR_52","MEDM_COLOR_50","MEDM_COLOR_61","MEDM_COLOR_63","MEDM_COLOR_30","MEDM_COLOR_32","MEDM_COLOR_34","MEDM_COLOR_20","MEDM_COLOR_23"];
 
 widget.setPropertyValue("background_color",bgcolors[bin]);

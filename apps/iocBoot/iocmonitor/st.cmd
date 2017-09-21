@@ -12,10 +12,6 @@ monitor_registerRecordDeviceDriver pdbbase
 callbackSetQueueSize(10000)
 scanOnceSetQueueSize(10000)
 
-#dbLoadRecords("db/heartbeatCalc.db","P=B_HW_,R=CRIO_DEV_,DLY=60")
-#dbLoadRecords("db/heartbeatCalc.db","P=B_HW_,R=CRIO_HTCC_,DLY=60")
-#dbLoadRecords("db/heartbeatCalc.db","P=B_HW_,R=CRIO_SVT_,DLY=60")
-
 dbLoadTemplate("db/caenhv_stat.substitutions")
 dbLoadRecords("db/caenhv_stat.db","SEC=1")
 dbLoadRecords("db/caenhv_stat.db","SEC=2")
@@ -37,16 +33,13 @@ dbLoadRecords("db/collimator_alarm.db")
 
 dbLoadRecords("db/htcc-gas-calc.db")
 
+# cross-IOC hv stuff:
 dbLoadTemplate("db/ltccOnOff.substitutions")
-dbLoadTemplate("db/htccOnOff.substitutions")
 dbLoadTemplate("db/pcalOnOff.substitutions")
 dbLoadTemplate("db/ecalOnOff.substitutions")
 dbLoadTemplate("db/ftofOnOff.substitutions")
 dbLoadTemplate("db/hvOnOff.substitutions")
 
-# TODO:  move this to HVCTOF0 ioc:
-dbLoadTemplate("db/ctofcndOnOff.substitutions")
- 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 

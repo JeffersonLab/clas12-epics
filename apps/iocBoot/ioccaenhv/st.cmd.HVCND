@@ -16,6 +16,13 @@ Start_CAEN(20, "sy527_0x100000_1")
 
 dbLoadTemplate("db/HVCND_CND.substitutions")
 
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Inner, ONOFF=ON, VAL=1")
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Middle,ONOFF=ON, VAL=1")
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Outer, ONOFF=ON, VAL=1")
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Inner, ONOFF=OFF,VAL=0")
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Middle,ONOFF=OFF,VAL=0")
+dbLoadRecords("db/cndOnOff-1side.db","IMO=Outer, ONOFF=OFF,VAL=0")
+
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/heartbeatCalc.db","P=ioccaenhv_HVDCa,R=:")
 

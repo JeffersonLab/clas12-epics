@@ -11,15 +11,6 @@ record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):scalers") {
     field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT0:scalers")
     info(autosaveFields_pass0,"DESC")
 }
-## all data from one fiber (we're deprecating this):
-#record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):data") {
-#    field(DTYP,"JLAB_SCALERS")
-#    field(DESC,"SSP data waveform")
-#    field(INP,"#C$(CScode) S$(Data)")
-#    field(NELM,"9")
-#    field(FTVL,"DOUBLE")
-#    field(SCAN,"5 second")
-#}
 
 # individual temperatures and voltages (todo: replace temp#/volt# suffix with proper name):
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:fpga") {
@@ -347,4 +338,17 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch)_PMT2:scalersAvgK") {
     info(autosaveFields_pass0,"HHSV HSV LLSV HIHI HIGH LOLO DESC")
 }
 
+#####################################################################
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):alarm") {
+    field(DESC,"Alarm Summary of temperatre and voltages")
+    field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:fpga CPP MSS")
+    field(INPB, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg0 CPP MSS")
+    field(INPC, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):temp:reg1 CPP MSS")
+    field(INPD, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb5 CPP MSS")
+    field(INPE, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:pcb3_3 CPP MSS")
+    field(INPF, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:int1 CPP MSS")
+    field(INPG, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:aux1_8 CPP MSS")
+    field(INPH, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1 CPP MSS")
+    field(INPI, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1_2 CPP MSS")
+}
 

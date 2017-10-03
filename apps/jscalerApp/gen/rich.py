@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # for full RICH:
-#mappingFile='./SspRich_cabling.txt'
+#mappingFile='./SspRich_cabling_ILA.txt'
 
 # for cosmic RICH:
 mappingFile='./SspRich_cabling_cosmic_ILA.txt'

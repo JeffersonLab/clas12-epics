@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 # for full RICH:
-#mappingFile='./SspRich_cabling_ILA.txt'
+mappingFile='./SspRich_cabling_ILA.txt'
 
 # for cosmic RICH:
-mappingFile='./SspRich_cabling_cosmic_ILA.txt'
+#mappingFile='./SspRich_cabling_cosmic_ILA.txt'
 
 tiles=[]
 pmts=[]
@@ -17,8 +17,8 @@ for line in open(mappingFile,'r').readlines():
   line=line.strip()
 
   # ignore the extra columns introduced in later versions of Matteo's file:
-  hack=line.find('A')
-  line=line[0:hack]
+  if line.find('A')>=0:
+    line=line[0:line.find('A')]
 
   # PMT### uses a different seperator than everything else,
   # if we don't find it then move on:

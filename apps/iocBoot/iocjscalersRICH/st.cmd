@@ -49,7 +49,6 @@ seq waveform, "P=B_DET_RICH_SCALERS_,R=ROWS:"
 seq waveform, "P=B_DET_RICH_SCALERS_,R=PMTS:"
 
 # load them once, then autosaving these to reduce ioc startup noise:
-#< richPmt-setDesc.cmd
-#< richTile-setDesc.cmd
+#< rich-setDesc.cmd
 
 dbl > pv.list

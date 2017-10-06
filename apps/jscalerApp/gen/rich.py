@@ -1,10 +1,29 @@
 #!/usr/bin/env python
+import sys
 
+# INPUTS:
 # for full RICH:
 mappingFile='./SspRich_cabling_ILA.txt'
-
 # for cosmic RICH:
 #mappingFile='./SspRich_cabling_cosmic_ILA.txt'
+
+# OUTPUTS:
+# jscalerApp/Db/jscaler_RICH_Maps.db
+# iocjscalersRICH/richPmt-setDesc.cmd
+# iocjscalersRICH/richTile-setDesc.cmd
+
+ALIASES=False
+DESCES=False
+CAPUT=True
+if len(sys.argv)>1:
+  if sys.argv[1]=='-a':
+    ALIASES=True
+  elif sys.argv[1]=='-d':
+    DESCES=True
+    CAPUT=False
+  elif sys.argv[1]=='-c':
+    DESCES=True
+    CAPUT=True
 
 tiles=[]
 pmts=[]
@@ -69,7 +88,7 @@ pmtSuffixes=[
     ":scalersAvg",
     ":scalersAvgK"]
 
-if False:
+if ALIASES:
   # generate TILE/PMT aliases:
   # NOTE, aliases have to be loaded in the IOC
   for xx in tiles:
@@ -83,18 +102,20 @@ if False:
     for suff in pmtSuffixes:
       print 'alias("%s%s","%s%s")'%(hwpv,suff,depv,suff)
 
-if True:
+if DESCES:
   # generate DESC fields:
-  # NOTE, fields can be be loaded after IOC init (e.g. via caputs), and .DESC fields are autosaved
+  # NOTE:  can be be loaded after IOC init, as .DESC fields are autosaved
   for xx in pmts:
     for yy in pmtSuffixes:
       pv='B_DET_RICH_SSP_PMT%.3d%s.DESC'%(xx['pmt'],yy)
-      print 'caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d\'' % \
-        (pv,xx['slot'],xx['fiber'],xx['tile'],xx['pmt'])
+      if CAPUT: fmt='caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d\''
+      else:     fmt='dbpf("%s","RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d")'
+      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'],xx['pmt'])
   for xx in tiles:
     for yy in tileSuffixes:
       pv='B_DET_RICH_SSP_TILE%.3d%s.DESC'%(xx['tile'],yy)
-      print 'caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d\''% \
-        (pv,xx['slot'],xx['fiber'],xx['tile'])
+      if CAPUT: fmt='caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d\''
+      else:     fmt='dbpf("%s","RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d")'
+      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'])
 
 

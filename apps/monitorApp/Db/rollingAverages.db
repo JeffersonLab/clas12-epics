@@ -1,0 +1,48 @@
+
+record(ai,"$(P)$(R=):2h") {}
+record(ai,"$(P)$(R=):8h") {}
+record(ai,"$(P)$(R=):24h") {}
+record(ai,"$(P)$(R=):1w") {}
+
+record(calc,"$(P)$(R=):2h:alarm") {
+    field(INPA,"$(P)$(R=):2h CPP")
+    field(INPB,"$(P)$(R=) CPP")
+    field(INPC,"$(P)$(R=):2h:tolerance CPP")
+    field(CALC,"ABS(A)<1e-8 ? 0 : ABS(A-B)/A<C")
+}
+record(calc,"$(P)$(R=):8h:alarm") {
+    field(INPA,"$(P)$(R=):8h CPP")
+    field(INPB,"$(P)$(R=) CPP")
+    field(INPC,"$(P)$(R=):8h:tolerance CPP")
+    field(CALC,"ABS(A)<1e-8 ? 0 : ABS(A-B)/A<C")
+}
+record(calc,"$(P)$(R=):24h:alarm") {
+    field(INPA,"$(P)$(R=):24h CPP")
+    field(INPB,"$(P)$(R=) CPP")
+    field(INPC,"$(P)$(R=):24h:tolerance CPP")
+    field(CALC,"ABS(A)<1e-8 ? 0 : ABS(A-B)/A<C")
+}
+record(calc,"$(P)$(R=):1w:alarm") {
+    field(INPA,"$(P)$(R=):1w CPP")
+    field(INPB,"$(P)$(R=) CPP")
+    field(INPC,"$(P)$(R=):1w:tolerance CPP")
+    field(CALC,"ABS(A)<1e-8 ? 0 : ABS(A-B)/A<C")
+}
+
+record(ai,"$(P)$(R=):2h:tolerance") {
+    field(VAL,0.1)
+    info(autosaveFields_pass1,"VAL")
+}
+record(ai,"$(P)$(R=):8h:tolerance") {
+    field(VAL,0.1)
+    info(autosaveFields_pass1,"VAL")
+}
+record(ai,"$(P)$(R=):24h:tolerance") {
+    field(VAL,0.1)
+    info(autosaveFields_pass1,"VAL")
+}
+record(ai,"$(P)$(R=):1w:tolerance") {
+    field(VAL,0.1)
+    info(autosaveFields_pass1,"VAL")
+}
+

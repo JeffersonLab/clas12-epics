@@ -1,0 +1,63 @@
+#
+# N. Baltzell
+#
+# alarm setters, based on current value and relative tolerance
+#
+# probably going to need absolute tolerance etc
+#
+
+record(ai,"$(P)$(R):minorTolerance") {
+    field(VAL,"0.1")
+    field(PINI,1)
+    info(autosaveFields_pass1,"VAL")
+}
+record(ai,"$(P)$(R):majorTolerance") {
+    field(VAL,"0.2")
+    field(PINI,1)
+    info(autosaveFields_pass1,"VAL")
+}
+record(calcout,"$(P)$(R):HIHI") {
+    field(SCAN,"5 second")
+    field(INPA,"$(P)$(R)")
+    field(INPB,"$(P)")
+    field(INPC,"$(P)$(R):majorTolerance CPP")
+    field(CALC,"B + C * A")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R).HIHI PP")
+    info(autosaveFields_pass1,"VAL")
+}
+record(calcout,"$(P)$(R):HIGH") {
+    field(SCAN,"5 second")
+    field(INPA,"$(P)$(R)")
+    field(INPB,"$(P)")
+    field(INPC,"$(P)$(R):minorTolerance CPP")
+    field(CALC,"B + C * A")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R).HIGH PP")
+    info(autosaveFields_pass1,"VAL")
+}
+record(calcout,"$(P)$(R):LOW") {
+    field(SCAN,"5 second")
+    field(INPA,"$(P)$(R)")
+    field(INPB,"$(P)")
+    field(INPC,"$(P)$(R):minorTolerance CPP")
+    field(CALC,"B - C * A")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R).LOW PP")
+    info(autosaveFields_pass1,"VAL")
+}
+record(calcout,"$(P)$(R):LOLO") {
+    field(SCAN,"5 second")
+    field(INPA,"$(P)$(R)")
+    field(INPB,"$(P)")
+    field(INPC,"$(P)$(R):majorTolerance CPP")
+    field(CALC,"B - C * A")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R).LOLO PP")
+    info(autosaveFields_pass1,"VAL")
+}
+

@@ -12,7 +12,10 @@ monitor_registerRecordDeviceDriver pdbbase
 callbackSetQueueSize(10000)
 scanOnceSetQueueSize(10000)
 
+# to be moved to individual caenhv iocs:
 dbLoadTemplate("db/caenhv_stat.substitutions")
+
+# multi-ioc caenhv statuses:
 dbLoadRecords("db/caenhv_stat.db","SEC=1")
 dbLoadRecords("db/caenhv_stat.db","SEC=2")
 dbLoadRecords("db/caenhv_stat.db","SEC=3")

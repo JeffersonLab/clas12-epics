@@ -21,7 +21,7 @@ CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 OPVS={}
 
 # heartbeat PV:
-HBEAT=epics.pv.PV('iocRollAvg:HEARTBEAT')
+HBEAT=epics.pv.PV('iocrollAvg:HEARTBEAT')
 
 # setup the output PVs:
 def initOutputs():

@@ -108,6 +108,7 @@ class ScanThread(threading.Thread):
     print '\nNew Thread: Scan=%.0fs dt=%s'%(self.period,self.dt)
     #print ' '.join(self.pvNames)
     while not self.shutdownFlag.is_set():
+      time.sleep(1)
       now=time.time()
       #print '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\
       (self.period,self.dt,now,self.lastScan,(now-self.lastScan))
@@ -130,7 +131,6 @@ class ScanThread(threading.Thread):
               print 'Error caputting '+self.pvNames[ii]
         else:
           print '\nTHREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
-      time.sleep(1)
     print '\nThread #%s stopped.'%self.ident
 
 class HeartbeatThread(threading.Thread):
@@ -138,12 +138,12 @@ class HeartbeatThread(threading.Thread):
     threading.Thread.__init__(self)
     self.shutdownFlag = threading.Event()
   def run(self):
-    print '\nThread #%s started.'%self.ident
+    print '\nHeartbeat Thread started.'
     while not self.shutdownFlag.is_set():
+      time.sleep(1)
       if HBEAT.get()==0: HBEAT.put(1)
       else:              HBEAT.put(0)
-      time.sleep(1)
-    print '\nThread #%s stopped.'%self.ident
+    print '\nHeartbeat Thread stopped.'
 
 class ServiceExit(Exception):
   pass

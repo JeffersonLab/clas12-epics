@@ -42,16 +42,28 @@ def initOutputs():
       pvs.append(pv)
     OPVS[dt]=pvs
 
-# get myStats results:
-def getMyaStats2(pvNames,dt):
+# just run myStats and return output:
+def myStats(pvNames,dt):
   cmd=list(CMD)
   cmd=[xx.replace('DT',dt) for xx in cmd]
   cmd=[xx.replace('PVNAME',','.join(pvNames)) for xx in cmd]
-  p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-  out,err = p.communicate()
+  out,err=None,None
+  try:
+    p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    out,err = p.communicate()
+  except:
+    # This happens.  Probably an nfs issue.
+    print 'getMyaStats2:  exception running myStats!'
+    # Prevent from trying again immediately:
+    time.sleep(10)
+  return out,err
 
+# get myStats results:
+def getMyaStats(pvNames,dt):
   stats=[]
+  out,err=myStats(pvNames,dt)
   if not out or err:
+    print 'getMyaStats:  error running myStats!'
     print err
   else:
     lines=out.strip().split('\n')
@@ -64,7 +76,7 @@ def getMyaStats2(pvNames,dt):
         data = line.split()
         if len(data) != len(headers):
           print data
-          print headeris
+          print headers
         else:
           stat={}
           for ii in range(len(data)):
@@ -80,19 +92,18 @@ def getMyaStats2(pvNames,dt):
           stats.append(stat)
   return stats
 
-def getMyaStats(pvNames,dt):
+# if there's a maximum on #pvs to pass to myStats:
+def getMyaStats63(pvNames,dt):
   stats=[]
   aa=list(pvNames)
   while len(aa)>0:
     bb=[]
     while len(aa)>0 and len(bb)<63:
       bb.append(aa.pop(0))
-    stat=getMyaStats2(bb,dt)
+    stat=getMyaStats(bb,dt)
     if stat and len(stat)==len(bb):
       stats.extend(stat)
   return stats
-
-
 
 class ScanThread(threading.Thread):
   def __init__(self,period,pvs):
@@ -111,27 +122,37 @@ class ScanThread(threading.Thread):
       time.sleep(1)
       now=time.time()
       #print '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\
-      (self.period,self.dt,now,self.lastScan,(now-self.lastScan))
-      if now-self.lastScan > self.period:
-        pretty=str(datetime.datetime.now())
-        print '%s - Calling myStats - Scan=%.0fs DeltaT=%s'%(pretty,self.period,self.dt)
+      #(self.period,self.dt,now,self.lastScan,(now-self.lastScan))
+      if now-self.lastScan < self.period: continue
+      pretty=str(datetime.datetime.now())
+      print '%s - Calling myStats - Scan=%.0fs DeltaT=%s'%(pretty,self.period,self.dt)
+      success=True
+      stats=getMyaStats(self.pvNames,self.dt)
+      if stats and len(stats)==len(self.pvs):
+        for ii in range(len(self.pvs)):
+          if not stats[ii].has_key('Mean'):
+            print stats[ii]
+            print 'ERROR:  Missing Key: '+self.pvNames[ii]
+            success=False
+            continue
+          if stats[ii]['Mean']=='N/A':
+            print 'ERROR:  N/A: '+self.pvNames[ii]
+            success=False
+            continue
+          try:
+            self.pvs[ii]['pv'].put(float(stats[ii]['Mean']))
+          except:
+            print 'Error caputting '+self.pvNames[ii]
+            success=False
+      else:
+        print 'THREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
+        success=False
+      # if full success, update last scan time
+      # otherwise sleep a little and scan again on next cycle
+      if success:
         self.lastScan=now
-        stats=getMyaStats(self.pvNames,self.dt)
-        if stats and len(stats)==len(self.pvs):
-          for ii in range(len(self.pvs)):
-            if not stats[ii].has_key('Mean'):
-              print stats[ii]
-              print 'ERROR:  Missing Key: '+self.pvNames[ii]
-              continue
-            if stats[ii]['Mean']=='N/A':
-              print 'ERROR:  N/A: '+self.pvNames[ii]
-              continue
-            try:
-              self.pvs[ii]['pv'].put(float(stats[ii]['Mean']))
-            except:
-              print 'Error caputting '+self.pvNames[ii]
-        else:
-          print 'THREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
+      else:
+        time.sleep(5)
     print 'Scan Thread Stopped: Scan=%.0fs dt=%s'%(self.period,self.dt)
 
 class HeartbeatThread(threading.Thread):
@@ -168,72 +189,84 @@ def main():
   try:
     t=HeartbeatThread()
     threads.append(t)
-
     for ii in range(len(TIMES)):
       t=ScanThread(SCANS[ii],OPVS[TIMES[ii]])
       threads.append(t)
-
     print '\nrollAvg.py:  # of threads: %d\n '%len(threads)
-
     for tt in threads:  tt.start()
 
     # keep alive in order to handle signals and close threads:
     while True: time.sleep(1)
 
-
   except ServiceExit:
     print '\nrollAvg.py:  shutting down ...'
-    for tt in threads:
-      tt.shutdownFlag.set()
-    for tt in threads:
-      tt.join()
-
-
+    for tt in threads: tt.shutdownFlag.set()
+    for tt in threads: tt.join()
 
 if __name__ == '__main__': main()
 
 
 
 
-
-
-
 #class MyThread(threading.Thread):
-#  def __Init__(self):
+#  def __Init__(self,name):
 #    threading.Thread.__init__(self)
 #    self.shutdownFlag = threading.Event()
+#    self.name = name
 #  def run(self):
-#    print '\nThread #%s started.'%self.ident
+#    print 'Thread started:   %s'%self.name
 #    while not self.shutdownFlag.is_set():
 #      self.process()
 #      time.sleep(1)
-#    print '\nThread #%s stopped.'%self.ident
+#    print 'Thread stopped:  %s'%self.name
 #  def process(self):
 #    pass
 #
+#class HeartbeatThread(MyThread):
+#  def __init__(self,name):
+#    MyThread.__init__(self,name)
+#  def process(self):
+#    if HBEAT.get()==0: HBEAT.put(1)
+#    else:              HBEAT.put(0)
+#
 #class ScanThread(MyThread):
-#  def __init__(self,period,pvs):
-#    MyThread.__init__(self)
+#  def __init__(self,name,period,pvs):
+#    MyThread.__init__(self,name)
 #    self.lastScan=-99999
 #    self.period=period
 #    self.pvs=pvs
 #    self.pvNames=[]
+#    self.dt=pvs[0]['dt']
 #    for pv in pvs: self.pvNames.append(pv['name'])
 #  def process(self):
-#    now=time.clock()
-#    if now-self.lastScan > self.period:
-#      self.lastScan=time.clock()
-#      stats=[]#getMyaStats(self.pvNames,self.pvs[0]['dt'])
-#      if stats and len(stats)==len(self.pvs):
-#        for ii in range(len(self.pvs)):
+#    now=time.time()
+#    #print '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\
+#    #(self.period,self.dt,now,self.lastScan,(now-self.lastScan))
+#    if now-self.lastScan < self.period: continue
+#    pretty=str(datetime.datetime.now())
+#    print '%s - Calling myStats - Scan=%.0fs DeltaT=%s'%(pretty,self.period,self.dt)
+#    success=True
+#    stats=getMyaStats(self.pvNames,self.dt)
+#    if stats and len(stats)==len(self.pvs):
+#      for ii in range(len(self.pvs)):
+#        if not stats[ii].has_key('Mean'):
+#          print stats[ii]
+#          print 'ERROR:  Missing Key: '+self.pvNames[ii]
+#          success=False
+#          continue
+#        if stats[ii]['Mean']=='N/A':
+#          print 'ERROR:  N/A: '+self.pvNames[ii]
+#          success=False
+#          continue
+#        try:
 #          self.pvs[ii]['pv'].put(float(stats[ii]['Mean']))
-#      else:
-#        print '\nrollAverages.py:  ERROR'
-#
-#class HeartbeatThread(MyThread):
-#  def __init__(self,period,pvs):
-#    MyThread.__init__(self)
-#  def process(self):
-#    if HBEAT.get()==0: HBEAT.put(1)
-#    else:              HBEAT.put(0)
+#        except:
+#          print 'Error caputting '+self.pvNames[ii]
+#          success=False
+#    else:
+#      print 'THREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
+#      success=False
+#    # if not full success, don't update last scan time:
+#    if success:
+#      self.lastScan=now
 

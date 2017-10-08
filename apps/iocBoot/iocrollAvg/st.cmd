@@ -4,7 +4,7 @@ cd ${TOP}
 dbLoadDatabase("dbd/monitor.dbd")
 monitor_registerRecordDeviceDriver pdbbase
 
-dbLoadRecords("db/cRIO_heartbeat_bi.db","P=rollAvg,R=:")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:")
 
 dbLoadTemplate("db/rollingAverages.substitutions")
 

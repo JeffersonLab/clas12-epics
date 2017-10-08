@@ -15,18 +15,23 @@ function insertLine()
     lc.setPropertyValue("border_style",1);
     lc.setPropertyValue("line_width",0);
     lc.setPropertyValue("height",5);
-    lc.setPropertyValue("width",560);
+    lc.setPropertyValue("width",589);
     lc.setPropertyValue("border_width",1);
     lc.setPropertyValue("border_color","MEDM_COLOR_5");
     lc.setPropertyValue("background_color","Read_Background");
     widget.addChildToBottom(lc);
 }
-function insertGap(size)
+function insertGap(size,text)
 {
     var line = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
-    line.setPropertyValue("width",1);
+    if (text.equals("")) { line.setPropertyValue("width",1); }
+    else                 { line.setPropertyValue("width",500); }
     line.setPropertyValue("height",size);
-    line.setPropertyValue("text","");
+    line.setPropertyValue("text","  "+text);
+    line.setPropertyValue("font","Header 3");
+    line.setPropertyValue("foreground_color","Read_Foreground");
+    line.setPropertyValue("horizontal_alignment","Left");
+    line.setPropertyValue("auto_size",true);
     widget.addChildToBottom(line);
 }
 function insertIoc(iocName,opiFile)
@@ -46,7 +51,7 @@ function insertIoc(iocName,opiFile)
 
 for (var iFile=0; iFile<fileNames.length; iFile++) {
 
-    if (iFile>0) insertGap(15);
+    if (iFile>0) insertGap(15,"");
 
     //java.lang.System.out.println(fileNames[iFile]);
 
@@ -56,9 +61,13 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
         if (lines[ii].startsWith("#") || lines[ii].equals("") ) {
-            insertGap(7);
             insertLine();
-            insertGap(7);
+            insertGap(5,"");
+            var label=lines[ii].slice(1);
+            if (label.length>0) {
+              insertGap(20,label);
+            }
+            //insertGap(7,"");
             continue;
         }
 
@@ -73,12 +82,12 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         if (alarms!=0) opiFile = "rollAvg-alarms.opi";
 
         insertIoc(iocName,opiFile);
-//        insertGap(1);
+//        insertGap(1,"");
         jj++;
     }
 }
 
-insertGap(7);
+insertGap(7,"");
 insertLine();
 
 

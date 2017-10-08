@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import epics,subprocess,time,sys,threading,signal
+import epics,subprocess,time,datetime,sys,threading,signal
 
 # See $EPICS/apps/monitorApp/Db/rollingAverages.db for outputs
 
@@ -105,7 +105,7 @@ class ScanThread(threading.Thread):
     self.dt=pvs[0]['dt']
     for pv in pvs: self.pvNames.append(pv['name'])
   def run(self):
-    print '\nNew Thread: Scan=%.0fs dt=%s'%(self.period,self.dt)
+    print 'Scan Thread Started: Scan=%.0fs dt=%s'%(self.period,self.dt)
     #print ' '.join(self.pvNames)
     while not self.shutdownFlag.is_set():
       time.sleep(1)
@@ -113,7 +113,8 @@ class ScanThread(threading.Thread):
       #print '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\
       (self.period,self.dt,now,self.lastScan,(now-self.lastScan))
       if now-self.lastScan > self.period:
-        print '\nCalling myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
+        pretty=str(datetime.datetime.now())
+        print '%s - Calling myStats - Scan=%.0fs DeltaT=%s'%(pretty,self.period,self.dt)
         self.lastScan=now
         stats=getMyaStats(self.pvNames,self.dt)
         if stats and len(stats)==len(self.pvs):
@@ -130,20 +131,20 @@ class ScanThread(threading.Thread):
             except:
               print 'Error caputting '+self.pvNames[ii]
         else:
-          print '\nTHREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
-    print '\nThread #%s stopped.'%self.ident
+          print 'THREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt)
+    print 'Scan Thread Stopped: Scan=%.0fs dt=%s'%(self.period,self.dt)
 
 class HeartbeatThread(threading.Thread):
   def __init__(self):
     threading.Thread.__init__(self)
     self.shutdownFlag = threading.Event()
   def run(self):
-    print '\nHeartbeat Thread started.'
+    print 'Heartbeat Thread started.'
     while not self.shutdownFlag.is_set():
       time.sleep(1)
       if HBEAT.get()==0: HBEAT.put(1)
       else:              HBEAT.put(0)
-    print '\nHeartbeat Thread stopped.'
+    print 'Heartbeat Thread stopped.'
 
 class ServiceExit(Exception):
   pass

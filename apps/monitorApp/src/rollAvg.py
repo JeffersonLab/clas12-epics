@@ -21,7 +21,7 @@ CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 OPVS={}
 
 # heartbeat PV:
-HBEAT=epics.pv.PV('rollAvg:HEARTBEAT')
+HBEAT=epics.pv.PV('iocrollAvgGet:HEARTBEAT')
 
 # logfile:
 LOGFILENAME='/usr/clas12/DATA/logs/iocrollAvgGet.log'

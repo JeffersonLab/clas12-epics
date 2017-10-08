@@ -48,7 +48,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 
     if (iFile>0) insertGap(15);
 
-    java.lang.System.out.println(fileNames[iFile]);
+    //java.lang.System.out.println(fileNames[iFile]);
 
     var lines=FileUtil.readTextFile(fileNames[iFile],widget);
     lines=lines.split("\n");

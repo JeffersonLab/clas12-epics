@@ -7,6 +7,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 // columns are options (the only currently valid one is "noautosave");
 
 var fileNames=widget.getMacroValue("F").split(",");
+var alarms=widget.getMacroValue("A")
 
 function insertLine()
 {
@@ -14,7 +15,7 @@ function insertLine()
     lc.setPropertyValue("border_style",1);
     lc.setPropertyValue("line_width",0);
     lc.setPropertyValue("height",5);
-    lc.setPropertyValue("width",1386);
+    lc.setPropertyValue("width",560);
     lc.setPropertyValue("border_width",1);
     lc.setPropertyValue("border_color","MEDM_COLOR_5");
     lc.setPropertyValue("background_color","Read_Background");
@@ -68,7 +69,8 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         columns=lines[ii].split(" ");
         if (columns.length>1) iocName=columns[0];
 
-        var opiFile = "rollAvg.opi"
+        var opiFile = "rollAvg.opi";
+        if (alarms!=0) opiFile = "rollAvg-alarms.opi";
 
         insertIoc(iocName,opiFile);
 //        insertGap(1);

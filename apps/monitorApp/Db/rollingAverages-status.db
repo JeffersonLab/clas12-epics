@@ -69,4 +69,29 @@ record(bi,"iocrollAvgGet:1w:stat") {
     field(PINI,"1")
 }
 
+record(calcout,"iocrollAvgGet:statCalc") {
+    field(INPA,"iocrollAvgGet:2h:stat CPP")
+    field(INPB,"iocrollAvgGet:8h:stat CPP")
+    field(INPC,"iocrollAvgGet:24h:stat CPP")
+    field(INPD,"iocrollAvgGet:1w:stat CPP")
+    field(INPE,"iocrollAvgGet:2h:HEARTBEAT_STAT CPP")
+    field(INPF,"iocrollAvgGet:2h:HEARTBEAT_STAT CPP")
+    field(INPG,"iocrollAvgGet:2h:HEARTBEAT_STAT CPP")
+    field(INPH,"iocrollAvgGet:2h:HEARTBEAT_STAT CPP")
+    field(CALC,"(A#0 || B#0 || C#0 || D#0 || E#1 || F#1 || G#1 || H#1 ) ? 1 : 0")
+    field(HIHI,"1")
+    field(HHSV,"MAJOR")
+    field(DOPT,"Use CALC")
+    field(OOPT,"Every Time")
+    field(OUT,"iocrollAvgGet:stat PP")
+}
+record(mbbi,"iocrollAvgGet:stat") {
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MAJOR")
+    field(ZRST,"Comms Ok")
+    field(ONST,"Comms Error")
+}
+
 

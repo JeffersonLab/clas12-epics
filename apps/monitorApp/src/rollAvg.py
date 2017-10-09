@@ -141,7 +141,8 @@ class ScanThread(threading.Thread):
     while not self.shutdownFlag.is_set():
       m1=MESSAGES[TIMES.index(self.dt)]['prev'].get()
       m2=MESSAGES[TIMES.index(self.dt)]['next'].get()
-      if m1=='Uninitialized' or m2=='Uninitialized':
+      if m1=='Uninitialized' or m2=='Uninitialized' or \
+          MYACOMMS[TIMES.index(self.dt)].get()==1:
         nConsecBad += 1
         if nConsecBad>1: self.lastScan=-99999
         time.sleep(2)

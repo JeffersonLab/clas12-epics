@@ -5,6 +5,12 @@ dbLoadDatabase("dbd/monitor.dbd")
 monitor_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:2h:")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:8h:")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:24h:")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:1w:")
+
+dbLoadRecords("db/rollingAverages-status.db")
 
 dbLoadTemplate("db/rollingAverages.substitutions")
 

@@ -23,6 +23,20 @@ OPVS={}
 # heartbeat PV:
 HBEAT=epics.pv.PV('iocrollAvgGet:HEARTBEAT')
 
+HBEATS=[]
+for tt in TIMES:
+  HBEATS.append(epics.pv.PV('iocrollAvgGet:%s:HEARTBEAT'%tt))
+
+MYACOMMS=[]
+for tt in TIMES:
+  MYACOMMS.append(epics.pv.PV('iocrollAvgGet:%s:stat'%tt))
+
+MESSAGES=[]
+for tt in TIMES:
+  pvPrev=epics.pv.PV('iocrollAvgGet:%s:prevUpdate'%tt)
+  pvNext=epics.pv.PV('iocrollAvgGet:%s:nextUpdate'%tt)
+  MESSAGES.append({'prev':pvPrev,'next':pvNext})
+
 # logfile:
 LOGFILENAME='/usr/clas12/DATA/logs/iocrollAvgGet.log'
 LOGFILE=None
@@ -120,10 +134,23 @@ class ScanThread(threading.Thread):
     self.dt=pvs[0]['dt']
     for pv in pvs: self.pvNames.append(pv['name'])
   def run(self):
+    global MYACOMMS
     myPrint( 'Scan Thread Started: Scan=%.0fs dt=%s'%(self.period,self.dt))
     #myPrint( ' '.join(self.pvNames))
+    nConsecBad=0
     while not self.shutdownFlag.is_set():
+      m1=MESSAGES[TIMES.index(self.dt)]['prev'].get()
+      m2=MESSAGES[TIMES.index(self.dt)]['next'].get()
+      if m1=='Uninitialized' or m2=='Uninitialized':
+        nConsecBad += 1
+        if nConsecBad>1: self.lastScan=-99999
+        time.sleep(2)
+      else:
+        nConsecBad = 0
       time.sleep(1)
+      hbeat=HBEATS[TIMES.index(self.dt)]
+      if hbeat.get()==0: hbeat.put(1)
+      else:              hbeat.put(0)
       now=time.time()
       #myPrint( '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\)
       #(self.period,self.dt,now,self.lastScan,(now-self.lastScan))
@@ -146,7 +173,7 @@ class ScanThread(threading.Thread):
           try:
             self.pvs[ii]['pv'].put(float(stats[ii]['Mean']))
           except:
-            myPrint( 'Error caputting '+self.pvNames[ii])
+            myPrint( 'ERROR CAPUT %s %.2f'%(self.pvNames[ii],stats[ii]['Mean']))
             success=False
       else:
         myPrint( 'THREAD ERROR: myStats: Scan=%.0fs dt=%s'%(self.period,self.dt))
@@ -155,7 +182,16 @@ class ScanThread(threading.Thread):
       # otherwise sleep a little and scan again on next cycle
       if success:
         self.lastScan=now
+        MYACOMMS[TIMES.index(self.dt)].put(0)
+        d3=datetime.timedelta(seconds=SCANS[TIMES.index(self.dt)])
+        t1=datetime.datetime.now()
+        t2=t1+d3
+        T1='%d/%d %.2d:%.2d '%(t1.month,t1.day,t1.hour,t1.minute)
+        T2='%d/%d %.2d:%.2d '%(t2.month,t2.day,t2.hour,t2.minute)
+        MESSAGES[TIMES.index(self.dt)]['prev'].put(str(T1))
+        MESSAGES[TIMES.index(self.dt)]['next'].put(str(T2))
       else:
+        MYACOMMS[TIMES.index(self.dt)].put(1)
         time.sleep(5)
     myPrint( 'Scan Thread Stopped: Scan=%.0fs dt=%s'%(self.period,self.dt))
 

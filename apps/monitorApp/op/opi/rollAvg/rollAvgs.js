@@ -9,12 +9,12 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 var fileNames=widget.getMacroValue("F").split(",");
 var alarms=widget.getMacroValue("A")
 
-function insertLine()
+function insertLine(width)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Rectangle");
     lc.setPropertyValue("border_style",1);
     lc.setPropertyValue("line_width",0);
-    lc.setPropertyValue("height",5);
+    lc.setPropertyValue("height",width);
     lc.setPropertyValue("width",589);
     lc.setPropertyValue("border_width",1);
     lc.setPropertyValue("border_color","MEDM_COLOR_5");
@@ -24,12 +24,17 @@ function insertLine()
 function insertGap(size,text)
 {
     var line = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
-    if (text.equals("")) { line.setPropertyValue("width",1); }
-    else                 { line.setPropertyValue("width",500); }
+    if (text.equals("")) {
+        line.setPropertyValue("width",1);
+        line.setPropertyValue("text","");
+    }
+    else {
+        line.setPropertyValue("width",500);
+        line.setPropertyValue("text","  "+text);
+        line.setPropertyValue("font","Header 3");
+        line.setPropertyValue("foreground_color","Read_Foreground");
+    }
     line.setPropertyValue("height",size);
-    line.setPropertyValue("text","  "+text);
-    line.setPropertyValue("font","Header 3");
-    line.setPropertyValue("foreground_color","Read_Foreground");
     line.setPropertyValue("horizontal_alignment","Left");
     line.setPropertyValue("auto_size",true);
     widget.addChildToBottom(line);
@@ -61,8 +66,8 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
         if (lines[ii].startsWith("#") || lines[ii].equals("") ) {
-            insertLine();
-            insertGap(5,"");
+            //insertLine(1);
+            insertGap(1,"");
             var label=lines[ii].slice(1);
             if (label.length>0) {
               insertGap(20,label);
@@ -88,8 +93,6 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 }
 
 insertGap(7,"");
-insertLine();
-
-
+insertLine(5);
 
 

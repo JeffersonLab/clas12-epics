@@ -227,7 +227,10 @@ def checkLogFile():
 def myPrint(text):
   global LOGFILE
   print text
-  LOGFILE.write(text)
+  try :
+    LOGFILE.write(text)
+  except TypeError:
+    print 'Invalid Text'
 
 def main():
 

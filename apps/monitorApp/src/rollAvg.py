@@ -20,19 +20,12 @@ CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 # the output PVs:
 OPVS={}
 
-# heartbeat PV:
+# status PVs:
 HBEAT=epics.pv.PV('iocrollAvgGet:HEARTBEAT')
-
-HBEATS=[]
+HBEATS,MYACOMMS,MESSAGES=[],[],[]
 for tt in TIMES:
   HBEATS.append(epics.pv.PV('iocrollAvgGet:%s:HEARTBEAT'%tt))
-
-MYACOMMS=[]
-for tt in TIMES:
   MYACOMMS.append(epics.pv.PV('iocrollAvgGet:%s:stat'%tt))
-
-MESSAGES=[]
-for tt in TIMES:
   pvPrev=epics.pv.PV('iocrollAvgGet:%s:prevUpdate'%tt)
   pvNext=epics.pv.PV('iocrollAvgGet:%s:nextUpdate'%tt)
   MESSAGES.append({'prev':pvPrev,'next':pvNext})
@@ -123,6 +116,15 @@ def getMyaStats63(pvNames,dt):
       stats.extend(stat)
   return stats
 
+def updateHeartbeat(heartbeat):
+  if heartbeat.get()==0: heartbeat.put(1)
+  else:                  heartbeat.put(0)
+
+def getPrettyTime(dateTime):
+  return '%d/%d %.2d:%.2d'%\
+      (dateTime.month,dateTime.day,dateTime.hour,dateTime.minute)
+
+
 class ScanThread(threading.Thread):
   def __init__(self,period,pvs):
     threading.Thread.__init__(self)
@@ -139,6 +141,7 @@ class ScanThread(threading.Thread):
     #myPrint( ' '.join(self.pvNames))
     nConsecBad=0
     while not self.shutdownFlag.is_set():
+      # if Mya comms problem, reset lastScan to force an update:
       m1=MESSAGES[TIMES.index(self.dt)]['prev'].get()
       m2=MESSAGES[TIMES.index(self.dt)]['next'].get()
       if m1=='Uninitialized' or m2=='Uninitialized' or \
@@ -149,9 +152,7 @@ class ScanThread(threading.Thread):
       else:
         nConsecBad = 0
       time.sleep(1)
-      hbeat=HBEATS[TIMES.index(self.dt)]
-      if hbeat.get()==0: hbeat.put(1)
-      else:              hbeat.put(0)
+      updateHeartbeat(HBEATS[TIMES.index(self.dt)])
       now=time.time()
       #myPrint( '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\)
       #(self.period,self.dt,now,self.lastScan,(now-self.lastScan))
@@ -183,14 +184,12 @@ class ScanThread(threading.Thread):
       # otherwise sleep a little and scan again on next cycle
       if success:
         self.lastScan=now
-        MYACOMMS[TIMES.index(self.dt)].put(0)
-        d3=datetime.timedelta(seconds=SCANS[TIMES.index(self.dt)])
+        dt=datetime.timedelta(seconds=SCANS[TIMES.index(self.dt)])
         t1=datetime.datetime.now()
-        t2=t1+d3
-        T1='%d/%d %.2d:%.2d '%(t1.month,t1.day,t1.hour,t1.minute)
-        T2='%d/%d %.2d:%.2d '%(t2.month,t2.day,t2.hour,t2.minute)
-        MESSAGES[TIMES.index(self.dt)]['prev'].put(str(T1))
-        MESSAGES[TIMES.index(self.dt)]['next'].put(str(T2))
+        t2=t1+dt
+        MESSAGES[TIMES.index(self.dt)]['prev'].put(getPrettyTime(t1))
+        MESSAGES[TIMES.index(self.dt)]['next'].put(getPrettyTime(t2))
+        MYACOMMS[TIMES.index(self.dt)].put(0)
       else:
         MYACOMMS[TIMES.index(self.dt)].put(1)
         time.sleep(5)
@@ -204,8 +203,7 @@ class HeartbeatThread(threading.Thread):
     myPrint( 'Heartbeat Thread started.')
     while not self.shutdownFlag.is_set():
       time.sleep(1)
-      if HBEAT.get()==0: HBEAT.put(1)
-      else:              HBEAT.put(0)
+      updateHeartbeat(HBEAT)
     myPrint( 'Heartbeat Thread stopped.')
 
 class ServiceExit(Exception):

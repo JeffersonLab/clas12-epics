@@ -321,6 +321,13 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     // read scalers:::::::::::::::::::::::::::::::::::::::::::
     (*buf)=0;
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
+/*
+    if (len > ssp->MAXSCALERLEN) {
+        printf("SSPReadScalers:  Invalid Scaler Array length:%d\n",len);
+        if (*buf) delete *buf;
+        return 1; 
+    }
+*/
     ii=0;
     while (1) {
     
@@ -391,6 +398,13 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     (*buf)=0;
     len=0;
     ret = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
+/*
+    if (len > ssp->MAXDATALEN) {
+        printf("SSPReadScalers:  Invalid Scaler Array length:%d\n",len);
+        if (*buf) delete *buf;
+        return 1; 
+    }
+*/    
     ii=0;
     while (1) {
     

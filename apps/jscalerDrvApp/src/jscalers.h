@@ -124,6 +124,9 @@ class JlabSSPBoard : public JlabBoard {
         static const int DATAHEADEROFFSET=2;
         static const double CLOCKFREQ=125E6;
 
+        static const int MAXSCALERLEN = MAXFIBERS * (SCALERSPERBIBER+SCALERHEADEROFFSET); 
+        static const int MAXDATALEN = MAXFIBERS * (DATAPERBIBER+DATAHEADEROFFSET); 
+
         int numOfSSPDataChannels;
         vector< double > *SSPData;
         vector< int > scalerFibers;

@@ -30,42 +30,44 @@ file "db/mmgas_asyn_aiFloat64.template" { pattern
 
 file "db/mmgas_asyn_bi_bit.template" { pattern
     {P,              R,             PORT,   OFFSET, MASK,       ZNAM,   ONAM,   ZSV,        OSV,        SCAN}
-    {B_DET_FMT_GAS_, FLOWDIFF_FLT,  R506,   32,     0x1,        Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, INFLOW_FLT,    R506,   32,     0x2,        Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, OVRFLOW_FLT,   R506,   32,     0x4,        Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    # FLOW_START    0x8
-    # FLOW_STOP     0x16
-    # <empty>       0x32
-    # <empty>       0x64
-    # <empty>       0x128
-    {B_DET_FMT_GAS_, GEN_WRN,       R506,   32,     0x256,      Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, GEN_FLT,       R506,   32,     0x512,      Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, FLOW_STAT,     R506,   32,     0x1024,     Fault,  Ok,     MAJOR,      NO_ALARM,   "I/O Intr"}
-    {B_DET_FMT_GAS_, PRES_WRN,      R506,   32,     0x2048,     Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, INFLOW_WRN,    R506,   32,     0x4096,     Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, OVRFLOW_WRN,   R506,   32,     0x8192,     Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, FLOWDIFF_WRN,  R506,   32,     0x16384,    Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
-    {B_DET_FMT_GAS_, PRES_FLT,      R506,   32,     0x32768,    Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, FLOWDIFF_FLT,  R506,   32,     1,          Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, INFLOW_FLT,    R506,   32,     2,          Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, OVRFLOW_FLT,   R506,   32,     4,          Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    # FLOW_START    8
+    # FLOW_STOP     16
+    # <empty>       32
+    # <empty>       64
+    # <empty>       128
+    {B_DET_FMT_GAS_, GEN_WRN,       R506,   32,     256,        Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, GEN_FLT,       R506,   32,     512,        Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, FLOW_STAT,     R506,   32,     1024,       Fault,  Ok,     MAJOR,      NO_ALARM,   "I/O Intr"}
+    {B_DET_FMT_GAS_, PRES_WRN,      R506,   32,     2048,       Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, INFLOW_WRN,    R506,   32,     4096,       Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, OVRFLOW_WRN,   R506,   32,     8192,       Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, FLOWDIFF_WRN,  R506,   32,     16384,      Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
+    {B_DET_FMT_GAS_, PRES_FLT,      R506,   32,     32768,      Ok,     Fault,  NO_ALARM,   MAJOR,      "I/O Intr"}
 }
 
 file "db/mmgas_asyn_aoFloat64.template" { pattern
-    {P,              R                       PORT,   OFFSET, DATA_TYPE,  DRVL, DRVH, PREC,   EGU}
-    {B_DET_FMT_GAS_, PRES_WRN_LVL:set,       W506A,   0,      FLOAT32_BE, 0,  500,    1,      mbar}
-    {B_DET_FMT_GAS_, PRES_FLT_LVL:set,       W506A,   2,      FLOAT32_BE, 0,  500,    1,      mbar}
-    {B_DET_FMT_GAS_, INFLOW_WRN_LVL:set,     W506A,   4,      FLOAT32_BE, 0,  100,    1,      "L/h"}
-    {B_DET_FMT_GAS_, INFLOW_FLT_LVL:set,     W506A,   6,      FLOAT32_BE, 0,  100,    1,      "L/h"}
-    {B_DET_FMT_GAS_, OVRFLOW_WRN_LVL:set,    W506A,   8,      FLOAT32_BE, 0,  100,    1,      "L/h"}
-    {B_DET_FMT_GAS_, OVRFLOW_FLT_PCT:set,    W506A,   10,     FLOAT32_BE, 0,  100,    1,      "%"}
-    {B_DET_FMT_GAS_, FLOWDIFF_WRN_LVL:set,   W506A,   12,     FLOAT32_BE, 0,  100,    1,      "L/h"}
-    {B_DET_FMT_GAS_, FLOWDIFF_FLT_LVL:set,   W506A,   14,     FLOAT32_BE, 0,  100,    1,      "L/h"}
-    {B_DET_FMT_GAS_, INFLOW_SET:set,         W506A,   20,     FLOAT32_BE, 0,   10,    1,      "L/h"}
-    {B_DET_FMT_GAS_, INFLOW_RAMP:set,        W506A,   22,     FLOAT32_BE, 0, 1000,    1,      sec}
+    {P,              R                       PORT,    OFFSET, DATA_TYPE,  DRVL, DRVH, PREC, EGU}
+    {B_DET_FMT_GAS_, PRES_WRN_LVL:set,       W506A,   0,      FLOAT32_BE, 0,    500,  1,    mbar}
+    {B_DET_FMT_GAS_, PRES_FLT_LVL:set,       W506A,   2,      FLOAT32_BE, 0,    500,  1,    mbar}
+    {B_DET_FMT_GAS_, INFLOW_WRN_LVL:set,     W506A,   4,      FLOAT32_BE, 0,    100,  1,    "L/h"}
+    {B_DET_FMT_GAS_, INFLOW_FLT_LVL:set,     W506A,   6,      FLOAT32_BE, 0,    100,  1,    "L/h"}
+    {B_DET_FMT_GAS_, OVRFLOW_WRN_LVL:set,    W506A,   8,      FLOAT32_BE, 0,    100,  1,    "L/h"}
+    {B_DET_FMT_GAS_, OVRFLOW_FLT_PCT:set,    W506A,   10,     FLOAT32_BE, 0,    100,  1,    "%"}
+    {B_DET_FMT_GAS_, FLOWDIFF_WRN_LVL:set,   W506A,   12,     FLOAT32_BE, 0,    100,  1,    "L/h"}
+    {B_DET_FMT_GAS_, FLOWDIFF_FLT_LVL:set,   W506A,   14,     FLOAT32_BE, 0,    100,  1,    "L/h"}
+    {B_DET_FMT_GAS_, START_TIME_OK:set,      W506A,   16,     INT32_BE,   0,   1000,  0,    "min"}
+    {B_DET_FMT_GAS_, SETPT_TIME_OK:set,      W506A,   18,     INT32_BE,   0,   1000,  0,    "min"}
+    {B_DET_FMT_GAS_, INFLOW_SET:set,         W506A,   20,     FLOAT32_BE, 0,    10,   1,    "L/h"}
+    {B_DET_FMT_GAS_, INFLOW_RAMP:set,        W506A,   22,     FLOAT32_BE, 0,    1000, 1,    sec}
 }
 
 file "db/mmgas_asyn_bo_bit.template" { pattern
     {P,              R,             PORT    OFFSET, MASK,   HIGH,   ZNAM,           ONAM}
-    {B_DET_FMT_GAS_, FLOW_START,    W506,   0,      0x8,    1,      "Start Flow",   "Start Flow"}
-    {B_DET_FMT_GAS_, FLOW_STOP,     W506,   0,      0x16,   1,      "Stop Flow",    "Stop Flow"}
+    {B_DET_FMT_GAS_, FLOW_START,    W506,   0,      8,      1,      "Start Flow",   "Start Flow"}
+    {B_DET_FMT_GAS_, FLOW_STOP,     W506,   0,      16,     1,      "Stop Flow",    "Stop Flow"}
 }
 
 # Read WRN_LVL/FLT_LVL and set HIGH/HSV, HIHI/HHSV

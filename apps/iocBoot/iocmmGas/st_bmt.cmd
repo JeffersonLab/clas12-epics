@@ -25,6 +25,7 @@ modbusInterposeConfig("TCP505",0,5000,0)
 # 32-bit integers (Function code = 3)
 drvModbusAsynConfigure("R505", "TCP505", 0, 3,  0, 33, 0, 1000, "Siemens")
 drvModbusAsynConfigure("W505", "TCP505", 0, 6,  32, 1, 0, 1000, "Siemens")
+drvModbusAsynConfigure("W505A","TCP505", 0,16,  0, 33, 0, 0,    "Siemens")
 
 ## Load record instances
  dbLoadRecords("db/save_restoreStatus.db", "P=$(IOC):")

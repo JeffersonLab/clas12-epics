@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += mmgas_asyn_aiFloat64.template
+DB += mmgas_asyn_aoFloat64.template
 DB += mmgas_asyn_bi_bit.template
 DB += mmgas_asyn_bo_bit.template
 DB += mmgas_status_alarm.template

@@ -10,7 +10,7 @@ dbLoadDatabase("dbd/mmGas.dbd")
 mmGas_registerRecordDeviceDriver(pdbbase)
 
 ## Configure modbus ports
-drvAsynIPPortConfigure("TCP506","129.57.86.139:506",0,0,1)
+drvAsynIPPortConfigure("TCP506","129.57.160.183:506",0,0,1)
 
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
 modbusInterposeConfig("TCP506",0,5000,0)

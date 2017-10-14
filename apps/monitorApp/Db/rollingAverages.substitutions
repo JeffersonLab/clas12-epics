@@ -1,658 +1,179 @@
-file "db/rollingAverages.db" {
-    pattern {P}
-{CPI0840}
-{CFI082}
-{CPV084BY}
-{CFI60DLP}
-{CPI6010}
-{CFI6010}
-{CFI75DB15R}
-{CFI6030}
-{CPI60HP}
-{CPI60LP}
-{CPI671}
-{CPI672}
-{CPI673}
-{CPI674}
-{CPI6751}
-{CLL6763A}
-{CFI6711A}
-{CFI6711B}
-{CFI6711C}
-{CFI6712}
-{CLL71Q205R}
-{CLL71Q305R}
-{CLL71D106R}
-{CLL72Q205R}
-{CLL72Q305R}
-{CLL72D106R}
-{HacL_Q2_HP3458A:IOUT}
-{HacL_HPE1313A:0_Ch21}
-{HacL_HPE1313A:0_Ch22}
-{HacL_D1_HP3458A:IOUT}
-{HacL_HPE1313A:0_Ch0}
-{HacL_HPE1313A:0_Ch1}
-{HacL_Q3_HP3458A:IOUT}
-{HacL_HPE1313A:0_Ch32}
-{HacL_HPE1313A:0_Ch33}
-{HacR_Q2_HP3458A:IOUT}
-{HacR_HPE1313A:0_Ch21}
-{HacR_HPE1313A:0_Ch22}
-{HacR_D1_HP3458A:IOUT}
-{HacR_HPE1313A:0_Ch0}
-{HacR_HPE1313A:0_Ch1}
-{HacR_Q3_HP3458A:IOUT}
-{HacR_HPE1313A:0_Ch32}
-{HacR_HPE1313A:0_Ch33}
-{CFI75DB15O}
-{CPI75DB05RA}
-{CPI75DB08RA}
-{B_TORUS:LHe:LL8120DP}
-{B_TORUS:LHe:LL8120SC}
-{B_SOL:LHe:LL8620DP}
-{B_SOL:LHe:LL8620SC}
-{B_SOL:LHe:LL8670DP}
-{B_SOL:LHe:LL8670SC}
-{LL8210}
-{B_SACLAYTGT:LT_CR}
-{B_SACLAYTGT:PT_2KH}
-{B_SACLAYTGT:TT_ET}
-{B_SOL:MPS:I_ZFCT}
-{B_SOL:LHe:FI8621A_IN}
-{B_SOL:LHe:FI8621B_IN}
-{B_TORUS:MPS:I_ZFCT}
-{B_TORUS:LHe:FV8121A_IN}
-{B_TORUS:LHe:FV8121B_IN}
-{ecQ1_I_True}
-{ecQ2_I_True}
-{ecQ3_I_True}
-{ecDI_I_True}
-{ecSHB_I_True}
-{ecSQ1_I_True}
-{ecSQ2_I_True}
-{ecSQ3_I_True}
-{ecSDI_I_True}
-{ecQ1_m_flow_CL_P}
-{ecQ1_m_flow_CL_N}
-{ecQ2_m_flow_CL_P}
-{ecQ2_m_flow_CL_N}
-{ecQ3_m_flow_CL_P}
-{ecQ3_m_flow_CL_N}
-{ecDI_M_flow_Rx}
-{ecDI_M_flow_Lx}
-{ecSHB_m_flow_CL_R}
-{ecSHB_m_flow_CL_L}
-{ecSQ1_m_flow_CL_R}
-{ecSQ1_m_flow_CL_L}
-{ecSQ2_m_flow_CL_R}
-{ecSQ2_m_flow_CL_L}
-{ecSQ3_m_flow_CL_R}
-{ecSQ3_m_flow_CL_L}
-{ecSDI_m_flow_CL_R}
-{ecSDI_m_flow_CL_L}
-
-# HAVE WRAP FIELD IN ANOTHER RECORD:
-#{CEV6721C.ORBV}
-
-{CEV6711C}
-{CFI6711C}
-{echmst1}
-{echmst2}
-{ecSTL_T_He_Supply_TL}
-{ecSTL_T_He_Return_TL}
-{EV91017_readback}
-{EV91019_readback}
-{LL91020}
-{EV91001_pos}
-{OXSS_RDF}
-{OXSS_MGFD}
-{haL1_JTV_Rca}
-{haL1_Temperature}
-{haL1_hp_power_R}
-{haL1_TI_Cryo_In_R}
-{haL1_TI_Cryo_Out_R}
-{haL2_JTV_Rca}
-{haL2_Temperature}
-{haL2_hp_power_R}
-{haL2_TI_Cryo_In_R}
-{haL2_TI_Cryo_Out_R}
-{haL3_JTV_Rca}
-{haL3_Temperature}
-{haL3_hp_power_R}
-{haL3_TI_Cryo_In_R}
-{haL3_TI_Cryo_Out_R}
-{haLS218_4_T4}
-{haWR_EV_R}
-{haCryo_Supply_T}
-{haCryo_Return_T}
-{haCryo_Supply_P}
-{haCryo_Return_P}
-{haHallA_beam_current}
+file "db/rollingAverages" {
+pattern {P EGU LOW HIGH DESC}
+{"CPI0840" "atm" "1.03" "1.08" "Recovery compressor suction pressure"}
+{"CFI082" "g/s" "5" "20" "Purifier Flow Rate"}
+{"CPV084BY" "%" "-3" "50" "Recovery compressor bypass valve position"}
+{"CFI60DLP" "g/s" "0" "20" "Dirty return flow rate from Halls A, B, C"}
+{"CPI6010" "atm" "3.9" "4.8" "4 atm Helium warm gas supply pressure"}
+{"CFI6010" "g/s" "0" "15" "4 atm Helium warm gas supply flow rate"}
+{"CFI75DB15R" "g/s" "1" "10" "4 atm Helium warm gas to Hall A DBX"}
+{"FI8561" "g/s" "0" "10" "4 atm Helium warm gas to Hall B DBX"}
+{"MV6010A" "Open/Closed" "" "" "4 atm Helium manual valve to Hall A"}
+{"MV6010B" "Open/Closed" "" "" "4 atm Helium manual valve to Hall B"}
+{"MV6010C" "Open/Closed" "" "" "4 atm Helium manual valve to Hall C"}
+{"MV6030A" "Open/Closed" "" "" "Lead and quench return to ESR from Hall A"}
+{"MV6031A" "Open/Closed" "" "" "Lead and quench return to Purifier from Hall A"}
+{"MV6030B" "Open/Closed" "" "" "Lead and quench return to ESR from Hall B"}
+{"MV6031B" "Open/Closed" "" "" "Lead and quench return to Purifier from Hall B"}
+{"MV6030C" "Open/Closed" "" "" "Lead and quench return to ESR from Hall C"}
+{"MV6031C" "Open/Closed" "" "" "Lead and quench return to Purifier from Hall C"}
+{"CFI6030" "g/s" "0" "20" "Clean return flow from Halls A, B, C"}
+{"CPI60HP" "atm" "15" "18" "High Pressure Helium into cold box"}
+{"CPI60LP" "atm" "1.03" "1.08" "Low Pressure Helium from cold box"}
+{"CPI671" "atm" "2.8" "3.2" "ESR Valve Box 4K supply pressure to Halls"}
+{"CPI672" "atm" "1.05" "1.15" "ESR Valve Box 4K return pressure from Halls"}
+{"CPI673" "atm" "" "" "ESR Valve Box 15K supply pressure to Halls"}
+{"CPI674" "atm" "" "" "ESR Valve Box 20K supply pressure to Halls"}
+{"CPI6751" "atm" "3.5" "4" "ESR Valve Box 80K supply pressure to Halls"}
+{"CLL6763A" "%" "30" "80" "10K liter Helium Dewar at ESR"}
+{"CLL6763A_DL_Dt30" "%/hr" "" "" "10K liter Helium Dewar level change rate over last 1/2hr"}
+{"CLL6763A_DL_Dt120" "%/hr" "" "" "10K liter Helium Dewar level change rate over last 2 hrs"}
+{"CLL6763A_DL_Dt600" "%/hr" "" "" "10K liter Helium Dewar level change rate over last 10 hrs"}
+{"CFI6711A" "g/s" "" "" "4K supply flow to Hall A"}
+{"CFI6711B" "g/s" "5" "15" "4K supply flow to Hall B"}
+{"CFI6711C" "g/s" "" "" "4K supply flow to Hall C"}
+{"CFI6712" "g/s" "0" "20" "4K supply flow from CHL to ESR via ESTL"}
+{"CLL71Q205R" "%" "" "" "Helium level Left Arm Magnet Q2"}
+{"CLL71Q305R" "%" "" "" "Helium level Left Arm Magnet Q3"}
+{"CLL71D106R" "%" "" "" "Helium level Left Arm Magnet D1"}
+{"CLL72Q205R" "%" "" "" "Helium level Right Arm Magnet Q2"}
+{"CLL72Q305R" "%" "" "" "Helium level Right Arm Magnet Q3"}
+{"CLL72D106R" "%" "" "" "Helium level Right Arm Magnet D1"}
+{"CLL7172Total" "%" "" "" "Average level in ALL magnets in Hall A"}
+{"CLL7172TotalDL_Dt30" "%/hr" "" "" "Average level change in ALL magnets in Hall A over last 1/2 hr"}
+{"CLL7172TotalDL_Dt120" "%/hr" "" "" "Average level change in ALL magnets in Hall A over last 2 hrs"}
+{"CLL7172TotalDL_Dt600" "%/hr" "" "" "Average level change in ALL magnets in Hall A over last 10 hrs"}
+{"HacL_Q2_HP3458A:IOUT " "I" "" "" "Left Q2 I OUT"}
+{"HacL_HPE1313A:0_Ch21 " "SLM" "" "" "Left Q2 Lead A"}
+{"HacL_HPE1313A:0_Ch22 " "SLM" "" "" "Left Q2 Lead B"}
+{"HacL_D1_HP3458A:IOUT " "I" "" "" "Left Dipole I OUT"}
+{"HacL_HPE1313A:0_Ch0 " "SLM" "" "" "Left Dipole Lead A"}
+{"HacL_HPE1313A:0_Ch1 " "SLM" "" "" "Left Dipole Lead B"}
+{"HacL_Q3_HP3458A:IOUT " "I" "" "" "LEFT Q3 I OUT"}
+{"HacL_HPE1313A:0_Ch32 " "SLM" "" "" "Left Q3 Lead A"}
+{"HacL_HPE1313A:0_Ch33 " "SLM" "" "" "Left Q3 Lead B"}
+{"HacR_Q2_HP3458A:IOUT " "I" "" "" "Right Q2 I OUT"}
+{"HacR_HPE1313A:0_Ch21 " "SLM" "" "" "Right Q2 Lead A"}
+{"HacR_HPE1313A:0_Ch22 " "SLM" "" "" "Right Q2 Lead B"}
+{"HacR_D1_HP3458A:IOUT " "I" "" "" "Right Dipole I OUT"}
+{"HacR_HPE1313A:0_Ch0 " "SLM" "" "" "Right Dipole Lead A"}
+{"HacR_HPE1313A:0_Ch1 " "SLM" "" "" "Right Dipole Lead B"}
+{"HacR_Q3_HP3458A:IOUT " "I" "" "" "Right Q3 I OUT"}
+{"HacR_HPE1313A:0_Ch32 " "SLM" "" "" "Right Q3 Lead A"}
+{"HacR_HPE1313A:0_Ch33 " "SLM" "" "" "Right Q3 Lead B"}
+{"CFI75DB15O" "g/s" "" "" "4 Atom flow (needs calibration)"}
+{"CPI75DB05RA" "Atm" "" "" "4K He supply pressure (distribution can)"}
+{"CPI75DB08RA" "Atm" "" "" "4K He Return pressure (distribution can) (needs calibration)"}
+{"B_TORUS:LHe:LL8120DP" "%" "60" "80" "Helium level in Torus (Differential Pressure sensor)"}
+{"B_TORUS:LHe:LL8120SC" "% " "100" "100" "Helium level in Torus (Superconducting sensor)"}
+{"B_SOL:LHe:LL8620DP" "%" "90" "100" "Helium level in Solenoid Lead reservoir (Differential Pressure sensor)"}
+{"B_SOL:LHe:LL8620SC" "%" "90" "100" "Helium level in Solenoid Lead reservoir (Superconducting sensor)"}
+{"B_SOL:LHe:LL8670DP" "%" "70" "90" "Helium level in Solenoid Magnet reservoir (DP sensor)"}
+{"B_SOL:LHe:LL8670SC" "%" "70" "90" "Helium level in Solenoid Magnet reservoir (SC sensor)"}
+{"LL8210.VAL" "% " "55" "65" "Helium level in Buffer Dewar"}
+{"B_SACLAYTGT:LT_CR" "%" "0" "100" "Helium Level in Saclay Target "}
+{"B_SACLAYTGT:PT_2KH" "mbar" "0.1" "1300" "Helium pressure in Target gas condensor"}
+{"B_SACLAYTGT:TT_ET" "K" "3" "300" "Target Temperature"}
+{"B_TORUS:LHe:FI8561" "g/s" "0" "5" "Hall B 300 to 80K helium cooldown flow"}
+{"B_SOL:MPS:I_ZFCT" "Amps" "-2416" "2416" "Solenoid Current"}
+{"B_SOL:LHe:FI8621A_IN" "SLM" "60" "70" "Solenoid VCL flow A"}
+{"B_SOL:LHe:FI8621B_IN" "SLM" "60" "70" "Solenoid VCL flow B"}
+{"B_TORUS:MPS:I_ZFCT" "Amps" "-3770" "3770" "Torus Current"}
+{"B_TORUS:LHe:FV8121A_IN" "SLM" "88" "111" "Torus VCL flow A"}
+{"B_TORUS:LHe:FV8121B_IN" "SLM" "88" "111" "Torus VCL flow B"}
+{"ecQ1_H_LHe" "%" "" "" "Helium level HMS Q1"}
+{"ecQ2_H_LHe" "%" "" "" "Helium level HMS Q2"}
+{"ecQ3_H_LHe" "%" "" "" "Helium level HMS Q3"}
+{"ecDI_H_LHe" "%" "" "" "Helium level HMS Dipole"}
+{"ecSHB_H_LHe" "%" "" "" "Helium level  SHMS HB"}
+{"ecSQ1_H_LHe" "%" "" "" "Helium level  SHMS Q1"}
+{"ecSQ2_H_LHe" "%" "" "" "Helium level  SHMS Q2"}
+{"ecSQ3_H_LHe" "%" "" "" "Helium level  SHMS Q3"}
+{"ecSDI_H_LHe" "%" "" "" "Helium level  SHMS Dipole"}
+{"ecQ1_I_True" "Amps" "" "" "Current HMS Q1"}
+{"ecQ2_I_True" "Amps" "" "" "Current HMS Q2"}
+{"ecQ3_I_True" "Amps" "" "" "Current HMS Q3"}
+{"ecDI_I_True" "Amps" "" "" "Current HMS Dipole"}
+{"ecSHB_I_True" "Amps" "" "" "Current SHMS HB"}
+{"ecSQ1_I_True" "Amps" "" "" "Current SHMS Q1"}
+{"ecSQ2_I_True" "Amps" "" "" "Current SHMS Q2"}
+{"ecSQ3_I_True" "Amps" "" "" "Current SHMS Q3"}
+{"ecSDI_I_True" "Amps" "" "" "Current SHMS Dipole"}
+{"ecQ1_m_flow_CL_P" "l/min" "" "" "HMS Q1 VCL + Flow"}
+{"ecQ1_m_flow_CL_N" "l/min" "" "" "HMS Q1 VCL - Flow"}
+{"ecQ2_m_flow_CL_P" "l/min" "" "" "HMS Q2 VCL + Flow"}
+{"ecQ2_m_flow_CL_N" "l/min" "" "" "HMS Q2 VCL - Flow"}
+{"ecQ3_m_flow_CL_P" "l/min" "" "" "HMS Q3 VCL + Flow"}
+{"ecQ3_m_flow_CL_N" "l/min" "" "" "HMS Q3 VCL - Flow"}
+{"ecDI_M_flow_Rx" "l/hr" "" "" "HMS Dipole VCL + Flow"}
+{"ecDI_M_flow_Lx" "l/hr" "" "" "HMS Dipole VCL - Flow"}
+{"ecSHB_m_flow_CL_R" "l/min" "" "" "SHMS HB VCL + Flow"}
+{"ecSHB_m_flow_CL_L" "l/min" "" "" "SHMS HB VCL - Flow"}
+{"ecSQ1_m_flow_CL_R" "l/min" "" "" "SHMS Q1 VCL + Flow"}
+{"ecSQ1_m_flow_CL_L" "l/min" "" "" "SHMS Q1 VCL - Flow"}
+{"ecSQ2_m_flow_CL_R" "l/min" "" "" "SHMS Q2 VCL + Flow"}
+{"ecSQ2_m_flow_CL_L" "l/min" "" "" "SHMS Q2 VCL - Flow"}
+{"ecSQ3_m_flow_CL_R" "l/min" "" "" "SHMS Q3 VCL + Flow"}
+{"ecSQ3_m_flow_CL_L" "l/min" "" "" "SHMS Q3 VCL - Flow"}
+{"ecSDI_m_flow_CL_R" "l/min" "" "" "SHMS Dipole VCL + Flow"}
+{"ecSDI_m_flow_CL_L" "l/min" "" "" "SHMS Dipole VCL - Flow"}
+{"CEV6711C.ORBC" "%" "" "" "Cryo's 4K Supply Valve to Hall C"}
+{"CEV6721C.ORBV" "%" "" "" "Cryos's 4K Return Valve from Hall C"}
+{"CEV6711C " "g/s" "" "" "Cryo's 4K Flow Limit"}
+{"CFI6711C" "g/s" "" "" "4K Supply Flow to Hall C"}
+{"echmst1" "K" "" "" "HMS Transfer Line He Supply Temp"}
+{"echmst2" "K" "" "" "HMS Transfer Line He Return Temp"}
+{"ecSTL_T_He_Supply_TL" "K" "" "" "SHMS Transfer Line He Supply Temp"}
+{"ecSTL_T_He_Return_TL" "K" "" "" "SHMS Transfer Line He Return Temp"}
+{"EV91017_readback" "%" "" "" "4K He Supply Valve"}
+{"EV91019_readback" "%" "" "" "4K He Return Valve"}
+{"LL91020" "%" "" "" "He Liquid Level"}
+{"EV91001_pos" "%" "" "" "300K warm He gas return valve"}
+{"OXSS_RDF" "T" "" "" "B-Field Leads (no current readback)"}
+{"OXSS_MGFD" "T" "" "" "B_Field presistent"}
+{"haL1_JTV_Rca" "% open" "15" "50" "Loop 1 coolant valve"}
+{"haL1_Temperature" "K" "18" "24" "Loop 1control temperature, readback"}
+{"haL1_hp_power_R" "Watts" "0" "500" "Loop 1 control heater"}
+{"haL1_TI_Cryo_In_R" "K" "13" "16" "Loop 1 coolant-in temperature"}
+{"haL1_TI_Cryo_Out_R" "K" "18" "25" "Loop 1 coolant-out temperature"}
+{"haL2_JTV_Rca" "% open" "15" "50" "Loop 2 coolant valve"}
+{"haL2_Temperature" "K" "18" "24" "Loop 2 control temperature, readback"}
+{"haL2_hp_power_R" "Watts" "0" "500" "Loop 2 control heater"}
+{"haL2_TI_Cryo_In_R" "K" "13" "16" "Loop 2 coolant-in temperature"}
+{"haL2_TI_Cryo_Out_R" "K" "18" "25" "Loop 2 coolant-out temperature"}
+{"haL3_JTV_Rca" "% open" "15" "50" "Loop 3 coolant valve"}
+{"haL3_Temperature" "K" "18" "24" "Loop 3 control temperature, readback"}
+{"haL3_hp_power_R" "Watts" "0" "500" "Loop 3 control heater"}
+{"haL3_TI_Cryo_In_R" "K" "13" "16" "Loop 3 coolant-in temperature"}
+{"haL3_TI_Cryo_Out_R" "K" "18" "25" "Loop 3 coolant-out temperature"}
+{"haLS218_4_T4" "K" "280" "300" "Warm return temperature"}
+{"haWR_EV_R" "% open" "0" "0" "Warm return valve"}
+{"haCryo_Supply_T" "K" "13" "16" "ESR 15K supply temperature to Hall A"}
+{"haCryo_Return_T" "K" "18" "25" "ESR 15K return temperature from Hall A"}
+{"haCryo_Supply_P" "atm" "" "" "ESR 15K supply pressure to Hall A"}
+{"haCryo_Return_P" "atm" "" "" "ESR 15K return pressure from Hall A"}
+{"haHallA_beam_current" "microAmps" "" "" "beam current on Hall A cryotarget"}
+{"Sub System" "" "Normal Min" "Normal Max" ""}
+{"hcL1_JTV_Rca" "% open" "15" "50" "Loop 1 coolant valve"}
+{"hcL1_Temperature" "K" "18" "24" "Loop 1control temperature, readback"}
+{"hcL1_hp_power_R" "Watts" "0" "500" "Loop 1 control heater"}
+{"hcL1_TI_Cryo_In_R" "K" "13" "16" "Loop 1 coolant-in temperature"}
+{"hcL1_TI_Cryo_Out_R" "K" "18" "25" "Loop 1 coolant-out temperature"}
+{"hcL2_JTV_Rca" "% open" "15" "50" "Loop 2 coolant valve"}
+{"hcL2_Temperature" "K" "18" "24" "Loop 2 control temperature, readback"}
+{"hcL2_hp_power_R" "Watts" "0" "500" "Loop 2 control heater"}
+{"hcL2_TI_Cryo_In_R" "K" "13" "16" "Loop 2 coolant-in temperature"}
+{"hcL2_TI_Cryo_Out_R" "K" "18" "25" "Loop 2 coolant-out temperature"}
+{"hcL3_JTV_Rca" "% open" "15" "50" "Loop 3 coolant valve"}
+{"hcL3_Temperature" "K" "18" "24" "Loop 3 control temperature, readback"}
+{"hcL3_hp_power_R" "Watts" "0" "500" "Loop 3 control heater"}
+{"hcL3_TI_Cryo_In_R" "K" "13" "16" "Loop 3 coolant-in temperature"}
+{"hcL3_TI_Cryo_Out_R" "K" "18" "25" "Loop 3 coolant-out temperature"}
+{"hcLS218_4_T4" "K" "280" "300" "Warm return temperature"}
+{"hcWR_EV_R" "% open" "0" "0" "Warm return valve"}
+{"hcCryo_Supply_T" "K" "13" "16" "ESR 15K supply temperature to Hall C"}
+{"hcCryo_Return_T" "K" "18" "25" "ESR 15K return temperature from Hall C"}
+{"hcCryo_Supply_P" "atm" "" "" "ESR 15K supply pressure to Hall C"}
+{"hcCryo_Return_P" "atm" "" "" "ESR 15K return pressure from Hall C"}
+{"hcHallC_beam_current" "microAmps" "" "" "beam current on Hall C cryotarget"}
 }
-
-# MOVED TO SINGLE ALARM SETPOINTS
-
-#file "db/alarmSetters.db" {
-#    pattern {P R SCAN}
-#{CPI0840 :2h "10 second" }
-#{CFI082 :2h "10 second" }
-#{CPV084BY :2h "10 second" }
-#{CFI60DLP :2h "10 second" }
-#{CPI6010 :2h "10 second" }
-#{CFI6010 :2h "10 second" }
-#{CFI75DB15R :2h "10 second" }
-#{CFI6030 :2h "10 second" }
-#{CPI60HP :2h "10 second" }
-#{CPI60LP :2h "10 second" }
-#{CPI671 :2h "10 second" }
-#{CPI672 :2h "10 second" }
-#{CPI673 :2h "10 second" }
-#{CPI674 :2h "10 second" }
-#{CPI6751 :2h "10 second" }
-#{CLL6763A :2h "10 second" }
-#{CFI6711A :2h "10 second" }
-#{CFI6711B :2h "10 second" }
-#{CFI6711C :2h "10 second" }
-#{CFI6712 :2h "10 second" }
-#{CLL71Q205R :2h "10 second" }
-#{CLL71Q305R :2h "10 second" }
-#{CLL71D106R :2h "10 second" }
-#{CLL72Q205R :2h "10 second" }
-#{CLL72Q305R :2h "10 second" }
-#{CLL72D106R :2h "10 second" }
-#{HacL_Q2_HP3458A:IOUT :2h "10 second" }
-#{HacL_HPE1313A:0_Ch21 :2h "10 second" }
-#{HacL_HPE1313A:0_Ch22 :2h "10 second" }
-#{HacL_D1_HP3458A:IOUT :2h "10 second" }
-#{HacL_HPE1313A:0_Ch0 :2h "10 second" }
-#{HacL_HPE1313A:0_Ch1 :2h "10 second" }
-#{HacL_Q3_HP3458A:IOUT :2h "10 second" }
-#{HacL_HPE1313A:0_Ch32 :2h "10 second" }
-#{HacL_HPE1313A:0_Ch33 :2h "10 second" }
-#{HacR_Q2_HP3458A:IOUT :2h "10 second" }
-#{HacR_HPE1313A:0_Ch21 :2h "10 second" }
-#{HacR_HPE1313A:0_Ch22 :2h "10 second" }
-#{HacR_D1_HP3458A:IOUT :2h "10 second" }
-#{HacR_HPE1313A:0_Ch0 :2h "10 second" }
-#{HacR_HPE1313A:0_Ch1 :2h "10 second" }
-#{HacR_Q3_HP3458A:IOUT :2h "10 second" }
-#{HacR_HPE1313A:0_Ch32 :2h "10 second" }
-#{HacR_HPE1313A:0_Ch33 :2h "10 second" }
-#{CFI75DB15O :2h "10 second" }
-#{CPI75DB05RA :2h "10 second" }
-#{CPI75DB08RA :2h "10 second" }
-#{B_TORUS:LHe:LL8120DP :2h "10 second" }
-#{B_TORUS:LHe:LL8120SC :2h "10 second" }
-#{B_SOL:LHe:LL8620DP :2h "10 second" }
-#{B_SOL:LHe:LL8620SC :2h "10 second" }
-#{B_SOL:LHe:LL8670DP :2h "10 second" }
-#{B_SOL:LHe:LL8670SC :2h "10 second" }
-#{LL8210 :2h "10 second" }
-#{B_SACLAYTGT:LT_CR :2h "10 second" }
-#{B_SACLAYTGT:PT_2KH :2h "10 second" }
-#{B_SACLAYTGT:TT_ET :2h "10 second" }
-#{B_SOL:MPS:I_ZFCT :2h "10 second" }
-#{B_SOL:LHe:FI8621A_IN :2h "10 second" }
-#{B_SOL:LHe:FI8621B_IN :2h "10 second" }
-#{B_TORUS:MPS:I_ZFCT :2h "10 second" }
-#{B_TORUS:LHe:FV8121A_IN :2h "10 second" }
-#{B_TORUS:LHe:FV8121B_IN :2h "10 second" }
-#{ecQ1_I_True :2h "10 second" }
-#{ecQ2_I_True :2h "10 second" }
-#{ecQ3_I_True :2h "10 second" }
-#{ecDI_I_True :2h "10 second" }
-#{ecSHB_I_True :2h "10 second" }
-#{ecSQ1_I_True :2h "10 second" }
-#{ecSQ2_I_True :2h "10 second" }
-#{ecSQ3_I_True :2h "10 second" }
-#{ecSDI_I_True :2h "10 second" }
-#{ecQ1_m_flow_CL_P :2h "10 second" }
-#{ecQ1_m_flow_CL_N :2h "10 second" }
-#{ecQ2_m_flow_CL_P :2h "10 second" }
-#{ecQ2_m_flow_CL_N :2h "10 second" }
-#{ecQ3_m_flow_CL_P :2h "10 second" }
-#{ecQ3_m_flow_CL_N :2h "10 second" }
-#{ecDI_M_flow_Rx :2h "10 second" }
-#{ecDI_M_flow_Lx :2h "10 second" }
-#{ecSHB_m_flow_CL_R :2h "10 second" }
-#{ecSHB_m_flow_CL_L :2h "10 second" }
-#{ecSQ1_m_flow_CL_R :2h "10 second" }
-#{ecSQ1_m_flow_CL_L :2h "10 second" }
-#{ecSQ2_m_flow_CL_R :2h "10 second" }
-#{ecSQ2_m_flow_CL_L :2h "10 second" }
-#{ecSQ3_m_flow_CL_R :2h "10 second" }
-#{ecSQ3_m_flow_CL_L :2h "10 second" }
-#{ecSDI_m_flow_CL_R :2h "10 second" }
-#{ecSDI_m_flow_CL_L :2h "10 second" }
-#
-## HAVE WRAP FIELD IN ANOTHER RECORD:
-##{CEV6721C.ORBV :2h "10 second" }
-#
-#{CEV6711C :2h "10 second" }
-#{CFI6711C :2h "10 second" }
-#{echmst1 :2h "10 second" }
-#{echmst2 :2h "10 second" }
-#{ecSTL_T_He_Supply_TL :2h "10 second" }
-#{ecSTL_T_He_Return_TL :2h "10 second" }
-#{EV91017_readback :2h "10 second" }
-#{EV91019_readback :2h "10 second" }
-#{LL91020 :2h "10 second" }
-#{EV91001_pos :2h "10 second" }
-#{OXSS_RDF :2h "10 second" }
-#{OXSS_MGFD :2h "10 second" }
-#{haL1_JTV_Rca :2h "10 second" }
-#{haL1_Temperature :2h "10 second" }
-#{haL1_hp_power_R :2h "10 second" }
-#{haL1_TI_Cryo_In_R :2h "10 second" }
-#{haL1_TI_Cryo_Out_R :2h "10 second" }
-#{haL2_JTV_Rca :2h "10 second" }
-#{haL2_Temperature :2h "10 second" }
-#{haL2_hp_power_R :2h "10 second" }
-#{haL2_TI_Cryo_In_R :2h "10 second" }
-#{haL2_TI_Cryo_Out_R :2h "10 second" }
-#{haL3_JTV_Rca :2h "10 second" }
-#{haL3_Temperature :2h "10 second" }
-#{haL3_hp_power_R :2h "10 second" }
-#{haL3_TI_Cryo_In_R :2h "10 second" }
-#{haL3_TI_Cryo_Out_R :2h "10 second" }
-#{haLS218_4_T4 :2h "10 second" }
-#{haWR_EV_R :2h "10 second" }
-#{haCryo_Supply_T :2h "10 second" }
-#{haCryo_Return_T :2h "10 second" }
-#{haCryo_Supply_P :2h "10 second" }
-#{haCryo_Return_P :2h "10 second" }
-#{haHallA_beam_current :2h "10 second" }
-#}
-#file "db/alarmSetters.db" {
-#    pattern {P R SCAN}
-#{CPI0840 :8h "10 second" }
-#{CFI082 :8h "10 second" }
-#{CPV084BY :8h "10 second" }
-#{CFI60DLP :8h "10 second" }
-#{CPI6010 :8h "10 second" }
-#{CFI6010 :8h "10 second" }
-#{CFI75DB15R :8h "10 second" }
-#{CFI6030 :8h "10 second" }
-#{CPI60HP :8h "10 second" }
-#{CPI60LP :8h "10 second" }
-#{CPI671 :8h "10 second" }
-#{CPI672 :8h "10 second" }
-#{CPI673 :8h "10 second" }
-#{CPI674 :8h "10 second" }
-#{CPI6751 :8h "10 second" }
-#{CLL6763A :8h "10 second" }
-#{CFI6711A :8h "10 second" }
-#{CFI6711B :8h "10 second" }
-#{CFI6711C :8h "10 second" }
-#{CFI6712 :8h "10 second" }
-#{CLL71Q205R :8h "10 second" }
-#{CLL71Q305R :8h "10 second" }
-#{CLL71D106R :8h "10 second" }
-#{CLL72Q205R :8h "10 second" }
-#{CLL72Q305R :8h "10 second" }
-#{CLL72D106R :8h "10 second" }
-#{HacL_Q2_HP3458A:IOUT :8h "10 second" }
-#{HacL_HPE1313A:0_Ch21 :8h "10 second" }
-#{HacL_HPE1313A:0_Ch22 :8h "10 second" }
-#{HacL_D1_HP3458A:IOUT :8h "10 second" }
-#{HacL_HPE1313A:0_Ch0 :8h "10 second" }
-#{HacL_HPE1313A:0_Ch1 :8h "10 second" }
-#{HacL_Q3_HP3458A:IOUT :8h "10 second" }
-#{HacL_HPE1313A:0_Ch32 :8h "10 second" }
-#{HacL_HPE1313A:0_Ch33 :8h "10 second" }
-#{HacR_Q2_HP3458A:IOUT :8h "10 second" }
-#{HacR_HPE1313A:0_Ch21 :8h "10 second" }
-#{HacR_HPE1313A:0_Ch22 :8h "10 second" }
-#{HacR_D1_HP3458A:IOUT :8h "10 second" }
-#{HacR_HPE1313A:0_Ch0 :8h "10 second" }
-#{HacR_HPE1313A:0_Ch1 :8h "10 second" }
-#{HacR_Q3_HP3458A:IOUT :8h "10 second" }
-#{HacR_HPE1313A:0_Ch32 :8h "10 second" }
-#{HacR_HPE1313A:0_Ch33 :8h "10 second" }
-#{CFI75DB15O :8h "10 second" }
-#{CPI75DB05RA :8h "10 second" }
-#{CPI75DB08RA :8h "10 second" }
-#{B_TORUS:LHe:LL8120DP :8h "10 second" }
-#{B_TORUS:LHe:LL8120SC :8h "10 second" }
-#{B_SOL:LHe:LL8620DP :8h "10 second" }
-#{B_SOL:LHe:LL8620SC :8h "10 second" }
-#{B_SOL:LHe:LL8670DP :8h "10 second" }
-#{B_SOL:LHe:LL8670SC :8h "10 second" }
-#{LL8210 :8h "10 second" }
-#{B_SACLAYTGT:LT_CR :8h "10 second" }
-#{B_SACLAYTGT:PT_2KH :8h "10 second" }
-#{B_SACLAYTGT:TT_ET :8h "10 second" }
-#{B_SOL:MPS:I_ZFCT :8h "10 second" }
-#{B_SOL:LHe:FI8621A_IN :8h "10 second" }
-#{B_SOL:LHe:FI8621B_IN :8h "10 second" }
-#{B_TORUS:MPS:I_ZFCT :8h "10 second" }
-#{B_TORUS:LHe:FV8121A_IN :8h "10 second" }
-#{B_TORUS:LHe:FV8121B_IN :8h "10 second" }
-#{ecQ1_I_True :8h "10 second" }
-#{ecQ2_I_True :8h "10 second" }
-#{ecQ3_I_True :8h "10 second" }
-#{ecDI_I_True :8h "10 second" }
-#{ecSHB_I_True :8h "10 second" }
-#{ecSQ1_I_True :8h "10 second" }
-#{ecSQ2_I_True :8h "10 second" }
-#{ecSQ3_I_True :8h "10 second" }
-#{ecSDI_I_True :8h "10 second" }
-#{ecQ1_m_flow_CL_P :8h "10 second" }
-#{ecQ1_m_flow_CL_N :8h "10 second" }
-#{ecQ2_m_flow_CL_P :8h "10 second" }
-#{ecQ2_m_flow_CL_N :8h "10 second" }
-#{ecQ3_m_flow_CL_P :8h "10 second" }
-#{ecQ3_m_flow_CL_N :8h "10 second" }
-#{ecDI_M_flow_Rx :8h "10 second" }
-#{ecDI_M_flow_Lx :8h "10 second" }
-#{ecSHB_m_flow_CL_R :8h "10 second" }
-#{ecSHB_m_flow_CL_L :8h "10 second" }
-#{ecSQ1_m_flow_CL_R :8h "10 second" }
-#{ecSQ1_m_flow_CL_L :8h "10 second" }
-#{ecSQ2_m_flow_CL_R :8h "10 second" }
-#{ecSQ2_m_flow_CL_L :8h "10 second" }
-#{ecSQ3_m_flow_CL_R :8h "10 second" }
-#{ecSQ3_m_flow_CL_L :8h "10 second" }
-#{ecSDI_m_flow_CL_R :8h "10 second" }
-#{ecSDI_m_flow_CL_L :8h "10 second" }
-#
-## HAVE WRAP FIELD IN ANOTHER RECORD:
-##{CEV6721C.ORBV :8h "10 second" }
-#
-#{CEV6711C :8h "10 second" }
-#{CFI6711C :8h "10 second" }
-#{echmst1 :8h "10 second" }
-#{echmst2 :8h "10 second" }
-#{ecSTL_T_He_Supply_TL :8h "10 second" }
-#{ecSTL_T_He_Return_TL :8h "10 second" }
-#{EV91017_readback :8h "10 second" }
-#{EV91019_readback :8h "10 second" }
-#{LL91020 :8h "10 second" }
-#{EV91001_pos :8h "10 second" }
-#{OXSS_RDF :8h "10 second" }
-#{OXSS_MGFD :8h "10 second" }
-#{haL1_JTV_Rca :8h "10 second" }
-#{haL1_Temperature :8h "10 second" }
-#{haL1_hp_power_R :8h "10 second" }
-#{haL1_TI_Cryo_In_R :8h "10 second" }
-#{haL1_TI_Cryo_Out_R :8h "10 second" }
-#{haL2_JTV_Rca :8h "10 second" }
-#{haL2_Temperature :8h "10 second" }
-#{haL2_hp_power_R :8h "10 second" }
-#{haL2_TI_Cryo_In_R :8h "10 second" }
-#{haL2_TI_Cryo_Out_R :8h "10 second" }
-#{haL3_JTV_Rca :8h "10 second" }
-#{haL3_Temperature :8h "10 second" }
-#{haL3_hp_power_R :8h "10 second" }
-#{haL3_TI_Cryo_In_R :8h "10 second" }
-#{haL3_TI_Cryo_Out_R :8h "10 second" }
-#{haLS218_4_T4 :8h "10 second" }
-#{haWR_EV_R :8h "10 second" }
-#{haCryo_Supply_T :8h "10 second" }
-#{haCryo_Return_T :8h "10 second" }
-#{haCryo_Supply_P :8h "10 second" }
-#{haCryo_Return_P :8h "10 second" }
-#{haHallA_beam_current :8h "10 second" }
-#}
-#file "db/alarmSetters.db" {
-#    pattern {P R SCAN}
-#{CPI0840 :24h "10 second" }
-#{CFI082 :24h "10 second" }
-#{CPV084BY :24h "10 second" }
-#{CFI60DLP :24h "10 second" }
-#{CPI6010 :24h "10 second" }
-#{CFI6010 :24h "10 second" }
-#{CFI75DB15R :24h "10 second" }
-#{CFI6030 :24h "10 second" }
-#{CPI60HP :24h "10 second" }
-#{CPI60LP :24h "10 second" }
-#{CPI671 :24h "10 second" }
-#{CPI672 :24h "10 second" }
-#{CPI673 :24h "10 second" }
-#{CPI674 :24h "10 second" }
-#{CPI6751 :24h "10 second" }
-#{CLL6763A :24h "10 second" }
-#{CFI6711A :24h "10 second" }
-#{CFI6711B :24h "10 second" }
-#{CFI6711C :24h "10 second" }
-#{CFI6712 :24h "10 second" }
-#{CLL71Q205R :24h "10 second" }
-#{CLL71Q305R :24h "10 second" }
-#{CLL71D106R :24h "10 second" }
-#{CLL72Q205R :24h "10 second" }
-#{CLL72Q305R :24h "10 second" }
-#{CLL72D106R :24h "10 second" }
-#{HacL_Q2_HP3458A:IOUT :24h "10 second" }
-#{HacL_HPE1313A:0_Ch21 :24h "10 second" }
-#{HacL_HPE1313A:0_Ch22 :24h "10 second" }
-#{HacL_D1_HP3458A:IOUT :24h "10 second" }
-#{HacL_HPE1313A:0_Ch0 :24h "10 second" }
-#{HacL_HPE1313A:0_Ch1 :24h "10 second" }
-#{HacL_Q3_HP3458A:IOUT :24h "10 second" }
-#{HacL_HPE1313A:0_Ch32 :24h "10 second" }
-#{HacL_HPE1313A:0_Ch33 :24h "10 second" }
-#{HacR_Q2_HP3458A:IOUT :24h "10 second" }
-#{HacR_HPE1313A:0_Ch21 :24h "10 second" }
-#{HacR_HPE1313A:0_Ch22 :24h "10 second" }
-#{HacR_D1_HP3458A:IOUT :24h "10 second" }
-#{HacR_HPE1313A:0_Ch0 :24h "10 second" }
-#{HacR_HPE1313A:0_Ch1 :24h "10 second" }
-#{HacR_Q3_HP3458A:IOUT :24h "10 second" }
-#{HacR_HPE1313A:0_Ch32 :24h "10 second" }
-#{HacR_HPE1313A:0_Ch33 :24h "10 second" }
-#{CFI75DB15O :24h "10 second" }
-#{CPI75DB05RA :24h "10 second" }
-#{CPI75DB08RA :24h "10 second" }
-#{B_TORUS:LHe:LL8120DP :24h "10 second" }
-#{B_TORUS:LHe:LL8120SC :24h "10 second" }
-#{B_SOL:LHe:LL8620DP :24h "10 second" }
-#{B_SOL:LHe:LL8620SC :24h "10 second" }
-#{B_SOL:LHe:LL8670DP :24h "10 second" }
-#{B_SOL:LHe:LL8670SC :24h "10 second" }
-#{LL8210 :24h "10 second" }
-#{B_SACLAYTGT:LT_CR :24h "10 second" }
-#{B_SACLAYTGT:PT_2KH :24h "10 second" }
-#{B_SACLAYTGT:TT_ET :24h "10 second" }
-#{B_SOL:MPS:I_ZFCT :24h "10 second" }
-#{B_SOL:LHe:FI8621A_IN :24h "10 second" }
-#{B_SOL:LHe:FI8621B_IN :24h "10 second" }
-#{B_TORUS:MPS:I_ZFCT :24h "10 second" }
-#{B_TORUS:LHe:FV8121A_IN :24h "10 second" }
-#{B_TORUS:LHe:FV8121B_IN :24h "10 second" }
-#{ecQ1_I_True :24h "10 second" }
-#{ecQ2_I_True :24h "10 second" }
-#{ecQ3_I_True :24h "10 second" }
-#{ecDI_I_True :24h "10 second" }
-#{ecSHB_I_True :24h "10 second" }
-#{ecSQ1_I_True :24h "10 second" }
-#{ecSQ2_I_True :24h "10 second" }
-#{ecSQ3_I_True :24h "10 second" }
-#{ecSDI_I_True :24h "10 second" }
-#{ecQ1_m_flow_CL_P :24h "10 second" }
-#{ecQ1_m_flow_CL_N :24h "10 second" }
-#{ecQ2_m_flow_CL_P :24h "10 second" }
-#{ecQ2_m_flow_CL_N :24h "10 second" }
-#{ecQ3_m_flow_CL_P :24h "10 second" }
-#{ecQ3_m_flow_CL_N :24h "10 second" }
-#{ecDI_M_flow_Rx :24h "10 second" }
-#{ecDI_M_flow_Lx :24h "10 second" }
-#{ecSHB_m_flow_CL_R :24h "10 second" }
-#{ecSHB_m_flow_CL_L :24h "10 second" }
-#{ecSQ1_m_flow_CL_R :24h "10 second" }
-#{ecSQ1_m_flow_CL_L :24h "10 second" }
-#{ecSQ2_m_flow_CL_R :24h "10 second" }
-#{ecSQ2_m_flow_CL_L :24h "10 second" }
-#{ecSQ3_m_flow_CL_R :24h "10 second" }
-#{ecSQ3_m_flow_CL_L :24h "10 second" }
-#{ecSDI_m_flow_CL_R :24h "10 second" }
-#{ecSDI_m_flow_CL_L :24h "10 second" }
-#
-## HAVE WRAP FIELD IN ANOTHER RECORD:
-##{CEV6721C.ORBV :24h "10 second" }
-#
-#{CEV6711C :24h "10 second" }
-#{CFI6711C :24h "10 second" }
-#{echmst1 :24h "10 second" }
-#{echmst2 :24h "10 second" }
-#{ecSTL_T_He_Supply_TL :24h "10 second" }
-#{ecSTL_T_He_Return_TL :24h "10 second" }
-#{EV91017_readback :24h "10 second" }
-#{EV91019_readback :24h "10 second" }
-#{LL91020 :24h "10 second" }
-#{EV91001_pos :24h "10 second" }
-#{OXSS_RDF :24h "10 second" }
-#{OXSS_MGFD :24h "10 second" }
-#{haL1_JTV_Rca :24h "10 second" }
-#{haL1_Temperature :24h "10 second" }
-#{haL1_hp_power_R :24h "10 second" }
-#{haL1_TI_Cryo_In_R :24h "10 second" }
-#{haL1_TI_Cryo_Out_R :24h "10 second" }
-#{haL2_JTV_Rca :24h "10 second" }
-#{haL2_Temperature :24h "10 second" }
-#{haL2_hp_power_R :24h "10 second" }
-#{haL2_TI_Cryo_In_R :24h "10 second" }
-#{haL2_TI_Cryo_Out_R :24h "10 second" }
-#{haL3_JTV_Rca :24h "10 second" }
-#{haL3_Temperature :24h "10 second" }
-#{haL3_hp_power_R :24h "10 second" }
-#{haL3_TI_Cryo_In_R :24h "10 second" }
-#{haL3_TI_Cryo_Out_R :24h "10 second" }
-#{haLS218_4_T4 :24h "10 second" }
-#{haWR_EV_R :24h "10 second" }
-#{haCryo_Supply_T :24h "10 second" }
-#{haCryo_Return_T :24h "10 second" }
-#{haCryo_Supply_P :24h "10 second" }
-#{haCryo_Return_P :24h "10 second" }
-#{haHallA_beam_current :24h "10 second" }
-#}
-#file "db/alarmSetters.db" {
-#    pattern {P R SCAN}
-#{CPI0840 :1w "10 second" }
-#{CFI082 :1w "10 second" }
-#{CPV084BY :1w "10 second" }
-#{CFI60DLP :1w "10 second" }
-#{CPI6010 :1w "10 second" }
-#{CFI6010 :1w "10 second" }
-#{CFI75DB15R :1w "10 second" }
-#{CFI6030 :1w "10 second" }
-#{CPI60HP :1w "10 second" }
-#{CPI60LP :1w "10 second" }
-#{CPI671 :1w "10 second" }
-#{CPI672 :1w "10 second" }
-#{CPI673 :1w "10 second" }
-#{CPI674 :1w "10 second" }
-#{CPI6751 :1w "10 second" }
-#{CLL6763A :1w "10 second" }
-#{CFI6711A :1w "10 second" }
-#{CFI6711B :1w "10 second" }
-#{CFI6711C :1w "10 second" }
-#{CFI6712 :1w "10 second" }
-#{CLL71Q205R :1w "10 second" }
-#{CLL71Q305R :1w "10 second" }
-#{CLL71D106R :1w "10 second" }
-#{CLL72Q205R :1w "10 second" }
-#{CLL72Q305R :1w "10 second" }
-#{CLL72D106R :1w "10 second" }
-#{HacL_Q2_HP3458A:IOUT :1w "10 second" }
-#{HacL_HPE1313A:0_Ch21 :1w "10 second" }
-#{HacL_HPE1313A:0_Ch22 :1w "10 second" }
-#{HacL_D1_HP3458A:IOUT :1w "10 second" }
-#{HacL_HPE1313A:0_Ch0 :1w "10 second" }
-#{HacL_HPE1313A:0_Ch1 :1w "10 second" }
-#{HacL_Q3_HP3458A:IOUT :1w "10 second" }
-#{HacL_HPE1313A:0_Ch32 :1w "10 second" }
-#{HacL_HPE1313A:0_Ch33 :1w "10 second" }
-#{HacR_Q2_HP3458A:IOUT :1w "10 second" }
-#{HacR_HPE1313A:0_Ch21 :1w "10 second" }
-#{HacR_HPE1313A:0_Ch22 :1w "10 second" }
-#{HacR_D1_HP3458A:IOUT :1w "10 second" }
-#{HacR_HPE1313A:0_Ch0 :1w "10 second" }
-#{HacR_HPE1313A:0_Ch1 :1w "10 second" }
-#{HacR_Q3_HP3458A:IOUT :1w "10 second" }
-#{HacR_HPE1313A:0_Ch32 :1w "10 second" }
-#{HacR_HPE1313A:0_Ch33 :1w "10 second" }
-#{CFI75DB15O :1w "10 second" }
-#{CPI75DB05RA :1w "10 second" }
-#{CPI75DB08RA :1w "10 second" }
-#{B_TORUS:LHe:LL8120DP :1w "10 second" }
-#{B_TORUS:LHe:LL8120SC :1w "10 second" }
-#{B_SOL:LHe:LL8620DP :1w "10 second" }
-#{B_SOL:LHe:LL8620SC :1w "10 second" }
-#{B_SOL:LHe:LL8670DP :1w "10 second" }
-#{B_SOL:LHe:LL8670SC :1w "10 second" }
-#{LL8210 :1w "10 second" }
-#{B_SACLAYTGT:LT_CR :1w "10 second" }
-#{B_SACLAYTGT:PT_2KH :1w "10 second" }
-#{B_SACLAYTGT:TT_ET :1w "10 second" }
-#{B_SOL:MPS:I_ZFCT :1w "10 second" }
-#{B_SOL:LHe:FI8621A_IN :1w "10 second" }
-#{B_SOL:LHe:FI8621B_IN :1w "10 second" }
-#{B_TORUS:MPS:I_ZFCT :1w "10 second" }
-#{B_TORUS:LHe:FV8121A_IN :1w "10 second" }
-#{B_TORUS:LHe:FV8121B_IN :1w "10 second" }
-#{ecQ1_I_True :1w "10 second" }
-#{ecQ2_I_True :1w "10 second" }
-#{ecQ3_I_True :1w "10 second" }
-#{ecDI_I_True :1w "10 second" }
-#{ecSHB_I_True :1w "10 second" }
-#{ecSQ1_I_True :1w "10 second" }
-#{ecSQ2_I_True :1w "10 second" }
-#{ecSQ3_I_True :1w "10 second" }
-#{ecSDI_I_True :1w "10 second" }
-#{ecQ1_m_flow_CL_P :1w "10 second" }
-#{ecQ1_m_flow_CL_N :1w "10 second" }
-#{ecQ2_m_flow_CL_P :1w "10 second" }
-#{ecQ2_m_flow_CL_N :1w "10 second" }
-#{ecQ3_m_flow_CL_P :1w "10 second" }
-#{ecQ3_m_flow_CL_N :1w "10 second" }
-#{ecDI_M_flow_Rx :1w "10 second" }
-#{ecDI_M_flow_Lx :1w "10 second" }
-#{ecSHB_m_flow_CL_R :1w "10 second" }
-#{ecSHB_m_flow_CL_L :1w "10 second" }
-#{ecSQ1_m_flow_CL_R :1w "10 second" }
-#{ecSQ1_m_flow_CL_L :1w "10 second" }
-#{ecSQ2_m_flow_CL_R :1w "10 second" }
-#{ecSQ2_m_flow_CL_L :1w "10 second" }
-#{ecSQ3_m_flow_CL_R :1w "10 second" }
-#{ecSQ3_m_flow_CL_L :1w "10 second" }
-#{ecSDI_m_flow_CL_R :1w "10 second" }
-#{ecSDI_m_flow_CL_L :1w "10 second" }
-#
-## HAVE WRAP FIELD IN ANOTHER RECORD:
-##{CEV6721C.ORBV :1w "10 second" }
-#
-#{CEV6711C :1w "10 second" }
-#{CFI6711C :1w "10 second" }
-#{echmst1 :1w "10 second" }
-#{echmst2 :1w "10 second" }
-#{ecSTL_T_He_Supply_TL :1w "10 second" }
-#{ecSTL_T_He_Return_TL :1w "10 second" }
-#{EV91017_readback :1w "10 second" }
-#{EV91019_readback :1w "10 second" }
-#{LL91020 :1w "10 second" }
-#{EV91001_pos :1w "10 second" }
-#{OXSS_RDF :1w "10 second" }
-#{OXSS_MGFD :1w "10 second" }
-#{haL1_JTV_Rca :1w "10 second" }
-#{haL1_Temperature :1w "10 second" }
-#{haL1_hp_power_R :1w "10 second" }
-#{haL1_TI_Cryo_In_R :1w "10 second" }
-#{haL1_TI_Cryo_Out_R :1w "10 second" }
-#{haL2_JTV_Rca :1w "10 second" }
-#{haL2_Temperature :1w "10 second" }
-#{haL2_hp_power_R :1w "10 second" }
-#{haL2_TI_Cryo_In_R :1w "10 second" }
-#{haL2_TI_Cryo_Out_R :1w "10 second" }
-#{haL3_JTV_Rca :1w "10 second" }
-#{haL3_Temperature :1w "10 second" }
-#{haL3_hp_power_R :1w "10 second" }
-#{haL3_TI_Cryo_In_R :1w "10 second" }
-#{haL3_TI_Cryo_Out_R :1w "10 second" }
-#{haLS218_4_T4 :1w "10 second" }
-#{haWR_EV_R :1w "10 second" }
-#{haCryo_Supply_T :1w "10 second" }
-#{haCryo_Return_T :1w "10 second" }
-#{haCryo_Supply_P :1w "10 second" }
-#{haCryo_Return_P :1w "10 second" }
-#{haHallA_beam_current :1w "10 second" }
-#}

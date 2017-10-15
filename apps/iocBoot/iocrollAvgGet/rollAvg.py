@@ -1,1 +1,1 @@
-../iocrollAvg/rollAvg.py
+../../rollAvgApp/src/rollAvg.py

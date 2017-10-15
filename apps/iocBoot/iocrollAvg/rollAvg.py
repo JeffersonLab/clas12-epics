@@ -1,1 +1,0 @@
-../../monitorApp/src/rollAvg.py

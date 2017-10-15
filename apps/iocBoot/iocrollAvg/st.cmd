@@ -26,8 +26,8 @@ iocInit
 caPutLogInit("clonioc1:7011")
 
 makeAutosaveFiles()
-create_rollAvg_set("info_positions.req", 5, "P=${IOC}:")
-create_rollAvg_set("info_settings.req", 30, "P=${IOC}:")
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
 

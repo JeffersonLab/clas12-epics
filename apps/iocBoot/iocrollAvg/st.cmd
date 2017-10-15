@@ -1,8 +1,8 @@
-#!../../bin/linux-x86_64/monitor
+#!../../bin/linux-x86_64/rollAvg
 < envPaths
 cd ${TOP}
-dbLoadDatabase("dbd/monitor.dbd")
-monitor_registerRecordDeviceDriver pdbbase
+dbLoadDatabase("dbd/rollAvg.dbd")
+rollAvg_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:")
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=iocrollAvgGet,R=:2h:")
@@ -26,8 +26,8 @@ iocInit
 caPutLogInit("clonioc1:7011")
 
 makeAutosaveFiles()
-create_monitor_set("info_positions.req", 5, "P=${IOC}:")
-create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+create_rollAvg_set("info_positions.req", 5, "P=${IOC}:")
+create_rollAvg_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
 

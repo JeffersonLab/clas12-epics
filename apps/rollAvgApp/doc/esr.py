@@ -3,7 +3,7 @@ import epics,subprocess
 
 # True:  substitutions file
 # False: online/archiving status
-PRINTSTATS=True
+PRINTSTATS=False
 
 # Kashy's spreadsheet, exported to ascii:
 INPUTFILE='ESR_HALLS Cryogenics Overview Pages Rev 0_1 DK.csv'
@@ -23,10 +23,17 @@ def parseFile():
   for line in open(INPUTFILE,'r').readlines()[SKIPFIRSTLINES:]:
 
     line=line.strip().replace('"','')
+
+    ignore=False
     for ign in IGNORE:
-      if line.find(ign)>=0: continue
+      if line.find(ign)>=0:
+        ignore=True
+        break
+    if ignore: continue
 
     cols=line.split(FIELDSEPERATOR);
+    for ii in range(len(cols)):
+      cols[ii]=cols[ii].strip()
 
     while len(cols)>0 and cols[len(cols)-1]=='': cols.pop()
 
@@ -37,9 +44,14 @@ def parseFile():
       if VERBOSE: print '#\n#',section
       continue
 
-    rec={'name':cols[0],'section':section,\
+    name=cols[0].replace('.VAL','')
+
+    rec={'name':name,'section':section,\
         'units':None,'desc':None,'low':None,'high':None,\
-        'online':False,'archived':False}
+        'online':False,'archived':False,'malformed':False}
+
+    if rec['name'].find('.')>=0:
+      rec['malformed']=True
 
     if len(cols)>1: rec['units']=cols[1]
     if len(cols)>2: rec['desc']=cols[2]
@@ -54,15 +66,17 @@ def parseFile():
   return recs
 
 def printSubs (records):
-  print 'file "db/rollingAverages" {'
+  print 'file "db/rollingAverages.db" {'
   print 'pattern {P EGU LOW HIGH DESC}'
   for rec in records:
+    desc=rec['desc'][0:39]
+    if rec['malformed']: continue
     print '{"%s" "%s" "%s" "%s" "%s"}' %\
         (rec['name'],
          clean(rec['units']),
          clean(rec['low']),
          clean(rec['high']),
-         rec['desc'])
+         desc)
   print '}'
 
 def clean(ss):
@@ -96,9 +110,12 @@ if PRINTSTATS:
   print '\n\n##### Offline PVs:'
   for rec in records:
     if not isOnline(rec['name']): print rec['name']
-  print '\n\n##### UNARCHIVED PVs:'
+  print '\n\n##### Unarchived PVs:'
   for rec in records:
     if not isArchived(rec['name']): print rec['name']
+  print '\n\n##### Malformed PVs:'
+  for rec in records:
+    if rec['malformed']: print rec['name']
 else:
   printSubs(records)
 

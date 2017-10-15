@@ -7,7 +7,7 @@ record(ai,"$(P)$(R=):2h") {
     field(LLSV,"NO_ALARM")
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
-    field(EGU,"$(EGU=)"
+    field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):8h") {
@@ -18,7 +18,7 @@ record(ai,"$(P)$(R=):8h") {
     field(LLSV,"NO_ALARM")
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
-    field(EGU,"$(EGU=)"
+    field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):24h") {
@@ -29,7 +29,7 @@ record(ai,"$(P)$(R=):24h") {
     field(LLSV,"NO_ALARM")
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
-    field(EGU,"$(EGU=)"
+    field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):1w") {
@@ -40,9 +40,36 @@ record(ai,"$(P)$(R=):1w") {
     field(LLSV,"NO_ALARM")
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
-    field(EGU,"$(EGU=)"
+    field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
+
+record(ai,"$(P)$(R=):minorTolerance") {
+    field(VAL,"0.5")
+    field(PINI,1)
+    info(autosaveFields,"VAL")
+}
+record(calcout,"$(P)$(R=):HIGHCALC") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)")
+    field(INPB,"$(P)$(R=):minorTolerance")
+    field(CALC,"A + B")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R=):HIGH PP")
+    info(autosaveFields_pass0,"VAL")
+}
+record(calcout,"$(P)$(R=):LOWCALC") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)")
+    field(INPB,"$(P)$(R=):minorTolerance")
+    field(CALC,"A - B")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R=):LOW PP")
+    info(autosaveFields_pass0,"VAL")
+}
+
 
 record(ai,"$(P)$(R=):LOW") {
     field(FLNK,"$(P)$(R=):LOWSEQ.PROC")

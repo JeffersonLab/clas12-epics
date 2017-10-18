@@ -1,0 +1,32 @@
+file "db/mmIntlk.template" {
+
+pattern { P R LOW HIGH CTRL CTRLVAL PREC }
+
+# LV Current -> LV OFF
+{ B_DET_MVT_LV_0:i_rd :intlk: B_DET_MVT_LV_0:i_rd.LOLO B_DET_MVT_LV_0:i_rd.HIHI B_DET_MVT_LV_0:switch 0 2 }
+{ B_DET_MVT_LV_1:i_rd :intlk: B_DET_MVT_LV_1:i_rd.LOLO B_DET_MVT_LV_1:i_rd.HIHI B_DET_MVT_LV_1:switch 0 2 }
+{ B_DET_MVT_LV_2:i_rd :intlk: B_DET_MVT_LV_2:i_rd.LOLO B_DET_MVT_LV_2:i_rd.HIHI B_DET_MVT_LV_2:switch 0 2 }
+{ B_DET_MVT_LV_3:i_rd :intlk: B_DET_MVT_LV_3:i_rd.LOLO B_DET_MVT_LV_3:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 }
+
+# .SEVR
+# 0/1/2/3 = NO_ALARM/MINOR/MAJOR/INVALID
+
+# FEU Current/Temperature -> LV OFF
+{ B_DET_MVT_FEU:Current_A.SEVR :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+{ B_DET_MVT_FEU:XTmpV6.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+{ B_DET_MVT_FEU:MTmpInt.SEVR   :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+{ B_DET_MVT_FEU:TmpSdX.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+{ B_DET_MVT_FEU:TmpSdA.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+
+# Gas Pressure/Flow -> GAS OFF
+{ B_DET_BMT_GAS_PRES :intlk: -99999 B_DET_BMT_GAS_PRES.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 }
+{ B_DET_FMT_GAS_PRES :intlk: -99999 B_DET_FMT_GAS_PRES.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 }
+{ B_DET_BMT_GAS_INFLOW :intlk: -99999 B_DET_BMT_GAS_INFLOW.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 }
+{ B_DET_FMT_GAS_INFLOW :intlk: -99999 B_DET_FMT_GAS_INFLOW.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 }
+
+# Gas Flow -> HV OFF
+{ B_DET_BMT_GAS_INFLOW :intlk2: B_DET_BMT_GAS_INFLOW.LOLO 999999 B_DET_BMT_HV:pwoff 1 2 }
+{ B_DET_BMT_GAS_INFLOW :intlk2: 3.0 999999 B_DET_BMT_HV:pwoff 1 2 }
+
+}
+

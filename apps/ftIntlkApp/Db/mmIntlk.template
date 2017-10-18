@@ -1,0 +1,103 @@
+
+# Required Macros:
+# P = input pv to test
+# LOW = low limit 
+# HIGH = high limit
+# CTRL = output pv
+# CTRLVAL = value to write
+#
+# Optional Macros:
+# R = suffix to append to interlock records defined in this file
+
+# Check first time if the values are within allowed limits.
+# If not, after a few seconds trigger a second
+# comparison to engage the interlock.
+record(calcout, "$(P)$(R)first_check") {
+  field(DESC, "First test")
+  field(SCAN, "2 second")
+  field(PREC, "$(PREC)")
+  field(CALC, "(C<A||A<B)&(D#1)?1:0")
+  field(INPA, "$(P)")
+  field(INPB, "$(LOW)")
+  field(INPC, "$(HIGH)")
+  field(INPD, "$(P)$(R)intlk_bypass")
+  field(OUT, "$(P)$(R)second_check PP")
+  field(OOPT, "When Non-zero")
+  field(DOPT, "Use OCAL")
+  field(OCAL, "1")
+  field(HIGH, "1")
+  field(HSV,  "MAJOR")
+}
+# Second check. If this PV is processed
+# and the CALC is TRUE (1) it will set the
+# interlock status record to 1.
+record(calcout, "$(P)$(R)second_check") {
+  field(DESC, "Second check")
+  field(SCAN, "Passive")
+  field(PINI, "NO")
+  field(PREC, "$(PREC)")
+  field(CALC, "(C<A||A<B)&(D#1)?1:0")
+  field(INPA, "$(P)")
+  field(INPB, "$(LOW)")
+  field(INPC, "$(HIGH)")
+  field(INPD, "$(P)$(R)intlk_bypass")
+  field(OUT, "$(P)$(R)intlk_status.VAL PP")
+  field(OOPT, "When Non-zero")
+  field(DOPT, "Use CALC")
+  field(OCAL, "1")
+  field(HIGH, "1")
+  field(HSV,  "MAJOR")
+}
+
+# Record to reset the interlock
+record(bo, "$(P)$(R)intlk_reset") {
+  field(DESC, "Reset interlock")
+  field(SCAN, "Passive")
+  field(PINI, "NO")
+  field(UDF, "0")
+  field(VAL, "0")
+  field(OUT, "$(P)$(R)intlk_status.VAL PP")
+}
+
+record(bo, "$(P)$(R)force_val") {
+  field(DESC, "Force Value")
+  field(SCAN, "1 second")
+  field(DISV, "0")
+  field(SDIS, "$(P)$(R)intlk_status.VAL")
+  field(VAL, "$(CTRLVAL)")
+  field(OUT, "$(CTRL) PP")
+}
+
+# Record to bypass interlock
+record(bo, "$(P)$(R)intlk_bypass") {
+  field(DESC, "Bypass interlock")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(VAL, "0")
+  field(ZNAM, "Normal")
+  field(ONAM, "Bypass")
+  field(ZSV,  "NO_ALARM")
+  field(OSV,  "MAJOR")
+}
+
+# Status of the interlock. 1 Means interlock
+# is engaged, 0 means interlock in not
+# engaged.
+record(bo, "$(P)$(R)intlk_status") {
+  field(DESC, "Status of Interlock")
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(VAL, "0")
+  field(ZNAM, "Ok")
+  field(ONAM, "Fault")
+  field(ZSV, "NO_ALARM")
+  field(OSV, "MAJOR")
+}
+
+record(ao, "$(P)$(R)intlk_delay") {
+  field(SCAN, "Passive")
+  field(PINI, "YES")
+  field(VAL, "10")
+  field(OUT, "$(P)$(R)first_check.ODLY")
+  field(EGU, "sec")
+}

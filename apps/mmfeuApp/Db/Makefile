@@ -11,9 +11,8 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
 #DB += xxx.db
-DB    += mmfeu.db
-DB    += mmfeucrate.db
-DB    += mmfeuslot.db
+DB    += $(wildcard ../*.db)
+DB    += $(wildcard ../*.template)
 DB    += $(wildcard ../*.substitutions)
 PROTO += mmfeu.proto
 

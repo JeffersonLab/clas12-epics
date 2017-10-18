@@ -19,6 +19,8 @@ mmfeu_DBD += calc.dbd
 mmfeu_DBD += drvAsynIPPort.dbd
 mmfeu_DBD += stream.dbd
 mmfeu_DBD += system.dbd
+mmfeu_DBD += asSupport.dbd
+mmfeu_DBD += caPutLog.dbd
 
 # Include dbd files from all support applications:
 #mmfeu_DBD += xxx.dbd
@@ -38,9 +40,11 @@ mmfeu_SRCS_vxWorks += -nil-
 
 # Link in the code from the support library
 mmfeu_LIBS += devIocStats
+mmfeu_LIBS += autosave
 mmfeu_LIBS += stream
 mmfeu_LIBS += asyn
 mmfeu_LIBS += calc
+mmfeu_LIBS += caPutLog
 
 # Finally link IOC to the EPICS Base libraries
 mmfeu_LIBS += $(EPICS_BASE_IOC_LIBS)

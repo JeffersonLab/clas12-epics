@@ -52,7 +52,18 @@ function insertIoc(iocName,opiFile)
     lc.addMacro("P",iocName);
     widget.addChildToBottom(lc);
 }
-
+function insertComms()
+{
+    var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
+    lc.setPropertyValue("opi_file","rollAvgs-comms.opi");
+    //try   { lc.setPropertyValue("resize_behaviour",1); }
+    //catch (err) { lc.setPropertyValue("auto_size",true); }
+    lc.setPropertyValue("auto_size",true);
+    lc.setPropertyValue("zoom_to_fit",false);
+    lc.setPropertyValue("border_style",0);
+    lc.setPropertyValue("background_color","Header_Background");
+    widget.addChildToBottom(lc);
+}
 
 for (var iFile=0; iFile<fileNames.length; iFile++) {
 
@@ -67,7 +78,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     {
         if (lines[ii].startsWith("#") || lines[ii].equals("") ) {
             //insertLine(1);
-            insertGap(1,"");
+            //insertGap(1,"");
             var label=lines[ii].slice(1);
             if (label.length>0) {
               insertGap(20,label);
@@ -84,7 +95,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         if (columns.length>1) iocName=columns[0];
 
         var opiFile = "rollAvg.opi";
-        if (alarms!=0) opiFile = "rollAvg-alarms.opi";
+        if (alarms>0) opiFile = "rollAvg-alarms.opi";
 
         insertIoc(iocName,opiFile);
 //        insertGap(1,"");
@@ -94,5 +105,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 
 insertGap(7,"");
 insertLine(5);
+
+if (alarms>=0) insertComms();
 
 

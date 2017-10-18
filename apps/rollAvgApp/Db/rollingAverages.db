@@ -44,32 +44,8 @@ record(ai,"$(P)$(R=):1w") {
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 
-record(ai,"$(P)$(R=):minorTolerance") {
-    field(VAL,"0.5")
-    field(PINI,1)
-    info(autosaveFields,"VAL")
-}
-record(calcout,"$(P)$(R=):HIGHCALC") {
-    field(SCAN,"1 second")
-    field(INPA,"$(P)")
-    field(INPB,"$(P)$(R=):minorTolerance")
-    field(CALC,"A + B")
-    field(DOPT,"Use CALC")
-    field(OOPT,"On Change")
-    field(OUT,"$(P)$(R=):HIGH PP")
-    info(autosaveFields_pass0,"VAL")
-}
-record(calcout,"$(P)$(R=):LOWCALC") {
-    field(SCAN,"1 second")
-    field(INPA,"$(P)")
-    field(INPB,"$(P)$(R=):minorTolerance")
-    field(CALC,"A - B")
-    field(DOPT,"Use CALC")
-    field(OOPT,"On Change")
-    field(OUT,"$(P)$(R=):LOW PP")
-    info(autosaveFields_pass0,"VAL")
-}
-
+############################################################
+# just propogate alarm limits down to 2h/8h/24h/1w records:
 
 record(ai,"$(P)$(R=):LOW") {
     field(FLNK,"$(P)$(R=):LOWSEQ.PROC")
@@ -99,4 +75,35 @@ record(seq,"$(P)$(R=):HIGHSEQ") {
     field(DOL3,"$(P)$(R=):HIGH")
     field(DOL4,"$(P)$(R=):HIGH")
 }
+
+############################################################
+# set alarm limits dynamically:
+
+#record(ai,"$(P)$(R=):minorTolerance") {
+#    field(VAL,"0.5")
+#    field(PINI,1)
+#    info(autosaveFields,"VAL")
+#}
+## calculate limits:
+#record(calcout,"$(P)$(R=):HIGHCALC") {
+#    field(SCAN,"1 second")
+#    field(INPA,"$(P)")
+#    field(INPB,"$(P)$(R=):minorTolerance")
+#    field(CALC,"A + B")
+#    field(DOPT,"Use CALC")
+#    field(OOPT,"On Change")
+#    field(OUT,"$(P)$(R=):HIGH PP")
+#    info(autosaveFields_pass0,"VAL")
+#}
+#record(calcout,"$(P)$(R=):LOWCALC") {
+#    field(SCAN,"1 second")
+#    field(INPA,"$(P)")
+#    field(INPB,"$(P)$(R=):minorTolerance")
+#    field(CALC,"A - B")
+#    field(DOPT,"Use CALC")
+#    field(OOPT,"On Change")
+#    field(OUT,"$(P)$(R=):LOW PP")
+#    info(autosaveFields_pass0,"VAL")
+#}
+
 

@@ -44,10 +44,16 @@ record(ai,"$(P)$(R=):1w") {
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 
+record(stringin,"$(P)$(R=):DESC") {
+    field(VAL,"$(DESC=)")
+    info(autosaveFields_pass0,"VAL")
+}
+
 ############################################################
 # just propogate alarm limits down to 2h/8h/24h/1w records:
 
 record(ai,"$(P)$(R=):LOW") {
+    field(VAL,"$(LOW=0)")
     field(FLNK,"$(P)$(R=):LOWSEQ.PROC")
     info(autosaveFields,"VAL")
 }
@@ -62,6 +68,7 @@ record(seq,"$(P)$(R=):LOWSEQ") {
     field(DOL4,"$(P)$(R=):LOW")
 }
 record(ai,"$(P)$(R=):HIGH") {
+    field(VAL,"$(HIGH=0)")
     field(FLNK,"$(P)$(R=):HIGHSEQ.PROC")
     info(autosaveFields,"VAL")
 }

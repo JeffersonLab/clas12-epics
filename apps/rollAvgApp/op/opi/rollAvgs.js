@@ -106,6 +106,6 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 insertGap(7,"");
 insertLine(5);
 
-if (alarms>=0) insertComms();
+//if (alarms>=0) insertComms();
 
 

@@ -9,13 +9,12 @@ if len(sys.argv)>1:
   else:                 sys.exit('Usage:  esr.py [-p]')
 
 # Kashy's spreadsheet, exported to ascii:
-INPUTFILE='ESR_HALLS Cryogenics Overview Pages Rev 1_2.csv'
+INPUTFILE='ESR_HALLS_Cryo_Overview.csv'
 FIELDSEPERATOR='#'
+SKIPFIRSTLINES=5
 
 # Ignore lines containing:
 IGNORE=['Sub System','High Power Target Power']
-
-SKIPFIRSTLINES=5
 
 VERBOSE=False
 
@@ -57,8 +56,9 @@ def parseSpreadsheet():
 
     if len(cols)>1: rec['units']=cols[1]
     if len(cols)>2: rec['desc']=cols[2]
-    if len(cols)>3: rec['low']=cols[3]
-    if len(cols)>4: rec['high']=cols[4]
+    if len(cols)>3 and rec['desc']=='': rec['desc']=cols[3]
+    if len(cols)>4: rec['low']=cols[4]
+    if len(cols)>5: rec['high']=cols[5]
 
     if VERBOSE:
       print '%s %s %s %s <>%s<>'%(name,units,low,high,desc)
@@ -76,6 +76,7 @@ def clean(ss):
   elif ss=='SLM': ss='slm'
   elif ss=='Watts': ss='W'
   elif ss=='Amps': ss='A'
+  elif ss=='I': ss='A'
   else: ss=ss.replace('?','')
   return ss
 
@@ -93,6 +94,12 @@ def getStats(records):
   for rec in records:
     if isOnline(rec['name']):   rec['online']=True
     if isArchived(rec['name']): rec['archived']=True
+
+def printCaputs(records):
+  print '\n\nPrintint :DESC caputs'
+  for rec in records:
+    pvName=rec['name']+':DESC'
+    print 'caput %s "%s"'%(pvName,rec['desc'])
 
 # generate the substitutions file:
 def printSubs (records):
@@ -130,13 +137,13 @@ if PRINTSTATS:
   getStats(records)
   print '\n\n##### Offline PVs:'
   for rec in records:
-    if not rec['online']: print rec['name']
+    if not rec['online']: print '%s :: %s :: %s'%(rec['name'],rec['section'],rec['desc'])
   print '\n\n##### Unarchived PVs:'
   for rec in records:
-    if not rec['archived']: print rec['name']
+    if not rec['archived']: print '%s :: %s :: %s'%(rec['name'],rec['section'],rec['desc'])
   print '\n\n##### Malformed PVs:'
   for rec in records:
-    if rec['malformed']: print rec['name']
+    if rec['malformed']: print '%s :: %s :: %s'%(rec['name'],rec['section'],rec['desc'])
   print '\n\n##### Good PVs:'
   printPvList(records)
 

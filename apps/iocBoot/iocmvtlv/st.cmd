@@ -26,6 +26,12 @@ devSnmpSetParam(DebugLevel,10)
 
 dbLoadTemplate("db/mvtlv.substitutions")
 
+#dbLoadRecords("db/mmfeusums.db","SUFFIX=Current_A")
+#dbLoadRecords("db/mmfeusums.db","XTmpV6")
+#dbLoadRecords("db/mmfeusums.db","MTmpInt")
+#dbLoadRecords("db/mmfeusums.db","TmpSdX")
+#dbLoadRecords("db/mmfeusums.db","TmpSdA")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 < save_restore.cmd

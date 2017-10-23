@@ -339,8 +339,13 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
-        if (thisLen <= ssp->SCALERHEADEROFFSET)
-            printf("SSPReadScalers:  Bad Scaler length:  %d\n",thisLen);
+        
+        // non-RICH SSP boards:
+        if (thisLen==0) break;
+
+        if (thisLen <= ssp->SCALERHEADEROFFSET) {
+            printf("SSPReadScalers:  Bad Scaler length:  %d/%d\n",len,thisLen);
+        }
         else {
             thisFiber = (*buf)[ii+1];
             thisRef = (*buf)[ii+2];
@@ -416,10 +421,15 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
             printf("SSPReadScalers:  Invalid scaler lengths.\n");
             break;
         }
+        
+        // non-RICH ssp boards:
+        if (thisLen==0) break;
+
         if (thisLen != ssp->DATAPERFIBER+ssp->DATAHEADEROFFSET)
             printf("SSPReadScalers:  Odd Data length:  %d\n",thisLen);
-        if (thisLen <= ssp->DATAHEADEROFFSET)
+        if (thisLen <= ssp->DATAHEADEROFFSET) {
             printf("SSPReadScalers:  Bad Data length:  %d\n",thisLen);
+        }
         else {
             thisFiber = (*buf)[ii+1];
             thisRef = (*buf)[ii+2];

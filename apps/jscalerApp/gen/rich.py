@@ -35,6 +35,8 @@ for line in open(mappingFile,'r').readlines():
 
   line=line.strip()
 
+  if line.find('#')==0: continue
+
   # ignore the extra columns introduced in later versions of Matteo's file:
   if line.find('A')>=0:
     line=line[0:line.find('A')]

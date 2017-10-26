@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import sys
 
+SPREADSHEET='ftintlk.csv'
+SPREADSHEET='svtHardIntlk.csv'
+
 ICOLS={'desc':0,
       'access':1,
       'type':2,
@@ -8,12 +11,32 @@ ICOLS={'desc':0,
       'units':4,
       'pvname':7}
 
-for line in open('ftintlk.csv','r').readlines():
+if SPREADSHEET.find('svt')>=0:
+  ICOLS['desc']=1
+  ICOLS['access']=2
+  ICOLS['type']=3
+  ICOLS['pvname']=4
+  ICOLS['units']=5
+
+for line in open(SPREADSHEET,'r').readlines():
+
+  if line.find('LabVIEW')>=0: continue
+
   cols=line.strip().split(',')
+
+  if cols[ICOLS['pvname']] == '': continue
+
   if len(cols)!=8: continue
   vals={}
   for key in ICOLS.keys():
     vals[key]=cols[ICOLS[key]]
+
+  if vals['desc'].find('SVT EPICS')>=0:
+    vals['desc']=vals['desc'].replace('SVT EPICS','SVT')
+  if vals['desc'].find('SVT Detector')>=0:
+    vals['desc']=vals['desc'].replace('SVT Detector','SVT')
+
+  vals['pvname']=vals['pvname'].strip()
 
   pvtype=None
   if   vals['type']=='Double': pvtype='a'

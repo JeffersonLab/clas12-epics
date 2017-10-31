@@ -27,7 +27,6 @@ devSnmpSetParam(DebugLevel,10)
 dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")
 dbLoadTemplate("db/fttrklv.substitutions")
-dbLoadTemplate("db/lvctof.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 

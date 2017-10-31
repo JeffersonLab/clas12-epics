@@ -124,7 +124,7 @@
     <wuid>611d3cfc:1540a932a5a:-7d62</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>CTOF HV</text>
+    <text>CTOF</text>
     <scripts />
     <height>59</height>
     <border_width>1</border_width>
@@ -297,33 +297,33 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Controls</description>
+        <description>HV Controls</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/CTOF/scripts/ctof_off.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Turn All Off</description>
+        <description>Turn All HV Off</description>
       </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/CTOF/scripts/ctof_on.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 ]]></scriptText>
         <embedded>false</embedded>
-        <description>Turn All On</description>
+        <description>Turn All HV On</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>hvbackup.py save det=CTOF_HV</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>1</wait_time>
-        <description>Save Settings</description>
+        <description>Save HV Settings</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>hvbackup.py restore det=CTOF_HV</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>1</wait_time>
-        <description>Restore Settings</description>
+        <description>Restore HV Settings</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>ioccaenhv_HVCTOF0:SysReset</pv_name>

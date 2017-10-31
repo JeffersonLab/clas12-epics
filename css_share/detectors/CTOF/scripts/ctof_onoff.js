@@ -13,6 +13,8 @@ else if (topbot == "BOT") { c1=24; }
 
 for (var cc=c0; cc<=c1; cc++)
 {
+        if (cc==14) continue;
+
   var ccc;
   if (cc<10) { ccc = "0" + cc; }
   else       { ccc = cc; }

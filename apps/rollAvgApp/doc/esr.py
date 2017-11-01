@@ -107,7 +107,9 @@ def printSubs (records):
   print 'pattern {P EGU LOW HIGH DESC}'
   for rec in records:
     desc=rec['desc'][0:39]
-    if rec['malformed']: continue
+    if rec['malformed']:
+      continue
+#      rec['name']=rec['name'].replace('.','_')
     print '{"%s" "%s" "%s" "%s" "%s"}' %\
         (rec['name'],
          clean(rec['units']),

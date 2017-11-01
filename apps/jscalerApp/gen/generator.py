@@ -380,6 +380,26 @@ def mkChannelsFTC(firstCrateNumber,spreadsheet='ftc_channel_map.csv'):
     channels.append(channel)
   return channels
 
+def mkChannelsFTH(firstCrateNumber,spreadsheet='fth.txt'):
+  channels=[]
+  crateNames={72:'ADCFT3'}
+  for line in open(spreadsheet,'r').readlines():
+    cols=line.strip().split()
+    if len(cols)!=7: continue
+    cr=int(cols[0])
+    sl=int(cols[1])
+    ch=int(cols[2])
+    sector=int(cols[3])
+    layer=int(cols[4])
+    component=int(cols[5])
+    order=int(cols[6])
+    if cr==72: crno=firstCrateNumber+2
+    channel={'Sl':'%.2d'%(sl),'Ch':'%.2d'%(ch),'CrName':crateNames[cr],'Det':'FTH','Sys':'FADC'}
+    channel['Element']='S%dL%dC%.2d'%(sector,layer,component)
+    setCodes(crno,channel)
+    channels.append(channel)
+  return channels
+
 def mkCrates(channels,subfileName):
   crates=[]
   for channel in channels:
@@ -454,4 +474,5 @@ mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.c
 mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
 mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
 

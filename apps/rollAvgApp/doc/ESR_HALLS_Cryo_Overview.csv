@@ -1,7 +1,7 @@
 ###########
 Parameters of ESR and Halls A, B, and C to help operators to understand the complete system, its status and effect of your changes on others###########
-Revision#1_3##########
-Date#10/17/2017##########
+Revision#1_5##########
+Date#11/1/2017##########
 Last updated by#David Kashy######Averages####
 Sub System##New name#Original name#Normal Min#Normal Max#Current Value#last 2 hrs#last 8 hrs#yesterday#last week#Comments
 ###########
@@ -14,7 +14,7 @@ CFI60DLP#g/s#Dirty Flow from 3 Halls#Dirty return flow rate from Halls A, B, C#0
 CPI6010#atm#4atm warm He sup press#4 atm Helium warm gas supply pressure#3.9#4.8######
 CFI6010#g/s#4atm warm He sup flow#4 atm Helium warm gas supply flow rate#0#15######
 CFI75DB15R#g/s#4atm warm He to Hall A#4 atm Helium warm gas to Hall A DBX#1#10######
-FI8561#g/s#4atm warm He to Hall B#4 atm Helium warm gas to Hall B DBX#0#10######
+B_TORUS:LHe:FI8561_Flow#g/s#4atm warm He to Hall B#4 atm Helium warm gas to Hall B DBX#0#10######
 MV6010A#Open/Closed#4atm to Hall A#4 atm Helium manual valve to Hall A#N/A#N/A######User input or need to add readback
 MV6010B#Open/Closed#4atm to Hall B#4 atm Helium manual valve to Hall B#N/A#N/A######User input or need to add readback
 MV6010C#Open/Closed#4atm to Hall C#4 atm Helium manual valve to Hall C#N/A#N/A######User input or need to add readback
@@ -113,8 +113,8 @@ B_SOL:LHe:LL8670SC#%#Sol Mag Reservoir LL SC probe#Helium level in Solenoid Magn
 B_SOL:MPS:I_ZFCT#Amps#Solenoid Current#Solenoid Current#-2416#2416######
 B_SOL:LHe:FI8621A_IN#SLM#Solenoid VCL flow A#Solenoid VCL flow A#60#70######
 B_SOL:LHe:FI8621B_IN#SLM#Solenoid VCL flow B#Solenoid VCL flow B#60#70######
-B_SOL:LHe:PV8522SR##Solenoid cold return valve#Solenoid cold return valve#4#58######
-B_SOL:LHe:PV8522SCD##Solenoid warm return valve#Solenoid cooldown (warm return) valve#0#0######
+B_TORUS:LHe:PV8522SR#%#Solenoid cold return valve#Solenoid cold return valve#4#58######
+B_TORUS:LHe:PV8522SCD#%#Solenoid warm return valve#Solenoid cooldown (warm return) valve#0#0######
 ###########
 B_TORUS:LHe:EV8115JT#%#Torus 4K Supply Valve#4K Supply Valve position########
 B_TORUS:LHe:EV8111CD#%#Torus 4K Supply bottom fill#Cooldown Supply valve (bottom fill)########
@@ -124,8 +124,8 @@ B_TORUS:LHe:LL8120SC#% #Torus LL SC probe#Helium level in Torus (Superconducting
 B_TORUS:MPS:I_ZFCT#Amps#Torus Current#Torus Current#-3770#3770######
 B_TORUS:LHe:FV8121A_IN#SLM#Torus VCL flow A#Torus VCL flow A#88#111######
 B_TORUS:LHe:FV8121B_IN#SLM#Torus VCL flow B#Torus VCL flow B#88#111######
-B_TORUS:LHe:PV8522TR##Torus cold return valve#Torus cold return valve#45#65######
-B_TORUS:LHe:PV8522TCD##Torus warm return valve#Torus cooldown (warm return) valve#0#0######
+B_TORUS:LHe:PV8522TR#%#Torus cold return valve#Torus cold return valve#45#65######
+B_TORUS:LHe:PV8522TCD#%#Torus warm return valve#Torus cooldown (warm return) valve#0#0######
 ###########
 LL8210.VAL#% #Buffer Dewar LL SC probe#Helium level in Buffer Dewar#55#65######
 EV8210BP.ORBV##Buffer Dewar cold return valve#Buffer Dewar cold return valv#20#50######
@@ -135,15 +135,15 @@ B_SACLAYTGT:PT_2KH#mbar#Target coolant (LHe)  pressure#Helium pressure in Target
 B_SACLAYTGT:TT_ET#K#Target Temperature#Target Temperature#3#300######
 ###########
 Hall C Magnets and Target ###########
-ecQ1_H_LHe#%##Helium level HMS Q1#60#80######
-ecQ2_H_LHe#%##Helium level HMS Q2#60#80######
-ecQ3_H_LHe#%##Helium level HMS Q3#60#80######
-ecDI_H_LHe#%##Helium level HMS Dipole#60#80######
-ecSHB_H_LHe#%##Helium level  SHMS HB#60#80######
-ecSQ1_H_LHe#%##Helium level  SHMS Q1#60#80######
-ecSQ2_H_LHe#%##Helium level  SHMS Q2#60#80######
-ecSQ3_H_LHe#%##Helium level  SHMS Q3#60#80######
-ecSDI_H_LHe#%##Helium level  SHMS Dipole#60#80######
+ecQ1_h_LHe#%##Helium level HMS Q1#60#80######
+ecQ2_h_LHe#%##Helium level HMS Q2#60#80######
+ecQ3_h_LHe#%##Helium level HMS Q3#60#80######
+ecDI_h_LHe#%##Helium level HMS Dipole#60#80######
+ecSHB_h_LHe#%##Helium level  SHMS HB#60#80######
+ecSQ1_h_LHe#%##Helium level  SHMS Q1#60#80######
+ecSQ2_h_LHe#%##Helium level  SHMS Q2#60#80######
+ecSQ3_h_LHe#%##Helium level  SHMS Q3#60#80######
+ecSDI_h_LHe#%##Helium level  SHMS Dipole#60#80######
 ecQ1_I_True#Amps##Current HMS Q1#0#1100######
 ecQ2_I_True#Amps##Current HMS Q2#0#1100######
 ecQ3_I_True#Amps##Current HMS Q3#0#1100######
@@ -172,12 +172,12 @@ ecSQ3_m_flow_CL_L#l/min##SHMS Q3 VCL - Flow#50#90######adjusted according to PSU
 ecSDI_m_flow_CL_R#l/min##SHMS Dipole VCL + Flow#50#100######adjusted according to PSU output current
 ecSDI_m_flow_CL_L#l/min##SHMS Dipole VCL - Flow#50#100######adjusted according to PSU output current
 ###########
-ecDI_V5_LVDT_true###HMS DI 4K Supply Valve########
+ecDI_S5_LVDT_true###HMS DI 4K Supply Valve########
 ecQ3_V8_LVDT_true###HMS Q3 4K Supply Valve########
 ecQ2_V8_LVDT_true###HMS Q2 4K Supply Valve########
 ecQ1_V8_LVDT_true###HMS Q1 4K Supply Valve########
 ###########
-ecDI_V6_LVDT_true###HMS DI 4K Return Valve########
+ecDI_S6_LVDT_true###HMS DI 4K Return Valve########
 ecQ3_V13_LVDT_true###HMS Q3 4K Return Valve########
 ecQ2_V13_LVDT_true###HMS Q2 4K Return Valve########
 ecQ1_V13_LVDT_true###HMS Q1 4K Return Valve########
@@ -187,17 +187,17 @@ ecQ2_vWR_LVDT_true###HMS Q3 Warm Return Valve########
 ecQ3_vWR_LVDT_true###HMS Q2 Warm Return Valve########
 ecDI_s11_LVDT_true###HMS Q1 Warm Return Valve########
 ###########
-ecSDI_S5_LVDT_true###SHMS DI 4K Supply Valve########
-ecSQ3_S5_LVDT_true###SHMS Q3 4K Supply Valve########
-ecSQ2_S5_LVDT_true###SHMS Q2 4K Supply Valve########
-ecSQ1_S5_LVDT_true###SHMS Q1 4K Supply Valve########
-ecSHB_S5_LVDT_true###SHMS HB 4K Supply Valve########
+ecSDI_V5_LVDT_true###SHMS DI 4K Supply Valve########
+ecSQ3_V5_LVDT_true###SHMS Q3 4K Supply Valve########
+ecSQ2_V5_LVDT_true###SHMS Q2 4K Supply Valve########
+ecSQ1_V5_LVDT_true###SHMS Q1 4K Supply Valve########
+ecSHB_V5_LVDT_true###SHMS HB 4K Supply Valve########
 ###########
-ecSDI_S6_LVDT_true###SHMS DI 4K Return Valve########
-ecSQ3_S6_LVDT_true###SHMS Q3 4K Return Valve########
-ecSQ2_S6_LVDT_true###SHMS Q2 4K Return Valve########
-ecSQ1_S6_LVDT_true###SHMS Q1 4K Return Valve########
-ecSHB_S6_LVDT_true###SHMS HB 4K Return Valve########
+ecSDI_V6_LVDT_true###SHMS DI 4K Return Valve########
+ecSQ3_V6_LVDT_true###SHMS Q3 4K Return Valve########
+ecSQ2_V6_LVDT_true###SHMS Q2 4K Return Valve########
+ecSQ1_V6_LVDT_true###SHMS Q1 4K Return Valve########
+ecSHB_V6_LVDT_true###SHMS HB 4K Return Valve########
 ###########
 ecSDI_vWR_LVDT_true###SHMS DI Warm Return Valve########
 ecSHB_vWR_LVDT_true###SHMS Q3 Warm Return Valve########
@@ -216,7 +216,7 @@ ecSQ3_vWR_LVDT_true###SHMS HB Warm Return Valve########
 ###########
 ###########
 ###########
-CEV6711C.ORBC#%##Cryo's 4K Supply Valve to Hall C#100#100######
+CEV6711C.ORBV#%##Cryo's 4K Supply Valve to Hall C#100#100######
 CEV6721C.ORBV#%##Cryos's 4K Return Valve from Hall C#100#100######
 CEV6711C #g/s##Cryo's 4K Flow Limit########Input from Cryo
 CFI6711C#g/s##4K Supply Flow to Hall C#20#25######
@@ -296,3 +296,9 @@ hcCryo_Return_T#K##ESR 15K return temperature from Hall C#18#25######ESR signal,
 hcCryo_Supply_P#atm##ESR 15K supply pressure to Hall C########ESR signal, with Target Group name
 hcCryo_Return_P#atm##ESR 15K return pressure from Hall C########ESR signal, with Target Group name
 hcHallC_beam_current#microAmps##beam current on Hall C cryotarget########
+###########
+###########
+###########
+UPDATED 10_30_17###########
+###########
+Seem to be correct already 10_30_17###########

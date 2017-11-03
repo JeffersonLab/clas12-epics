@@ -17,7 +17,9 @@ svtChiller_registerRecordDeviceDriver(pdbbase)
 
 ####################################
 # For the Anova A40:
-drvAsynIPPortConfigure("L1",hallb-moxa1.jlab.org:4005)
+#drvAsynIPPortConfigure("L1",hallbsc-6:4005)
+drvAsynIPPortConfigure("L1",129.57.160.245:4005)
+#drvAsynIPPortConfigure("L1",hallb-moxa1.jlab.org:4005)
 dbLoadRecords("db/anova.db","P=B_SVT_,R=CHILLER_,PORT=L1")
 dbLoadRecords("db/svtChiller-anova2eco.db","P=B_SVT_CHILLER"))
 ####################################

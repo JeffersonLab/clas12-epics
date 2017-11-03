@@ -1,0 +1,139 @@
+#!/bin/sh
+esc=`echo -en "\033"`
+
+# Set colors
+cc_red="${esc}[0;31m"
+
+usage ()
+{
+    exe=`basename $0` #get the name of this executable
+ 
+    echo -e "NAME"
+    echo -e "        $exe - Read EPICS Events and Plot Everything in ROOT"
+    echo -e
+    echo -e "SYNOPSIS"
+    echo -e "        $exe [OPTION]... [PV]...                                               \e[1;35m\\\\\mode 1\e[0m"
+    echo -e "        $exe [ROOT OPTIONS]...[file1.C ... fileN.C]                            \e[1;35m\\\\\mode 2\e[0m"
+    echo -e
+    echo -e "DESCRIPTION"
+    echo -e
+    echo -e "        $exe [OPTION]... [PV]...                                               \e[1;35m\\\\\mode 1\e[0m"
+    echo -e 
+    echo -e "        In this mode, make ROOT graphs by reading EPICS values periodically and plots graphs of all PVs against time."
+    echo -e "        If -x or -w option is specified, additional graphs of all PVs against the 1st PV in the list are made"
+    echo -e "        If more that one graph exists for any given x-axis, then a multigraph with all graphs using that x-axis is also created"
+    echo -e "        See EXAMPLES 1, below."
+    echo -e
+    echo -e "        -t period"
+    echo -e "              set the period (ie time(s)) between reads. Default = 2s"
+    echo -e
+    echo -e "        -x"
+    echo -e "              make additional graphs of all PVs against the 1st in the list"
+    echo -e
+    echo -e "        -w start,stop,step"
+    echo -e "              As -x, but additionally, write to the 1st of the listed PVs to do a scan. Must be 3 comma separated values."
+    echo -e "              After each time period the next value will be written to the PV"
+    echo -e 
+    echo -e "        -q "
+    echo -e "              Quiet (and quick). Won't pop up a GUI and won't ask for confrmation if scanning (with -w option)."
+    echo -e 
+    echo -e "        -d outdir"
+    echo -e "              Select a directory for any output files. Default is ./epics_gr"
+    echo -e
+    echo -e "        -s"
+    echo -e "              simulation mode. Runs a softIOC For testing"
+    echo -e "              The following PVs are available PV23004,colliX,PMT1,Fcup,Xsetting,Ysetting,BigScaler,BigScaler,AMO_SCALERS"
+    echo -e "              These are updated automatically in simulation mode"
+    echo -e
+    echo -e "        -h"
+    echo -e "              print this help message"
+    echo -e
+    echo -e "        [PV]..."
+    echo -e "              EPICS PV. Can include an optional fit and fit range. For example:"
+    echo -e "              MyScalerRate"
+    echo -e "              MyScalerRate::pol4               will fit 4th deg poly to the graph of this PV"
+    echo -e "              MyScalerRate::pol4,1.2,10.4      will fit 4th deg poly to the graph in the x-axis range 1.2 - 10.4"
+    echo -e "              If -x or -w option is selected, any specified fits will be applied to the graph of PV vs PV0"
+    echo -e "              Otherwise, the fit will be applied to the graph of PV vs Time"
+    echo -e "              For PV0, any specified fit will always be fitted vs Time "
+    echo -e "              Choosing a fit of L or C (no range needed) will join the points with a line(L) or curve(C)"
+    echo -e
+    echo -e
+    echo -e "        $exe [ROOT OPTIONS]...[file1.C ... fileN.C]                             \e[1;35m\\\\\mode 2\e[0m"
+    echo -e
+    echo -e "        In this mode call root with the reeper library loaded then set up customised behaviour in .C macros."
+    echo -e "        See EXAMPLES 2, below."
+    echo -e
+    echo -e
+    echo -e "EXAMPLES 1"
+    echo -e "        Note. These examples use the -s flag, for simulated data. Try them"
+    echo -e
+    echo -e "        $exe -s colliX PMT1 Fcup                  \e[1;35m \\\\\ makes graphs of each of the above PVs vs time\e[0m"
+    echo -e "        $exe -s -x colliX PMT1 Fcup               \e[1;35m \\\\\ as above, but additionally makes graphs of PMT1 and Fcup vs colliX\e[0m"
+    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1 Fcup  \e[1;35m \\\\\ as above but scans on colliX from -2.0 -> 2.0 in steps on 0.1\e[0m"
+    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1::gaus Fcup::gaus,-1.0,1.0  \e[1;35m\\\\\ as above but fits gaus to both PMT1 and Fcup vs colliX\e[0m"
+    echo -e "                                                                         \e[1;35m\\\\\ with restricted range for the latter\e[0m"
+    echo -e
+    echo -e "EXAMPLES 2"
+    echo -e "        Note. These examples use root macros to do EPICS PV plotting. All use simulated PVs in a softIOC."
+    echo -e "              The macros are templates to show how to use the GrimReeper features. Copy and hack."
+    echo -e
+    echo -e "        $exe -l $REEPER/grBasic.C     \e[1;35m \\\\\ Sets up a simple scan and plots one PV against another\e[0m"
+    echo -e "        $exe -l $REEPER/grScanFancy.C \e[1;35m \\\\\ Shows how to do a 2d scan, fill 2d histograms and read waveforms.\e[0m"
+    echo -e
+    echo -e 
+    echo -e "AUTHOR"
+    echo -e "        Written by Ken Livingston"
+    echo -e 
+    echo -e "SEE ALSO"
+    echo -e "        $exe is part of the (GRIM)REEPER package. (GRIM)REEPER Implements Macros to Read EPICS Events and Plot Everything in ROOT"
+    echo -e "        Full documentation at <http:somewhere>"
+    echo -e
+    echo -e "                                                                                             June 2017"
+   exit 
+}
+
+#some defaults
+SIM="0"
+PERIOD="1"
+GUI="1"
+SCAN="\"\""
+OUTDIR="\"\""
+
+#check the no of args
+if [ "$#" -lt 1 ]
+then
+  usage
+fi
+
+#check if there's a .C file, then pass all args to root, but insert the loader macro before the users .C file 
+if [ -n "$(echo $@ | grep '\.C')" ]; then
+    rootargs=`echo $@ | awk '{for(n=1;n<=NF;n++){if((l==0)&&($n~".C")){printf"%s/grLoad.C ",ENVIRON["REEPER"];l=1}printf"%s ",$n}}'`
+
+    #echo "root $rootargs";
+    root $rootargs
+
+#otherwise process the args to construct root args to call the genReeper.C macro 
+else
+
+    while getopts ":sqxd:t:w:h" opt; do
+	case $opt in
+
+	    s )  SIM="1" ;;
+	    d )  OUTDIR="\"$OPTARG\"" ;;
+	    q )  GUI="0" ;;
+	    x )  SCAN="\"1\"" ;;
+	    t )  PERIOD="$OPTARG" ;;
+	    w )  SCAN="\"$OPTARG\"";;
+	    h )  usage ;;
+	    \?)  usage ;;
+	esac
+    done
+
+    shift $(($OPTIND - 1))
+    macroargs="$#,\"$@\",$PERIOD,$SIM,$GUI,$SCAN,$OUTDIR"
+    #echo "root $rootargs";
+    root -l ${REEPER}/grLoad.C "${REEPER}/genReeper.C($macroargs)"
+fi
+
+exit

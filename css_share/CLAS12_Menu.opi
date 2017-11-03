@@ -587,6 +587,14 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>FT HW Interlocks</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/FTH/FTH_FADC.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>FTH FADC Scalers</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -887,7 +895,7 @@ $(pv_value)</tooltip>
           <description>RICH SSP Boards</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>detectors/RICH/ssp-tempvolt.opi</path>
+          <path>detectors/RICH/ssp-tempvolt-colorscale.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
             <SCREEN>temp:fpga</SCREEN>
@@ -897,11 +905,9 @@ $(pv_value)</tooltip>
           <description>RICH Temperatures Map</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>detectors/RICH/ssp-scalers.opi</path>
+          <path>detectors/RICH/ssp-scalers-colorscale.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <SCREEN>temp:fpga</SCREEN>
-            <L>FPGA Temperatures (C)</L>
           </macros>
           <replace>2</replace>
           <description>RICH Scalers Map</description>
@@ -1780,7 +1786,7 @@ $(pv_value)</tooltip>
           <macros>
             <include_parent_macros>true</include_parent_macros>
             <P>scaler</P>
-            <SUFFIX>_</SUFFIX>
+            <SUFFIX></SUFFIX>
           </macros>
           <replace>2</replace>
           <description>Joerger Scaler</description>
@@ -2423,59 +2429,6 @@ $(pv_value)</tooltip>
       <name>Grid Layout</name>
     </widget>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-43c9d5fa:158447c69c6:-6996</wuid>
-    <pv_value />
-    <text>JMenu</text>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <image></image>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Action Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>110</width>
-    <x>29</x>
-    <name>Action Button</name>
-    <y>118</y>
-    <style>0</style>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="true">
-      <action type="EXECUTE_CMD">
-        <command>jtabs_launcher.sh</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description></description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
     <border_style>6</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -2587,6 +2540,61 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>TOF</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-3a2a9588:15f834b4aeb:-7fdb</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>25</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color name="GRID" red="90" green="90" blue="90" />
+    </border_color>
+    <label>Accelerator</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>110</width>
+    <x>29</x>
+    <name>DC</name>
+    <y>119</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>jtabs_launcher.sh</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>JMenu</description>
+      </action>
+      <action type="OPEN_WEBPAGE">
+        <hyperlink>http://epicsweb.jlab.org</hyperlink>
+        <description>JMenu Web</description>
       </action>
     </actions>
     <font>

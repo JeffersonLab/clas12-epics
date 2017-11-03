@@ -1,7 +1,8 @@
 cd "$IOC_root_vmesvt"
 
 < cdCommands
-< ../network-86
+< ../network-NAB
+#< ../network-86
 < ../nfsCommands
 
 cd topbin

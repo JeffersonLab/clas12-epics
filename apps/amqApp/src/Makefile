@@ -40,9 +40,6 @@ USR_INCLUDES += -I./ -I$(IPC_HOME)/src/main -I/usr/include/apr-1 -I/usr/include/
 amq_LIBS += $(EPICS_BASE_IOC_LIBS)
 amq_LIBS += activemq-cpp json-c amqSupport
 
-#amq_LIBS += activemq-cpp
-#amq_LIBS += json-c
-
 #===========================
 
 include $(TOP)/configure/RULES

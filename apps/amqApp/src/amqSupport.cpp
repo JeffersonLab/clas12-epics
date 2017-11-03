@@ -68,7 +68,6 @@ void json_read_value( json_object *jobj, int indx );
 void json_parse_array( json_object *jobj);
 void print_json_value(json_object *jobj);
 
-void readPV(void*,double);
 
 using namespace activemq;
 using namespace activemq::core;
@@ -114,7 +113,8 @@ private:
   
   SimpleAsyncConsumer(const SimpleAsyncConsumer&);
   SimpleAsyncConsumer& operator=(const SimpleAsyncConsumer&);
-  
+  StreamMessage *smessage;
+
 public:
   
   SimpleAsyncConsumer(const std::string& brokerURI,
@@ -189,6 +189,7 @@ public:
   // Called from the consumer since this class is a registered MessageListener.
   virtual void onMessage(const Message* message) {
     if(!startFlag) return;
+    smessage = (StreamMessage*)message;  
     static int count = 0;
     rset* prset;
     uint copy=0;
@@ -199,39 +200,40 @@ public:
       
       if (textMessage != NULL) {
 	text = textMessage->getText();
-	if(rawmessage){                 //if theres a RAWMSG record copy up to NELM of the message to the waveform
-	  copy=strlen(text.c_str());    //try to copy the whole thing
-	  if(copy>rawmessage->nelm){    //but chop if not enough space in the waveform
-	    copy=rawmessage->nelm;
-	  }
-	  dbScanLock((dbCommon*)rawmessage);
-	  //std::cout << "message " << text.c_str() << "   " << rawmessage->bptr << endl;
-	  strncpy((char *)(rawmessage->bptr),text.c_str(),copy);
-	  rawmessage->nord = copy;
-	  prset=(rset*)rawmessage->rset;
-	  ((fptr)(prset->process))((dbCommon*)rawmessage);
-	  dbScanUnlock((dbCommon*)rawmessage);
-	}
-	if(npv){
-	  jobj = json_tokener_parse(text.c_str());
-	  if(jobj!=NULL){
-	    json_epics(jobj);
-	  }
-	}
       }
-      else {
-	text = "NOT A TEXTMESSAGE!";
+      else{
+	text = smessage->readString();
+      }
+      
+      std::cout << "Full Message = " << text.c_str() << endl;
+      if(rawmessage){                 //if theres a RAWMSG record copy up to NELM of the message to the waveform
+	copy=strlen(text.c_str());    //try to copy the whole thing
+	if(copy>rawmessage->nelm){    //but chop if not enough space in the waveform
+	  copy=rawmessage->nelm;
+	}
+	dbScanLock((dbCommon*)rawmessage);
+	strncpy((char *)(rawmessage->bptr),text.c_str(),copy);
+	rawmessage->nord = copy;
+	prset=(rset*)rawmessage->rset;
+	((fptr)(prset->process))((dbCommon*)rawmessage);
+	dbScanUnlock((dbCommon*)rawmessage);
+      }
+      if(npv){
+	//text.insert (0, 1, '{');
+	//text.append(1, '}');
+	jobj = json_tokener_parse(text.c_str());
+	if(jobj!=NULL){
+	  json_epics(jobj);
+	}
+	else{ 
+	  std::cout << "Not a json thing" << std::endl;
+	}
       }
       
       if (clientAck) {
 	message->acknowledge();
       }
-      
-      //      printf("Message #%d Received: %s\n", count, text.c_str());
-      //sscanf(text.c_str(),"%lf",&rawval);
-      //printf("Scanned as %lf\n", rawval);		
-      //readPV(pvstructs[0],rawval);
-      
+            
     } catch (CMSException& e) {
       e.printStackTrace();
     }
@@ -348,21 +350,6 @@ void addPV(void *addr, int type, char* key){
   npv++;
 }
 
-// called when message is recieved
-  void readPV(void* precv, double raw){
-  aiRecord* prec= (aiRecord*)precv;
-
-  std::cout << "raw " << raw << std::endl;
-
-  rset* prset;
-
-  prset=(rset*)prec->rset;
-  
-  dbScanLock((dbCommon*)prec);
-  prec->val=raw;
-  ((fptr)(*prset->process))((dbCommon*)prec);
-  dbScanUnlock((dbCommon*)prec);
-}
 
 /*printing the value corresponding to boolean, double, integer and strings*/
 void print_json_value(json_object *jobj){
@@ -390,6 +377,7 @@ void json_read_value(json_object *jobj, int indx ){
   void *prec = pvstructs[indx];
   char *key = jsonKeys[indx];
   int pvtype= pvtypes[indx];
+  rset* prset;
   
   enum json_type type = json_object_get_type(jobj); /*Getting the type of the json object*/
   double aival=0.0;
@@ -408,6 +396,9 @@ void json_read_value(json_object *jobj, int indx ){
     dbScanLock((dbCommon*)prec);
     if(pvtype==EAi)((aiRecord*)(prec))->val = aival;
     else ((biRecord*)(prec))->val = (int)aival;
+
+    prset=(rset*)((dbCommon*)prec)->rset;
+    ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
     
     break;
@@ -420,6 +411,8 @@ void json_read_value(json_object *jobj, int indx ){
     }
     dbScanLock((dbCommon*)prec);
     ((aiRecord*)(prec))->val = json_object_get_double(jobj);
+    prset=(rset*)((dbCommon*)prec)->rset;
+    ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
     
     break;
@@ -432,6 +425,8 @@ void json_read_value(json_object *jobj, int indx ){
     }
     dbScanLock((dbCommon*)prec);
     ((aiRecord*)(prec))->val = (double)json_object_get_int(jobj);
+    prset=(rset*)((dbCommon*)prec)->rset;
+    ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
     
     break;
@@ -451,6 +446,8 @@ void json_read_value(json_object *jobj, int indx ){
       if(strlen(json_object_get_string(jobj))>(((waveformRecord*)(prec))->nelm)) ((waveformRecord*)(prec))->nord = ((waveformRecord*)(prec))->nelm;
       else ((waveformRecord*)(prec))->nord = strlen(json_object_get_string(jobj));
     }
+    prset=(rset*)((dbCommon*)prec)->rset;
+    ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
     break;
 
@@ -464,6 +461,7 @@ void json_read_value(json_object *jobj, int indx ){
 void json_read_array( json_object *jobj, int indx) {   //got here because it's a json array who key matches that of an epics PV in the list
   enum json_type type;
   json_object * jvalue;
+  rset* prset;
 
   char *key = jsonKeys[indx];                          //get the key of the json element we're interested in
   int pvtype= pvtypes[indx];                           //find the type of the PV
@@ -505,6 +503,8 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 	bptr_d[i]=json_object_get_double(jvalue);      //fill the buffer with doubles
       }
       wrec->nord=ncopy;
+      prset=(rset*)((dbCommon*)prec)->rset;
+      ((fptr)(prset->process))((dbCommon*)prec);
       dbScanUnlock((dbCommon*)prec);
 
       break;
@@ -519,6 +519,8 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 	bptr_i[i]=json_object_get_int(jvalue);
       }
       wrec->nord=ncopy;
+      prset=(rset*)((dbCommon*)prec)->rset;
+      ((fptr)(prset->process))((dbCommon*)prec);
       dbScanUnlock((dbCommon*)prec);
       break;
       

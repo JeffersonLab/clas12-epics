@@ -12,20 +12,18 @@ monitor_registerRecordDeviceDriver pdbbase
 callbackSetQueueSize(10000)
 scanOnceSetQueueSize(10000)
 
-dbLoadTemplate("db/caenhv_stat-DC.substitutions")
-
-dbLoadRecords("db/monitorApp_torus.db")
-
 dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")
 dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
 
-dbLoadRecords("db/HVDC_VSCAN.db")
+# remove this from iocmonitor after ioctorusForce is restarted:
+dbLoadRecords("db/torus_fieldAverage.db")
 
 dbLoadRecords("db/collimator_alarm.db")
 
 dbLoadRecords("db/htcc-gas-calc.db")
 
 # cross-IOC hv stuff:
+dbLoadRecords("db/HVDC_VSCAN.db")
 dbLoadTemplate("db/ltccOnOff.substitutions")
 dbLoadTemplate("db/pcalOnOff.substitutions")
 dbLoadTemplate("db/ecalOnOff.substitutions")

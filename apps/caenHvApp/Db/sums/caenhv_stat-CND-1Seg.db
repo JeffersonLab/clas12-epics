@@ -1,0 +1,77 @@
+
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E1:isOn") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E1.L CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E1.L CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E1.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E2:isOn") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E2.L CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E2.L CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E2.L CPP")
+    field(CALC,"(A>>15)&1=1&&(B>>15)&1=1&&(C>>15)&1=1")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG):isOn") {
+    field(INPA,"B_DET_CND_HV_Seg$(SEG)_E1:isOn CPP")
+    field(INPB,"B_DET_CND_HV_Seg$(SEG)_E2:isOn CPP")
+    field(CALC,"A=1 && B=1")
+}
+
+
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E1:isOff") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E1.L CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E1.L CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E1.L CPP")
+    field(CALC,"(A&(1<<15))=0&&(B&(1<<15))=0&&(C&(1<<15))=0")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E2:isOff") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E2.L CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E2.L CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E2.L CPP")
+    field(CALC,"(A&(1<<15))=0&&(B&(1<<15))=0&&(C&(1<<15))=0")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG):isOff") {
+    field(INPA,"B_DET_CND_HV_Seg$(SEG)_E1:isOff CPP")
+    field(INPB,"B_DET_CND_HV_Seg$(SEG)_E2:isOff CPP")
+    field(CALC,"A=1 && B=1")
+}
+
+
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E1:isError") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E1 CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E1 CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E1 CPP")
+    field(CALC,"A>9000 || B>9000 || C>9000")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E2:isError") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E2 CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E2 CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E2 CPP")
+    field(CALC,"A>9000 || B>9000 || C>9000")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG):isError") {
+    field(INPA,"B_DET_CND_HV_Seg$(SEG)_E1:isError CPP")
+    field(INPB,"B_DET_CND_HV_Seg$(SEG)_E2:isError CPP")
+    field(CALC,"A=1 || B=1")
+}
+
+
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E1:isComm") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E1 CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E1 CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E1 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG)_E2:isComm") {
+    field(INPA,"B_DET_CND_HV_Inner_Seg$(SEG)_E2 CPP")
+    field(INPB,"B_DET_CND_HV_Middle_Seg$(SEG)_E2 CPP")
+    field(INPC,"B_DET_CND_HV_Outer_Seg$(SEG)_E2 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_CND_HV_Seg$(SEG):isComm") {
+    field(INPA,"B_DET_CND_HV_Seg$(SEG)_E1:isComm CPP")
+    field(INPB,"B_DET_CND_HV_Seg$(SEG)_E2:isComm CPP")
+    field(CALC,"A=1 && B=1")
+}
+
+

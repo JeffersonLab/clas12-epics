@@ -1,3 +1,4 @@
+
 record(calc,"$(P)_00-07:$(SUFF)") {
     field(INPA,"$(P)_00:$(SUFF) CPP")
     field(INPB,"$(P)_01:$(SUFF) CPP")
@@ -20,14 +21,273 @@ record(calc,"$(P)_08-15:$(SUFF)") {
     field(INPH,"$(P)_15:$(SUFF) CPP")
     field(CALC,"A+B+C+D+E+F+G+H")
 }
-record(calc,"$(P)_00-15:$(SUFF)") {
+record(calc,"$(P)_TOTAL:$(SUFF)") {
     field(INPA,"$(P)_00-07:$(SUFF) CPP")
     field(INPB,"$(P)_08-15:$(SUFF) CPP")
     field(CALC,"A+B")
-}
-record(calc,"$(P)_00:$(SUFF):frac") {
-    field(INPA,"$(P)_00:$(SUFF) CPP")
-    field(INPC,"$(P)_00-15:$(SUFF) CPP")
-    field(CALC,"B>0 ? A/B : 0")
+    field(FLNK,"$(P)_00:$(SUFF):frac.PROC")
 }
 
+record(calc,"$(P)_00:$(SUFF):frac") {
+    field(INPA,"$(P)_00:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_01:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_01:$(SUFF):frac") {
+    field(INPA,"$(P)_01:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_02:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_02:$(SUFF):frac") {
+    field(INPA,"$(P)_02:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_03:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_03:$(SUFF):frac") {
+    field(INPA,"$(P)_03:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_04:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_04:$(SUFF):frac") {
+    field(INPA,"$(P)_04:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_05:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_05:$(SUFF):frac") {
+    field(INPA,"$(P)_05:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_06:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_06:$(SUFF):frac") {
+    field(INPA,"$(P)_06:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_07:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_07:$(SUFF):frac") {
+    field(INPA,"$(P)_07:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_08:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_08:$(SUFF):frac") {
+    field(INPA,"$(P)_08:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_09:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_09:$(SUFF):frac") {
+    field(INPA,"$(P)_09:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_10:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_10:$(SUFF):frac") {
+    field(INPA,"$(P)_10:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_11:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_11:$(SUFF):frac") {
+    field(INPA,"$(P)_11:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_12:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_12:$(SUFF):frac") {
+    field(INPA,"$(P)_12:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_13:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_13:$(SUFF):frac") {
+    field(INPA,"$(P)_13:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_14:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_14:$(SUFF):frac") {
+    field(INPA,"$(P)_14:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_15:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_15:$(SUFF):frac") {
+    field(INPA,"$(P)_15:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_16:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_16:$(SUFF):frac") {
+    field(INPA,"$(P)_16:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_17:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_17:$(SUFF):frac") {
+    field(INPA,"$(P)_17:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_18:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_18:$(SUFF):frac") {
+    field(INPA,"$(P)_18:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_19:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_19:$(SUFF):frac") {
+    field(INPA,"$(P)_19:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_20:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_20:$(SUFF):frac") {
+    field(INPA,"$(P)_20:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_21:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_21:$(SUFF):frac") {
+    field(INPA,"$(P)_21:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_22:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_22:$(SUFF):frac") {
+    field(INPA,"$(P)_22:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_23:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_23:$(SUFF):frac") {
+    field(INPA,"$(P)_23:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_24:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_24:$(SUFF):frac") {
+    field(INPA,"$(P)_24:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_25:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_25:$(SUFF):frac") {
+    field(INPA,"$(P)_25:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_26:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_26:$(SUFF):frac") {
+    field(INPA,"$(P)_26:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_27:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_27:$(SUFF):frac") {
+    field(INPA,"$(P)_27:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_28:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_28:$(SUFF):frac") {
+    field(INPA,"$(P)_28:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_29:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_29:$(SUFF):frac") {
+    field(INPA,"$(P)_29:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_30:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_30:$(SUFF):frac") {
+    field(INPA,"$(P)_30:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_31:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_31:$(SUFF):frac") {
+    field(INPA,"$(P)_31:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+    field(FLNK,"$(P)_32:$(SUFF):frac.PROC")
+}
+record(calc,"$(P)_32:$(SUFF):frac") {
+    field(INPA,"$(P)_32:$(SUFF)")
+    field(INPB,"$(P)_TOTAL:$(SUFF)")
+    field(CALC,"B>0 ? 100*A/B : 0")
+    field(EGU,"%")
+    field(PREC,1)
+}

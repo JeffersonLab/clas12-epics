@@ -8,6 +8,7 @@ record(ai,"$(P)$(R=):2h") {
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
     field(EGU,"$(EGU=)")
+    field(PREC,2)
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):8h") {
@@ -19,6 +20,7 @@ record(ai,"$(P)$(R=):8h") {
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
     field(EGU,"$(EGU=)")
+    field(PREC,2)
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):24h") {
@@ -30,6 +32,7 @@ record(ai,"$(P)$(R=):24h") {
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
     field(EGU,"$(EGU=)")
+    field(PREC,2)
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 record(ai,"$(P)$(R=):1w") {
@@ -41,6 +44,7 @@ record(ai,"$(P)$(R=):1w") {
     field(LOW,"$(LOW=0)")
     field(HIGH,"$(HIGH=0)")
     field(EGU,"$(EGU=)")
+    field(PREC,2)
     info(autosaveFields_pass0,"VAL HIGH LOW")
 }
 
@@ -53,6 +57,7 @@ record(stringin,"$(P)$(R=):DESC") {
 # just propogate alarm limits down to 2h/8h/24h/1w records:
 
 record(ai,"$(P)$(R=):LOW") {
+    field(PREC,2)
     field(VAL,"$(LOW=0)")
     field(FLNK,"$(P)$(R=):LOWSEQ.PROC")
     info(autosaveFields,"VAL")
@@ -68,6 +73,7 @@ record(seq,"$(P)$(R=):LOWSEQ") {
     field(DOL4,"$(P)$(R=):LOW")
 }
 record(ai,"$(P)$(R=):HIGH") {
+    field(PREC,2)
     field(VAL,"$(HIGH=0)")
     field(FLNK,"$(P)$(R=):HIGHSEQ.PROC")
     info(autosaveFields,"VAL")

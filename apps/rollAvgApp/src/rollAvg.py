@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import epics,subprocess,time,datetime,sys,threading,signal
 
-# See $EPICS/apps/monitorApp/Db/rollingAverages.db for outputs
+# See $EPICS/apps/rollAvgApp/Db/rollingAverages.db for outputs
 
 # time durations over which to average:
 # - use myStats conventions

@@ -32,8 +32,13 @@ dbLoadTemplate("db/jscalers_RICH_sums_tempvolt.substitutions")
 dbLoadTemplate("db/jscalers_puts_RICH.substitutions")
 
 # make waveforms: 
-dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=ROWS:,NELM=23,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/rows.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=ROWS:,NELM=23, FTVL=FLOAT,PERIOD=5,FNAME=pvlists/rows.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=PMTS:,NELM=391,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/pmts.txt")
+
+dbLoadRecords("db/rich_maxTemp.db","P=B_DET_RICH_SSP,SUFF=:temp:fpga")
+dbLoadTemplate("db/rich_maxTemp.substitutions")
+
+dbLoadRecords("db/richIntlk.template","P=B_DET_RICH_INTLK,R=:temp:fpga:,TESTVAL=B_DET_RICH_SSP:temp:fpga:max,CTRL=B_DET_RICH_LVHV:OFF")
 
 cd ${TOP}/iocBoot/${IOC}
 

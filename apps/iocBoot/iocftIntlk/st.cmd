@@ -10,8 +10,6 @@ ftIntlk_registerRecordDeviceDriver pdbbase
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:"
 
-#dbLoadRecords("db/ftcIntlk_test.db")
-
 #dbLoadRecords("db/ftcIntlk_hvQ.db","P=B_DET_FTC_HV_Q1")
 #dbLoadRecords("db/ftcIntlk_hvQ.db","P=B_DET_FTC_HV_Q2")
 #dbLoadRecords("db/ftcIntlk_hvQ.db","P=B_DET_FTC_HV_Q3")

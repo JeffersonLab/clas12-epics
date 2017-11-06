@@ -27,10 +27,10 @@ dbLoadTemplate("db/jscalers_FTH_FADC.substitutions")
 dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")
 
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,  NELM=332,FTVL=FLOAT,PERIOD=1,FNAME=ftcfadc.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:t:,NELM=332,FTVL=FLOAT,PERIOD=10,FNAME=ftcfadcT.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTH_,R=FADC:,  NELM=232,FTVL=FLOAT,PERIOD=1,FNAME=fthfadc.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_FTH_,R=FADC:t:,NELM=232,FTVL=FLOAT,PERIOD=10,FNAME=fthfadcT.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,  NELM=332,FTVL=FLOAT,PERIOD=1, FNAME=ftcfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:t:,NELM=332,FTVL=FLOAT,PERIOD=30,FNAME=ftcfadcT.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTH_,R=FADC:,  NELM=232,FTVL=FLOAT,PERIOD=1, FNAME=fthfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_FTH_,R=FADC:t:,NELM=232,FTVL=FLOAT,PERIOD=30,FNAME=fthfadcT.txt")
 
 cd ${TOP}/iocBoot/${IOC}
 

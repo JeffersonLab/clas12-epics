@@ -205,7 +205,7 @@ public:
 	text = smessage->readString();
       }
       
-      std::cout << "Full Message = " << text.c_str() << endl;
+      //std::cout << "Full Message = " << text.c_str() << endl;
       if(rawmessage){                 //if theres a RAWMSG record copy up to NELM of the message to the waveform
 	copy=strlen(text.c_str());    //try to copy the whole thing
 	if(copy>rawmessage->nelm){    //but chop if not enough space in the waveform
@@ -386,7 +386,7 @@ void json_read_value(json_object *jobj, int indx ){
 
   switch (type) {
   case json_type_boolean:
-    printf("Trying to Bool write %s \n",key);
+    //printf("Trying to Bool write %s \n",key);
     if((pvtype!= EAi)&&(pvtype != EBi)){         //bool can go to Ai or Bi record
       printf("Warning: key=%s is Json boolean - needs to go to EPICS Ai or Bi record\n",key);
       return;
@@ -396,6 +396,7 @@ void json_read_value(json_object *jobj, int indx ){
     dbScanLock((dbCommon*)prec);
     if(pvtype==EAi)((aiRecord*)(prec))->val = aival;
     else ((biRecord*)(prec))->val = (int)aival;
+    ((dbCommon*)prec)->udf = FALSE;
 
     prset=(rset*)((dbCommon*)prec)->rset;
     ((fptr)(prset->process))((dbCommon*)prec);
@@ -404,13 +405,14 @@ void json_read_value(json_object *jobj, int indx ){
     break;
     
   case json_type_double:
-    printf("Trying to Double write %s \n",key);
+    //printf("Trying to Double write %s \n",key);
     if(pvtype != EAi){         //Double must go to Ai record
       printf("Warning: key=%s is Json double - needs to go to EPICS Ai record\n",key);
       return;
     }
     dbScanLock((dbCommon*)prec);
     ((aiRecord*)(prec))->val = json_object_get_double(jobj);
+    ((dbCommon*)prec)->udf = FALSE;
     prset=(rset*)((dbCommon*)prec)->rset;
     ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
@@ -418,13 +420,14 @@ void json_read_value(json_object *jobj, int indx ){
     break;
     
   case json_type_int:
-    printf("Trying to Int write %s \n",key);
+    //printf("Trying to Int write %s \n",key);
     if(pvtype != EAi){         //Int must go to Ai record
       printf("Warning: key=%s is Json int - needs to go to EPICS Ai record\n",key);
       return;
     }
     dbScanLock((dbCommon*)prec);
     ((aiRecord*)(prec))->val = (double)json_object_get_int(jobj);
+    ((dbCommon*)prec)->udf = FALSE;
     prset=(rset*)((dbCommon*)prec)->rset;
     ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);
@@ -432,7 +435,7 @@ void json_read_value(json_object *jobj, int indx ){
     break;
     
   case json_type_string: 
-    printf("Trying to string write %s \n",key);
+    //printf("Trying to string write %s \n",key);
     if((pvtype != EString)&&(pvtype != EWaveform)){  // string must go into must go to stringin or waveform
       printf("Warning: key=%s is Json string - needs to go to EPICS stringin or waveform record\n",key);
       return;
@@ -446,6 +449,7 @@ void json_read_value(json_object *jobj, int indx ){
       if(strlen(json_object_get_string(jobj))>(((waveformRecord*)(prec))->nelm)) ((waveformRecord*)(prec))->nord = ((waveformRecord*)(prec))->nelm;
       else ((waveformRecord*)(prec))->nord = strlen(json_object_get_string(jobj));
     }
+    ((dbCommon*)prec)->udf = FALSE;
     prset=(rset*)((dbCommon*)prec)->rset;
     ((fptr)(prset->process))((dbCommon*)prec);
     dbScanUnlock((dbCommon*)prec);

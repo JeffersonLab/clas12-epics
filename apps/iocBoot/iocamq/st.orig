@@ -7,6 +7,7 @@ dbLoadDatabase "dbd/amq.dbd"
 amq_registerRecordDeviceDriver pdbbase
 
 ConnectMQ("tcp://clondb3:61616","HallB_TALK")
+#ConnectMQ("tcp://127.0.0.1:61616","HallB_DAQ")
 
 ## Load record instances
 
@@ -28,7 +29,7 @@ dbLoadRecords("db/amqStringArray.db","P=B_MSG_DAQ_MSGSTRING,K=RAWMSG,N=200")
 #The required macros are:
 #P = Prefix
 #K = json key
-#N = No of elements in the array, if required
+#N = No of elements in the arrayy
 
 #Ints
 dbLoadRecords("db/amqInt.db","P=B_MSG_DAQ_EventRate,K=EventRate")

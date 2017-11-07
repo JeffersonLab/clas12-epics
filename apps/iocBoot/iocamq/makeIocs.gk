@@ -1,0 +1,104 @@
+#!/bin/awk
+#This makes iocs from the .dat files in this directory.
+#Run like this.
+#awk -f  makeIocs.gk *.dat
+
+#This gets run only once when the script is called
+BEGIN{
+prefix="B"
+broker="tcp://clondb3:61616"
+oldfile=""
+wavetype["D"] = "db/amqDoubleArray.db"
+wavetype["I"] = "db/amqIntArray.db"
+wavetype["S"] = "db/amqStringArray.db"
+aitype["I"]   = "db/amqDouble.db"
+aitype["D"]   = "db/amqInt.db"
+
+#define the pro-forma blurb here
+line=0
+blurb[line++]="#!../../bin/linux-x86_64/amq"
+commentline  = line
+blurb[line++]="to be filled later"
+blurb[line++]=""
+blurb[line++]="cd \"../..\""
+blurb[line++]=""
+blurb[line++]="## Register all support components"
+blurb[line++]="dbLoadDatabase \"dbd/amq.dbd\""
+blurb[line++]="amq_registerRecordDeviceDriver pdbbase"
+blurb[line++]=""
+blurb[line++]="#"
+connectline  = line
+blurb[line++]="to be filled later"
+blurb[line++]=""
+blurb[line++]="## Load record instances"
+blurb[line++]=""
+blurb[line++]="#The RAWMESG key means don't parse for JSON, but writes the whole message into"
+blurb[line++]="#a waveform PV up to NELM characters. TYPE must be CHAR."
+blurb[line++]="#Eg. dbLoadRecords(\"db/amqStringArray.db\",\"P=B,K=RAWMSG,N=200\")"
+blurb[line++]=""
+blurb[line++]="#Now PVs pulling from json objects"
+blurb[line++]="#There are 4 types:"
+blurb[line++]="#1 Int"
+blurb[line++]="#2 Double"
+blurb[line++]="#3 Array of Ints"
+blurb[line++]="#4 Array of Doubles"
+blurb[line++]="#5 String"
+blurb[line++]=""
+blurb[line++]="#Types 1 and 2 for into aiRecords"
+blurb[line++]="#Types 3,4,5 go into waveformRecords (with FTVL=DBR_LONG, DBR_DOUBLE, DBR_CHAR respectively) "
+blurb[line++]=""
+blurb[line++]="#The required macros are:"
+blurb[line++]="#P = Prefix"
+blurb[line++]="#K = json key"
+blurb[line++]="#N = No of elements in the array, if required"
+blurb[line++]=""
+}
+
+#This gets called for every line in every .dat file on the command line
+{
+    
+    #if the filename has changed write the proforma part
+    if(oldfile!=FILENAME){
+	split(FILENAME,a,".dat");       #get the name and topic from the filename and instert into the blurb.
+	topic              = a[1]; 
+	outfile            = sprintf("st.%s",topic)
+	blurb[commentline] = sprintf("#This file was created by using the command \"awk -f makeIocs.gk %s\" on %s",FILENAME, strftime());
+	blurb[connectline] = sprintf("ConnectMQ(\"%s\",\"%s\")",broker,topic);
+	print blurb[0] > outfile;
+	for(l=1;l<line;l++){
+	    print blurb[l] >> outfile;
+	}
+	oldfile=FILENAME;
+    }
+    
+    if($1=="pv:"){          #if pv: line, give the fields the proper names
+	key     = $2;
+	type    = $3;
+	elem    = $4;
+	tminor  = $5;
+	tmajor  = $6;
+	comment = "";
+	for(n=7;n<=NF;n++) comment = sprintf("%s %s",comment,$n); #we're not using the comment, but you never know.	
+	
+	#in timeouts are zero, disable alarms
+	if(tminor=="0") hsv="NO_ALARM";
+	else hsv="MINOR";
+	if(tmajor=="0") hhsv="NO_ALARM";
+	else hhsv="MAJOR";
+	
+	if(elem>1)printf("dbLoadRecords(\"%s\",\"P=%s_%s_%s,K=%s,N=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,topic,key,key,elem,tminor,tmajor,hsv,hhsv)>outfile;
+	else printf("dbLoadRecords(\"%s\",\"P=%s_%s_%s,K=%s,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",aitype[type],prefix,topic,key,key,tminor,tmajor,hsv,hhsv)>outfile;
+    }
+
+    if($1=="end:"){
+	printf "\n" >outfile;
+	printf "\n" >outfile;
+	printf "cd ${TOP}/iocBoot/${IOC}\n" >outfile;
+	printf "iocInit\n" >outfile;
+	printf "\n" >outfile;
+	printf "#Need this to start responding to messages after all records are defined\n" >outfile;
+	printf "StartMQ()\n" >outfile;
+
+    }
+}
+

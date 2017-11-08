@@ -264,6 +264,27 @@ def mkChannelsHTCC(crateNumber):
         fChan += 1
   return channels
 
+def mkChannelsCND(crateNumber):
+  channels=[]
+  slots=[3,4,5,6,7,8,9,10,13]
+  ilr,lr=0,['1','2']
+  iimo,imo=0,['I','M','O']
+  iphi=1
+  for slot in slots:
+    for chan in range(16):
+      channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'CrName':'ADCCND1','Det':'CND','Sys':'FADC'}
+      channel['Element']='%s_%.2d_%s'%(imo[iimo],iphi,lr[ilr])
+      setCodes(crateNumber,channel)
+      channels.append(channel)
+      ilr+=1
+      if ilr>=len(lr):
+        ilr=0
+        iimo+=1
+      if iimo>=len(imo):
+        iimo=0
+        iphi+=1
+  return channels
+
 def mkChannelsFTOF(crateNumber,sector,system):
   if system=='FADC': crate='ADCFTOF'+str(sector)
   else:              crate='TDCFTOF'+str(sector)
@@ -468,11 +489,13 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-for sector in range(6): mkSector(sector+1)
+#for sector in range(6): mkSector(sector+1)
 
-mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+#mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+#mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
-mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
-mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
+#mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+#mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
+
+mkDetector(mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
 

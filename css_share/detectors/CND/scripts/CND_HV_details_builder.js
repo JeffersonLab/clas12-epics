@@ -20,7 +20,7 @@ for (var seg=1; seg<=24; seg++)
         
         var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
         if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
-        else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
+        else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel-WITHTRIP.opi"); }
         //try   { lc.setPropertyValue("resize_behaviour",1); }
         //catch (err) { lc.setPropertyValue("auto_size",true); }
         lc.setPropertyValue("auto_size",true);

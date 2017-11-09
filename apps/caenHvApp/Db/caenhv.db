@@ -92,6 +92,15 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
    info(autosaveFields_pass0,"HSV LSV HHSV LLSV HIGH LOW HIHI LOLO")
 }   
 
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):triprbk")
+{
+   field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).P CPP NMS")
+   field(OMSL,"closed_loop")
+   field(PREC,"2")
+   field(EGU,"ms")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):triprbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):triprbk")
+}   
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk")
 {
    field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).G CPP NMS")

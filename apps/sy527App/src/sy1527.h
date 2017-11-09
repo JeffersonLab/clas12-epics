@@ -302,6 +302,10 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
+int
+sy1527SetChannelTripTime(unsigned int id, unsigned int board,
+                         unsigned int chan,float u);
+
 
 
 

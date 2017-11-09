@@ -14,6 +14,7 @@
 #define PROP_MVDZ 8    /*  */
 #define PROP_MCDZ 9    /*  */
 #define PROP_HVL  10   /*  */
+#define PROP_TT   11   /* trip time */
 
 #define PROP_HBEAT  15   /*  */  /// my_n:
 

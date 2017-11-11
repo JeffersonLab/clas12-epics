@@ -1,5 +1,7 @@
 program seq_v450waveform
 
+// N. Baltzell
+
 option -c;
 option -r;
 

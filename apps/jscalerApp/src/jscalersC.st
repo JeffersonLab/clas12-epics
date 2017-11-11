@@ -1,5 +1,6 @@
-
 program seqJscalersC
+
+// N. Baltzell
 
 option -c;
 option -r;

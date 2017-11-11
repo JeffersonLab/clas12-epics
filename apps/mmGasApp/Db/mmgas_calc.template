@@ -1,0 +1,45 @@
+
+#P=B_DET_BMT_GAS_
+#P=B_DET_FMT_GAS_
+#P=B_DET_FTT_GAS_
+
+# STAT summary:
+record(calc,"$(P)STAT") {
+    field(INPA,"$(P)PRES_STAT CPP")
+    field(INPB,"$(P)INFLOW_STAT CPP")
+    field(INPC,"$(P)FLOWDIFF_STAT CPP")
+    field(INPD,"$(P)GEN_STAT CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIGH,1)
+    field(HIHI,2)
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+}
+# WRN summary:
+record(calc,"$(P)WRN") {
+    field(INPA,"$(P)PRES_WRN CPP")
+    field(INPB,"$(P)INFLOW_WRN CPP")
+    field(INPC,"$(P)FLOWDIFF_WRN CPP")
+    field(INPD,"$(P)GEN_WRN CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIGH,1)
+    field(HSV,"MINOR")
+}
+# FLT summary:
+record(calc,"$(P)FLT") {
+    field(INPA,"$(P)PRES_FLT CPP")
+    field(INPB,"$(P)INFLOW_FLT CPP")
+    field(INPC,"$(P)FLOWDIFF_FLT CPP")
+    field(INPD,"$(P)GEN_FLT CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIHI,1)
+    field(HSV,"MAJOR")
+}
+
+# just propogate severities to one global status:
+record(calc,"$(P)GLOBALSTAT") {
+    field(INPA,"$(P)STAT CPP")
+    field(INPB,"$(P)WRN CPP")
+    field(INPC,"$(P)FLT CPP")
+}
+

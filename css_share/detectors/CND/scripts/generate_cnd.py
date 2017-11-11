@@ -6,7 +6,7 @@ head='''<?xml version="1.0" encoding="UTF-8"?>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <macros>
     <include_parent_macros>true</include_parent_macros>
-    <TYPE>4527</TYPE>
+    <TYPE>527</TYPE>
     <ARGH>0</ARGH>
   </macros>
   <wuid>-1440ecc8:14f850aa82a:-67a8</wuid>
@@ -62,7 +62,7 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </bg_gradient_color>
     <scripts>
-      <path pathString="/CLAS12_Share/apps/caenHvApp/set_status_led2.js" checkConnect="true" sfe="false" seoe="false">
+      <path pathString="/CLAS12_Share/apps/caenHvApp/set_status_color.js" checkConnect="true" sfe="false" seoe="false">
         <pv trig="true">___PVPREFIX___:stat</pv>
         <pv trig="true">___PVPREFIX___:comms</pv>
       </path>
@@ -170,8 +170,8 @@ radO=230
 radM=200
 radI=170
 
-xoff=40
-yoff=40
+xoff=1
+yoff=1
 
 x0=xoff+radO
 y0=yoff+radO
@@ -189,10 +189,10 @@ def getCircle(rad,angle,element):
 print head
 for ii in range(48):
   foo,bar=int(ii/2)+1,ii%2+1
-  phi=float(ii-1)*2*math.pi/48
-  oo=getCircle(radO,phi,'Outer_Seg%d_E%d'%(foo,bar))
-  mm=getCircle(radM,phi,'Middle_Seg%d_E%d'%(foo,bar))
-  ii=getCircle(radI,phi,'Inner_Seg%d_E%d'%(foo,bar))
+  phi=float(ii-1)*2*math.pi/48 + 2*(2*math.pi/48)
+  oo=getCircle(radO,phi,'Outer_Seg%.2d_E%d'%(foo,bar))
+  mm=getCircle(radM,phi,'Middle_Seg%.2d_E%d'%(foo,bar))
+  ii=getCircle(radI,phi,'Inner_Seg%.2d_E%d'%(foo,bar))
   print oo,mm,ii
 print tail
 

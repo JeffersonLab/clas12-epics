@@ -39,3 +39,35 @@ pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
 
 }
 
+#file "db/mmIntlk.template" {
+#
+#pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
+#
+## LV Current -> LV OFF
+#{ B_DET_FTT_INTLK_ LV0 B_DET_FTT_LV_0:i_rd  -99999 B_DET_FTT_LV_0:i_rd.HIHI B_DET_FTT_LV_0:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV1 B_DET_FTT_LV_1:i_rd  -99999 B_DET_FTT_LV_1:i_rd.HIHI B_DET_FTT_LV_1:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV2 B_DET_FTT_LV_2:i_rd  -99999 B_DET_FTT_LV_2:i_rd.HIHI B_DET_FTT_LV_2:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV3 B_DET_FTT_LV_3:i_rd  -99999 B_DET_FTT_LV_3:i_rd.HIHI B_DET_FTT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV4 B_DET_FTT_LV_4:i_rd  -99999 B_DET_FTT_LV_4:i_rd.HIHI B_DET_FTT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV5 B_DET_FTT_LV_5:i_rd  -99999 B_DET_FTT_LV_5:i_rd.HIHI B_DET_FTT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#
+## FEU Current/Temperature -> LV OFF
+#{ B_DET_FTT_INTLK_ FeuCurrent_A   B_DET_FTT_FEU:Current_A.SEVR   -99999 2 B_DET_FTT_LV:pwoff 1 0 "Turn All FTT LV OFF if FEU current HIHI"}
+#{ B_DET_FTT_INTLK_ FeuXTmpV6_deg  B_DET_FTT_FEU:XTmpV6_deg.SEVR  -99999 2 B_DET_FTT_LV:pwoff 1 0 "Turn All FTT LV OFF if FEU XTmpV6 HIHI"}
+#{ B_DET_FTT_INTLK_ FeuMTmpInt_deg B_DET_FTT_FEU:MTmpInt_deg.SEVR -99999 2 B_DET_FTT_LV:pwoff 1 0 "Turn All FTT LV OFF if FEU MTmpInt HIHI"}
+#{ B_DET_FTT_INTLK_ FeuTmpSdX_deg  B_DET_FTT_FEU:TmpSdX_deg.SEVR  -99999 2 B_DET_FTT_LV:pwoff 1 0 "Turn All FTT LV OFF if FEU TmpSdX HIHI"}
+#{ B_DET_FTT_INTLK_ FeuTmpSdA_deg  B_DET_FTT_FEU:TmpSdA_deg.SEVR  -99999 2 B_DET_FTT_LV:pwoff 1 0 "Turn All FTT LV OFF if FEU TmpSdA HIHI"}
+#
+## Gas Fault -> LV+HV OFF
+#{ B_DET_FTT_INTLK_ GasFlt B_DET_FTT_GAS_FLT  -99999 1 B_DET_FTT_LVHV:pwoff 1 0          "Turn All FTT LV/HV OFF ifgas fault"}
+#
+## Gas Pressure/Flow -> GAS OFF
+#{ B_DET_FTT_INTLK_ GasPress    B_DET_FTT_GAS_PRES    -99999 B_DET_FTT_GAS_PRES.HIHI   B_DET_FTT_GAS_FLOW_STOP 1 2 "Turn FTT Gas OFF if pressure HIHI"}
+#{ B_DET_FTT_INTLK_ GasInflowHi B_DET_FTT_GAS_INFLOW  -99999 B_DET_FTT_GAS_INFLOW.HIHI B_DET_FTT_GAS_FLOW_STOP 1 2 "Turn FTT Gas OFF if inflow HIHI"}
+#
+## Gas Flow -> HV OFF
+#{ B_DET_FTT_INTLK_ GasInflowLo  B_DET_FTT_GAS_INFLOW  B_DET_FTT_GAS_INFLOW.LOLO 999999 B_DET_FTT_HV:pwoff 1 2 "Turn FTT HV OFF if gas flow LOLO" }
+#{ B_DET_FTT_INTLK_ GasInflowLo3 B_DET_FTT_GAS_INFLOW  0.3                       999999 B_DET_FTT_HV:pwoff 1 2 "Turn FTT HV OFF if gas flow < 0.3" }
+#
+#}
+

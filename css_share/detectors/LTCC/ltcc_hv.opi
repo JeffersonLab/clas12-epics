@@ -12911,19 +12911,19 @@ $(pv_value)</tooltip>
         <wait_time>1</wait_time>
         <description>Restore Settings</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>/CLAS12_Share/detectors/LTCC/scripts/ltcc_off.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>All HV OFF</description>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_LTCC_HV:OFF</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>ALL HV OFF</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>/CLAS12_Share/detectors/LTCC/scripts/ltcc_on.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>All HV ON</description>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_LTCC_HV:ON</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Turn All LTCC HV ON?</confirm_message>
+        <description>ALL HV ON</description>
       </action>
     </actions>
     <font>

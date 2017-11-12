@@ -4,38 +4,38 @@
 
 file "db/mmIntlk.template" {
 
-pattern { P R LOW HIGH CTRL CTRLVAL PREC DESC }
+pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
 
 # LV Current -> LV OFF
-{ B_DET_MVT_LV_0:i_rd :intlk: -99999 B_DET_MVT_LV_0:i_rd.HIHI B_DET_MVT_LV_0:switch 0 2 "Turn one LV OFF if LV current High"}
-{ B_DET_MVT_LV_1:i_rd :intlk: -99999 B_DET_MVT_LV_1:i_rd.HIHI B_DET_MVT_LV_1:switch 0 2 "Turn one LV OFF if LV current High"}
-{ B_DET_MVT_LV_2:i_rd :intlk: -99999 B_DET_MVT_LV_2:i_rd.HIHI B_DET_MVT_LV_2:switch 0 2 "Turn one LV OFF if LV current High"}
-{ B_DET_MVT_LV_3:i_rd :intlk: -99999 B_DET_MVT_LV_3:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current High"}
-{ B_DET_MVT_LV_4:i_rd :intlk: -99999 B_DET_MVT_LV_4:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current High"}
-{ B_DET_MVT_LV_5:i_rd :intlk: -99999 B_DET_MVT_LV_5:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current High"}
+{ B_DET_MVT_INTLK_ LV0 B_DET_MVT_LV_0:i_rd  -99999 B_DET_MVT_LV_0:i_rd.HIHI B_DET_MVT_LV_0:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV1 B_DET_MVT_LV_1:i_rd  -99999 B_DET_MVT_LV_1:i_rd.HIHI B_DET_MVT_LV_1:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV2 B_DET_MVT_LV_2:i_rd  -99999 B_DET_MVT_LV_2:i_rd.HIHI B_DET_MVT_LV_2:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV3 B_DET_MVT_LV_3:i_rd  -99999 B_DET_MVT_LV_3:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV4 B_DET_MVT_LV_4:i_rd  -99999 B_DET_MVT_LV_4:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV5 B_DET_MVT_LV_5:i_rd  -99999 B_DET_MVT_LV_5:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
 
 # FEU Current/Temperature -> LV OFF
-{ B_DET_MVT_FEU:Current_A.SEVR :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0                  "Turn All MVT LV OFF if FEU current High"}
-{ B_DET_MVT_FEU:XTmpV6.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0                  "Turn All MVT LV OFF if FEU current High"}
-{ B_DET_MVT_FEU:MTmpInt.SEVR   :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0                  "Turn All MVT LV OFF if FEU current High"}
-{ B_DET_MVT_FEU:TmpSdX.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0                  "Turn All MVT LV OFF if FEU current High"}
-{ B_DET_MVT_FEU:TmpSdA.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0                  "Turn All MVT LV OFF if FEU current High"}
+{ B_DET_MVT_INTLK_ FeuCurrent_A   B_DET_MVT_FEU:Current_A.SEVR   -99999 2 B_DET_MVT_LV:pwoff 1 0 "Turn All MVT LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ FeuXTmpV6_deg  B_DET_MVT_FEU:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV:pwoff 1 0 "Turn All MVT LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ FeuMTmpInt_deg B_DET_MVT_FEU:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV:pwoff 1 0 "Turn All MVT LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ FeuTmpSdX_deg  B_DET_MVT_FEU:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV:pwoff 1 0 "Turn All MVT LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ FeuTmpSdA_deg  B_DET_MVT_FEU:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV:pwoff 1 0 "Turn All MVT LV OFF if FEU TmpSdA HIHI"}
 
 # Gas Fault -> LV+HV OFF
-{ B_DET_BMT_GAS_FLT :intlk: -99999 1 B_DET_BMT_LVHV:pwoff 1 0                           "Turn All BMT LV+HV OFF if BMT gas fault"}
-{ B_DET_FMT_GAS_FLT :intlk: -99999 1 B_DET_FMT_LVHV:pwoff 1 0                           "Turn All FMT LV+HV OFF if FMT gas fault"}
+{ B_DET_BMT_INTLK_ GasFlt B_DET_BMT_GAS_FLT  -99999 1 B_DET_BMT_LVHV:pwoff 1 0          "Turn All BMT LV/HV OFF if BMT gas fault"}
+{ B_DET_FMT_INTLK_ GasFlt B_DET_FMT_GAS_FLT  -99999 1 B_DET_FMT_LVHV:pwoff 1 0          "Turn All FMT LV/HV OFF if FMT gas fault"}
 
 # Gas Pressure/Flow -> GAS OFF
-{ B_DET_BMT_GAS_PRES   :intlk: -99999 B_DET_BMT_GAS_PRES.HIHI   B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if BMT gas pressure HIHI"}
-{ B_DET_FMT_GAS_PRES   :intlk: -99999 B_DET_FMT_GAS_PRES.HIHI   B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if FMT gas pressure HIHI"}
-{ B_DET_BMT_GAS_INFLOW :intlk: -99999 B_DET_BMT_GAS_INFLOW.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if BMT gas inflow HIHI"}
-{ B_DET_FMT_GAS_INFLOW :intlk: -99999 B_DET_FMT_GAS_INFLOW.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if FMT gas inflow HIHI"}
+{ B_DET_BMT_INTLK_ GasPress    B_DET_BMT_GAS_PRES    -99999 B_DET_BMT_GAS_PRES.HIHI   B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if pressure HIHI"}
+{ B_DET_FMT_INTLK_ GasPress    B_DET_FMT_GAS_PRES    -99999 B_DET_FMT_GAS_PRES.HIHI   B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if pressure HIHI"}
+{ B_DET_BMT_INTLK_ GasInflowHi B_DET_BMT_GAS_INFLOW  -99999 B_DET_BMT_GAS_INFLOW.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if inflow HIHI"}
+{ B_DET_FMT_INTLK_ GasInflowHi B_DET_FMT_GAS_INFLOW  -99999 B_DET_FMT_GAS_INFLOW.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if inflow HIHI"}
 
 # Gas Flow -> HV OFF
-{ B_DET_BMT_GAS_INFLOW :intlk2: B_DET_BMT_GAS_INFLOW.LOLO 999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow LOLO" }
-{ B_DET_BMT_GAS_INFLOW :intlk2: 3.0                       999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow < 0.3" }
-{ B_DET_FMT_GAS_INFLOW :intlk2: B_DET_FMT_GAS_INFLOW.LOLO 999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow LOLO" }
-{ B_DET_FMT_GAS_INFLOW :intlk2: 3.0                       999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow < 0.3" }
+{ B_DET_BMT_INTLK_ GasInflowLo  B_DET_BMT_GAS_INFLOW  B_DET_BMT_GAS_INFLOW.LOLO 999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow LOLO" }
+{ B_DET_BMT_INTLK_ GasInflowLo3 B_DET_BMT_GAS_INFLOW  0.3                       999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow < 0.3" }
+{ B_DET_FMT_INTLK_ GasInflowLo  B_DET_FMT_GAS_INFLOW  B_DET_FMT_GAS_INFLOW.LOLO 999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow LOLO" }
+{ B_DET_FMT_INTLK_ GasInflowLo3 B_DET_FMT_GAS_INFLOW  0.3                       999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow < 0.3" }
 
 }
 

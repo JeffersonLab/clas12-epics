@@ -29,6 +29,7 @@ dbLoadTemplate("db/pcalOnOff.substitutions")
 dbLoadTemplate("db/ecalOnOff.substitutions")
 dbLoadTemplate("db/ftofOnOff.substitutions")
 dbLoadTemplate("db/hvOnOff.substitutions")
+dbLoadRecords("db/ltccOnOff.db")
 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

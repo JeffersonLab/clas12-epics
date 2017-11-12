@@ -42,8 +42,6 @@ char CAEN_GetChannel(unsigned, unsigned, unsigned, double *, double *);
 \*                                                                           */
 long InitChannel(struct bigsubRecord *psub)
 {
-  /*  printf("This is a Dummy Function \n"); */
-// printf("bigsub init\n"); // my:
    return(0);
 }
 
@@ -67,23 +65,18 @@ long ScanChannel(struct bigsubRecord *psub)
    * module's block generator as opposed to a regular channel.  If it is
    * a generator, the channel number's bit 31 is set as a flag.
    */
-  // my: comment +++++++++++++ // replaced by copying : cp ./base-3.14.8.2/include/bigsubRecord.h ./base-3.14.12.3/include/.
   
   unsigned chassis = (unsigned) psub->a;
   unsigned slot = (unsigned) psub->b;
   unsigned channel = (unsigned) psub->c;
   if (psub->d != 0) channel |= 0x80;
   
-//  printf("bigsub\n"); // my:
-
   /* Call device support routine to get channel data for this record, filled
    * in starting at field 'e'.  Also pass the 'val' field which will be set to
    * the difference (absolute value) between measured and demand voltage (if
    * applicable).
    */
-  // my: comment +++++++++++++ // replaced by copying : cp ./base-3.14.8.2/include/bigsubRecord.h ./base-3.14.12.3/include/.
   
-//return 0;
   if (CAEN_GetChannel(chassis, slot, channel, &psub->e, &psub->val) == ERROR)
   { char alert[128];
     sprintf(alert, "Bigsub - %s(%d): Chassis=%u Slot=%u Channel=%u",
@@ -91,14 +84,7 @@ long ScanChannel(struct bigsubRecord *psub)
     recGblRecordError(S_db_badField, (void *) psub, alert);
     return(S_db_badField);
   }
-  
 
-
-  /*
-  else {
-	printf("Read values %d  %f %f \n", psub->k, psub->f, psub->g ); 
-  }
-  */
   return(0);
 }
 

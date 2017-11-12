@@ -299,25 +299,17 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>1</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <precision>0</precision>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
+    <tooltip></tooltip>
     <horizontal_alignment>1</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
-    <wuid>-466fdcfe:15fb0930b26:-7b61</wuid>
-    <transparent>false</transparent>
-    <pv_value />
+    <wuid>-ea1f2cb:15fb1fa998c:-7fcf</wuid>
+    <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>##.###</text>
-    <rotation_angle>0.0</rotation_angle>
+    <text>N/A</text>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>true</show_units>
     <height>26</height>
     <border_width>1</border_width>
     <scale_options>
@@ -326,50 +318,70 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P)$(R):first_check.B</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color name="Read_Background" red="77" green="77" blue="77" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
-    <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <wrap_words>false</wrap_words>
-    <format_type>0</format_type>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
     <background_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
+      <color name="Invalid" red="255" green="0" blue="255" />
     </background_color>
     <width>90</width>
-    <x>60</x>
-    <name>Text Update_2</name>
+    <x>168</x>
+    <name>Label_2</name>
     <y>108</y>
     <foreground_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>1</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <precision>0</precision>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
+    <tooltip></tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules />
+    <rules>
+      <rule name="Text" prop_id="text" out_exp="false">
+        <exp bool_exp="pv0&lt;=0">
+          <value>NO_ALARM</value>
+        </exp>
+        <exp bool_exp="pv0==1">
+          <value>MINOR</value>
+        </exp>
+        <exp bool_exp="pv0==2">
+          <value>MAJOR</value>
+        </exp>
+        <pv trig="true">$(P)$(R):first_check.C</pv>
+      </rule>
+      <rule name="Color" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pv0&lt;=0">
+          <value>
+            <color name="OPI_Background" red="50" green="50" blue="50" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0==1">
+          <value>
+            <color name="Minor" red="255" green="128" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0==2">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <pv trig="true">$(P)$(R):first_check.C</pv>
+      </rule>
+    </rules>
     <enabled>true</enabled>
-    <wuid>-466fdcfe:15fb0930b26:-7b5d</wuid>
-    <transparent>false</transparent>
-    <pv_value />
+    <wuid>-ea1f2cb:15fb1fa998c:-7fcb</wuid>
+    <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>##.###</text>
-    <rotation_angle>0.0</rotation_angle>
+    <text>UNKNOWN</text>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>true</show_units>
     <height>26</height>
     <border_width>1</border_width>
     <scale_options>
@@ -378,27 +390,24 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>$(P)$(R):first_check.C</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color name="Read_Background" red="77" green="77" blue="77" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
-    <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <wrap_words>false</wrap_words>
-    <format_type>0</format_type>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
     <background_color>
-      <color name="OPI_Background" red="50" green="50" blue="50" />
+      <color name="Invalid" red="255" green="0" blue="255" />
     </background_color>
     <width>90</width>
-    <x>54</x>
-    <name>Text Update_3</name>
-    <y>144</y>
+    <x>168</x>
+    <name>Label_3</name>
+    <y>133</y>
     <foreground_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

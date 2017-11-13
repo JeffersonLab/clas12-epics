@@ -83,7 +83,7 @@
     <wuid>-2c0b3d7b:15913a3c670:-6a94</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>CND HV</text>
+    <text>CND</text>
     <scripts />
     <height>45</height>
     <border_width>1</border_width>
@@ -235,6 +235,14 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message>Really Reboot HV IOC?</confirm_message>
         <description>Reboot HV IOC</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../scalers/compact/jscaler_cnd.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Scalers</description>
       </action>
     </actions>
     <font>
@@ -408,7 +416,7 @@ $(trace_0_y_pv_value)</tooltip>
     <trace_count>2</trace_count>
     <axis_1_show_grid>true</axis_1_show_grid>
     <axis_1_dash_grid_line>true</axis_1_dash_grid_line>
-    <show_toolbar>true</show_toolbar>
+    <show_toolbar>false</show_toolbar>
     <axis_0_visible>true</axis_0_visible>
     <axis_0_show_grid>true</axis_0_show_grid>
     <trace_0_y_axis_index>1</trace_0_y_axis_index>
@@ -427,10 +435,12 @@ $(trace_0_y_pv_value)</tooltip>
       <color red="200" green="200" blue="200" />
     </axis_1_grid_color>
     <actions hook="true" hook_all="false">
-      <action type="EXECUTE_CMD">
-        <command>/usr/clas12/release/pro/epics/css_share/detectors/FTC/scripts/ftc_scalers.py</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
+      <action type="OPEN_DISPLAY">
+        <path>../scalers/compact/jscaler_cnd.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
         <description></description>
       </action>
     </actions>
@@ -480,7 +490,7 @@ $(trace_0_y_pv_value)</tooltip>
     <border_alarm_sensitive>true</border_alarm_sensitive>
     <axis_2_maximum>1000.0</axis_2_maximum>
     <show_plot_area_border>false</show_plot_area_border>
-    <width>728</width>
+    <width>493</width>
     <trace_1_x_pv_value />
     <axis_1_minimum>0.0</axis_1_minimum>
     <title_font>

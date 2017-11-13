@@ -32,6 +32,8 @@ dbLoadTemplate("db/mvtlv.substitutions")
 #dbLoadRecords("db/mmfeusums.db","TmpSdX")
 #dbLoadRecords("db/mmfeusums.db","TmpSdA")
 
+dbLoadRecords("db/mvtlvOnOff.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 < save_restore.cmd

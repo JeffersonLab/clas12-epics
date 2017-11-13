@@ -266,23 +266,21 @@ def mkChannelsHTCC(crateNumber):
 
 def mkChannelsCND(crateNumber):
   channels=[]
-  slots=[3,4,5,6,7,8,9,10,13]
-  ilr,lr=0,['1','2']
-  iimo,imo=0,['I','M','O']
-  iphi=1
-  for slot in slots:
-    for chan in range(16):
-      channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'CrName':'ADCCND1','Det':'CND','Sys':'FADC'}
-      channel['Element']='%s_%.2d_%s'%(imo[iimo],iphi,lr[ilr])
-      setCodes(crateNumber,channel)
-      channels.append(channel)
-      ilr+=1
-      if ilr>=len(lr):
-        ilr=0
-        iimo+=1
-      if iimo>=len(imo):
-        iimo=0
-        iphi+=1
+  maxSlot=13
+  for line in open('cnd.txt','r').readlines():
+    cols=line.strip().split()
+    if len(cols)!=7: continue
+    crate=int(cols[0])
+    slot=int(cols[1])
+    if int(slot)>maxSlot: continue
+    chan=int(cols[2])
+    segment=int(cols[3])
+    imo=['Inner','Middle','Outer'][int(cols[4])-1]
+    lr=int(cols[6])
+    channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'CrName':'ADCCND1','Det':'CND','Sys':'FADC'}
+    channel['Element']='%s_Seg%.2d_E%d'%(imo,segment,lr)
+    setCodes(crateNumber,channel)
+    channels.append(channel)
   return channels
 
 def mkChannelsFTOF(crateNumber,sector,system):

@@ -278,7 +278,7 @@ def mkChannelsCND(crateNumber):
     imo=['Inner','Middle','Outer'][int(cols[4])-1]
     lr=int(cols[6])
     channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'CrName':'ADCCND1','Det':'CND','Sys':'FADC'}
-    channel['Element']='%s_Seg%.2d_E%d'%(imo,segment,lr)
+    channel['Element']='%s_Seg%.2d_E%d'%(imo,segment,lr+1)
     setCodes(crateNumber,channel)
     channels.append(channel)
   return channels

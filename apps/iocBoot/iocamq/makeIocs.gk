@@ -59,11 +59,13 @@ blurb[line++]=""
     
     #if the filename has changed write the proforma part
     if(oldfile!=FILENAME){
-	split(FILENAME,a,".dat");       #get the name and topic from the filename and instert into the blurb.
-	topic              = a[1]; 
+	split(FILENAME,a,".dat");
+	fulltopic=a[1];
+	n=split(FILENAME,a,".");       #get the name and topic from the filename and instert into the blurb.
+	topic              = a[n-1]; 
 	outfile            = sprintf("st.%s",topic)
 	blurb[commentline] = sprintf("#This file was created by using the command \"awk -f makeIocs.gk %s\" on %s",FILENAME, strftime());
-	blurb[connectline] = sprintf("ConnectMQ(\"%s\",\"%s\")",broker,topic);
+	blurb[connectline] = sprintf("ConnectMQ(\"%s\",\"%s\")",broker,fulltopic);
 	print blurb[0] > outfile;
 	for(l=1;l<line;l++){
 	    print blurb[l] >> outfile;

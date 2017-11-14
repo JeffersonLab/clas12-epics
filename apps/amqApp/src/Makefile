@@ -18,6 +18,9 @@ amq_DBD += base.dbd
 
 amq_DBD += amqdev.dbd
 
+amq_DBD += devIocStats.dbd
+amq_DBD += asSupport.dbd
+
 # Add all the support libraries needed by this IOC
 #amq_LIBS += xxx
 
@@ -39,6 +42,8 @@ USR_INCLUDES += -I./ -I$(IPC_HOME)/src/main -I/usr/include/apr-1 -I/usr/include/
 # Finally link to the EPICS Base libraries
 amq_LIBS += $(EPICS_BASE_IOC_LIBS)
 amq_LIBS += activemq-cpp json-c amqSupport
+amq_LIBS += autosave
+amq_LIBS += devIocStats
 
 #===========================
 

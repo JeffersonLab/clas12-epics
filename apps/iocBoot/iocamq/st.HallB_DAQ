@@ -1,7 +1,5 @@
 #!../../bin/linux-x86_64/amq
-#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Tue Nov 14 07:37:04 EST 2017
-
-< envPaths
+#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Tue Nov 14 09:32:06 EST 2017
 
 cd "../.."
 
@@ -40,22 +38,11 @@ dbLoadRecords("db/amqDouble.db","P=B_HallB_DAQ_EventRate,K=EventRate,TH=10,THH=2
 dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
+dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
-dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
 cd ${TOP}/iocBoot/${IOC}
-
-< save_restore.cmd
-
 iocInit
 
 #Need this to start responding to messages after all records are defined
 StartMQ()
-
-makeAutosaveFiles()
-create_monitor_set("info_positions.req", 5, "P=${IOC}:")
-create_monitor_set("info_settings.req", 30, "P=${IOC}:")
-
-dbl > pv.list
-

@@ -27,7 +27,7 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_ai;
+  DEVSUPFUN  read_wf;
 } devWaveformMQ = {
   5, /* space for 6 functions */
   NULL,

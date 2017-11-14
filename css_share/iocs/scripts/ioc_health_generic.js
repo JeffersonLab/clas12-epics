@@ -20,12 +20,16 @@ function insertLine()
     lc.setPropertyValue("background_color","Read_Background");
     widget.addChildToBottom(lc);
 }
-function insertGap(size)
+function insertGap(size,text)
 {
+    if (!text) return;
     var line = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
-    line.setPropertyValue("width",1);
+    line.setPropertyValue("width",160);
     line.setPropertyValue("height",size);
-    line.setPropertyValue("text","");
+    line.setPropertyValue("text",text);
+    line.setPropertyValue("foreground_color","Header_Foreground");
+    line.setPropertyValue("horizontal_alignment","Left");
+    line.setPropertyValue("font","Default Bold");
     widget.addChildToBottom(line);
 }
 function insertIoc(iocName,opiFile)
@@ -52,10 +56,15 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
-        if (!lines[ii].startsWith("ioc")) {
-            insertGap(7);
+        if (lines[ii].startsWith("#")) {
+            insertGap(15,lines[ii].substring(1));
+            continue;
+        }
+
+        else if (!lines[ii].startsWith("ioc")) {
+            insertGap(7,"");
             insertLine();
-            insertGap(7);
+            insertGap(7,"");
             continue;
         }
 
@@ -80,7 +89,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         opiFile += ".opi";
 
         insertIoc(iocName,opiFile);
-        insertGap(1);
+        insertGap(1,"");
         jj++;
     }
 }

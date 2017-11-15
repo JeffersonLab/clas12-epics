@@ -28,6 +28,9 @@ dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")
 dbLoadTemplate("db/fttrklv.substitutions")
 
+dbLoadRecords("db/fttlvOnOff.db")
+dbLoadRecords("db/fthlvOnOff.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 < save_restore.cmd

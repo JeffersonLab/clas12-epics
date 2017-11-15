@@ -1,4 +1,4 @@
-TOP=../..
+TOP=../../../
 include $(TOP)/configure/CONFIG
 #----------------------------------------
 #  ADD MACRO DEFINITIONS BELOW HERE

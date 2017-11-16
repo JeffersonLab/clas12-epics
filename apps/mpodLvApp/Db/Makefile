@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += mpod8008l.db
+DB += mpodClearEvents.db
 DB += $(wildcard ../*.substitutions)
 
 # If <anyname>.db template is not named <anyname>*.template add

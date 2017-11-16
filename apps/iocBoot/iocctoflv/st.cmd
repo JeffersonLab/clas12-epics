@@ -25,6 +25,7 @@ devSnmpSetParam(DebugLevel,10)
 #MpodStatusParserDebug=1
 
 dbLoadTemplate("db/ctoflv.substitutions")
+dbLoadRecords("db/mpodClearEvents.db","HOST=lvctof,IP=%(lvctof)")
 
 cd "${TOP}/iocBoot/${IOC}"
 

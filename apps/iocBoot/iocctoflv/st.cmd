@@ -26,6 +26,7 @@ devSnmpSetParam(DebugLevel,10)
 
 dbLoadTemplate("db/ctoflv.substitutions")
 dbLoadRecords("db/mpodClearEvents.db","HOST=lvctof,IP=%(lvctof)")
+dbLoadRecords("db/ctoflvOnOff.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 

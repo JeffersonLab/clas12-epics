@@ -6,7 +6,7 @@
 #This gets run only once when the script is called
 BEGIN{
 prefix="B"
-broker="tcp://clondb3:61616"
+broker="tcp://clondb1:61616"
 oldfile=""
 wavetype["D"] = "db/amqDoubleArray.db"
 wavetype["I"] = "db/amqIntArray.db"
@@ -20,7 +20,9 @@ blurb[line++]="#!../../bin/linux-x86_64/amq"
 commentline  = line
 blurb[line++]="to be filled later"
 blurb[line++]=""
-blurb[line++]="cd \"../..\""
+blurb[line++]="< envPaths"
+blurb[line++]=""
+blurb[line++]="cd ${TOP}"
 blurb[line++]=""
 blurb[line++]="## Register all support components"
 blurb[line++]="dbLoadDatabase \"dbd/amq.dbd\""
@@ -94,13 +96,15 @@ blurb[line++]=""
 
     if($1=="end:"){
 	printf "\n" >outfile;
+
+
+	printf "dbLoadRecords(\"$(DEVIOCSTATS)/db/iocAdminSoft.db\",\"IOC=$(IOC)\")\n" >outfile;
 	printf "\n" >outfile;
 	printf "cd ${TOP}/iocBoot/${IOC}\n" >outfile;
 	printf "iocInit\n" >outfile;
 	printf "\n" >outfile;
 	printf "#Need this to start responding to messages after all records are defined\n" >outfile;
 	printf "StartMQ()\n" >outfile;
-
     }
 }
 

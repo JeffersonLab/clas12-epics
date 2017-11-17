@@ -1,14 +1,16 @@
 #!../../bin/linux-x86_64/amq
-#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Tue Nov 14 09:32:06 EST 2017
+#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Fri Nov 17 16:46:48 EST 2017
 
-cd "../.."
+< envPaths
+
+cd ${TOP}
 
 ## Register all support components
 dbLoadDatabase "dbd/amq.dbd"
 amq_registerRecordDeviceDriver pdbbase
 
 #
-ConnectMQ("tcp://clondb3:61616","clasrun.clasprod.daq.HallB_DAQ")
+ConnectMQ("tcp://clondb1:61616","clasrun.clasprod.daq.HallB_DAQ")
 
 ## Load record instances
 
@@ -39,7 +41,14 @@ dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_TestScalers,K=TestScalers,N=20,
 dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
 dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterPosition,K=FTClusterPosition,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterEnergy,K=FTClusterEnergy,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterNHits,K=FTClusterNHits,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterPositionHodo,K=FTClusterPositionHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterEnergyHodo,K=FTClusterEnergyHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterNHitsHodo,K=FTClusterNHitsHodo,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 
 cd ${TOP}/iocBoot/${IOC}
 iocInit

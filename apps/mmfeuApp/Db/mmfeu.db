@@ -1,4 +1,14 @@
 #Basic configuration commands
+
+record(asyn,"$(P):ASYN")
+{
+    field(DTYP,"asynRecordDevice")
+    field(PORT,"$(PORT)")
+    field(ADDR,"24")
+    field(OMAX,"2000")
+    field(IMAX,"2000")
+}
+
 record(stringout, "$(P):COMMAND") {
    field(DTYP, "stream")
    field(OUT, "@mmfeu.proto sendCommand($(P)) $(PORT)")

@@ -16,11 +16,6 @@ record(ai,"$(P)$(R=)") {
     field(PINI,1)
 }
 
-# The current value of PV 
-record(ai,"$(P)$(R=):curr") {
-    field(VAL,0)
-    field(PINI,1)
-}
 
 # The previous value of PV
 record(ai,"$(P)$(R=):prev") {
@@ -28,36 +23,70 @@ record(ai,"$(P)$(R=):prev") {
     field(PINI,1)
 }
 
-# Write the previous value of PV with a delay of $(DT),
-# and FLNK to store the current value.
 record(calcout,"$(P)$(R=):prevC") {
     field(SCAN,"$(DT) second")
     field(INPA,"$(P)$(R=)")
-    field(CALC,"A")
+    field(CALC,A)
     field(OOPT,"Every Time")
     field(DOPT,"Use CALC")
     field(OUT,"$(P)$(R=):prev PP")
-    field(ODLY,"5")
-    field(FLNK,"$(P)$(R=):currC.PROC")
-}
-
-# Write the current value of PV with no delay,
-# and FLNK to calculate the time-derivative over.
-record(calcout,"$(P)$(R=):currC") {
-    field(INPA,"$(P)$(R=)")
-    field(CALC,"A")
-    field(OOPT,"Every Time")
-    field(DOPT,"Use CALC")
-    field(OUT,"$(P)$(R=):curr PP")
     field(ODLY,"0")
-    field(FLNK,"$(P)$(R=):dxdt.PROC")
+    field(FLNK,"$(P)$(R=):delay.PROC PP")
 }
-
-# Calculate the time-derivative:
+record(seq,"$(P)$(R=):delay") {
+    field(DOL1,"$(P)$(R=):dxdt PP")
+    field(DO1,"1")
+    field(DLY1,"$(DT)")
+}
 record(calc,"$(P)$(R=):dxdt") {
-    field(INPA,"$(P)$(R=):curr")
+    field(INPA,"$(P)$(R=)")
     field(INPB,"$(P)$(R=):prev")
-    field(INPC,"$(P)$(R=):prevC.ODLY")
+    field(INPC,"$(DT)")
     field(CALC,"(A-B)/C")
     field(PREC,"5")
+    field(EGU,"dx/$(DT)s")
 }
+
+
+## The current value of PV 
+#record(ai,"$(P)$(R=):curr") {
+#    field(VAL,0)
+#    field(PINI,1)
+#}
+#
+## Write the previous value of PV with a delay of $(DT),
+## and FLNK to store the current value.
+#record(calcout,"$(P)$(R=):prevC") {
+#    field(SCAN,"$(DT) second")
+#    field(INPA,"$(P)$(R=)")
+#    field(CALC,"A")
+#    field(OOPT,"Every Time")
+#    field(DOPT,"Use CALC")
+#    field(OUT,"$(P)$(R=):prev PP")
+#    field(ODLY,"$(DT).3")
+#    field(FLNK,"$(P)$(R=):currC.PROC")
+#}
+#
+## Write the current value of PV with no delay,
+## and FLNK to calculate the time-derivative over.
+#record(calcout,"$(P)$(R=):currC") {
+#    field(INPA,"$(P)$(R=)")
+#    field(CALC,"A")
+#    field(OOPT,"Every Time")
+#    field(DOPT,"Use CALC")
+#    field(OUT,"$(P)$(R=):curr PP")
+#    field(ODLY,"0")
+#    field(FLNK,"$(P)$(R=):dxdt.PROC")
+#}
+#
+## Calculate the time-derivative:
+#record(calc,"$(P)$(R=):dxdt") {
+#    field(INPA,"$(P)$(R=):curr")
+#    field(INPB,"$(P)$(R=):prev")
+#    field(INPC,"$(P)$(R=):prevC.ODLY")
+#    field(CALC,"(A-B)/C")
+#    field(PREC,"5")
+#}
+#
+#
+#

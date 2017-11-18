@@ -8,6 +8,8 @@ testApp_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/dt_test.db","P=B_XXX,DT=1")
 
+dbLoadRecords("db/timeDerivative.db","P=CLL6763A,DT=10")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 iocInit

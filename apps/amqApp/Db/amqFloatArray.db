@@ -1,0 +1,23 @@
+record(waveform,"$(P)"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)")
+  field(NELM,"$(N)")
+  field(FTVL,"FLOAT")
+  field(DESC,"")
+  field(FLNK,"$(P)-DF")
+}
+
+record(dfanout, "$(P)-DF"){
+  field(DOL,"0")
+  field(OUTA,$(P)-Time)
+  }
+
+record(calc,"$(P)-Time") {
+  field(DESC,"")
+  field(CALC,"VAL+1")
+  field(SCAN, "1 second")
+  field(HIHI, "$(THH)")
+  field(HIGH, "$(TH)")
+  field(HHSV, "$(HHSV)")
+  field(HSV, "$(HSV)")
+}

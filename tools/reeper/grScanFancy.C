@@ -10,22 +10,24 @@
 // 4. Demonstrates how to use the (GRIM)REEPER functions to read waveforms:
 //    into an array, a TH1D, and a slice of a TH2D 
 
+enum {MY_SET,MY_INIT,MY_READ,MY_WRITE,MY_END};
 
 //Some essential globals
 GrimReeper* gr       = NULL;  //The GrimReeper class
 int      p           = 0;     //number of points
 double **pvdata      = NULL;  //All the acquired data
-void myFunc(int mode = 0);        //custom user function defined below
+void myFunc(int mode = 0);    //custom user function defined below
 
 void grScanFancy(){
 
   //make the main class object
   gr = new GrimReeper();
   
-  gr->CANVW=400; //make the default canvases a bit smaller. Some parameters are accessible without set Functions
+  gr->CANVW=600; //make the default canvases a bit smaller. Some parameters are accessible without set Functions
   gr->CANVH=400;
-  
-  gr->simIOC(2); // mode 2 means xy scan the simulation
+  gr->setGraphsPerCanvas(3);
+
+  gr->simIOC(2); // mode 2 means xy scan in the simulation
 
   //Add all the PVs to be readback - in addition to setting x,y in the scan with caput, we read the actual values back. 
   //Time is compuslory as PV0         // 0
@@ -33,18 +35,18 @@ void grScanFancy(){
   gr->addPV("Ysetting");              // 2 
   gr->addPV("BigScaler");             // 3 
 
-  //make some graphs using makeGraph(int y,int x, const char *fit,double min, double max),
-  //                       where y,x are indices of PVs (see above, fit is a fit function min,max are fit range)
-  //                       A single letter is for fit is passed as a draw option "C" or "L" normally.
+  //make some graphs using makeGraph(char *y, char *x, const char *fit,double min, double max, int canv, int pad),
+  //                       makeGraph(int   y, int   x, const char *fit,double min, double max, int canv, int pad),
+  //                           where y,x are names or indices of PVs (see above)
+  //                           fit is a fit function min,max are fit range (
+  //                           canv,pad specify the canvas and pad index. 
   //
-  //                       Axes can be referred to by their PVname or index (see addPV() above).
-  //
-  //             y-axis       v    x-axis            fitfunc     fitrange
-  gr->makeGraph("Xsetting",        "Time",           "L"                    );   // 0
-  gr->makeGraph("Ysetting",        "Time",           "L"                    );   // 1
-  gr->makeGraph("BigScaler",       "Time",           "C"                    );   // 2
-  gr->makeGraph("BigScaler",       "Xsetting",       "pol3"                 );   // 3
-  gr->makeGraph("BigScaler",       "Ysetting",       "pol3"                 );   // 4
+  //             y-axis    v     x-axis              fitfunc     fitrange    canv(0,,,) pad(1,,,,)    
+  gr->makeGraph("Xsetting",        "Time",           "L",        0.0, 0.0,   0,         1);          // 0
+  gr->makeGraph("Ysetting",        "Time",           "L",        0.0, 0.0,   0,         2);          // 1
+  gr->makeGraph("BigScaler",       "Time",           "C",        0.0, 0.0,   0,         3);          // 2
+  gr->makeGraph("BigScaler",       "Xsetting",       "pol3",    -2.0, 2.0,   1,         1);          // 3
+  gr->makeGraph("BigScaler",       "Ysetting",       "pol3",     0.0, 0.0,   1,         2);          // 4
 
   
   //gr->makeMultiGraph("Position vs Time","Xsetting_v_Time","Ysetting_v_Time");
@@ -54,11 +56,12 @@ void grScanFancy(){
   gr->setVerbosity(0);                 //stop it clogging up the console with all the PV readback numbers
   gr->setConfirmScan(0);               //(defaults to 1, meaning ask for confirmation before starting scan).
 
+
+  myFunc(MY_SET);                      //Call myFunc() to do the init part this is the specialised part. 
+  
   //make a gui - or you could do it all from the command line
   gr->makeControlGUI(GR_SMALLGUI);
 
-  myFunc(GR_INIT);                     //Call myFunc() to do the init part this is the specialised part. 
-  
   //gr->startScanning();               //start the scan directly instead of clicking the button on the GUI.
   
 }
@@ -83,6 +86,7 @@ void myFunc(int mode){
   double ystep       = 0.0;
   double val;
   char   command[100];
+  char thisfunc[100];
 
   //fprintf(stderr,"ran myRead(%d)\n",mode);
   
@@ -90,8 +94,10 @@ void myFunc(int mode){
   
   switch (mode) {
     
-  case GR_INIT:                 //only called once to set u pmy func
+  case MY_SET:                 //only called once to set up my func
     
+    fprintf(stdout,"called myFunc(MY_SET)\n");
+
     pvdata = gr->getPVData();   //get the address of the array with all the data points
 
     slicecanv = new TCanvas("slicecanv","slicecanv",1200,800,500,500); //make canvas and don't allow closing
@@ -112,13 +118,22 @@ void myFunc(int mode){
     timeSlices = new TH2D("timeSlices","timeSlices",100,0,100,20,0,20);
     timeSlices->Draw("col");
     
-    //These 2 lines set up the (GRIM)REEPER to call myFunc() to read and write as appropriate.
-    gr->setUserRead("myFunc(1)");
-    gr->setUserWrite("myFunc(2)");
+    //These  lines set up the (GRIM)REEPER to call myFunc() to init, read, write, end as required.
+    gr->setUserInit("myFunc(1)");    //=myFunc(MY_INIT)
+    gr->setUserRead("myFunc(2)");    //=myFunc(MY_READ)
+    gr->setUserWrite("myFunc(3)");   //=myFunc(MY_WRITE)
+    gr->setUserEnd("myFunc(4)");     //=myFunc(MY_END)
 
     break;
     
-  case GR_READ: //Called during a scan, after reading the PVs.
+  case MY_INIT:
+    gr->writePV("Xsetting",0);
+    gr->writePV("Ysetting",0);
+    fprintf(stdout,"Moving to initial x,y positions ... waiting 5s\n");
+    gSystem->Sleep(5000);
+    break;
+    
+  case MY_READ: //Called during a scan, after reading the PVs.
     //fprintf(stderr,"ran myRead(2)\n");
     gr->waveToArray("AMO_SCALERS",dArray,100);
     //now do something with that array if you like!
@@ -135,8 +150,7 @@ void myFunc(int mode){
     timecanv->Modified();timecanv->Update();
     break;
     
-  case GR_WRITE: //called during a scan after reading pvs (and before waiting Period time)  
-    //fprintf(stderr,"ran myRead(2)\n");
+  case MY_WRITE: //called during a scan after reading pvs (and before waiting Period time)  
     if(p<100){
       ystep=int(p/10);xstep=p%10;
       gr->writePV("Xsetting",xstep);
@@ -148,6 +162,12 @@ void myFunc(int mode){
     }
     
     else gr->stopScanning();
+    break;
+
+  case MY_END:
+    //do something here just to demonstrate
+    xyPlot->Scale(0.1);
+    xycanv->Modified();xycanv->Update();
     break;
     
   default:

@@ -86,7 +86,7 @@ void myFunc(int mode){
   
   switch (mode) {
     
-  case GR_SET:                 //only called once to set u pmy func
+  case GR_SET:                 //only called once to set up my func
     
     pvdata = gr->getPVData();   //get the address of the array with all the data points
     

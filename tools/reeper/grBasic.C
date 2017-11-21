@@ -13,36 +13,59 @@ void grBasic(int sim = 1){
   //Optional - use a testioc if you don't have real PVs
   if(sim)gr->simIOC();  
   
-  
   //Add all the PVs to be readback (These are from the simulation)
-  // Time is compuslory as PV0    // 0
+
+  //         PVname                      Index 
+  //        "Time"                    // 0     Time is automatically there as PV0
   gr->addPV("PV23004");               // 1
   gr->addPV("colliX");                // 2
   gr->addPV("BigScaler");             // 3
   gr->addPV("Fcup");                  // 4
   gr->addPV("PMT1");                  // 5
   gr->addPV("Xsetting");              // 6 
-  gr->addPV("Ysetting");              // 7 
+  gr->addPV("Ysetting");              // 7
+
+  //The following are "dummy PVs - these are formulae combinations of those already defined above, where any TF1 string is allowed 
+  // There are options for specifying the parameters
+  // [n], [n-], [n+] where:
+  // [n]  is current value, just read in, (= PVdata[n][nPoint])
+  // [n-] is the "diffence" - current value - previous value (= PVdata[n][nPoint]-PVdata[n][nPoint-1])
+  // [n+] is the "integral" - summ of all values up to current value (= Sum(PVdata[n][p] for b=0,nPoint))
+  // Eg 
+  gr->addPV("[5]/[4]");               // 8 PMT1/Fcup             
+  gr->addPV("[5]/[0-]");              // 9 PMT - Time difference - ie Scaler rate in Hz               
+  gr->addPV("[3+]/[4+]");             //10 BigScaler integral /  Fcup Integral              
+
 
   gr->printPVs();
 
-  //make some graphs using makeGraph(int y,int x, const char *fit,double min, double max),
-  //                       where y,x are indices of PVs (see above, fit is a fit function min,max are fit range)
-  //                       A single letter is for fit is passed as a draw option "C" or "L" normally.
-  //             y-axis    v     x-axis                  fitfunc     fitrange    
-  gr->makeGraph( "PV23004",      "Time",                   "pol3"                     );   // 0
-  gr->makeGraph( "colliX",       "Time",                   "C"                        );   // 1
-  gr->makeGraph( "BigScaler",    "Time"                                               );   // 2
-  gr->makeGraph( "PMT1",         "colliX",                 "pol4",     -2.0,  2.0     );   // 3
-  gr->makeGraph( "Fcup",         "PMT1"                                               );   // 4
+  gr->setGraphsPerCanvas(3);
+  
+  //make some graphs using makeGraph(char *y, char *x, const char *fit,double min, double max, int canv, int pad),
+  //                       makeGraph(int   y, int   x, const char *fit,double min, double max, int canv, int pad),
+  //                           where y,x are names or indices of PVs (see above)
+  //                           fit is a fit function min,max are fit range)
+  //                           canv,pad specify the canvas and pad index. 
+  //
+  //             y-axis    v     x-axis                  fitfunc     fitrange    canv(0,,,) pad(1,,,,)    
+  gr->makeGraph( "PV23004",      "Time",                   "pol3",   0.0, 0.0,   0,         1);            // 0
+  gr->makeGraph( "colliX",       "Time",                   "C",      0.0, 0.0,   0,         2);            // 1
+  gr->makeGraph( "BigScaler",    "Time",                   "",       0.0, 0.0,   0,         3);            // 2
+  gr->makeGraph( "PMT1",         "colliX",                 "pol4",  -2.0, 2.0,   1,         1);            // 3
+  gr->makeGraph( "Fcup",         "colliX",                 "",       0.0, 0.0,   1,         2);            // 4
+  gr->makeGraph( 8,               2,                       "",       0.0, 0.0,   1,         3);            // 5
+  gr->makeGraph( 9,               0,                       "",       0.0, 0.0,   2,         1);            // 6
+  gr->makeGraph( 10,              0,                       "",       0.0, 0.0,   2,         2);            // 7
 
   gr->printGraphs();
 
   //make multigraphs - use graph names or indices
   gr->makeMultiGraph("All PVs vs Time","PV23004_v_Time", "colliX_v_Time", "BigScaler_v_Time");    //name version
+  gr->makeMultiGraph("All PVs vs colliX",3,4,5);    //name version
   //gr->makeMultiGraph("All PVs vs Time",0,1,2);                                                  //index version
   //gr->multiCanvas[0]->SetFillColor(406);         //Give them coloured background for mark them different from single graphs.
 
+  //gr->drawGraphs();
   
   //Set the period of the readback (seconds - integer)
   gr->setPeriod(3);

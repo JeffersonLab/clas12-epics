@@ -1,4 +1,6 @@
 /*
+   N.Baltzell
+
    waveform.st
 
    Read list of PV names from a file, fill their values in a waveform,

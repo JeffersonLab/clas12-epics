@@ -217,6 +217,11 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
     printf("CAEN_HVload: request for HVL\n");
     sy1527SetChannelMaxVoltage(id, slot, channel, value);
   }
+  else if(!strncmp("PRD",property,3))
+  {
+    printf("CAEN_HVload: request for PRD\n");
+    sy1527SetChannelTripTime(id, slot, channel, value);
+  }
 
   return(0);
 }
@@ -307,6 +312,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_MVDZ] = 0.0;  // m
   property[PROP_MCDZ] = 0.0;  // n
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
+  property[PROP_TT] = sy1527GetChannelTripTime(id,slot,channel); //p
 
   property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// my_n:  // t
 

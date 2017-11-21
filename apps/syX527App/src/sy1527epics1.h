@@ -11,9 +11,10 @@
 #define PROP_TC   5    /*  */
 #define PROP_CE   6    /*  */
 #define PROP_ST   7    /*  */
-#define PROP_MVDZ 8    /*  */
-#define PROP_MCDZ 9    /*  */
+//#define PROP_MVDZ 8    /*  */
+//#define PROP_MCDZ 9    /*  */
 #define PROP_HVL  10   /*  */
+#define PROP_TT   11    /* trip time */
 
 // Low Voltage Modules:
 #define PROP_RUPT   3 // ramp up time (reusing RUP)

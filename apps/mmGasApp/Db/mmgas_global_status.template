@@ -1,0 +1,76 @@
+
+#P=B_DET_BMT_GAS_
+#P=B_DET_FMT_GAS_
+#P=B_DET_FTT_GAS_
+
+# STAT summary:
+record(calc,"$(P)STAT") {
+    field(INPA,"$(P)PRES_STAT CPP")
+    field(INPB,"$(P)INFLOW_STAT CPP")
+    field(INPC,"$(P)FLOWDIFF_STAT CPP")
+    field(INPD,"$(P)GEN_STAT CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIGH,1)
+    field(HIHI,2)
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+}
+# WRN summary:
+record(calc,"$(P)WRN") {
+    field(INPA,"$(P)PRES_WRN CPP")
+    field(INPB,"$(P)INFLOW_WRN CPP")
+    field(INPC,"$(P)FLOWDIFF_WRN CPP")
+    field(INPD,"$(P)GEN_WRN CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIGH,1)
+    field(HSV,"MINOR")
+}
+# FLT summary:
+record(calc,"$(P)FLT") {
+    field(INPA,"$(P)PRES_FLT CPP")
+    field(INPB,"$(P)INFLOW_FLT CPP")
+    field(INPC,"$(P)FLOWDIFF_FLT CPP")
+    field(INPD,"$(P)GEN_FLT CPP")
+    field(CALC,"MAX(A,MAX(B,MAX(C,D)))")
+    field(HIHI,1)
+    field(HSV,"MAJOR")
+}
+
+# just propogate severities to one global status:
+record(calc,"$(P)GLOBALSTAT") {
+    field(INPA,"$(P)FLT CPP")
+    field(INPB,"$(P)INFLOW CPP")
+    field(INPC,"$(P)INFLOW.SEVR")
+}
+
+# Get which button was pressed most recently, START or STOP.
+# If READ error (.SEVR=3), assume STOP.
+# Requires being FLNK'd from FLOW_START/FLOW_STOP records.
+# Write output to WANTGAS.
+record(calcout,"$(P)WANTGASCHECK") {
+    field(INPA,"$(P)FLOW_START")
+    field(INPB,"$(P)FLOW_STOP")
+    field(INPC,"$(P)FLOW_STAT.SEVR CPP")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(CALC,"A=1 || B=1 || C=3")
+    field(OCAL,"C#3 && A=1 ? 1 : 0")
+    field(OUT,"$(P)WANTGAS CPP")
+    # for partial testing when PLC is offline:
+    #field(CALC,"A=1 || B=1")
+    #field(OCAL,"A=1 ? 1 : 0")
+}
+
+# Whether the PLC wants gas or not.
+# # VAL must be autosaved to work across ioc reboots.
+record(bi,"$(P)WANTGAS") {
+    field(VAL,1)
+    field(ZNAM,"Gas Not Wanted")
+    field(ONAM,"Gas Wanted")
+    info(autosaveFields_pass0,"VAL")
+}
+
+
+
+
+

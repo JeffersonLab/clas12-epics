@@ -1,32 +1,105 @@
-file "db/mmIntlk.template" {
-
-pattern { P R LOW HIGH CTRL CTRLVAL PREC }
-
-# LV Current -> LV OFF
-{ B_DET_MVT_LV_0:i_rd :intlk: B_DET_MVT_LV_0:i_rd.LOLO B_DET_MVT_LV_0:i_rd.HIHI B_DET_MVT_LV_0:switch 0 2 }
-{ B_DET_MVT_LV_1:i_rd :intlk: B_DET_MVT_LV_1:i_rd.LOLO B_DET_MVT_LV_1:i_rd.HIHI B_DET_MVT_LV_1:switch 0 2 }
-{ B_DET_MVT_LV_2:i_rd :intlk: B_DET_MVT_LV_2:i_rd.LOLO B_DET_MVT_LV_2:i_rd.HIHI B_DET_MVT_LV_2:switch 0 2 }
-{ B_DET_MVT_LV_3:i_rd :intlk: B_DET_MVT_LV_3:i_rd.LOLO B_DET_MVT_LV_3:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 }
 
 # .SEVR
 # 0/1/2/3 = NO_ALARM/MINOR/MAJOR/INVALID
 
+file "db/mmIntlk.template" {
+
+pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
+
+# LV Current -> LV OFF
+{ B_DET_MVT_INTLK_ LV0 B_DET_MVT_LV_0:i_rd  -99999 B_DET_MVT_LV_0:i_rd.HIHI B_DET_MVT_LV_0:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV1 B_DET_MVT_LV_1:i_rd  -99999 B_DET_MVT_LV_1:i_rd.HIHI B_DET_MVT_LV_1:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV2 B_DET_MVT_LV_2:i_rd  -99999 B_DET_MVT_LV_2:i_rd.HIHI B_DET_MVT_LV_2:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV3 B_DET_MVT_LV_3:i_rd  -99999 B_DET_MVT_LV_3:i_rd.HIHI B_DET_MVT_LV_3:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV4 B_DET_MVT_LV_4:i_rd  -99999 B_DET_MVT_LV_4:i_rd.HIHI B_DET_MVT_LV_4:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+{ B_DET_MVT_INTLK_ LV5 B_DET_MVT_LV_5:i_rd  -99999 B_DET_MVT_LV_5:i_rd.HIHI B_DET_MVT_LV_5:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+
 # FEU Current/Temperature -> LV OFF
-{ B_DET_MVT_FEU:Current_A.SEVR :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
-{ B_DET_MVT_FEU:XTmpV6.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
-{ B_DET_MVT_FEU:MTmpInt.SEVR   :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
-{ B_DET_MVT_FEU:TmpSdX.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
-{ B_DET_MVT_FEU:TmpSdA.SEVR    :intlk: -99999 2 B_DET_MVT_LV:pwoff 1 0 }
+{ B_DET_MVT_INTLK_ Feu1Current_A   B_DET_MVT_FEU_Cr1:Current_A.SEVR   -99999 2 B_DET_MVT_LV_0:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu1XTmpV6_deg  B_DET_MVT_FEU_Cr1:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_0:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu1MTmpInt_deg B_DET_MVT_FEU_Cr1:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_0:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu1TmpSdX_deg  B_DET_MVT_FEU_Cr1:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_0:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu1TmpSdA_deg  B_DET_MVT_FEU_Cr1:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_0:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+{ B_DET_MVT_INTLK_ Feu2Current_A   B_DET_MVT_FEU_Cr2:Current_A.SEVR   -99999 2 B_DET_MVT_LV_1:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu2XTmpV6_deg  B_DET_MVT_FEU_Cr2:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_1:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu2MTmpInt_deg B_DET_MVT_FEU_Cr2:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_1:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu2TmpSdX_deg  B_DET_MVT_FEU_Cr2:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_1:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu2TmpSdA_deg  B_DET_MVT_FEU_Cr2:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_1:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+{ B_DET_MVT_INTLK_ Feu3Current_A   B_DET_MVT_FEU_Cr3:Current_A.SEVR   -99999 2 B_DET_MVT_LV_2:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu3XTmpV6_deg  B_DET_MVT_FEU_Cr3:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_2:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu3MTmpInt_deg B_DET_MVT_FEU_Cr3:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_2:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu3TmpSdX_deg  B_DET_MVT_FEU_Cr3:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_2:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu3TmpSdA_deg  B_DET_MVT_FEU_Cr3:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_2:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+{ B_DET_MVT_INTLK_ Feu4Current_A   B_DET_MVT_FEU_Cr4:Current_A.SEVR   -99999 2 B_DET_MVT_LV_3:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu4XTmpV6_deg  B_DET_MVT_FEU_Cr4:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_3:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu4MTmpInt_deg B_DET_MVT_FEU_Cr4:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_3:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu4TmpSdX_deg  B_DET_MVT_FEU_Cr4:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_3:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu4TmpSdA_deg  B_DET_MVT_FEU_Cr4:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_3:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+{ B_DET_MVT_INTLK_ Feu5Current_A   B_DET_MVT_FEU_Cr5:Current_A.SEVR   -99999 2 B_DET_MVT_LV_4:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu5XTmpV6_deg  B_DET_MVT_FEU_Cr5:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_4:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu5MTmpInt_deg B_DET_MVT_FEU_Cr5:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_4:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu5TmpSdX_deg  B_DET_MVT_FEU_Cr5:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_4:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu5TmpSdA_deg  B_DET_MVT_FEU_Cr5:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_4:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+{ B_DET_MVT_INTLK_ Feu6Current_A   B_DET_MVT_FEU_Cr6:Current_A.SEVR   -99999 2 B_DET_MVT_LV_5:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+{ B_DET_MVT_INTLK_ Feu6XTmpV6_deg  B_DET_MVT_FEU_Cr6:XTmpV6_deg.SEVR  -99999 2 B_DET_MVT_LV_5:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+{ B_DET_MVT_INTLK_ Feu6MTmpInt_deg B_DET_MVT_FEU_Cr6:MTmpInt_deg.SEVR -99999 2 B_DET_MVT_LV_5:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+{ B_DET_MVT_INTLK_ Feu6TmpSdX_deg  B_DET_MVT_FEU_Cr6:TmpSdX_deg.SEVR  -99999 2 B_DET_MVT_LV_5:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+{ B_DET_MVT_INTLK_ Feu6TmpSdA_deg  B_DET_MVT_FEU_Cr6:TmpSdA_deg.SEVR  -99999 2 B_DET_MVT_LV_5:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+
+# Gas Fault -> LV+HV OFF
+{ B_DET_BMT_INTLK_ GasFlt B_DET_BMT_GAS_FLT  -99999 1 B_DET_BMT_HV:pwoff 1 0          "Turn All BMT HV OFF if BMT gas fault"}
+{ B_DET_FMT_INTLK_ GasFlt B_DET_FMT_GAS_FLT  -99999 1 B_DET_FMT_HV:pwoff 1 0          "Turn All FMT HV OFF if FMT gas fault"}
 
 # Gas Pressure/Flow -> GAS OFF
-{ B_DET_BMT_GAS_PRES :intlk: -99999 B_DET_BMT_GAS_PRES.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 }
-{ B_DET_FMT_GAS_PRES :intlk: -99999 B_DET_FMT_GAS_PRES.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 }
-{ B_DET_BMT_GAS_INFLOW :intlk: -99999 B_DET_BMT_GAS_INFLOW.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 }
-{ B_DET_FMT_GAS_INFLOW :intlk: -99999 B_DET_FMT_GAS_INFLOW.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 }
+{ B_DET_BMT_INTLK_ GasPress    B_DET_BMT_GAS_PRES    -99999 B_DET_BMT_GAS_PRES.HIHI   B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if pressure HIHI"}
+{ B_DET_FMT_INTLK_ GasPress    B_DET_FMT_GAS_PRES    -99999 B_DET_FMT_GAS_PRES.HIHI   B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if pressure HIHI"}
+{ B_DET_BMT_INTLK_ GasInflowHi B_DET_BMT_GAS_INFLOW  -99999 B_DET_BMT_GAS_INFLOW.HIHI B_DET_BMT_GAS_FLOW_STOP 1 2 "Turn BMT Gas OFF if inflow HIHI"}
+{ B_DET_FMT_INTLK_ GasInflowHi B_DET_FMT_GAS_INFLOW  -99999 B_DET_FMT_GAS_INFLOW.HIHI B_DET_FMT_GAS_FLOW_STOP 1 2 "Turn FMT Gas OFF if inflow HIHI"}
 
 # Gas Flow -> HV OFF
-{ B_DET_BMT_GAS_INFLOW :intlk2: B_DET_BMT_GAS_INFLOW.LOLO 999999 B_DET_BMT_HV:pwoff 1 2 }
-{ B_DET_BMT_GAS_INFLOW :intlk2: 3.0 999999 B_DET_BMT_HV:pwoff 1 2 }
+{ B_DET_BMT_INTLK_ GasInflowLo  B_DET_BMT_GAS_INFLOW  B_DET_BMT_GAS_INFLOW.LOLO 999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow LOLO" }
+{ B_DET_BMT_INTLK_ GasInflowLo3 B_DET_BMT_GAS_INFLOW  0.3                       999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if BMT gas flow < 0.3" }
+{ B_DET_FMT_INTLK_ GasInflowLo  B_DET_FMT_GAS_INFLOW  B_DET_FMT_GAS_INFLOW.LOLO 999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow LOLO" }
+{ B_DET_FMT_INTLK_ GasInflowLo3 B_DET_FMT_GAS_INFLOW  0.3                       999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if FMT gas flow < 0.3" }
 
 }
+
+#file "db/mmIntlk.template" {
+#
+#pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
+#
+## LV Current -> LV OFF
+#{ B_DET_FTT_INTLK_ LV0 B_DET_FTT_LV_0:i_rd  -99999 B_DET_FTT_LV_0:i_rd.HIHI B_DET_FTT_LV_0:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV1 B_DET_FTT_LV_1:i_rd  -99999 B_DET_FTT_LV_1:i_rd.HIHI B_DET_FTT_LV_1:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#{ B_DET_FTT_INTLK_ LV2 B_DET_FTT_LV_2:i_rd  -99999 B_DET_FTT_LV_2:i_rd.HIHI B_DET_FTT_LV_2:switch 0 2 "Turn one LV OFF if LV current HIHI"}
+#
+## FEU Current/Temperature -> LV OFF
+#{ B_DET_FTT_INTLK_ Feu1Current_A   B_DET_FTT_FEU_Cr1:Current_A.SEVR   -99999 2 B_DET_FTT_LV_0:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+#{ B_DET_FTT_INTLK_ Feu1XTmpV6_deg  B_DET_FTT_FEU_Cr1:XTmpV6_deg.SEVR  -99999 2 B_DET_FTT_LV_0:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+#{ B_DET_FTT_INTLK_ Feu1MTmpInt_deg B_DET_FTT_FEU_Cr1:MTmpInt_deg.SEVR -99999 2 B_DET_FTT_LV_0:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+#{ B_DET_FTT_INTLK_ Feu1TmpSdX_deg  B_DET_FTT_FEU_Cr1:TmpSdX_deg.SEVR  -99999 2 B_DET_FTT_LV_0:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+#{ B_DET_FTT_INTLK_ Feu1TmpSdA_deg  B_DET_FTT_FEU_Cr1:TmpSdA_deg.SEVR  -99999 2 B_DET_FTT_LV_0:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+#{ B_DET_FTT_INTLK_ Feu2Current_A   B_DET_FTT_FEU_Cr2:Current_A.SEVR   -99999 2 B_DET_FTT_LV_1:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+#{ B_DET_FTT_INTLK_ Feu2XTmpV6_deg  B_DET_FTT_FEU_Cr2:XTmpV6_deg.SEVR  -99999 2 B_DET_FTT_LV_1:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+#{ B_DET_FTT_INTLK_ Feu2MTmpInt_deg B_DET_FTT_FEU_Cr2:MTmpInt_deg.SEVR -99999 2 B_DET_FTT_LV_1:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+#{ B_DET_FTT_INTLK_ Feu2TmpSdX_deg  B_DET_FTT_FEU_Cr2:TmpSdX_deg.SEVR  -99999 2 B_DET_FTT_LV_1:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+#{ B_DET_FTT_INTLK_ Feu2TmpSdA_deg  B_DET_FTT_FEU_Cr2:TmpSdA_deg.SEVR  -99999 2 B_DET_FTT_LV_1:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+#{ B_DET_FTT_INTLK_ Feu3Current_A   B_DET_FTT_FEU_Cr3:Current_A.SEVR   -99999 2 B_DET_FTT_LV_2:switch 0 0 "Turn one LV OFF if FEU current HIHI"}
+#{ B_DET_FTT_INTLK_ Feu3XTmpV6_deg  B_DET_FTT_FEU_Cr3:XTmpV6_deg.SEVR  -99999 2 B_DET_FTT_LV_2:switch 0 0 "Turn one LV OFF if FEU XTmpV6 HIHI"}
+#{ B_DET_FTT_INTLK_ Feu3MTmpInt_deg B_DET_FTT_FEU_Cr3:MTmpInt_deg.SEVR -99999 2 B_DET_FTT_LV_2:switch 0 0 "Turn one LV OFF if FEU MTmpInt HIHI"}
+#{ B_DET_FTT_INTLK_ Feu3TmpSdX_deg  B_DET_FTT_FEU_Cr3:TmpSdX_deg.SEVR  -99999 2 B_DET_FTT_LV_2:switch 0 0 "Turn one LV OFF if FEU TmpSdX HIHI"}
+#{ B_DET_FTT_INTLK_ Feu3TmpSdA_deg  B_DET_FTT_FEU_Cr3:TmpSdA_deg.SEVR  -99999 2 B_DET_FTT_LV_2:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
+#
+## Gas Fault -> LV+HV OFF
+#{ B_DET_FTT_INTLK_ GasFlt B_DET_FTT_GAS_FLT  -99999 1 B_DET_FTT_HV:pwoff 1 0          "Turn All FTT HV OFF ifgas fault"}
+#
+## Gas Pressure/Flow -> GAS OFF
+#{ B_DET_FTT_INTLK_ GasPress    B_DET_FTT_GAS_PRES    -99999 B_DET_FTT_GAS_PRES.HIHI   B_DET_FTT_GAS_FLOW_STOP 1 2 "Turn FTT Gas OFF if pressure HIHI"}
+#{ B_DET_FTT_INTLK_ GasInflowHi B_DET_FTT_GAS_INFLOW  -99999 B_DET_FTT_GAS_INFLOW.HIHI B_DET_FTT_GAS_FLOW_STOP 1 2 "Turn FTT Gas OFF if inflow HIHI"}
+#
+## Gas Flow -> HV OFF
+#{ B_DET_FTT_INTLK_ GasInflowLo  B_DET_FTT_GAS_INFLOW  B_DET_FTT_GAS_INFLOW.LOLO 999999 B_DET_FTT_HV:pwoff 1 2 "Turn FTT HV OFF if gas flow LOLO" }
+#{ B_DET_FTT_INTLK_ GasInflowLo3 B_DET_FTT_GAS_INFLOW  0.3                       999999 B_DET_FTT_HV:pwoff 1 2 "Turn FTT HV OFF if gas flow < 0.3" }
+#
+#}
 

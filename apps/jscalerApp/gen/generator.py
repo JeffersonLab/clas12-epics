@@ -264,6 +264,25 @@ def mkChannelsHTCC(crateNumber):
         fChan += 1
   return channels
 
+def mkChannelsCND(crateNumber):
+  channels=[]
+  maxSlot=13
+  for line in open('cnd.txt','r').readlines():
+    cols=line.strip().split()
+    if len(cols)!=7: continue
+    crate=int(cols[0])
+    slot=int(cols[1])
+    if int(slot)>maxSlot: continue
+    chan=int(cols[2])
+    segment=int(cols[3])
+    imo=['Inner','Middle','Outer'][int(cols[4])-1]
+    lr=int(cols[6])
+    channel={'Sl':'%.2d'%(slot),'Ch':'%.2d'%(chan),'CrName':'ADCCND1','Det':'CND','Sys':'FADC'}
+    channel['Element']='%s_Seg%.2d_E%d'%(imo,segment,lr+1)
+    setCodes(crateNumber,channel)
+    channels.append(channel)
+  return channels
+
 def mkChannelsFTOF(crateNumber,sector,system):
   if system=='FADC': crate='ADCFTOF'+str(sector)
   else:              crate='TDCFTOF'+str(sector)
@@ -468,11 +487,13 @@ def mkDetector(channels,subFileName,startupFileName):
 
 
 
-for sector in range(6): mkSector(sector+1)
+#for sector in range(6): mkSector(sector+1)
 
-mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+#mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+#mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
-mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
-mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
+#mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+#mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
+
+mkDetector(mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
 

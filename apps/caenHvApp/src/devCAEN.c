@@ -10,21 +10,19 @@
  *   07/010/2003 - Initial release  Hovanes Egiyan                                          *
 \*****************************************************************************/
 
-/// debugging and new version by Valeri Sytnik, 2013
-
 #define ALLSET_THROUGH_ONE 0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
 #include <stdio.h>
-#include "sy1527.h" /// my:
+#include "sy1527.h"
 #include <shareLib.h>
 #include <unistd.h>
-epicsShareFunc int errlogPrintf(const char *pFormat, ...); ///my:
+epicsShareFunc int errlogPrintf(const char *pFormat, ...);
 
-extern int mainframes[MAX_HVPS]; /// my:
-extern HV Measure[MAX_HVPS]; /// my:
+extern int mainframes[MAX_HVPS];
+extern HV Measure[MAX_HVPS];
 
 typedef int BOOL;
 typedef int STATUS;
@@ -58,9 +56,9 @@ typedef int STATUS;
 
 #include "sy1527epics1.h"
 
-extern int is_mainframe_read[256]; // my: flag to prevent epics value init before reading by driver
-extern int nmainframes; // my:
-int FLAG_BLOCK_INIT=1; // my:
+extern int is_mainframe_read[256];
+extern int nmainframes;
+int FLAG_BLOCK_INIT=1;
 
 static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
@@ -70,7 +68,7 @@ static long read_waveform(struct waveformRecord *);
 static long write_bo(struct boRecord *);
 static long init_bo(struct boRecord *);
 
-void block_until_fraimworks_read();/// my:
+void block_until_fraimworks_read();
 /* Thses EPICS structures associate the CAEN Dev records with the
  * initialization and processing routines defined in this file.  The
  * global structure names are required by epics because of the
@@ -166,7 +164,7 @@ static long init_bo(struct boRecord  *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-  block_until_fraimworks_read(); // my:
+  block_until_fraimworks_read();
 
   char tmp[81]; /// temporal
   int first_channel=channel, chs_number=command;
@@ -190,15 +188,15 @@ static long init_bo(struct boRecord  *pbo)
    }
    else if (command == S_HV) {
      int onoff;
-     //retv = CAEN_GetHv(chassis, &onoff); /// my:
-     CAEN_GetHv(chassis, &onoff); /// my:
+     //retv = CAEN_GetHv(chassis, &onoff);
+     CAEN_GetHv(chassis, &onoff);
      pbo->rval = onoff;
    }
    else if (command == S_CHHV) {
      int st=sy1527GetChannelStatus(chassis, slot,channel);
      pbo->rval = st & (1<<0); ///only1527
    }
-   else if (command == S_BDHV) {   /// my: smi we do not need init here as it is used only in FSM tree
+   else if (command == S_BDHV) {
      pbo->rval=0; /// just init somehow
    }
    else if (command == S_INTLK) {
@@ -243,14 +241,11 @@ static long write_bo(struct boRecord *pbo)
   unsigned command = (*signal)>>8;
   unsigned channel = (*signal) - ((command)<<8);
 
-  printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval); //my: 
+  printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval);
 
   // identify the type of Bo and issue a command to the desired chassis.
   int first_channel=channel, chs_number=command;
   if (strstr(pbo->desc,"smi")) {
-    //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
-    //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
-
     //retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
     sy1527BoardSmiControl(pbo->name, chassis, slot,  
     first_channel, chs_number, (unsigned char)pbo->rval);
@@ -265,11 +260,11 @@ static long write_bo(struct boRecord *pbo)
       status = CAEN_HVload(chassis, slot, channel, "CE", (float)pbo->rval );
     else if (command == S_HV)
       status = CAEN_SetHV(chassis, (unsigned char)pbo->rval  );
-    else if (command == S_CHHV) /// my: set CH ON or OFF
-      status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval ); /// my:
-    else if (command == S_BDHV) /// my: smi set BD ON or OFF
+    else if (command == S_CHHV)
+      status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval );
+    else if (command == S_BDHV)
       //status = CAEN_HVload(chassis, slot, channel, "CHONOFF", (float)pbo->rval ); 
-      status = sy1527SetBoardOnOff(chassis, slot, (unsigned char)pbo->rval ); /// my: smi
+      status = sy1527SetBoardOnOff(chassis, slot, (unsigned char)pbo->rval );
     else if (command == S_INTLK)
       status = sy1527SetChannelInterlock(chassis, slot, channel, (unsigned int)pbo->rval );
     else if (command == S_RANGE)
@@ -326,7 +321,7 @@ static long read_bi(struct biRecord *pbi)
   /* Access the requested chassis's database, depending on which of the two
    * bi commands was sent.  Show an error if the request is not recognized.
    */
-  int onoff; /// my:
+  int onoff;
   int retv;
   if (strstr(pbi->desc,"smi")) {
     retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
@@ -334,7 +329,7 @@ static long read_bi(struct biRecord *pbi)
   }
   else {
     if      (command == G_Valid) result = CAEN_GetValidity(chassis);
-    else if (command == G_HV)    result = CAEN_GetHv(chassis, &onoff); /// my:
+    else if (command == G_HV)    result = CAEN_GetHv(chassis, &onoff);
     else if (command == G_Alarm) result = CAEN_GetAlarm(chassis);
     else {
       char alert[128];
@@ -348,7 +343,7 @@ static long read_bi(struct biRecord *pbi)
       recGblRecordError(S_db_badField, (void *) pbi, "No such chassis");
       return(S_db_badField);
     }
-    else pbi->rval = onoff; /// my: was result;
+    else pbi->rval = onoff;
   }
 
   return 0;  
@@ -460,7 +455,7 @@ static long init_ao(struct aoRecord  *pao)
 
   // Initialize the record depending on the passed parameters.
 
-  block_until_fraimworks_read(); // my:
+  block_until_fraimworks_read();
 
   switch (command)
   { case S_DV:
@@ -549,7 +544,7 @@ static long write_ao(struct aoRecord *pao)
   }
 
   // Convert the record's assignment value to ASCII for passing to HVload.
-printf("WRITE_AO ======================================== name=%s %f %d\n",pao->name, pao->val, pao->rval); //my: 
+printf("WRITE_AO ======================================== name=%s %f %d\n",pao->name, pao->val, pao->rval);
 
   // my: not much meaning but to save in EPICS not a huge number, but real value
   if (ALLSET_THROUGH_ONE) pao->val = value_f; 
@@ -795,14 +790,14 @@ static long read_crate_stringin(stringinRecord *prec)
 	/* parse device dependent option string and set data pointer */
 	pinstio = &(prec->inp.value.instio);
 	sscanf(pinstio->string, "%s %d", mf, &slot);
-	if( mf[0] == '\0' || slot<-1 || slot>MAX_SLOT ) {  /// my: MAX_SLOTS
+	if( mf[0] == '\0' || slot<-1 || slot>MAX_SLOT ) {
 		printf( "%s: Invalid device parameters: \"%s\"\n", prec->name, pinstio->string);
 		return(-1);
 	}
 
 	int i;
 	i = 0;
-	while ( i < MAX_HVPS && strcmp(/** Crate[i].name*/Measure[i].name, mf) != 0) i++; /// my: MAX_CRATES
+	while ( i < MAX_HVPS && strcmp(/** Crate[i].name*/Measure[i].name, mf) != 0) i++;
 
 	if (i>=MAX_HVPS) return(-1);
 	if (slot == -1) {

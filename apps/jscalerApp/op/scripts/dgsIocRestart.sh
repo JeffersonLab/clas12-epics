@@ -92,6 +92,18 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
+elif [[ $1 == "cnd" || $1 == "adccnd1" ]]
+then
+    dgsReboot adccnd1
+    sleep 2
+    softioc_console -R iocjscalersC
+
+elif [[ $1 == "trigger" || $1 == "trig2" ]]
+then
+    dgsReboot trig2
+    sleep 2
+    softioc_console -R iocjscalersT
+
 elif [[ $1 == "rich" || $1 == "fevme1" ]]
 then
     dgsReboot fevme1

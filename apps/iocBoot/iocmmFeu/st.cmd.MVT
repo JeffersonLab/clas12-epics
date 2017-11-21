@@ -30,6 +30,8 @@ drvAsynIPPortConfigure("L1","sedipcu184:15000",0,0,0)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
 dbLoadRecords("db/mmfeu.db","P=B_DET_MVT_FEU,R=:asyn,PORT=L1,CR_LOW=5,CR_HI=7");
 dbLoadTemplate("db/mmfeucrate.substitutions")	
 dbLoadTemplate("db/mmfeuslot.substitutions")
@@ -37,4 +39,14 @@ dbLoadTemplate("db/mmfeuslot.substitutions")
 dbLoadTemplate("db/mmfeusums.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
+
+< save_restore.cmd
+
 iocInit
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list
+

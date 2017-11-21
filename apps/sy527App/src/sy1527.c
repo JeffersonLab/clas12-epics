@@ -2070,6 +2070,15 @@ u=Measure[id].board[board].channel[chan].fval[Trip];
   UNLOCK_MAINFRAME(id);
   return u;
 }
+int
+sy1527SetChannelTripTime(unsigned int id, unsigned int board,
+                         unsigned int chan, float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_FVALUE(Trip, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
+}
 
 
 

@@ -64,7 +64,8 @@ file "db/mmgas_asyn_aoFloat64.template" { pattern
     {B_DET_BMT_GAS_, INFLOW_RAMP:set,        W505A,   22,     FLOAT32_BE, 0,    1000, 1,    sec}
 }
 
-file "db/mmgas_asyn_bo_bit.template" { pattern
+#file "db/mmgas_asyn_bo_bit.template" { pattern
+file "db/mmgas_asyn_bo_bit_FLNK.template" { pattern
     {P,              R,             PORT    OFFSET, MASK,   HIGH,   ZNAM,           ONAM}
     {B_DET_BMT_GAS_, FLOW_START,    W505,   0,      8,      1,      "Start Flow",   "Start Flow"}
     {B_DET_BMT_GAS_, FLOW_STOP,     W505,   0,      16,     1,      "Stop Flow",    "Stop Flow"}
@@ -101,3 +102,7 @@ file "db/mmgas_status_flowdiff.template" { pattern
     {B_DET_BMT_GAS_,    FLOWDIFF}
 }
 
+file "db/mmgas_global_status.template" { pattern
+    {P}
+    {B_DET_BMT_GAS_}
+}

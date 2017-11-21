@@ -1920,7 +1920,7 @@ $(pv_value)</tooltip>
     <height>20</height>
     <border_width>1</border_width>
     <visible>true</visible>
-    <pv_name>B_HW_CRIO_SVT_HEARTBEAT</pv_name>
+    <pv_name>B_HW_CRIO_SF_HEARTBEAT</pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
@@ -3163,61 +3163,6 @@ $(pv_value)</tooltip>
     </font>
     <off_label>OFF</off_label>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-27072060:15c44acd0eb:-5796</wuid>
-    <pv_value />
-    <text>ON/OFF</text>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <image></image>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Action Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="191" green="191" blue="191" />
-    </background_color>
-    <width>84</width>
-    <x>301</x>
-    <name>Action Button_5</name>
-    <y>49</y>
-    <style>0</style>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>../../apps/svtCtrlApp/seq_svtOnOff-All.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description></description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -3385,7 +3330,7 @@ $(pv_value)</tooltip>
     <wuid>-4e6fab15:15d3728c9c8:-62e6</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>SVT Acess Controls:</text>
+    <text>SVT Access Controls:</text>
     <scripts />
     <height>26</height>
     <border_width>1</border_width>
@@ -3571,6 +3516,73 @@ $(pv_value)</tooltip>
     <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-7da604c8:15fa839bcf9:-7342</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>ON/OFF</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="191" green="191" blue="191" />
+    </background_color>
+    <width>84</width>
+    <x>298</x>
+    <name>Menu Button_2</name>
+    <y>49</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>B_SVT_SEQ:btnOff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Turn All HV/LV OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_SVT_SEQ:btnOn</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Turn All SVT HV/LV ON?</confirm_message>
+        <description>Turn All HV/LV ON</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/svtCtrlApp/seq_svtOnOff-All.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Sequencer Details</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
     </font>
   </widget>
 </display>

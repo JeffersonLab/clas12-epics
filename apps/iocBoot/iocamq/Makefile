@@ -8,3 +8,4 @@ datfiles = $(wildcard *.dat)
 
 iocs : 
 	awk -f  makeIocs.gk $(datfiles)
+	chmod +x st.*

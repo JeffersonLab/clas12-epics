@@ -10,7 +10,7 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-DB += amqInt.db amqIntArray.db amqDouble.db amqDoubleArray.db amqStringArray.db
+DB += amqInt.db amqIntArray.db amqDouble.db amqDoubleArray.db amqFloatArray.db amqStringArray.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

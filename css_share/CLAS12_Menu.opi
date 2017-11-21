@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>980</height>
+  <height>1010</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -41,7 +41,7 @@
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>289</height>
+    <height>297</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -531,20 +531,12 @@ $(pv_value)</tooltip>
           <description>FTC Overview</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/FTT/FTT_HV_details_novice.opi</path>
+          <path>/CLAS12_Share/detectors/FTT/FTT_HVLV_details.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>FTT HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/FTT/FTT_LV_details_novice.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>FTT LV</description>
+          <description>FTT HV/LV</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/mmGasApp/mmgas_plc.opi</path>
@@ -556,20 +548,12 @@ $(pv_value)</tooltip>
           <description>FTT Gas</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/FTH/FTH_LV_details_novice.opi</path>
+          <path>/CLAS12_Share/detectors/FTH/FTH_HVLV_details.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>FTH LV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/FTH/FTH_HV_details_novice2.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>FTH HV</description>
+          <description>FTH HV/LV</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/fthDividerApp/fthDividerNovice.opi</path>
@@ -585,7 +569,15 @@ $(pv_value)</tooltip>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>FT HW Interlocks</description>
+          <description>FTC/FTH HW Interlocks</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/ftIntlkApp/fttIntlks.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>FTT Interlocks</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/FTH/FTH_FADC.opi</path>
@@ -1043,7 +1035,7 @@ $(pv_value)</tooltip>
     <width>150</width>
     <x>8</x>
     <name>Subsystems</name>
-    <y>439</y>
+    <y>446</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -1304,6 +1296,14 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>Cosmic Trigger</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/amqApp/trigFT.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>FT Trigger</description>
         </action>
       </actions>
       <font>
@@ -1667,6 +1667,24 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>Asym IA</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/synApps/mca/SIS38XX.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>HEL_</P>
+          </macros>
+          <replace>2</replace>
+          <description>Struck</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/synApps/mca/SIS38XX.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>bom_</P>
+          </macros>
+          <replace>2</replace>
+          <description>Struck 2</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -2028,6 +2046,14 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>EM Forces</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/plcApp/all_comm.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>COMMs</description>
+        </action>
         <action type="EXECUTE_CMD">
           <command>tordaqGui</command>
           <command_directory>$(user.home)</command_directory>
@@ -2177,12 +2203,6 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>Hexbeam Temperatures</description>
         </action>
-        <action type="EXECUTE_CMD">
-          <command>tordaqGui</command>
-          <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>Analyzer</description>
-        </action>
         <action type="OPEN_DISPLAY">
           <path>apps/rollAvgApp/rollAvgs-alarms.opi</path>
           <macros>
@@ -2190,6 +2210,20 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>JLab Cryo Averages</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/plcApp/all_comm.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>COMMs</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>tordaqGui</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Analyzer</description>
         </action>
       </actions>
       <font>
@@ -2288,7 +2322,7 @@ $(pv_value)</tooltip>
     <width>150</width>
     <x>8</x>
     <name>Tools</name>
-    <y>782</y>
+    <y>785</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>

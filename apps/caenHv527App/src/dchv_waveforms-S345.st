@@ -1,5 +1,7 @@
 program seqDCHVwaveforms345
 
+// N. Baltzell
+
 option -c;
 option -r;
 

@@ -167,6 +167,11 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
     printf("CAEN_HVload: request for HVL\n");
     sy1527SetChannelMaxVoltage(id, slot, channel, value);
   }
+  else if(!strncmp("PRD",property,3))
+  {
+    printf("CAEN_HVload: request for PRD\n");
+    sy1527SetChannelTripTime(id, slot, channel, value);
+  }
   else if(!strncmp("UNVT",property,3))
   {
     printf("CAEN_HVload: request for UNVT\n");
@@ -269,7 +274,7 @@ STATUS
 CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
                 double *property, double *delta)
 {
-
+  float tmp;
   const unsigned int demandOn = sy1527GetChannelDemandOnOff(id,slot,channel);
 
   property[PROP_MC] = sy1527GetChannelMeasuredCurrent(id, slot, channel); // e
@@ -281,16 +286,15 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_CE] = (float) sy1527GetChannelEnableDisable(id, slot, channel);  // k
   property[PROP_ST] = (float) sy1527GetChannelStatus(id, slot, channel);  // l
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
+  property[PROP_TT] = sy1527GetChannelTripTime(id,slot,channel); //p
 
-  // used to have this:
-  //property[PROP_MVDZ] = 0.0;  // m
-  //property[PROP_MCDZ] = 0.0;  // n
- 
   // LV-Only:
   property[PROP_UNVT] = sy1527GetChannelUnderVoltage(id, slot, channel); // m
   property[PROP_OVVT] = sy1527GetChannelOverVoltage(id, slot, channel); // n
-  property[PROP_TEMP] = sy1527GetChannelTemperature(id, slot, channel); // p
-  property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // r
+  // let LV/HV share one bigsub field (PROP_TT/PROP_TEMP):
+  tmp = sy1527GetChannelTemperature(id, slot, channel); // p
+  if (tmp>=0) property[PROP_TEMP] = tmp;
+  property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // q
   property[PROP_INTLK] = sy1527GetChannelInterlock(id, slot, channel); // r
 
   // Dual-Range Only:
@@ -329,7 +333,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   }
  
   // If channel is ON, then delta is difference between measured and demand voltages.
-  // This should allow to alarm any time a channel is turned on or off, in addition
+  // This allows to alarm any time a channel is turned on or off, in addition
   // to serving as a voltage tolerance alarm.
   else if ( ((int)property[PROP_ST] & (BIT_ON) ) )
     *delta =  property[PROP_MV] - property[PROP_DV];
@@ -340,7 +344,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   // negative status when comms error (for archiving):
   if (property[PROP_HBEAT]>1e-5) {
       if (property[PROP_ST]<1e-5) property[PROP_ST]=COMMERROR;
-      else                        property[PROP_ST]=-property[PROP_ST];
+      else                        property[PROP_ST]=-100000*property[PROP_ST];
   }
 
   return(0);

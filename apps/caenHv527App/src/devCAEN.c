@@ -165,7 +165,9 @@ static long init_bo(struct boRecord  *pbo)
   
   char tmp[81]; /// temporal
   int retv;
+#ifndef NO_SMI
   int first_channel=channel, chs_number=command;
+#endif
   if(strstr(pbo->desc,"smi")) {
     strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
     tmp[strlen(pbo->name)-strlen("_BO")]=0;
@@ -280,10 +282,12 @@ static long write_bo(struct boRecord *pbo)
 
   /* identify the type of Bo and issue a command to the desired chassis.
    */
-  int retv;
   //char tmp1[10];
   //int first_board, bds_number;
+#ifndef NO_SMI
+  int retv;
   int first_channel=channel, chs_number=command;
+#endif
   if(strstr(pbo->desc,"smi")) {
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
     //sscanf(pbo->desc, "%s %d %d", tmp1, first_board, bds_number);
@@ -360,13 +364,15 @@ static long read_bi(struct biRecord *pbi)
   unsigned chassis = (*card) - ((slot)<<8) ;
 
   unsigned command = (*signal)>>8;
+#ifndef NO_SMI
   unsigned channel = (*signal) - ((command)<<8);
+#endif
 
   /* Access the requested chassis's database, depending on which of the two
    * bi commands was sent.  Show an error if the request is not recognized.
    */
   int onoff; /// my:
-  int retv;
+  int retv=0;
   if(strstr(pbi->desc,"smi")) {
 #ifndef NO_SMI
     retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);

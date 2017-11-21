@@ -226,7 +226,8 @@ public:
 	  json_epics(jobj);
 	}
 	else{ 
-	  std::cout << "Not a json thing" << std::endl;
+	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
+	  std::cout << "Full Message = " << text.c_str() << endl;
 	}
       }
       
@@ -341,7 +342,8 @@ void addPV(void *addr, int type, char* key){
     rawmessage = (waveformRecord*)addr;         //save as special
     std::cerr << "Raw messages will go into " << rawmessage->name << std::endl;
     return;
-  }
+  }    
+
   pvstructs[npv] = addr;                        //save address as a void
   jsonKeys[npv]  = new char[strlen(key)];       //save json key
   strcpy(jsonKeys[npv],key);
@@ -482,6 +484,7 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 
   waveformRecord * wrec = (waveformRecord*)(prec);     //cast to waveform
   double *bptr_d = (double *)(wrec->bptr);             //cast the waveform buffer as int and double
+  float *bptr_f = (float *)(wrec->bptr);                //cast the waveform buffer as int and double
   int *bptr_i = (int *)(wrec->bptr);
   int wavelen = wrec->nelm;                            //find no of elements in waveform
 
@@ -497,14 +500,22 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
   if((type==json_type_double)||(type==json_type_int)){ //only int and double
     switch (type){
     case json_type_double:
-      if(wrec->ftvl != DBR_DOUBLE){
-	printf("Warning PV %s.FTVL needs to be DOUBLE for json array %s. Not filling waveform!",pvname,key );
+      if((wrec->ftvl != DBR_DOUBLE)&&(wrec->ftvl != DBR_FLOAT)){
+	printf("Warning PV %s.FTVL needs to be DOUBLE of FLOAT for json array %s. Not filling waveform!\n",pvname,key );
 	break;
       }
       dbScanLock((dbCommon*)prec);
-      for (int i=0; i<ncopy; i++){
-	jvalue = json_object_array_get_idx(jobj, i);
-	bptr_d[i]=json_object_get_double(jvalue);      //fill the buffer with doubles
+      if(wrec->ftvl==DBR_DOUBLE){
+	for (int i=0; i<ncopy; i++){
+	  jvalue = json_object_array_get_idx(jobj, i);
+	  bptr_d[i]=json_object_get_double(jvalue);      //fill the buffer with doubles
+	}
+      }
+      else if(wrec->ftvl==DBR_FLOAT){
+	for (int i=0; i<ncopy; i++){
+	  jvalue = json_object_array_get_idx(jobj, i);
+	  bptr_f[i]=(float)json_object_get_double(jvalue);      //fill the buffer with floats
+	}
       }
       wrec->nord=ncopy;
       prset=(rset*)((dbCommon*)prec)->rset;
@@ -514,7 +525,7 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
       break;
     case json_type_int:
       if(wrec->ftvl != DBR_LONG){
-	printf("Warning PV %s.FTVL needs to be LONG for json array %s. Not filling waveform!",pvname,key );
+	printf("Warning PV %s.FTVL needs to be LONG for json array %s. Not filling waveform!\n",pvname,key );
 	break;
       }
       dbScanLock((dbCommon*)prec);

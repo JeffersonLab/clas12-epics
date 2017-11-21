@@ -1355,7 +1355,7 @@ float
 sy1527GetChannelMaxVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
-  if (Measure[id].board[board].SVMax < 0) return 0;
+  if (Measure[id].board[board].SVMax < 0) return -1;
   float u;
   LOCK_MAINFRAME(id);
   //GET_FVALUE(HV_SVMax, u);
@@ -1369,7 +1369,7 @@ float
 sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
-  if (Measure[id].board[board].OVVThr < 0) return 0;
+  if (Measure[id].board[board].OVVThr < 0) return -1;
   float u;
   LOCK_MAINFRAME(id);
   GET_FVALUE(Measure[id].board[board].OVVThr, u);
@@ -1398,7 +1398,7 @@ float
 sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
-  if (Measure[id].board[board].VCon < 0) return 0;
+  if (Measure[id].board[board].VCon < 0) return -1;
   float u;
   LOCK_MAINFRAME(id);
   GET_FVALUE(Measure[id].board[board].VCon, u);
@@ -1411,7 +1411,7 @@ float
 sy1527GetChannelTemperature(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
-  if (Measure[id].board[board].Temp < 0) return 0;
+  if (Measure[id].board[board].Temp < 0) return -1;
   float u;
   LOCK_MAINFRAME(id);
   GET_FVALUE(Measure[id].board[board].Temp, u);
@@ -1424,7 +1424,7 @@ float
 sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
                            unsigned int chan)
 {
-  if (Measure[id].board[board].UNVThr < 0) return 0;
+  if (Measure[id].board[board].UNVThr < 0) return -1;
   float u;
   LOCK_MAINFRAME(id);
   GET_FVALUE(Measure[id].board[board].UNVThr, u);
@@ -1631,7 +1631,7 @@ unsigned int
 sy1527GetChannelInterlock(unsigned int id, unsigned int board,
                       unsigned int chan)
 {
-  if (Measure[id].board[board].Intck < 0) return 0;
+  if (Measure[id].board[board].Intck < 0) return -1;
   unsigned int u;
   LOCK_MAINFRAME(id);
   //GET_LVALUE(HV_Pw, u);
@@ -1645,7 +1645,7 @@ int
 sy1527SetChannelInterlock(unsigned int id, unsigned int board,
                       unsigned int chan,unsigned int u)
 {
-  if (Measure[id].board[board].Intck < 0) return 0;
+  if (Measure[id].board[board].Intck < 0) return -1;
   LOCK_MAINFRAME(id);
   //SET_LVALUE(HV_Pw, u);
   SET_LVALUE(Measure[id].board[board].Intck, u);
@@ -1658,7 +1658,7 @@ unsigned int
 sy1527GetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan)
 {
-  if (Measure[id].board[board].ImRange < 0) return 0;
+  if (Measure[id].board[board].ImRange < 0) return -1;
   unsigned int u;
   LOCK_MAINFRAME(id);
   //GET_LVALUE(HV_Pw, u);
@@ -1672,7 +1672,7 @@ int
 sy1527SetChannelRange(unsigned int id, unsigned int board,
                       unsigned int chan, unsigned int u)
 {
-  if (Measure[id].board[board].ImRange < 0) return 0;
+  if (Measure[id].board[board].ImRange < 0) return -1;
   LOCK_MAINFRAME(id);
   //SET_LVALUE(HV_Pw, u);
   SET_LVALUE(Measure[id].board[board].ImRange, u);
@@ -1684,7 +1684,7 @@ float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan)
 {
-  if (Measure[id].board[board].Trip < 0) return 0;
+  if (Measure[id].board[board].Trip < 0) return -1;
   float u; 
   LOCK_MAINFRAME(id);
   //u=Measure[id].board[board].channel[chan].fval[HV_Trip];
@@ -1692,6 +1692,16 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
   GET_FVALUE(Measure[id].board[board].Trip, u);
   UNLOCK_MAINFRAME(id);
   return u;
+}
+int
+sy1527SetChannelTripTime(unsigned int id, unsigned int board,
+                           unsigned int chan, float u)
+{
+  LOCK_MAINFRAME(id);
+  printf("Setting Trip ... %d %f\n",Measure[id].board[board].Trip,u);
+  SET_FVALUE(Measure[id].board[board].Trip, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
 }
 
 void sy1527GetBoardModelName(unsigned int id,unsigned int slot,char* value) {
@@ -1764,7 +1774,7 @@ int
 sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan, unsigned int u)
 {
-  if (Measure[id].board[board].PwEn < 0) return 0;
+  if (Measure[id].board[board].PwEn < 0) return -1;
   LOCK_MAINFRAME(id);
   //SET_LVALUE1(HV_PwEn, u);
   SET_LVALUE1(Measure[id].board[board].PwEn, u);
@@ -1777,7 +1787,7 @@ unsigned int
 sy1527GetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan)
 {
-  if (Measure[id].board[board].PwEn < 0) return 0;
+  if (Measure[id].board[board].PwEn < 0) return -1;
   unsigned int u;
   LOCK_MAINFRAME(id);
   //GET_LVALUE(HV_PwEn, u);

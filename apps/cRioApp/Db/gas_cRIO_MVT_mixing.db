@@ -85,23 +85,34 @@ record(bi,"B_DET_MVT_GAS_MIX2_PURGE") {
 	field(DESC,"1=Arpurge,0=defaultgasesformix2")
 	info(autosaveFields_pass0,"ZSV OSV")
 }
-record(ai,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW") {
-	field(DESC,"=1_Ar_FLOW+1_C4H10_FLOW+1_CF4_FLOW")
+record(calc,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_MVT_GAS_MIX1_Ar_FLOW")
+    field(INPB,"B_DET_MVT_GAS_MIX1_CF4_FLOW")
+    field(CALC,"A+B")
+	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+}
+record(calc,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW_SET") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_MVT_GAS_MIX1_Ar_FLOW_SET")
+    field(INPB,"B_DET_MVT_GAS_MIX1_CF4_FLOW_SET")
+    field(CALC,"A+B")
 	field(EGU,"sccm")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
-record(ai,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW_SET") {
-	field(DESC,"=1_Ar_FLOW_SET+1_C4H10_FLOW_SET+1_CF4_F")
+record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_MVT_GAS_MIX2_Ar_FLOW")
+    field(INPB,"B_DET_MVT_GAS_MIX2_C4H10_FLOW")
+    field(CALC,"A+B")
 	field(EGU,"sccm")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
-record(ai,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW") {
-	field(DESC," = 2_Ar_FLOW + 2_C4H10_FLOW")
-	field(EGU,"sccm")
-	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
-}
-record(ai,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW_SET") {
-	field(DESC," = 2_Ar_FLOW_SET + 2_C4H10_FLOW_SET")
+record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW_SET") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_MVT_GAS_MIX2_Ar_FLOW_SET")
+    field(INPB,"B_DET_MVT_GAS_MIX2_C4H10_FLOW_SET")
+    field(CALC,"A+B")
 	field(EGU,"sccm")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }

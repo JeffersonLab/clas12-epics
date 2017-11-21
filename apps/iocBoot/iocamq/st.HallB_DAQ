@@ -1,5 +1,5 @@
 #!../../bin/linux-x86_64/amq
-#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Fri Nov 17 16:46:48 EST 2017
+#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Mon Nov 20 17:48:12 EST 2017
 
 < envPaths
 
@@ -38,7 +38,7 @@ dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_RAWMSG,K=RAWMSG,N=200,TH=0,T
 dbLoadRecords("db/amqInt.db","P=B_HallB_DAQ_LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqDouble.db","P=B_HallB_DAQ_EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqFloatArray.db","P=B_HallB_DAQ_TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
 dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterPosition,K=FTClusterPosition,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
@@ -55,3 +55,5 @@ iocInit
 
 #Need this to start responding to messages after all records are defined
 StartMQ()
+
+dbl > pv.list

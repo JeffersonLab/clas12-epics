@@ -29,7 +29,7 @@ void test(){
   r = new TRandom();  //and a randomizer for them
   
 
-  mq=new RootMQ("tcp://clondb3:61616");  //create mq and try to connect
+  mq=new RootMQ("tcp://clondb1:61616");  //create mq and try to connect
   //  mq=new RootMQ("tcp://junk:61616");  //create mq and try to connect
 
   if(mq->GetConnectionStatus()==1){
@@ -55,7 +55,7 @@ void test(){
     mq->jAddDoubleArray(js,"TestVals",TestVals,20);
     mq->jEnd(js);                                     //end the string
   
-    mq->SendMessage("HallB_DAQ",js);                 //send the message
+    mq->SendMessage("clasrun.clasprod.daq.HallB_DAQ",js);                 //send the message
     gSystem->Sleep(2000);
   }
 }

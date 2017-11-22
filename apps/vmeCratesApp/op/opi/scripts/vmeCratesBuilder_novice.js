@@ -8,7 +8,8 @@ var pcal1=["ADCPCAL1","ADCPCAL2","ADCPCAL3","ADCPCAL4","ADCPCAL5","ADCPCAL6"];
 var pcal2=["TDCPCAL1","TDCPCAL2","TDCPCAL3","TDCPCAL4","TDCPCAL5","TDCPCAL6"];
 var ftof1=["ADCFTOF1","ADCFTOF2","ADCFTOF3","ADCFTOF4","ADCFTOF5","ADCFTOF6"];
 var ftof2=["TDCFTOF1","TDCFTOF2","TDCFTOF3","TDCFTOF4","TDCFTOF5","TDCFTOF6"];
-var groups=[ecal1,ecal2,pcal1,pcal2,ftof1,ftof2,dets];
+var slow=["SVTVME1"]
+var groups=[ecal1,ecal2,pcal1,pcal2,ftof1,ftof2,dets,slow];
 
 for (var ii=0; ii<groups.length; ii++)
 {

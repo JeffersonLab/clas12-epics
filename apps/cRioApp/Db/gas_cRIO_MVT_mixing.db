@@ -1,103 +1,139 @@
 record(ai,"B_SYS_WEATHER_GP_Temp") {
 	field(DESC,"RTD on gas pad")
 	field(EGU,"deg F")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_Ar_FLOW") {
 	field(DESC,"Argon flow for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_Ar_FLOW_SET") {
 	field(DESC,"Argon setpoint for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_C4H10_FLOW") {
 	field(DESC,"Isobutane flow for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_C4H10_FLOW_SET") {
 	field(DESC,"Isobutane setpoint for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_CF4_FLOW") {
 	field(DESC,"Carbon tetrafluoride flow for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_CF4_FLOW_SET") {
 	field(DESC,"Carbon tetrafluoride setpoint for mix 1")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_Ar_FLOW") {
 	field(DESC,"Argon flow for mix 2")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_Ar_FLOW_SET") {
 	field(DESC,"Argon setpoint for mix 2")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_C4H10_FLOW") {
 	field(DESC,"Isobutane flow for mix 2")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_C4H10_FLOW_SET") {
 	field(DESC,"Isobutane setpoint for mix 2")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_PRESS") {
 	field(DESC,"Pressure in mix tank for mix 1")
 	field(EGU,"psig")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_PRESS") {
 	field(DESC,"Pressure in mix tank for mix 2")
 	field(EGU,"psig")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
-}
-record(bi,"B_DET_MVT_GAS_MODE") {
-	field(DESC,"Gasmixingmode,1=automatic,0=manual")
-	info(autosaveFields_pass0,"ZSV OSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX1_SET") {
 	field(DESC,"Mix 1 setpoint when in automatic mode")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(ai,"B_DET_MVT_GAS_MIX2_SET") {
 	field(DESC,"Mix 2 setpoint when in automatic mode")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+}
+
+########################################################
+# booleans
+
+record(bi,"B_DET_MVT_GAS_MODE") {
+	field(DESC,"Gasmixingmode,1=automatic,0=manual")
+    field(ZNAM,"Manual")
+    field(ONAM,"Automatic")
+	info(autosaveFields_pass0,"ZSV OSV")
 }
 record(bi,"B_DET_MVT_GAS_MIX1_PURGE") {
 	field(DESC,"1=Arpurge,0=defaultgasesformix1")
+    field(ZNAM,"Default for Mix1")
+    field(ONAM,"Argon Purge")
 	info(autosaveFields_pass0,"ZSV OSV")
 }
 record(bi,"B_DET_MVT_GAS_MIX2_PURGE") {
 	field(DESC,"1=Arpurge,0=defaultgasesformix2")
+    field(ZNAM,"Default for Mix2")
+    field(ONAM,"Argon Purge")
 	info(autosaveFields_pass0,"ZSV OSV")
 }
+
+
+
+########################################################
+# calculations
+
 record(calc,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW") {
     field(SCAN,"1 second")
     field(INPA,"B_DET_MVT_GAS_MIX1_Ar_FLOW")
-    field(INPB,"B_DET_MVT_GAS_MIX1_CF4_FLOW")
-    field(CALC,"A+B")
+    field(INPB,"B_DET_MVT_GAS_MIX1_C4H10_FLOW")
+    field(INPC,"B_DET_MVT_GAS_MIX1_CF4_FLOW")
+    field(CALC,"A+B+C")
+	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(calc,"B_DET_MVT_GAS_MIX1_TOTAL_FLOW_SET") {
     field(SCAN,"1 second")
     field(INPA,"B_DET_MVT_GAS_MIX1_Ar_FLOW_SET")
-    field(INPB,"B_DET_MVT_GAS_MIX1_CF4_FLOW_SET")
-    field(CALC,"A+B")
+    field(INPB,"B_DET_MVT_GAS_MIX1_C4H10_FLOW_SET")
+    field(INPC,"B_DET_MVT_GAS_MIX1_CF4_FLOW_SET")
+    field(CALC,"A+B+C")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW") {
@@ -106,6 +142,7 @@ record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW") {
     field(INPB,"B_DET_MVT_GAS_MIX2_C4H10_FLOW")
     field(CALC,"A+B")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
 record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW_SET") {
@@ -114,5 +151,8 @@ record(calc,"B_DET_MVT_GAS_MIX2_TOTAL_FLOW_SET") {
     field(INPB,"B_DET_MVT_GAS_MIX2_C4H10_FLOW_SET")
     field(CALC,"A+B")
 	field(EGU,"sccm")
+    field(PREC,"2")
 	info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
 }
+
+

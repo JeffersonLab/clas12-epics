@@ -36,17 +36,21 @@
 #include <TClass.h>
 #include <TClassMenuItem.h>
 #include <TGMenu.h>
+#include <TFormula.h>
+#include <TTimeStamp.h>
 
 enum E_GR_PV {Time}; //(Because I want to refer to Time
-enum E_GR_LOCAL {GR_SET,GR_READ,GR_WRITE,GR_INIT};
 enum E_GR_FIT {GR_NOFIT,GR_FIT,GR_FITRANGE};
 enum E_GR_STATUS {GR_STOPPED,GR_STARTED,GR_PAUSED};
 enum E_GR_AUTO {GR_AUTO,GR_MANUAL,GR_TOGGLE};
 enum E_GR_GUI {GR_NOGUI,GR_SMALLGUI,GR_BIGGUI};
 
-const char*  defaultFormats[]  = {"gif","root","pdf","C",NULL}; //default formats for saving canvases
+const char*  defaultFormats[]  = {"gif","C",NULL}; //default formats for saving canvases
 const char   defaultOutdir[]   = "./epics_gr";                  //default dir
 const char*  onOffList[]       = {"#bullet",""};
+
+const int goodColors[] = {1,2,4,6,8,9,28,30,38,46,48}; //colours and markers that are OK on white bg.
+const int goodMarkers[] = {20,21,22,23,29};
 
 class GrimReeper : public TObject{
 private:
@@ -64,8 +68,8 @@ public:
   void stopScanning();
   void pauseScanning();
   void resumeScanning();
-  void makeGraph(int yPV, int xPV, const char* pvfit = "", double rangemin = 0.0, double rangemax = 0.0 );
-  void makeGraph(const char *yPVName, const char *xPVName, const char* pvfit = "", double rangemin = 0.0, double rangemax = 0.0 );
+  void makeGraph(int yPV, int xPV, const char* pvfit = "", double rangemin = 0.0, double rangemax = 0.0, int canv = -1, int pad = 1);
+  void makeGraph(const char *yPVName, const char *xPVName, const char* pvfit = "", double rangemin = 0.0, double rangemax = 0.0, int canv = -1, int pad = 1 );
   void updateGraph(int g);
   void drawGraph(int g);
   void drawGraphs();
@@ -85,7 +89,10 @@ public:
   void changePeriod(int t);
   void setGraphAuto(int g, int a);
   void setMultiAuto(int g, int a);
-  void setAuto(TObject *gr);
+   int getGraphAuto(int g);
+   int getMultiAuto(int g);
+   int GetAuto(TObject *gr);
+  void SetAuto(TObject *gr);  // *TOGGLE* *GETTER=GetAutohhxs
   void resetGrim();
   void exitGrim();
   void saveAll();
@@ -103,19 +110,25 @@ public:
   void setUserRead(const char *read){userRead=read;};
   void setUserWrite(const char *write){userWrite=write;};
   void setUserInit(const char *init){userInit=init;};
+  void setUserEnd(const char *end){userEnd=end;};
   void setSaveFormats(const char **formats){saveFormats=(char **)formats;};
   void setSaveDir(const char *dir){outdir=(char *)dir;};
   int  getPoints(){return nPoints;};
+  void setPoints(int n){nPointsInScan=n;};
+  void setSaveAndExit(int n){saveAndExit=n;};
   double **getPVData(){return pvData;};
   int confirmDialog(const char *title, char *message, EMsgBoxIcon icon = kMBIconExclamation, Int_t buttons = kMBCancel+kMBOk);
   void setMAXPV(int maxpv){MAXPV=maxpv;};
   void setMAXDATA(int data){MAXDATA=data;};
-
+  void setOptFit(int opt);
+  void setGraphsPerCanvas(int g){perCanvas=g;};
+  
   //functions for asimulated ioc
   void killSimIOC();
   void writeTestPVs();
   void simIOC(int m=0);
-
+  void setLogCommand(const char *logCom){logCommand=logCom;};
+  
   //All these class data members should really start with "f" to keep in line with ROOT coding convention. Too late!
   //Change any of these before calling adding any PVs, or calling init()
   int MAXPV;                     
@@ -123,7 +136,9 @@ public:
   int MAXGRAPH;   	
   int MAXMULTI;    
   int MAXADDM;     	
-  int MAXCANV;     	
+  int MAXCANV;
+  int PERCANVAS;
+  int MAXFORM;
   
   int CANVH;       
   int CANVW;	   
@@ -135,7 +150,7 @@ public:
   int YPADD;
   int verbose;
 
-  const char *REEPER;             //the env variable
+  const char *REEPER;              //the env variable
   const char *outdir;              //directory for output and saves
   char **saveFormats;              //list of formats to be used for saving graphs etc
   char  **onOff;                   //char strings to represent on and off
@@ -144,6 +159,11 @@ public:
   //Arrays to hold all the data
   TString        *pvNames;         //hold the PV names
   double        **pvData;          //pointers to the data arrays
+  double         *pvIntegral;      //keep running integrals 
+  TFormula      **pvFormula;       //for dummy PVs which are functions of previously defined PVs.
+  int           **pvFormPV;        //incices of PVs in a formula - up to 10;
+  int            *pvFormN;         //no of incices of PVs in a formula - up to 10;
+  char           **pvMod;          //Flag to refer to the previous reading of a PV.
   TGraph        **pvGraph;         //all the graphs
   int            *graphAuto;       //autoscale stuff
   double         *graphXfirst;       
@@ -155,6 +175,10 @@ public:
   double         *multiYfirst;       
   double         *multiYlast;       
   TCanvas       **grCanvas;        //canvases for each graph 
+  TCanvas       **gCanv;           //   
+  int             nCanv;           //   
+  int            *grPad;           //pad index for each graph 
+  int             perCanvas;       //flag to do a canvas per graph 
   TMultiGraph   **pvMultiGraph;    //pointers to all the multigraphs
   int            *multiAuto;       //autoscale flag
   int           **multiIndices;    //hold indices of graphs in multigraphs
@@ -162,6 +186,7 @@ public:
   int            *pvGraphX;        //hold the indices of the data sets used for each graph
   int            *pvGraphY;
   TString        *grFits;          //hold fit and ranges for graphs
+  TF1           **grTF1;           //The actual fits
   double         *grFitMin;
   double         *grFitMax;
   int            *grFitDo;
@@ -181,6 +206,8 @@ public:
   int scanPeriod;      //default to 1s
   int scanTime;        //time counter
   int nPoints;         //no of reads
+  int nPointsInScan;   //end scan after this, if non-zero
+  int saveAndExit;      //flag to save all the stuff before exiting
   int nGraphs;         //no of graphs
   int nCanvas;         //no of canvases
   int nMulti;          //no of mulit graphs
@@ -198,13 +225,18 @@ public:
   TString returnString;            //general return string
   TLegend *legend;
   
-  TTimer  *pvTimer;                //to call the PV read (and possibly write) periodically
-  TTimer  *guiTimer;
+  TTimer     *pvTimer;             //to call the PV read (and possibly write) periodically
+  TTimer     *guiTimer;
+  TTimeStamp  sysTime;             //to get precise times.
+  double      startTime;
+  double      now;
   
   int   scanPVIndex;               //index of PV to be scanned. Defaults to scanning on time (ie periodic readback only)
-  const char *userRead;                  //custom read function called when epics readback is done.
-  const char *userWrite;                 //custom write function called at the start of each step.
-  const char *userInit;                  //custom init called to do initial positions for user scan
+  const char *userRead;            //custom read function called when epics readback is done.
+  const char *userWrite;           //custom write function called at the start of each step.
+  const char *userInit;            //custom init called to do initial positions for user scan
+  const char *userEnd;             //custom init called to do initial positions for user scan
+  const char *logCommand; 
  
   double scanStart;                //defaults for stepping on PV for the scan  
   double scanStop;
@@ -255,27 +287,36 @@ GrimReeper::GrimReeper(){
   MAXMULTI = 20;          //Max no of canvases to mults to draw	
   MAXADDM  = 10;          //Max no of graphs to add to a multigraph	
   MAXCANV  = 20;          //Max no of canvases to use			
+  MAXFORM  = 10;          //Max no of PVs that can be referred to in a formula			
   
-  CANVH    = 600;         //come canvas dimensions			
-  CANVW    = 800;							
-  GUIH     = 900;	
-  GUIW     = 820;							
-  MCANVH   = 500;							
-  MCANVW   = 500;							
-  XPADD    = 10;
-  YPADD    = 40;                                                      
+  CANVH      = 600;         //come canvas dimensions			
+  CANVW      = 800;							
+  GUIH       = 900;	
+  GUIW       = 820;							
+  MCANVH     = 600;							
+  MCANVW     = 800;							
+  XPADD      = 10;
+  YPADD      = 40;
+  PERCANVAS  =  5;       //no of graphs per big canvas
   
-  scanPeriod  = 1;         //default to 1s
-  verbose     = 1;         //default to verbose
+  scanPeriod  = 1;       //default to 1s
+  verbose     = 1;       //default to verbose
 
-  userRead      = NULL;    //custom read function called when epics readback is done.
-  userWrite     = NULL;    //custom write function called at the start of each step.
-  userInit      = NULL;    //custom write function called at the start of each step.
+  userRead      = NULL;
+  userWrite     = NULL; 
+  userInit      = NULL; 
+  userEnd       = NULL; 
+  logCommand    = NULL; 
   
   scanStart    = 0.0;       //defaults for stepping on PV for the scan  
   scanStop     = 0.0;
   scanStep     = 0.0;
   scanVal      = 0.0;
+  
+  nPointsInScan = 0;             //end scan after this number
+  saveAndExit   = 0;             //
+  perCanvas     =  PERCANVAS;
+  
 
   isInit       = 0;         //flag if initialised
 
@@ -314,11 +355,23 @@ void GrimReeper::init(){                       // initialise
   char titlestring[128];
   char timerfunc[128];
   
- 
-  pvNames       = new TString[MAXPV];
+
+  pvNames       = new TString[MAXPV];          //pv names
+  pvFormula     = new TFormula*[MAXPV];        //for dummy PVs which are functions of previously defined PVs.
+  pvFormPV      = new int*[MAXPV];             //allow up to MAXFORM PVs in a formula [0]
+  pvMod         = new char*[MAXPV];             
+  for(int n=0;n<MAXPV;n++){
+    pvFormPV[n] = new int[MAXFORM]; 
+    pvMod[n]    = new char[MAXPV]; 
+  }
+  pvFormN       = new int[MAXPV];              //no of incices of PVs in a formula - up to 10;
   pvData        = new double*[MAXPV];          //pointers to the data arrays
+  pvIntegral    = new double[MAXPV];           //integrals
   pvGraph       = new TGraph*[MAXGRAPH];       //all the graphs
   grCanvas      = new TCanvas*[MAXGRAPH];      //canvases for each graph 
+  gCanv         = new TCanvas*[MAXCANV];  
+  nCanv         = 0;
+  grPad         = new int[MAXGRAPH];           //pad index for each graph 
   pvMultiGraph  = new TMultiGraph*[MAXMULTI];  //pointers to all the multigraphs
   multiIndices  = new int*[MAXMULTI];
   for(int n=0;n<MAXMULTI;n++){
@@ -328,6 +381,7 @@ void GrimReeper::init(){                       // initialise
   pvGraphX      = new int[MAXGRAPH];           //hold the indices of the data sets used for each graph
   pvGraphY      = new int[MAXGRAPH];
   grFits        = new TString[MAXGRAPH];       //hold fit and ranges for graphs
+  grTF1         = new TF1*[MAXGRAPH];         
   grFitMin      = new double [MAXGRAPH];
   grFitMax      = new double[MAXGRAPH];
   grFitDo       = new int[MAXGRAPH];
@@ -345,25 +399,26 @@ void GrimReeper::init(){                       // initialise
   pvNames[0]    = "Time";                      //the zeroth "PV" is always time 
   pvData[0]     = new Double_t[MAXDATA];       //create an array for it
 
-  nPV         = 1;             //no of loaded PVs
-  scanTime    = 0;             //time counter
-  nPoints     = 0;             //no of reads
-  nGraphs     = 0;             //no of graphs
-  nCanvas     = 0;             //no of canvases
-  nMulti      = 0;             //no of mulit graphs
-  nMultiCanvas= 0;             //no of multi canvases
-  refreshRate = 2;             //how often to refresh the graphs (every 2 points default)
-  fitAfter    = 10;            //how many points required before trying a fit.
-  confirmScan = 1;             //should ask for confirmation before doing a scan with caput commands.
-  scanStatus  = GR_STOPPED; 
-  guiToggle   = 0;
+  nPV          = 1;             //no of loaded PVs
+  scanTime     = 0;             //time counter
+  nPoints      = 0;             //no of reads
+  nGraphs      = 0;             //no of graphs
+  nCanvas      = 0;             //no of canvases
+  nMulti       = 0;             //no of mulit graphs
+  nMultiCanvas = 0;             //no of multi canvases
+  refreshRate  = 2;             //how often to refresh the graphs (every 2 points default)
+  fitAfter     = 10;            //how many points required before trying a fit.
+  confirmScan  = 1;             //should ask for confirmation before doing a scan with caput commands.
+  scanStatus   = GR_STOPPED; 
+  guiToggle    = 0;
 
   //  sprintf(timerfunc,"%s->PVScanStep()",className);
   pvTimer       = new TTimer("GR->PVScanStep()",1000*scanPeriod);   //create timer with the default time
 
   gStyle->SetMarkerSize(1.5);                              //set dome default styles
   gStyle->SetMarkerStyle(20);
-
+  gStyle->SetPadBorderMode(0);
+  setOptFit(1);
   
   fprintf(stdout, "\nInitialised\n\n");
   isInit     = 1;                                          //flag that init was called
@@ -371,22 +426,102 @@ void GrimReeper::init(){                       // initialise
 
 int GrimReeper::addPV(const char *pvstring){               //Add a PV to the list for plotting
 
-  char pvname[128];
+  char pvname[128]="";                                     //pv
+  char tstring[128]="";                                    //for temporary use
+  char tstringf[128]="";                                   //for temporary use
+  char fname[128]="";                                      //formula
   char checkString[128];
   char comString[128];
   char namestring[128];
   char titlestring[128];
   char conststring[128];
-
-  if(!isInit) init();                                      //call init if required
+  char *bracket;
+  char *dptr;
+  char *dptr2;
+  char *sptr;
+  int  index;
+  char indstring[10];
+  char formname[20];
+  int npar=0;
+  char parstr[2];
   
-  sscanf(pvstring, "%s", pvname);                          //scan into new string to strip any whitespace
-  sprintf(checkString,"cainfo %s | grep State:",pvname);  //print the cainfo command to figure if the channel exists
-  returnString = gSystem->GetFromPipe(checkString);        //capture the result from the command
-  if(strstr(returnString.Data(),"never")){                 //return -1 if pv not found from chan access
-    fprintf(stdout,"WARNING, PV not found: %s\n",pvname);
-    return -1;
+  if(!isInit) init();                                   //call init if required
+  
+  pvFormN[nPV]=0;                                       //assume not a formula until we know better 
+  pvFormula[nPV]=NULL;                                      
+  
+  strcpy(fname,pvstring);
+  if(strstr(fname,"[")){                                //string has "[" - meaning it's a formula
+                                                        //Now it get slightly tricky. - 3 stages:
+                                                        //Stage 1. Hunt for modifiers and store and remove eg. "[2]/[3-]*[1+]" -> "[2]/[3]*[1]"
+                                                        //The +/- are saved and at the point of application of the formula
+                                                        //determine whether to unse the derivateive or integral instead of the PV value. 
+    dptr=fname;                                         
+    dptr2=pvname;
+    strcpy(fname,pvstring);   
+    strcpy(pvname,pvstring);                         
+    while(bracket=strstr(dptr,"]")){                    //search for all +/-
+      if((*(bracket-1)=='+')|| (*(bracket-1)=='-')){    //check if theres a + or - behind the ]
+	fprintf(stderr,"bracket = %c\n",*(bracket-1));  // - means use the prev point [n-1] in the formula       
+	sscanf(bracket-2,"%d",&index);                  // + means use integral of all prev points [Sigma n] 
+	pvMod[nPV][pvFormN[nPV]]=*(bracket-1);                 // save this to know how to use this PV in the formual
+	sprintf(bracket-1,"%s",bracket);
+      }
+      else{
+	sscanf(bracket-1,"%d",&index);                   //get the index
+	pvMod[nPV][pvFormN[nPV]]=0;                      //no modifications in formua just [n]
+      }
+      pvFormPV[nPV][pvFormN[nPV]]=index;                 //save the index
+      dptr=bracket+2;                                    //move the destination strin ptr
+      pvFormN[nPV]++;                                    //increment the no of PV used in this calculation
+    }
+   
+    strcpy(pvname,fname);                                //Stage 2. now the string has all the [+],[-]s stripped out
+    sptr=pvname;                                         //eg [2]/[3-]*[1+] -> [2]/[3]*[1]
+    pvFormN[nPV]=0;
+    while(bracket=strstr(sptr,"[")){                     //replace the indices with the proper pv names to make titles.
+      strcpy(tstring,bracket+3);
+      sscanf(bracket+1,"%d",&index);
+      sprintf(bracket,"");  
+      if(pvMod[nPV][pvFormN[nPV]]=='-'){
+    	sprintf(bracket,"#Delta%s%s",pvNames[pvFormPV[nPV][pvFormN[nPV]]].Data(),tstring);
+      }
+      else if(pvMod[nPV][pvFormN[nPV]]=='+'){
+   	sprintf(bracket,"#Sigma%s%s",pvNames[pvFormPV[nPV][pvFormN[nPV]]].Data(),tstring);
+      }
+      else{
+    	sprintf(bracket,"%s%s",pvNames[pvFormPV[nPV][pvFormN[nPV]]].Data(),tstring);
+      }
+      sptr=bracket+strlen(pvNames[pvFormPV[nPV][pvFormN[nPV]]].Data())+1;
+      fprintf(stderr,"pvname = %s\n",pvname);
+      pvFormN[nPV]++;
+    }   
+      
+    npar=0;
+    bracket=fname;
+    while(bracket=strstr(bracket,"[")){                 //stage 3 replace all the [n] with contiguous parameter indices
+      sprintf(parstr,"%d",npar++);                      //eg [2]/[3-]*[1+] -> [0]/[1]*[2]
+      strncpy(bracket+1,parstr,1);
+      bracket++;
+      fprintf(stderr,"fname = %s\n",fname);
+    }
+
+    fprintf(stderr,"Translating Formula to dummy PV: %s -> %s -> %s\n", pvstring, pvname,fname );
+    sprintf(formname,"pv%d_form",nPV);
+    pvFormula[nPV] = new TFormula(formname,fname);
+
   }
+  
+  else{
+    sscanf(pvstring, "%s", pvname);                        //scan PV into new string to strip any whitespace before/after PV name     
+    sprintf(checkString,"cainfo %s | grep State:",pvname);   //print the cainfo command to figure if the channel exists
+    returnString = gSystem->GetFromPipe(checkString);        //capture the result from the command
+    if(strstr(returnString.Data(),"never")){                 //return -1 if pv not found from chan access
+      fprintf(stdout,"WARNING, PV not found: %s\n",pvname);
+      return -1;
+    }
+  }
+  
   pvNames[nPV] = pvname;                                   //save the name
   pvData[nPV]  = new Double_t[MAXDATA];                    //create an array for it
   for(int p = 0;p<nPoints;p++){                            //if PV added after there are already points done, retro fill with zeros
@@ -394,14 +529,16 @@ int GrimReeper::addPV(const char *pvstring){               //Add a PV to the lis
   }
   
   nPV++;                                                  //increment the no of PVs
-
+  
   fprintf(stdout,"PV added to list: %s\n",pvname);
   if (nPV<=1) return 0;                                   //must be PVs other than "time"
   
   sprintf(getCommandString,"caget -t");                   //init the command to read them all
-  for(int n=1;n<nPV;n++){                                 //add all the PVs to the string
-    strcat(getCommandString," ");
-    strcat(getCommandString,pvNames[n].Data());
+  for(int n=1;n<nPV;n++){                                 //add all the non-formula PVs to the string
+    if(pvFormN[n]==0){
+      strcat(getCommandString," ");
+      strcat(getCommandString,pvNames[n].Data());
+    }
   }
   strcat(getCommandString," | awk '{printf\"%s \",$1}'");
 
@@ -410,8 +547,12 @@ int GrimReeper::addPV(const char *pvstring){               //Add a PV to the lis
 }
 
 void GrimReeper::printPVs(){                  //print the current list with indices
+  if(nPV<=1){
+    fprintf(stderr,"\nWarning: No PVs defined:\n");
+    return;
+  }
   fprintf(stdout,"\nFull list of PVs is:\n");
-  fprintf(stdout,"Index   %-50s\n","PV name (can be used as index)");
+  fprintf(stdout,"Index   %-50s\n","PV name");
   fprintf(stdout,"%2d\t%-50s\t%s\n",0,"Time (Time(s) is local pv, always present)","n/a");
   for(int n=1;n<nPV;n++){
     fprintf(stdout,"%2d\t%-50s\n",n,pvNames[n].Data());
@@ -423,13 +564,13 @@ void GrimReeper::printPVs(){                  //print the current list with indi
 
 void GrimReeper::printGraphs(){                  //print the current list with indices
   fprintf(stdout,"\nFull list of Graphs is:\n");
-  fprintf(stdout,"Index\t%-50s\tFit    \tFitRange           \tnPoints\n","Graph Name (can be used as index)");
+  fprintf(stdout,"Index\t%-50s\tFit    \tFitRange           \tnPoints\n","Graph Name");
   for(int n=0;n<nGraphs;n++){
     if(grFitDo[n] == GR_FITRANGE){
-      fprintf(stdout,"%-2d\t%-50s%10s\t%5.2lf - %5.2lf\t\t%2d\n",n,grCanvas[n]->GetName(),grFits[n].Data(), grFitMin[n], grFitMax[n], pvGraph[n]->GetN());
+      fprintf(stdout,"%-2d\t%-50s%10s\t%5.2lf - %5.2lf\t\t%2d\n",n,pvGraph[n]->GetName(),grFits[n].Data(), grFitMin[n], grFitMax[n], pvGraph[n]->GetN());
     }
     else{
-      fprintf(stdout,"%-2d\t%-50s%10s\t\t\t\t%2d\n",n,grCanvas[n]->GetName(),grFits[n].Data(), pvGraph[n]->GetN());      
+      fprintf(stdout,"%-2d\t%-50s%10s\t\t\t\t%2d\n",n,pvGraph[n]->GetName(),grFits[n].Data(), pvGraph[n]->GetN());      
     }
   }
   fprintf(stdout,"\n");
@@ -442,24 +583,61 @@ void GrimReeper::PVScanStep(){  //This is called by the timer
   int ret;
   char *data, *eptr;
   int n = 1;
+  int par=-1;
+  int skip=0;
   
   if(verbose)fprintf(stdout,"Doing step number %d: ", nPoints);
   
-  pvData[Time][nPoints] = (double)scanTime;           //save the time as pv0
+  sysTime.Set();
+  //  now=(double)sysTime.GetSec()+double(sysTime.GetNanoSec())*10e-9;
+  now=sysTime.AsDouble();
+  //  now=(double)((10000000000*sysTime.GetSec())+sysTime.GetNanoSec())/10e9;
+  
+  
+  //  pvData[Time][nPoints] = (double)scanTime;           //save the time as pv0
+  pvData[Time][nPoints] = now-startTime;                 //save the time as pv0
   scanTime += scanPeriod;                                //increment the timer
 
   if(verbose)fprintf(stdout,"%s\n",getCommandString);
   returnString = gSystem->GetFromPipe(getCommandString); //read
   if(verbose)fprintf(stdout,"%s\n",returnString.Data());  
 
+  //fead in all the PVs
   data=(char *)returnString.Data();
   do {                                      //loop over in this old fashioned way
-    pvData[n][nPoints]=strtod(data, &eptr);
-    if(verbose)fprintf(stdout,"%-50s\t%g\n",pvNames[n].Data(),pvData[n][nPoints]);
-    data = eptr;
+    if(pvFormN[n]==0){                      //if not a formula
+      pvData[n][nPoints]=strtod(data, &eptr);
+      pvIntegral[n]+=pvData[n][nPoints];    //add to the integral
+      if(verbose)fprintf(stdout,"%-50s\t%g\n",pvNames[n].Data(),pvData[n][nPoints]);
+      data = eptr;
+    }
     n++;
   } while ((*eptr)&&(n<nPV));
 
+  //loop over and look for formulae
+  for(int n=1;n<nPV;n++){                   //for all pvs
+    if(pvFormN[n]>0){                       //if it's a formula
+      skip=0;
+      for(int i=0;i<pvFormN[n];i++){        //go through the list of parameter(PV incides) used in the fomula
+  	par=pvFormPV[n][i];
+	if(pvMod[n][i]=='-'){               //taking Delta n (=[n]-[-1]), so there has to be > 1 point read
+	  if(nPoints<=1){                   //skip 1st point if any parameter uses '-'
+	    skip=1;
+	    break;
+	  }
+	  pvFormula[n]->SetParameter(i,pvData[par][nPoints]-pvData[par][nPoints-1]); //Diff wth prev point.
+	}
+	else if(pvMod[n][i]=='+'){                         
+	  pvFormula[n]->SetParameter(i,pvIntegral[par]);      //Integral
+	}
+	else{
+	  pvFormula[n]->SetParameter(i,pvData[par][nPoints]); //set the parameter to use current reading for that PV.	  
+	}
+      }
+      if(!skip)pvData[n][nPoints]=pvFormula[n]->Eval(1);        //evaluate
+    }
+  }
+  
   if(userRead){
     gROOT->ProcessLine(userRead);
   }
@@ -491,7 +669,11 @@ void GrimReeper::PVScanStep(){  //This is called by the timer
     gROOT->ProcessLine(userWrite);
   }
   
-  if((nPoints%refreshRate==0)||(nPoints==1)) drawGraphs(); //try updating 
+  if((nPoints%refreshRate==0)||(nPoints==1)) drawGraphs(); //try updating
+  
+  if((nPointsInScan)&&(nPoints>=nPointsInScan)){           //if scan completed
+    stopScanning();
+  }
 }
 
 
@@ -506,7 +688,10 @@ void GrimReeper::startScanning(){
   }
 
   if(scanStatus==GR_STOPPED){
-
+    if(nPV<=1){
+      fprintf(stderr,"\nWARNING, there are no PVs defined. Scanning is meaningless!\n");
+      return;
+    }
     if(nPoints>0){      
       sprintf(warning,"WARNING. This will clear all graphs and restart any scans.\nSave first if you need to.\n"); //make a big string
       
@@ -527,14 +712,19 @@ void GrimReeper::startScanning(){
 	sprintf(warning,"%sPeriod(s):  %d    ( = time to wait between steps)\n",warning,scanPeriod);
 	sprintf(warning,"%sARE YOU REALLY SURE YOU WANT TO DO THIS ? \n",warning);
 	
-	fprintf(stdout,"%s",warning);  //print on stdout, and open confim dialogue
+	//fprintf(stdout,"%s",warning);  //print on stdout, and open confim dialogue
 	ret=confirmDialog("Message from the GRIM REEPER",warning,kMBIconExclamation,kMBCancel+kMBOk);
       
 	if(ret!=kMBOk) return;         //Don't start unless OK
       }
       
+      for(int n=0;n<nPV;n++){          //zero all the integrals
+ 	pvIntegral[n]=0.0;
+      }
+
       //    sprintf(command,"caput -t %s %g > /dev/null", pvNames[scanPVIndex].Data(), scanStart); //go to the starting poition
       sprintf(command,"caput %s %g", pvNames[scanPVIndex].Data(), scanStart); //go to the starting poition
+      nPointsInScan=0; //override any limit to the no of steps, since this might stop the scan 
       gSystem->Exec(command);
       
       scanVal=scanStart;             //save this for the next steps
@@ -554,6 +744,10 @@ void GrimReeper::startScanning(){
       }
     }
   }
+  sysTime.Set();
+  //  startTime=(double)sysTime.GetSec()+double(sysTime.GetNanoSec())*10e-9;
+  startTime=sysTime.AsDouble();
+  
   pvTimer->Start(scanPeriod*1000);   //start the timer which calls the scan step function
   scanStatus = GR_STARTED;
   if(isGUI)updateGUI();
@@ -566,8 +760,17 @@ void GrimReeper::stopScanning(){
     fprintf(stdout,"\nStopped any scans\n");
     scanStatus = GR_STOPPED;
     if(isGUI)updateGUI();
+    if(userEnd){     //if end function
+      fprintf(stdout,"\nCalling %s\n",userEnd);
+      gROOT->ProcessLine(userEnd);
+    }
+    if(saveAndExit){
+      saveAll();
+      exitGrim();
+    }
   }
 }
+
 void GrimReeper::pauseScanning(){
   if(pvTimer){
     pvTimer->Stop();
@@ -585,14 +788,14 @@ void GrimReeper::resumeScanning(){
   }
 }
 
-void GrimReeper::makeGraph(const char *yPVName, const char *xPVName, const char* pvfit, double rangemin, double rangemax) {
+void GrimReeper::makeGraph(const char *yPVName, const char *xPVName, const char* pvfit, double rangemin, double rangemax, int canv, int pad) {
   int x=-1,y=-1;
   for(int n=0;n<nPV;n++){
     if(!strcmp(yPVName,pvNames[n].Data()))y=n;
     if(!strcmp(xPVName,pvNames[n].Data()))x=n;
   }
   if((x!=y)&&(y>=0)&&(y<nPV)&&(x>=0)&&(x<nPV)){
-    makeGraph(y,x,pvfit,rangemin,rangemax);
+    makeGraph(y,x,pvfit,rangemin,rangemax,canv,pad);
   }
   else{
     fprintf(stderr,"ERROR: plotting %s vs %s is not possible. Available PVs are:",yPVName,xPVName);
@@ -602,9 +805,11 @@ void GrimReeper::makeGraph(const char *yPVName, const char *xPVName, const char*
 }
   
 
-void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin, double rangemax) {
+void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin, double rangemax, int canv, int pad) {
   char titlestring[128];
   char namestring[128];
+  char cnamestring[128];
+  char grString[20];
   int xcoord,ycoord;
   char conststring[128];
   TClass *cl;
@@ -630,8 +835,8 @@ void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin,
     pvData[xPV][0]=0.0;pvData[yPV][0]=0.0;         //force 1st point of 0 to allow multigraphs to be made.
   }
   pvGraph[nGraphs] = new TGraph(1,pvData[xPV],pvData[yPV]);
-  pvGraph[nGraphs]->SetMarkerColor((6*nGraphs)+50);
-  pvGraph[nGraphs]->SetMarkerStyle(nGraphs+20);
+  pvGraph[nGraphs]->SetMarkerColor(goodColors[nGraphs%11]); 
+  pvGraph[nGraphs]->SetMarkerStyle(goodMarkers[nGraphs%5]);
   pvGraphX[nGraphs] = xPV;
   pvGraphY[nGraphs] = yPV;
 
@@ -649,6 +854,8 @@ void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin,
     grFits[nGraphs].Append(pvfit);
     grFitMin[nGraphs] = rangemin;
     grFitMax[nGraphs] = rangemax;
+    sprintf(grString,"grTF1_%d",nGraphs),
+    grTF1[nGraphs] = new TF1(grString,pvfit,rangemin,rangemax);
     if(TMath::Abs(rangemax-rangemin)<0.000001){    //tiny, so don't use fit range
       grFitDo[nGraphs] = GR_FIT;
     }
@@ -662,28 +869,43 @@ void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin,
   }
 
   
-  //make a canvas for the graph
+  //make title and name for the graph
   sprintf(titlestring,"%s v %s", pvNames[pvGraphY[nGraphs]].Data(),pvNames[pvGraphX[nGraphs]].Data());
   sprintf(namestring,"Graph%d_%s_v_%s", nGraphs, pvNames[pvGraphY[nGraphs]].Data(),pvNames[pvGraphX[nGraphs]].Data());
   
   xcoord = GUIW + 20 + (XPADD*nGraphs);
   ycoord = 30+YPADD*nGraphs; 
 
-  grCanvas[nGraphs] = new TCanvas(namestring,titlestring,xcoord,ycoord,CANVW,CANVH);
-
-  //as soon as a graph canvas is made, set the context menu to have extra item for toggling autoscaling
-  //this adds it to the context menu for all TGraphs
+  if(canv==-1){     //make a new canvas for single graph
+    sprintf(cnamestring,"grCanvas_%d",nCanv);
+    gCanv[nCanv]=new TCanvas(cnamestring,titlestring,xcoord,ycoord,CANVW,0.6*CANVH);
+    gCanv[nCanv]->Divide(1,1,0.001,0.001);
+    grCanvas[nGraphs]=gCanv[nCanv];
+    grCanvas[nGraphs]->GetPad(1)->SetBorderMode(0);
+    nCanv++;
+  }
+  else{
+    if(gCanv[canv]==NULL){
+      sprintf(cnamestring,"grCanvas_%d",nCanv);
+      gCanv[canv]=new TCanvas(cnamestring,titlestring,xcoord,ycoord,CANVW,perCanvas*0.6*CANVH);
+      nCanv++;
+      gCanv[canv]->Divide(1,perCanvas);
+    }
+    grCanvas[nGraphs]=gCanv[canv];
+  }
+  grPad[nGraphs]=pad;
+  grCanvas[nGraphs]->cd(grPad[nGraphs]);
+  grCanvas[nGraphs]->GetPad(grPad[nGraphs])->SetName(namestring);
 
   if(nGraphs==0){
-    cl = grCanvas[nGraphs]->IsA();
-    cl->SetContextMenuTitle("GrimReeper");
+    cl = (grCanvas[nGraphs]->GetPad(1))->IsA();
+    //cl->SetContextMenuTitle("GrimReeper");
     l  = cl->GetMenuList();
     //l->RemoveAll();
-    mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"toggle autoscale","setAuto",GR,"TObject *",0);
+    mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"toggle autoscale","SetAuto",GR,"TObject *",0);
     l->AddFirst(mi);
   }
   
-
   graphAuto[nGraphs]=GR_AUTO;                                        //default to auto scaling
   graphXfirst[nGraphs] = 0.0;
   graphXlast[nGraphs]  = 0.0;
@@ -692,8 +914,9 @@ void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin,
   
   sprintf(namestring,"%s_v_%s", pvNames[pvGraphY[nGraphs]].Data(),pvNames[pvGraphX[nGraphs]].Data());
   fprintf(stdout,"Added graph %s\n",namestring);
-  sprintf(conststring,"const int %s = %d;",namestring, nGraphs);  //make a line to define a const for the graph.
-  gROOT->ProcessLine(conststring);                                //now PV names can be used as enum array indices
+
+  pvGraph[nGraphs]->Draw("AL");
+
   nGraphs++;
 
   if(isGUI==GR_BIGGUI){
@@ -702,10 +925,11 @@ void GrimReeper::makeGraph(int yPV, int xPV, const char* pvfit, double rangemin,
 }
 
 //This gets called from the graph menu, passing the object associated with the menu.
-void GrimReeper::setAuto(TObject *gr){
+void GrimReeper::SetAuto(TObject *gr){
   int g;
   if(strstr(gr->GetName(),"Multi")){
-    sscanf(gr->GetName(),"MultiGraph%d",&g);
+    //fprintf(stderr,"MULTITOGGLE %s\n",gr->GetName());
+    sscanf(gr->GetName(),"MultiGraphCanvas%d",&g);
     setMultiAuto(g,GR_TOGGLE);    
   }
 
@@ -715,14 +939,33 @@ void GrimReeper::setAuto(TObject *gr){
   }
 }
 
+//This gets called from the graph menu, passing the object associated with the menu.
+int GrimReeper::GetAuto(TObject *gr){
+  int g;
+  if(strstr(gr->GetName(),"Multi")){
+    //fprintf(stderr,"MULTITOGGLE %s\n",gr->GetName());
+    sscanf(gr->GetName(),"MultiGraphCanvas%d",&g);
+    return getMultiAuto(g);    
+  }
+
+  else{
+    sscanf(gr->GetName(),"Graph%d_",&g);
+    return getGraphAuto(g);
+  }
+}
+
 void GrimReeper::setGraphAuto(int g, int a){
   if(a==GR_TOGGLE)graphAuto[g]=!graphAuto[g];
   else graphAuto[g]=a;
   if(isGUI==GR_BIGGUI)updateGraphList();
 }
+int  GrimReeper::getGraphAuto(int g){
+  return graphAuto[g];
+}
 
 void GrimReeper::setMultiAuto(int g, int a){
   double xf,xl;
+  
 
   if(a==GR_TOGGLE)multiAuto[g]=!multiAuto[g];
   else multiAuto[g]=a;
@@ -734,6 +977,10 @@ void GrimReeper::setMultiAuto(int g, int a){
     multiXlast[g]=xl;
   }
   if(isGUI==GR_BIGGUI)updateMultiList();
+}
+
+int GrimReeper::getMultiAuto(int g){  
+  return multiAuto[g];
 }
 
 void GrimReeper::updateGraph(int g){
@@ -788,18 +1035,18 @@ void GrimReeper::drawGraph(int g){
   char dopt[10]="AP";
 
   
-  if(!nPoints){
-    fprintf(stdout, "ERROR: No data accumulated yet. Be patient. Or did you forget to start scanning?\n");
-    return;
-  }
+  //  if(!nPoints){
+  //    fprintf(stdout, "ERROR: No data accumulated yet. Be patient. Or did you forget to start scanning?\n");
+  //    return;
+  //  }
   updateGraph(g);
-  grCanvas[g]->cd();
+  grCanvas[g]->cd(grPad[g]);
 
   if((grFitDo[g]==GR_NOFIT)&&(strlen(grFits[g].Data())>0)){
     strcat(dopt,grFits[g].Data());
   }
   if(graphAuto[g]==GR_MANUAL){
-    //pvGraph[g]->GetXaxis()->SetRangeUser(graphXfirst[g],graphXlast[g]);
+    pvGraph[g]->GetXaxis()->SetRangeUser(graphXfirst[g],graphXlast[g]);
     pvGraph[g]->GetHistogram()->SetMinimum(graphYfirst[g]);
     pvGraph[g]->GetHistogram()->SetMaximum(graphYlast[g]);
     
@@ -811,6 +1058,7 @@ void GrimReeper::drawGraph(int g){
   pvGraph[g]->Draw(dopt);
   if(pvGraphX[g]==Time)pvGraph[g]->GetHistogram()->GetXaxis()->SetTitle("Time (s)");
   else pvGraph[g]->GetHistogram()->GetXaxis()->SetTitle(pvNames[pvGraphX[g]].Data());
+  pvGraph[g]->GetHistogram()->GetYaxis()->SetTitle(pvNames[pvGraphY[g]].Data());
   ((TRootCanvas*)grCanvas[g]->GetCanvasImp())->DontCallClose(); //don't allow closing the graph canvas
   pvGraph[g]->Draw(dopt);
  
@@ -818,11 +1066,13 @@ void GrimReeper::drawGraph(int g){
   if((grFitDo[g])&&(nPoints>10)){                               //only apply fits after 10 points
     sprintf(fopt,"q%s",fitopt);
     if(grFitDo[g]==GR_FIT){
-      pvGraph[g]->Fit(grFits[g].Data(),fopt);
+      // pvGraph[g]->Fit(grFits[g].Data(),fopt);
+      pvGraph[g]->Fit(grTF1[g],fopt);
     }
     else{
       sprintf(fopt,"q%sR",fitopt);
-      pvGraph[g]->Fit(grFits[g].Data(),fopt,"", grFitMin[g],grFitMax[g]);
+      //pvGraph[g]->Fit(grFits[g].Data(),fopt,"", grFitMin[g],grFitMax[g]);
+      pvGraph[g]->Fit(grTF1[g],fopt,"");
     }
   }
   grCanvas[g]->Update();
@@ -877,8 +1127,11 @@ void GrimReeper::makeMultiGraph(const char *title,int *mg){
   char namestring[128];
   char titlestring[128];
   int mcount=0;
+  TClass *cl;
+  TList*l;
+  TClassMenuItem* mi;  
   
-  legend = new TLegend(0.6,0.7,0.90,0.90);                         //Create a legend
+  legend = new TLegend(0.1,0.7,0.6,0.90);                         //Create a legend
 
   sprintf(titlestring,"pvMultiGraph[%d]: %s",nMulti,title);        //make name and titles
   sprintf(namestring,"MultiGraph%d",nMulti);
@@ -901,7 +1154,7 @@ void GrimReeper::makeMultiGraph(const char *title,int *mg){
     }
   }
 
-  multiAuto[nMulti]   = GR_AUTO;                                        //default to auto scaling
+  multiAuto[nMulti]   = GR_AUTO;                                   //default to auto scaling
   multiXfirst[nMulti] = 0.0;
   multiXlast[nMulti]  = 0.0;
   multiYfirst[nMulti] = 0.0;
@@ -909,23 +1162,29 @@ void GrimReeper::makeMultiGraph(const char *title,int *mg){
 
   sprintf(namestring,"MultiGraphCanvas%d",nMulti);                 //name and create canvas
   multiCanvas[nMulti]  = new TCanvas(namestring,titlestring,1250+CANVW+2*XPADD*nMulti,2*YPADD*(nMulti),MCANVW,MCANVH);
-  multiCanvas[nMulti]->cd();
+  multiCanvas[nMulti]->Divide(1,1,0.001,0.001);
+  multiCanvas[nMulti]->cd(1);
   ((TRootCanvas*)multiCanvas[nMulti]->GetCanvasImp())->DontCallClose(); //don't allow closing the graph canvas
   pvMultiGraph[nMulti]->Draw("ap");
   if(pvGraphX[mg[0]]==Time) pvMultiGraph[nMulti]->GetXaxis()->SetTitle("Time (s)"); //If time, give x axis label units of s
   else pvMultiGraph[nMulti]->GetXaxis()->SetTitle(pvNames[pvGraphX[mg[0]]]);        //else just pv name
   
+
   legend->Draw();           
   
   multiCanvas[nMulti]->Modified();                                 //force the drawing before coloring the canvas
   multiCanvas[nMulti]->Update();                                   //to keep the actual graph white
   multiCanvas[nMulti]->SetFillColor(20+(3*nMulti));
+  multiCanvas[nMulti]->GetPad(1)->SetBorderMode(0);
+  multiCanvas[nMulti]->GetPad(1)->SetFillColor(20+(3*nMulti));
   multiCanvas[nMulti]->Modified();
   multiCanvas[nMulti]->Update();
 
   nMulti++;
   
-  if(isGUI==GR_BIGGUI) updateMultiList();                                     //if there's a GUI update the list. 
+
+
+  if(isGUI==GR_BIGGUI) updateMultiList();                          //if there's a GUI update the list. 
 }
 
 
@@ -968,7 +1227,7 @@ void GrimReeper::updateMultiGraph(int m){
   if(nPoints<10)pvMultiGraph[m]->GetYaxis()->SetRangeUser(ymin,ymax); //autoscale on the basis of the 1st 10 points
   if(multiAuto[m]==GR_AUTO)pvMultiGraph[m]->GetYaxis()->SetRangeUser(ymin,ymax);
   
-  multiCanvas[m]->cd();
+  multiCanvas[m]->cd(1);
   gPad->Modified(); 
   multiCanvas[m]->Update();
 }
@@ -983,8 +1242,10 @@ void GrimReeper::changePeriod(int t){
 void GrimReeper::saveAll(){  //save data in column format and save canvases in some sort of format
 
   FILE *fp;
-  char filename[100];
-  char command[100];
+  char filename[200];
+  char rmlink[200];
+  char mklink[200];
+  char command[200];
   char warning[500];
   int ret;
   
@@ -992,17 +1253,26 @@ void GrimReeper::saveAll(){  //save data in column format and save canvases in s
 
     
   sprintf(filename,"%s/gr_save_%s.txt",outdir,date.Data());  
+  sprintf(rmlink,"cd %s; /bin/rm -f *_latest.*",outdir);  
+  sprintf(mklink,"cd %s;ln -s gr_save_%s.txt gr_save_latest.txt",outdir,date.Data());  
 
-  sprintf(warning,"Save all data.\n"); //make a big string
-  sprintf(warning,"%sAll PV data will be saved in columns in file: %s \n",warning,filename);
-  sprintf(warning,"%sand graph canvases as %s/<graphname>_%s.<formats>  \n",warning,outdir,date.Data());
-    
-  fprintf(stdout,"%s",warning);  //print on stdout, and open confim dialogue
-  ret=confirmDialog("Message from the GRIM REEPER",warning,kMBIconQuestion,kMBCancel+kMBOk);
-  if(ret!=kMBOk) return;         //Don't startsave unless OK
+  if(isGUI){                             //if there's a GUI ask for confirmation
+    sprintf(warning,"Save all data.\n"); //make a big string
+    sprintf(warning,"%sAll PV data will be saved in columns in file: %s \n",warning,filename);
+    sprintf(warning,"%s and graph canvases as %s/<graphname>_%s.<formats>  \n",warning,outdir,date.Data());
+    if(logCommand){
+      sprintf(warning,"%s The following command will also be issued to save information to the log book:\n",warning);
+      sprintf(warning,"%s %s\n",warning,logCommand);
+    }
+    fprintf(stdout,"%s\n",warning);  //print on stdout, and open confim dialogue
+    ret=confirmDialog("Message from the GRIM REEPER",warning,kMBIconQuestion,kMBCancel+kMBOk);
+    if(ret!=kMBOk) return;         //Don't startsave unless OK
+  }
   
   sprintf(command,"mkdir -p %s",outdir);                      //make the output directory if it doesn't exist
   gSystem->Exec(command);
+  gSystem->Exec(rmlink);                                      //remove any previous link file
+  
   fp = fopen(filename,"w");
   for(int n=0;n<nPV;n++){                                     //write the pv infor as #comments at top of file
     fprintf(fp,"# PV%d = %s\n",n,pvNames[n].Data());
@@ -1020,18 +1290,24 @@ void GrimReeper::saveAll(){  //save data in column format and save canvases in s
     fprintf(fp,"\n");
   }
   fclose(fp);
-
-
-  for(int g=0;g<nGraphs;g++){
+  
+  gSystem->Exec(mklink);                                      //remove any previous link filemake a new link
+  
+  for(int g=0;g<nCanv;g++){
+    //  for(int g=0;g<nGraphs;g++){
     int f=0;
     while(saveFormats[f]){
-      sprintf(filename,"%s/%s_%s.%s",outdir,grCanvas[g]->GetName(),date.Data(),saveFormats[f]);
+      sprintf(filename,"%s/%s_%s.%s",outdir,gCanv[g]->GetName(),date.Data(),saveFormats[f]);
+      sprintf(mklink,"cd %s;ln -s %s_%s.%s %s_latest.%s ",outdir,gCanv[g]->GetName(),date.Data(),saveFormats[f],gCanv[g]->GetName(),saveFormats[f]);  
       fprintf(stderr,"Saving %s\n",filename);
-      grCanvas[g]->SaveAs(filename);
+      gCanv[g]->SaveAs(filename);
+      gSystem->Exec(mklink);                                  //make a new link file
       f++;
     }
   }
-	      
+  if(logCommand){
+    gSystem->Exec(logCommand); 
+  }
 }
 
 void GrimReeper::resetGrim(){
@@ -1067,6 +1343,7 @@ int GrimReeper::confirmDialog(const char *title, char *message, EMsgBoxIcon icon
 }
 
 void GrimReeper::exitGrim(){
+  stopScanning();
   killSimIOC();
   exit(0);
 }
@@ -1135,7 +1412,9 @@ void GrimReeper::makeControlGUI(int guisize){
       multipad    = new TPad(  "multipad",  "multipad",      0,  0.00, 1.0, 0.15, 0);multipad->SetFillColor(30);multipad->Draw(); 
     }
     titlepad1->cd();
+
     
+
     sprintf(string,"%s/Grim_Reaper.png",REEPER);
     TImage *img1 = TImage::Open(string);
     img1->Draw();
@@ -1209,8 +1488,8 @@ void GrimReeper::makeControlGUI(int guisize){
     statuslabel->AddText("nPoints:");
     statuslabel->AddText("Period(s):");
     statuslabel->AddText("Scanning:");
-    statuslabel->AddText("Read func:");
-    statuslabel->AddText("Write func:");
+    statuslabel->AddText("Init/End funcs:");
+    statuslabel->AddText("Read/Write funcs:");
     statuslabel->Draw();
 
     statustext=new TPaveText(0.42,0.1,0.98,0.9,"NB");
@@ -1288,7 +1567,7 @@ void GrimReeper::makeControlGUI(int guisize){
     //mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"Make new multigraph","GR->makeMultiGraph",0,"char *title, int, int, int, int, int, int, int, int, int, int");
     mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"Make new multigraph","makeMultiGraph",GR,"char *title, int, int, int, int, int, int, int, int, int, int");
     l->AddFirst(mi);
-    mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"Make new graph","makeGraph",GR,"int, int, const char*, double, rangemax");
+    mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"Make new graph","makeGraph",GR,"int, int, const char*, double, double");
     l->AddFirst(mi);
     mi = new TClassMenuItem(TClassMenuItem::kPopupUserFunction,cl,"Add new PV","addPV",GR,"char *");
     l->AddFirst(mi);
@@ -1308,10 +1587,9 @@ void GrimReeper::makeControlGUI(int guisize){
     popup->AddEntry("AddPV(), makeGraph(), makeMultiGraph() functions from the text area below", 1);
     popup->AddEntry("Autoscaling() from any of the graph Canvases", 1);
     popup->AddSeparator();
-    popup->AddEntry("See manual at http://somewhere.soon.com", 1);
+    popup->AddEntry("See manual at http://nuclear.gla.ac.uk/~kl/epics/grimReeper/grimReeper.html", 1);
     bar->MapSubwindows();
     bar->Layout();
-    
   }
 }
 void GrimReeper::updatePvList(){
@@ -1338,7 +1616,7 @@ void GrimReeper::updateGraphList(){
   graphtext->Clear();
   for(int n=0;n<textLines;n++){
     if(n<nGraphs){
-      sprintf(string,"%2d %-33s    %d,%d        %s",n,strstr(grCanvas[n]->GetName(),"_")+1,pvGraphY[n],pvGraphX[n],onOff[graphAuto[n]]);
+      sprintf(string,"%2d %-33s    %d,%d        %s",n,strstr(pvGraph[n]->GetName(),"_")+1,pvGraphY[n],pvGraphX[n],onOff[graphAuto[n]]);
     }
     else{
       sprintf(string,"");
@@ -1443,6 +1721,8 @@ void GrimReeper::updatePauseButton(){
 void GrimReeper::updateStatus(){
   buttonpad->cd();
   char string[100];
+  char read[100];
+  char write[100];
   statustext->Clear();
   sprintf(string,"%-6d", nPoints);
   statustext->AddText(string);
@@ -1452,25 +1732,43 @@ void GrimReeper::updateStatus(){
     sprintf(string,"%s (%5.2f-%5.2f,step %4.2f) %5.2f", pvNames[scanPVIndex].Data(),scanStart,scanStop,scanStep,scanVal );
   }
   else{
-    sprintf(string,"------ ");
+    sprintf(string,"------");
   }
   statustext->AddText(string);
+
+  if(userInit==NULL){
+    sprintf(read,"------");
+  }
+  else{
+    sprintf(read,"%s",userInit);
+  }
+  
+  if(userEnd==NULL){
+    sprintf(write,"------");
+  }
+  else{
+    sprintf(write,"%s",userEnd);
+  }
+  sprintf(string,"%s/%s",read,write);
+  statustext->AddText(string);
+  
   if(userRead==NULL){
-    sprintf(string,"------ ");
+    sprintf(read,"------");
   }
   else{
-    sprintf(string,"%s",userRead);
+    sprintf(read,"%s",userRead);
   }
-  statustext->AddText(string);
-  
   if(userWrite==NULL){
-    sprintf(string,"------ ");
+    sprintf(write,"------");
   }
   else{
-    sprintf(string,"%s",userWrite);
+    sprintf(write,"%s",userWrite);
   }
+  sprintf(string,"%s/%s",read,write);
   statustext->AddText(string);
   
+
+
   buttonpad->Modified();
   buttonpad->Update();
   grimCanvas->cd();
@@ -1600,19 +1898,20 @@ void GrimReeper::writeTestPVs(){
   gSystem->Exec(command);
   
   
-  PV23004 = klrand->Uniform(100.0,200.0);
+  //  Fcup = 1000.0*TMath::Gaus(colliX,0.6,2.0);
+  Fcup = klrand->Gaus(100,20.0);
+  sprintf(command,"caput -t Fcup %g > /dev/null", Fcup);
+  gSystem->Exec(command);
+
+  PV23004 = Fcup*klrand->Uniform(100.0,200.0);
   sprintf(command,"caput -t PV23004 %g > /dev/null", PV23004);
   gSystem->Exec(command);
   
-  PMT1 = 20000.0*TMath::Gaus(colliX,0.6,1.0);
+  PMT1 = Fcup*20000.0*TMath::Gaus(colliX,0.6,1.0);
   //PMT1 *= klrand->Gaus(1,0.1);
   sprintf(command,"caput -t PMT1 %g > /dev/null", PMT1);
   gSystem->Exec(command);
   
-  Fcup = 1000.0*TMath::Gaus(colliX,0.6,2.0);
-  Fcup *= klrand->Gaus(1,0.01);
-  sprintf(command,"caput -t Fcup %g > /dev/null", Fcup);
-  gSystem->Exec(command);
   
   testTime++;
 }
@@ -1623,3 +1922,8 @@ void GrimReeper::writePV(const char *pv_name, double pv_value){
   sprintf(command,"caput -t %s %g > /dev/null", pv_name, pv_value);
   gSystem->Exec(command);
 }
+
+void GrimReeper::setOptFit(int opt){
+  gStyle->SetOptFit(opt);
+}
+

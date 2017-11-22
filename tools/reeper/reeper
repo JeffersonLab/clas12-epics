@@ -12,7 +12,7 @@ usage ()
     echo -e "        $exe - Read EPICS Events and Plot Everything in ROOT"
     echo -e
     echo -e "SYNOPSIS"
-    echo -e "        $exe [OPTION]... [PV]...                                               \e[1;35m\\\\\mode 1\e[0m"
+    echo -e "        $exe [OPTION]... [PV]...[formula]....                                  \e[1;35m\\\\\mode 1\e[0m"
     echo -e "        $exe [ROOT OPTIONS]...[file1.C ... fileN.C]                            \e[1;35m\\\\\mode 2\e[0m"
     echo -e
     echo -e "DESCRIPTION"
@@ -28,17 +28,35 @@ usage ()
     echo -e "              set the period (ie time(s)) between reads. Default = 2s"
     echo -e
     echo -e "        -x"
-    echo -e "              make additional graphs of all PVs against the 1st in the list"
+    echo -e "              make graphs of all PVs against the 1st in the list"
     echo -e
     echo -e "        -w start,stop,step"
     echo -e "              As -x, but additionally, write to the 1st of the listed PVs to do a scan. Must be 3 comma separated values."
     echo -e "              After each time period the next value will be written to the PV"
     echo -e 
-    echo -e "        -q "
-    echo -e "              Quiet (and quick). Won't pop up a GUI and won't ask for confrmation if scanning (with -w option)."
+    echo -e "        -W start,stop,step"
+    echo -e "              As above, but doesn't show the GUI and automatically saves the data and exits"
+    echo -e 
+    echo -e "        -T"
+    echo -e "              Force creation of additional Time Graphs when option -x or -w is chosen."
+    echo -e 
+    echo -e "        -n points"
+    echo -e "              Set no of points in the scan (not valid if -w or -W option is slected)"
+    echo -e 
+    echo -e "        -N points"
+    echo -e "              As above, but doesn't show the GUI and automatically saves all the data and exits"
+    echo -e 
+    echo -e "        -g 0/1"
+    echo -e "              Don't show, or show the GUI - this flag needs to come after -W or -n points. Default = 1"
+    echo -e 
+    echo -e "        -m"
+    echo -e "              Draw multigraphs in addition to basic graphs (ie superimposed on a single graph)"
     echo -e 
     echo -e "        -d outdir"
     echo -e "              Select a directory for any output files. Default is ./epics_gr"
+    echo -e
+    echo -e "        -l \"logbookcommand and args\" "
+    echo -e "              Use a script with arguments to send saved data to the logbook"
     echo -e
     echo -e "        -s"
     echo -e "              simulation mode. Runs a softIOC For testing"
@@ -48,16 +66,25 @@ usage ()
     echo -e "        -h"
     echo -e "              print this help message"
     echo -e
-    echo -e "        [PV]..."
-    echo -e "              EPICS PV. Can include an optional fit and fit range. For example:"
-    echo -e "              MyScalerRate"
-    echo -e "              MyScalerRate::pol4               will fit 4th deg poly to the graph of this PV"
-    echo -e "              MyScalerRate::pol4,1.2,10.4      will fit 4th deg poly to the graph in the x-axis range 1.2 - 10.4"
-    echo -e "              If -x or -w option is selected, any specified fits will be applied to the graph of PV vs PV0"
-    echo -e "              Otherwise, the fit will be applied to the graph of PV vs Time"
-    echo -e "              For PV0, any specified fit will always be fitted vs Time "
+    echo -e "        -c maxcanv"
+    echo -e "              maximum number of graphs on a single canvas. Use maxcanv=1 for separate canvases."
+    echo -e
+    echo -e "        [PV]"
+    echo -e "              EPICS PV which must be accessible with caget"
+    echo -e
+    echo -e "        [PV--]"
+    echo -e "              As above, and the -- supresses automatic creation of graphs, and makes it available for formulae (see below)."
+    echo -e
+    echo -e "        [PV::params] [PV##params]"
+    echo -e "              As above, with a fit and fit range(optional). For example:"
+    echo -e "              MyScalerRate::pol4               will fit 4th deg poly"
+    echo -e "              MyScalerRate##pol4,1.2,10.4      will fit 4th deg poly in the x-axis range 1.2 - 10.4"
+    echo -e "              If both PV0(Time) and PV1 graphs exist, use :: for PV0(Time) and ## for PV1"
     echo -e "              Choosing a fit of L or C (no range needed) will join the points with a line(L) or curve(C)"
     echo -e
+    echo -e "        [formula]"
+    echo -e "              This is a ROOT TF1 expression, in quotes, where the numbers in the brackets refer to PV indices."
+    echo -e "              eg \"[1]/[2]\" \"TMath::Cos([1]/[2])\"   "
     echo -e
     echo -e "        $exe [ROOT OPTIONS]...[file1.C ... fileN.C]                             \e[1;35m\\\\\mode 2\e[0m"
     echo -e
@@ -68,11 +95,14 @@ usage ()
     echo -e "EXAMPLES 1"
     echo -e "        Note. These examples use the -s flag, for simulated data. Try them"
     echo -e
-    echo -e "        $exe -s colliX PMT1 Fcup                  \e[1;35m \\\\\ makes graphs of each of the above PVs vs time\e[0m"
-    echo -e "        $exe -s -x colliX PMT1 Fcup               \e[1;35m \\\\\ as above, but additionally makes graphs of PMT1 and Fcup vs colliX\e[0m"
-    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1 Fcup  \e[1;35m \\\\\ as above but scans on colliX from -2.0 -> 2.0 in steps on 0.1\e[0m"
-    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1::gaus Fcup::gaus,-1.0,1.0  \e[1;35m\\\\\ as above but fits gaus to both PMT1 and Fcup vs colliX\e[0m"
-    echo -e "                                                                         \e[1;35m\\\\\ with restricted range for the latter\e[0m"
+    echo -e "        $exe -s colliX PMT1 Fcup                                      \e[1;35m \\\\\ graphs of PVs vs Time(PV0)\e[0m"
+    echo -e "        $exe -s -x colliX PMT1 Fcup                                   \e[1;35m \\\\\ graphs of PVs vs colliX(PV1)\e[0m"
+    echo -e "        $exe -s -T -x colliX PMT1 Fcup                                \e[1;35m \\\\\ both sets of graphs (Time and colliX) \e[0m"
+    echo -e "        $exe -s -T -w -2.0,2.0,0.1 colliX PMT1 Fcup                   \e[1;35m \\\\\ as above, and scans colliX: -2.0->2.0 step=0.1 \e[0m"
+    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1::gaus                      \e[1;35m\\\\\ as above, and fits gaus to both PMT1\e[0m"
+    echo -e "        $exe -s -w -2.0,2.0,0.1 colliX PMT1::gaus,-1.0,1.0             \e[1;35m\\\\\ as above with restricted fit range\e[0m"
+    echo -e "        $exe -s -x colliX PMT1-- Fcup-- \"[2]/[3]\"                      \e[1;35m\\\\\ exclude PMT,Fcup from graphs, but make graph of ratio\e[0m"
+    echo -e                                                                          
     echo -e
     echo -e "EXAMPLES 2"
     echo -e "        Note. These examples use root macros to do EPICS PV plotting. All use simulated PVs in a softIOC."
@@ -94,11 +124,17 @@ usage ()
 }
 
 #some defaults
+FORCETIME="0"
 SIM="0"
 PERIOD="1"
 GUI="1"
 SCAN="\"\""
+LOGCOM="\"\""
 OUTDIR="\"\""
+SAVEANDEXIT="0"
+NPOINTS="0"
+PERCANVAS="4"
+MAKEMULTI="0"
 
 #check the no of args
 if [ "$#" -lt 1 ]
@@ -116,23 +152,37 @@ if [ -n "$(echo $@ | grep '\.C')" ]; then
 #otherwise process the args to construct root args to call the genReeper.C macro 
 else
 
-    while getopts ":sqxd:t:w:h" opt; do
+    while getopts ":Tsxml:d:t:g:w:W:n:N:c:h" opt; do
 	case $opt in
 
+	    T )  FORCETIME="1" ;;
 	    s )  SIM="1" ;;
+	    m )  MAKEMULTI="1" ;;
+	    l )  LOGCOM="\"$OPTARG\"" ;;
 	    d )  OUTDIR="\"$OPTARG\"" ;;
-	    q )  GUI="0" ;;
+	    g )  GUI="$OPTARG";;
 	    x )  SCAN="\"1\"" ;;
 	    t )  PERIOD="$OPTARG" ;;
+	    c )  PERCANVAS="$OPTARG" ;;
 	    w )  SCAN="\"$OPTARG\"";;
+	    W )  SCAN="\"$OPTARG\""
+		 GUI="0"
+		 SAVEANDEXIT="1"
+		 ;;
+	    n )  NPOINTS="$OPTARG";;
+	    N )  NPOINTS="$OPTARG"
+		 GUI="0"
+		 SAVEANDEXIT="1"
+		 ;;
 	    h )  usage ;;
 	    \?)  usage ;;
 	esac
     done
 
     shift $(($OPTIND - 1))
-    macroargs="$#,\"$@\",$PERIOD,$SIM,$GUI,$SCAN,$OUTDIR"
+    macroargs="$#,\"$@\",$PERIOD,$SIM,$GUI,$FORCETIME,$NPOINTS,$SAVEANDEXIT,$SCAN,$OUTDIR,$PERCANVAS,$MAKEMULTI,$LOGCOM"
     #echo "root $rootargs";
+#    echo "root -l ${REEPER}/grLoad.C \"${REEPER}/genReeper.C($macroargs)\""
     root -l ${REEPER}/grLoad.C "${REEPER}/genReeper.C($macroargs)"
 fi
 

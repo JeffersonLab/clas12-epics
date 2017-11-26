@@ -8,8 +8,14 @@ import epics,subprocess,time,datetime,sys,threading,signal
 # - also the PV suffix
 TIMES=['2h','8h','24h','1w']
 
+# spans of time-derivatives:
+# - PV suffix is dxdtDTTIMES
+DTTIMES=['30m','2h','10h']
+
 # corresponding "scan" periods (units=seconds):
 SCANS=[ 2*60, 8*60, 24*60, 7*24*60 ]
+
+DTSCANS=[ 2*60, 2*60, 2*60 ]
 
 # name of file containing list of input PVs to be time-averaged:
 PVFILE='./pvRollAvg.list'
@@ -19,6 +25,7 @@ CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 
 # the output PVs:
 OPVS={}
+OPVSDT={}
 
 # status PVs:
 HBEAT=epics.pv.PV('iocrollAvgGet:HEARTBEAT')
@@ -38,6 +45,7 @@ LOGFILE=None
 def initOutputs():
   global OPVS
   pvnames=[xx.strip() for xx in open(PVFILE,'r').readlines()]
+#  pvnamesDT=[xx.strip() for xx in open(PVFILEDT,'r').readlines()]
   for ii in range(len(TIMES)):
     dt=TIMES[ii]
     pvs=[]
@@ -52,11 +60,21 @@ def initOutputs():
       pv['pv']=epics.pv.PV(pvname+':'+dt)
       pvs.append(pv)
     OPVS[dt]=pvs
+#  for ii in range(len(DTTIMES)):
+#    dt=DTTIMES[ii]
+#    pvs=[]
+#    for pvname in pvnamesDT:
 
 # just run myStats and return output:
-def myStats(pvNames,dt):
+def myStats(pvNames,dt,t0=None):
   cmd=list(CMD)
-  cmd=[xx.replace('DT',dt) for xx in cmd]
+  if t0==None:
+    # averge over time range between -dt and now:
+    cmd=[xx.replace('DT',dt) for xx in cmd]
+  else:
+    # average over time range between -t0 and -t0+dt:
+    cmd=[xx.replace('-DT',t0) for xx in cmd]
+    cmd=[xx.replace('^DT',dt) for xx in cmd]
   cmd=[xx.replace('PVNAME',','.join(pvNames)) for xx in cmd]
   out,err=None,None
   try:
@@ -101,19 +119,6 @@ def getMyaStats(pvNames,dt):
               myPrint( 'Bad value from myStats for %s : >%s<'%(pvNames[iline-1],data[ii]))
               break
           stats.append(stat)
-  return stats
-
-# if there's a maximum on #pvs to pass to myStats:
-def getMyaStats63(pvNames,dt):
-  stats=[]
-  aa=list(pvNames)
-  while len(aa)>0:
-    bb=[]
-    while len(aa)>0 and len(bb)<63:
-      bb.append(aa.pop(0))
-    stat=getMyaStats(bb,dt)
-    if stat and len(stat)==len(bb):
-      stats.extend(stat)
   return stats
 
 def updateHeartbeat(heartbeat):
@@ -192,7 +197,7 @@ class ScanThread(threading.Thread):
         MYACOMMS[TIMES.index(self.dt)].put(0)
       else:
         MYACOMMS[TIMES.index(self.dt)].put(1)
-        time.sleep(5)
+        time.sleep(120)
     myPrint( 'Scan Thread Stopped: Scan=%.0fs dt=%s'%(self.period,self.dt))
 
 class HeartbeatThread(threading.Thread):
@@ -266,6 +271,8 @@ if __name__ == '__main__': main()
 
 
 
+
+
 #class MyThread(threading.Thread):
 #  def __Init__(self,name):
 #    threading.Thread.__init__(self)
@@ -327,4 +334,17 @@ if __name__ == '__main__': main()
 #    # if not full success, don't update last scan time:
 #    if success:
 #      self.lastScan=now
+
+# if there's a maximum on #pvs to pass to myStats:
+#def getMyaStats63(pvNames,dt):
+#  stats=[]
+#  aa=list(pvNames)
+#  while len(aa)>0:
+#    bb=[]
+#    while len(aa)>0 and len(bb)<63:
+#      bb.append(aa.pop(0))
+#    stat=getMyaStats(bb,dt)
+#    if stat and len(stat)==len(bb):
+#      stats.extend(stat)
+#  return stats
 

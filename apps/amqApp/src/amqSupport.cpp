@@ -583,6 +583,8 @@ void json_epics(json_object * jobj){
       json_parse_array(val);
     }
   }
+  json_object_put(jobj);
+
 }
   
 void json_parse_array( json_object *jobj) {

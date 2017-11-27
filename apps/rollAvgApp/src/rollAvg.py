@@ -146,6 +146,7 @@ class ScanThread(threading.Thread):
     #myPrint( ' '.join(self.pvNames))
     nConsecBad=0
     while not self.shutdownFlag.is_set():
+      updateHeartbeat(HBEATS[TIMES.index(self.dt)])
       # if Mya comms problem, reset lastScan to force an update:
       m1=MESSAGES[TIMES.index(self.dt)]['prev'].get()
       m2=MESSAGES[TIMES.index(self.dt)]['next'].get()
@@ -157,7 +158,6 @@ class ScanThread(threading.Thread):
       else:
         nConsecBad = 0
       time.sleep(1)
-      updateHeartbeat(HBEATS[TIMES.index(self.dt)])
       now=time.time()
       #myPrint( '\nScan=%.0fs dt=%s -- Now=%.2f Last=%.2f Delta=%.2f'%\)
       #(self.period,self.dt,now,self.lastScan,(now-self.lastScan))

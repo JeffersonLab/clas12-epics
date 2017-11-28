@@ -1696,10 +1696,28 @@ $(pv_value)</tooltip>
           <path>apps/synApps/mca/SIS38XX.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
+            <P>asym_</P>
+          </macros>
+          <replace>2</replace>
+          <description>Asy Struck</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/synApps/mca/SIS38XX.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
             <P>bom_</P>
           </macros>
           <replace>2</replace>
           <description>BOM Struck</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/synApps/mca/SIS38XX.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>struck</P>
+          </macros>
+          <replace>2</replace>
+          <description>DAQ Struck</description>
         </action>
       </actions>
       <font>
@@ -2568,6 +2586,12 @@ $(pv_value)</tooltip>
         <description>ECAL</description>
       </action>
       <action type="EXECUTE_CMD">
+        <command>notify_expert.pl ft_expert</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>FT</description>
+      </action>
+      <action type="EXECUTE_CMD">
         <command>notify_expert.pl htcc_expert</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
@@ -2578,6 +2602,12 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>LTCC</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>notify_expert.pl rich_expert</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>RICH</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>notify_expert.pl svt_expert</command>

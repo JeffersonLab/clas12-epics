@@ -115,11 +115,11 @@ sub make_elog_entry {
       print "Sending to >$primary_pager_or_cell<\n" ;
 	  system($cmd);
     }
-#    if(length($backup_pager_or_cell)>0) {
-#      $cmd="cat /tmp/notify_expert.tmp | mailx -s \"$subject\" $backup_pager_or_cell";
-#      print "Sending to >$backup_pager_or_cell<\n" ;
-#	  system($cmd);
-#    }
+    if(length($backup_pager_or_cell)>0) {
+      $cmd="cat /tmp/notify_expert.tmp | mailx -S smtp=smtp://smtpmail.jlab.org -s \"$subject\" $backup_pager_or_cell";
+      print "Sending to >$backup_pager_or_cell<\n" ;
+	  system($cmd);
+    }
 
 
 # make log entry

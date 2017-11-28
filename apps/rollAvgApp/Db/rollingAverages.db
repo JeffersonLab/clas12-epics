@@ -107,7 +107,7 @@ record(seq,"$(P)$(R=):HIGHSEQ") {
 ############################################################
 # Calculate dynamic limits on averages relative to present value:
 
-record(ai,"$(P)$(R=):minorTolerance") {
+record(ai,"$(P)$(R=):relativeTolerance") {
     field(VAL,"0.1")
     field(PINI,1)
     info(autosaveFields,"VAL")
@@ -117,7 +117,7 @@ record(ai,"$(P)$(R=):minorTolerance") {
 record(calc,"$(P)$(R=):HIGHCALC") {
     field(SCAN,"1 second")
     field(INPA,"$(P)")
-    field(INPB,"$(P)$(R=):minorTolerance")
+    field(INPB,"$(P)$(R=):relativeTolerance")
     field(CALC,"A * (1+B)")
 #    field(DOPT,"Use CALC")
 #    field(OOPT,"On Change")
@@ -129,7 +129,7 @@ record(calc,"$(P)$(R=):HIGHCALC") {
 record(calc,"$(P)$(R=):LOWCALC") {
     field(SCAN,"1 second")
     field(INPA,"$(P)")
-    field(INPB,"$(P)$(R=):minorTolerance")
+    field(INPB,"$(P)$(R=):relativeTolerance")
     field(CALC,"A * (1-B)")
 #    field(DOPT,"Use CALC")
 #    field(OOPT,"On Change")

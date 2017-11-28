@@ -1,0 +1,1 @@
+../apps/fthDividerApp/op/scripts/saveDividerChannelsToFile.sh

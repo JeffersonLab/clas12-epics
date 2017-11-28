@@ -4,6 +4,8 @@
 
 MAXSTRING=39
 
+printMya=True
+
 def printRecord(name,units,desc):
   desc=desc[0:MAXSTRING]
   if units=='boolean': print 'record(bi,"'+name+'") {'
@@ -25,5 +27,7 @@ for line in open('MVT Gas PVs.csv','r').readlines():
   if len(desc)>MAXSTRING: desc=desc.replace('B_DET_MVT_GAS_MIX','')
   if len(desc)>MAXSTRING: desc=desc.replace(' ','')
   if not name.find('B_')==0: continue
-  printRecord(name,units,desc)
+  if deadband=='': deadband=0
+  if printMya: print name,deadband
+  else:        printRecord(name,units,desc)
 

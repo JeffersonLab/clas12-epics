@@ -61,7 +61,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
             continue;
         }
 
-        else if (!lines[ii].startsWith("ioc")) {
+        else if (!lines[ii].startsWith("ioc") && !lines[ii].startsWith("classc")) {
             insertGap(7,"");
             insertLine();
             insertGap(7,"");

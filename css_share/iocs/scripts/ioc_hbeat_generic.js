@@ -38,6 +38,7 @@ function insertIoc(iocName,opiFile)
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);
     lc.setPropertyValue("background_color","OPI_Background");
+    if (iocName.startsWith("classc")) lc.addMacro("S","heartbeat");
     lc.addMacro("P",iocName);
     widget.addChildToBottom(lc);
 }
@@ -52,7 +53,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
-        if (!lines[ii].startsWith("ioc")) {
+        if (!lines[ii].startsWith("ioc") && !lines[ii].startsWith("classc")) {
             //insertGap(1);
             insertLine();
             //insertGap(1);

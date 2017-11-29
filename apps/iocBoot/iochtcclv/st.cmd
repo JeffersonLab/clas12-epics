@@ -15,13 +15,13 @@ epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
 ## Configure devices
 
-drvAsynIPPortConfigure("1",129.57.86.129:10001,0,0,0)
-#drvAsynIPPortConfigure("2",129.57.86.130:10001,0,0,0)
-#drvAsynIPPortConfigure("3",129.57.86.132:10001,0,0,0)
-#drvAsynIPPortConfigure("4",129.57.86.133:10001,0,0,0)
-#drvAsynIPPortConfigure("5",129.57.160.185:10001,0,0,0)
-#drvAsynIPPortConfigure("6",129.57.160.186:10001,0,0,0)
-#drvAsynIPPortConfigure("7",129.57.160.187:10001,0,0,0)
+drvAsynIPPortConfigure("1",129.57.160.205:10001,0,0,0)
+drvAsynIPPortConfigure("2",129.57.160.206:10001,0,0,0)
+drvAsynIPPortConfigure("3",129.57.160.207:10001,0,0,0)
+drvAsynIPPortConfigure("4",129.57.160.208:10001,0,0,0)
+drvAsynIPPortConfigure("5",129.57.160.185:10001,0,0,0)
+drvAsynIPPortConfigure("6",129.57.160.186:10001,0,0,0)
+drvAsynIPPortConfigure("7",129.57.160.187:10001,0,0,0)
 drvAsynIPPortConfigure("8",129.57.160.188:10001,0,0,0)
 
 #asynSetTraceMask("1",-1,0x09)
@@ -31,12 +31,12 @@ drvAsynIPPortConfigure("8",129.57.160.188:10001,0,0,0)
 
 ## Load record instances
 dbLoadRecords("db/sy2604.db","P=htcclv1,PORT=1,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv2,PORT=2,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv3,PORT=3,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv4,PORT=4,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv5,PORT=5,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv6,PORT=6,ADDR=24,IMAX=2000,OMAX=2000")
-#dbLoadRecords("db/sy2604.db","P=htcclv7,PORT=7,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv2,PORT=2,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv3,PORT=3,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv4,PORT=4,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv5,PORT=5,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv6,PORT=6,ADDR=24,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/sy2604.db","P=htcclv7,PORT=7,ADDR=24,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/sy2604.db","P=htcclv8,PORT=8,ADDR=24,IMAX=2000,OMAX=2000")
 
 

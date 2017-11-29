@@ -23,6 +23,7 @@ BEAST += gas_cRIO_HTCC.xml
 BEAST += gas_cRIO_IOCS.xml
 BEAST += gas_cRIO_LTCC.xml
 BEAST += gas_cRIO_SVT.xml
+BEAST += gas_cRIO_MVT_mixing.xml
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

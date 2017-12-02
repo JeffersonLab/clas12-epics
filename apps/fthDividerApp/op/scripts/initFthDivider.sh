@@ -6,8 +6,8 @@ Prefix="B_DET_FTH_DIVIDER"
 
 ##This lot for the TOP module
 ##Set the default init files (in user space)
-caput -S ${Prefix}:DATA_FILE_LOAD ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat
-caput -S ${Prefix}:DATA_FILE_SAVE ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat
+caput -S ${Prefix}:DATA_FILE_LOAD /home/clasrun/FT/FThodo/HVDivider/fthDividerDefaultChannels.dat
+caput -S ${Prefix}:DATA_FILE_SAVE /home/clasrun/FT/FThodo/HVDivider/fthDividerDefaultChannels.dat
 #Init tables for positions of channels etc
 
 
@@ -26,4 +26,6 @@ caput -a ${Prefix}:HV_TABLE 232 1 1 1 1 1 1 1 1 16 16 16 16 16 16 16 16 2 2 2 2 
 caput -a ${Prefix}:SLOT_TABLE 232 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 13 13 13 13 13 13 13 13 13 13 13 13 13 13 13 13 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 19 19 19 19 19 19 19 19 
 
 caput -a ${Prefix}:CHAN_TABLE 232 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1 3 4 6 9 11 12 14 
+
+${scriptdir}/loadDividerChannelsFromFile.sh ${Prefix}
 

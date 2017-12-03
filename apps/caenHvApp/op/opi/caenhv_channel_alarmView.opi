@@ -34,6 +34,84 @@
   <actions hook="false" hook_all="false" />
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>1</border_style>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <alarm_pulsing>true</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>2</horizontal_alignment>
+    <rules>
+      <rule name="Rule" prop_id="text" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value></value>
+        </exp>
+        <pv trig="true">loc://asdfqwerzxcv(1)</pv>
+      </rule>
+    </rules>
+    <enabled>true</enabled>
+    <wuid>54caf658:16018559552:-6379</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text></text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(E)</pv_name>
+    <vertical_alignment>2</vertical_alignment>
+    <border_color>
+      <color red="150" green="150" blue="150" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="Header_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>220</width>
+    <x>1</x>
+    <name>Text Update_7</name>
+    <y>0</y>
+    <foreground_color>
+      <color name="Header_Background" red="50" green="50" blue="50" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/alarms/aiaocalc_alarm_set.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <sig>$(P)</sig>
+        </macros>
+        <replace>2</replace>
+        <description>Open Alarm Settings</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/apps/caenHvApp/bigsub.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <BIGSUB>$(P)</BIGSUB>
+        </macros>
+        <replace>2</replace>
+        <description>Open Bigsub Details</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Default" height="7" style="0">Fineprint</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>1</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
     <precision>0</precision>
@@ -43,13 +121,13 @@ $(pv_value)</tooltip>
     <rules />
     <enabled>true</enabled>
     <wuid>5d8af81f:14ee08f3481:-7f57</wuid>
-    <transparent>false</transparent>
+    <transparent>true</transparent>
     <pv_value />
     <auto_size>false</auto_size>
     <text>DESC</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
     <show_units>true</show_units>
     <height>20</height>
     <border_width>1</border_width>
@@ -66,7 +144,7 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>true</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>

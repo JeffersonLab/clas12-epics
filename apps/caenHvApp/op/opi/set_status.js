@@ -8,7 +8,7 @@ var type = widget.getMacroValue("TYPE");
 
 // copied this logic from hv_control Qt GUI code.
 
-//java.lang.System.out.println("set_status.js");
+//java.lang.System.out.println(type);
 
 
 if (type == "527")

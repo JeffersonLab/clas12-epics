@@ -557,7 +557,7 @@ public class MakeLogEntry
         for (int jj=0; jj<IMPATHS.size(); jj++) {
           if (IMPATHS.get(jj).equals("")) continue;
           if (DEBUG) System.out.println("Logging Image #"+jj+": "+IMPATHS.get(jj));
-          entry.addAttachment(IMPATHS.get(jj),"Snapshot of "+IMPATHS.get(jj));
+          entry.addAttachment(IMPATHS.get(jj),IMPATHS.get(jj));
         }
       }
       else if (!IMGPATH.equals("")) entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);

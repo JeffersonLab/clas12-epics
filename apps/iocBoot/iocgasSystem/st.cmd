@@ -37,6 +37,8 @@ dbLoadRecords("db/gas_cRIO_MVT_mixing.db")
 
 # dbLoadRecords("db/gas_cRIO_RICH.db",    "P=B_DET_,R=RICH_GAS_")
 
+dbLoadRecords("db/gas_cRIO_HTCC-calc.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

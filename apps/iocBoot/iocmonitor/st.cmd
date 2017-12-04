@@ -20,8 +20,6 @@ dbLoadRecords("db/torus_fieldAverage.db")
 
 dbLoadRecords("db/collimator_alarm.db")
 
-dbLoadRecords("db/htcc-gas-calc.db")
-
 # cross-IOC hv stuff:
 dbLoadRecords("db/HVDC_VSCAN.db")
 dbLoadTemplate("db/ltccOnOff.substitutions")

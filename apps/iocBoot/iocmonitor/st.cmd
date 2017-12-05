@@ -32,6 +32,8 @@ dbLoadRecords("db/ltccOnOff.db","ONOFF=OFF")
 
 dbLoadRecords("db/beamCurrentRatios.db")
 
+dbLoadRecords("db/hallb_ia.db")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 

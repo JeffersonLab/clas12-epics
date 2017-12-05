@@ -42,6 +42,7 @@ fthDivider_LIBS += devIocStats
 fthDivider_LIBS += stream
 fthDivider_LIBS += asyn
 fthDivider_LIBS += calc
+fthDivider_LIBS += autosave
 
 # Finally link to the EPICS Base libraries
 fthDivider_LIBS += $(EPICS_BASE_IOC_LIBS)

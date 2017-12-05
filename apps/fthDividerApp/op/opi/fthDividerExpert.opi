@@ -323,9 +323,9 @@ $(pv_value)</tooltip>
         <color red="255" green="255" blue="255" />
       </background_color>
       <width>228</width>
-      <x>14</x>
+      <x>18</x>
       <name>Label_11</name>
-      <y>27</y>
+      <y>15</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -858,9 +858,9 @@ $(pv_value)</tooltip>
           <color red="255" green="255" blue="255" />
         </background_color>
         <width>107</width>
-        <x>53</x>
+        <x>55</x>
         <name>Module properties Label</name>
-        <y>12</y>
+        <y>6</y>
         <foreground_color>
           <color red="0" green="0" blue="0" />
         </foreground_color>
@@ -921,6 +921,249 @@ $(pv_value)</tooltip>
       <actions hook="false" hook_all="false" />
       <font>
         <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+      <toggle_button>false</toggle_button>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>Do you really need to? This also reboots the IOC</tooltip>
+      <push_action_index>0</push_action_index>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>77fb229f:152a1502397:3238</wuid>
+      <pv_value />
+      <text>Reset Controller</text>
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>23</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>false</width_scalable>
+        <height_scalable>false</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <image></image>
+      <visible>true</visible>
+      <pv_name>$(P):RESET</pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Action Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>140</width>
+      <x>668</x>
+      <name>Action Button</name>
+      <y>52</y>
+      <style>0</style>
+      <foreground_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>$(pv_name)</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message>Are you sure. This will reset the flasher Module and reboot the IOC.</confirm_message>
+          <description>This will reset the flasher Module and reboot the IOC</description>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>iocfthDivider:SysReset</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message></confirm_message>
+          <description></description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <horizontal_alignment>0</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>7b7c6d7c:1601877a93b:-4e34</wuid>
+      <transparent>true</transparent>
+      <auto_size>false</auto_size>
+      <text>Connected</text>
+      <scripts />
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>true</wrap_words>
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <width>89</width>
+      <x>693</x>
+      <name>Label_18</name>
+      <y>17</y>
+      <foreground_color>
+        <color name="MEDM_COLOR_17" red="51" green="153" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip>Check LV, and network.</tooltip>
+      <horizontal_alignment>1</horizontal_alignment>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0&gt;0">
+            <value>true</value>
+          </exp>
+          <pv trig="true">$(P):GET_TEMP.SEVR</pv>
+        </rule>
+      </rules>
+      <enabled>true</enabled>
+      <wuid>7b7c6d7c:1601877a93b:-4e33</wuid>
+      <transparent>false</transparent>
+      <auto_size>false</auto_size>
+      <text>DISCONNECTED</text>
+      <scripts />
+      <height>28</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>false</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>true</wrap_words>
+      <background_color>
+        <color name="MEDM_COLOR_2" red="218" green="218" blue="218" />
+      </background_color>
+      <width>140</width>
+      <x>668</x>
+      <name>Label_19</name>
+      <y>14</y>
+      <foreground_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+      <toggle_button>false</toggle_button>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>Do you really need to? This also reboots the IOC</tooltip>
+      <push_action_index>0</push_action_index>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>7b7c6d7c:1601877a93b:-ffe</wuid>
+      <pv_value />
+      <text>Reboot IOC</text>
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>23</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>false</width_scalable>
+        <height_scalable>false</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <image></image>
+      <visible>true</visible>
+      <pv_name>$(P):RESET</pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Action Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>140</width>
+      <x>668</x>
+      <name>Action Button_1</name>
+      <y>85</y>
+      <style>0</style>
+      <foreground_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="WRITE_PV">
+          <pv_name>iocfthDivider:SysReset</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message>Reboot the ioc: iocfthDivider</confirm_message>
+          <description>This will reboot the IOC.</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <horizontal_alignment>1</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>7b7c6d7c:1601877a93b:-6f0</wuid>
+      <transparent>true</transparent>
+      <auto_size>false</auto_size>
+      <text>PIC 32 Connection Status</text>
+      <scripts />
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>true</wrap_words>
+      <background_color>
+        <color red="255" green="255" blue="255" />
+      </background_color>
+      <width>213</width>
+      <x>448</x>
+      <name>Label_11</name>
+      <y>15</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
       </font>
     </widget>
   </widget>
@@ -1516,13 +1759,13 @@ $(pv_value)</tooltip>
     </widget>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
-    <border_style>1</border_style>
+    <border_style>0</border_style>
     <tooltip></tooltip>
     <rules />
     <enabled>true</enabled>
     <wuid>871e625:15840fc4a46:76</wuid>
     <transparent>true</transparent>
-    <lock_children>true</lock_children>
+    <lock_children>false</lock_children>
     <scripts />
     <height>324</height>
     <border_width>1</border_width>
@@ -1542,7 +1785,7 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="240" green="240" blue="240" />
     </background_color>
-    <width>104</width>
+    <width>95</width>
     <x>790</x>
     <name>Grouping Container</name>
     <y>87</y>
@@ -2574,7 +2817,7 @@ $(pv_value)</tooltip>
     <actions hook="false" hook_all="false" />
     <border_style>3</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <file_source>0</file_source>
+    <file_source>1</file_source>
     <enabled>true</enabled>
     <wuid>-6004969d:146d25350eb:-7b8a</wuid>
     <transparent>false</transparent>
@@ -2632,7 +2875,7 @@ $(pv_value)</tooltip>
     <actions hook="false" hook_all="false" />
     <border_style>3</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <file_source>0</file_source>
+    <file_source>1</file_source>
     <enabled>true</enabled>
     <wuid>-6004969d:146d25350eb:-7b9e</wuid>
     <transparent>false</transparent>
@@ -2712,59 +2955,6 @@ $(pv_value)</tooltip>
     </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>0</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>Do you really need to?</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>77fb229f:152a1502397:3238</wuid>
-    <pv_value />
-    <text>Reset Controller</text>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>23</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>false</width_scalable>
-      <height_scalable>false</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <image></image>
-    <visible>true</visible>
-    <pv_name>$(P):RESET</pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Action Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>140</width>
-    <x>753</x>
-    <name>Action Button</name>
-    <y>485</y>
-    <style>0</style>
-    <foreground_color>
-      <color name="Major" red="255" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="WRITE_PV">
-        <pv_name>$(pv_name)</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message>Are you sure. This will reset the flasher Module. You must reboot the IOC afterwards</confirm_message>
-        <description>This will reset the flasher Module. You must reboot the IOC afterwards</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.xyGraph" version="1.0.0">
@@ -2962,95 +3152,6 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>0</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>7b7c6d7c:1601877a93b:-4e34</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>Connected</text>
-    <scripts />
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>89</width>
-    <x>778</x>
-    <name>Label_18</name>
-    <y>451</y>
-    <foreground_color>
-      <color name="MEDM_COLOR_17" red="51" green="153" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip>Check LV, and network.</tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="Rule" prop_id="visible" out_exp="false">
-        <exp bool_exp="pv0&gt;0">
-          <value>true</value>
-        </exp>
-        <pv trig="true">$(P):GET_TEMP.SEVR</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>7b7c6d7c:1601877a93b:-4e33</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>DISCONNECTED</text>
-    <scripts />
-    <height>28</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>false</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color name="MEDM_COLOR_2" red="218" green="218" blue="218" />
-    </background_color>
-    <width>140</width>
-    <x>753</x>
-    <name>Label_19</name>
-    <y>448</y>
-    <foreground_color>
-      <color name="Major" red="255" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

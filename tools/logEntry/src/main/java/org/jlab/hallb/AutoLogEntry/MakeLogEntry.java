@@ -48,6 +48,8 @@ public class MakeLogEntry
 
   JTextArea LOGTEXT = new JTextArea("Enter Comments Here", 20, 40);
   JTextArea LOGTITLE = new JTextArea("Title", 20, 40);
+  JTextArea EMAILTEXT = new JTextArea("Email", 20, 40);
+  JTextArea MAKERTEXT = new JTextArea("Maker", 20, 40);
   JTextPane STATUSTEXT = null;
   JPanel IMPANEL=new JPanel();
   JFrame FRAME;
@@ -89,7 +91,6 @@ public class MakeLogEntry
 
   public void run(String[] args)
   {
-      System.out.println(SCREENSHOTDIR);
       File fff= new File(SCREENSHOTDIR);
       fff.mkdir();
 
@@ -322,6 +323,18 @@ public class MakeLogEntry
     LOGTEXT.updateUI();
   }
 
+  public void initEmail()
+  {
+      EMAILTEXT.setText("");
+      EMAILTEXT.updateUI();
+  }
+  
+  public void initMaker()
+  {
+      MAKERTEXT.setText("");
+      MAKERTEXT.updateUI();
+  }
+
   public void makeGui()
   {
     // screenshot panel:
@@ -341,6 +354,23 @@ public class MakeLogEntry
     LOGTITLE.setFont(new Font("Dialog.plain",0,15));
     LOGTITLE.setPreferredSize(new Dimension(400, 15));
     LOGTITLE.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    
+    initEmail();
+    EMAILTEXT.setVisible(true);
+    EMAILTEXT.setEditable(true);
+    EMAILTEXT.setForeground(Color.BLUE);
+    EMAILTEXT.setFont(new Font("Dialog.plain",0,15));
+    EMAILTEXT.setPreferredSize(new Dimension(400, 15));
+    EMAILTEXT.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
+    initMaker();
+    MAKERTEXT.setVisible(true);
+    MAKERTEXT.setEditable(true);
+    MAKERTEXT.setForeground(Color.BLUE);
+    MAKERTEXT.setFont(new Font("Dialog.plain",0,15));
+    MAKERTEXT.setPreferredSize(new Dimension(400, 15));
+    MAKERTEXT.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
 
     // log text entry:
     LOGTEXT.setLineWrap(true);
@@ -411,6 +441,30 @@ public class MakeLogEntry
     titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
     titlePanel.add(LOGBOOKCHOICE);
+    
+    JPanel emailPanel = new JPanel();
+    emailPanel.setOpaque(false);
+    emailPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Email Notify"));
+    emailPanel.setLayout(new BoxLayout(emailPanel,BoxLayout.LINE_AXIS));
+    emailPanel.setPreferredSize(new Dimension(200, 42));
+    emailPanel.add(EMAILTEXT);
+    
+    JPanel makerPanel = new JPanel();
+    makerPanel.setOpaque(false);
+    makerPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Entry Makers"));
+    makerPanel.setLayout(new BoxLayout(makerPanel,BoxLayout.LINE_AXIS));
+    makerPanel.setPreferredSize(new Dimension(200, 42));
+    makerPanel.add(MAKERTEXT);
+
+
+    JPanel topPanel = new JPanel();
+    topPanel.setOpaque(false);
+   // topPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
+    topPanel.setLayout(new BoxLayout(topPanel,BoxLayout.PAGE_AXIS));
+    topPanel.setPreferredSize(new Dimension(200, 128));
+    topPanel.add(titlePanel);
+    topPanel.add(emailPanel);
+    topPanel.add(makerPanel);
 
     JPanel tabPanel=null;
     if (DOTABS)
@@ -426,7 +480,8 @@ public class MakeLogEntry
     FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     FRAME.add(commentsPanel, BorderLayout.CENTER);
     FRAME.add(buttonPanel, "South");
-    FRAME.add(titlePanel, "North");
+    FRAME.add(topPanel, "North");
+    //FRAME.add(titlePanel, "North");
     if (DOTABS) FRAME.add(tabPanel,"West");
     else        FRAME.add(screenshotPanel,"West");
     FRAME.pack();
@@ -563,6 +618,26 @@ public class MakeLogEntry
       else if (!IMGPATH.equals("")) entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);
       entry.setTitle(LOGTITLE.getText());
       entry.setBody(LOGTEXT.getText().replaceFirst("Enter Comments Here",""));
+      if (EMAILTEXT.getText().contains("@")) {
+          String asdf="";
+          String comma="";
+          String qwer=EMAILTEXT.getText().replaceAll("^[,\\s]+","");
+          for (String ss : qwer.split("[,\\s]+")) {
+              asdf+=comma+ss;
+              comma=",";
+          }
+          entry.setEmailNotify(asdf);
+      }
+      if (!MAKERTEXT.getText().equals("")) {
+          String asdf="";
+          String comma="";
+          String qwer=MAKERTEXT.getText().replaceAll("^[,\\s]+","");
+          for (String ss : qwer.split("[,\\s]+")) {
+              asdf+=comma+ss;
+              comma=",";
+          }
+          entry.setEntryMakers(asdf);
+      }
       final long logNumber = entry.submitNow();
       //entry.submit();
       //System.out.println(entry.getXML());
@@ -609,6 +684,8 @@ public class MakeLogEntry
       updateStatusPane("",Color.BLACK);
       initLogTitle();
       initLogComments();
+      initEmail();
+      initMaker();
       IMGPATH=null;
     }
   }

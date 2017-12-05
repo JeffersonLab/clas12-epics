@@ -14,7 +14,7 @@ DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db
 DB += gas_cRIO_RICH.db
 DB += gas_cRIO_SVT.db
 DB += gas_cRIO_MVT_mixing.db
-DB += htcc-gas-calc.db
+DB += gas_cRIO_HTCC-calc.db
 
 DB += weather_cRIO.db
 

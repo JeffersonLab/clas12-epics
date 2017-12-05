@@ -441,30 +441,41 @@ public class MakeLogEntry
     titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
     titlePanel.add(LOGBOOKCHOICE);
-    
+
     JPanel emailPanel = new JPanel();
     emailPanel.setOpaque(false);
     emailPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Email Notify"));
     emailPanel.setLayout(new BoxLayout(emailPanel,BoxLayout.LINE_AXIS));
-    emailPanel.setPreferredSize(new Dimension(200, 42));
+    emailPanel.setPreferredSize(new Dimension(100, 42));
     emailPanel.add(EMAILTEXT);
     
     JPanel makerPanel = new JPanel();
     makerPanel.setOpaque(false);
     makerPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Entry Makers"));
     makerPanel.setLayout(new BoxLayout(makerPanel,BoxLayout.LINE_AXIS));
-    makerPanel.setPreferredSize(new Dimension(200, 42));
+    makerPanel.setPreferredSize(new Dimension(100, 42));
     makerPanel.add(MAKERTEXT);
+
+    JPanel myPanel = new JPanel();
+    myPanel.setOpaque(false);
+    //myPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Entry Makers"));
+    myPanel.setLayout(new BoxLayout(myPanel,BoxLayout.LINE_AXIS));
+    myPanel.setPreferredSize(new Dimension(200, 42));
+    myPanel.add(emailPanel);
+    myPanel.add(makerPanel);
+
+
 
 
     JPanel topPanel = new JPanel();
     topPanel.setOpaque(false);
    // topPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
     topPanel.setLayout(new BoxLayout(topPanel,BoxLayout.PAGE_AXIS));
-    topPanel.setPreferredSize(new Dimension(200, 128));
+    topPanel.setPreferredSize(new Dimension(200, 84));
     topPanel.add(titlePanel);
-    topPanel.add(emailPanel);
-    topPanel.add(makerPanel);
+    topPanel.add(myPanel);
+//    topPanel.add(emailPanel);
+//    topPanel.add(makerPanel);
 
     JPanel tabPanel=null;
     if (DOTABS)

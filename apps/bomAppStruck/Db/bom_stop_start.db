@@ -1,0 +1,76 @@
+
+grecord(bo,"$(SCLR)_StartedBO") {
+	field(OUT,"$(SCLR)_Start.VAL  PP MS")
+}
+grecord(ai,"$(SCLR)_dwel") {
+     field(SCAN,".2 second")
+     field(VAL,"1")
+     field(FLNK,"$(SCLR)_high_calc")
+}
+grecord(calc,"$(SCLR)_high_calc") {
+     field(FLNK,"$(SCLR)_high")
+     field(INPA,"$(SCLR)_dwel")
+     field(CALC,"A+0.1")
+}
+grecord(ao, "$(SCLR)_high") {
+     field(OUT,"$(SCLR)_Start.HIGH")
+     field(DOL,"$(SCLR)_high_calc")
+     field(FLNK,"$(SCLR)_dwel_calc")
+     field(OMSL, "closed_loop")
+}
+grecord(calc, "$(SCLR)_dwel_calc")
+{
+     field(FLNK,"$(SCLR)_dwel_set")
+     field(CALC,"B>=1?A/B:A")
+     field(INPA,"$(SCLR)_dwel")
+     field(INPB,"$(SCLR)_0.NUSE")	
+}
+grecord(ao, "$(SCLR)_dwel_set") {
+     field(DOL,"$(SCLR)_dwel_calc")
+     field(OUT,"$(SCLR)_0.DWEL")
+     field(OMSL, "closed_loop")
+}
+grecord(bo,"$(SCLR)_Start") {
+     field(FLNK,"$(SCLR)_StartFO.PROC  PP MS")
+     field(OUT,"0")
+     field(ZNAM,"STOP")
+     field(ONAM,"START")
+}
+grecord(bo,"$(SCLR)_reStart") {
+     field(SCAN,".1 second")
+     field(SDIS,"$(SCLR)_Start.VAL  NPP NMS")
+     field(DISV,"1")
+     field(DOL,"1")
+     field(OUT,"$(SCLR)_Start.VAL  CA MS")
+     field(ZNAM,"Manual")
+     field(ONAM,"Continuous")
+}
+grecord(histogram, "$(SCLR)_scalers") { 
+  field(NELM, "32")
+  field(LLIM, "0")
+  field(ULIM, "32")
+##  field(DTYP, "Soft Channel")
+}
+
+grecord(fanout,"$(SCLR)_StartFO") {
+     field(SDIS,"$(SCLR)_StartedBO.PACT  NPP NMS")
+#     field(LNK3,"$(SCLR)_Start_A  PP MS")
+     field(LNK1,"$(SCLR)_StopSeq_A.PROC  PP MS")
+     field(LNK2,"$(SCLR)_Eras_A  PP MS")
+}
+
+grecord(seq,"$(SCLR)_Eras_A") {
+  field(DISV,"0")
+  field(SDIS,"$(SCLR)_Start.VAL  NPP MS")
+  field(DOL1,"1")
+  field(LNK1,"$(SCLR)_0.ERST PP MS")
+}
+
+grecord(seq,"$(SCLR)_StopSeq_A") {
+  field(SDIS,"$(SCLR)_Start.VAL  NPP MS")
+  field(DOL1,"1")
+  field(LNK1,"$(SCLR)_0.STOP PP MS")
+  field(DOL2,"1")
+  field(LNK2,"$(SCLR)_Read PP MS")
+}
+

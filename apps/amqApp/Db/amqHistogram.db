@@ -1,0 +1,93 @@
+#records needed to define a hitsogram. 
+#All entities are appended to the basic name with _
+#TITLE
+#NBINS
+#XMIN
+#XMAX
+#YMIN
+#YMAX
+#
+#DATA to go into NBINS consecutive bins in array
+#EDGES to go int NBINS+1 array of bin limits 
+
+record(waveform,"$(P)_DATA"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_DATA")
+  field(NELM,"$(N)")
+  field(FTVL,"FLOAT")
+  field(DESC,"")
+  field(FLNK,"$(P)_DATA-DF")
+}
+
+record(dfanout, "$(P)_DATA-DF"){
+  field(DOL,"0")
+  field(OUTA,$(P)-DATA-Time)
+  }
+
+record(calc,"$(P)_DATA-Time") {
+  field(DESC,"")
+  field(CALC,"VAL+1")
+  field(SCAN, "1 second")
+  field(HIHI, "$(THH)")
+  field(HIGH, "$(TH)")
+  field(HHSV, "$(HHSV)")
+  field(HSV, "$(HSV)")
+}
+
+record(waveform,"$(P)_EDGES"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_EDGES")
+  field(NELM,"$(NE)")
+  field(FTVL,"FLOAT")
+  field(DESC,"")
+}
+
+record(ai,"$(P)_NBINS"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_NBINS")
+  field(PREC,"0")
+  field(DESC,"")
+}
+
+record(ai,"$(P)_XMIN"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_XMIN")
+  field(PREC,"2")
+  field(DESC,"")
+}
+
+record(ai,"$(P)_MAX"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_XMAX")
+  field(PREC,"2")
+  field(DESC,"")
+}
+
+record(ai,"$(P)_YMIN"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_YMIN")
+  field(PREC,"2")
+  field(DESC,"")
+}
+
+record(ai,"$(P)_YMAX"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_YMAX")
+  field(PREC,"2")
+  field(DESC,"")
+}
+
+record(waveform,"$(P)_XTITLE"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_XTITLE")
+  field(NELM,"100")
+  field(FTVL,"CHAR")
+  field(DESC,"")
+}
+record(waveform,"$(P)_YTITLE"){
+  field(DTYP,"AMQR")
+  field(INP,"$(K)_YTITLE")
+  field(NELM,"100")
+  field(FTVL,"CHAR")
+  field(DESC,"")
+}

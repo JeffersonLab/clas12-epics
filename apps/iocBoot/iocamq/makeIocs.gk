@@ -5,13 +5,14 @@
 
 #This gets run only once when the script is called
 BEGIN{
-prefix="B"
+prefix="B_DAQ"
 broker="tcp://clondb1:61616"
 oldfile=""
 wavetype["D"] = "db/amqDoubleArray.db"
 wavetype["F"] = "db/amqFloatArray.db"
 wavetype["I"] = "db/amqIntArray.db"
 wavetype["S"] = "db/amqStringArray.db"
+wavetype["H"] = "db/amqHistogram.db"
 aitype["I"]   = "db/amqDouble.db"
 aitype["D"]   = "db/amqInt.db"
 
@@ -91,8 +92,15 @@ blurb[line++]=""
 	if(tmajor=="0") hhsv="NO_ALARM";
 	else hhsv="MAJOR";
 	
-	if(elem>1)printf("dbLoadRecords(\"%s\",\"P=%s_%s_%s,K=%s,N=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,topic,key,key,elem,tminor,tmajor,hsv,hhsv)>outfile;
-	else printf("dbLoadRecords(\"%s\",\"P=%s_%s_%s,K=%s,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",aitype[type],prefix,topic,key,key,tminor,tmajor,hsv,hhsv)>outfile;
+	if(elem>1){
+	    if(type=="H"){
+		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,NE=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,key,key,elem,elem+1,tminor,tmajor,hsv,hhsv)>outfile;
+	    }
+	    else{
+		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,key,key,elem,tminor,tmajor,hsv,hhsv)>outfile;
+	    }
+	}
+	else printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",aitype[type],prefix,key,key,tminor,tmajor,hsv,hhsv)>outfile;
     }
 
     if($1=="end:"){

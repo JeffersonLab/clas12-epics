@@ -59,13 +59,11 @@
 
 #include "amqSupport.h"
 extern "C" void addPV(void * addr, int type, char *key);
-//void json_parse(json_object * jobj);
-void json_epics(json_object * jobj);
-//void json_parse_array( json_object *jobj, char *key);
+void json_epics(json_object *jtop);
 void json_read_array( json_object *jobj, int indx );
 void json_read_value( json_object *jobj, int indx );
 
-void json_parse_array( json_object *jobj);
+void json_parse_array( json_object *jobj, char *key);
 void print_json_value(json_object *jobj);
 
 
@@ -85,11 +83,14 @@ Thread *consumerThread;        //The main thread
 #define MAXPV 100              //Maximum number of PVs
 
 static waveformRecord* rawmessage = NULL; //if we want to store the raw mwssage in a char waveform
-static char *jsonKeys[MAXPV];  //json keys for all PVs
-static void *pvstructs[MAXPV]; //pointers to the structs for all the PVs
-static int pvtypes[MAXPV];     //
-static int npv=0;              //counter
-static int startFlag=0;        //
+//static char *jsonKeys[MAXPV];             //json keys for all PVs
+static char *jsonKeyParts[MAXPV][10];     //parts (delimited with _) XXX_YYY##3_ZZZ_KEY
+static int   jsonKeyNparts[MAXPV];        //nparts
+static int   jsonKeyIndices[MAXPV][10];   //incices for array parts
+static void *pvstructs[MAXPV];            //pointers to the structs for all the PVs
+static int pvtypes[MAXPV];                //
+static int npv=0;                         //counter
+static int startFlag=0;                   //
 //static double rawval;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -338,17 +339,54 @@ void startConsumer(){
 
 //called from init_record to save addr of record, type and related json key 
 void addPV(void *addr, int type, char* key){
+  char *lastu;
+  char *thisu;
+  std::cerr << "Adding key" << key <<  std::endl;
+
   if((type==EWaveform)&&strstr(key,"RAWMSG")){  //If waveform with RAWMSG in key, 
     rawmessage = (waveformRecord*)addr;         //save as special
     std::cerr << "Raw messages will go into " << rawmessage->name << std::endl;
     return;
   }    
 
-  pvstructs[npv] = addr;                        //save address as a void
-  jsonKeys[npv]  = new char[strlen(key)];       //save json key
-  strcpy(jsonKeys[npv],key);
-  pvtypes[npv]   = type;                        //save type
-  std::cerr << "json Key "<< npv << " = " << jsonKeys[npv] << " associated with PV = " << ((dbCommon*)pvstructs[npv])->name << std::endl;
+  pvstructs[npv] = addr;                           //save address as a void
+
+  //The key will be specified like this  AAA_BBB_CCC##3_DDD_THING (hopeully simpler)
+  //                                     obj obj arr[3] obj item
+
+  jsonKeyNparts[npv]=0;
+  lastu=key;
+  while((thisu=strchr(lastu,'_'))){                                      //find underscore
+    jsonKeyParts[npv][jsonKeyNparts[npv]] = new char[(thisu-lastu)+1];   //make string for it
+    strncpy(jsonKeyParts[npv][jsonKeyNparts[npv]],lastu,(thisu-lastu));  //copy to it
+    strcpy(jsonKeyParts[npv][jsonKeyNparts[npv]]+(thisu-lastu),"");      //terminate
+    lastu=thisu+1;                                                       //move past the "_"
+    jsonKeyNparts[npv]++;                                                //increment the counter
+  }
+  
+  jsonKeyParts[npv][jsonKeyNparts[npv]] = new char[strlen(lastu)];       //so copy full key
+  strcpy(jsonKeyParts[npv][jsonKeyNparts[npv]],lastu);
+
+  jsonKeyNparts[npv]++;                                                  //increment the counter
+
+
+
+  pvtypes[npv]   = type;                                                  //save type
+  std::cerr << "PV "<< npv << "parts: ";
+
+  for(int n=0;n<jsonKeyNparts[npv];n++){                                  //see if this is an element in an array
+    jsonKeyIndices[npv][n]=-1;                                            //delimited by ##.
+    if((lastu=strstr(jsonKeyParts[npv][n],"##"))){                        //if so, save the index
+      sscanf(lastu+2,"%d",&jsonKeyIndices[npv][n]);
+      strcpy(lastu,"");                                                   //strip off the ##N part
+      std::cerr << jsonKeyParts[npv][n] << "[" << jsonKeyIndices[npv][n] << "] ";
+    }
+    else{
+      std::cerr << jsonKeyParts[npv][n] << " ";
+    }
+  }
+  std::cerr << std::endl;
+  
   npv++;
 }
 
@@ -377,7 +415,7 @@ void print_json_value(json_object *jobj){
 /*printing the value corresponding to boolean, double, integer and strings*/
 void json_read_value(json_object *jobj, int indx ){
   void *prec = pvstructs[indx];
-  char *key = jsonKeys[indx];
+  char *key = ((dbCommon*)(prec))->name;
   int pvtype= pvtypes[indx];
   rset* prset;
   
@@ -469,9 +507,9 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
   json_object * jvalue;
   rset* prset;
 
-  char *key = jsonKeys[indx];                          //get the key of the json element we're interested in
   int pvtype= pvtypes[indx];                           //find the type of the PV
   void *prec = pvstructs[indx];                        //get the record for the PV
+  char *key = ((dbCommon*)(prec))->name;
   char *pvname = ((dbCommon*)prec)->name;              //find name of PV
 
   if(pvtype != EWaveform){
@@ -484,7 +522,7 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 
   waveformRecord * wrec = (waveformRecord*)(prec);     //cast to waveform
   double *bptr_d = (double *)(wrec->bptr);             //cast the waveform buffer as int and double
-  float *bptr_f = (float *)(wrec->bptr);                //cast the waveform buffer as int and double
+  float *bptr_f = (float *)(wrec->bptr);               //cast the waveform buffer as int and double
   int *bptr_i = (int *)(wrec->bptr);
   int wavelen = wrec->nelm;                            //find no of elements in waveform
 
@@ -501,7 +539,7 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
     switch (type){
     case json_type_double:
       if((wrec->ftvl != DBR_DOUBLE)&&(wrec->ftvl != DBR_FLOAT)){
-	printf("Warning PV %s.FTVL needs to be DOUBLE of FLOAT for json array %s. Not filling waveform!\n",pvname,key );
+	printf("Warning PV %s.FTVL needs to be DOUBLE or FLOAT for json array %s. Not filling waveform!\n",pvname,key );
 	break;
       }
       dbScanLock((dbCommon*)prec);
@@ -524,15 +562,32 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 
       break;
     case json_type_int:
-      if(wrec->ftvl != DBR_LONG){
-	printf("Warning PV %s.FTVL needs to be LONG for json array %s. Not filling waveform!\n",pvname,key );
-	break;
+      if(wrec->ftvl==DBR_DOUBLE){
+	dbScanLock((dbCommon*)prec);
+	for (int i=0; i<ncopy; i++){
+	  jvalue = json_object_array_get_idx(jobj, i);
+	  bptr_d[i]=(double)json_object_get_int(jvalue);
+	}
       }
-      dbScanLock((dbCommon*)prec);
-      for (int i=0; i<ncopy; i++){
-	jvalue = json_object_array_get_idx(jobj, i);
-	bptr_i[i]=json_object_get_int(jvalue);
+      else if(wrec->ftvl==DBR_FLOAT){
+	dbScanLock((dbCommon*)prec);
+	for (int i=0; i<ncopy; i++){
+	  jvalue = json_object_array_get_idx(jobj, i);
+	  bptr_f[i]=(float)json_object_get_int(jvalue);
+	}
       }
+      else if(wrec->ftvl==DBR_LONG){
+	dbScanLock((dbCommon*)prec);
+	for (int i=0; i<ncopy; i++){
+	  jvalue = json_object_array_get_idx(jobj, i);
+	  bptr_i[i]=json_object_get_int(jvalue);
+	}
+      }
+      else{
+      	printf("Warning PV %s.FTVL needs to be LONG, FLOAT or DOUBLE for json array %s. Not filling waveform!\n",pvname,key );
+      	break;
+      }
+
       wrec->nord=ncopy;
       prset=(rset*)((dbCommon*)prec)->rset;
       ((fptr)(prset->process))((dbCommon*)prec);
@@ -546,48 +601,65 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 }
 
 
-void json_epics(json_object * jobj){ 
- 
+void json_epics(json_object *jtop){ 
+
+        
+  //Need to decode something like this: AAA_BBB_CCC##3_DDD_THING
+  //                                    obj obj arr[3] obj item
+  //
   enum json_type type = json_type_null;
   json_object *value;
+  json_object *jobj;
   
-  for(int n=0;n<npv;n++){         //check all the keys which are for EPICS PVs
-    if(json_object_object_get_ex(jobj,jsonKeys[n],&value)){
+  
+  for(int n=0;n<npv;n++){                  //check all the keys which are for EPICS PVs
+    jobj=jtop;                             //point to the top level jobj
+    for(int p=0;p<jsonKeyNparts[n];p++){   //go over all the parts
+      printf("looking for %s\n",jsonKeyParts[n][p]);
+      if(!json_object_object_get_ex(jobj,jsonKeyParts[n][p],&value)) break;  //break if key not found
+      printf("found %s\n",jsonKeyParts[n][p]);
       type = json_object_get_type(value);
-      switch (type){
-      case json_type_boolean:
-      case json_type_double:
-      case json_type_int:
-      case json_type_string:
-	json_read_value(value,n);
-	break;
-      case json_type_array:
-	json_read_array(value,n);
-	break;
-      default:
-	break;
+      if(p<jsonKeyNparts[n]-1){             //must be a jobj or array#index, since before the _THING part
+	if(type == json_type_object){
+	  jobj=value;
+	  continue;                         //make this the jobs for the next item
+	}
+	else if((type == json_type_array)&&(jsonKeyIndices[n][p]>-1)){    //array with index
+	  value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
+	  type = json_object_get_type(value);
+	  if(type != json_type_object)break;
+	  jobj=value;
+	  continue;                         //make this the jobs for the next item
+	}
+	else break;                         //not found, break
+      }
+      
+      else{                                 // at the _THING part - its an actual value
+	
+	if(jsonKeyIndices[n][p]>-1){
+	  value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
+	  type = json_object_get_type(value);
+	}
+	switch (type){
+	case json_type_boolean:
+	case json_type_double:
+	case json_type_int:
+	case json_type_string:
+	  json_read_value(value,n);
+	  break;
+	case json_type_array:
+	  json_read_array(value,n);
+	  break;
+	default:
+	  break;
+	}
       }
     }
   }
-  //now check in case there's an json object in there and do recursion
-  //Although it is not encouraged to embed values for EPICS in a big nested json heirarchy! 
-  json_object_object_foreach(jobj, key, val){
-    //printf("key is  %s     %d\n", key, type);
-    type = json_object_get_type(val);
-    if(type == json_type_object){
-      //printf("ojbect is  %s\n", key);
-      json_epics(val);
-    }
-    if(type == json_type_array){
-      //printf("array is  %s\n", key);
-      json_parse_array(val);
-    }
-  }
-  json_object_put(jobj);
-
+  json_object_put(jtop);
 }
   
-void json_parse_array( json_object *jobj) {
+void json_parse_array( json_object *jobj, char *key) {
   enum json_type type;
   json_object *jarray = jobj; /*Simply get the array*/
   
@@ -600,7 +672,7 @@ void json_parse_array( json_object *jobj) {
     jvalue = json_object_array_get_idx(jarray, i); /*Getting the array element at position i*/
     type = json_object_get_type(jvalue);
     if (type == json_type_array) {
-      json_parse_array(jvalue);
+      json_parse_array(jvalue,key);
     }
     if (type == json_type_object) {
       json_epics(jvalue);

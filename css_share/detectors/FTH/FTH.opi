@@ -222,32 +222,32 @@ $(pv_value)</tooltip>
           <replace>0</replace>
           <description>Controls</description>
         </action>
-        <action type="EXECUTE_JAVASCRIPT">
-          <path>/CLAS12_Share/detectors/FTH/scripts/FTH_HV_off.js</path>
-          <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-          <embedded>false</embedded>
+        <action type="WRITE_PV">
+          <pv_name>B_DET_FTH_HV:OFF</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message></confirm_message>
           <description>HV All Off</description>
         </action>
-        <action type="EXECUTE_JAVASCRIPT">
-          <path>/CLAS12_Share/detectors/FTH/scripts/FTH_HV_on.js</path>
-          <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-          <embedded>false</embedded>
+        <action type="WRITE_PV">
+          <pv_name>B_DET_FTH_HV:ON</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message>Really Turn All FTH HV On?</confirm_message>
           <description>HV All On</description>
         </action>
         <action type="WRITE_PV">
           <pv_name>B_DET_FTH_LV:pwoff</pv_name>
           <value>1</value>
           <timeout>10</timeout>
-          <confirm_message>Are you sure you want to do this?</confirm_message>
+          <confirm_message></confirm_message>
           <description>LV All Off</description>
         </action>
         <action type="WRITE_PV">
           <pv_name>B_DET_FTH_LV:pwon</pv_name>
           <value>1</value>
           <timeout>10</timeout>
-          <confirm_message>Are you sure you want to do this?</confirm_message>
+          <confirm_message></confirm_message>
           <description>LV All On</description>
         </action>
       </actions>
@@ -387,7 +387,7 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="true" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>../../apps/cRioIntlkApp/FT-hwintlk.opi</path>
+          <path>FTH_HVLV_details.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
@@ -601,57 +601,6 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
       <off_label>  OFF</off_label>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>14</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-7820a1:156223dc11b:-7906</wuid>
-      <transparent>false</transparent>
-      <auto_size>false</auto_size>
-      <text>  Soft Interlock Status:</text>
-      <scripts />
-      <height>20</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="127" green="127" blue="127" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
-      <background_color>
-        <color red="50" green="50" blue="50" />
-      </background_color>
-      <width>288</width>
-      <x>66</x>
-      <name>Label_26</name>
-      <y>217</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="true" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>../../apps/ftIntlkApp/ftcIntlk.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC_INTLK_</P>
-          </macros>
-          <replace>0</replace>
-          <description>Open Soft Interlocks</description>
-        </action>
-      </actions>
-      <show_scrollbar>false</show_scrollbar>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
     </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
       <border_style>1</border_style>
@@ -1061,70 +1010,6 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
       </font>
     </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <effect_3d>false</effect_3d>
-      <bit>0</bit>
-      <pv_value />
-      <height>20</height>
-      <border_width>1</border_width>
-      <visible>true</visible>
-      <pv_name>B_DET_FTC_INTLK_Q2Q3:status</pv_name>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>LED</widget_type>
-      <name>LED_1</name>
-      <actions hook="true" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>../../apps/ftIntlkApp/ftcIntlk.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC_INTLK_</P>
-          </macros>
-          <replace>0</replace>
-          <description>Open Soft Interlocks</description>
-        </action>
-      </actions>
-      <show_boolean_label>false</show_boolean_label>
-      <border_style>0</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <enabled>true</enabled>
-      <wuid>2ac53985:156317d016d:-5691</wuid>
-      <on_color>
-        <color name="Major" red="255" green="0" blue="0" />
-      </on_color>
-      <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
-      <on_label>ON</on_label>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>true</keep_wh_ratio>
-      </scale_options>
-      <off_color>
-        <color name="Off" red="60" green="100" blue="60" />
-      </off_color>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color red="240" green="240" blue="240" />
-      </background_color>
-      <square_led>false</square_led>
-      <width>20</width>
-      <x>328</x>
-      <data_type>0</data_type>
-      <y>217</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-      <off_label>OFF</off_label>
-    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
       <border_style>1</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -1308,70 +1193,6 @@ widget.setPropertyValue("foreground_color","Read_Foreground");
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <effect_3d>false</effect_3d>
-      <bit>0</bit>
-      <pv_value />
-      <height>20</height>
-      <border_width>1</border_width>
-      <visible>true</visible>
-      <pv_name>B_DET_FTC_INTLK_Q1Q4:status</pv_name>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>LED</widget_type>
-      <name>LED</name>
-      <actions hook="true" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>../../apps/ftIntlkApp/ftcIntlk.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC_INTLK_</P>
-          </macros>
-          <replace>0</replace>
-          <description>Open Soft Interlocks</description>
-        </action>
-      </actions>
-      <show_boolean_label>false</show_boolean_label>
-      <border_style>0</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <enabled>true</enabled>
-      <wuid>-7820a1:156223dc11b:-78d5</wuid>
-      <on_color>
-        <color name="Major" red="255" green="0" blue="0" />
-      </on_color>
-      <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
-      <on_label>ON</on_label>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>true</keep_wh_ratio>
-      </scale_options>
-      <off_color>
-        <color name="Off" red="60" green="100" blue="60" />
-      </off_color>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color red="240" green="240" blue="240" />
-      </background_color>
-      <square_led>false</square_led>
-      <width>20</width>
-      <x>260</x>
-      <data_type>0</data_type>
-      <y>217</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-      <off_label>OFF</off_label>
-    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
       <border_style>0</border_style>
       <tooltip></tooltip>
@@ -1408,57 +1229,6 @@ $(pv_value)</tooltip>
         <color name="Header_ForeGround" red="255" green="255" blue="255" />
       </foreground_color>
       <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>2ac53985:156317d016d:-567d</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text>LV N</text>
-      <scripts />
-      <height>20</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>42</width>
-      <x>293</x>
-      <name>Label_28</name>
-      <y>217</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="true" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>../../apps/ftIntlkApp/ftcIntlk.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC_INTLK_</P>
-          </macros>
-          <replace>0</replace>
-          <description>Open Soft Interlocks</description>
-        </action>
-      </actions>
-      <show_scrollbar>false</show_scrollbar>
       <font>
         <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
       </font>
@@ -1598,57 +1368,6 @@ $(pv_value)</tooltip>
         <color name="Header_ForeGround" red="255" green="255" blue="255" />
       </foreground_color>
       <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>2ac53985:156317d016d:-5689</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text>LV P</text>
-      <scripts />
-      <height>20</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>true</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>42</width>
-      <x>226</x>
-      <name>Label_27</name>
-      <y>217</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="true" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>../../apps/ftIntlkApp/ftcIntlk.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_DET_FTC_INTLK_</P>
-          </macros>
-          <replace>0</replace>
-          <description>Open Soft Interlocks</description>
-        </action>
-      </actions>
-      <show_scrollbar>false</show_scrollbar>
       <font>
         <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
       </font>
@@ -3482,7 +3201,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_1</name>
         <y>0</y>
@@ -3523,7 +3242,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_1</name>
         <y>0</y>
@@ -3564,7 +3283,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_2</name>
         <y>20</y>
@@ -3605,7 +3324,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_3</name>
         <y>20</y>
@@ -3646,7 +3365,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_4</name>
         <y>41</y>
@@ -3687,7 +3406,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_5</name>
         <y>41</y>
@@ -3728,7 +3447,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_6</name>
         <y>62</y>
@@ -3769,7 +3488,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_7</name>
         <y>62</y>
@@ -3810,7 +3529,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_8</name>
         <y>83</y>
@@ -3851,7 +3570,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_9</name>
         <y>83</y>
@@ -3892,7 +3611,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_10</name>
         <y>104</y>
@@ -3933,7 +3652,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_11</name>
         <y>104</y>
@@ -3974,7 +3693,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_12</name>
         <y>125</y>
@@ -4015,7 +3734,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>104</x>
         <name>Linking Container_13</name>
         <y>125</y>
@@ -4056,7 +3775,7 @@ $(pv_value)</tooltip>
         <background_color>
           <color red="255" green="254" blue="148" />
         </background_color>
-        <width>94</width>
+        <width>91</width>
         <x>0</x>
         <name>Linking Container_14</name>
         <y>146</y>

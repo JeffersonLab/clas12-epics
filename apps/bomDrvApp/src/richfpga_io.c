@@ -293,14 +293,14 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		
 		if(!(i & 0x1))
 		{
-			regs->CH[i>>1].bits.Gain0 = 255; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain0 = 64; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum0 = 0;
 			regs->CH[i>>1].bits.CTest0 = ctest;
 			regs->CH[i>>1].bits.MaskOr0 = 0;
 		}
 		else
 		{
-			regs->CH[i>>1].bits.Gain1 = 255; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain1 = 64; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum1 = 0;
 			regs->CH[i>>1].bits.CTest1 = ctest;
 			regs->CH[i>>1].bits.MaskOr1 = 0;
@@ -419,7 +419,7 @@ void rich_print_dynregs(MAROC_DyRegs regs)
 
 void rich_init_dynregs(MAROC_DyRegs *regs)
 {
-	//int i;
+	int i;
 
 	memset(regs, 0, sizeof(MAROC_DyRegs));
 
@@ -441,7 +441,7 @@ void rich_dump_scalers()
 	float ref, fval;
 	unsigned int val;
 	int i, j;
-	//char buf[100];
+	char buf[100];
 
 	/* halt scaler counting */
 	rich_write32(&pRICH_regs->Sd.ScalerLatch, 0x1);
@@ -549,7 +549,7 @@ void rich_disable_all_tdc_channels()
 
 void rich_enable_tdc_channel(int ch)
 {
-	//int i;
+	int i;
 	int proc_idx, proc_reg, proc_bit;
 	int val;
 	
@@ -570,7 +570,7 @@ void rich_enable_tdc_channel(int ch)
 
 void rich_disable_tdc_channel(int ch)
 {
-	//int i;
+	int i;
 	int proc_idx, proc_reg, proc_bit;
 	int val;
 	
@@ -712,7 +712,7 @@ void rich_setmask_fpga_or(int m0_0, int m0_1, int m1_0, int m1_1, int m2_0, int 
 /*****************************************************************/
 /*****************************************************************/
 
-#define MAROC_NUM		3
+#define MAROC_NUM		2
 
 void rich_test_regs(int thr)
 {
@@ -819,8 +819,8 @@ void SetupMAROC_ADC(unsigned char h1, unsigned char h2, int resolution, int maro
 
 int main2(int argc, char *argv[])
 {
-	//int n, val = 0;
-	//long long nevents, nbytes, dbytes;
+	int n, val = 0;
+	long long nevents, nbytes, dbytes;
 
 	open_register_socket();
 
@@ -833,7 +833,7 @@ int main2(int argc, char *argv[])
 
 	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
 	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
-	rich_write32(&pRICH_regs->Sd.CTestSrc, SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
+	rich_write32(&pRICH_regs->Sd.CTestSrc, 0);//SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
 	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
 	
 	/* Set trig source to disabled */
@@ -866,7 +866,7 @@ int main2(int argc, char *argv[])
   while(1)
   {
     rich_dump_scalers();
-    usleep(100000);
+    usleep(1000000);
   }
   
 	close(sockfd_reg);

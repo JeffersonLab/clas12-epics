@@ -6,16 +6,6 @@
 #include <vector>
 #include "jscalers.h"
 
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <arpa/inet.h> 
 #include "richfpga_io.c"
 
 //#undef JSCALER_DEBUG
@@ -33,7 +23,6 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it);
 ScalersSlowControl::ScalersSlowControl(){}
 map<int, VmeChassis*> *ScalersSlowControl::GetChassisMap(){ return &vmecrates; }
 
-
 VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
 	int n, val;
@@ -45,6 +34,7 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 	n = read(sockfd_reg, &val, 4);
 	printf("n = %d, val = 0x%08X\n", n, val);
 
+    /*
 	rich_test_regs(400);
 	rich_set_pulser(10000000.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
 	rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
@@ -55,6 +45,52 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
 	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
 	rich_write32(&pRICH_regs->Sd.CTestSrc, SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
+	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
+	
+	// Set trig source to disabled
+	rich_write32(&pRICH_regs->Sd.TrigSrc, 0);
+	rich_write32(&pRICH_regs->EvtBuilder.TrigDelay, 128);				//128*8ns = 1024ns trigger delay
+	
+	int hold_dly = 5;
+//	SetupMAROC_ADC(20, 20, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_DISABLE);
+	SetupMAROC_ADC(hold_dly, hold_dly, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_3ASIC);
+
+	// Soft pulse sync
+	rich_write32(&pRICH_regs->Sd.SyncSrc, 1);
+	rich_write32(&pRICH_regs->Sd.SyncSrc, 0);
+
+	rich_fifo_reset();
+	rich_fifo_status();
+	rich_setup_readout(1200/8, 400/8);			// lookback 1.2us, capture 400ns
+	
+	rich_disable_all_tdc_channels();
+	rich_enable_all_tdc_channels();
+	
+	// Set trig source to pulser when ready to take events
+	rich_write32(&pRICH_regs->Sd.TrigSrc, SD_SRC_SEL_PULSER_DLY0);		// trigger source is pulser (delayed by TrigDelay)
+
+    int thr = 300;
+    rich_test_regs(thr);
+
+    rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
+
+    int rval2 = pthread_create(&threadC, NULL, crateThread, (void *) this );
+    if (rval2 != 0) {
+        perror("Creating the Server Analysis Thread failed");
+        exit(3);
+    }
+*/
+   
+	rich_test_regs(400);
+	rich_set_pulser(10000000.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
+	rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
+
+	// Setup FPGA version of MAROC OR (note: this OR is formed in the FPGA from the MAROC hits and does not use the MAROC_OR signal)
+	rich_setmask_fpga_or(0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000);
+
+	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
+	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
+	rich_write32(&pRICH_regs->Sd.CTestSrc, 0);//SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
 	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
 	
 	/* Set trig source to disabled */
@@ -81,15 +117,14 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
     int thr = 300;
     rich_test_regs(thr);
-
+  
     rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
-
-    int rval2 = pthread_create(&threadC, NULL, crateThread, (void *) this );
-    if (rval2 != 0) {
-        perror("Creating the Server Analysis Thread failed");
-        exit(3);
+    
+    while (1) {
+        sleep(SCALERS_READ_INTERVAL);
+        printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
+        rich_dump_scalers();
     }
-   
 
 
     return;

@@ -4,14 +4,14 @@ include $(TOP)/configure/CONFIG
 
 STATIC_BUILD=YES
 
-LIB_SRCS += jscalers.cpp
+LIB_SRCS += bom.cpp
 
 #PROD_LIBS += jscalers
 
-LIBRARY_Linux += bomDrvApp
+LIBRARY_Linux += bomDrv
 
 INC += common.h
-INC += jscalers.h
+INC += bom.h
 
 #===========================
 PROD_LIBS    += rol

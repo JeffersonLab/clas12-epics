@@ -1625,7 +1625,7 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_0_grid_color>
     <axis_2_visible>true</axis_2_visible>
     <trace_0_name>$(trace_0_y_pv)</trace_0_name>
-    <axis_2_minimum>0.0</axis_2_minimum>
+    <axis_2_minimum>1.0</axis_2_minimum>
     <trace_0_update_mode>0</trace_0_update_mode>
     <trace_1_x_pv></trace_1_x_pv>
     <wuid>4fca8264:15d797b0109:-7ec3</wuid>
@@ -1647,7 +1647,7 @@ $(trace_0_y_pv_value)</tooltip>
     <axis_2_grid_color>
       <color red="200" green="200" blue="200" />
     </axis_2_grid_color>
-    <trace_0_buffer_size>332</trace_0_buffer_size>
+    <trace_0_buffer_size>232</trace_0_buffer_size>
     <axis_1_maximum>500.0</axis_1_maximum>
     <axis_0_scale_font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -1663,7 +1663,7 @@ $(trace_0_y_pv_value)</tooltip>
     <trace_0_visible>true</trace_0_visible>
     <trace_1_name>$(trace_1_y_pv)</trace_1_name>
     <trace_1_y_pv_value />
-    <axis_2_auto_scale>true</axis_2_auto_scale>
+    <axis_2_auto_scale>false</axis_2_auto_scale>
     <show_legend>false</show_legend>
     <axis_0_axis_title>FADC Channel</axis_0_axis_title>
     <axis_0_axis_color>
@@ -1692,7 +1692,7 @@ $(trace_0_y_pv_value)</tooltip>
     </scale_options>
     <trace_1_y_pv>B_DET_FTC_FADC:wf</trace_1_y_pv>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <axis_0_maximum>332.0</axis_0_maximum>
+    <axis_0_maximum>232.0</axis_0_maximum>
     <trace_1_y_axis_index>2</trace_1_y_axis_index>
     <height>181</height>
     <trigger_pv_value />
@@ -1722,17 +1722,17 @@ $(trace_0_y_pv_value)</tooltip>
       <color red="242" green="26" blue="26" />
     </trace_1_trace_color>
     <pv_name>B_DET_FTH_FADC:t:wf</pv_name>
-    <axis_2_log_scale>false</axis_2_log_scale>
+    <axis_2_log_scale>true</axis_2_log_scale>
     <axis_2_auto_scale_threshold>0.0</axis_2_auto_scale_threshold>
     <name>XY Graph</name>
-    <trace_1_trace_type>0</trace_1_trace_type>
+    <trace_1_trace_type>3</trace_1_trace_type>
     <axis_0_auto_scale>false</axis_0_auto_scale>
     <axis_0_minimum>0.0</axis_0_minimum>
     <trace_1_update_delay>100</trace_1_update_delay>
     <axis_2_dash_grid_line>true</axis_2_dash_grid_line>
     <axis_1_axis_title>Threshold</axis_1_axis_title>
     <axis_1_auto_scale>false</axis_1_auto_scale>
-    <trace_1_line_width>1</trace_1_line_width>
+    <trace_1_line_width>2</trace_1_line_width>
     <trace_1_plot_mode>0</trace_1_plot_mode>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -1751,7 +1751,7 @@ $(trace_0_y_pv_value)</tooltip>
     <axis_2_time_format>0</axis_2_time_format>
     <axis_2_left_bottom_side>false</axis_2_left_bottom_side>
     <border_alarm_sensitive>true</border_alarm_sensitive>
-    <axis_2_maximum>100.0</axis_2_maximum>
+    <axis_2_maximum>1000000.0</axis_2_maximum>
     <show_plot_area_border>false</show_plot_area_border>
     <width>603</width>
     <trace_1_x_pv_value />
@@ -1769,7 +1769,7 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_1_title_font>
     <visible>true</visible>
     <axis_2_axis_title>Counts</axis_2_axis_title>
-    <trace_1_buffer_size>332</trace_1_buffer_size>
+    <trace_1_buffer_size>232</trace_1_buffer_size>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <axis_2_scale_format></axis_2_scale_format>
     <scripts />
@@ -2203,7 +2203,7 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
     <rules>
       <rule name="Rule" prop_id="off_color" out_exp="false">
-        <exp bool_exp="pv0==0 &amp;&amp; pv1==0 &amp;&amp; pv2==0">
+        <exp bool_exp="pv0==0">
           <value>
             <color name="Off" red="60" green="100" blue="60" />
           </value>
@@ -2213,9 +2213,7 @@ $(pv_value)</tooltip>
             <color name="Major" red="255" green="0" blue="0" />
           </value>
         </exp>
-        <pv trig="true">B_DET_FTC_INTLK_TEMP_STATUS</pv>
-        <pv trig="true">B_DET_FTC_INTLK_HUMID_STATUS</pv>
-        <pv trig="true">B_DET_FTC_INTLK_FLOW_STATUS</pv>
+        <pv trig="true">B_DET_FTH_INTLK_TEMP_STATUS</pv>
       </rule>
     </rules>
     <effect_3d>false</effect_3d>
@@ -2282,7 +2280,7 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
     <rules>
       <rule name="Rule" prop_id="off_color" out_exp="false">
-        <exp bool_exp="pv0==0 &amp;&amp; pv1==0 &amp;&amp; pv2==0">
+        <exp bool_exp="pv0==0">
           <value>
             <color name="Off" red="60" green="100" blue="60" />
           </value>
@@ -2292,9 +2290,7 @@ $(pv_value)</tooltip>
             <color name="Major" red="255" green="0" blue="0" />
           </value>
         </exp>
-        <pv trig="true">B_DET_FTC_INTLK_TEMP_LATCHED_ERR</pv>
-        <pv trig="true">B_DET_FTC_INTLK_HUMID_LATCHED_ERR</pv>
-        <pv trig="true">B_DET_FTC_INTLK_FLOW_LATCHED_ERR</pv>
+        <pv trig="true">B_DET_FTH_INTLK_TEMP_LATCHED_ERR</pv>
       </rule>
     </rules>
     <effect_3d>false</effect_3d>

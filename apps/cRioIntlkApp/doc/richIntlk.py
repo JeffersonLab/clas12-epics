@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 import sys
 
+if len(sys.argv)<2:
+  sys.exit('Usage:  richIntlk.py csvFileName')
+
 ICOLS={
       'access':4,
       'type':5,
       'units':7,
       'pvname':6}
 
-for line in open('richIntlk.csv','r').readlines():
+for line in open(sys.argv[1],'r').readlines():
   if line.find('PV')==0: continue
+  if line.find('Hall B RICH')==0: continue
   cols=line.strip().split(',')
-  if len(cols)!=9: continue
+  if len(cols)!=9 and len(cols)!=8: continue
   vals={}
   for key in ICOLS.keys():
     vals[key]=cols[ICOLS[key]]

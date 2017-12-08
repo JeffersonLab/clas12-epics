@@ -33,7 +33,7 @@ for line in open(sys.argv[1],'r').readlines():
     elif vals['units'].find('C')>=0: units='C'
     elif vals['units'].find('N/A')>=0: units=''
     else: units=vals['units']
-    asfields='HIHI HIGH LOW LOLO HHSV HSV LSV LLSV'
+    asfields='HIHI HIGH LOW LOLO HHSV HSV LSV LLSV MDEL'
   elif pvtype=='bi' or pvtype=='bo':
     asfields='ZSV OSV'
 

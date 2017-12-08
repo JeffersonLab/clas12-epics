@@ -25,7 +25,7 @@
 #include <epicsExport.h> 
 #include <cantProceed.h>
 
-#include "common.h"
+#include "bomCommon.h"
 #include "CrateMsgTypes.h"
 
 extern int is_mainframe_read[256];
@@ -75,6 +75,7 @@ epicsExportAddress(dset,devWaveformBOM);
 static long init_ai(struct aiRecord *pai) { return 0; }
 static long read_ai(struct aiRecord *pai)
 {
+//      fprintf(stderr,"zzzzzzzzzzzzzaaaaaaaaaaaaaaaa--------\b");
   struct vmeio *pvmeio = (struct vmeio *) &(pai->inp.value);  
 
   unsigned short* card    = (unsigned short*) &pvmeio->card;
@@ -88,6 +89,25 @@ static long read_ai(struct aiRecord *pai)
 
   double *values;
   int ret,len;
+     /* 
+  values = (double *) malloc(sizeof(double)*16);
+  fprintf(stderr,"CALLING IOCGETBOMSCALERS ...\n");
+  //fprintf(stderr,"bbbbb-------%d %d %d %d %d\b",slot,chassis,command,signal,channel);
+  if (!IocGetBomScalers(chassis,slot,signal,JLAB_SET_THRESHOLD,values)) {
+      //fprintf(stderr,"aaaaaaaaaaaaaaaa--------%d\b",channel);
+      fprintf(stderr,"CALLED IOCGETBOMSCALERS ...\n");
+      pai->rval = values[0];//(command & 0xF)-1];
+  }
+  else
+      recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
+  free(values);
+  */
+  return 0;  
+/*
+  pthread_mutex_lock(&(bomScalersMutex));
+  printf("%f\n",bomScalers[channel]);
+  pthread_mutex_unlock(&(bomScalersMutex));
+*/
   // thresholds:
   if (command==FADCTET || command==TDCTET || command==TRGTET) { 
       values = (double *) malloc(sizeof(double)*2);

@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <vector>
-#include "jscalers.h"
+#include "bom.h"
 
 #include "richfpga_io.c"
 
@@ -16,7 +16,6 @@
 
 using namespace std;
 void *crateThread(void *);
-void *crateThreadMon(void *);
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels);
 int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it);
@@ -34,52 +33,6 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 	n = read(sockfd_reg, &val, 4);
 	printf("n = %d, val = 0x%08X\n", n, val);
 
-    /*
-	rich_test_regs(400);
-	rich_set_pulser(10000000.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
-	rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
-
-	// Setup FPGA version of MAROC OR (note: this OR is formed in the FPGA from the MAROC hits and does not use the MAROC_OR signal)
-	rich_setmask_fpga_or(0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000);
-
-	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
-	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
-	rich_write32(&pRICH_regs->Sd.CTestSrc, SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
-	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
-	
-	// Set trig source to disabled
-	rich_write32(&pRICH_regs->Sd.TrigSrc, 0);
-	rich_write32(&pRICH_regs->EvtBuilder.TrigDelay, 128);				//128*8ns = 1024ns trigger delay
-	
-	int hold_dly = 5;
-//	SetupMAROC_ADC(20, 20, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_DISABLE);
-	SetupMAROC_ADC(hold_dly, hold_dly, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_3ASIC);
-
-	// Soft pulse sync
-	rich_write32(&pRICH_regs->Sd.SyncSrc, 1);
-	rich_write32(&pRICH_regs->Sd.SyncSrc, 0);
-
-	rich_fifo_reset();
-	rich_fifo_status();
-	rich_setup_readout(1200/8, 400/8);			// lookback 1.2us, capture 400ns
-	
-	rich_disable_all_tdc_channels();
-	rich_enable_all_tdc_channels();
-	
-	// Set trig source to pulser when ready to take events
-	rich_write32(&pRICH_regs->Sd.TrigSrc, SD_SRC_SEL_PULSER_DLY0);		// trigger source is pulser (delayed by TrigDelay)
-
-    int thr = 300;
-    rich_test_regs(thr);
-
-    rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
-
-    int rval2 = pthread_create(&threadC, NULL, crateThread, (void *) this );
-    if (rval2 != 0) {
-        perror("Creating the Server Analysis Thread failed");
-        exit(3);
-    }
-*/
    
 	rich_test_regs(400);
 	rich_set_pulser(10000000.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
@@ -98,7 +51,6 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 	rich_write32(&pRICH_regs->EvtBuilder.TrigDelay, 128);				//128*8ns = 1024ns trigger delay
 	
 	int hold_dly = 5;
-//	SetupMAROC_ADC(20, 20, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_DISABLE);
 	SetupMAROC_ADC(hold_dly, hold_dly, MAROC_ADC_RESOLUTION_12b, MAROC_MASK_3ASIC);
 
 	/* Soft pulse sync */
@@ -119,96 +71,34 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
     rich_test_regs(thr);
   
     rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
-    
-    while (1) {
-        sleep(SCALERS_READ_INTERVAL);
-        printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
-        rich_dump_scalers();
-    }
+   
 
-
-    return;
-    
-
-    int *board_types;
-    int len=0;
-    unsigned int *buf[1];
-    int ret;
 
     pthread_mutex_init(&IOmutex, NULL);
+    
+    int rval;
 
-    is_crate_read=0;
-
-    // search for the server's port:
-    for (int iPort=0; iPort<MAXNPORTS; iPort++) {
-
-        port=getPortFromDb(HOSTNAME)+iPort;
-        printf("Trying %s:%d: ....\n", HOSTNAME.c_str(), port);
-        
-        numberOfSlots=0;
-        crateMsgClient= new CrateMsgClient((const char*) HOSTNAME.c_str(), port);
-
-        if (crateMsgClient->IsValid()) {
-            printf("Connected %p\n",crateMsgClient);
-            break;
-        }
-        if (crateMsgClient) delete(crateMsgClient);
-        printf("NOT CONNECTED - Trying next port ...\n");
-    }
-    if (!crateMsgClient->IsValid()) {
-        printf("FAILED TO CONNECT to %s after trying %d ports, must restart IOC to retry\n", HOSTNAME.c_str(),MAXNPORTS);
-        return;
-    }
-
-    (*buf)=0;
-    ret = crateMsgClient->GetCrateMap(buf, &len);
-    printf("boards len=%d\n",len);
-    if (ret) {
-        for (int ii=0; ii<len; ii++) printf("slot %2d, boardID 0x%08x\n",ii,(*buf)[ii]);
-        board_types=(int *) (*buf);
-        numberOfSlots=len;
-        for (int i=0; i<numberOfSlots; i++) {
-            if (board_types[i]==SCALER_TYPE_DSC2)
-                crateBoards[i]= (new JlabDisc2Board(crateMsgClient, i, board_types[i] ));
-            else if (board_types[i]==SCALER_TYPE_FADC250)
-                crateBoards[i]=(new JlabFadc250Board(crateMsgClient, i, board_types[i] ));
-            else if(board_types[i]==SCALER_TYPE_SSP)
-                crateBoards[i]=(new JlabSSPBoard(crateMsgClient, i, board_types[i] ));
-            else if(board_types[i]==JLAB_SLOT_IS_EMPTY)
-                crateBoards[i]=0;
-            else {
-                printf("unknown board!\n");
-                exit(1);
-            }
-        }
-    }
-    if (*buf) delete (*buf);
-
-    int rval = pthread_create(&threadC, NULL, crateThread, (void *) this );
+    fprintf(stderr,"Making thread\n");
+    rval = pthread_create(&threadC, NULL, crateThread, (void *) this );
+    fprintf(stderr,"Made thread\n");
     if (rval != 0) {
         perror("Creating the Server Analysis Thread failed");
         exit(3);
     }
-   
-    // try to use another thread to restart threadC if crashed:
-    //rval = pthread_create(&threadCmon, NULL, crateThreadMon, (void*)this);
-}
-
-
-void* crateThreadMon(void *ptr) {
-    VmeChassis *ptr_c=(VmeChassis *)ptr;
+    fprintf(stderr,"Thread Created.\n");
+/*
     while (1) {
-        pthread_join(ptr_c->threadC,NULL);
-        printf("Thread Crashed for %s, Respawning in 10 seconds ....\n",ptr_c->HOSTNAME.c_str());
-        sleep(10);
-        int rval = pthread_create(&(ptr_c->threadC), NULL, crateThread, (void *) ptr );
-        if (rval != 0) {
-            perror("Creating the Server Analysis Thread failed");
-            exit(3);
-        }
+        sleep(SCALERS_READ_INTERVAL);
+        pthread_mutex_lock(&IOmutex);
+        fprintf(stderr,"loop\n");
+        printf("(((((((((((((((((((((((((((((((((((((((((((((((((((\n");
+        rich_dump_scalers(bomScalers);
+        pthread_mutex_unlock(&IOmutex);
     }
-
+*/
 }
+
+
 ///=========================================================================================================
 int VmeChassis::GetNumberOfSlots() { return numberOfSlots; }
 int VmeChassis::getPortFromDb(string &HOSTNAME) { return DGSPORTNO; }
@@ -217,133 +107,27 @@ map<int, JlabBoard*> *VmeChassis::GetBoardMap() { return &crateBoards; }
 ///=========================================================================================================
 void *crateThread(void *ptr) {
 
-    while (1) {
-        sleep(SCALERS_READ_INTERVAL);
-        rich_dump_scalers();
+    fprintf(stderr,"crateThread\n");
+
+    VmeChassis *ptr_c=NULL;
+    
+    while (!ptr || !ptr_c) {
+        sleep(1);
+        ptr_c=(VmeChassis*)ptr;
     }
 
-
-    VmeChassis *ptr_c=(VmeChassis *)ptr;
-
-    int len=0;
-    unsigned int *buf[1];
-    int partype;
-
-    while(1){
-        
-        //bool testing=false;
-        //if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) testing=true;
-        //if (testing) fprintf(stderr,"Enter crateThread ADCECAL1\n");
-/*
-        if (!(ptr_c->crateMsgClient->IsValid()) ||
-            !(ptr_c->crateMsgClient->CheckConnection("foo"))) {
-            fprintf(stderr,"jscalers:crateThread Error %s\n",ptr_c->getHostname().c_str());
-            //ptr_c->crateMsgClient=new CrateMsgClient((const char*)ptr_c->getHostname().c_str(),ptr_c->port);
-            sleep(10);
-            continue;
-        }
-*/
-
+    fprintf(stderr,"got chassis\n");
+        sleep(1);
+    
+    while (1) {
         sleep(SCALERS_READ_INTERVAL);
+//        if (!(ptr_c->IOmutex)) continue;
+        fprintf(stderr,"threadA\n");
         pthread_mutex_lock(&(ptr_c->IOmutex));
-        int ret=0;
-        ///----------------------------- read part--------------------------------------
-
-        for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
-
-            //if (testing) fprintf(stderr,"%d\n",it->first);
-
-            if(!(it->second))continue;
-
-            int nchannels = (it->second)->numberOfChannels;
-            
-            //if (testing) fprintf(stderr,"%d %d\n",it->first,nchannels);
-
-            if((it->second)->boardType==SCALER_TYPE_DSC2){
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:Dsc2ReadScalersA\n");
-#endif
-                //if (testing) fprintf(stderr,"Read Disc Scalers ...\n");
-                Dsc2ReadScalers(ptr_c, it, nchannels);
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:Dsc2ReadScalersB\n");
-#endif
-            }
-
-            else if((it->second)->boardType==SCALER_TYPE_FADC250){
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:Fadc250ReadScalerA\n");
-#endif
-                //if (testing) fprintf(stderr,"Read Fadc Scalers ...\n");
-                Fadc250ReadScalers(ptr_c, it, nchannels);
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:Fadc250ReadScalerB\n");
-#endif
-            }
-
-            else if((it->second)->boardType==SCALER_TYPE_SSP){
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:SSPReadScalerA\n");
-#endif
-                SSPReadScalers(ptr_c, it);
-                continue; // hack to preven ssp crash below in thresholds
-#ifdef JSCALER_DEBUG
-                fprintf(stderr,"ioc:SSPReadScalerB\n");
-#endif
-            }
-                
-            //if (testing) fprintf(stderr,"Done Reading Scalers.\n");
-
-            ///-------------------  thresholds ------------------------------------
-            for (int i=0; i<it->second->numberOfChannels; i++)
-                it->second->scalerThresholds[i].clear();
-            (*buf)=0;
-            partype = SCALER_PARTYPE_THRESHOLD;
-            ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-            if (ret)
-                for (int i=0; i<len; i++) /// len is number of channels
-                    ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
-            if (*buf) delete *buf;
-            (*buf)=0;
-            partype = SCALER_PARTYPE_THRESHOLD2;
-            ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-            if (ret)
-                for (int i=0; i<len; i++)
-                    ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
-            if (*buf) delete *buf;
-#ifdef JSCALER_DEBUG 
-            for (int i=0; i<it->second->numberOfChannels; i++) {  
-                int size1 = ( it->second->scalerThresholds[i] ).size();
-                for (int i8=0; i8<size1; i8++)
-                    printf("slot=%d size=%d  =%f \n", it->first, size1, ( it->second->scalerThresholds[i] )[i8]);
-            }
-#endif
-        }
-
-        ///-------------------------- request part -----------------------------------------
-        unsigned int buffer[100];
-        for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
-            if (!(it->second))continue;
-            for (unsigned int j=0; j<(it->second)->genericSetBoards.size(); j++) {
-                if ((it->second)->genericSetBoards[j].command==JLAB_SET_THRESHOLD) {
-                    (*buf)=0;
-                    len=1;
-                    partype = (int) ((it->second)->genericSetBoards[j].values[0]);
-                    buffer[0]=(uint)(it->second)->genericSetBoards[j].values[1];
-                    ret = ptr_c->crateMsgClient->SetChannelParams((it->second)->slotNumber, (it->second)->genericSetBoards[j].channelNumber,
-                            partype, buffer, len );
-                    if (ret<=0) printf("error in thresh set\n");
-                    if (*buf) delete *buf;
-                }
-                (it->second)->genericSetBoards[j].values.clear();
-            }
-            (it->second)->genericSetBoards.clear();
-        }
+        fprintf(stderr,"thread\n");
+        fprintf(stderr,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
+        rich_dump_scalers(ptr_c->bomScalers);
         pthread_mutex_unlock(&(ptr_c->IOmutex));
-        ptr_c->is_crate_read=1;
-
-        
-        //if (testing) fprintf(stderr,"Leave crateThread ADCECAL1\n");
     }
     return NULL;
 }

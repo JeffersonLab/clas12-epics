@@ -13,7 +13,7 @@
 #include <map>
 #include <pthread.h>
 
-#include "common.h"
+#include "bomCommon.h"
 
 #include "cratemsgclient.h"
 
@@ -166,6 +166,7 @@ class VmeChassis {
     public:
         string HOSTNAME;
 
+        double bomScalers[16];
         string getHostname() {return HOSTNAME;}
         int port;  /// should be gotten from the databses (not used at the moment)
         CrateMsgClient* crateMsgClient;

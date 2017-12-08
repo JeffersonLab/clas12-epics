@@ -10,7 +10,7 @@ LIB_SRCS += bom.cpp
 
 LIBRARY_Linux += bomDrv
 
-INC += common.h
+INC += bomCommon.h
 INC += bom.h
 
 #===========================

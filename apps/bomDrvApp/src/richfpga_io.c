@@ -10,6 +10,9 @@
 #include <arpa/inet.h> 
 #include "richfpga_io.h"
 
+//double bomScalers[16];
+//pthread_mutex_t bomScalersMutex;
+
 RICH_regs *pRICH_regs = (RICH_regs *)0x0;
 
 int sockfd_reg = 0;
@@ -419,7 +422,7 @@ void rich_print_dynregs(MAROC_DyRegs regs)
 
 void rich_init_dynregs(MAROC_DyRegs *regs)
 {
-	int i;
+	//int i;
 
 	memset(regs, 0, sizeof(MAROC_DyRegs));
 
@@ -436,12 +439,12 @@ float rich_print_scaler(char *name, unsigned int scaler, float ref)
   return rate;
 }
 
-void rich_dump_scalers()
+void rich_dump_scalers(double scalers[16])
 {
 	float ref, fval;
 	unsigned int val;
 	int i, j;
-	char buf[100];
+	//char buf[100];
 
 	/* halt scaler counting */
 	rich_write32(&pRICH_regs->Sd.ScalerLatch, 0x1);
@@ -475,11 +478,14 @@ void rich_dump_scalers()
 	rich_print_scaler("Busy", rich_read32(&pRICH_regs->Sd.Scaler_Busy), ref);
 	rich_print_scaler("BusyCycles", rich_read32(&pRICH_regs->Sd.Scaler_BusyCycles), ref);
 */
+
+  static const int bom_pmt2fpga_map[] = {31,33,27,37,23,41,19,45,15,49,11,53,7,57,3,61,35};
+/*
   for(j = 0; j < 64; j++)
 	{
 		printf("CH%2d", j);
 
-		for(i = 0; i < 3; i++)
+		for(i = 2; i < 3; i++)
 		{
 			val = rich_read32(&pRICH_regs->MAROC_Proc[i].Scalers[j]);
 			fval = (float)val / ref;
@@ -487,6 +493,16 @@ void rich_dump_scalers()
 		}
 		printf("\n");
 	}
+*/
+
+    for (int ii=0; ii<16; ii++) {
+        int k = bom_pmt2fpga_map[ii];
+		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
+        fval = (float)val / ref;
+        scalers[ii] = fval;
+        printf("%8.1f ", scalers[ii]);
+    }
+    printf("\n");
 
 	/* resets scalers */
 	rich_write32(&pRICH_regs->Sd.ScalerLatch, 0x2);
@@ -549,7 +565,7 @@ void rich_disable_all_tdc_channels()
 
 void rich_enable_tdc_channel(int ch)
 {
-	int i;
+	//int i;
 	int proc_idx, proc_reg, proc_bit;
 	int val;
 	
@@ -570,7 +586,7 @@ void rich_enable_tdc_channel(int ch)
 
 void rich_disable_tdc_channel(int ch)
 {
-	int i;
+	//int i;
 	int proc_idx, proc_reg, proc_bit;
 	int val;
 	
@@ -819,8 +835,8 @@ void SetupMAROC_ADC(unsigned char h1, unsigned char h2, int resolution, int maro
 
 int main2(int argc, char *argv[])
 {
-	int n, val = 0;
-	long long nevents, nbytes, dbytes;
+	//int n, val = 0;
+	//long long nevents, nbytes, dbytes;
 
 	open_register_socket();
 
@@ -863,9 +879,10 @@ int main2(int argc, char *argv[])
   
   rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
 
+    double scalers[16];
   while(1)
   {
-    rich_dump_scalers();
+    rich_dump_scalers(scalers);
     usleep(1000000);
   }
   

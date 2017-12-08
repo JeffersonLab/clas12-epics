@@ -7,6 +7,29 @@ ScalersSlowControl *scalersslowcontrol;
 extern "C" {
 #endif
 
+    int IocGetBomScalers(int crate, int slot, int channel, int command, double values[]){
+        fprintf(stderr,"Inside IocG3etBomScalersw- %d --------------\n",crate);
+        //if (scalersslowcontrol->vmecrates.count(crate)<=0) return 1;
+        pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        fprintf(stderr,"---------------%d\b",channel);
+        values[0]=(scalersslowcontrol->vmecrates[crate])->bomScalers[channel];
+        pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        return 0;
+    }
+
+#ifdef __cplusplus
+}
+#endif
+
+
+
+
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
     int IocSetValue(int crate, int slot, int channel, int command, double values[]){
         if(scalersslowcontrol->vmecrates.count(crate)<=0) return 1;
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));

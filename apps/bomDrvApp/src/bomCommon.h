@@ -1,5 +1,5 @@
-#ifndef JSCALERS_COMMON_DOT_H
-#define JSCALERS_COMMON_DOT_H
+#ifndef BOM_COMMON_DOT_H
+#define BOM_COMMON_DOT_H
 
 #define SCALERS_READ_INTERVAL 1
 
@@ -35,6 +35,7 @@ enum{SCALER_GROUP_1,SCALER_GROUP_2};
 #ifdef __cplusplus
 extern "C" {
 #endif
+int IocGetBomScalers(int crate, int slot, int channel, int command, double values[]);
 int IocGetValue(int crate, int slot, int channel, int command, double values[]);
 int IocSetValue(int crate, int slot, int channel, int command, double values[]);
 void IocReadWaveform(int crate, int slot, int channel, int len, double values[]);

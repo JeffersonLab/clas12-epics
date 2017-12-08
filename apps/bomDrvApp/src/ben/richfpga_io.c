@@ -475,6 +475,7 @@ void rich_dump_scalers()
 	rich_print_scaler("Busy", rich_read32(&pRICH_regs->Sd.Scaler_Busy), ref);
 	rich_print_scaler("BusyCycles", rich_read32(&pRICH_regs->Sd.Scaler_BusyCycles), ref);
 */
+    /*
   for(j = 0; j < 64; j++)
 	{
 		printf("CH%2d", j);
@@ -487,6 +488,17 @@ void rich_dump_scalers()
 		}
 		printf("\n");
 	}
+    */
+   
+    char doggy[100];;
+    static const int bom_pmt2fpga_map[] = {31,33,27,37,23,41,19,45,15,49,11,53,7,57,3,61,35};
+    for (j=0;j<16;j++) {
+        int k = bom_pmt2fpga_map[j];
+		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
+        fval = (float)val / ref;
+        sprintf(doggy,"caput bom_sc_ai_%d %f >& /dev/null",j,fval);
+        system(doggy);
+    }
 
 	/* resets scalers */
 	rich_write32(&pRICH_regs->Sd.ScalerLatch, 0x2);

@@ -1,5 +1,5 @@
 #!../../bin/linux-x86_64/amq
-#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Wed Dec  6 16:07:21 EST 2017
+#This file was created by using the command "awk -f makeIocs.gk clasrun.clasprod.daq.HallB_DAQ.dat" on Wed Dec  6 17:35:35 EST 2017
 
 < envPaths
 
@@ -10,7 +10,7 @@ dbLoadDatabase "dbd/amq.dbd"
 amq_registerRecordDeviceDriver pdbbase
 
 #
-ConnectMQ("tcp://clondb1:61616","clasrun.clasprod.daq.HallB_DAQ")
+ConnectMQ("tcp://clon00:61616","clasrun.clasprod.daq.HallB_DAQ")
 
 ## Load record instances
 
@@ -34,32 +34,33 @@ ConnectMQ("tcp://clondb1:61616","clasrun.clasprod.daq.HallB_DAQ")
 #K = json key
 #N = No of elements in the array, if required
 
-dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_RAWMSG,K=RAWMSG,N=200,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
-dbLoadRecords("db/amqInt.db","P=B_HallB_DAQ_LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqDouble.db","P=B_HallB_DAQ_EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqFloatArray.db","P=B_HallB_DAQ_TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqStringArray.db","P=B_HallB_DAQ_NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
-dbLoadRecords("db/amqIntArray.db","P=B_HallB_DAQ_FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterPosition,K=FTClusterPosition,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterEnergy,K=FTClusterEnergy,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterNHits,K=FTClusterNHits,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterPositionHodo,K=FTClusterPositionHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterEnergyHodo,K=FTClusterEnergyHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_FTClusterNHitsHodo,K=FTClusterNHitsHodo,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_trig2vtp_VTPGT_TRIGGERBITS,K=trig2vtp_VTPGT_TRIGGERBITS,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal1vtp_VTPECS_CLUSTERS,K=adcecal1vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal2vtp_VTPECS_CLUSTERS,K=adcecal2vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal3vtp_VTPECS_CLUSTERS,K=adcecal3vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal4vtp_VTPECS_CLUSTERS,K=adcecal4vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal5vtp_VTPECS_CLUSTERS,K=adcecal5vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcecal6vtp_VTPECS_CLUSTERS,K=adcecal6vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal1vtp_VTPPCS_CLUSTERS,K=adcpcal1vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal2vtp_VTPPCS_CLUSTERS,K=adcpcal2vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal3vtp_VTPPCS_CLUSTERS,K=adcpcal3vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal4vtp_VTPPCS_CLUSTERS,K=adcpcal4vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal5vtp_VTPPCS_CLUSTERS,K=adcpcal5vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
-dbLoadRecords("db/amqDoubleArray.db","P=B_HallB_DAQ_adcpcal6vtp_VTPPCS_CLUSTERS,K=adcpcal6vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqStringArray.db","P=B_DAQ:RAWMSG,K=RAWMSG,N=1000,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
+dbLoadRecords("db/amqInt.db","P=B_DAQ:LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqDouble.db","P=B_DAQ:EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqIntArray.db","P=B_DAQ:TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqStringArray.db","P=B_DAQ:NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
+dbLoadRecords("db/amqHistogram.db","P=B_DAQ:TestHist,K=TestHist,N=100,NE=101,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqIntArray.db","P=B_DAQ:FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterPosition,K=FTClusterPosition,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterEnergy,K=FTClusterEnergy,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterNHits,K=FTClusterNHits,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterPositionHodo,K=FTClusterPositionHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterEnergyHodo,K=FTClusterEnergyHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterNHitsHodo,K=FTClusterNHitsHodo,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:trig2vtp_VTPGT_TRIGGERBITS,K=trig2vtp_VTPGT_TRIGGERBITS,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal1vtp_VTPECS_CLUSTERS,K=adcecal1vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal2vtp_VTPECS_CLUSTERS,K=adcecal2vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal3vtp_VTPECS_CLUSTERS,K=adcecal3vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal4vtp_VTPECS_CLUSTERS,K=adcecal4vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal5vtp_VTPECS_CLUSTERS,K=adcecal5vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal6vtp_VTPECS_CLUSTERS,K=adcecal6vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal1vtp_VTPPCS_CLUSTERS,K=adcpcal1vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal2vtp_VTPPCS_CLUSTERS,K=adcpcal2vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal3vtp_VTPPCS_CLUSTERS,K=adcpcal3vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal4vtp_VTPPCS_CLUSTERS,K=adcpcal4vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal5vtp_VTPPCS_CLUSTERS,K=adcpcal5vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal6vtp_VTPPCS_CLUSTERS,K=adcpcal6vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 

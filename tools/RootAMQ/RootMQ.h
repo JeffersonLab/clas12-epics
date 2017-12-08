@@ -13,6 +13,7 @@ class RootMQ {
   void jAddInt(char *jstring, const char *name, int data, const char *format="%d");
   void jAddDouble(char *jstring,  const char *name, double data, const char *format="%le");
   void jAddString(char *jstring,  const char *name, char *data);
+  void jAddJson(char *jstring,  const char *name, char *data);
   void jAddIntArray(char *jstring,  const char *name, int *data, int len, const char *format="%d");
   void jAddDoubleArray(char *jstring,  const char *name, double *data, int len, const char *format="%le");
   void jAddStringArray(char *jstring,  const char *name, char **data, int len);

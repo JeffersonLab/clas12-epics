@@ -175,6 +175,10 @@ void RootMQ::jAddString(char *jstring, const char *name, char *data){
   if(strlen(jstring)>2) strcat(jstring,",");
   sprintf(jstring+strlen(jstring),"\"%s\":\"%s\"",name,data);
 }
+void RootMQ::jAddJson(char *jstring, const char *name, char *data){
+  if(strlen(jstring)>2) strcat(jstring,",");
+  sprintf(jstring+strlen(jstring),"\"%s\":%s",name,data);
+}
 
 void RootMQ::jAddIntArray(char *jstring, const char *name, int *data, int len, const char *format){
   if(strlen(jstring)>2) strcat(jstring,", ");

@@ -59,11 +59,11 @@
 
 #include "amqSupport.h"
 extern "C" void addPV(void * addr, int type, char *key);
-void json_epics(json_object *jtop);
+void json_epics(json_object *jtop, int isdeep);
 void json_read_array( json_object *jobj, int indx );
 void json_read_value( json_object *jobj, int indx );
 
-void json_parse_array( json_object *jobj, char *key);
+//void json_parse_array( json_object *jobj, char *key);
 void print_json_value(json_object *jobj);
 
 
@@ -83,7 +83,7 @@ Thread *consumerThread;        //The main thread
 #define MAXPV 100              //Maximum number of PVs
 
 static waveformRecord* rawmessage = NULL; //if we want to store the raw mwssage in a char waveform
-//static char *jsonKeys[MAXPV];             //json keys for all PVs
+static char *jsonKeyFull[MAXPV];          //json keys for all full names
 static char *jsonKeyParts[MAXPV][10];     //parts (delimited with _) XXX_YYY##3_ZZZ_KEY
 static int   jsonKeyNparts[MAXPV];        //nparts
 static int   jsonKeyIndices[MAXPV][10];   //incices for array parts
@@ -194,6 +194,7 @@ public:
     static int count = 0;
     rset* prset;
     uint copy=0;
+    int isdeep=0;
     try {
       count++;
       const TextMessage* textMessage = dynamic_cast<const TextMessage*>(message);
@@ -224,7 +225,10 @@ public:
 	//text.append(1, '}');
 	jobj = json_tokener_parse(text.c_str());
 	if(jobj!=NULL){
-	  json_epics(jobj);
+	  if(strchr(text.c_str()+1,'{')){  //if there's another "{" after the start, it has some nesting.
+	    isdeep=1;
+	  }
+	  json_epics(jobj,isdeep);
 	}
 	else{ 
 	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
@@ -350,7 +354,10 @@ void addPV(void *addr, int type, char* key){
   }    
 
   pvstructs[npv] = addr;                           //save address as a void
-
+  
+  jsonKeyFull[npv] = new char[strlen(key)+1];      //save the full name
+  strcpy(jsonKeyFull[npv],key);
+  
   //The key will be specified like this  AAA_BBB_CCC##3_DDD_THING (hopeully simpler)
   //                                     obj obj arr[3] obj item
 
@@ -422,7 +429,7 @@ void json_read_value(json_object *jobj, int indx ){
   enum json_type type = json_object_get_type(jobj); /*Getting the type of the json object*/
   double aival=0.0;
 
-  //  printf("Trying to write %s %d %d %d %d\n",key,type, json_type_boolean,json_type_double, json_type_int );
+  //printf("Trying to write %s %d %d %d %d\n",key,type, json_type_boolean,json_type_double, json_type_int );
 
   switch (type) {
   case json_type_boolean:
@@ -601,7 +608,7 @@ void json_read_array( json_object *jobj, int indx) {   //got here because it's a
 }
 
 
-void json_epics(json_object *jtop){ 
+void json_epics(json_object *jtop, int isdeep){ 
 
         
   //Need to decode something like this: AAA_BBB_CCC##3_DDD_THING
@@ -613,33 +620,10 @@ void json_epics(json_object *jtop){
   
   
   for(int n=0;n<npv;n++){                  //check all the keys which are for EPICS PVs
-    jobj=jtop;                             //point to the top level jobj
-    for(int p=0;p<jsonKeyNparts[n];p++){   //go over all the parts
-      printf("looking for %s\n",jsonKeyParts[n][p]);
-      if(!json_object_object_get_ex(jobj,jsonKeyParts[n][p],&value)) break;  //break if key not found
-      printf("found %s\n",jsonKeyParts[n][p]);
-      type = json_object_get_type(value);
-      if(p<jsonKeyNparts[n]-1){             //must be a jobj or array#index, since before the _THING part
-	if(type == json_type_object){
-	  jobj=value;
-	  continue;                         //make this the jobs for the next item
-	}
-	else if((type == json_type_array)&&(jsonKeyIndices[n][p]>-1)){    //array with index
-	  value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
-	  type = json_object_get_type(value);
-	  if(type != json_type_object)break;
-	  jobj=value;
-	  continue;                         //make this the jobs for the next item
-	}
-	else break;                         //not found, break
-      }
-      
-      else{                                 // at the _THING part - its an actual value
-	
-	if(jsonKeyIndices[n][p]>-1){
-	  value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
-	  type = json_object_get_type(value);
-	}
+
+    if(isdeep==0){                         //no nesting all at top level in json string
+      if(json_object_object_get_ex(jtop,jsonKeyFull[n],&value)){ //So look for full key
+	type = json_object_get_type(value);
 	switch (type){
 	case json_type_boolean:
 	case json_type_double:
@@ -655,27 +639,72 @@ void json_epics(json_object *jtop){
 	}
       }
     }
+
+    else{                                    //some depth - so interpret the nesting from the name       
+      jobj=jtop;                             //point to the top level jobj
+      for(int p=0;p<jsonKeyNparts[n];p++){   //go over all the parts
+	//printf("looking for %s\n",jsonKeyParts[n][p]);
+	if(!json_object_object_get_ex(jobj,jsonKeyParts[n][p],&value)) break;  //break if key not found
+	//printf("found %s\n",jsonKeyParts[n][p]);
+	type = json_object_get_type(value);
+	if(p<jsonKeyNparts[n]-1){             //must be a jobj or array#index, since before the _THING part
+	  if(type == json_type_object){
+	    jobj=value;
+	    continue;                         //make this the jobs for the next item
+	  }
+	  else if((type == json_type_array)&&(jsonKeyIndices[n][p]>-1)){    //array with index
+	    value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
+	    type = json_object_get_type(value);
+	    if(type != json_type_object)break;
+	    jobj=value;
+	    continue;                         //make this the jobs for the next item
+	  }
+	  else break;                         //not found, break
+	}
+	
+	else{                                 // at the _THING part - its an actual value
+	
+	  if(jsonKeyIndices[n][p]>-1){
+	    value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
+	    type = json_object_get_type(value);
+	  }
+	  switch (type){
+	  case json_type_boolean:
+	  case json_type_double:
+	  case json_type_int:
+	  case json_type_string:
+	    json_read_value(value,n);
+	    break;
+	  case json_type_array:
+	    json_read_array(value,n);
+	    break;
+	  default:
+	    break;
+	  }
+	}
+      }
+    }
   }
   json_object_put(jtop);
 }
   
-void json_parse_array( json_object *jobj, char *key) {
-  enum json_type type;
-  json_object *jarray = jobj; /*Simply get the array*/
+// void json_parse_array( json_object *jobj, char *key) {
+//   enum json_type type;
+//   json_object *jarray = jobj; /*Simply get the array*/
   
-  int arraylen = json_object_array_length(jarray); /*Getting the length of the array*/
-  //printf("Array Length: %dn",arraylen);
-  int i;
-  json_object * jvalue;
+//   int arraylen = json_object_array_length(jarray); /*Getting the length of the array*/
+//   //printf("Array Length: %dn",arraylen);
+//   int i;
+//   json_object * jvalue;
   
-  for (i=0; i< arraylen; i++){
-    jvalue = json_object_array_get_idx(jarray, i); /*Getting the array element at position i*/
-    type = json_object_get_type(jvalue);
-    if (type == json_type_array) {
-      json_parse_array(jvalue,key);
-    }
-    if (type == json_type_object) {
-      json_epics(jvalue);
-    }
-  }
-}
+//   for (i=0; i< arraylen; i++){
+//     jvalue = json_object_array_get_idx(jarray, i); /*Getting the array element at position i*/
+//     type = json_object_get_type(jvalue);
+//     if (type == json_type_array) {
+//       json_parse_array(jvalue,key);
+//     }
+//     if (type == json_type_object) {
+//       json_epics(jvalue);
+//     }
+//   }
+// }

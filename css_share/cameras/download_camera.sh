@@ -1,7 +1,12 @@
 #!/bin/bash
 
 host=$1
-cd /usr/clas12/DATA/cameras
+
+camdir=/usr/clas12/DATA/cameras
+#camdir=/tmp/cameras
+mkdir -p $camdir
+cd $camdir
+
 
 ip=`host $host | awk '{print$4}'`
 

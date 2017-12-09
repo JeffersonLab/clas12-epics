@@ -79,6 +79,15 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
+elif [[ $1 == "C" ]]
+then
+    dgsReboot adcft1
+    dgsReboot adcft2
+    dgsReboot adcctof1
+    dgsReboot adccnd1
+    sleep 2
+    softioc_console -R iocjscalersC
+
 elif [[ $1 == "ft" ]]
 then
     dgsReboot adcft1

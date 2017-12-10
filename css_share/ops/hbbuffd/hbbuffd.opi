@@ -372,58 +372,6 @@ $(pv_value)</tooltip>
       <color red="127" green="127" blue="127" />
     </line_color>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-    <border_style>0</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <precision>0</precision>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>4036bd2a:155ccba48bf:-7d9d</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <auto_size>false</auto_size>
-    <text>##.###</text>
-    <rotation_angle>0.0</rotation_angle>
-    <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>true</show_units>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name>ESR_OUTAGE_STATE</pv_name>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <precision_from_pv>true</precision_from_pv>
-    <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <wrap_words>false</wrap_words>
-    <format_type>0</format_type>
-    <background_color>
-      <color name="Read_Background" red="77" green="77" blue="77" />
-    </background_color>
-    <width>243</width>
-    <x>11</x>
-    <name>Text Update</name>
-    <y>49</y>
-    <foreground_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.polyline" version="1.0.0">
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -10745,7 +10693,17 @@ $(pv_value)</tooltip>
     <widget_type>Tank</widget_type>
     <name>Tank</name>
     <show_hi>true</show_hi>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>../../alarms/aiaocalc_alarm_set.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <sig>LL8210</sig>
+        </macros>
+        <replace>0</replace>
+        <description>LL8210 Alarm Settings</description>
+      </action>
+    </actions>
     <show_lo>true</show_lo>
     <border_style>0</border_style>
     <show_lolo>true</show_lolo>
@@ -11269,6 +11227,18 @@ $(pv_value)</tooltip>
         </macros>
         <replace>0</replace>
         <description>JT Valve Expert</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py det=BUFFERDEWAR save</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Save Settings</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py det=BUFFERDEWAR restore</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Restore Settings</description>
       </action>
     </actions>
     <font>

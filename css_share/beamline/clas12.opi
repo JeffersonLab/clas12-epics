@@ -10459,7 +10459,7 @@ $(pv_value)</tooltip>
       <border_style>0</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
       <alarm_pulsing>true</alarm_pulsing>
-      <precision>0</precision>
+      <precision>2</precision>
       <tooltip>$(pv_name)
 $(pv_value)</tooltip>
       <horizontal_alignment>1</horizontal_alignment>
@@ -10482,12 +10482,12 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_FCUP_OVER_SLM</pv_name>
+      <pv_name>slm_fcup_ratio</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
-      <precision_from_pv>true</precision_from_pv>
+      <precision_from_pv>false</precision_from_pv>
       <widget_type>Text Update</widget_type>
       <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
       <wrap_words>false</wrap_words>
@@ -10552,7 +10552,7 @@ $(pv_value)</tooltip>
       <border_style>0</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
       <alarm_pulsing>true</alarm_pulsing>
-      <precision>0</precision>
+      <precision>2</precision>
       <tooltip>$(pv_name)
 $(pv_value)</tooltip>
       <horizontal_alignment>1</horizontal_alignment>
@@ -10580,7 +10580,7 @@ $(pv_value)</tooltip>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
-      <precision_from_pv>true</precision_from_pv>
+      <precision_from_pv>false</precision_from_pv>
       <widget_type>Text Update</widget_type>
       <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
       <wrap_words>false</wrap_words>
@@ -13291,6 +13291,58 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <precision>2</precision>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <horizontal_alignment>1</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-49eb3afd:16038f504e0:-2f98</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <auto_size>false</auto_size>
+      <text>N/A</text>
+      <rotation_angle>0.0</rotation_angle>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <show_units>false</show_units>
+      <height>17</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <precision_from_pv>false</precision_from_pv>
+      <widget_type>Text Update</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <wrap_words>false</wrap_words>
+      <format_type>1</format_type>
+      <background_color>
+        <color red="246" green="213" blue="155" />
+      </background_color>
+      <width>144</width>
+      <x>140</x>
+      <name>Text Update_150</name>
+      <y>90</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <fontdata fontName="Sans" height="11" style="0" />
+      </font>
+    </widget>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>0</border_style>
@@ -14473,7 +14525,7 @@ $(pv_value)</tooltip>
       <tooltip></tooltip>
       <horizontal_alignment>1</horizontal_alignment>
       <rules>
-        <rule name="Rule" prop_id="text" out_exp="false">
+        <rule name="Text" prop_id="text" out_exp="false">
           <exp bool_exp="pv0==1">
             <value>ON</value>
           </exp>
@@ -14482,7 +14534,7 @@ $(pv_value)</tooltip>
           </exp>
           <pv trig="true">HallBOrb:Onoff</pv>
         </rule>
-        <rule name="Rule" prop_id="background_color" out_exp="false">
+        <rule name="Background Color" prop_id="background_color" out_exp="false">
           <exp bool_exp="pv0==1">
             <value>
               <color name="On" red="0" green="255" blue="0" />
@@ -14491,6 +14543,19 @@ $(pv_value)</tooltip>
           <exp bool_exp="true">
             <value>
               <color name="Major" red="255" green="0" blue="0" />
+            </value>
+          </exp>
+          <pv trig="true">HallBOrb:Onoff</pv>
+        </rule>
+        <rule name="Foreground Color" prop_id="foreground_color" out_exp="false">
+          <exp bool_exp="pv0==1">
+            <value>
+              <color name="Write_Foreground" red="0" green="0" blue="0" />
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color name="Read_Foreground" red="255" green="255" blue="255" />
             </value>
           </exp>
           <pv trig="true">HallBOrb:Onoff</pv>
@@ -14582,7 +14647,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>237</height>
+    <height>254</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -14594,7 +14659,7 @@ $(pv_value)</tooltip>
     </macros>
     <visible>true</visible>
     <border_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color red="191" green="191" blue="191" />
     </border_color>
     <widget_type>Grouping Container</widget_type>
     <background_color>
@@ -14632,7 +14697,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14656,7 +14721,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>127</x>
       <name>Text Update_121</name>
-      <y>178</y>
+      <y>177</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14684,7 +14749,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14708,7 +14773,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>127</x>
       <name>Text Update_151</name>
-      <y>11</y>
+      <y>10</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14736,7 +14801,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14760,7 +14825,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>53</x>
       <name>Text Update_123</name>
-      <y>11</y>
+      <y>10</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14788,7 +14853,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14812,7 +14877,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>33</x>
       <name>Text Update_124</name>
-      <y>34</y>
+      <y>33</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14840,7 +14905,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14864,7 +14929,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>145</x>
       <name>Text Update_125</name>
-      <y>34</y>
+      <y>33</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14892,7 +14957,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14916,7 +14981,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>17</x>
       <name>Text Update_126</name>
-      <y>59</y>
+      <y>58</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14944,7 +15009,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -14968,7 +15033,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>160</x>
       <name>Text Update_127</name>
-      <y>59</y>
+      <y>58</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -14996,7 +15061,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15020,7 +15085,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>-1</x>
       <name>Text Update_128</name>
-      <y>82</y>
+      <y>81</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15048,7 +15113,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15072,7 +15137,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>177</x>
       <name>Text Update_158</name>
-      <y>82</y>
+      <y>81</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15100,7 +15165,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15124,7 +15189,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>-1</x>
       <name>Text Update_130</name>
-      <y>105</y>
+      <y>104</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15152,7 +15217,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15176,7 +15241,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>177</x>
       <name>Text Update_160</name>
-      <y>105</y>
+      <y>104</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15204,7 +15269,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15228,7 +15293,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>17</x>
       <name>Text Update_161</name>
-      <y>130</y>
+      <y>129</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15256,7 +15321,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15280,7 +15345,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>160</x>
       <name>Text Update_133</name>
-      <y>130</y>
+      <y>129</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15308,7 +15373,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15332,7 +15397,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>33</x>
       <name>Text Update_163</name>
-      <y>154</y>
+      <y>153</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15360,7 +15425,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15384,7 +15449,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>145</x>
       <name>Text Update_135</name>
-      <y>154</y>
+      <y>153</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15412,7 +15477,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15436,7 +15501,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>53</x>
       <name>Text Update_136</name>
-      <y>178</y>
+      <y>177</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15464,7 +15529,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>false</show_units>
-      <height>18</height>
+      <height>17</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15488,7 +15553,7 @@ $(pv_value)</tooltip>
       <width>71</width>
       <x>89</x>
       <name>Text Update_166</name>
-      <y>95</y>
+      <y>94</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -15508,7 +15573,7 @@ $(pv_value)</tooltip>
       <auto_size>false</auto_size>
       <text>Sum</text>
       <scripts />
-      <height>32</height>
+      <height>31</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -15528,12 +15593,108 @@ $(pv_value)</tooltip>
       <width>76</width>
       <x>87</x>
       <name>Label_1</name>
-      <y>106</y>
+      <y>105</y>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
       <actions hook="false" hook_all="false" />
       <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.polyline" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <line_width>1</line_width>
+      <horizontal_fill>true</horizontal_fill>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <arrows>2</arrows>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-5d954970:1603d0663fe:-7a10</wuid>
+      <transparent>false</transparent>
+      <points>
+        <point x="68" y="202" />
+        <point x="190" y="202" />
+      </points>
+      <fill_arrow>true</fill_arrow>
+      <pv_value />
+      <alpha>255</alpha>
+      <rotation_angle>0.0</rotation_angle>
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>1</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <anti_alias>true</anti_alias>
+      <line_style>0</line_style>
+      <arrow_length>20</arrow_length>
+      <widget_type>Polyline</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="191" green="191" blue="191" />
+      </background_color>
+      <width>123</width>
+      <x>68</x>
+      <name>Polyline</name>
+      <y>202</y>
+      <fill_level>0.0</fill_level>
+      <foreground_color>
+        <color red="191" green="191" blue="191" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+      <border_style>0</border_style>
+      <tooltip></tooltip>
+      <horizontal_alignment>1</horizontal_alignment>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-5d954970:1603d0663fe:-79fc</wuid>
+      <transparent>true</transparent>
+      <auto_size>false</auto_size>
+      <text>Beam Right</text>
+      <scripts />
+      <height>19</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Label</widget_type>
+      <wrap_words>false</wrap_words>
+      <background_color>
+        <color red="127" green="127" blue="127" />
+      </background_color>
+      <width>123</width>
+      <x>67</x>
+      <name>Label_1</name>
+      <y>204</y>
+      <foreground_color>
+        <color red="191" green="191" blue="191" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>

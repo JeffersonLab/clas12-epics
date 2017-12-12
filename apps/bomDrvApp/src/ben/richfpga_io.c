@@ -293,14 +293,16 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		
 		if(!(i & 0x1))
 		{
-			regs->CH[i>>1].bits.Gain0 = 64; /* Gain 64 = unity */
+			//regs->CH[i>>1].bits.Gain0 = 64; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain0 = 16; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum0 = 0;
 			regs->CH[i>>1].bits.CTest0 = ctest;
 			regs->CH[i>>1].bits.MaskOr0 = 0;
 		}
 		else
 		{
-			regs->CH[i>>1].bits.Gain1 = 64; /* Gain 64 = unity */
+			//regs->CH[i>>1].bits.Gain1 = 64; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain1 = 16; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum1 = 0;
 			regs->CH[i>>1].bits.CTest1 = ctest;
 			regs->CH[i>>1].bits.MaskOr1 = 0;
@@ -456,7 +458,7 @@ void rich_dump_scalers()
 	ref = (float)val / 125.0E6;
 
 	/* read scalers */
-  /*
+
 	rich_print_scaler("GClk125", rich_read32(&pRICH_regs->Sd.Scaler_GClk125), ref);
 	rich_print_scaler("Sync", rich_read32(&pRICH_regs->Sd.Scaler_Sync), ref);
 	rich_print_scaler("Trig", rich_read32(&pRICH_regs->Sd.Scaler_Trig), ref);
@@ -474,7 +476,7 @@ void rich_dump_scalers()
 	rich_print_scaler("Or1_3", rich_read32(&pRICH_regs->Sd.Scaler_Or1[2]), ref);
 	rich_print_scaler("Busy", rich_read32(&pRICH_regs->Sd.Scaler_Busy), ref);
 	rich_print_scaler("BusyCycles", rich_read32(&pRICH_regs->Sd.Scaler_BusyCycles), ref);
-*/
+
     /*
   for(j = 0; j < 64; j++)
 	{
@@ -496,6 +498,7 @@ void rich_dump_scalers()
         int k = bom_pmt2fpga_map[j];
 		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
         fval = (float)val / ref;
+        printf("bom_sc_ai_%d:  ref=%f raw=%d  hz=%f\n",j,ref,val,fval);
         sprintf(doggy,"caput bom_sc_ai_%d %f >& /dev/null",j,fval);
         system(doggy);
     }

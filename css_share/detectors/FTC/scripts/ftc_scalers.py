@@ -602,10 +602,15 @@ def main():
               loadPV(ch)
               ch=ch.vals
               xx,yy=ch['X'],ch['Y']
-              if xx<0: xx+=1
-              if yy<0: yy+=1
+              #if (ch['PVVAL']>10):
+               # print xx,yy,ch['PVVAL']
+
               # swap x to make it downstream view:
               xx=-xx
+
+              #after, fix the fact x=0 / y=0 don't exists
+              if xx<0: xx+=1
+              if yy<0: yy+=1
               hh.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
               hi.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
 

@@ -24,6 +24,9 @@ echo $infile
 com="${1}:SET_DRIVER_STATUS ON"
 caput $com;
 
+echo "Waiting 5s for the drivers to turn on"
+sleep 5;
+
 #stop updating  readback until done
 com="${1}:GET_AMP_ALL.DISV 0"
 caput $com;
@@ -34,7 +37,7 @@ gawk -v pv=$dataChan 'BEGIN{n=0;e=1}\
           for(n=0;n<=tot;n++){\
              if(id[n]<232){\
                  #out=sprintf("sleep 0.2;caput -t  %s_ID%03d:AMPSET %d",pv,id[n],amp[n]);\
-                 out=sprintf("caput -t  %s_ID%03d:AMPSET %d",pv,id[n],amp[n]);\
+                 out=sprintf("sleep 0.2;caput -t  %s_ID%03d:AMPSET %d",pv,id[n],amp[n]);\
                  system(out);\
                  print out;\
              }\

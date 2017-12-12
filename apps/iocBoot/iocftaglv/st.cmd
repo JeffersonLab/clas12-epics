@@ -30,6 +30,7 @@ dbLoadTemplate("db/fttrklv.substitutions")
 
 dbLoadRecords("db/fttlvOnOff.db")
 dbLoadRecords("db/fthlvOnOff.db")
+dbLoadRecords("db/rebootDivider.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 

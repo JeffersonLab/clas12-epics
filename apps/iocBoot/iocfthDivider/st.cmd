@@ -26,12 +26,11 @@ drvAsynIPPortConfigure("L1","ftvdivider:9764",0,0,0)
 #dbLoadRecords("db/xxx.db","user=klivHost")
 
 ## Load record instances
-dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/fthDivider.db","P=B_DET_FTH_DIVIDER,R=:asyn,PORT=L1,NCHAN=240");
 dbLoadTemplate("db/fthDividerChan.substitutions")
 dbLoadTemplate("db/fthDividerBoard.substitutions")
 
-dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 
 cd "${TOP}/iocBoot/${IOC}"
 #dbLoadRecords("test.db")

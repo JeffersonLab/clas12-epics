@@ -294,7 +294,7 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		if(!(i & 0x1))
 		{
 			//regs->CH[i>>1].bits.Gain0 = 64; /* Gain 64 = unity */
-			regs->CH[i>>1].bits.Gain0 = 16; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain0 = 56; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum0 = 0;
 			regs->CH[i>>1].bits.CTest0 = ctest;
 			regs->CH[i>>1].bits.MaskOr0 = 0;
@@ -302,7 +302,7 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		else
 		{
 			//regs->CH[i>>1].bits.Gain1 = 64; /* Gain 64 = unity */
-			regs->CH[i>>1].bits.Gain1 = 16; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain1 = 56; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum1 = 0;
 			regs->CH[i>>1].bits.CTest1 = ctest;
 			regs->CH[i>>1].bits.MaskOr1 = 0;

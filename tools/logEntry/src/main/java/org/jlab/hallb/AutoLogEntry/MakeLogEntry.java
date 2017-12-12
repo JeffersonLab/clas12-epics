@@ -199,6 +199,7 @@ public class MakeLogEntry
       if (DEBUG) System.out.println(imgPath);
       if (winId==null) 
       {
+        System.err.println("Running import ...");
         String[] cmd={"import",imgPath};
         Runtime.getRuntime().exec(cmd);
       }
@@ -221,29 +222,30 @@ public class MakeLogEntry
     try {
       int count=0;
       boolean goodFile=false;
-      for (count=0; count<50; count++) {
+      for (count=0; count<100; count++) {
         file=new File(filename);
         if (file.isFile()) { goodFile=true; break; }
         sleep(200);
       }
       if (!goodFile) 
       {
-        System.err.println("File DNE:  "+filename);
-        updateStatusPane("Error Displaying Screenshot.  Try Again.",Color.RED);
+        //System.err.println("File DNE:  "+filename);
+        updateStatusPane("Error Displaying Screenshot (1).  Try Again.",Color.RED);
         return null;
       }
-      if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT1:  "+count);
+      //if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT1:  "+count);
+    updateStatusPane("Reading Screenshot ...",Color.BLACK);
       sleep(500);
-      for (count=0; count<50; count++) {
+      for (count=0; count<200; count++) {
         imbuff=ImageIO.read(file);
         if (imbuff==null) sleep(200);
         else break;
       }
-      if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT2:  "+count);
+//      if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT2:  "+count);
       if (imbuff==null) 
       {
-        System.err.println("Error Displaying Screenshot.");
-        updateStatusPane("Error Displaying Screenshot.  Try Again.",Color.RED);
+        //System.err.println("Error Displaying Screenshot.");
+        updateStatusPane("Error Displaying Screenshot (2).  Try Again.",Color.RED);
       }
     }
     catch (IOException e) { e.printStackTrace(); }

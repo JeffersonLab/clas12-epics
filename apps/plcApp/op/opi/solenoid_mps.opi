@@ -142,18 +142,18 @@ for(var index = 0; index<24; index++){
     </foreground_color>
     <actions hook="false" hook_all="true">
       <action type="WRITE_PV">
+        <pv_name>B_SOL:DAQ_REC:ctrl:daq_state</pv_name>
+        <value>0</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Start DAQ recording</description>
+      </action>
+      <action type="WRITE_PV">
         <pv_name>$(pv_name)</pv_name>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description></description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_SOL:DAQ_REC:ctrl:daq_state</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>Start DAQ recording</description>
       </action>
     </actions>
     <show_boolean_label>true</show_boolean_label>
@@ -161,100 +161,6 @@ for(var index = 0; index<24; index++){
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>
     <off_label>Turn ON MPS</off_label>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
-    <toggle_button>true</toggle_button>
-    <border_style>14</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>MPS Power Switch</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules>
-      <rule name="visible" prop_id="visible" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>false</value>
-        </exp>
-        <exp bool_exp="pv0==0">
-          <value>true</value>
-        </exp>
-        <pv trig="true">$(P)Status.B0</pv>
-      </rule>
-      <rule name="disable" prop_id="enabled" out_exp="false">
-        <exp bool_exp="pv0==1">
-          <value>false</value>
-        </exp>
-        <exp bool_exp="pv0==0">
-          <value>true</value>
-        </exp>
-        <pv trig="true">$(P)Status.B0</pv>
-      </rule>
-    </rules>
-    <effect_3d>true</effect_3d>
-    <bit>-1</bit>
-    <enabled>true</enabled>
-    <wuid>-4a8d93c0:15366ed2389:-7285</wuid>
-    <on_color>
-      <color red="0" green="255" blue="0" />
-    </on_color>
-    <show_confirm_dialog>1</show_confirm_dialog>
-    <password></password>
-    <pv_value />
-    <released_action_index>0</released_action_index>
-    <square_button>true</square_button>
-    <show_led>false</show_led>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>30</height>
-    <on_label>Turning OFF</on_label>
-    <border_width>2</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>true</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name>$(P)OnOffSet</pv_name>
-    <border_color>
-      <color red="120" green="120" blue="120" />
-    </border_color>
-    <widget_type>Boolean Button</widget_type>
-    <off_color>
-      <color red="0" green="100" blue="0" />
-    </off_color>
-    <confirm_message>Are your sure you want to do this?</confirm_message>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="Button" red="240" green="240" blue="240" />
-    </background_color>
-    <width>180</width>
-    <x>50</x>
-    <name>MPS Power OFF_1</name>
-    <data_type>0</data_type>
-    <y>46</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="true">
-      <action type="WRITE_PV">
-        <pv_name>$(pv_name)</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description></description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_SOL:DAQ_REC:ctrl:daq_state</pv_name>
-        <value>0</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>Stop DAQ recording</description>
-      </action>
-    </actions>
-    <show_boolean_label>true</show_boolean_label>
-    <font>
-      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
-    </font>
-    <off_label>Turn OFF MPS</off_label>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>14</border_style>
@@ -2821,5 +2727,99 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
     </font>
     <off_label>OFF</off_label>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
+    <toggle_button>true</toggle_button>
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>MPS Power Switch</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules>
+      <rule name="visible" prop_id="visible" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+      <rule name="disable" prop_id="enabled" out_exp="false">
+        <exp bool_exp="pv0==1">
+          <value>false</value>
+        </exp>
+        <exp bool_exp="pv0==0">
+          <value>true</value>
+        </exp>
+        <pv trig="true">$(P)Status.B0</pv>
+      </rule>
+    </rules>
+    <effect_3d>true</effect_3d>
+    <bit>-1</bit>
+    <enabled>true</enabled>
+    <wuid>-4a8d93c0:15366ed2389:-7285</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <show_confirm_dialog>1</show_confirm_dialog>
+    <password></password>
+    <pv_value />
+    <released_action_index>0</released_action_index>
+    <square_button>true</square_button>
+    <show_led>false</show_led>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>30</height>
+    <on_label>Turning OFF</on_label>
+    <border_width>2</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)OnOffSet</pv_name>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <widget_type>Boolean Button</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <confirm_message>Are your sure you want to do this?</confirm_message>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Button" red="240" green="240" blue="240" />
+    </background_color>
+    <width>180</width>
+    <x>50</x>
+    <name>MPS Power OFF_1</name>
+    <data_type>0</data_type>
+    <y>46</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>B_SOL:DAQ_REC:ctrl:daq_state</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Stop DAQ recording</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <show_boolean_label>true</show_boolean_label>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+    <off_label>Turn OFF MPS</off_label>
   </widget>
 </display>

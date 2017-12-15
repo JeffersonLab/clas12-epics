@@ -32,6 +32,8 @@ drvModbusAsynConfigure("W505A","TCP505", 0,16,  0, 33, 0, 0,    "Siemens")
 dbLoadRecords("db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadTemplate("db/mmgas_bmt.substitutions")
 
+dbLoadRecords("db/mvt_gasOnOff.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

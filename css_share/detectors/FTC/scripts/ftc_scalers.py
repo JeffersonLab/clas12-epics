@@ -588,6 +588,15 @@ def main():
     tt.SetTextColor(1)
     tt.DrawTextNDC(0.3,0.92,'FTC FADC SCALERS')
 
+    bb=TBox()
+    bb.SetFillStyle(1001)
+    bb.SetFillColor(0)
+    bb.SetLineWidth(1)
+    bb.SetLineColor(1)
+    bb.DrawBox(-3.47,-1.47,4.47,2.46)
+    bb.DrawBox(-1.47,-3.47,2.49,4.47)
+    bb.DrawBox(-2.47,-2.47,3.49,3.47)
+
     cc.cd()
     for xx in [ttM,tt2,ttime,arrow,tarrow]: xx.Draw()
     cc2.cd()

@@ -24,7 +24,7 @@ option -s;
 #define WRITEDELAY 1
 
 // Voltage thresholds for considering a channel ON (LARGE) or OFF (SMALL):
-#define HVSMALL 0.1
+#define HVSMALL 0.2
 #define HVLARGE 1.0
 #define LVSMALL 0.1
 #define LVLARGE 1.0

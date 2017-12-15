@@ -19,6 +19,8 @@ DB += mmgas_bmt.substitutions
 DB += mmgas_fmt.substitutions
 DB += mmgas_ftt.substitutions
 
+DB += mvt_gasOnOff.db
+
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 

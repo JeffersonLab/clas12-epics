@@ -12,6 +12,9 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 DB += amqInt.db amqIntArray.db amqDouble.db amqDoubleArray.db amqFloatArray.db amqStringArray.db amqHistogram.db
 
+DB += amqTriggerBits.substitutions
+DB += amqTrigBit.template
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

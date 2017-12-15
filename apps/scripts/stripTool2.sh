@@ -3,6 +3,13 @@
 cfg=""
 cfgDir=$EPICS/tools/stripCharts
 
+if [ -d $cfgDir/$1 ]
+then
+    cd $cfgDir/$1
+
+    exec StripTool >& /dev/null &
+
+else
     cd $cfgDir
 
     tmpdir=/tmp/StripTool
@@ -28,6 +35,8 @@ cfgDir=$EPICS/tools/stripCharts
             >> $cfg
         let npv=npv+1
     done
+    
+    exec StripTool $cfg >& /dev/null &
+fi
 
-exec StripTool $cfg >& /dev/null &
 

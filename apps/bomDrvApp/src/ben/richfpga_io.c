@@ -14,6 +14,16 @@ RICH_regs *pRICH_regs = (RICH_regs *)0x0;
 
 int sockfd_reg = 0;
 
+// #35 is dynode
+// [i]th element is bom_sc_ai_[i]
+//
+// this is the map that is NEVER changed:
+static const int bom_pmt2fpga_map[] = {31, 33, 27, 37, 23, 41, 19, 45, 15, 49, 11, 53, 7,  57,  3, 61, 35};
+//
+// this is the gains for the 16 channels:
+static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 17, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24}; 
+//atic const int GAIN[] =             { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16};
+
 typedef struct
 {
 	int len;
@@ -294,7 +304,7 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		if(!(i & 0x1))
 		{
 			//regs->CH[i>>1].bits.Gain0 = 64; /* Gain 64 = unity */
-			regs->CH[i>>1].bits.Gain0 = 56; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain0 = 17; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum0 = 0;
 			regs->CH[i>>1].bits.CTest0 = ctest;
 			regs->CH[i>>1].bits.MaskOr0 = 0;
@@ -302,24 +312,20 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
 		else
 		{
 			//regs->CH[i>>1].bits.Gain1 = 64; /* Gain 64 = unity */
-			regs->CH[i>>1].bits.Gain1 = 56; /* Gain 64 = unity */
+			regs->CH[i>>1].bits.Gain1 = 17; /* Gain 64 = unity */
 			regs->CH[i>>1].bits.Sum1 = 0;
 			regs->CH[i>>1].bits.CTest1 = ctest;
 			regs->CH[i>>1].bits.MaskOr1 = 0;
 		}
-/*
-if(i == 0)
-{
-	regs->CH[i>>1].bits.MaskOr0 = 0;
-}
-else
-{
-	if(i != 1)
-		regs->CH[i>>1].bits.Gain0 = 0;
-	regs->CH[i>>1].bits.Gain1 = 0;
-}
-*/
 	}
+
+    // overwrite the 16 bom channels' gains:
+    for(i=0; i<16; i++) {
+        int jjj = bom_pmt2fpga_map[i];
+        if (!(jjj&0x1)) regs->CH[jjj>>1].bits.Gain0 = GAIN[i];
+        else            regs->CH[jjj>>1].bits.Gain1 = GAIN[i];
+    }
+
 }
 /*****************************************************************/
 /*****************************************************************/
@@ -493,7 +499,6 @@ void rich_dump_scalers()
     */
    
     char doggy[100];;
-    static const int bom_pmt2fpga_map[] = {31,33,27,37,23,41,19,45,15,49,11,53,7,57,3,61,35};
     for (j=0;j<16;j++) {
         int k = bom_pmt2fpga_map[j];
 		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
@@ -844,10 +849,13 @@ int main(int argc, char *argv[])
 	rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
 
 	// Setup FPGA version of MAROC OR (note: this OR is formed in the FPGA from the MAROC hits and does not use the MAROC_OR signal)
-	rich_setmask_fpga_or(0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000);
+	//rich_setmask_fpga_or(0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000);
+	rich_setmask_fpga_or(0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF);
 
-	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
-	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
+	//rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
+	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_MAROC_OR);
+	//rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
+	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_MAROC_OR); 
 	rich_write32(&pRICH_regs->Sd.CTestSrc, 0);//SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
 	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
 	

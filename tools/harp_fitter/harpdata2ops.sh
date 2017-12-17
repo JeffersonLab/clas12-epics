@@ -10,7 +10,7 @@ remoteDir=/usr/opsdata/harpData/HallB
 for dd in $localSubdirs
 do
     # the trailing slash is important
-    rsync -r -a -v -e ssh $localDir/$dd/ $remoteUser@$remoteHost:$remoteDir
+    rsync -r -a -e ssh $localDir/$dd/ $remoteUser@$remoteHost:$remoteDir
 done
 
 

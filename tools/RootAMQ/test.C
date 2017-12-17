@@ -74,7 +74,7 @@ void make_json_hist_int(char *jhist, int npoints, int *data, float xmin=1, float
   char *end;
   sprintf(jhist,"{ \"NBINSX\":%d",npoints);
   if(xmin<xmax){
-    sprintf(jhist,"%s,\"XMIN\":%e,\"XMAX\":%e",jhist,xmin,xmax);
+    sprintf(jhist,"%s,\"XMIN\":%e,\"XMAX\":%e,\"XTITLE\":\"xaxistitle\"",jhist,xmin,xmax);
   }
   sprintf(jhist, "%s,\"DATA\":[%d",jhist,data[0]);
   for(int n=1;n<npoints;n++){

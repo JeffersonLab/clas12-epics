@@ -231,8 +231,8 @@ public:
 	  json_epics(jobj,isdeep);
 	}
 	else{ 
-	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
-	  std::cout << "Full Message = " << text.c_str() << endl;
+//	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
+//	  std::cout << "Full Message = " << text.c_str() << endl;
 	}
       }
       

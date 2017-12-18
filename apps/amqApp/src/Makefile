@@ -20,9 +20,7 @@ amq_DBD += amqdev.dbd
 
 amq_DBD += devIocStats.dbd
 amq_DBD += asSupport.dbd
-
-# Add all the support libraries needed by this IOC
-#amq_LIBS += xxx
+amq_DBD += waveformApp.dbd
 
 amqSupport_SRCS += amqSupport.cpp
 LIBRARY_IOC_linux-x86_64 += amqSupport
@@ -44,6 +42,7 @@ amq_LIBS += $(EPICS_BASE_IOC_LIBS)
 amq_LIBS += activemq-cpp json-c amqSupport
 amq_LIBS += autosave
 amq_LIBS += devIocStats
+amq_LIBS += waveformApp
 
 #===========================
 

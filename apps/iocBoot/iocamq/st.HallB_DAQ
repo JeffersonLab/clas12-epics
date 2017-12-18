@@ -63,6 +63,7 @@ dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal5vtp_VTPPCS_CLUSTERS,K=adcp
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal6vtp_VTPPCS_CLUSTERS,K=adcpcal6vtp_VTPPCS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
 dbLoadTemplate("db/amqTriggerBits.substitutions")
+dbLoadRecords("db/waveformApp.db","P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P,NELM=32,FTVL=DOUBLE,PERIOD=1,FNAME=trigBitsWaveform.txt")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 
@@ -71,5 +72,7 @@ iocInit
 
 #Need this to start responding to messages after all records are defined
 StartMQ()
+
+seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
 
 dbl > pv.list

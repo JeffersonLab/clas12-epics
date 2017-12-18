@@ -73,7 +73,7 @@ then
     exit
 fi
 
-if [[ $1 == "adcft1" || $1 == "adcft2" ]]
+if [[ $1 == "adcft1" || $1 == "adcft2" || $1 == "adcft3" ]]
 then
     dgsReboot $1
     sleep 2
@@ -83,6 +83,7 @@ elif [[ $1 == "C" ]]
 then
     dgsReboot adcft1
     dgsReboot adcft2
+    dgsReboot adcft3
     dgsReboot adcctof1
     dgsReboot adccnd1
     sleep 2
@@ -92,6 +93,7 @@ elif [[ $1 == "ft" ]]
 then
     dgsReboot adcft1
     dgsReboot adcft2
+    dgsReboot adcft3
     sleep 2
     softioc_console -R iocjscalersC
 

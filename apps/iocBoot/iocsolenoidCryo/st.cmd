@@ -46,3 +46,7 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
 
+## Oddball setpoints that don't have autosave
+dbpf B_SOL:LHe:EV8670BY:VAL:SET.PREC,4
+dbpf B_SOL:LHe:EV8670BY:CVAL.PREC,4
+

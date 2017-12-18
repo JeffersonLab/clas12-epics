@@ -15,7 +15,7 @@ option -s;
 #define FIXDELAY 11
 
 // Duration (seconds) after which to abort state if checks unsucessfull:
-#define TIMEOUT 60
+#define TIMEOUT 120
 
 // Number of PVs to write consecutively without delay:
 #define NCONSECWRITES 8

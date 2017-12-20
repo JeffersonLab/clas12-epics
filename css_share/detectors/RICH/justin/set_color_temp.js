@@ -14,8 +14,11 @@ var nbins=10;
 
 
 var temp = PVUtil.getDouble(pvs[0]);
-var screen = widget.getMacroValue("SCREEN");
+var suffix = widget.getMacroValue("SUFFIX");
+var max = PVUtil.getDouble(pvs[1]);
+var min = PVUtil.getDouble(pvs[2]);
 
+/*
 if(screen== "temp:fpga"||screen=="temp:reg0"||screen=="temp:reg1"){
 	min=1;
 	max=70;
@@ -32,9 +35,10 @@ else{
 	max=100;
 	min=0;
 }
+*/
 
-display.getWidget("ScaleMax").setPropertyValue("text", max.toString());
-display.getWidget("ScaleMin").setPropertyValue("text", min.toString());
+//display.getWidget("ScaleMax").setPropertyValue("text", max.toString());
+//display.getWidget("ScaleMin").setPropertyValue("text", min.toString());
 
 if(temp>max)
 	bin=10;
@@ -44,7 +48,18 @@ else
 	bin = Math.floor((temp-min)/(max-min)*nbins);
 
 //java.lang.System.out.println(bin);
+//#ffa500 #ff8d00 #fa7700 #f26000 #e74b00 #d93800 #c82601 #b51402 #a00502 #8b0000
+var color9 = ColorFontUtil.getColorFromRGB(255,165,0);
+var color8 = ColorFontUtil.getColorFromRGB(255,141,0);
+var color7 = ColorFontUtil.getColorFromRGB(250,119,0);
+var color6 = ColorFontUtil.getColorFromRGB(242,96,0);
+var color5 = ColorFontUtil.getColorFromRGB(231,75,0);
+var color4 = ColorFontUtil.getColorFromRGB(217,56,0);
+var color3 = ColorFontUtil.getColorFromRGB(200,38,1);
+var color2 = ColorFontUtil.getColorFromRGB(181,20,2);
+var color1 = ColorFontUtil.getColorFromRGB(160,5,2);
+var color0 = ColorFontUtil.getColorFromRGB(139,0,0);
 
-var bgcolors=["MEDM_COLOR_28","MEDM_COLOR_52","MEDM_COLOR_50","MEDM_COLOR_61","MEDM_COLOR_63","MEDM_COLOR_30","MEDM_COLOR_32","MEDM_COLOR_34","MEDM_COLOR_22","MEDM_COLOR_23","Major","Write_Foreground"];
+var bgcolors=[color0,color1,color2,color3,color4,color5,color6,color7,color8,color9,"MEDM_COLOR_31","Write_Foreground"];
 
 widget.setPropertyValue("background_color",bgcolors[bin]);

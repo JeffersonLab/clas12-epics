@@ -189,7 +189,11 @@ public:
   
   // Called from the consumer since this class is a registered MessageListener.
   virtual void onMessage(const Message* message) {
+    
     if(!startFlag) return;
+    //if(strcmp(message->getCMSType().c_str(),"json")==0){
+    //  fprintf(stderr,"Message Type = %s\n", message->getCMSType().c_str());
+    // }
     smessage = (StreamMessage*)message;  
     static int count = 0;
     rset* prset;

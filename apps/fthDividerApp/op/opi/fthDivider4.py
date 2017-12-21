@@ -11,11 +11,30 @@ side=24
 for n in range(0,232):
         linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer") 
         linkingContainer.setPropertyValue("opi_file", "tile.opi")
-        linkingContainer.addMacro("ID", str(n).zfill(3))
+        if (n==224):
+                linkingContainer.addMacro("ID",str(225).zfill(3))
+        elif (n==225):
+                linkingContainer.addMacro("ID",str(227).zfill(3))
+        elif (n==226):
+                linkingContainer.addMacro("ID",str(228).zfill(3))
+        elif (n==227):
+                linkingContainer.addMacro("ID",str(230).zfill(3))
+        elif (n==228):
+                linkingContainer.addMacro("ID",str(233).zfill(3))
+        elif (n==229):
+                linkingContainer.addMacro("ID",str(235).zfill(3))
+        elif (n==230):
+                linkingContainer.addMacro("ID",str(236).zfill(3))
+        elif (n==231):
+                linkingContainer.addMacro("ID",str(238).zfill(3))
+        else:
+                linkingContainer.addMacro("ID", str(n).zfill(3))
+        #linkingContainer.addMacro("ID", str(n).zfill(3))
         linkingContainer.setPropertyValue("resize_behaviour", 2)
         linkingContainer.setPropertyValue("border_style", 2)
         s = int(slot[n])
         c = int(chan[n])
+        print n," ",s," ",c," ",str(n).zfill(3)
         #ConsoleUtil.writeInfo(str(l) + "    " + str(wlayer))
         posx=s*side - 40;
         posy=c*side;

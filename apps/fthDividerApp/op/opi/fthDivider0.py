@@ -14,7 +14,7 @@ for n in range(0,232):
 		linkingContainer = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer") 
 		linkingContainer.setPropertyValue("opi_file", "tile.opi")
 		#linkingContainer.addMacro("ID",str(n))
-		linkingContainer.addMacro("ID", str(n).zfill(3))
+                linkingContainer.addMacro("ID", str(n).zfill(3))
 		linkingContainer.setPropertyValue("resize_behaviour", 2)
 		linkingContainer.setPropertyValue("border_style", 2)
                 l = int(layer[n])

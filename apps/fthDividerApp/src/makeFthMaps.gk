@@ -3,6 +3,7 @@ BEGIN{
 FS=","
 slot_offset=0;
 divindex=0;
+printdivindex=0;
 Prefix="B_DET_FTH_DIVIDER";
 half["1"]="Top";
 half["2"]="Bottom";
@@ -62,7 +63,34 @@ half["2"]="Bottom";
 	    #boardch[$1,"_",$4]=sprintf("%s,%03d",boardch[$1,"_",$4],divindex);
 	    boardi[bname]++;
 	    boardhv[bname]=($6 - 1)*12 + $7 + 1;
-	    boardch[bname]=sprintf("%s,%03d",boardch[bname],divindex);
+	    #A.C. try to fix last indexes
+	    #divindex==224 should be 225
+	    printdivindex=divindex;
+	    if (divindex==224){
+		printdivindex=225;
+	    }
+	    else if (divindex==225){
+		printdivindex=227;
+	    }
+	    else if (divindex==226){
+		printdivindex=228;
+	    }
+	    else if (divindex==227){
+		printdivindex=230;
+	    }
+	    else if (divindex==228){
+		printdivindex=233;
+	    }
+	    else if (divindex==229){
+		printdivindex=235;
+	    }
+	    else if (divindex==230){
+		printdivindex=236;
+	    }
+	    else if (divindex==231){
+		printdivindex=238;
+	    }
+	    boardch[bname]=sprintf("%s,%03d",boardch[bname],printdivindex);
 	    divindex++;
 	}
     }
@@ -111,8 +139,41 @@ END{
 
     for(divindex in slot){
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
-	printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",divindex,  xcoord[enam], ycoord[enam], tsize[enam], slot[divindex], chan[divindex],   layer[divindex], sector[divindex],  element[divindex], h[divindex] > subfile;
-    }
+	printdivindex=divindex
+	if (divindex==224){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",224,-999,-999,-999,19,0,-999,-999,-999,15 > subfile;
+	    printdivindex=225;
+	}
+	else if (divindex==225){
+	     printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",226,-999,-999,-999,19,2,-999,-999,-999,15 > subfile;
+	    printdivindex=227;
+	}
+	else if (divindex==226){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",229,-999,-999,-999,19,5,-999,-999,-999,15 > subfile;
+	    printdivindex=228;
+	}
+	else if (divindex==227){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",231,-999,-999,-999,19,7,-999,-999,-999,-999,15 > subfile;
+	    printdivindex=230;
+	}
+	else if (divindex==228){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",232,-999,-999,-999,19,8,-999,-999,-999,-999,30 > subfile;
+	    printdivindex=233;
+	}
+	else if (divindex==229){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",234,-999,-999,-999,19,10,-999,-999,-999,-999,30 > subfile;
+	    printdivindex=235;
+	}
+	else if (divindex==230){    
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",237,-999,-999,-999,19,13,-999,-999,-999,-999,30 > subfile;
+	    printdivindex=236;
+	}
+	else if (divindex==231){
+	    printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",239,-999,-999,-999,19,15,-999,-999,-999,-999,30 > subfile;
+	    printdivindex=238;
+	}
+	printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",printdivindex,  xcoord[enam], ycoord[enam], tsize[enam], slot[divindex], chan[divindex],   layer[divindex], sector[divindex],  element[divindex], h[divindex] > subfile;
+    }  
     print"}" > subfile
 
     #make some waveform arrays to be put in the init file

@@ -40,6 +40,8 @@ dbLoadTemplate("db/rich_maxTemp.substitutions")
 
 dbLoadRecords("db/richIntlk.template","P=B_DET_RICH_INTLK,R=:temp:fpga:,TESTVAL=B_DET_RICH_SSP:temp:fpga:max,CTRL=B_DET_RICH_LVHV:OFF")
 
+dbLoadRecords("db/jscalers_RICH_ColorScale.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

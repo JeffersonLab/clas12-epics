@@ -49,17 +49,17 @@ else
 
 //java.lang.System.out.println(bin);
 //#ffa500 #ff8d00 #fa7700 #f26000 #e74b00 #d93800 #c82601 #b51402 #a00502 #8b0000
-var color0 = ColorFontUtil.getColorFromRGB(255,165,0);
-var color1 = ColorFontUtil.getColorFromRGB(255,141,0);
-var color2 = ColorFontUtil.getColorFromRGB(250,119,0);
-var color3 = ColorFontUtil.getColorFromRGB(242,96,0);
-var color4 = ColorFontUtil.getColorFromRGB(231,75,0);
-var color5 = ColorFontUtil.getColorFromRGB(217,56,0);
-var color6 = ColorFontUtil.getColorFromRGB(200,38,1);
-var color7 = ColorFontUtil.getColorFromRGB(181,20,2);
-var color8 = ColorFontUtil.getColorFromRGB(160,5,2);
-var color9 = ColorFontUtil.getColorFromRGB(139,0,0);
+var color0 = ColorFontUtil.getColorFromRGB(0,0,255);
+var color1 = ColorFontUtil.getColorFromRGB(90,0,237);
+var color2 = ColorFontUtil.getColorFromRGB(127,0,217);
+var color3 = ColorFontUtil.getColorFromRGB(155,0,194);
+var color4 = ColorFontUtil.getColorFromRGB(177,0,170);
+var color5 = ColorFontUtil.getColorFromRGB(196,0,144);
+var color6 = ColorFontUtil.getColorFromRGB(213,0,118);
+var color7 = ColorFontUtil.getColorFromRGB(229,0,87);
+var color8 = ColorFontUtil.getColorFromRGB(243,0,53);
+var color9 = ColorFontUtil.getColorFromRGB(255,0,0);
 
-var bgcolors=[color0,color1,color2,color3,color4,color5,color6,color7,color8,color9,"Warning","MEDM_COLOR_29"];
+var bgcolors=[color0,color1,color2,color3,color4,color5,color6,color7,color8,color9,"MEDM_COLOR_23","MEDM_COLOR_29"];
 
 widget.setPropertyValue("background_color",bgcolors[bin]);

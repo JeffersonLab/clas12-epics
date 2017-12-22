@@ -109,7 +109,7 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
-elif [[ $1 == "trigger" || $1 == "trig2" ]]
+elif [[ $1 == "T" || $1 == "trigger" || $1 == "scaler1" ]]
 then
     dgsReboot trig2
     sleep 2

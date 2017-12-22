@@ -20,6 +20,9 @@ dbLoadRecords("db/hall_target.db")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
+dbLoadTemplate("db/hallb_ia.substitutions")
+dbLoadRecords("db/hallb_ia.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -32,5 +35,11 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
-#dbl > pv.list
+dbl > pv.list
+
+epicsThreadSleep(2)
+dbpf "B_IA_C1068_QDAC07:init.PROC", "1"
+dbpf "B_IA_C1068_QDAC08:init.PROC", "1"
+dbpf "B_IA_C1068_QDAC09:init.PROC", "1"
+dbpf "B_IA_C1068_QDAC10:init.PROC", "1"
 

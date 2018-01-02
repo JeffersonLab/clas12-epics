@@ -14,7 +14,8 @@ dbLoadRecords("db/rollingAverages-status.db")
 
 dbLoadTemplate("db/rollingAverages.substitutions")
 
-dbLoadRecords("db/timeDerivative.db","P=LL8210,R=:deriv,DT=10,SCALE=1000,EGU=g/s")
+dbLoadRecords("db/timeDerivative.db","P=LL8210,R=:deriv,DT=10,SCALE=604,EGU=g/s")
+dbLoadRecords("db/timeDerivative.db","P=CLL6763A,R=:deriv,DT=10,SCALE=12080,EGU=g/s")
 
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")

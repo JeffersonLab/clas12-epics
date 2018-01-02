@@ -10,7 +10,6 @@
 # $(P)          = the PV of which to calculate the time-derivative,
 # $(DT)         = the sampling period
 # $(P)$(R=):dxdt = the resulting time-derivate
-#
 
 # The PV of which to calculate the time-derivative (only for testing):
 #record(ai,"$(P)") {
@@ -21,6 +20,7 @@
 record(ai,"$(P)$(R=):prev") {
     field(VAL,0)
     field(PINI,1)
+#    field(TPRO,1)
 }
 record(calcout,"$(P)$(R=):prevC") {
     field(SCAN,"$(DT) second")
@@ -31,18 +31,23 @@ record(calcout,"$(P)$(R=):prevC") {
     field(OUT,"$(P)$(R=):prev PP")
     field(ODLY,"0")
     field(FLNK,"$(P)$(R=):delay.PROC PP")
+#    field(TPRO,1)
 }
 record(seq,"$(P)$(R=):delay") {
     field(DOL1,"$(P)$(R=):dxdt PP")
     field(DO1,"1")
     field(DLY1,"$(DT)")
+#    field(TPRO,1)
 }
 record(calc,"$(P)$(R=):dxdt") {
-    field(INPA,"$(P)$(R=)")
+    field(INPA,"$(P)")
     field(INPB,"$(P)$(R=):prev")
     field(INPC,"$(DT)")
-    field(CALC,"(A-B)/C")
+    field(INPD,"$(SCALE=1)")
+    field(CALC,"D*(A-B)/C")
     field(PREC,"5")
-    field(EGU,"dx/$(DT)s")
+    field(EGU,"$(EGU=)")
+#    field(EGU,"dx/$(DT)s")
+#    field(TPRO,1)
 }
 

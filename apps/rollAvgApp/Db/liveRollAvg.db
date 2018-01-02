@@ -1,0 +1,19 @@
+
+# takes two records to make a rolling average?
+
+record(compress,"$(P):circBuff") {
+    field(INP,"$(I) CPP")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"$(N)")
+}
+
+record(compress,"$(P)") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(P):circBuff CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"$(N)")
+    field(EGU,"$(EGU=)")
+    info(autosaveFields_pass0,"VAL DESC")
+}
+

@@ -10,7 +10,7 @@
 //#define JSCALER_DEBUG
 
 #define DGSPORTNO 6102
-#define MAXNPORTS 10 // maximum number of ports to try before failure
+#define MAXNPORTS 30 // maximum number of ports to try before failure
 
 using namespace std;
 void *crateThread(void *);

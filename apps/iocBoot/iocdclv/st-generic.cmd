@@ -10,14 +10,12 @@ A6551_registerRecordDeviceDriver pdbbase
 
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
-epicsEnvSet("SCAN","2 second")
-
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 drvAsynIPPortConfigure("${PORT}",${GPIB}.jlab.org:1234,0,0,0)
 
-dbLoadRecords("db/A6551.db","SCAN=${SCAN},P=B_DET_DC_LV_${SECREG},PORT=${PORT},ADDR=1,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/A6551.db","SCAN=${SCAN},P=B_DET_DC_LV_${SECREG},PORT=${PORT},ADDR=${ADDR},IMAX=2000,OMAX=2000")
 
 dbLoadRecords("db/prologix.db","P=${GPIB},R=:,DESC=DCLV_${PORT},PORT=${PORT}")
 

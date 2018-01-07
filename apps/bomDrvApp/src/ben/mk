@@ -1,1 +1,10 @@
-gcc -I. -o richfpga_io richfpga_io.c
+epics=/usr/clas12/R3.14.12.5
+
+gcc -I. \
+-I$epics/extensions/include \
+-I$epics/base/include \
+-I$epics/base/include/os/Linux \
+-L$epics/extensions/lib/linux-x86_64 \
+-l ezca \
+-o richfpga_io richfpga_io.c
+

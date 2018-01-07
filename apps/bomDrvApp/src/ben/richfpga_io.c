@@ -7,8 +7,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
-#include <arpa/inet.h> 
+#include <arpa/inet.h>
+
 #include "richfpga_io.h"
+
+// trying to add ezca w/o standard EPICS build system:
+#include "epicsTime.h"
+#include "cadef.h"
+#include "ezca.h"
 
 RICH_regs *pRICH_regs = (RICH_regs *)0x0;
 
@@ -19,10 +25,10 @@ int sockfd_reg = 0;
 //
 // this is the map that is NEVER changed:
 static const int bom_pmt2fpga_map[] = {31, 33, 27, 37, 23, 41, 19, 45, 15, 49, 11, 53, 7,  57,  3, 61, 35};
-//
 // this is the gains for the 16 channels:
 static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 17, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24}; 
 //atic const int GAIN[] =             { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16};
+
 
 typedef struct
 {
@@ -506,6 +512,7 @@ void rich_dump_scalers()
         printf("bom_sc_ai_%d:  ref=%f raw=%d  hz=%f\n",j,ref,val,fval);
         sprintf(doggy,"caput bom_sc_ai_%d %f >& /dev/null",j,fval);
         system(doggy);
+//        ezcaPut(
     }
 
 	/* resets scalers */

@@ -17,7 +17,7 @@ DB += $(wildcard ../*.template)
 DB += $(wildcard ../*.db)
 DB += $(wildcard ../*.substitutions)
 
-BEAST += $(wildcard ../*.xml)
+BEAST += saclayTarget-alarms.xml
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

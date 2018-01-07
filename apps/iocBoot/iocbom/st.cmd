@@ -2,17 +2,13 @@
 < envPaths
 cd ${TOP}
 
-#Init_BOM()
-
-#Start_BOM_CRATE("0","SCALER9")
-
 ## Register all support components
 dbLoadDatabase("dbd/iocbom.dbd")
 iocbom_registerRecordDeviceDriver(pdbbase)
 
 ## Load record instances
-#dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
-#dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 #dbLoadTemplate("db/bom_channels.substitutions")
 dbLoadTemplate("db/bom_channels_sim.substitutions")

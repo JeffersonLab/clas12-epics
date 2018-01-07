@@ -26,6 +26,7 @@ classc1App_DEPEND_DIRS += harp_genericApp kepcoApp scalerApp	# vme crate
 classc4App_DEPEND_DIRS += harp_genericApp scalerApp sixtyHzApp 	# vme crate
 classc6App_DEPEND_DIRS += btaApp
 classc8App_DEPEND_DIRS += struckDaqApp
+classc3App_DEPEND_DIRS += XY560App
 jscalerApp_DEPEND_DIRS += jscalerDrvApp
 kepcoApp_DEPEND_DIRS   += DVME628App
 dynabcApp_DEPEND_DIRS  += XY240App

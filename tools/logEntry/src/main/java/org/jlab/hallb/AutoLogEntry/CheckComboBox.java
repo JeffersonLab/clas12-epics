@@ -54,11 +54,13 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+
 /**
  * ComboBox containing checkbox
  * @author gjj
  */
 class CheckComboBox extends JComboBox {
+
    private List<ObjCheckBox> cbs;
    private Map<Object, Boolean> mapObjSelected;
    private List<CheckComboBoxSelectionChangedListener> changedListeners

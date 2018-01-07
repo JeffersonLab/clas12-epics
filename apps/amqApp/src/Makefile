@@ -37,6 +37,9 @@ amq_SRCS_DEFAULT += amqMain.cpp
 
 USR_INCLUDES += -I./ -I$(IPC_HOME)/src/main -I/usr/include/apr-1 -I/usr/include/activemq-cpp-3.9.3
 
+activemq-cpp_DIR += /usr/lib64
+json-c_DIR += /usr/lib64
+
 # Finally link to the EPICS Base libraries
 amq_LIBS += $(EPICS_BASE_IOC_LIBS)
 amq_LIBS += activemq-cpp json-c amqSupport

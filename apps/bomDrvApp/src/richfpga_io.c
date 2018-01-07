@@ -443,7 +443,7 @@ void rich_dump_scalers(double scalers[16])
 {
 	float ref, fval;
 	unsigned int val;
-	int i, j;
+	//int i, j;
 	//char buf[100];
 
 	/* halt scaler counting */
@@ -521,7 +521,7 @@ void rich_set_pulser(float freq, float duty, int count)
 
 	if((duty <= 0.0) || (duty >= 1.0))
 	{
-		printf("Error in %s: duty invalid, setting to 50%", __FUNCTION__);
+		printf("Error in %s: duty invalid, setting to 50%%", __FUNCTION__);
 		duty = 0.5;
 	}
 

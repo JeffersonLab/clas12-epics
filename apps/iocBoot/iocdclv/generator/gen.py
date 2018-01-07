@@ -7,7 +7,7 @@ outDirStub='./output/iocdclv_'
 #outDirStub=iocBootDir+'iocdclv_'
 
 templateFile='./st-template.cmd'
-templateFileS='./st-generic.cmd'
+templateFileS='../st-generic.cmd'
 mappingFile='./mapping.txt'
 
 template=open(templateFile,'r').readlines()
@@ -25,9 +25,10 @@ for ss in range(1,7):
   outFileS=open(outDir+'/st.cmd','w')
 
   addr=1
+  dogs=list(templateS)
   while True:
-    xx=templateS.pop(0)
-    if xx.find('drvAsynIPPortConfigure')==0: break
+    if dogs[0].find('drvAsynIPPortConfigure')==0: break
+    xx=dogs.pop(0)
     outFileS.write(xx)
 
   for rr in range(1,4):
@@ -48,21 +49,23 @@ for ss in range(1,7):
       xx=xx.replace('xxxADDRxxx','1')
       outFileSR.write(xx)
 
-    for xx in templateS:
-      if xx.find('drvAsynIPPPortConfigure')==0 or
+    for xx in dogs:
+      if xx.find('drvAsynIPPortConfigure')==0 or \
          xx.find('dbLoadRecords("db/A6551.db')==0:
         xx=xx.replace('${PORT}',sr)
         xx=xx.replace('${GPIB}',host)
         xx=xx.replace('${SCAN}','2 seconds')
         xx=xx.replace('${SECREG}','SEC%d_R%d'%(ss,rr))
-        xx=xx.replace('${ADDR}',addr)
+        xx=xx.replace('${ADDR}',str(addr))
         outFileS.write(xx)
 
-    addr+=1
+        print host,addr
+
+    #addr+=1
 
     outFileSR.close()
 
-  for xx in templateS: outFileS.write(xx)
+  for xx in dogs: outFileS.write(xx)
   outFileS.close()
 
 

@@ -102,6 +102,7 @@ public:
   int SendMessage(const char *topic, char *msg){
     // Create the destination 
     destination = session->createTopic( topic );
+    string type = "test";
     
     // Create a MessageProducer from the Session to the Topic or Queue
     producer = session->createProducer( destination );
@@ -114,7 +115,8 @@ public:
     string text = msg;
     
     TextMessage* message = session->createTextMessage( text );
-    
+    //message->setCMSType(type);
+
     printf( "Sent message: \"%s\"\n", text.c_str() );
     producer->send( message );
     

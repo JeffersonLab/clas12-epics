@@ -210,40 +210,41 @@ public:
       else{
 	text = smessage->readString();
       }
-      
-      //std::cout << "Full Message = " << text.c_str() << endl;
-      if(rawmessage){                 //if theres a RAWMSG record copy up to NELM of the message to the waveform
-	copy=strlen(text.c_str());    //try to copy the whole thing
-	if(copy>rawmessage->nelm){    //but chop if not enough space in the waveform
-	  copy=rawmessage->nelm;
-	}
-	dbScanLock((dbCommon*)rawmessage);
-	strncpy((char *)(rawmessage->bptr),text.c_str(),copy);
-	rawmessage->nord = copy;
-	prset=(rset*)rawmessage->rset;
-	((fptr)(prset->process))((dbCommon*)rawmessage);
-	dbScanUnlock((dbCommon*)rawmessage);
-      }
-      if(npv){
-	//text.insert (0, 1, '{');
-	//text.append(1, '}');
-	jobj = json_tokener_parse(text.c_str());
-	if(jobj!=NULL){
-	  if(strchr(text.c_str()+1,'{')){  //if there's another "{" after the start, it has some nesting.
-	    isdeep=1;
+      if(strlen(text.c_str())>6){
+	//std::cout << "Full Message = " << text.c_str() << endl;
+	if(rawmessage){                 //if theres a RAWMSG record copy up to NELM of the message to the waveform
+	  copy=strlen(text.c_str());    //try to copy the whole thing
+	  if(copy>rawmessage->nelm){    //but chop if not enough space in the waveform
+	    copy=rawmessage->nelm;
 	  }
-	  json_epics(jobj,isdeep);
+	  dbScanLock((dbCommon*)rawmessage);
+	  strncpy((char *)(rawmessage->bptr),text.c_str(),copy);
+	  rawmessage->nord = copy;
+	  prset=(rset*)rawmessage->rset;
+	  ((fptr)(prset->process))((dbCommon*)rawmessage);
+	  dbScanUnlock((dbCommon*)rawmessage);
 	}
-	else{ 
-//	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
-//	  std::cout << "Full Message = " << text.c_str() << endl;
+	if(npv){
+	  //text.insert (0, 1, '{');
+	  //text.append(1, '}');
+	  jobj = json_tokener_parse(text.c_str());
+	  if(jobj!=NULL){
+	    if(strchr(text.c_str()+1,'{')){  //if there's another "{" after the start, it has some nesting.
+	      isdeep=1;
+	    }
+	    json_epics(jobj,isdeep);
+	  }
+	    else{ 
+	      //	  std::cout << "Not a json thing. Here's the raw text" << std::endl;
+	      //	  std::cout << "Full Message = " << text.c_str() << endl;
+	    }
 	}
       }
       
       if (clientAck) {
 	message->acknowledge();
       }
-            
+      
     } catch (CMSException& e) {
       e.printStackTrace();
     }

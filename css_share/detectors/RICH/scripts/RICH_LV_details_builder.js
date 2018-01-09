@@ -9,6 +9,8 @@ var nchan = 40;
 
   for (var chan=1; chan<=nchan; chan++)
   {
+    if (chan==13 || chan==14 || chan==37 || chan==38) continue;
+
     if (chan<10) chan="0"+chan;
 
     var pv = prefix+chan;

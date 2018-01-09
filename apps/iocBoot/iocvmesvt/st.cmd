@@ -21,7 +21,10 @@ dbLoadRecords("db/V450_1.db")
 dbLoadRecords("db/V450_alarm.db")
 dbLoadRecords("db/svtWatchdogVme.db")
 
-dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks-noReboot.db","IOC=iocvmesvt")
+# Why did we do this?
+#dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks-noReboot.db","IOC=iocvmesvt")
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocvmesvt")
+
 dbLoadRecords("db/save_restoreStatus.db", "P=iocvmesvt:")
 
 cd startup

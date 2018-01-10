@@ -19,8 +19,8 @@ dbLoadRecords("db/timeDerivative.db","P=LL8210,R=:deriv,DT=10,SCALE=604,EGU=g/s"
 dbLoadRecords("db/timeDerivative.db","P=CLL6763A,R=:deriv,DT=2,SCALE=12080,EGU=g/s")
 
 # live average is over DT*N seconds
-dbLoadRecords("db/liveRollAvg.db","I=LL8210:deriv:dxdt,P=LL8210:dxdt,N=18,EGU=g/s")
-dbLoadRecords("db/liveRollAvg.db","I=CLL6763A:deriv:dxdt,P=CLL6763A:dxdt,N=150,EGU=g/s")
+dbLoadRecords("db/liveRollAvg.db","I=LL8210:deriv:dxdt,P=LL8210:dxdt,N=18,EGU=g/s,SCAN=5")
+dbLoadRecords("db/liveRollAvg.db","I=CLL6763A:deriv:dxdt,P=CLL6763A:dxdt,N=150,EGU=g/s,SCAN=1")
 
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")

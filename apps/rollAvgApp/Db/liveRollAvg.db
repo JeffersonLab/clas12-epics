@@ -1,11 +1,7 @@
-#
-# Takes two records to make a rolling average (?).
-# Because single compress with ALG=Average updates
-# its average every N polls, so not really rolling.
-#
 
 record(compress,"$(P):circBuff") {
-    field(INP,"$(I) CPP")
+    field(SCAN,"$(SCAN) second")
+    field(INP,"$(I)")
     field(ALG,"Circular Buffer")
     field(NSAM,"$(N)")
 }
@@ -19,4 +15,3 @@ record(compress,"$(P)") {
     field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL DESC")
 }
-

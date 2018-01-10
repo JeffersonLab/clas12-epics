@@ -23,6 +23,8 @@ dbLoadTemplate("db/alarm_bpm.substitutions")
 dbLoadTemplate("db/hallb_ia.substitutions")
 dbLoadRecords("db/hallb_ia.db")
 
+dbLoadTemplate("db/mcc_fsd.substitutions")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

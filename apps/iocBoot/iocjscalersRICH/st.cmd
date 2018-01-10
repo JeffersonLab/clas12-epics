@@ -4,7 +4,7 @@ cd ${TOP}
 
 Init_SCALERS()
 
-Start_SCALERS_CRATE("0","fevme1")
+Start_SCALERS_CRATE("0","rich4")
 
 
 ## Register all support components

@@ -5,7 +5,7 @@ desc = widget.getPropertyValue("tooltip")
 #ConsoleUtil.writeInfo(desc)
 currhv = -1
 if len(desc) > 2:
-        ConsoleUtil.writeInfo(desc)
+        ConsoleUtil.writeInfo("Desc = "+desc)
         currhv = int(desc[desc.find("HVChan")+7:])
         ConsoleUtil.writeInfo("Currhv = " + str(currhv) )
         if currhv < 0:

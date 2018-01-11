@@ -20,8 +20,9 @@ dbLoadRecords("db/hall_target.db")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
-dbLoadTemplate("db/hallb_ia.substitutions")
-dbLoadRecords("db/hallb_ia.db")
+# Temporary, move these to be run as user=clasioc:
+#dbLoadTemplate("db/hallb_ia.substitutions")
+#dbLoadRecords("db/hallb_ia.db")
 
 dbLoadTemplate("db/mcc_fsd.substitutions")
 
@@ -39,9 +40,9 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
 
-epicsThreadSleep(2)
-dbpf "B_IA_C1068_QDAC07:init.PROC", "1"
-dbpf "B_IA_C1068_QDAC08:init.PROC", "1"
-dbpf "B_IA_C1068_QDAC09:init.PROC", "1"
-dbpf "B_IA_C1068_QDAC10:init.PROC", "1"
+#epicsThreadSleep(2)
+#dbpf "B_IA_C1068_QDAC07:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC08:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC09:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC10:init.PROC", "1"
 

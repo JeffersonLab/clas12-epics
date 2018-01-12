@@ -29,6 +29,7 @@ static const int bom_pmt2fpga_map[] = {31, 33, 27, 37, 23, 41, 19, 45, 15, 49, 1
 static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 17, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24}; 
 //atic const int GAIN[] =             { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16};
 
+//#define DEBUG
 
 typedef struct
 {
@@ -470,7 +471,7 @@ void rich_dump_scalers()
 	ref = (float)val / 125.0E6;
 
 	/* read scalers */
-
+#ifdef DEBUG
 	rich_print_scaler("GClk125", rich_read32(&pRICH_regs->Sd.Scaler_GClk125), ref);
 	rich_print_scaler("Sync", rich_read32(&pRICH_regs->Sd.Scaler_Sync), ref);
 	rich_print_scaler("Trig", rich_read32(&pRICH_regs->Sd.Scaler_Trig), ref);
@@ -488,6 +489,7 @@ void rich_dump_scalers()
 	rich_print_scaler("Or1_3", rich_read32(&pRICH_regs->Sd.Scaler_Or1[2]), ref);
 	rich_print_scaler("Busy", rich_read32(&pRICH_regs->Sd.Scaler_Busy), ref);
 	rich_print_scaler("BusyCycles", rich_read32(&pRICH_regs->Sd.Scaler_BusyCycles), ref);
+#endif
 
     /*
   for(j = 0; j < 64; j++)
@@ -509,7 +511,9 @@ void rich_dump_scalers()
         int k = bom_pmt2fpga_map[j];
 		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
         fval = (float)val / ref;
+#ifdef DEBUG
         printf("bom_sc_ai_%d:  ref=%f raw=%d  hz=%f\n",j,ref,val,fval);
+#endif
         sprintf(doggy,"caput bom_sc_ai_%d %f >& /dev/null",j,fval);
         system(doggy);
 //        ezcaPut(

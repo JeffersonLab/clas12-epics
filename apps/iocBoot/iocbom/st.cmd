@@ -13,6 +13,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 #dbLoadTemplate("db/bom_channels.substitutions")
 dbLoadTemplate("db/bom_channels_sim.substitutions")
 dbLoadRecords("db/bom_channels_sum.db")
+dbLoadRecords("db/bom_calc.db")
 
 cd ${TOP}/iocBoot/${IOC}
 

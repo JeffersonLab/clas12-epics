@@ -1,4 +1,19 @@
+# N. Baltzell, 2018
+#
+# Calculate rolling mean and RMS of any PV.
+#
+# Required Macros:
+# P    = output PV prefix
+# I    = input PV of which to find the mean and RMS
+# N    = number of readings to use for calculations
+# SCAN = seconds between readings (must be an EPICS scan period 1/2/5/10)
+#
+# Optional Macros:
+# EGU
+# DESC
+# 
 
+# circular buffer of $(I) values:
 record(compress,"$(P):circBuff") {
     field(SCAN,"$(SCAN) second")
     field(INP,"$(I)")
@@ -6,6 +21,7 @@ record(compress,"$(P):circBuff") {
     field(NSAM,"$(N)")
 }
 
+#### THE MEAN:
 record(compress,"$(P)") {
     field(DESC,"$(DESC=)")
     field(INP,"$(P):circBuff CPP")
@@ -14,4 +30,41 @@ record(compress,"$(P)") {
     field(N,"$(N)")
     field(EGU,"$(EGU=)")
     info(autosaveFields_pass0,"VAL DESC")
+    field(FLNK,"$(P):rmsCalc.PROC")
 }
+
+# latest RMS term, (value-mean)^2:
+record(calcout,"$(P):rmsCalc") {
+    field(INPA,"$(I)")
+    field(INPB,"$(P)")
+    field(CALC,"(A-B)*(A-B)")
+    field(OUT,"$(P):rmsCircBuff.PROC")
+}
+
+# circular buffer of RMS terms:
+record(compress,"$(P):rmsCircBuff") {
+    field(INP,"$(P):rmsCalc")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"$(N)")
+    field(FLNK,"$(P):rmsAvg.PROC")
+}
+
+# average of RMS terms:
+record(compress,"$(P):rmsAvg") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(P):rmsCircBuff")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"$(N)")
+    field(EGU,"$(EGU=)")
+    info(autosaveFields_pass0,"VAL DESC")
+    field(FLNK,"$(P):rms.PROC")
+}
+
+#### THE RMS:
+record(calc,"$(P):rms") {
+    field(INPA,"$(P):rmsAvg")
+    field(INPB,"$(P).NSAM")
+    field(CALC,"A>0 && B>0 ? sqrt(A*B) : 0")
+}
+

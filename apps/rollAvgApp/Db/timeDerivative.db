@@ -1,27 +1,25 @@
+# N. Baltzell, 2017
 #
-# Calculate a time-derivative, based on periodically sampling a value,
-# as the difference between the current and previous values divided by
-# the sampling period.
+# Calculate a time-derivative as the difference between the current and
+# previous values divided by the sampling period.
 #
-# Sampling period must be an EPICS scan period (1/2/5/10).
-#
-# N. Baltzell
-#
-# $(P)          = the PV of which to calculate the time-derivative,
-# $(DT)         = the sampling period
+# Required Macros:
+# $(P)           = the PV of which to calculate the time-derivative,
+# $(DT)          = the sampling period (must be an EPICS scan period 1/2/5/10)
 # $(P)$(R=):dxdt = the resulting time-derivate
+#
+# Optional Macros:
+# SCALE
+# EGU
+#
 
-# The PV of which to calculate the time-derivative (only for testing):
-#record(ai,"$(P)") {
-#    field(VAL,0)
-#    field(PINI,1)
-#}
-
+# just a place to store the previous value:
 record(ai,"$(P)$(R=):prev") {
     field(VAL,0)
     field(PINI,1)
-#    field(TPRO,1)
 }
+
+# get the current value, immediately store it as the preious value, then goto delay:
 record(calcout,"$(P)$(R=):prevC") {
     field(SCAN,"$(DT) second")
     field(INPA,"$(P)")
@@ -31,14 +29,16 @@ record(calcout,"$(P)$(R=):prevC") {
     field(OUT,"$(P)$(R=):prev PP")
     field(ODLY,"0")
     field(FLNK,"$(P)$(R=):delay.PROC PP")
-#    field(TPRO,1)
 }
+
+# delay before calculating the time-derivative: 
 record(seq,"$(P)$(R=):delay") {
     field(DOL1,"$(P)$(R=):dxdt PP")
     field(DO1,"1")
     field(DLY1,"$(DT)")
-#    field(TPRO,1)
 }
+
+#### THE TIME-DERIVATIVE:
 record(calc,"$(P)$(R=):dxdt") {
     field(INPA,"$(P)")
     field(INPB,"$(P)$(R=):prev")
@@ -47,6 +47,5 @@ record(calc,"$(P)$(R=):dxdt") {
     field(CALC,"D*(A-B)/C")
     field(PREC,"5")
     field(EGU,"$(EGU=)")
-#    field(TPRO,1)
 }
 

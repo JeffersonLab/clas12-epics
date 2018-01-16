@@ -23,6 +23,7 @@ dbLoadRecords("db/richIntlk-S1EP.db")
 dbLoadRecords("db/richIntlk-sums.db")
 
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_, R=CRIO_RICH_, DLY=60")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_, R=CRIO_RICH_S1_EP_, DLY=60")
 
 cd ${TOP}/iocBoot/${IOC}
 

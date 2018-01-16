@@ -6,6 +6,7 @@ import sys
 mappingFile='./SspRich_cabling_ILA.txt'
 # for cosmic RICH:
 #mappingFile='./SspRich_cabling_cosmic_ILA.txt'
+tileToLvFile='../../caenHvApp/doc/rich_TILE2LV.txt'
 
 # OUTPUTS:
 # jscalerApp/Db/jscaler_RICH_Maps.db
@@ -27,6 +28,11 @@ if len(sys.argv)>1:
 
 tiles=[]
 pmts=[]
+
+tileToLv=[]
+for xx in open(tileToLvFile,'r').readlines():
+  tileToLv.append(int(xx.strip()))
+
 
 ###################################################################
 ###################################################################
@@ -110,14 +116,14 @@ if DESCES:
   for xx in pmts:
     for yy in pmtSuffixes:
       pv='B_DET_RICH_SSP_PMT%.3d%s.DESC'%(xx['pmt'],yy)
-      if CAPUT: fmt='caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d\''
-      else:     fmt='dbpf("%s","RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d")'
-      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'],xx['pmt'])
+      if CAPUT: fmt='caput %s \'RICH - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d, Lv%.2d\''
+      else:     fmt='dbpf("%s","RICH - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d, Lv%.2d")'
+      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'],xx['pmt'],tileToLv[int(xx['tile'])-1])
   for xx in tiles:
     for yy in tileSuffixes:
       pv='B_DET_RICH_SSP_TILE%.3d%s.DESC'%(xx['tile'],yy)
-      if CAPUT: fmt='caput %s \'RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d\''
-      else:     fmt='dbpf("%s","RICH SSP - Sl%.2d, Fi%.2d, Ti%.3d")'
-      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'])
+      if CAPUT: fmt='caput %s \'RICH - Sl%.2d, Fi%.2d, Ti%.3d, Lv%.2d\''
+      else:     fmt='dbpf("%s","RICH - Sl%.2d, Fi%.2d, Ti%.3d, Lv%.2d")'
+      print fmt % (pv,xx['slot'],xx['fiber'],xx['tile'],tileToLv[int(xx['tile'])-1])
 
 

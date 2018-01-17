@@ -431,12 +431,17 @@ class ECalChannelCollection:
 ECAL=ECalChannelCollection()
 
 def calcRates(chans):
-    total,maximum=0,0
+    total,maximum,top,bottom,left,right=0,0,0,0,0,0
     for ccc in chans:
-       total += ccc.vals['PVVAL']
-       if ccc.vals['PVVAL']>maximum:
-         maximum=ccc.vals['PVVAL']
-    return [total,maximum]
+       rate = ccc.vals['PVVAL']
+       total += rate
+       if rate>maximum: maximum=rate
+       # X is upstream, swap it for downstream:
+       if ccc.vals['X']<0: right  += rate
+       else:               left   += rate
+       if ccc.vals['Y']<0: bottom += rate
+       else:               top    += rate
+    return [total,maximum,top,bottom,left,right]
 
 def setupHists(hhh):
     for hh in hhh:
@@ -564,11 +569,13 @@ def main():
     gPad.SetRightMargin(0.11)
 
     #tt2=TPaveText(0.7,0.96,0.9,0.99,'NDC')
-    ttM=TPaveText(-3+0+0.05,5-5+0.05,4,6-5.01)
-    tt2=TPaveText(-3+0+0.05,5-6+0.05,4,6-6.01)
+    ttM=TPaveText(-3+0+0.05,7-5+0.05,4,8-5.01)
+    tt2=TPaveText(-3+0+0.05,7-6+0.05,4,8-6.01)
+    ttX=TPaveText(-3+0+0.05,7-8+0.05,4,8-8.01)
+    ttY=TPaveText(-3+0+0.05,7-9+0.05,4,8-9.01)
     ttime=TPaveText(-10,-12.5,10,-11.8)
     tchan=TPaveText(0,0,0.9,1)
-    setupPaveTexts([tt2,ttM,ttime,tchan])
+    setupPaveTexts([tt2,ttM,ttime,tchan,ttX,ttY])
     ttM.SetTextColor(2)
     ttM.SetFillStyle(0)
     tt2.SetFillStyle(0)
@@ -598,7 +605,7 @@ def main():
     bb.DrawBox(-2.47,-2.47,3.49,3.47)
 
     cc.cd()
-    for xx in [ttM,tt2,ttime,arrow,tarrow]: xx.Draw()
+    for xx in [ttM,tt2,ttime,arrow,tarrow,ttX,ttY]: xx.Draw()
     cc2.cd()
     tchan.Draw('NDC')
     cc.cd()
@@ -623,10 +630,16 @@ def main():
               hh.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
               hi.SetBinContent(xax.FindBin(xx),yax.FindBin(yy),ch['PVVAL'])
 
-            for xx in [ttime,tt2,ttM]: xx.Clear()
-            [total,maximum]=calcRates(ECAL.chans)
+            for xx in [ttime,tt2,ttM,ttX,ttY]: xx.Clear()
+            [total,maximum,top,bottom,left,right]=calcRates(ECAL.chans)
+
+            xasy = (right-left)/total
+            yasy = (top-bottom)/total
+
             tt2.AddText('Total:  %.1f MHz'%(total/1000))
             ttM.AddText('Max:  %.0f kHz'%(maximum))
+            ttX.AddText('X-Asy:  %+.1f%%'%(100*xasy))
+            ttY.AddText('Y-Asy:  %+.1f%%'%(100*yasy))
             ttime.AddText(makeTime())
 
             if not gPad: sys.exit()

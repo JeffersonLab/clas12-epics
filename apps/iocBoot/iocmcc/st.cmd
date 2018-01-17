@@ -24,7 +24,13 @@ dbLoadTemplate("db/alarm_bpm.substitutions")
 #dbLoadTemplate("db/hallb_ia.substitutions")
 #dbLoadRecords("db/hallb_ia.db")
 
+# calculate running averages:
 dbLoadTemplate("db/mcc_fsd.substitutions")
+
+# breakout FSD bits into single records:
+#dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=MASK,I=ISD2H001HALOMASKr,ZSV=NO_ALARM,OSV=MAJOR")
+#dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=TRIP,I=ISD2H001HALOTESTr,ZSV=NO_ALARM,OSV=MAJOR")
+#dbLoadRecords("db/mcc_fsd_aliases.db")
 
 cd ${TOP}/iocBoot/${IOC}
 

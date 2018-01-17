@@ -58,7 +58,6 @@ dbLoadTemplate("db/saclayTarget.substitutions")
 # THIS IS NEW complete bits:
 dbLoadTemplate("db/saclayTarget-bits.substitutions")
 
-#dbLoadRecords("db/saclayTarget-aliases.db","P=B_SACLAYTGT:")
 #dbLoadRecords("db/saclayTarget-alarm.db","P=B_SACLAYTGT:")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")

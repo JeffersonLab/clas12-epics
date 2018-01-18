@@ -16,6 +16,8 @@ mcc_DBD += base.dbd
 mcc_DBD += asSupport.dbd
 mcc_DBD += devIocStats.dbd
 mcc_DBD += caPutLog.dbd
+mcc_DBD += calc.dbd
+mcc_DBD += sCalcoutRecord.dbd
 
 # mcc_registerRecordDeviceDriver.cpp derives from mcc.dbd
 mcc_SRCS += mcc_registerRecordDeviceDriver.cpp
@@ -24,6 +26,7 @@ mcc_SRCS += mcc_registerRecordDeviceDriver.cpp
 mcc_SRCS_DEFAULT += mccMain.cpp
 mcc_SRCS_vxWorks += -nil-
 
+mcc_LIBS += calc
 mcc_LIBS += autosave
 mcc_LIBS += devIocStats
 mcc_LIBS += caPutLog

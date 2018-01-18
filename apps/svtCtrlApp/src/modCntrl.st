@@ -168,7 +168,7 @@ ss modCntrl {
       when( ) {
          for(i=0;i<2;i++){
            if( (lvcmdoff[i] > 0) && (hvrb[i] < HVOFF) && (hvst[i] == 0)) {
-              printf("::lvoff %d, hvrb %f, hvst %ld\n",lvcmdoff[i],hvrb[i],hvst[i]);
+              printf("::lvoff %d, hvrb %f, hvst %d\n",lvcmdoff[i],hvrb[i],hvst[i]);
               strcpy ( message[i], "Turn off LV" );
               pvPut(message[i]);
               printf("Turn off %d LV\n",i);

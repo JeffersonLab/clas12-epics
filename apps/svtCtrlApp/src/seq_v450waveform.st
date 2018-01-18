@@ -16,6 +16,8 @@ string prefix = "B_SVT_TEMP";
 //#define NTEMPS 132
 #define NTEMPS 84
 
+#define MAXTEMP 150
+
 int nChansPerSlot[NSLOTS]={16,16,16,16,16,4,16,16,16};
 int nModulesPerRegion[NREGIONS]={10,14,18};
 //int nModulesPerRegion[NREGIONS]={10,14,18,24};
@@ -94,7 +96,7 @@ ss seq_v450waveform {
     when ()
     {
       for (ii=0; ii<wfLength; ii++) pvGet(wfi[ii]);
-      for (ii=0; ii<wfLength; ii++) wfo[ii]=wfi[ii];
+      for (ii=0; ii<wfLength; ii++) wfo[ii] = wfi[ii]<MAXTEMP ? wfi[ii] : 1e-8;
       pvPut(wfo);
       epicsThreadSleep(delay);
     } state run

@@ -16026,7 +16026,7 @@ ScriptUtil.openOPI(widget,"clas12.opi",1,null);]]></scriptText>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>81</height>
+    <height>76</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -16044,8 +16044,8 @@ ScriptUtil.openOPI(widget,"clas12.opi",1,null);]]></scriptText>
     <background_color>
       <color red="111" green="111" blue="111" />
     </background_color>
-    <width>161</width>
-    <x>213</x>
+    <width>154</width>
+    <x>217</x>
     <name>Orbit Locks</name>
     <y>12</y>
     <foreground_color>
@@ -16065,7 +16065,27 @@ ScriptUtil.openOPI(widget,"clas12.opi",1,null);]]></scriptText>
       <tooltip>$(pv_name)
 $(pv_value)</tooltip>
       <horizontal_alignment>1</horizontal_alignment>
-      <rules />
+      <rules>
+        <rule name="Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv1==1">
+            <value>
+              <color name="Major" red="255" green="0" blue="0" />
+            </value>
+          </exp>
+          <exp bool_exp="pv0==1">
+            <value>
+              <color name="On" red="0" green="255" blue="0" />
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color name="Warning" red="255" green="255" blue="0" />
+            </value>
+          </exp>
+          <pv trig="true">B_ORBITLOCKS:isRunning</pv>
+          <pv trig="true">B_ORBITLOCKS:isSuspended</pv>
+        </rule>
+      </rules>
       <enabled>true</enabled>
       <wuid>-7cde59e3:16109afba36:-7d38</wuid>
       <transparent>false</transparent>
@@ -16076,7 +16096,7 @@ $(pv_value)</tooltip>
       <scripts />
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>true</show_units>
-      <height>43</height>
+      <height>37</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -16097,12 +16117,12 @@ $(pv_value)</tooltip>
       <background_color>
         <color red="111" green="111" blue="111" />
       </background_color>
-      <width>117</width>
-      <x>9</x>
+      <width>127</width>
+      <x>-1</x>
       <name>Text Update</name>
       <y>6</y>
       <foreground_color>
-        <color name="Read_Foreground" red="255" green="255" blue="255" />
+        <color name="Write_Foreground" red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="false" />
       <font>

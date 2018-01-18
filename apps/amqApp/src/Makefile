@@ -18,6 +18,8 @@ amq_DBD += base.dbd
 
 amq_DBD += amqdev.dbd
 
+amq_DBD += calc.dbd
+amq_DBD += aCalcoutRecord.dbd
 amq_DBD += devIocStats.dbd
 amq_DBD += asSupport.dbd
 amq_DBD += waveformApp.dbd
@@ -46,6 +48,7 @@ amq_LIBS += activemq-cpp json-c amqSupport
 amq_LIBS += autosave
 amq_LIBS += devIocStats
 amq_LIBS += waveformApp
+amq_LIBS += calc
 
 #===========================
 

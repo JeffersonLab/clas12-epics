@@ -1,11 +1,10 @@
 record(subArray,"B_DAQ_GTTrigBit:$(N)") {
-    field(DESC,"$(ALIAS)")
+    field(DESC,"$(DESC)")
     field(INP,"B_DAQ:trig2vtp_VTPGT_TRIGGERBITS $(INOPT)")
     field(FTVL,"DOUBLE")
     field(MALM,32)
     field(NELM,1)
     field(INDX,"$(N)")
-    alias("B_DAQ_GTTrigBit:$(ALIAS)")
     field(FLNK,"B_DAQ_GTTrigBit:$(M).PROC")
 }
 
@@ -27,3 +26,7 @@ record(calc,"B_DAQ_GTTrigBitPrescaledFrac:$(N)") {
     field(EGU,"%")
 }
 
+record(ai,"B_DAQ_VTPGT:TrigBit:$(N)") {
+    field(DESC,"$(DESC)")
+    field(INP,"B_DAQ_GTTrigBit:$(N)")
+}

@@ -250,6 +250,18 @@ $(pv_value)</tooltip>
           <confirm_message></confirm_message>
           <description>LV All On</description>
         </action>
+        <action type="EXECUTE_CMD">
+          <command>hvbackup.py save det=FTH_HV</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Save HV Settings</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>hvbackup.py restore det=FTH_HV</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Restore HV Settings</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>

@@ -5,7 +5,7 @@ record(subArray,"B_DAQ_GTTrigBit:$(N)") {
     field(MALM,32)
     field(NELM,1)
     field(INDX,"$(N)")
-    field(FLNK,"B_DAQ_GTTrigBit:$(M).PROC")
+    field(FLNK,"B_DAQ_VTPGT:TrigBit:$(N).PROC")
 }
 
 record(ai,"B_DAQ_GTTrigBitPrescale:$(N)") {
@@ -29,4 +29,5 @@ record(calc,"B_DAQ_GTTrigBitPrescaledFrac:$(N)") {
 record(ai,"B_DAQ_VTPGT:TrigBit:$(N)") {
     field(DESC,"$(DESC)")
     field(INP,"B_DAQ_GTTrigBit:$(N)")
+    field(FLNK,"B_DAQ_GTTrigBit:$(M).PROC")
 }

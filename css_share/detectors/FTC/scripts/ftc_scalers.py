@@ -569,19 +569,25 @@ def main():
     gPad.SetRightMargin(0.11)
 
     #tt2=TPaveText(0.7,0.96,0.9,0.99,'NDC')
-    ttM=TPaveText(-3+0+0.05,7-5+0.05,4,8-5.01)
-    tt2=TPaveText(-3+0+0.05,7-6+0.05,4,8-6.01)
-    ttX=TPaveText(-3+0+0.05,7-8+0.05,4,8-8.01)
-    ttY=TPaveText(-3+0+0.05,7-9+0.05,4,8-9.01)
+    ttM=TPaveText(-3+0.05, 7-4.45, 4.0, 8-4.51)
+    tt2=TPaveText(-3+0.05, 7-5.45, 4.0, 8-5.51)
+
+    ttX=TPaveText(-2, 7-8.00, 3, 8-8.00)
+    ttY=TPaveText(-2, 7-9.00, 3, 8-9.00)
+    ttZ=TPaveText(-2, 6-8.80, 3, 8-9.30)
+    ttZ.AddText("positive = beam top/right")
+
     ttime=TPaveText(-10,-12.5,10,-11.8)
     tchan=TPaveText(0,0,0.9,1)
-    setupPaveTexts([tt2,ttM,ttime,tchan,ttX,ttY])
+    setupPaveTexts([tt2,ttM,ttime,tchan,ttX,ttY,ttZ])
     ttM.SetTextColor(2)
     ttM.SetFillStyle(0)
+    ttZ.SetFillStyle(0)
     tt2.SetFillStyle(0)
 
-    tarrow=TText(14.5,0.3,'Beam Right')
-    arrow=TArrow(19,0.5,23,0.5,0.02,'|>')
+    tarrow=TText(-0.9,0.7,'Beam Right')
+    tarrow.SetTextSizePixels(15)
+    arrow=TArrow(-1.4,0.5,2.4,0.5,0.02,'|>')
     arrow.SetAngle(40)
     arrow.SetFillColor(1)
     arrow.SetLineWidth(2)
@@ -605,7 +611,7 @@ def main():
     bb.DrawBox(-2.47,-2.47,3.49,3.47)
 
     cc.cd()
-    for xx in [ttM,tt2,ttime,arrow,tarrow,ttX,ttY]: xx.Draw()
+    for xx in [ttM,tt2,ttime,arrow,tarrow,ttX,ttY,ttZ]: xx.Draw()
     cc2.cd()
     tchan.Draw('NDC')
     cc.cd()
@@ -638,8 +644,14 @@ def main():
 
             tt2.AddText('Total:  %.1f MHz'%(total/1000))
             ttM.AddText('Max:  %.0f kHz'%(maximum))
-            ttX.AddText('X-Asy:  %+.1f%%'%(100*xasy))
-            ttY.AddText('Y-Asy:  %+.1f%%'%(100*yasy))
+
+            if total>1e2:
+              ttX.AddText('X-Asy:  %+.1f%%'%(100*xasy))
+              ttY.AddText('Y-Asy:  %+.1f%%'%(100*yasy))
+            else:
+              ttX.AddText('X-Asy:  N/A')
+              ttY.AddText('Y-Asy:  N/A')
+
             ttime.AddText(makeTime())
 
             if not gPad: sys.exit()

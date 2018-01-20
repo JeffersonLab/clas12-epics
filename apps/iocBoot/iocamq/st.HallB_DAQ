@@ -42,12 +42,14 @@ dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:TestVals,K=TestVals,N=20,TH=5,THH=1
 dbLoadRecords("db/amqStringArray.db","P=B_DAQ:NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
 dbLoadRecords("db/amqHistogram.db","P=B_DAQ:TestHist,K=TestHist,N=100,NE=101,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqIntArray.db","P=B_DAQ:FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterPosition,K=FTClusterPosition,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterEnergy,K=FTClusterEnergy,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterNHits,K=FTClusterNHits,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterPositionHodo,K=FTClusterPositionHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterEnergyHodo,K=FTClusterEnergyHodo,N=1000,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:FTClusterNHitsHodo,K=FTClusterNHitsHodo,N=9,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:trig2vtp_VTPGT_TRIGGERBITS,K=trig2vtp_VTPGT_TRIGGERBITS,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal1vtp_VTPECS_CLUSTERS,K=adcecal1vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcecal2vtp_VTPECS_CLUSTERS,K=adcecal2vtp_VTPECS_CLUSTERS,N=4,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
@@ -64,6 +66,8 @@ dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:adcpcal6vtp_VTPPCS_CLUSTERS,K=adcp
 
 dbLoadTemplate("db/amqTriggerBits.substitutions")
 dbLoadRecords("db/waveformApp.db","P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P,NELM=32,FTVL=DOUBLE,PERIOD=1,FNAME=trigBitsWaveform.txt")
+
+dbLoadRecords("db/amqTrigBit-alarms.db")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

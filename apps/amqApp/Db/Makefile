@@ -14,6 +14,7 @@ DB += amqInt.db amqIntArray.db amqDouble.db amqDoubleArray.db amqFloatArray.db a
 
 DB += amqTriggerBits.substitutions
 DB += amqTrigBit.template
+DB += amqTrigBit-alarms.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

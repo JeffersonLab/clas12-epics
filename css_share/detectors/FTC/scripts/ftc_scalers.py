@@ -639,13 +639,12 @@ def main():
             for xx in [ttime,tt2,ttM,ttX,ttY]: xx.Clear()
             [total,maximum,top,bottom,left,right]=calcRates(ECAL.chans)
 
-            xasy = (right-left)/total
-            yasy = (top-bottom)/total
-
             tt2.AddText('Total:  %.1f MHz'%(total/1000))
             ttM.AddText('Max:  %.0f kHz'%(maximum))
 
             if total>1e2:
+              xasy = (right-left)/total
+              yasy = (top-bottom)/total
               ttX.AddText('X-Asy:  %+.1f%%'%(100*xasy))
               ttY.AddText('Y-Asy:  %+.1f%%'%(100*yasy))
             else:

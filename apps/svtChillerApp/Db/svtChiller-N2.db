@@ -1,0 +1,537 @@
+record(ai,"B_SVT_CHILLER_N2:STATUS") {
+	field(DTYP,"Soft Channel")
+	field(INP,"B_SVT_CHILLER_N2:GetStatus NPP NMS")
+	field(LOLO,"-1")
+	field(LLSV,"MAJOR")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP05") {
+	field(DESC,"Read outflow temp limit TiL")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,05) L0")
+	field(PREC,"1")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP04") {
+	field(DESC,"Read outflow temp limit TiH")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,04) L0")
+	field(PREC,"1")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP03") {
+	field(DESC,"Read overtemp switch-off point")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,03) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP02") {
+	field(DESC,"Read cooling mode")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,02) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP01") {
+	field(DESC,"Read pump power level")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:PUMPLEVEL")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,01) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetSP00") {
+	field(DESC,"Read temp set value")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,00) L0")
+	field(PREC,"1")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPV10") {
+	field(DESC,"Read external temp in 0.0001 deg C")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,10) L0")
+	field(PREC,"4")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPV01") {
+	field(DESC,"Read controlled temp")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,01) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPV00") {
+	field(DESC,"Read external temp")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,00) L0")
+	field(PREC,"3")
+#field(HIHI,"23")
+#field(LOLO,"6")
+#field(HIGH,"18")
+#field(LOW,"6.5")
+#field(HHSV,"MAJOR")
+#field(LLSV,"MAJOR")
+#field(HSV,"MINOR")
+#field(LSV,"MINOR")
+  info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR14") {
+	field(DESC,"Read setpoint offset")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,14) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR10") {
+	field(DESC,"Read the control parameter XpF")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,10) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR09") {
+	field(DESC,"Read the max. outflow temp limit")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,09) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR07") {
+	field(DESC,"Read the control parameter TdE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,07) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR06") {
+	field(DESC,"Read the control parameter TvE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,06) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR05") {
+	field(DESC,"Read the control parameter TnE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,05) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR04") {
+	field(DESC,"Read the control parameter KpE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,04) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR03") {
+	field(DESC,"Read the control parameter Td")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,03) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR02") {
+	field(DESC,"Read the control parameter Tv")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,02) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR01") {
+	field(DESC,"Read the control parameter Tn")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,01) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetPAR00") {
+	field(DESC,"Read the control parameter Xp")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,00) L0")
+	field(PREC,"3")
+}
+record(ai,"B_SVT_CHILLER_N2:GetMODE04") {
+	field(DESC,"Setpoint offset source")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,04) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetMODE02") {
+	field(DESC,"Standby operation")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,02) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetMODE01") {
+	field(DESC,"Control ")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,01) L0")
+}
+record(ai,"B_SVT_CHILLER_N2:GetMODE00") {
+	field(DESC,"Keypad: 0 = released, 1 = locked. ")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,00) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetSP05") {
+	field(DESC,"TiH outflow temp limit, lower val")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,05) L0")
+	field(PREC,"1")
+}
+record(ao,"B_SVT_CHILLER_N2:SetSP04") {
+	field(DESC,"TiH outflow temp limit, upper val")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,04) L0")
+	field(PREC,"1")
+}
+record(ao,"B_SVT_CHILLER_N2:SetSP02") {
+	field(DESC,"Cooling op mode:0=OFF 1=ON 2=AUTO")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,02) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetSP01") {
+	field(DESC,"Pump power level 1 to 6")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,01) L0")
+	field(DOL,"B_SVT_CHILLER_N2:SetPL.RVAL NPP NMS")
+	field(OMSL,"closed_loop")
+	field(PREC,"0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetSP00") {
+	field(DESC,"Set-value transfer")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,00) L0")
+	field(PREC,"1")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPV05") {
+	field(DESC,"Set ext temp via interface")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(PV,05) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR14") {
+	field(DESC,"Write setpoint offset")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR14")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,14) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR10") {
+	field(DESC,"Write the control parameter XpF")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR10")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,10) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR09") {
+	field(DESC,"Write the max. outflow temp limit")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR09")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,09) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR07") {
+	field(DESC,"Write the control parameter TdE")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR07")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,07) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR06") {
+	field(DESC,"Write the control parameter TvE")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR06")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,06) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR05") {
+	field(DESC,"Write the control parameter TnE")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR05")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,05) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR04") {
+	field(DESC,"Write the control parameter KpE")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR04")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,04) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR03") {
+	field(DESC,"Write the control parameter Td")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR03")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,03) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR02") {
+	field(DESC,"Write the control parameter Tv")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR02")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,02) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR01") {
+	field(DESC,"Write the control parameter Tn")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR01")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,01) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetPAR00") {
+	field(DESC,"Write the control parameter Xp")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetPAR00")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,00) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetMODE04") {
+	field(DESC,"Set setpoint offset source")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetMODE04")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,04) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetMODE01") {
+	field(DESC,"Set Control Mode")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetMODE01")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,01) L0")
+}
+record(ao,"B_SVT_CHILLER_N2:SetMODE00") {
+	field(DESC,"Set Keypad Mode")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetMODE00")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,00) L0")
+}
+record(bi,"B_SVT_CHILLER_N2:WARN") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:ALARM")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B4 NPP NMS")
+	field(OSV,"MAJOR")
+    field(ZNAM,"OK")
+    field(ONAM,"WARN")
+}
+record(bi,"B_SVT_CHILLER_N2:OVERTEMP") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:WARN")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B3 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"B_SVT_CHILLER_N2:LOWLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:OVERTEMP")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B2 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"B_SVT_CHILLER_N2:HIGHLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:LOWLEVEL")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B1 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"B_SVT_CHILLER_N2:ERROR") {
+	field(DTYP,"Soft Channel")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B6 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"B_SVT_CHILLER_N2:ECVM") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:HIGHLEVEL")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B0 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"B_SVT_CHILLER_N2:ALARM") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:ERROR")
+	field(INP,"B_SVT_CHILLER_N2:STAT.B5 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bo,"B_SVT_CHILLER_N2:ONOFF") {
+	field(DESC,"Switch on,off from standby")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:GetMODE02")
+	field(OUT,"@ecoChiller.proto setEcoStandby(START) L0")
+	field(ZNAM,"STOP")
+	field(ONAM,"START")
+}
+record(seq,"B_SVT_CHILLER_N2:OFF") {
+  field(DOL1,"0")
+  field(DO1,"0")
+  field(LNK1,"B_SVT_CHILLER_N2:ONOFF CPP")
+}
+#record(bo,"B_SVT_CHILLER_N2:OFF") {
+#  field(OMSL,"closed_loop")
+#  field(DOL,"0")
+#  field(OUT,"B_SVT_CHILLER_N2:ONOFF")
+#}
+record(mbbi,"B_SVT_CHILLER_N2:PUMPLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(INP,"B_SVT_CHILLER_N2:GetSP01 NPP NMS")
+	field(ONVL,"1")
+	field(TWVL,"2")
+	field(THVL,"3")
+	field(FRVL,"4")
+	field(FVVL,"5")
+	field(SXVL,"6")
+	field(ONST,"LEVEL 1")
+	field(TWST,"LEVEL 2")
+	field(THST,"LEVEL 3")
+	field(FRST,"LEVEL 4")
+	field(FVST,"LEVEL 5")
+	field(SXST,"LEVEL 6")
+}
+record(mbbiDirect,"B_SVT_CHILLER_N2:STAT") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:ECVM")
+	field(INP,"B_SVT_CHILLER_N2:GetStat NPP NMS")
+}
+record(mbbo,"B_SVT_CHILLER_N2:SetPL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT_CHILLER_N2:SetSP01")
+	field(ZRVL,"1")
+	field(ONVL,"2")
+	field(TWVL,"3")
+	field(THVL,"4")
+	field(FRVL,"5")
+	field(FVVL,"6")
+	field(ZRST,"PUMP LEVEL 1")
+	field(ONST,"PUMP LEVEL 2")
+	field(TWST,"PUMP LEVEL 3")
+	field(THST,"PUMP LEVEL 4")
+	field(FRST,"PUMP LEVEL 5")
+	field(FVST,"PUMP LEVEL 6")
+}
+record(stringin,"B_SVT_CHILLER_N2:ReadResponse") {
+	field(DESC,"Read Response")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString() L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionV") {
+	field(DESC,"Get sw ver no of the RS232/485 module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_V) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionT") {
+	field(DESC,"Get sw ver no of the cooling system.")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_T) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionS") {
+	field(DESC,"Get sw ver no of the protection system")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_S) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionR") {
+	field(DESC,"Get sw ver no of the control system")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_R) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM5") {
+	field(DESC,"Get sw ver no of the solenoid valve 5")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_5) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM4") {
+	field(DESC,"Get sw ver no of the solenoid valve 4")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_4) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM3") {
+	field(DESC,"Get sw ver no of the solenoid valve 3")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_3) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM2") {
+	field(DESC,"Get sw ver no of the solenoid valve 2")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_2) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM1") {
+	field(DESC,"Get sw ver no of the solenoid valve 1")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_1) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionM0") {
+	field(DESC,"Get sw ver no of the solenoid valve 0")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_0) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionD") {
+	field(DESC,"Get sw ver no of the digital module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_D) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetVersionA") {
+	field(DESC,"Get sw ver no of the analogue module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_A) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetType") {
+	field(DESC,"Read device type")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(TYPE) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetStatus") {
+	field(DESC,"Read the dev status: 0=OK, -1=Error")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:STATUS")
+	field(INP,"@ecoChiller.proto getEcoString(STATUS) L0")
+}
+record(stringin,"B_SVT_CHILLER_N2:GetStat") {
+	field(DESC,"Read the error diagnosis response")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:STAT")
+	field(INP,"@ecoChiller.proto getEcoString(STAT) L0")
+}
+record(stringout,"B_SVT_CHILLER_N2:WriteCommand") {
+	field(DESC,"Send command")
+	field(DTYP,"stream")
+	field(FLNK,"B_SVT_CHILLER_N2:ReadResponse")
+	field(OUT,"@ecoChiller.proto setEcoString L0")
+}
+record(asyn,"B_SVT_CHILLER_N2:ASYN") {
+	field(DTYP,"asynRecordDevice")
+	field(UDF,"0")
+	field(PORT,"L0")
+	field(ADDR,"24")
+	field(PCNCT,"Connect")
+	field(OEOS,"\\r\\n")
+	field(OMAX,"2000")
+	field(IEOS,"\\r\\n")
+	field(IMAX,"2000")
+	field(EOMR,"Eos")
+	field(TMSK,"1")
+	field(TB0,"On")
+	field(TSIZ,"80")
+	field(TFIL,"Unknown")
+	field(AUCT,"autoConnect")
+	field(CNCT,"Connect")
+	field(ENBL,"Enable")
+}

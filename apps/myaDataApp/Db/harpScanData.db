@@ -1,0 +1,86 @@
+# 
+# EPICS PVs for integrating scan data with the Mya archiver
+# 
+# 
+# Notes:
+#   Some scanners will no use the 45* records
+#
+#   [Macros]
+#   P - prefix (ex. HB_BEAM:SCAN:)
+#   R - prefix (ex. tagger:)
+#   
+#   [autosave]
+#   Requires autosave to prevent false archived data.
+#   Restore pass0.
+# 
+# Author: Wesley Moore
+# Date:   Mar 2015
+#
+
+record(ai, "$(P)$(R)mean_x") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)sigma_x") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)bgr_peak_ratio_x") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)mean_y") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)sigma_y") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)bgr_peak_ratio_y") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)mean_45") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)sigma_45") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)bgr_peak_ratio_45") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)a") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)b") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)alpha") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)peak_x") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)peak_y") {
+    field(PREC, "3")
+}
+
+record(ai, "$(P)$(R)peak_45") {
+    field(PREC, "3")
+}
+
+record(longin, "$(P)$(R)unix_time") {
+    field(DESC, "unix time since epoch")
+}
+
+record(ai, "$(P)$(R)counter_num") {
+    field(DESC, "counter used for scan")
+}

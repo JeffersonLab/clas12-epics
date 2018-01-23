@@ -18,6 +18,8 @@ svtChiller_SRCS += svtChiller_registerRecordDeviceDriver.cpp
 svtChiller_SRCS_DEFAULT += svtChillerMain.cpp
 svtChiller_SRCS_vxWorks += -nil-
 
+svtChiller_SRCS += svtChillerTemp.st
+
 #The following adds support from base/src/vxWorks
 svtChiller_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
@@ -29,6 +31,7 @@ svtChiller_LIBS += autosave
 svtChiller_LIBS += caPutLog 
 svtChiller_LIBS += autosave 
 svtChiller_LIBS += calc
+svtChiller_LIBS += seq
 svtChiller_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================

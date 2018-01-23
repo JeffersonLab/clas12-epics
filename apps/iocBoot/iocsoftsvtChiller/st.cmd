@@ -49,6 +49,7 @@ dbLoadRecords("db/svtChiller-N2.db")
 ####################################
 ####################################
 
+dbLoadRecords("db/svtChiller-autoSet.db")
 
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
@@ -72,6 +73,8 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbpf("${IOC}:SysReset.ASG","ALLWRITE")
+
+seq seqsvtChillerTemp
 
 dbl > pv.list
 

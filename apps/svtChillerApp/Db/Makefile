@@ -15,6 +15,7 @@ DB += svtChiller.db
 DB += ecoChiller.db
 
 DB += svtChiller-anova2eco.db
+DB += svtChiller-autoSet.db
 
 PROTO += ecoChiller.proto
 

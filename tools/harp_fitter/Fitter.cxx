@@ -530,9 +530,9 @@ void Fitter::SubmitToLogbook()
     logbook_list = logbook_list + " -l ELOG";
   }
 
-  if( but_to_MYA->IsOn() )
+  if( but_to_HBLOG->IsOn() || but_to_ELOG->IsOn() || but_to_MYA->IsOn() )
   {
-    cout<<"Send to MYA is selected"<<endl;
+    //cout<<"Send to MYA is selected"<<endl;
     CAPUT();
   }
 

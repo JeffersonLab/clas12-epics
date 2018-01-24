@@ -31,6 +31,9 @@ dbLoadTemplate("db/jscalers_RICH_sums_tempvolt.substitutions")
 # global alarm limit setters:
 dbLoadTemplate("db/jscalers_puts_RICH.substitutions")
 
+# global alarms (e.g. #fibers):
+dbLoadRecords("db/jscaler_RICH_alarm.db")
+
 # make waveforms: 
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=ROWS:,NELM=23, FTVL=FLOAT,PERIOD=5,FNAME=pvlists/rows.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_RICH_SCALERS_,R=PMTS:,NELM=391,FTVL=FLOAT,PERIOD=5,FNAME=pvlists/pmts.txt")

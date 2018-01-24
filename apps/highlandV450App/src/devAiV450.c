@@ -107,8 +107,12 @@ struct aiRecord	*pai;
 
 	status=v450_read(pvmeio->card,pvmeio->signal,&value);
 
-	if ( status == 0 )
+	if ( status == 0 ) {
+        // hack, prolly not the right place for this, NAB (January 2018)
+        if (pvmeio->signal>=16 && pvmeio->signal<=20) 
+            value=(short)value;
 		pai->rval = value;
+    }
 	else
 		recGblSetSevr(pai,READ_ALARM,INVALID_ALARM);
 

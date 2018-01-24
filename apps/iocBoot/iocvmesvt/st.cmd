@@ -21,6 +21,8 @@ dbLoadRecords("db/V450_1.db")
 dbLoadRecords("db/V450_alarm.db")
 dbLoadRecords("db/svtWatchdogVme.db")
 
+dbLoadRecords("db/V450-alias.db")
+
 # Why did we do this?
 #dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks-noReboot.db","IOC=iocvmesvt")
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocvmesvt")

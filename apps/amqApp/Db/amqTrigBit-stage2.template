@@ -1,0 +1,107 @@
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a0") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,0)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a1.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a1") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,1)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a2.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a2") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,2)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a3.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a3") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,3)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a4.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a4") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,4)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a5.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a5") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,5)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a6.PROC")
+}
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a6") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,6)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:a7.PROC")
+
+record(subArray,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a7") {
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TriggerBits CPP")
+    field(FTVL,"DOUBLE")
+    field(MALM,8)
+    field(NELM,1)
+    field(INDX,7)
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S):TrigBit:0.PROC")
+}
+
+
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:0") {
+    field(DESC,"HTCC>0.5")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a0")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:1.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:1") {
+    field(DESC,"PCAL>10")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a1")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:2.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:2") {
+    field(DESC,"ECAL>10")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a2")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:3.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:3") {
+    field(DESC,"HTCC x PCAL>60 x ECAL>10 x PCAL+ECAL>150")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a3")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:4.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:4") {
+    field(DESC,"HTCC x PCAL>60")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a4")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:5.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:5") {
+    field(DESC,"HTCC x PCAL>160")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a5")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:6.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:6") {
+    field(DESC,"FTOF>0.5 x PCAL>10 x ECAL>30")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a6")
+    field(FLNK,"B_DAQ:SSPGT_SEC$(S)_TTrigBit:7.PROC")
+}
+record(ai,"B_DAQ:SSPGT_SEC$(S)_TrigBit:7") {
+    field(DESC,"FTOF>0.5 x PCAL>10")
+    field(INP,"B_DAQ:SSPGT_SEC$(S)_TrigBit:a7")
+}
+
+

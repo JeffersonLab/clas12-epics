@@ -1935,7 +1935,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>B_SVT_CHILLER_STATUS.STAT</pv_name>
+    <pv_name>B_SVT_CHILLER:GetMODE02.STAT</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="120" green="120" blue="120" />
@@ -3206,7 +3206,23 @@ $(pv_value)</tooltip>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>Lauda ECO</description>
+        <description>Lauda ECO (200W)</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>edm2opi/svtChiller-N2.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Lauda ECO - N2 (100W)</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/svtChillerApp/svtChiller-autoSet.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>0</replace>
+        <description>Auto Temperature Set</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>../../apps/chillerApp/chiller_anova.opi</path>
@@ -3217,23 +3233,7 @@ $(pv_value)</tooltip>
           <ioc>iocsoftsvtChiller</ioc>
         </macros>
         <replace>2</replace>
-        <description>Anova A40</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>edm2opi/svtChiller-N2.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Lauda ECO - N2</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>../../apps/svtChillerApp/svtChiller-autoSet.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>0</replace>
-        <description>Auto Temperature Set</description>
+        <description>Anova A40 - Not in Use</description>
       </action>
     </actions>
     <font>
@@ -3570,10 +3570,10 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>3da61d96:161258dc998:-7a3b</wuid>
     <on_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Major" red="255" green="0" blue="0" />
     </on_color>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
     <on_label>ON</on_label>
     <scale_options>
       <width_scalable>true</width_scalable>

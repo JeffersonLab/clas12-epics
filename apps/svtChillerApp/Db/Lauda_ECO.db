@@ -1,0 +1,537 @@
+record(ai,"$(P):STATUS") {
+	field(DTYP,"Soft Channel")
+	field(INP,"$(P):GetStatus NPP NMS")
+	field(LOLO,"-1")
+	field(LLSV,"MAJOR")
+}
+record(ai,"$(P):GetSP05") {
+	field(DESC,"Read outflow temp limit TiL")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,05) $(PORT)")
+	field(PREC,"1")
+}
+record(ai,"$(P):GetSP04") {
+	field(DESC,"Read outflow temp limit TiH")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,04) $(PORT)")
+	field(PREC,"1")
+}
+record(ai,"$(P):GetSP03") {
+	field(DESC,"Read overtemp switch-off point")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,03) $(PORT)")
+}
+record(ai,"$(P):GetSP02") {
+	field(DESC,"Read cooling mode")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,02) $(PORT)")
+}
+record(ai,"$(P):GetSP01") {
+	field(DESC,"Read pump power level")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):PUMPLEVEL")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,01) $(PORT)")
+}
+record(ai,"$(P):GetSP00") {
+	field(DESC,"Read temp set value")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(SP,00) $(PORT)")
+	field(PREC,"1")
+}
+record(ai,"$(P):GetPV10") {
+	field(DESC,"Read external temp in 0.0001 deg C")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,10) $(PORT)")
+	field(PREC,"4")
+}
+record(ai,"$(P):GetPV01") {
+	field(DESC,"Read controlled temp")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,01) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPV00") {
+	field(DESC,"Read external temp")
+	field(SCAN,"2 second")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PV,00) $(PORT)")
+	field(PREC,"3")
+#field(HIHI,"23")
+#field(LOLO,"6")
+#field(HIGH,"18")
+#field(LOW,"6.5")
+#field(HHSV,"MAJOR")
+#field(LLSV,"MAJOR")
+#field(HSV,"MINOR")
+#field(LSV,"MINOR")
+  info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+}
+record(ai,"$(P):GetPAR14") {
+	field(DESC,"Read setpoint offset")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,14) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR10") {
+	field(DESC,"Read the control parameter XpF")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,10) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR09") {
+	field(DESC,"Read the max. outflow temp limit")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,09) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR07") {
+	field(DESC,"Read the control parameter TdE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,07) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR06") {
+	field(DESC,"Read the control parameter TvE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,06) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR05") {
+	field(DESC,"Read the control parameter TnE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,05) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR04") {
+	field(DESC,"Read the control parameter KpE")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,04) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR03") {
+	field(DESC,"Read the control parameter Td")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,03) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR02") {
+	field(DESC,"Read the control parameter Tv")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,02) $(PORT)")
+}
+record(ai,"$(P):GetPAR01") {
+	field(DESC,"Read the control parameter Tn")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,01) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetPAR00") {
+	field(DESC,"Read the control parameter Xp")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(PAR,00) $(PORT)")
+	field(PREC,"3")
+}
+record(ai,"$(P):GetMODE04") {
+	field(DESC,"Setpoint offset source")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,04) $(PORT)")
+}
+record(ai,"$(P):GetMODE02") {
+	field(DESC,"Standby operation")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,02) $(PORT)")
+}
+record(ai,"$(P):GetMODE01") {
+	field(DESC,"Control ")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,01) $(PORT)")
+}
+record(ai,"$(P):GetMODE00") {
+	field(DESC,"Keypad: 0 = released, 1 = locked. ")
+	field(SCAN,"2 second")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoValue(MODE,00) $(PORT)")
+}
+record(ao,"$(P):SetSP05") {
+	field(DESC,"TiH outflow temp limit, lower val")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,05) $(PORT)")
+	field(PREC,"1")
+}
+record(ao,"$(P):SetSP04") {
+	field(DESC,"TiH outflow temp limit, upper val")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,04) $(PORT)")
+	field(PREC,"1")
+}
+record(ao,"$(P):SetSP02") {
+	field(DESC,"Cooling op mode:0=OFF 1=ON 2=AUTO")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,02) $(PORT)")
+}
+record(ao,"$(P):SetSP01") {
+	field(DESC,"Pump power level 1 to 6")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,01) $(PORT)")
+	field(DOL,"$(P):SetPL.RVAL NPP NMS")
+	field(OMSL,"closed_loop")
+	field(PREC,"0")
+}
+record(ao,"$(P):SetSP00") {
+	field(DESC,"Set-value transfer")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(SP,00) $(PORT)")
+	field(PREC,"1")
+}
+record(ao,"$(P):SetPV05") {
+	field(DESC,"Set ext temp via interface")
+	field(DTYP,"stream")
+	field(OUT,"@ecoChiller.proto setEcoValue(PV,05) $(PORT)")
+}
+record(ao,"$(P):SetPAR14") {
+	field(DESC,"Write setpoint offset")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR14")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,14) $(PORT)")
+}
+record(ao,"$(P):SetPAR10") {
+	field(DESC,"Write the control parameter XpF")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR10")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,10) $(PORT)")
+}
+record(ao,"$(P):SetPAR09") {
+	field(DESC,"Write the max. outflow temp limit")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR09")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,09) $(PORT)")
+}
+record(ao,"$(P):SetPAR07") {
+	field(DESC,"Write the control parameter TdE")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR07")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,07) $(PORT)")
+}
+record(ao,"$(P):SetPAR06") {
+	field(DESC,"Write the control parameter TvE")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR06")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,06) $(PORT)")
+}
+record(ao,"$(P):SetPAR05") {
+	field(DESC,"Write the control parameter TnE")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR05")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,05) $(PORT)")
+}
+record(ao,"$(P):SetPAR04") {
+	field(DESC,"Write the control parameter KpE")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR04")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,04) $(PORT)")
+}
+record(ao,"$(P):SetPAR03") {
+	field(DESC,"Write the control parameter Td")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR03")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,03) $(PORT)")
+}
+record(ao,"$(P):SetPAR02") {
+	field(DESC,"Write the control parameter Tv")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR02")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,02) $(PORT)")
+}
+record(ao,"$(P):SetPAR01") {
+	field(DESC,"Write the control parameter Tn")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR01")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,01) $(PORT)")
+}
+record(ao,"$(P):SetPAR00") {
+	field(DESC,"Write the control parameter Xp")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetPAR00")
+	field(OUT,"@ecoChiller.proto setEcoValue(PAR,00) $(PORT)")
+}
+record(ao,"$(P):SetMODE04") {
+	field(DESC,"Set setpoint offset source")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetMODE04")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,04) $(PORT)")
+}
+record(ao,"$(P):SetMODE01") {
+	field(DESC,"Set Control Mode")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetMODE01")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,01) $(PORT)")
+}
+record(ao,"$(P):SetMODE00") {
+	field(DESC,"Set Keypad Mode")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetMODE00")
+	field(OUT,"@ecoChiller.proto setEcoInt(MODE,00) $(PORT)")
+}
+record(bi,"$(P):WARN") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):ALARM")
+	field(INP,"$(P):STAT.B4 NPP NMS")
+	field(OSV,"MAJOR")
+    field(ZNAM,"OK")
+    field(ONAM,"WARN")
+}
+record(bi,"$(P):OVERTEMP") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):WARN")
+	field(INP,"$(P):STAT.B3 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"$(P):LOWLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):OVERTEMP")
+	field(INP,"$(P):STAT.B2 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"$(P):HIGHLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):LOWLEVEL")
+	field(INP,"$(P):STAT.B1 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"$(P):ERROR") {
+	field(DTYP,"Soft Channel")
+	field(INP,"$(P):STAT.B6 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"$(P):ECVM") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):HIGHLEVEL")
+	field(INP,"$(P):STAT.B0 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bi,"$(P):ALARM") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):ERROR")
+	field(INP,"$(P):STAT.B5 NPP NMS")
+	field(OSV,"MAJOR")
+}
+record(bo,"$(P):ONOFF") {
+	field(DESC,"Switch on,off from standby")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):GetMODE02")
+	field(OUT,"@ecoChiller.proto setEcoStandby(START) $(PORT)")
+	field(ZNAM,"STOP")
+	field(ONAM,"START")
+}
+record(seq,"$(P):OFF") {
+  field(DOL1,"0")
+  field(DO1,"0")
+  field(LNK1,"$(P):ONOFF CPP")
+}
+#record(bo,"$(P):OFF") {
+#  field(OMSL,"closed_loop")
+#  field(DOL,"0")
+#  field(OUT,"$(P):ONOFF")
+#}
+record(mbbi,"$(P):PUMPLEVEL") {
+	field(DTYP,"Soft Channel")
+	field(INP,"$(P):GetSP01 NPP NMS")
+	field(ONVL,"1")
+	field(TWVL,"2")
+	field(THVL,"3")
+	field(FRVL,"4")
+	field(FVVL,"5")
+	field(SXVL,"6")
+	field(ONST,"LEVEL 1")
+	field(TWST,"LEVEL 2")
+	field(THST,"LEVEL 3")
+	field(FRST,"LEVEL 4")
+	field(FVST,"LEVEL 5")
+	field(SXST,"LEVEL 6")
+}
+record(mbbiDirect,"$(P):STAT") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):ECVM")
+	field(INP,"$(P):GetStat NPP NMS")
+}
+record(mbbo,"$(P):SetPL") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P):SetSP01")
+	field(ZRVL,"1")
+	field(ONVL,"2")
+	field(TWVL,"3")
+	field(THVL,"4")
+	field(FRVL,"5")
+	field(FVVL,"6")
+	field(ZRST,"PUMP LEVEL 1")
+	field(ONST,"PUMP LEVEL 2")
+	field(TWST,"PUMP LEVEL 3")
+	field(THST,"PUMP LEVEL 4")
+	field(FRST,"PUMP LEVEL 5")
+	field(FVST,"PUMP LEVEL 6")
+}
+record(stringin,"$(P):ReadResponse") {
+	field(DESC,"Read Response")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString() $(PORT)")
+}
+record(stringin,"$(P):GetVersionV") {
+	field(DESC,"Get sw ver no of the RS232/485 module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_V) $(PORT)")
+}
+record(stringin,"$(P):GetVersionT") {
+	field(DESC,"Get sw ver no of the cooling system.")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_T) $(PORT)")
+}
+record(stringin,"$(P):GetVersionS") {
+	field(DESC,"Get sw ver no of the protection system")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_S) $(PORT)")
+}
+record(stringin,"$(P):GetVersionR") {
+	field(DESC,"Get sw ver no of the control system")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_R) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM5") {
+	field(DESC,"Get sw ver no of the solenoid valve 5")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_5) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM4") {
+	field(DESC,"Get sw ver no of the solenoid valve 4")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_4) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM3") {
+	field(DESC,"Get sw ver no of the solenoid valve 3")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_3) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM2") {
+	field(DESC,"Get sw ver no of the solenoid valve 2")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_2) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM1") {
+	field(DESC,"Get sw ver no of the solenoid valve 1")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_1) $(PORT)")
+}
+record(stringin,"$(P):GetVersionM0") {
+	field(DESC,"Get sw ver no of the solenoid valve 0")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_M_0) $(PORT)")
+}
+record(stringin,"$(P):GetVersionD") {
+	field(DESC,"Get sw ver no of the digital module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_D) $(PORT)")
+}
+record(stringin,"$(P):GetVersionA") {
+	field(DESC,"Get sw ver no of the analogue module")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(VERSION_A) $(PORT)")
+}
+record(stringin,"$(P):GetType") {
+	field(DESC,"Read device type")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(INP,"@ecoChiller.proto getEcoString(TYPE) $(PORT)")
+}
+record(stringin,"$(P):GetStatus") {
+	field(DESC,"Read the dev status: 0=OK, -1=Error")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):STATUS")
+	field(INP,"@ecoChiller.proto getEcoString(STATUS) $(PORT)")
+}
+record(stringin,"$(P):GetStat") {
+	field(DESC,"Read the error diagnosis response")
+	field(PINI,"YES")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):STAT")
+	field(INP,"@ecoChiller.proto getEcoString(STAT) $(PORT)")
+}
+record(stringout,"$(P):WriteCommand") {
+	field(DESC,"Send command")
+	field(DTYP,"stream")
+	field(FLNK,"$(P):ReadResponse")
+	field(OUT,"@ecoChiller.proto setEcoString $(PORT)")
+}
+record(asyn,"$(P):ASYN") {
+	field(DTYP,"asynRecordDevice")
+	field(UDF,"0")
+	field(PORT,"$(PORT)")
+	field(ADDR,"24")
+	field(PCNCT,"Connect")
+	field(OEOS,"\\r\\n")
+	field(OMAX,"2000")
+	field(IEOS,"\\r\\n")
+	field(IMAX,"2000")
+	field(EOMR,"Eos")
+	field(TMSK,"1")
+	field(TB0,"On")
+	field(TSIZ,"80")
+	field(TFIL,"Unknown")
+	field(AUCT,"autoConnect")
+	field(CNCT,"Connect")
+	field(ENBL,"Enable")
+}

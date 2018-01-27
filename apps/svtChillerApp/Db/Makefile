@@ -11,8 +11,7 @@ include $(TOP)/configure/CONFIG
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
 #DB += xxx.db
-DB += svtChiller.db
-DB += ecoChiller.db
+DB += Lauda_ECO.db
 
 DB += svtChiller-anova2eco.db
 DB += svtChiller-autoSet.db

@@ -124,7 +124,8 @@ def getChannels(det,sector=None):
   elif det=='MVT_LV':
     sys.exit('NOT READY FOR MVT_LV')
   elif det=='RICH_HV':
-    sys.exit('NOT READY FOR RICH_HV')
+    for tile in range(1,138):
+      prefixes.append('B_DET_RICH_HV_TILE%.3d'%tile)
   elif det=='RICH_LV':
     sys.exit('NOT READY FOR RICH_LV')
 

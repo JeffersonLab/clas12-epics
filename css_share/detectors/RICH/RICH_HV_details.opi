@@ -465,9 +465,9 @@
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>421</width>
-    <x>93</x>
+    <x>84</x>
     <name>Label</name>
-    <y>7</y>
+    <y>9</y>
     <foreground_color>
       <color name="Header_ForeGround" red="255" green="255" blue="255" />
     </foreground_color>
@@ -678,6 +678,63 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description></description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-289836e0:161494c6952:-49f1</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>23</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>Save/Restore</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>125</width>
+    <x>727</x>
+    <name>Menu Button_1</name>
+    <y>10</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py det=RICH_HV save</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Save HV Settings</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py det=RICH_HV restore</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Restore HV Settings</description>
       </action>
     </actions>
     <font>

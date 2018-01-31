@@ -23,14 +23,14 @@ do
   # wget is slower than mv, and cs-studio doesn't like a partial file,
   # so wget to a temporary file, then mv
   
-  wget -q -O ${host}_tmp.jpg http://${ip}/axis-cgi/jpg/image.cgi
+#  wget -q -O ${host}_tmp.jpg http://${ip}/axis-cgi/jpg/image.cgi
   
   # convert image to exact size (and correct aspect ratio) for display on css screens:
   # (NOTE:  the "display" command requires an X-server, "convert" does not)
   #convert -resize 397x391! ${host}_tmp.jpg ${host}_tmp2.jpg 
-  convert -resize 282x286! ${host}_tmp.jpg ${host}_tmp2.jpg 
+#  convert -resize 282x286! ${host}_tmp.jpg ${host}_tmp2.jpg 
   
-  mv -f ${host}_tmp2.jpg ${host}.jpg
+#  mv -f ${host}_tmp2.jpg ${host}.jpg
   
   sleep 0.5
   

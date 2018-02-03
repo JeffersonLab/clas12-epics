@@ -14,3 +14,28 @@ record(calc,"$(P)HWALARM")
     field(HIHI,"1")
 }
 
+record(calcout,"$(P)FILLCALC")
+{
+    field(SCAN,"1 second")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+    field(INPA,"$(P):LS_TB")
+    field(INPB,"$(P):LS_TH")
+    field(CALC,"A+B")
+    field(OUT,"$(P)FILLSTAT")
+}
+record(mbbi,"$(P)FILLSTAT")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+
+    field(ZRSV,"MAJOR")
+    field(ONSV,"MAJOR")
+    field(TWSV,"NO_ALARM")
+    
+    field(ZRST,"Empty")
+    field(ONST,"Partial")
+    field(TWST,"Full")
+}
+

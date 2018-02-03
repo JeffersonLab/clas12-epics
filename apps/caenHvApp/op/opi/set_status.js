@@ -37,30 +37,31 @@ if (type == "527")
 	
 	if ( ((1<<6)  & istatus)) { sstatus="Kill"; }
 	if ( ((1<<13) & istatus)) { sstatus="RDN"; }
-	if (!((1<<0)  & istatus)) { sstatus=("NotPrt"); }
+	if (!((1<<0)  & istatus)) { sstatus="COMMS"; }
 	
-	widget.setPropertyValue("text",sstatus);
-		
-	if (sstatus == "OFF") { 
-	  widget.setPropertyValue("background_color","Header_Background");
-	  widget.setPropertyValue("foreground_color","Header_Foreground");
-	}
-	else
-	{
-	  widget.setPropertyValue("foreground_color","Text_Foreground");
-	  if (sstatus == "ON") {
-	    widget.setPropertyValue("background_color","On");
-	  }
-	  else {
-	  	  widget.setPropertyValue("foreground_color","Header_Foreground");
-	  	  widget.setPropertyValue("background_color","Major");
-	  }
-	}
+    widget.setPropertyValue("text",sstatus);
 
-  if (sstatus=="NotPrt")
-  {
-    widget.setPropertyValue("background_color","MEDM_COLOR_38");
-  }
+    if (sstatus == "OFF") { 
+        widget.setPropertyValue("background_color","Header_Background");
+        widget.setPropertyValue("foreground_color","Header_Foreground");
+    }
+    else if (sstatus=="COMMS")
+    {
+        //widget.setPropertyValue("background_color","MEDM_COLOR_38");
+        widget.setPropertyValue("background_color","Attention");
+        widget.setPropertyValue("foreground_color","Text_Foreground");
+    }
+    else
+    {
+        widget.setPropertyValue("foreground_color","Text_Foreground");
+        if (sstatus == "ON") {
+            widget.setPropertyValue("background_color","On");
+        }
+        else {
+            widget.setPropertyValue("foreground_color","Header_Foreground");
+            widget.setPropertyValue("background_color","Major");
+        }
+    }
 
 }
 

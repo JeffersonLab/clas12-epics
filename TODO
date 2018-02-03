@@ -2,55 +2,72 @@
 # TODO List
 #
 
-# IOCS:
-  * remove:
+# GUIS:
+  * FT/FTT Overview
+  * FTC: HW->DET PVs
+  * more direct access to specific strip charts
+
+# HARDIOCS
+  *
+  * add SY527 reset (240 card) 
+  * classc1 kernel upgrade
+  * tsconnect@clonpc0: resolve classc4/8 port numbering
+  * switch to clonpc0 host
+  * classc12 still has tagger magnet hall probe
+  *
+  * move classc# to clas12-epics
+  *
+  * classcsvt debug port
+
+# SOFTIOCS:
+  *
+  * move all to clasioc:clas-3 (?)
+  ** ops CA r/w for ioctest/st-ia.cmd
+  ** check permissions (logs, autosave, ...)
+  *
+  * remove from procServ.conf:
   ** iocftcTemps
   ** iocprologix
   ** iocsoftsvtR4
   ** iocgasSystem86
   ** ioctorusTest
+  *
   * merge:
   ** iocbta -> iocmcc
   ** iocdclv_S#R* -> iocdclv_S#
   ** iocbomGet -> iocbom
+  ** iocrollAvgGet -> iocrollAvg
+  *
   * move:
-  ** iocamq -> clonioc#
-  * move all to clasioc:clas-3 (?)
-  ** CA r/w for ioctest/st-ia.cmd
+  ** iocamq
+  ** rollAvg(Get)
+  ** bom(Get)
+  *
+  * add saclaytgt-alarm.db
+  ** target status (full, empty, partial)
+  *** add to overview screen
 
 # alarms:
-  * Guidance Needed:
+  * Guidance
   ** COMMS->cRIO
   * missing xmls (probably added on-the-fly):
   ** cRio COMMS
   * Torus/Solenoid
-  ** add auto email:
-  *** B_TORUS:LN2:LL8152CP
-  *** B_TORUS:LN2:LL8152DP
-  *** B_TORUS:LN2:TP8152
-  *** B_TORUS:LHe:SHLDOUT_T_AVG
-  *** B_TORUS:LHe:SHLDOUT_T_MAX
   * FT
   ** LV
 
+# Annunciator
+  * run cronjob for headless Annunciator (e.g. on clonpc17)
+
+
+#####################################################
+#####################################################
+
 # caenhv generator updates (Ken):
-  * DC
-  * RICH
-  * CTOF
-  * CND
-  * FTC/FTT/FTH
-  * BMT/FMT
-
-# mya archiving
-  * FTC/FTH/FTT
-  * BMT/FMT
-  * RICH
-
-# get apps/scripts out of clasrun's PATH
+  * DC,RICH,CTOF,CND,FTC/FTT/FTH,BMT/FMT
 
 # jscalers
-  * DCRB
-  * SVT
+  * DCRB/SVT
 
 # /usr/clas12/DATA/logs:
   * check rotation - autodelte old empty files?
@@ -61,18 +78,6 @@
   * restructure access to hv/lv channels so don't need to know what crate
   * initialize chiller pump level ao properly
 
-# tsconnect:
-  * resolve classc4/8 port numbering errors in tsconnect config
-
-# slm
-  * ~stepanya/slmfit (use Ken's new scan/fitter)
-
-# Annunciator
-  * run cronjob for headless Annunciator (e.g. on clonpc17)
-
-# hardIOCS
-  * import from hps-epics into clas12-epics
-
 # firefox/chrome
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics
   * Maybe workspace generator and wrapper scripts too
@@ -81,18 +86,20 @@
   * finish FTH interlocks
   * probably should be in ioccaenhv_HVFTAG instead of a separate ioc
 
-# ftcFlasherApp (kliv)
-  * use native cs-studio confirm dialog instead of zenity popups (which get lost)?
-  * use burt save/restore instead of users editing caget/caput scripts?
+# get apps/scripts out of clasrun's PATH
 
-# css_share/detectors/FTC:
-  * change hv scripts to use DET hierarchy instead of HW
+#####################################################
+#####################################################
 
 #
 # Long-term
 #
-# 1. JLab Logbook integration in CS-Studio
-# 2. EPICS 3.15
-# 3. CS-Studio 4.5.0 (testing)
-# 4. ChannelFinder
+# 1. CS-Studio
+#    get it compiling again
+#    version 4.5.0 (testing)
+#    Slimmed-down build (e.g. no logbook feature)
+#    JLab Logbook integration in CS-Studio
+#    GUI revamp (single-window style)
+# 2 EPICS 3.15
+# 3 ChannelFinder
 

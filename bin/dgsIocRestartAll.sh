@@ -19,5 +19,5 @@ $xt -e dgsIocRestart.sh 4 &
 $xt -e dgsIocRestart.sh 5 &
 $xt -e dgsIocRestart.sh 6 &
 $xt -e dgsIocRestart.sh C &
-$xt -e dgsIocRestart.sh T &
+#$xt -e dgsIocRestart.sh T &
 

@@ -394,9 +394,36 @@ record(mbbi,"$(P):PUMPLEVEL") {
 }
 record(mbbiDirect,"$(P):STAT") {
 	field(DTYP,"Soft Channel")
-	field(FLNK,"$(P):ECVM")
+#	field(FLNK,"$(P):ECVM")
+    field(FLNK,"$(P):STATCALC")
 	field(INP,"$(P):GetStat NPP NMS")
 }
+record(calcout,"$(P):STATCALC") {
+    field(INPA,"$(P):STAT")
+    field(INPB,"$(P):GetMODE02")
+    field(INPC,"$(P):GetSP02")
+    field(CALC,"A=0 ? (B=1 ? 0 : C) : (A&4079 ? 4 : A&16)")
+    field(OUT,"$(P)_STATUS PP")
+    field(FLNK,"$(P):ECVM")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+}
+
+# This is just a status string,
+# With SAME SUFFIX as for anova to accomadate single status string.
+record(mbbi,"$(P)_STATUS") {
+    field(ZRST,"OFF")
+    field(ONST,"ON")
+    field(TWST,"ON - Auto")
+    field(THST,"Warning")
+    field(FRST,"Alarm")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"MINOR")
+    field(FRSV,"MAJOR")
+}
+
 record(mbbo,"$(P):SetPL") {
 	field(DTYP,"Soft Channel")
 	field(FLNK,"$(P):SetSP01")

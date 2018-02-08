@@ -77,11 +77,13 @@ VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
     }
     if (*buf) delete (*buf);
 
+    printf("Creating Crate Thread ...\n");
     int rval = pthread_create(&threadC, NULL, crateThread, (void *) this );
     if (rval != 0) {
-        perror("Creating the Server Analysis Thread failed");
+        perror("Creating the Crate Thread failed.");
         exit(3);
     }
+    printf("Created Crate Thread.\n");
    
     // try to use another thread to restart threadC if crashed:
     //rval = pthread_create(&threadCmon, NULL, crateThreadMon, (void*)this);

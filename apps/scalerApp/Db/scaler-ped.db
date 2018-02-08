@@ -1,0 +1,103 @@
+
+# P   = pedestal PV to write
+# R   = not required
+# VAL = input raw value used to calculate pedestal
+# REF = reference PV, do not calculate pedestal unless this is small
+# MIN = minimum value for reference PV
+# N   = number of samples in pedestal calculation
+ 
+# e.g.
+# P   = fcup_offset
+# VAL = scaler.S2
+# REF = IPM2C21A
+# MIN = 0.1
+# MINVAL = 300
+# N   = 10
+
+# testing only:
+record(ai,"$(P)") {}
+
+
+# Determine whether the current scaler reading is a good candidate,
+# based on 4-second average of current.  Forward to BPM circular
+# buffer immediately, wait 4 seconds before storing previous and
+# triggering calcout2.
+record(calcout,"$(P)$(R=)_calcout") {
+    field(SCAN,"1 second")
+    field(INPA,"$(VAL)")
+    field(INPB,"$(REF)")
+    field(INPC,"$(MIN)")
+    field(INPD,"$(MINVAL=0)")
+    field(INPE,"$(P)$(R=)_bpm_4avg")
+    field(CALC,"E<0.1 && B<C && (D<=0 || A<D) ? 1 : 0")
+    field(OOPT,"When Non-zero")
+    field(OCAL,"A")
+    field(DOPT,"Use OCAL")
+    field(OUT, "$(P)$(R=)_previous PP")
+    field(ODLY,"4")
+    field(FLNK,"$(P)$(R=)_bpm_circbuff.PROC PP")
+}
+
+record(compress,"$(P)$(R=)_bpm_circbuff") {
+    field(INP,"$(REF)")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"4")
+    field(N,"4")
+    field(FLNK,"$(P)$(R=)_bpm_4avg.PROC PP")
+}
+record(compress,"$(P)$(R=)_bpm_4avg") {
+    field(INP,"$(REF)")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"4")
+}
+
+# This is 4 seconds behind:
+record(ai,"$(P)$(R=)_previous") {
+    field(FLNK,"$(P)$(R=)_calcout2.PROC PP")
+}
+
+# This triggers the filling of the circular buffer,
+# 4 seconds after the reading, if bpm average is still small:
+record(calcout,"$(P)$(R=)_calcout2") {
+    field(INPA,"$(P)$(R=)_bpm_4avg")
+    field(INPB,"$(MIN)")
+    field(CALC,"A<B ? 1 : 0")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(OCAL,"1")
+    field(OUT,"$(P)$(R=)_circbuff.PROC")
+}
+
+
+record(compress,"$(P)$(R=)_circbuff") {
+    field(INP,"$(P)$(R=)_previous")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"$(N)")
+    field(N,"$(N)")
+    field(FLNK,"$(P)$(R=)_average.PROC PP")
+}
+
+record(compress,"$(P)$(R=)_average") {
+    field(INP,"$(P)$(R=)_circbuff")
+    field(ALG,"N to 1 Average")
+    field(NSAM,1)
+    field(N,"$(N)")
+#ignore last 4 entries, assuming $(N)=10:
+#    field(N,"$(OFFSET=6)")
+    field(FLNK,"$(P)$(R=)_write PP")
+}
+
+record(seq,"$(P)$(R=)_write") {
+    field(DISV,0)
+    field(SDIS,"$(P)$(R=)_enable.VAL")
+    field(DOL1,"$(P)$(R=)_average")
+    field(LNK1,"$(P) PP")
+}
+
+record(bi,"$(P)$(R=)_enable") {
+    field(ZNAM,"Disabled")
+    field(ONAM,"Enabled")
+    field(VAL,"0")
+}
+

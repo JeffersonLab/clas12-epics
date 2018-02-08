@@ -17,6 +17,7 @@ DB += amqTrigBit.template
 DB += amqTrigBit-alarms.db
 DB += amqTrigBit-alias.db
 DB += amqTrigBit-stage2.db
+DB += amqMergeFT.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

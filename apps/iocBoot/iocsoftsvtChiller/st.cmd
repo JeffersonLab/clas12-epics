@@ -10,15 +10,21 @@ dbLoadDatabase("dbd/svtChiller.dbd")
 svtChiller_registerRecordDeviceDriver(pdbbase)
 
 # This is the SVT chiller:
-drvAsynIPPortConfigure("L0",hallb-moxa1.jlab.org:4003)
-dbLoadRecords("db/Lauda_ECO.db","P=B_SVT_CHILLER,PORT=L0")
+#drvAsynIPPortConfigure("L0",hallb-moxa1.jlab.org:4003)
+#dbLoadRecords("db/Lauda_ECO.db","P=B_SVT_CHILLER,PORT=L0")
+
 # when it's an Anova, we do some aliases to preserve rest of SVT controls system: 
-#dbLoadRecords("db/anova.db","P=B_SVT_,R=CHILLER_,PORT=L0")
-#dbLoadRecords("db/svtChiller-anova2eco.db","P=B_SVT_CHILLER"))
+drvAsynIPPortConfigure("L0",hallb-moxa1.jlab.org:4005)
+dbLoadRecords("db/anova.db","P=B_SVT_,R=CHILLER_,PORT=L0")
+dbLoadRecords("db/svtChiller-anova2eco.db","P=B_SVT_CHILLER"))
 
 # This is the SVT-N2 chiller:
 drvAsynIPPortConfigure("L1",hallb-moxa1.jlab.org:4006)
 dbLoadRecords("db/Lauda_ECO.db","P=B_SVT_CHILLER_N2,PORT=L1")
+
+# This is as;ldfjk:
+#drvAsynIPPortConfigure("L1",hallb-moxa1.jlab.org:4006)
+#dbLoadRecords("db/Lauda_ECO.db","P=B_SVT_CHILLER,PORT=L1")
 
 # This is for the seqsvtChillerTemp sequencer:
 dbLoadRecords("db/svtChiller-autoSet.db")

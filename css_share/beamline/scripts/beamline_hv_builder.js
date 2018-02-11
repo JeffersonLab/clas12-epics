@@ -56,6 +56,8 @@ mkGap();
         lc.setPropertyValue("background_color","Header_Background");
         lc.addMacro("C",ii);
         lc.addMacro("P",pv);
+        if (ss[ii].indexOf("Midstream")==0) 
+          lc.addMacro("TYPE","527");
         widget.addChildToBottom(lc);
 
         if (ss[ii]=="UpstreamRight" ||

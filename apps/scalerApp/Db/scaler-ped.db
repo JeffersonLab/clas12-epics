@@ -88,6 +88,13 @@ record(compress,"$(P)$(R=):average") {
     field(FLNK,"$(P)$(R=):write PP")
     info(autosaveFields_pass0,"VAL")
 }
+record(ao,"$(P)$(R=):avg") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)$(R=):average CPP")
+    field(HIGH,"$(RAWMAX)")
+    field(HSV,"MAJOR")
+    info(autosaveFields_pass0,"HIGH")
+}
 record(seq,"$(P)$(R=):write") {
     field(DISV,0)
     field(SDIS,"$(P)$(R=):enable.VAL")
@@ -106,7 +113,11 @@ record(bo,"$(P)$(R=):changed") {
 record(bi,"$(P)$(R=):enable") {
     field(ZNAM,"Disabled")
     field(ONAM,"Enabled")
+    field(ZSV,"MAJOR")
+    field(OSV,"NO_ALARM")
     field(VAL,"0")
+    field(PINI,"1")
+    info(autosaveFields,"VAL")
 }
 
 

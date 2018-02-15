@@ -24,9 +24,18 @@ record(calc,"B_DAQ_GTTrigBitPrescaled:$(N)") {
 
 record(calc,"B_DAQ_GTTrigBitPrescaledFrac:$(N)") {
     field(INPA,"B_DAQ_GTTrigBitPrescaled:$(N)")
-    field(INPB,"B_DAQ_GTTrigBit:0")
-    field(CALC,"B>0 ? 100*A/B : 0")
+    field(INPB,"B_DAQ_GTTrigBitPrescaled:sum")
+    field(INPC,"B_DAQ_GTTrigBit:$(N):enable")
+#field(INPB,"B_DAQ_GTTrigBit:0")
+    field(CALC,"C=0 ? -1 : (B>0 ? 100*A/B : 0)")
     field(EGU,"%")
+}
+
+record(bi,"B_DAQ_GTTrigBit:$(N):enable") {
+    field(ZNAM,"Disabled")
+    field(ONAM,"Enabled")
+    field(VAL,"1")
+    info(autosaveFields_pass0,"VAL")
 }
 
 record(ai,"B_DAQ_VTPGT:TrigBit:$(N)") {

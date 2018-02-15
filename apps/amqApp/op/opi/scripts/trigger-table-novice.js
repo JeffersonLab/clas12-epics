@@ -1,22 +1,19 @@
 importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-var novice=widget.getMacroValue("NOVICE");
-
-var keepers=[0,10,15,19,20,21,23,25,26,29,30,31];
+var ignores=[0,10,15,19,20,21,23,25,26,29,30,31];
 
   for (var chan=0; chan<32; chan++)
   {
-    if (novice==1) {
-        var ignore=true;
-        for (var ii=0; ii<keepers.length; ii++) {
-            if (chan==keepers[ii]) {
-                ignore=false;
-                break;
-            }
-        }
-        if (ignore) continue;
-    } 
-    
+      var ignore=false;
+      for (var ii=0; ii<ignores.length; ii++) {
+          if (chan==chans[ii]) {
+              ignore=true;
+              break;
+          }
+      }
+
+      if (ignore) continue;
+
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
     lc.setPropertyValue("opi_file","/CLAS12_Share/apps/amqApp/trigger-row.opi");
     lc.setPropertyValue("auto_size",true);

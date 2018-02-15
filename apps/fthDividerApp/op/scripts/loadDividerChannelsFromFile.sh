@@ -35,7 +35,7 @@ gawk -v pv=$dataChan 'BEGIN{n=0;e=1}\
       {if(NF==2){id[n]=$1;amp[n]=$2;tot=n++}}\
       END{\
           for(n=0;n<=tot;n++){\
-             if(id[n]<232){\
+             if(id[n]<240){\
                  #out=sprintf("sleep 0.2;caput -t  %s_ID%03d:AMPSET %d",pv,id[n],amp[n]);\
                  out=sprintf("sleep 0.2;caput -t  %s_ID%03d:AMPSET %d",pv,id[n],amp[n]);\
                  system(out);\

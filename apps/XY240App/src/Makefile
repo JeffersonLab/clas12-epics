@@ -8,11 +8,15 @@ include $(TOP)/configure/CONFIG
 #==================================================
 # build a support library
 
+# Build an IOC support library
+LIBRARY_IOC_vxWorks += XY240Support
+
 # install XY240Support.dbd into <top>/dbd
 DBD += XY240Support.dbd
 
-# Build an IOC support library
-LIBRARY_IOC_vxWorks += XY240Support
+XY240Support_DBD += base.dbd
+XY240Support_DBD += vmeRecord.dbd
+XY240Support_DBD += XY240.dbd
 
 # specify all source files to be compiled and added to the library
 XY240Support_SRCS += devBiXy240M.c

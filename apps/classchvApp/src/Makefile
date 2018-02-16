@@ -30,6 +30,7 @@ classchv_SRCS_vxWorks += -nil-
 classchv_LIBS += devIocStats
 classchv_LIBS += autosave
 classchv_LIBS += XY240Support
+classchv_LIBS += vme
 classchv_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

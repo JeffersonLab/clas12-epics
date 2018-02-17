@@ -2,6 +2,20 @@
 # TODO List
 #
 
+# ALARMS:
+  * SVT HV meas - increase delay to 45s
+  * Guidance
+  ** COMMS->cRIO
+  * missing xmls (probably added on-the-fly):
+  ** cRio COMMS
+  ** weather
+  ** iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
+  * Torus/Solenoid
+  * FT
+  ** LV
+  * HV
+  ** MINOR vs MAJOR alarms - guidance needed
+
 # GUIS:
   * FT/FTT Overview
   * FTC: HW->DET PVs
@@ -10,16 +24,33 @@
 
 # HARDIOCS
   *
-  * add SY527 reset (240 card) 
+  * asym (classc6->?)
+  * * 64 MB struck for asym
+  * * separate struck for BCA for independent acq time
+  *
+  * add SY527 reset
+  * * xy240, jlab reset card, etc 
+  *
   * classc1 kernel upgrade
+  *
   * tsconnect@clonpc0: resolve classc4/8 port numbering
-  * switch to clonpc0 host
-  * classc12 still has tagger magnet hall probe
   *
-  * move classc# to clas12-epics
+  * switch to clonpc0 boot host
   *
-  * classcsvt debug port
-  * document wiring between MOXA and MVME-debugport
+  * move classc1/4/6/8 to clas12-epics
+  *
+  * old stuff to new epics
+  * * classc3/classc12
+  * * quads (classc3), pairspec+frascatis (classc3/classc12)
+  * * tagger magnet hall probe (classc12)
+  * * dvme628, xy240, xy560, gpib
+  * * merge into 1 magnet ioc
+  * 
+  * MVME debug port + MOXA
+  * * document wiring
+  * * make cables (red/pink)
+  * * install for classcsvt
+  *
 
 # SOFTIOCS:
   *
@@ -51,19 +82,6 @@
   *
   * iocareaDetector:
   ** add devIocStats and autosave
-
-# alarms:
-  * Guidance
-  ** COMMS->cRIO
-  * missing xmls (probably added on-the-fly):
-  ** cRio COMMS
-  ** weather
-  ** iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
-  * Torus/Solenoid
-  * FT
-  ** LV
-  * HV
-  ** MINOR vs MAJOR alarms - guidance needed
 
 # Manual:
  * Alarms:

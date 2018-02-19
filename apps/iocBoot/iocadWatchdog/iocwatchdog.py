@@ -6,11 +6,13 @@ import sys,epics,time,subprocess
 iocName='iocareaDetector'
 pvName='cctv6:image1:ArrayData'
 
+logfileDir='/usr/clas12/DATA/logs'
+
 maxStaleCount=2
-staleTolerance=10 # seconds
-checkPeriod=6 # seconds
+staleTolerance=10    # seconds
+checkPeriod=6        # seconds
 delayBeforeReboot=10 # seconds
-delayAfterReboot=30 # seconds
+delayAfterReboot=30  # seconds
 
 maxConsecutiveReboots=3
 
@@ -22,9 +24,15 @@ staleCount=None
 lastCallback=None
 PV=None
 
+#logfile=open(logfileDir+'/'+iocName+'Watchdog.log','w+')
+#def myprint(ss):
+#  print ss
+#  logfile.write(ss)
+
 def reboot():
   print 'Rebooting ...'
-  print subprocess.check_output(['softioc_console','-R',iocName])
+  cc=subprocess.check_output(['softioc_console','-R',iocName])
+  print cc
 
 def callbackfcn(**kws):
   global lastCallback
@@ -97,15 +105,19 @@ def main():
         consecutiveKills+=1
 
 if __name__ == "__main__":
-#  while len(sys.argv)>1:
-#    if sys.argv[ii]=='-m':
-#      singleKill=False
-#    elif sys.argv[ii]=='-i':
-#      ii+=1
-#      iocName=sys.argv[ii]
-#    elif sys.argv[ii]=='-p':
-#      ii+=1
-#      pvName=sys.argv[ii];
-#    ii+=1
+  while len(sys.argv)>1:
+    if sys.argv[ii]=='--single-kill':
+      singleKill=True
+    elif sys.argv[ii]=='--debug':
+      debug=True
+    elif sys.argv[ii]=='--dry-run':
+      dryRun=True
+    elif sys.argv[ii]=='--ioc':
+      ii+=1
+      iocName=sys.argv[ii]
+    elif sys.argv[ii]=='--pv':
+      ii+=1
+      pvName=sys.argv[ii]
+    ii+=1
   main()
 

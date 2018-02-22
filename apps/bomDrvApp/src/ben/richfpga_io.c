@@ -809,7 +809,12 @@ int open_socket(int port)
 
 	if( connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
 	{
+        char doggy[100];;
 		printf("\n Error : Connect Failed \n");
+        for (sockfd=0;sockfd<16;sockfd++) {
+            sprintf(doggy,"caput bom_sc_ai_%d -1 >& /dev/null",sockfd);
+            system(doggy);
+        }
 		exit(1);
 	}
 	return sockfd;

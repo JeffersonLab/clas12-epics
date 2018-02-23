@@ -75,7 +75,7 @@ int main(int argc,char **argv)
                 std::cout<<usage<<std::endl;
                 exit(0);
             default:
-                std::cout<<"Invalid Argument:  -"<<itmp<<std::endl;
+                std::cout<<"tordaqConverter:  Invalid Argument:  -"<<itmp<<std::endl;
                 std::cout<<usage<<std::endl;
                 exit(1);
         }
@@ -92,7 +92,7 @@ int main(int argc,char **argv)
             strptime(sStartTime.c_str(),timeFormat,&tm);
             tdr.startTime=mktime(&tm);
         }
-        std::cout<<"Start Time:  "<<tdr.startTime<<std::endl;
+        std::cout<<"tordaqConverter:  User Start Time:  "<<sStartTime<<" = "<<tdr.startTime<<std::endl;
     }
     
     // interpret end time argument:
@@ -106,14 +106,14 @@ int main(int argc,char **argv)
             strptime(sEndTime.c_str(),timeFormat,&tm);
             tdr.endTime=mktime(&tm);
         }
-        std::cout<<"End Time:    "<<tdr.endTime<<std::endl;
+        std::cout<<"tordaqConverter:  User End Time:    "<<sEndTime<<" = "<<tdr.endTime<<std::endl;
     }
 
     if (tdr.endTime>0 && tdr.startTime>0)
     {
         if (tdr.endTime < tdr.startTime)
         {
-            std::cerr<<"User Error:  Start Time later then End Time."<<std::endl;
+            std::cerr<<"tordaqConverter:  User Error:  Start Time later then End Time."<<std::endl;
             exit(1);
         }
     }
@@ -121,7 +121,7 @@ int main(int argc,char **argv)
     // check filesystem for input file:
     if (gSystem->AccessPathName(tdr.inFilename))
     {
-        std::cerr<<"Input File Does Not Exist:  "<<tdr.inFilename<<std::endl;
+        std::cerr<<"tordaqConverter:  Input File Does Not Exist:  "<<tdr.inFilename<<std::endl;
         std::cerr<<usage<<std::endl;
         exit(1);
     }
@@ -131,14 +131,14 @@ int main(int argc,char **argv)
     {
         if (tdr.outAsciiFilename!="stdout")
         {
-            std::cerr<<"Output File Already Exists:  "<<tdr.outAsciiFilename<<std::endl;
+            std::cerr<<"tordaqConverter:  Output File Already Exists:  "<<tdr.outAsciiFilename<<std::endl;
             std::cerr<<usage<<std::endl;
             exit(1);
         }
     }
     if (tdr.outRootFilename!="" && !gSystem->AccessPathName(tdr.outRootFilename))
     {
-        std::cerr<<"Output File Already Exists:  "<<tdr.outRootFilename<<std::endl;
+        std::cerr<<"tordaqConverter:  Output File Already Exists:  "<<tdr.outRootFilename<<std::endl;
         std::cerr<<usage<<std::endl;
         exit(1);
     }
@@ -146,7 +146,7 @@ int main(int argc,char **argv)
     // the real work:
     if (!tdr.process()) exit(1);
 
-    std::cout<<std::endl<<"Closing Files ..."<<std::endl<<std::endl;
+    std::cout<<std::endl<<"tordaqConverter:  Closing Files ..."<<std::endl<<std::endl;
     
     if (tdr.outRootFile) 
     {
@@ -155,7 +155,7 @@ int main(int argc,char **argv)
         // this is slow:
         if (tdr.makeHistos) 
         {
-            std::cout<<std::endl<<"Writing Histograms ... (this can take a couple minutes) ..."<<std::endl<<std::endl;
+            std::cout<<std::endl<<"tordaqConverter:  Writing Histograms ... (this can take a couple minutes) ..."<<std::endl<<std::endl;
             tdr.WriteRemainingHistos();
         }
 

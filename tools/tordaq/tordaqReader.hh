@@ -166,6 +166,29 @@ public:
                 outTree=new TNtupleD("tordaq","",varnames.c_str());
             }
         }
+        
+        {
+            Double_t time0=-1,time1=-1;
+            for (unsigned int ii=0; ii<inTrees.size(); ii++)
+            {
+                if (inTrees[ii]->LoadTree(0) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(0);
+                    if (time0<0 || inTrees[ii]->getTime(0)<time0)
+                        time0 = inTrees[ii]->getTime(0);
+                }
+                if (inTrees[ii]->LoadTree(inTrees[ii]->fChain->GetEntries()-1) < 0) continue;
+                else
+                {
+                    inTrees[ii]->fChain->GetEntry(inTrees[ii]->fChain->GetEntries()-1);
+                    if (time1<0 || inTrees[ii]->getTime(tordaqData::WFLENGTH-1)>time1)
+                        time1 = inTrees[ii]->getTime(tordaqData::WFLENGTH-1);
+                }
+            }
+            std::cout<<"tordaqReader:  File Start Time: "<<(long)time0<<std::endl;
+            std::cout<<"tordaqReader:  File End Time:   "<<(long)time1<<std::endl;
+        }
 
 /*
         // bin each histo independently based on its channels' min/max times:
@@ -244,6 +267,7 @@ public:
               return false;
             }
         }
+
 
         // setup dynamically allocated stuff:
         std::vector <double> lastUpdateTime;
@@ -551,15 +575,19 @@ public:
             }
 
 /*
-               Sol_QD1 : -(VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) + (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
-               Sol_QD2 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ ) - (VT9_DAQ+VT10_DAQ+VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)
-               Sol_QD3 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ)
+old:
                Sol_QD4 : (VT17_DAQ+VT18_DAQ+VT19_DAQ)
-               Sol_QD5 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ+VT1_DAQ)
                Sol_QD6 : (VT3_DAQ+VT2_DAQ+VT1_DAQ)
-               Sol_QD7 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ)
-               Sol_QD8 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ)
 */
+            std::string sComparators=
+               "Sol_QD1 : -(VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) + (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)\n"
+               "Sol_QD2 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ ) - (VT9_DAQ+VT10_DAQ+VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)\n"
+               "Sol_QD3 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ)\n"
+               "Sol_QD4 : VT19\n"
+               "Sol_QD5 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ+VT1_DAQ)\n"
+               "Sol_QD6 : VT1\n"
+               "Sol_QD7 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ)\n"
+               "Sol_QD8 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ)\n";
 
             if (isSolenoid) {
                 std::cout<<" QD1"<<std::flush;
@@ -591,9 +619,10 @@ public:
                 hQD3->Add(hh[18]);
                 hQD3->Add(hh[19]);
                 std::cout<<",QD4"<<std::flush;
-                TH1* hQD4=(TH1*)hh[17]->Clone("hQD4");
-                hQD4->Add(hh[18]);
-                hQD4->Add(hh[19]);
+                //TH1* hQD4=(TH1*)hh[17]->Clone("hQD4");
+                //hQD4->Add(hh[18]);
+                //hQD4->Add(hh[19]);
+                TH1* hQD4=(TH1*)hh[19]->Clone("hQD4");
                 std::cout<<",QD5"<<std::flush;
                 TH1* hQD5=(TH1*)hh[1]->Clone("hQD5");
                 hQD5->Add(hh[2]);
@@ -601,9 +630,10 @@ public:
                 hQD5->Add(hh[4]);
                 hQD5->Add(hh[5]);
                 std::cout<<",QD6"<<std::flush;
+                //TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
+                //hQD6->Add(hh[2]);
+                //hQD6->Add(hh[3]);
                 TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
-                hQD6->Add(hh[2]);
-                hQD6->Add(hh[3]);
                 std::cout<<",QD7";
                 TH1* hQD7=(TH1*)hh[2]->Clone("hQD7");
                 hQD7->Add(hh[3]);
@@ -623,6 +653,8 @@ public:
                 tdData.varnames.push_back("QD6");  outHistos.push_back(hQD6);
                 tdData.varnames.push_back("QD7");  outHistos.push_back(hQD7);
                 tdData.varnames.push_back("QD8");  outHistos.push_back(hQD8);
+
+                std::cout<<std::endl<<sComparators<<std::endl;
             }
 
             std::cout<<std::endl<<"tordaqReader:  Finished Making Comparators."<<std::endl;

@@ -115,9 +115,9 @@ then
     sleep 2
     softioc_console -R iocjscalersT
 
-elif [[ $1 == "rich" || $1 == "fevme1" ]]
+elif [[ $1 == "rich" || $1 == "rich4" ]]
 then
-    dgsReboot fevme1
+    dgsReboot rich4
     echo Sleeping 30 seconds before rebooting IOC ...
     sleep 30
     softioc_console -R iocjscalersRICH

@@ -22,7 +22,7 @@ record(compress,"$(P):circBuff") {
 }
 
 #### THE MEAN:
-record(compress,"$(P)") {
+record(compress,"$(P):mean") {
     field(DESC,"$(DESC=)")
     field(INP,"$(P):circBuff CPP")
     field(ALG,"N to 1 Average")
@@ -36,7 +36,7 @@ record(compress,"$(P)") {
 # latest RMS term, (value-mean)^2:
 record(calcout,"$(P):rmsCalc") {
     field(INPA,"$(I)")
-    field(INPB,"$(P)")
+    field(INPB,"$(P):mean")
     field(CALC,"(A-B)*(A-B)")
     field(OUT,"$(P):rmsCircBuff.PROC")
 }
@@ -64,7 +64,7 @@ record(compress,"$(P):rmsAvg") {
 #### THE RMS:
 record(calc,"$(P):rms") {
     field(INPA,"$(P):rmsAvg")
-    field(INPB,"$(P).NSAM")
-    field(CALC,"A>0 && B>0 ? sqrt(A*B) : 0")
+    field(INPB,"$(P):rmsAvg.N")
+    field(CALC,"A>0 && B>0 ? sqrt(A*B)/(B-1) : 0")
 }
 

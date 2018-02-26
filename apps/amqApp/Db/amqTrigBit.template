@@ -26,9 +26,9 @@ record(calc,"B_DAQ_GTTrigBitPrescaledFrac:$(N)") {
     field(INPA,"B_DAQ_GTTrigBitPrescaled:$(N)")
     field(INPB,"B_DAQ_GTTrigBitPrescaled:sum")
     field(INPC,"B_DAQ_GTTrigBit:$(N):enable")
-#field(INPB,"B_DAQ_GTTrigBit:0")
     field(CALC,"C=0 ? -1 : (B>0 ? 100*A/B : 0)")
     field(EGU,"%")
+    field(FLNK,"B_DAQ_VTPGT:TrigBit:$(N):norm.PROC")
 }
 
 record(bi,"B_DAQ_GTTrigBit:$(N):enable") {
@@ -45,3 +45,28 @@ record(ai,"B_DAQ_VTPGT:TrigBit:$(N)") {
     field(EGU,"Hz")
     info(autosaveFields_pass0,"DESC")
 }
+
+record(ai,"B_DAQ_VTPGT:TrigBit:$(N):normLimit") {
+    field(VAL,0)
+    field(EGU,"Hz/nA")
+    info(autosaveFields_pass0,"VAL")
+}
+
+record(calc,"B_DAQ_VTPGT:TrigBit:$(N):norm") {
+    field(INPA,"IPM2C21A")
+    field(INPB,"B_DAQ_VTPGT:TrigBit:$(N)")
+    field(CALC,"A>0 ? B/A : 0")
+    field(EGU,"Hz/nA")
+    field(FLNK,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm.PROC")
+}
+
+record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
+    field(INPA,"IPM2C21A")
+    field(INPB,"B_DAQ_VTPGT:TrigBit:$(N):norm")
+    field(INPC,"B_DAQ_VTPGT:TrigBit:$(N):normLimit")
+    field(INPD,"4")
+    field(CALC,"C>0 && A>D && B<C")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+

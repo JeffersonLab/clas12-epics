@@ -53,7 +53,7 @@ record(ai,"B_DAQ_VTPGT:TrigBit:$(N):normLimit") {
 }
 
 record(calc,"B_DAQ_VTPGT:TrigBit:$(N):norm") {
-    field(INPA,"IPM2C21A")
+    field(INPA,"scaler_calc1b")
     field(INPB,"B_DAQ_VTPGT:TrigBit:$(N)")
     field(CALC,"A>0 ? B/A : 0")
     field(EGU,"Hz/nA")
@@ -61,11 +61,12 @@ record(calc,"B_DAQ_VTPGT:TrigBit:$(N):norm") {
 }
 
 record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
-    field(INPA,"IPM2C21A")
+    field(INPA,"scaler_calc1b")
     field(INPB,"B_DAQ_VTPGT:TrigBit:$(N):norm")
     field(INPC,"B_DAQ_VTPGT:TrigBit:$(N):normLimit")
-    field(INPD,"4")
-    field(CALC,"C>0 && A>D && B<C")
+    field(INPD,"6")
+    field(INPE,"B_livetime")
+    field(CALC,"C>0 && A>D && B<C && (E>10&&E<99.99)")
     field(HIGH,"1")
     field(HSV,"MAJOR")
 }

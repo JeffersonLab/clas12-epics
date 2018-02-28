@@ -187,12 +187,14 @@ def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
   if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename,None)
   cmd=['burtrb','-f',reqFilename,'-o',snpFilename]
+  print ' '.join(cmd)
   p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
   return [out,err]
 
 def restoreBurt(snpFilename):
   cmd=['burtwb','-f',snpFilename]
+  print ' '.join(cmd)
   p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
   return [out,err]

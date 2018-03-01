@@ -1062,7 +1062,7 @@ $(pv_value)</tooltip>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -1090,7 +1090,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
@@ -2428,7 +2428,7 @@ Harp (2C24)</text>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -2456,7 +2456,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
@@ -2688,7 +2688,7 @@ $(pv_value)</tooltip>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -2716,7 +2716,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
@@ -2844,7 +2844,7 @@ $(pv_value)</tooltip>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -2872,7 +2872,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
@@ -6921,9 +6921,9 @@ $(pv_value)</tooltip>
       <color red="191" green="191" blue="191" />
     </background_color>
     <width>136</width>
-    <x>15</x>
+    <x>16</x>
     <name>Action Button</name>
-    <y>1004</y>
+    <y>976</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -6946,7 +6946,7 @@ $(pv_value)</tooltip>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -6974,7 +6974,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
@@ -9941,6 +9941,254 @@ FSD Channel #4</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)
+FSD Channel #3</tooltip>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>true</value>
+          </exp>
+          <pv trig="true">B_FSD_ISDDEST</pv>
+        </rule>
+      </rules>
+      <effect_3d>false</effect_3d>
+      <bit>3</bit>
+      <pv_value />
+      <height>20</height>
+      <border_width>1</border_width>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>LED</widget_type>
+      <name>LED</name>
+      <actions hook="false" hook_all="false" />
+      <show_boolean_label>false</show_boolean_label>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>-68ff486e:161d90dae6a:-7548</wuid>
+      <on_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </on_color>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <on_label>ON</on_label>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <off_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </off_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <square_led>true</square_led>
+      <width>30</width>
+      <x>143</x>
+      <data_type>0</data_type>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <off_label>OFF</off_label>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)
+FSD Channel #1</tooltip>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>true</value>
+          </exp>
+          <pv trig="true">B_FSD_ISDDEST</pv>
+        </rule>
+      </rules>
+      <effect_3d>false</effect_3d>
+      <bit>1</bit>
+      <pv_value />
+      <height>20</height>
+      <border_width>1</border_width>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>LED</widget_type>
+      <name>LED_1</name>
+      <actions hook="false" hook_all="false" />
+      <show_boolean_label>false</show_boolean_label>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>-68ff486e:161d90dae6a:-7547</wuid>
+      <on_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </on_color>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <on_label>ON</on_label>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <off_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </off_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <square_led>true</square_led>
+      <width>30</width>
+      <x>240</x>
+      <data_type>0</data_type>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <off_label>OFF</off_label>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)
+FSD Channel #2</tooltip>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>true</value>
+          </exp>
+          <pv trig="true">B_FSD_ISDDEST</pv>
+        </rule>
+      </rules>
+      <effect_3d>false</effect_3d>
+      <bit>2</bit>
+      <pv_value />
+      <height>20</height>
+      <border_width>1</border_width>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>LED</widget_type>
+      <name>LED_2</name>
+      <actions hook="false" hook_all="false" />
+      <show_boolean_label>false</show_boolean_label>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>-68ff486e:161d90dae6a:-7546</wuid>
+      <on_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </on_color>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <on_label>ON</on_label>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <off_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </off_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <square_led>true</square_led>
+      <width>30</width>
+      <x>340</x>
+      <data_type>0</data_type>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <off_label>OFF</off_label>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)
+FSD Channel #4</tooltip>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>true</value>
+          </exp>
+          <pv trig="true">B_FSD_ISDDEST</pv>
+        </rule>
+      </rules>
+      <effect_3d>false</effect_3d>
+      <bit>4</bit>
+      <pv_value />
+      <height>20</height>
+      <border_width>1</border_width>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>LED</widget_type>
+      <name>LED_6</name>
+      <actions hook="false" hook_all="false" />
+      <show_boolean_label>false</show_boolean_label>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>-68ff486e:161d90dae6a:-7545</wuid>
+      <on_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </on_color>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <on_label>ON</on_label>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <off_color>
+        <color name="Major" red="255" green="0" blue="0" />
+      </off_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <square_led>true</square_led>
+      <width>30</width>
+      <x>442</x>
+      <data_type>0</data_type>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <off_label>OFF</off_label>
+    </widget>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
     <border_style>13</border_style>
@@ -9949,7 +10197,7 @@ FSD Channel #4</tooltip>
     <enabled>true</enabled>
     <wuid>317aa5af:15e5eaa74b1:-6d35</wuid>
     <transparent>true</transparent>
-    <lock_children>true</lock_children>
+    <lock_children>false</lock_children>
     <scripts />
     <height>164</height>
     <border_width>1</border_width>
@@ -9976,7 +10224,16 @@ FSD Channel #4</tooltip>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>../apps/btaApp/btacfg.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Open BTA Config</description>
+      </action>
+    </actions>
     <fc>false</fc>
     <show_scrollbar>false</show_scrollbar>
     <font>
@@ -10029,7 +10286,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <fontdata fontName="Sans" height="11" style="0" />
       </font>
@@ -10069,7 +10335,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <show_scrollbar>false</show_scrollbar>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -10122,7 +10397,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <fontdata fontName="Sans" height="11" style="0" />
       </font>
@@ -10162,7 +10446,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <show_scrollbar>false</show_scrollbar>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -10203,14 +10496,14 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false">
+      <actions hook="true" hook_all="false">
         <action type="OPEN_DISPLAY">
           <path>../apps/btaApp/btacfg.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
-          <replace>1</replace>
-          <description>Configure Beam Type</description>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
         </action>
       </actions>
       <show_scrollbar>false</show_scrollbar>
@@ -10253,14 +10546,14 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false">
+      <actions hook="true" hook_all="false">
         <action type="OPEN_DISPLAY">
           <path>../apps/btaApp/btacfg.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
-          <replace>1</replace>
-          <description>Configure Beam Type</description>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
         </action>
       </actions>
       <show_scrollbar>false</show_scrollbar>
@@ -10303,13 +10596,13 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false">
+      <actions hook="true" hook_all="false">
         <action type="OPEN_DISPLAY">
           <path>../apps/btaApp/btacfg.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
-          <replace>1</replace>
+          <replace>2</replace>
           <description>Open BTA Config</description>
         </action>
       </actions>
@@ -10363,13 +10656,13 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Write_Foreground" red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false">
+      <actions hook="true" hook_all="false">
         <action type="OPEN_DISPLAY">
           <path>../apps/btaApp/btacfg.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
-          <replace>1</replace>
+          <replace>2</replace>
           <description>Open BTA Config</description>
         </action>
       </actions>
@@ -10424,7 +10717,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <fontdata fontName="Sans" height="11" style="0" />
       </font>
@@ -10464,7 +10766,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Header_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <show_scrollbar>false</show_scrollbar>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -10522,7 +10833,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Write_Foreground" red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
@@ -10575,7 +10895,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color name="Write_Foreground" red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
@@ -10627,7 +10956,16 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
-      <actions hook="false" hook_all="false" />
+      <actions hook="true" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>../apps/btaApp/btacfg.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Open BTA Config</description>
+        </action>
+      </actions>
       <font>
         <fontdata fontName="Sans" height="11" style="0" />
       </font>
@@ -16748,7 +17086,7 @@ $(pv_value)</tooltip>
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>true</alarm_pulsing>
-    <precision>0</precision>
+    <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -16785,7 +17123,7 @@ $(pv_value)</tooltip>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
     <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>

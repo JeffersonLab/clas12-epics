@@ -18,6 +18,7 @@ DB += amqTrigBit-alarms.db
 DB += amqTrigBit-alias.db
 DB += amqTrigBit-stage2.template
 DB += amqMergeFT.db
+DB += amqSplitFT.db
 DB += amqTrigBit-sums.db
 
 #----------------------------------------------------

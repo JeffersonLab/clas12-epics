@@ -36,6 +36,13 @@ record(compress,"$(P)$(R=):bpm_circbuff2") {
     field(ALG,"Circular Buffer")
     field(NSAM,"4")
     field(N,"4")
+    field(FLNK,"$(P)$(R=):9bpm_max.PROC")
+}
+record(compress,"$(P)$(R=):9bpm_max") {
+    field(INP,"$(P)$(R=):bpm_circbuff")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,"1")
+    field(N,"9")
     field(FLNK,"$(P)$(R=):4bpm_max.PROC")
 }
 record(compress,"$(P)$(R=):4bpm_max") {
@@ -92,7 +99,7 @@ record(ao,"$(P)$(R=):avg") {
     field(OMSL,"closed_loop")
     field(DOL,"$(P)$(R=):average CPP")
     field(HIGH,"$(RAWMAX)")
-    field(HSV,"MAJOR")
+    field(HSV,"MINOR")
     info(autosaveFields_pass0,"HIGH")
 }
 record(seq,"$(P)$(R=):write") {
@@ -113,7 +120,7 @@ record(bo,"$(P)$(R=):changed") {
 record(bi,"$(P)$(R=):enable") {
     field(ZNAM,"Disabled")
     field(ONAM,"Enabled")
-    field(ZSV,"MAJOR")
+    field(ZSV,"NO_ALARM")
     field(OSV,"NO_ALARM")
     field(VAL,"0")
     field(PINI,"1")

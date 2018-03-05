@@ -66,7 +66,8 @@ record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
     field(INPC,"B_DAQ_VTPGT:TrigBit:$(N):normLimit")
     field(INPD,"6")
     field(INPE,"B_livetime")
-    field(CALC,"C>0 && A>D && B<C && (E>10&&E<99.99)")
+    field(INPF,"B_SACLAYTGT:LS_TH") # full target
+    field(CALC,"C>0&&A>D&&B<C&&(E>10&&E<99.99)&&F=1")
     field(HIGH,"1")
     field(HSV,"MAJOR")
 }

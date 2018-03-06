@@ -48,7 +48,7 @@ class RichPmtCollection:
 
         ipmt+=1
 
-        print ipmt,ix,iy,vals['X'],vals['Y']
+        #print ipmt,ix,iy,vals['X'],vals['Y']
 
         vals['PVVAL']=0
         vals['PVNAME']='B_DET_RICH_SSP_PMT%.3d:scalers'%ipmt

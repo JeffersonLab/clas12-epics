@@ -20,6 +20,7 @@ DB += amqTrigBit-stage2.template
 DB += amqMergeFT.db
 DB += amqSplitFT.db
 DB += amqTrigBit-sums.db
+DB += amqSvt.substitutions
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

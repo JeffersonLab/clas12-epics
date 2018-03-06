@@ -16,6 +16,7 @@
 #record(ai,"$(RAW)") {}
 #######################################
 
+# previous 9 seconds of bpm readings:
 record(compress,"$(P)$(R=):bpm_circbuff") {
     field(SCAN,"1 second")
     field(INP,"$(REF)")
@@ -24,62 +25,50 @@ record(compress,"$(P)$(R=):bpm_circbuff") {
     field(N,"9")
     field(FLNK,"$(P)$(R=):raw_circbuff.PROC")
 }
+
+# previous 5 seconds of raw counts:
 record(compress,"$(P)$(R=):raw_circbuff") {
     field(INP,"$(RAW)")
     field(ALG,"Circular Buffer")
     field(NSAM,"5")
     field(N,"5")
-    field(FLNK,"$(P)$(R=):bpm_circbuff2.PROC")
-}
-record(compress,"$(P)$(R=):bpm_circbuff2") {
-    field(INP,"$(REF)")
-    field(ALG,"Circular Buffer")
-    field(NSAM,"4")
-    field(N,"4")
     field(FLNK,"$(P)$(R=):9bpm_max.PROC")
 }
+
+# maximum bpm over past 9 seconds:
 record(compress,"$(P)$(R=):9bpm_max") {
     field(INP,"$(P)$(R=):bpm_circbuff")
     field(ALG,"N to 1 High Value")
     field(NSAM,"1")
     field(N,"9")
-    field(FLNK,"$(P)$(R=):4bpm_max.PROC")
-}
-record(compress,"$(P)$(R=):4bpm_max") {
-    field(INP,"$(P)$(R=):bpm_circbuff")
-    field(ALG,"N to 1 High Value")
-    field(NSAM,"1")
-    field(N,"4")
     field(FLNK,"$(P)$(R=):raw.PROC")
 }
+
+# raw counts from 5 seconds ago:
 record(compress,"$(P)$(R=):raw") {
     field(INP,"$(P)$(R=):raw_circbuff")
     field(ALG,"N to 1 Average")
     field(NSAM,"1")
     field(N,"1")
-    field(FLNK,"$(P)$(R=):4bpm_max2.PROC")
-}
-record(compress,"$(P)$(R=):4bpm_max2") {
-    field(INP,"$(P)$(R=):bpm_circbuff2")
-    field(ALG,"N to 1 High Value")
-    field(NSAM,"1")
-    field(N,"4")
     field(FLNK,"$(P)$(R=):calcout.PROC")
 }
+
+# figure out whether to update pedestal calculation:
 record(calcout,"$(P)$(R=):calcout") {
     field(INPA,"$(RAW)")
     field(INPB,"$(REF)")
     field(INPC,"$(REFMAX)")
     field(INPD,"$(RAWMAX=300)")
-    field(INPE,"$(P)$(R=):4bpm_max")
-    field(INPF,"$(P)$(R=):4bpm_max2")
-    field(INPG,"$(P)$(R=):raw")
-    field(CALC,"( B<C && E<C && F<C && (D<=0 || A<D) ) ? 1 : 0")
+    field(INPE,"$(P)$(R=):9bpm_max")
+    field(INPF,"$(P)$(R=):raw")
+    field(CALC,"( B<C && E<C && (D<=0 || A<D) ) ? 1 : 0")
     field(OOPT,"When Non-zero")
     field(OCAL,"1")
     field(DOPT,"Use OCAL")
     field(OUT,"$(P)$(R=):circbuff.PROC PP")
 }
+
+# the N raw count readings to use for pedestal:
 record(compress,"$(P)$(R=):circbuff") {
     field(INP,"$(P)$(R=):raw")
     field(ALG,"Circular Buffer")
@@ -87,6 +76,8 @@ record(compress,"$(P)$(R=):circbuff") {
     field(N,"$(N)")
     field(FLNK,"$(P)$(R=):average.PROC PP")
 }
+
+# calculate pedestal:
 record(compress,"$(P)$(R=):average") {
     field(INP,"$(P)$(R=):circbuff")
     field(ALG,"N to 1 Average")
@@ -95,13 +86,17 @@ record(compress,"$(P)$(R=):average") {
     field(FLNK,"$(P)$(R=):write PP")
     info(autosaveFields_pass0,"VAL")
 }
+
+# pedetsal, just to have a scalar to read if disabled:
 record(ao,"$(P)$(R=):avg") {
     field(OMSL,"closed_loop")
     field(DOL,"$(P)$(R=):average CPP")
     field(HIGH,"$(RAWMAX)")
-    field(HSV,"MINOR")
+    field(HSV,"NO_ALARM")
     info(autosaveFields_pass0,"HIGH")
 }
+
+# write to the real pedetsal PV: 
 record(seq,"$(P)$(R=):write") {
     field(DISV,0)
     field(SDIS,"$(P)$(R=):enable.VAL")
@@ -109,13 +104,6 @@ record(seq,"$(P)$(R=):write") {
     field(LNK1,"$(OUT) PP")
     field(DOL2,"1")
     field(LNK2,"$(P)$(R=):changed PP")
-}
-record(bo,"$(P)$(R=):changed") {
-    field(ZNAM,"Idle")
-    field(ONAM,"Active")
-    field(VAL,"0")
-    field(PINI,"0")
-    field(HIGH,"0.5")
 }
 record(bi,"$(P)$(R=):enable") {
     field(ZNAM,"Disabled")
@@ -125,6 +113,14 @@ record(bi,"$(P)$(R=):enable") {
     field(VAL,"0")
     field(PINI,"1")
     info(autosaveFields,"VAL")
+}
+# just for visual feedback:
+record(bo,"$(P)$(R=):changed") {
+    field(ZNAM,"Idle")
+    field(ONAM,"Active")
+    field(VAL,"0")
+    field(PINI,"0")
+    field(HIGH,"0.5")
 }
 
 

@@ -21,6 +21,12 @@ float chillSetTemp; assign chillSetTemp to "B_SVT_CHILLER:SetSP00";
 float chillOnTemp;  assign chillOnTemp  to "B_SVT_CHILLER:onTemp";
 float chillOffTemp; assign chillOffTemp to "B_SVT_CHILLER:offTemp";
 
+float chillTempN2;    assign chillTempN2    to "B_SVT_CHILLER_N2_TEMP:RD_SP";
+float chillSetTempN2; assign chillSetTempN2 to "B_SVT_CHILLER_N2_TEMP:SP";
+
+float chillOnTempN2;  assign chillOnTempN2  to "B_SVT_CHILLER_N2:onTemp";
+float chillOffTempN2; assign chillOffTempN2 to "B_SVT_CHILLER_N2:offTemp";
+
 string seqMessage; assign seqMessage to "B_SVT_CHILLER:seqMessage";
 int seqStatus;     assign seqStatus  to "B_SVT_CHILLER:seqStatus";
 int seqDisable;    assign seqDisable to "B_SVT_CHILLER:seqDisable";
@@ -83,8 +89,11 @@ ss seqsvtChillerTemp {
             pvGet(lvOnR2);
             pvGet(lvOnR3);
             pvGet(chillTemp);
+            pvGet(chillTempN2);
             pvGet(chillOffTemp);
             pvGet(chillOnTemp);
+            pvGet(chillOffTempN2);
+            pvGet(chillOnTempN2);
 
             if (seqDisable==0) {
                 if (lvOnR1 || lvOnR2 || lvOnR3) {
@@ -95,6 +104,13 @@ ss seqsvtChillerTemp {
                         chillSetTemp = chillOnTemp;
                         pvPut(chillSetTemp);
                     }
+                    if (fabs(chillTempN2-chillOnTempN2)>0.1) {
+                        seqStatus=1;
+                        sprintf(seqMessage,"Setting Chiller Temp for SVT ON ...");
+                        pvPut(seqMessage);
+                        chillSetTempN2 = chillOnTempN2;
+                        pvPut(chillSetTempN2);
+                    }
                 }
                 else {
                     if (fabs(chillTemp-chillOffTemp)>0.1) {
@@ -103,6 +119,13 @@ ss seqsvtChillerTemp {
                         pvPut(seqMessage);
                         chillSetTemp = chillOffTemp;
                         pvPut(chillSetTemp);
+                    }
+                    if (fabs(chillTempN2-chillOffTempN2)>0.1) {
+                        seqStatus=1;
+                        sprintf(seqMessage,"Setting Chiller Temp for SVT OFF ...");
+                        pvPut(seqMessage);
+                        chillSetTempN2 = chillOffTempN2;
+                        pvPut(chillSetTempN2);
                     }
                 }
             }

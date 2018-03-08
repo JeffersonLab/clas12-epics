@@ -16,7 +16,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
 dbLoadRecords("db/svtHardIntlk.db")
-dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_, R=DGSCRIO1_, DLY=60")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_, R=SVTCRIO_, DLY=60")
 
 cd ${TOP}/iocBoot/${IOC}
 

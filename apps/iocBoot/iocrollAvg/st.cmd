@@ -15,12 +15,12 @@ dbLoadRecords("db/rollingAverages-status.db")
 
 dbLoadTemplate("db/rollingAverages.substitutions")
 
-dbLoadRecords("db/timeDerivative.db","P=LL8210,R=:deriv,DT=10,SCALE=604,EGU=g/s")
-dbLoadRecords("db/timeDerivative.db","P=CLL6763A,R=:deriv,DT=2,SCALE=12080,EGU=g/s")
+dbLoadRecords("db/timeDerivative.db","P=LL8210,R=,DT=10,SCALE=604,EGU=g/s")
+dbLoadRecords("db/timeDerivative.db","P=CLL6763A,R=,DT=2,SCALE=12080,EGU=g/s")
 
 # live average is over DT*N seconds
-dbLoadRecords("db/liveRollAvg.db","I=LL8210:deriv:dxdt,P=LL8210:dxdt,N=18,EGU=g/s,SCAN=10")
-dbLoadRecords("db/liveRollAvg.db","I=CLL6763A:deriv:dxdt,P=CLL6763A:dxdt,N=150,EGU=g/s,SCAN=2")
+dbLoadRecords("db/liveRollAvg.db","I=LL8210:dxdt,P=LL8210:dxdt,N=18,EGU=g/s,SCAN=10")
+dbLoadRecords("db/liveRollAvg.db","I=CLL6763A:dxdt,P=CLL6763A:dxdt,N=150,EGU=g/s,SCAN=2")
 
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")

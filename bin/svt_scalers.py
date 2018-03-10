@@ -201,6 +201,9 @@ def main():
                 region=3
                 sector=iy-SECTORSPERREGION[0]-SECTORSPERREGION[1]
 
+              if data==None or len(data)!=STRIPSPERSECTOR:
+                print 'Error Reading '+ch['PVNAME']
+                continue
               for ix in range(STRIPSPERSECTOR):
                   hh.SetBinContent(ix,iy+1,data[ix])
               iy += 1

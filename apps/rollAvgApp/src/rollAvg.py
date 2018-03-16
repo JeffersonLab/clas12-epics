@@ -23,6 +23,9 @@ PVFILE='./pvRollAvg.list'
 # myStats command line for most recent DT time range:
 CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 
+# thread sleeps this long after an error:
+ERRORSLEEP=120
+
 # the output PVs:
 OPVS={}
 OPVSDT={}
@@ -154,7 +157,7 @@ class ScanThread(threading.Thread):
           MYACOMMS[TIMES.index(self.dt)].get()==1:
         nConsecBad += 1
         if nConsecBad>1: self.lastScan=-99999
-        time.sleep(2)
+        time.sleep(ERRORSLEEP/4)
       else:
         nConsecBad = 0
       time.sleep(1)
@@ -197,7 +200,7 @@ class ScanThread(threading.Thread):
         MYACOMMS[TIMES.index(self.dt)].put(0)
       else:
         MYACOMMS[TIMES.index(self.dt)].put(1)
-        time.sleep(120)
+        time.sleep(ERRORSLEEP)
     myPrint( 'Scan Thread Stopped: Scan=%.0fs dt=%s'%(self.period,self.dt))
 
 class HeartbeatThread(threading.Thread):
@@ -248,12 +251,13 @@ def main():
 
     checkLogFile()
 
-    t=HeartbeatThread()
-    threads.append(t)
+    threads.append(HeartbeatThread())
+
     for ii in range(len(TIMES)):
-      t=ScanThread(SCANS[ii],OPVS[TIMES[ii]])
-      threads.append(t)
+      threads.append(ScanThread(SCANS[ii],OPVS[TIMES[ii]]))
+
     myPrint( '\nrollAvg.py:  # of threads: %d\n '%len(threads))
+
     for tt in threads:
       tt.start()
       time.sleep(1)

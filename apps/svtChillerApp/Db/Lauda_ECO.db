@@ -404,7 +404,7 @@ record(calcout,"$(P):STATCALC") {
     field(INPC,"$(P):GetSP02")
     field(CALC,"A=0 ? (B=1 ? 0 : C) : (A&4079 ? 4 : A&16)")
     field(OUT,"$(P)_STATUS PP")
-    field(FLNK,"$(P):ECVM")
+    field(FLNK,"$(P):ECVM.PROC")
     field(OOPT,"Every Time")
     field(DOPT,"Use CALC")
 }
@@ -532,14 +532,14 @@ record(stringin,"$(P):GetStatus") {
 	field(DESC,"Read the dev status: 0=OK, -1=Error")
 	field(PINI,"YES")
 	field(DTYP,"stream")
-	field(FLNK,"$(P):STATUS")
+	field(FLNK,"$(P):STATUS.PROC")
 	field(INP,"@ecoChiller.proto getEcoString(STATUS) $(PORT)")
 }
 record(stringin,"$(P):GetStat") {
 	field(DESC,"Read the error diagnosis response")
 	field(PINI,"YES")
 	field(DTYP,"stream")
-	field(FLNK,"$(P):STAT")
+	field(FLNK,"$(P):STAT.PROC")
 	field(INP,"@ecoChiller.proto getEcoString(STAT) $(PORT)")
 }
 record(stringout,"$(P):WriteCommand") {

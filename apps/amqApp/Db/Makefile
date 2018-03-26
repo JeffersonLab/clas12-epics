@@ -23,6 +23,7 @@ DB += amqTrigBit-sums.db
 DB += amqSvt.substitutions
 DB += tsBusy.db
 DB += tsBusy-alarm.db
+DB += amqRocsBusy.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

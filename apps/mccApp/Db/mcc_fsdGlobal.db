@@ -1,0 +1,46 @@
+
+record(ai,"B_FSD_ISDDESTai")
+{
+    field(PINI,1)
+    field(VAL,0)
+}
+record(bo,"B_FSD_ISDDEST")
+{
+    field(OMSL,"closed_loop")
+    field(DOL,"B_FSD_ISDDESTai CPP")
+    field(ZNAM,"No HallB")
+    field(ONAM,"HallB")
+}
+record(scalcout,"B_FSD_ISDDESTcalc") 
+{
+  field(SCAN,"1 second")
+  field(INAA,"ISDXXXXdest")
+  field(CALC,"AA['HallB','HallB']=''")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"B_FSD_ISDDESTai PP")
+}
+
+
+#
+# 1 if:
+# acc's beam stopper is NOT in
+# AND any of our FSDs are masked
+# AND tagger magnet is NOT on
+# AND HallB string dipole is ON
+#
+# else 0
+#
+record(calc,"B_FSD_MASK_ALARM") {
+    field(SCAN,"10 second")
+    field(INPA,"hallbbst")
+    field(INPB,"B_FSD_ISDDEST")
+    field(INPC,"ISD2H001HALOMASKr")
+    field(INPD,"MBSY2CM") # string magnet
+    field(INPE,"TMIRBCK")
+    field(CALC,"A=1&&(B=0||C#0)&&D>10&&ABS(E)<50")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+
+

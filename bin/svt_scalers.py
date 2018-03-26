@@ -42,6 +42,7 @@ class SvtChannelCollection:
         vals['PVVAL']=0
         vals['PVNAME']='B_SVT_DAQ_R%dS%d:STRIPRATE'%(region+1,sector+1)
         vals['PV']=pv.PV(vals['PVNAME'])
+        vals['PVTIME']=pv.PV(vals['PVNAME']+'-Time')
 
         self.chans.append(SvtChannel(vals))
 
@@ -106,6 +107,7 @@ def setupPaveTexts(pts):
 def loadPV(chan):
   ch=chan.vals
   ch['PVVAL']=ch['PV'].get()
+  ch['PVTIMEVAL']=ch['PVTIME'].get()
 
 
 mf=TGMainFrame(gClient.GetRoot(),800,565)
@@ -190,6 +192,12 @@ def main():
               loadPV(ch)
               ch=ch.vals
               data=ch['PVVAL']
+              time2=ch['PVTIMEVAL']
+
+              if time2>10:
+                print 'More than 10 seconds since message:  '+ch['PVNAME']
+                for ii in range(512):
+                  data[ii]=0
 
               if iy<SECTORSPERREGION[0]:
                 region=1

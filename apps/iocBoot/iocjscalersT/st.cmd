@@ -16,6 +16,8 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_TRIG.substitutions")
 
+dbLoadRecords("db/jscaler_TRIG_alias.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

@@ -111,7 +111,7 @@ then
 
 elif [[ $1 == "T" || $1 == "trigger" || $1 == "scaler1" ]]
 then
-    dgsReboot trig2
+    dgsReboot scaler1
     sleep 2
     softioc_console -R iocjscalersT
 

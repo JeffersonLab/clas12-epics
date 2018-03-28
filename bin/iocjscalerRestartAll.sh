@@ -6,6 +6,7 @@ do
 done
 
 softioc_console -R iocjscalersC
-#softioc_console -R iocjscalersT
+softioc_console -R iocjscalersT
+
 #softioc_console -R iocjscalersRICH
 

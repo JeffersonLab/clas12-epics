@@ -1,0 +1,45 @@
+record(ai,"$(P):livetime") {
+    field(EGU,"%")
+    field(PREC,1)
+    # already archived as:
+    alias("B_livetime")
+}
+
+record(ai,"$(P):livetime_heartbeat") {}
+record(ai,"$(P):run_number") {}
+record(ai,"$(P):run_nfiles") {}
+record(stringin,"$(P):run_status") {
+    field(FLNK,"$(P):run_status:calc.PROC")
+}
+record(stringin,"$(P):run_config") {}
+record(ai,"$(P):run_time") {
+    field(EGU,"seconds")
+}
+record(ai,"$(P):run_ndata") {
+    field(EGU,"?")
+}
+record(ai,"$(P):run_nevents") {}
+
+record(scalcout,"$(P):run_status:calc") {
+    field(INAA,"$(P):run_status")
+    field(CALC,"AA=='active'")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+    field(OUT,"$(P):coda_status_ai")
+}
+
+record(ai,"$(P):coda_status_ai")
+{
+  field(PINI,1)
+  field(VAL,0)
+  field(FLNK,"$(P):coda_status.PROC")
+}
+record(mbbi,"$(P):coda_status")
+{
+    field(INP,"$(P):coda_status_ai PP")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"not running")
+    field(ONST,"running")
+}
+

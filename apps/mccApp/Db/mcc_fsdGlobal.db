@@ -21,6 +21,15 @@ record(scalcout,"B_FSD_ISDDESTcalc")
   field(OUT,"B_FSD_ISDDESTai PP")
 }
 
+record(calc,"B_FSD_2H001:isMasked") {
+    field(SCAN,"1 second")
+    field(INPA,"ISD2H001N")
+# bit 11 is new card
+# bit 10 is old card
+    field(CALC,"A & (1<<11)")
+    field(FLNK,"B_FSD_MASK_ALARM.PROC")
+}
+
 
 #
 # 1 if:
@@ -32,13 +41,13 @@ record(scalcout,"B_FSD_ISDDESTcalc")
 # else 0
 #
 record(calc,"B_FSD_MASK_ALARM") {
-    field(SCAN,"10 second")
     field(INPA,"hallbbst")
     field(INPB,"B_FSD_ISDDEST")
     field(INPC,"ISD2H001HALOMASKr")
     field(INPD,"MBSY2CM") # string magnet
     field(INPE,"TMIRBCK")
-    field(CALC,"A=1&&(B=0||C#0)&&D>10&&ABS(E)<50")
+    field(INPF,"B_FSD_2H001:isMasked")
+    field(CALC,"A=1&&(B=0||C#0||F#0)&&D>10&&ABS(E)<50")
     field(HIGH,"1")
     field(HSV,"MAJOR")
 }

@@ -9945,75 +9945,17 @@ FSD Channel #4</tooltip>
       <alarm_pulsing>false</alarm_pulsing>
       <tooltip>$(pv_name)
 $(pv_value)
-FSD Channel #3</tooltip>
-      <rules>
-        <rule name="Rule" prop_id="visible" out_exp="false">
-          <exp bool_exp="pv0==0">
-            <value>true</value>
-          </exp>
-          <pv trig="true">B_FSD_ISDDEST</pv>
-        </rule>
-      </rules>
-      <effect_3d>false</effect_3d>
-      <bit>3</bit>
-      <pv_value />
-      <height>20</height>
-      <border_width>1</border_width>
-      <visible>false</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>LED</widget_type>
-      <name>LED</name>
-      <actions hook="false" hook_all="false" />
-      <show_boolean_label>false</show_boolean_label>
-      <border_style>0</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <enabled>true</enabled>
-      <wuid>-68ff486e:161d90dae6a:-7548</wuid>
-      <on_color>
-        <color name="Minor" red="255" green="128" blue="0" />
-      </on_color>
-      <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
-      <on_label>ON</on_label>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>true</keep_wh_ratio>
-      </scale_options>
-      <off_color>
-        <color name="Minor" red="255" green="128" blue="0" />
-      </off_color>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color red="240" green="240" blue="240" />
-      </background_color>
-      <square_led>true</square_led>
-      <width>30</width>
-      <x>143</x>
-      <data_type>0</data_type>
-      <y>72</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-      <off_label>OFF</off_label>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)
 FSD Channel #1</tooltip>
       <rules>
         <rule name="Rule" prop_id="visible" out_exp="false">
           <exp bool_exp="pv0==0">
             <value>true</value>
           </exp>
+          <exp bool_exp="pv1&amp;(1&lt;&lt;11)">
+            <value>true</value>
+          </exp>
           <pv trig="true">B_FSD_ISDDEST</pv>
+          <pv trig="true">ISD2H001N</pv>
         </rule>
       </rules>
       <effect_3d>false</effect_3d>
@@ -10075,7 +10017,11 @@ FSD Channel #2</tooltip>
           <exp bool_exp="pv0==0">
             <value>true</value>
           </exp>
+          <exp bool_exp="pv1&amp;(1&lt;&lt;11)">
+            <value>true</value>
+          </exp>
           <pv trig="true">B_FSD_ISDDEST</pv>
+          <pv trig="true">ISD2H001N</pv>
         </rule>
       </rules>
       <effect_3d>false</effect_3d>
@@ -10137,7 +10083,11 @@ FSD Channel #4</tooltip>
           <exp bool_exp="pv0==0">
             <value>true</value>
           </exp>
+          <exp bool_exp="pv1&amp;(1&lt;&lt;11)">
+            <value>true</value>
+          </exp>
           <pv trig="true">B_FSD_ISDDEST</pv>
+          <pv trig="true">ISD2H001N</pv>
         </rule>
       </rules>
       <effect_3d>false</effect_3d>
@@ -10179,6 +10129,72 @@ FSD Channel #4</tooltip>
       <square_led>true</square_led>
       <width>30</width>
       <x>442</x>
+      <data_type>0</data_type>
+      <y>72</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+      <off_label>OFF</off_label>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.LED" version="1.0.0">
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)
+FSD Channel #3</tooltip>
+      <rules>
+        <rule name="Rule" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="pv1&amp;(1&lt;&lt;11)">
+            <value>true</value>
+          </exp>
+          <pv trig="true">B_FSD_ISDDEST</pv>
+          <pv trig="true">ISD2H001N</pv>
+        </rule>
+      </rules>
+      <effect_3d>false</effect_3d>
+      <bit>3</bit>
+      <pv_value />
+      <height>20</height>
+      <border_width>1</border_width>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>LED</widget_type>
+      <name>LED</name>
+      <actions hook="false" hook_all="false" />
+      <show_boolean_label>false</show_boolean_label>
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <enabled>true</enabled>
+      <wuid>-68ff486e:161d90dae6a:-7548</wuid>
+      <on_color>
+        <color name="Minor" red="255" green="128" blue="0" />
+      </on_color>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <on_label>ON</on_label>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>true</keep_wh_ratio>
+      </scale_options>
+      <off_color>
+        <color name="Minor" red="255" green="128" blue="0" />
+      </off_color>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <square_led>true</square_led>
+      <width>30</width>
+      <x>143</x>
       <data_type>0</data_type>
       <y>72</y>
       <foreground_color>

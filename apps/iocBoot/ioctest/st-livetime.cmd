@@ -19,10 +19,10 @@ cd ${TOP}/iocBoot/${IOC}
 
 iocInit();
 
-dbpf("B_DAQ:livetime:rms.HIGH","0.3")
-dbpf("B_DAQ:livetime:rms.HSV","MAJOR")
+dbpf("B_DAQ:livetime:rms.HIGH","0.7")
+dbpf("B_DAQ:livetime:rms.HSV","MINOR")
 dbpf("B_DAQ:livetime:mean.LOW","75")
-dbpf("B_DAQ:livetime:mean.LSV","MAJOR")
+dbpf("B_DAQ:livetime:mean.LSV","MINOR")
 
 dbpf("B_IPM2C21A:rms.HIGH","2")
 dbpf("B_IPM2C21A:mean.LOW","5")

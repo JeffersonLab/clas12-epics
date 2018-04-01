@@ -8290,7 +8290,30 @@ $(pv_value)</tooltip>
   <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
     <border_style>13</border_style>
     <tooltip></tooltip>
-    <rules />
+    <rules>
+      <rule name="Text" prop_id="name" out_exp="false">
+        <exp bool_exp="pv0&gt;0">
+          <value>Fast Shut Down      ALERT:  UNSAFE MASKING      ALERT:  UNSAFE MASKING</value>
+        </exp>
+        <pv trig="true">B_FSD_MASK_ALARM</pv>
+      </rule>
+      <rule name="Background Color" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pv0&gt;0">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <pv trig="true">B_FSD_MASK_ALARM</pv>
+      </rule>
+      <rule name="Text Color" prop_id="border_color" out_exp="false">
+        <exp bool_exp="pv0&gt;0">
+          <value>
+            <color name="Read_Foreground" red="255" green="255" blue="255" />
+          </value>
+        </exp>
+        <pv trig="true">B_FSD_MASK_ALARM</pv>
+      </rule>
+    </rules>
     <enabled>true</enabled>
     <wuid>317aa5af:15e5eaa74b1:-6fb1</wuid>
     <transparent>true</transparent>

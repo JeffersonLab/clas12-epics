@@ -25,9 +25,11 @@ record(scalcout,"$(P):run_status:calc") {
     field(CALC,"AA=='active'")
     field(OOPT,"Every Time")
     field(DOPT,"Use CALC")
-    field(OUT,"$(P):coda_status_ai")
+    field(OUT,"$(P):coda_status_ai PP")
 }
 
+# scalcout to an mbbi complains about non-integer,
+# but an intermediate ai works around that:
 record(ai,"$(P):coda_status_ai")
 {
   field(PINI,1)
@@ -36,7 +38,7 @@ record(ai,"$(P):coda_status_ai")
 }
 record(mbbi,"$(P):coda_status")
 {
-    field(INP,"$(P):coda_status_ai PP")
+    field(INP,"$(P):coda_status_ai")
     field(ZRVL,"0")
     field(ONVL,"1")
     field(ZRST,"not running")

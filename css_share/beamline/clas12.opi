@@ -8293,7 +8293,7 @@ $(pv_value)</tooltip>
     <rules>
       <rule name="Text" prop_id="name" out_exp="false">
         <exp bool_exp="pv0&gt;0">
-          <value>Fast Shut Down      ALERT:  UNSAFE MASKING      ALERT:  UNSAFE MASKING</value>
+          <value>Fast Shut Down      ALERT:  UNSAFE MASKING      ALERT:  UNSAFE MASKING     </value>
         </exp>
         <pv trig="true">B_FSD_MASK_ALARM</pv>
       </rule>
@@ -12900,7 +12900,7 @@ $(pv_value)</tooltip>
           <pv trig="true">B_ORBITLOCKS:isSuspended</pv>
         </rule>
       </rules>
-      <enabled>true</enabled>
+      <enabled>false</enabled>
       <wuid>-7cde59e3:16109afba36:-7d38</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -12917,7 +12917,7 @@ $(pv_value)</tooltip>
         <height_scalable>true</height_scalable>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
-      <visible>true</visible>
+      <visible>false</visible>
       <pv_name>HallBCLAS12Orb:StringStat</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
@@ -12934,6 +12934,89 @@ $(pv_value)</tooltip>
       <width>127</width>
       <x>-1</x>
       <name>Text Update</name>
+      <y>6</y>
+      <foreground_color>
+        <color name="Write_Foreground" red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <precision>0</precision>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <horizontal_alignment>1</horizontal_alignment>
+      <rules>
+        <rule name="Rule" prop_id="background_color" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>
+              <color name="Major" red="255" green="0" blue="0" />
+            </value>
+          </exp>
+          <exp bool_exp="pv0==1">
+            <value>
+              <color name="On" red="0" green="255" blue="0" />
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color name="Warning" red="255" green="255" blue="0" />
+            </value>
+          </exp>
+          <pv trig="true">$(pv_name)</pv>
+        </rule>
+        <rule name="Text" prop_id="text" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>Off</value>
+          </exp>
+          <exp bool_exp="pv0==1">
+            <value>On</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>Unknown</value>
+          </exp>
+          <pv trig="true">$(pv_name)</pv>
+        </rule>
+      </rules>
+      <enabled>true</enabled>
+      <wuid>427d0bac:1628e1ee169:-79f1</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <auto_size>false</auto_size>
+      <text>##.###</text>
+      <rotation_angle>0.0</rotation_angle>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <show_units>true</show_units>
+      <height>37</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name>OpsMatrix10:OnOff</pv_name>
+      <vertical_alignment>1</vertical_alignment>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <precision_from_pv>true</precision_from_pv>
+      <widget_type>Text Update</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <wrap_words>true</wrap_words>
+      <format_type>0</format_type>
+      <background_color>
+        <color red="111" green="111" blue="111" />
+      </background_color>
+      <width>127</width>
+      <x>-1</x>
+      <name>Text Update_141</name>
       <y>6</y>
       <foreground_color>
         <color name="Write_Foreground" red="0" green="0" blue="0" />

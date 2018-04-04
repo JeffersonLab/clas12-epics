@@ -11,6 +11,8 @@ import ROOT
 SECTORSPERREGION=[10,14,18]
 STRIPSPERSECTOR=512
 
+POLLPERIOD=2
+
 class SvtChannel:
 
   def __init__(self,keyval):
@@ -228,7 +230,7 @@ def main():
             cc.Modified()
             cc.Update()
 
-            time.sleep(5)
+            time.sleep(POLLPERIOD)
 
 if __name__ == '__main__': main()
 

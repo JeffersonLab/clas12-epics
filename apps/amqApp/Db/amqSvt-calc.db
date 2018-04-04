@@ -1,0 +1,25 @@
+record(compress,"$(P):topAvg") {
+    field(INP,"$(P) CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"256")
+    field(EGU,"Hz")
+    field(FLNK,"$(P):bot.PROC")
+}
+record(subArray,"$(P):bot") {
+    field(INP,"$(P)")
+    field(NELM,256)
+    field(MALM,512)
+    field(INDX,256)
+    field(FTVL,"FLOAT")
+    field(FLNK,"$(P):botAvg.PROC")
+}
+record(compress,"$(P):botAvg") {
+    field(INP,"$(P):bot")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"256")
+    field(EGU,"Hz")
+}
+
+

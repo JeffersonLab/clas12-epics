@@ -21,6 +21,7 @@ DB += amqMergeFT.db
 DB += amqSplitFT.db
 DB += amqTrigBit-sums.db
 DB += amqSvt.substitutions
+DB += amqSvt-calc.db
 DB += daq2epics.db
 DB += tsBusy-alarm.db
 DB += amqRocsBusy.db

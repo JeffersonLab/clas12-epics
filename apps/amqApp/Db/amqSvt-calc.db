@@ -1,5 +1,5 @@
 record(compress,"$(P):topAvg") {
-    field(INP,"$(P) CPP")
+    field(INP,"$(P) CPP MSS")
     field(ALG,"N to 1 Average")
     field(NSAM,"1")
     field(N,"256")
@@ -7,7 +7,7 @@ record(compress,"$(P):topAvg") {
     field(FLNK,"$(P):bot.PROC")
 }
 record(subArray,"$(P):bot") {
-    field(INP,"$(P)")
+    field(INP,"$(P) MSS")
     field(NELM,256)
     field(MALM,512)
     field(INDX,256)
@@ -15,7 +15,7 @@ record(subArray,"$(P):bot") {
     field(FLNK,"$(P):botAvg.PROC")
 }
 record(compress,"$(P):botAvg") {
-    field(INP,"$(P):bot")
+    field(INP,"$(P):bot MSS")
     field(ALG,"N to 1 Average")
     field(NSAM,"1")
     field(N,"256")

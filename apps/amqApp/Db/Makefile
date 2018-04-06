@@ -26,6 +26,9 @@ DB += amqSvt-calcGlobal.db
 DB += daq2epics.db
 DB += tsBusy-alarm.db
 DB += amqRocsBusy.db
+DB += amqRocsRate.db
+DB += amqRocsRate.substitutions
+DB += amqRocsRate-sums.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

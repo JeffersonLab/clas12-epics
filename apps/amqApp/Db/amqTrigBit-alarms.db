@@ -80,7 +80,8 @@ record(calc,"B_DAQ_VTPGT:TrigBit:1-6:alarm") {
     field(INPE,"B_DAQ_VTPGT:TrigBit:5:alarm")
     field(INPF,"B_DAQ_VTPGT:TrigBit:6:alarm")
     field(INPG,"IPM2C21A")
-    field(CALC,"G>0.5 && (A||B||C||D||E||F)")
+    field(INPH,"B_DAQ:coda_status")
+    field(CALC,"H=1&&G>0.5 && (A||B||C||D||E||F)")
     field(HSV,"MAJOR")
     field(HIGH,"1")
 }
@@ -91,7 +92,8 @@ record(calc,"B_DAQ_VTPGT:TrigBit:FT:alarm") {
     field(INPB,"B_DAQ_VTPGT:TrigBit:29")
     field(INPC,"B_DAQ_VTPGT:TrigBit:30")
     field(INPD,"IPM2C21A")
-    field(CALC,"D>0.5&&(A<1||B<1||C<1)")
+    field(INPE,"B_DAQ:coda_status")
+    field(CALC,"E=1&&D>0.5&&(A<1||B<1||C<1)")
     field(HSV,"MAJOR")
     field(HIGH,"1")
 }
@@ -145,7 +147,8 @@ record(calc,"B_DAQ_VTPGT:TrigBit:normAlarm") {
     field(INPA,"B_DAQ_VTPGT:TrigBit:A:normAlarm")
     field(INPB,"B_DAQ_VTPGT:TrigBit:B:normAlarm")
     field(INPC,"B_DAQ_VTPGT:TrigBit:C:normAlarm")
-    field(CALC,"A||B||C")
+    field(INPD,"B_DAQ:coda_status")
+    field(CALC,"D=1&&(A||B||C)")
     field(HIGH,1)
     field(HSV,"MAJOR")
 }

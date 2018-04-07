@@ -127,8 +127,7 @@ record(calc,"$(P):svt:dataRate") {
     field(SCAN,"1 second")
     field(INPA,"$(P):svt1:dataRate")
     field(INPB,"$(P):svt2:dataRate")
-    field(INPC,"$(P):svt3:dataRate")
-    field(CALC,"A+B+C")
+    field(CALC,"A+B")
     field(EGU,"MB/s")
 }
 record(calc,"$(P):adc:dataRate") {
@@ -151,3 +150,15 @@ record(calc,"$(P):tdc:dataRate") {
     field(CALC,"A+B+C+D")
     field(EGU,"MB/s")
 }
+
+record(calc,"$(P):all:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adc:dataRate")
+    field(INPB,"$(P):tdc:dataRate")
+    field(INPC,"$(P):svt:dataRate")
+    field(INPD,"$(P):mm:dataRate")
+    field(INPE,"$(P):dc:dataRate")
+    field(CALC,"A+B+C+D+E")
+    field(EGU,"MB/s")
+}
+

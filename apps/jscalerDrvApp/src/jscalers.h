@@ -42,6 +42,7 @@ class JlabBoard {
 
         vector<string> part_epics_names;
 
+        int commsStatus;
         int slotNumber;
         int boardType;
         int numberOfChannels;
@@ -67,6 +68,7 @@ class JlabBoard {
                 scalerThresholds=new vector< double >[numberOfChannels];
                 scalerModes=new vector< double >[numberOfChannels];
             }
+            commsStatus=1;
         }
         virtual ~JlabBoard(){};
 
@@ -166,6 +168,7 @@ class VmeChassis {
     public:
         string HOSTNAME;
 
+        int commsStatus;
         string getHostname() {return HOSTNAME;}
         int port;  /// should be gotten from the databses (not used at the moment)
         CrateMsgClient* crateMsgClient;

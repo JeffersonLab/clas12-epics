@@ -23,6 +23,7 @@ map<int, VmeChassis*> *ScalersSlowControl::GetChassisMap(){ return &vmecrates; }
 
 VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
+    commsStatus=1;
     int *board_types;
     int len=0;
     unsigned int *buf[1];
@@ -138,6 +139,8 @@ void *crateThread(void *ptr) {
         int ret=0;
         ///----------------------------- read part--------------------------------------
 
+        ptr_c->commsStatus=1;
+
         for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
 
             //if (testing) fprintf(stderr,"%d\n",it->first);
@@ -153,7 +156,7 @@ void *crateThread(void *ptr) {
                 fprintf(stderr,"ioc:Dsc2ReadScalersA\n");
 #endif
                 //if (testing) fprintf(stderr,"Read Disc Scalers ...\n");
-                Dsc2ReadScalers(ptr_c, it, nchannels);
+                (it->second)->commsStatus = Dsc2ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersB\n");
 #endif
@@ -164,7 +167,7 @@ void *crateThread(void *ptr) {
                 fprintf(stderr,"ioc:Fadc250ReadScalerA\n");
 #endif
                 //if (testing) fprintf(stderr,"Read Fadc Scalers ...\n");
-                Fadc250ReadScalers(ptr_c, it, nchannels);
+                (it->second)->commsStatus=Fadc250ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerB\n");
 #endif
@@ -174,39 +177,44 @@ void *crateThread(void *ptr) {
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:SSPReadScalerA\n");
 #endif
-                SSPReadScalers(ptr_c, it);
-                continue; // hack to preven ssp crash below in thresholds
+                (it->second)->commsStatus=SSPReadScalers(ptr_c, it);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:SSPReadScalerB\n");
 #endif
             }
-                
-            //if (testing) fprintf(stderr,"Done Reading Scalers.\n");
 
-            ///-------------------  thresholds ------------------------------------
-            for (int i=0; i<it->second->numberOfChannels; i++)
-                it->second->scalerThresholds[i].clear();
-            (*buf)=0;
-            partype = SCALER_PARTYPE_THRESHOLD;
-            ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-            if (ret)
-                for (int i=0; i<len; i++) /// len is number of channels
-                    ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
-            if (*buf) delete *buf;
-            (*buf)=0;
-            partype = SCALER_PARTYPE_THRESHOLD2;
-            ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-            if (ret)
-                for (int i=0; i<len; i++)
-                    ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
-            if (*buf) delete *buf;
+            if ((it->second)->commsStatus==0) ptr_c->commsStatus=0;
+
+            // the rest applies only to FADC/DSC2 boards:
+            if((it->second)->boardType==SCALER_TYPE_DSC2 ||
+               (it->second)->boardType==SCALER_TYPE_FADC250) {
+                
+
+                ///-------------------  thresholds ------------------------------------
+                for (int i=0; i<it->second->numberOfChannels; i++)
+                    it->second->scalerThresholds[i].clear();
+                (*buf)=0;
+                partype = SCALER_PARTYPE_THRESHOLD;
+                ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
+                if (ret)
+                    for (int i=0; i<len; i++) /// len is number of channels
+                        ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
+                if (*buf) delete *buf;
+                (*buf)=0;
+                partype = SCALER_PARTYPE_THRESHOLD2;
+                ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
+                if (ret)
+                    for (int i=0; i<len; i++)
+                        ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
+                if (*buf) delete *buf;
 #ifdef JSCALER_DEBUG 
-            for (int i=0; i<it->second->numberOfChannels; i++) {  
-                int size1 = ( it->second->scalerThresholds[i] ).size();
-                for (int i8=0; i8<size1; i8++)
-                    printf("slot=%d size=%d  =%f \n", it->first, size1, ( it->second->scalerThresholds[i] )[i8]);
-            }
+                for (int i=0; i<it->second->numberOfChannels; i++) {  
+                    int size1 = ( it->second->scalerThresholds[i] ).size();
+                    for (int i8=0; i8<size1; i8++)
+                        printf("slot=%d size=%d  =%f \n", it->first, size1, ( it->second->scalerThresholds[i] )[i8]);
+                }
 #endif
+            }
         }
 
         ///-------------------------- request part -----------------------------------------
@@ -289,11 +297,11 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
         }
     }
     if (*buf) delete *buf;
-    return 0;
+    return ret;
 }
 
 int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
-    int len=0,ret=0;
+    int len=0,retScalers=0,retData=0;
     unsigned int *buf[1];
     int thisLen,thisFiber,ii,jj,marocID,pixelID,pmtID,fiberPixelID;
     double hz,thisRef;
@@ -322,7 +330,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
 
     // read scalers:::::::::::::::::::::::::::::::::::::::::::
     (*buf)=0;
-    ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
+    retScalers = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
 /*
     if (len > ssp->MAXSCALERLEN) {
         printf("SSPReadScalers:  Invalid Scaler Array length:%d\n",len);
@@ -331,7 +339,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     }
 */
     ii=0;
-    while (1) {
+    while (retScalers!=0) {
     
         if (ii>=len) break;
         
@@ -404,7 +412,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     // read data::::::::::::::::::::::::::::::::::::::::::::::
     (*buf)=0;
     len=0;
-    ret = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
+    retData = ptr_c->crateMsgClient->ReadData(it->first, buf, &len);
 /*
     if (len > ssp->MAXDATALEN) {
         printf("SSPReadScalers:  Invalid Scaler Array length:%d\n",len);
@@ -413,7 +421,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     }
 */    
     ii=0;
-    while (1) {
+    while (retData!=0) {
     
         if (ii>=len) break;
 
@@ -467,8 +475,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     }
 */
 
-    (void)ret;
-    return 0;    
+    return (retData+retScalers) == 2;
 }
 
 int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int &nchannels){
@@ -564,7 +571,7 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
         }
     }
     if(*buf)delete *buf;
-    return 0;
+    return ret;
 }
 
 ///==================================================================================================================

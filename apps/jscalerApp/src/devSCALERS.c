@@ -36,7 +36,20 @@ static long write_ao(struct aoRecord *);
 static long init_ao(struct aoRecord *); 
 static long read_ai(struct aiRecord *); 
 static long init_ai(struct aiRecord *); 
+static long read_bi(struct biRecord *); 
+static long init_bi(struct biRecord *); 
 static long read_waveform(struct waveformRecord *);
+
+struct
+{ long number;
+  DEVSUPFUN report;
+  DEVSUPFUN init;
+  DEVSUPFUN init_record;
+  DEVSUPFUN get_ioint_info;
+  DEVSUPFUN read_bi;
+  DEVSUPFUN special_linconv;
+} devBiSCALERS = {6, NULL, NULL, init_bi, NULL, read_bi, NULL};
+epicsExportAddress(dset,devBiSCALERS);
 
 struct
 { long number;
@@ -72,6 +85,25 @@ epicsExportAddress(dset,devWaveformSCALERS);
 
 
 //===============================================================================================
+static long init_bi(struct biRecord *pbi) { return 1; }
+static long read_bi(struct biRecord *pbi)
+{
+  struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  
+
+  unsigned short* card    = (unsigned short*) &pvmeio->card;
+  //unsigned short* signal  = (unsigned short*) &pvmeio->signal;
+
+  unsigned int slot = (*card)>>8;
+  unsigned int chassis = (*card) - ((slot)<<8) ;
+
+  //unsigned int command = (*signal)>>8;
+  //unsigned int channel = (*signal) - ((command)<<8);
+
+  pbi->rval = IocGetCommsStatus(chassis,slot);
+  return 0;
+}
+
+
 static long init_ai(struct aiRecord *pai) { return 0; }
 static long read_ai(struct aiRecord *pai)
 {

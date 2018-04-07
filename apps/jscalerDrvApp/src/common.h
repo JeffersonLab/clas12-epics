@@ -41,6 +41,7 @@ void IocReadWaveform(int crate, int slot, int channel, int len, double values[])
 int IocGetWaveformLength(int crate, int slot, int channel, int *len);
 void IocReadWaveformSSPData(int crate, int slot, int channel, int len, double values[]);
 int IocGetWaveformLengthSSPData(int crate, int slot, int channel, int *len);
+int IocGetCommsStatus(int crate,int slot);
 void block_until_crate_read(int crate);
 
 #ifdef __cplusplus

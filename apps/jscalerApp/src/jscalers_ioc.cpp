@@ -187,6 +187,17 @@ extern "C" {
         pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
         return 0;
     }
+
+    int IocGetCommsStatus(int crate,int slot) {
+        int status=0;
+        pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        if (slot<0) 
+            status = ((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->commsStatus;
+        else
+            status = scalersslowcontrol->vmecrates[crate]->commsStatus;
+        pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        return status;
+    }
  
 #ifdef __cplusplus
 }

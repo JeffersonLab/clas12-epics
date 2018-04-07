@@ -23,13 +23,15 @@ map<int, VmeChassis*> *ScalersSlowControl::GetChassisMap(){ return &vmecrates; }
 
 VmeChassis::VmeChassis(int id, string &hostname) : HOSTNAME(hostname){
 
-    commsStatus=1;
     int *board_types;
     int len=0;
     unsigned int *buf[1];
     int ret;
 
     pthread_mutex_init(&IOmutex, NULL);
+    
+    // initialize comms status (0=error):
+    commsStatus=0;
 
     is_crate_read=0;
 
@@ -183,6 +185,7 @@ void *crateThread(void *ptr) {
 #endif
             }
 
+            // set crate commsStatus if any board errors:
             if ((it->second)->commsStatus==0) ptr_c->commsStatus=0;
 
             // the rest applies only to FADC/DSC2 boards:
@@ -277,7 +280,6 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
     if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) 
         fprintf(stderr,"Fadc250ReadScalersB\n");
     */
-    (void)ret;
     if (len!=17) {
         printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
     }
@@ -339,7 +341,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     }
 */
     ii=0;
-    while (retScalers!=0) {
+    while (retScalers>0) {
     
         if (ii>=len) break;
         
@@ -421,7 +423,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
     }
 */    
     ii=0;
-    while (retData!=0) {
+    while (retData>0) {
     
         if (ii>=len) break;
 

@@ -85,7 +85,10 @@ epicsExportAddress(dset,devWaveformSCALERS);
 
 
 //===============================================================================================
-static long init_bi(struct biRecord *pbi) { return 1; }
+static long init_bi(struct biRecord *pbi) {
+    pbi->rval = 0;
+    return 0;
+}
 static long read_bi(struct biRecord *pbi)
 {
   struct vmeio *pvmeio = (struct vmeio *) &(pbi->inp.value);  

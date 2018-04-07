@@ -68,7 +68,8 @@ class JlabBoard {
                 scalerThresholds=new vector< double >[numberOfChannels];
                 scalerModes=new vector< double >[numberOfChannels];
             }
-            commsStatus=1;
+            //initialize comms status (0=error):
+            commsStatus=0;
         }
         virtual ~JlabBoard(){};
 

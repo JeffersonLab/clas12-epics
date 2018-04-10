@@ -1,0 +1,59 @@
+
+# There's a particular error case that results in an empty filename
+# and no data recorded, probably correlated with GetBufferSize()>1000
+# in wf2rootSub.c, but needs to be investigated.
+#
+# Meanwhile, check for the symptom to alarm on it:
+#
+
+# check for empty filename:
+record(scalcout,"$(P)$(R)ctrl:file_name:sCheck") 
+{
+    field(SCAN,"10 second")
+    field(INAA,"$(P)$(R)ctrl:file_name")
+    field(CALC,"AA==''")
+    field(OUT,"$(P)$(R)ctrl:file_name:aCheck PP")
+}
+
+# intermediate ai just get an scalcout to an mbbi
+# (if direct to bi, complains about data type)
+record(ai,"$(P)$(R)ctrl:file_name:aCheck")
+{
+    field(PINI,0)
+    field(VAL,0)
+    field(FLNK,"$(P)$(R)ctrl:file_name:check.PROC")
+}
+
+# filename status:
+record(bi,"$(P)$(R)ctrl:file_name:check")
+{
+    field(INP,"$(P)$(R)ctrl:file_name:aCheck")
+    field(ZNAM,"Ok")
+    field(ONAM,"FastDaq File Error")
+}
+
+# check if daq_state is running but filename is empty
+# or time derivative of file size is small. 
+record(calcout,"$(P)$(R)ctrl:alarmCalc")
+{
+    field(SCAN,"10 second")
+    field(INPA,"$(P)$(R)ctrl:daq_state")
+    field(INPB,"$(P)$(R)ctrl:file_name:check")
+    field(INPC,"$(P)$(R)ctrl:file_size:rms")
+    field(INPD,"1")
+    field(CALC,"A=0 && (B=1 || ABS(C)<D)")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+    field(OUT,"$(P)$(R)ctrl:alarm PP")
+}
+
+# final alarm record:
+record(bi,"$(P)$(R)ctrl:alarm")
+{
+    field(PINI,"1")
+    field(VAL,"0")
+    field(ZNAM,"Ok")
+    field(ONAM,"FastDaq File Error")
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+}

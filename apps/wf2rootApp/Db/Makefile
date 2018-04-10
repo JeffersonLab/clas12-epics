@@ -14,6 +14,7 @@ include $(TOP)/configure/CONFIG
 DB += wf2root_ctrl.db
 DB += wf2root_data.db
 DB += wf2root_test.db
+DB += wf2root_alarm.db
 
 REQ += wf2root_settings.req
 

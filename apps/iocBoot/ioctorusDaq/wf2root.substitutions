@@ -32,6 +32,17 @@ file "db/wf2root_data.db" {
     { B_TORUS:, DAQ_REC:, IDCCT1, FLOAT, 2000, hallb-crio-tor-fast:IOC:IDCCT1 }
 }
 
+file "db/wf2root_alarm.db" {
+    pattern { P R }
+    { B_TORUS: DAQ_REC: }
+}
+
+file "db/liveRollAvg.db" {
+    pattern { P I SCAN N }
+    { B_TORUS:DAQ_REC:ctrl:file_size B_TORUS:DAQ_REC:ctrl:file_size 10 30 }
+}
+
+
 #
 # !!! TEST DATA !!!
 #

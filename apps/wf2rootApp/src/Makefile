@@ -21,6 +21,8 @@ wf2root_DBD += base.dbd
 wf2root_DBD += asSupport.dbd
 wf2root_DBD += devIocStats.dbd
 wf2root_DBD += wf2rootSub.dbd
+wf2root_DBD += calc.dbd
+wf2root_DBD += sCalcoutRecord.dbd
 
 # wf2root_registerRecordDeviceDriver.cpp derives from wf2root.dbd
 wf2root_SRCS += wf2root_registerRecordDeviceDriver.cpp
@@ -34,6 +36,7 @@ wf2root_SRCS_vxWorks += -nil-
 
 
 # Link in the code from the support library
+wf2root_LIBS += calc
 wf2root_LIBS += autosave
 wf2root_LIBS += devIocStats
 

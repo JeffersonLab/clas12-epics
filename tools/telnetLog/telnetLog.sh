@@ -10,7 +10,7 @@
 host=$1
 port=$2
 
-logDir=/usr/clas12/DATA/logs-notrotated
+logDir=/usr/clas12/DATA/logs
 logFile=$host:$port.log
 
 touch $logDir/$logFile

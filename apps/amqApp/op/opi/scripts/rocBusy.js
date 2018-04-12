@@ -33,6 +33,7 @@ for (var ii=i1; ii<=i2; ii++) {
     if (ii==55 || ii==62 || ii==63) continue;
     var columns = lines[ii].split(" ");
     var rocName = columns[columns.length-1];
+    //if (!rocName.includes("-") && !rocName.includes("svt3"))
     insertRoc(rocName,ii);
 }
 

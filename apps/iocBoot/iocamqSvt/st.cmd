@@ -24,6 +24,11 @@ dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R3:botAvg:,NELM=42,F
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
+dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMERROR")
+dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMERROR")
+dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMSTATE")
+dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMSTATE")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

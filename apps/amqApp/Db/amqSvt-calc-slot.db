@@ -1,0 +1,30 @@
+
+record(calc,"B_SVT_DAQ_$(CRATE):$(SUFFIX):a") {
+    field(SCAN,"10 second")
+    field(INPA,"B_SVT_DAQ_$(CRATE)SLOT3:$(SUFFIX)")
+    field(INPB,"B_SVT_DAQ_$(CRATE)SLOT4:$(SUFFIX)")
+    field(INPC,"B_SVT_DAQ_$(CRATE)SLOT5:$(SUFFIX)")
+    field(INPD,"B_SVT_DAQ_$(CRATE)SLOT6:$(SUFFIX)")
+    field(INPE,"B_SVT_DAQ_$(CRATE)SLOT7:$(SUFFIX)")
+    field(INPF,"B_SVT_DAQ_$(CRATE)SLOT8:$(SUFFIX)")
+    field(INPG,"B_SVT_DAQ_$(CRATE)SLOT9:$(SUFFIX)")
+    field(CALC,"A+B+C+D+E+F+G")
+    field(FLNK,"B_SVT_DAQ_$(CRATE):$(SUFFIX):b.PROC")
+}
+
+record(calc,"B_SVT_DAQ_$(CRATE):$(SUFFIX):b") {
+    field(INPA,"B_SVT_DAQ_$(CRATE)SLOT10:$(SUFFIX)")
+    field(INPB,"B_SVT_DAQ_$(CRATE)SLOT13:$(SUFFIX)")
+    field(INPC,"B_SVT_DAQ_$(CRATE)SLOT14:$(SUFFIX)")
+    field(INPD,"B_SVT_DAQ_$(CRATE)SLOT15:$(SUFFIX)")
+    field(INPE,"B_SVT_DAQ_$(CRATE)SLOT16:$(SUFFIX)")
+    field(INPF,"B_SVT_DAQ_$(CRATE)SLOT17:$(SUFFIX)")
+    field(CALC,"A+B+C+D+E+F")
+    field(FLNK,"B_SVT_DAQ_$(CRATE):$(SUFFIX).PROC")
+}
+record(calc,"B_SVT_DAQ_$(CRATE):$(SUFFIX)") {
+    field(INPA,"B_SVT_DAQ_$(CRATE):$(SUFFIX):a")
+    field(INPB,"B_SVT_DAQ_$(CRATE):$(SUFFIX):b")
+    field(CALC,"A+B")
+}
+

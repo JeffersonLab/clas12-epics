@@ -13,7 +13,9 @@ CFG={
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
 'B_DAQ:run_time':     {'ini':-1,   'cmd':['run_time']},
 'B_DAQ:run_ndata':    {'ini':-1,   'cmd':['run_ndata']},
-'B_DAQ:run_nevents':  {'ini':-1,   'cmd':['run_nevents']}
+'B_DAQ:run_nevents':  {'ini':-1,   'cmd':['run_nevents']},
+'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 }
 
 HBEAT=epics.pv.PV('B_DAQ:livetime_heartbeat')
@@ -30,6 +32,8 @@ while True:
   success=True
   for pvName in CFG.keys():
     try:
+      if 'skip' in CFG[pvName] and ii%CFG[pvName]['skip']!=0:
+        continue
       xx=subprocess.check_output(CFG[pvName]['cmd']).strip()
       yy=xx
       if type(CFG[pvName]['ini']) is not str:
@@ -46,6 +50,8 @@ while True:
       print 'Error on '+pvName
   if success:
     ii+=1
+  if ii>1e8:
+    ii=0
 
   time.sleep(2)
 

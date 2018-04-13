@@ -15,7 +15,7 @@ function insertLine(width)
     lc.setPropertyValue("border_style",1);
     lc.setPropertyValue("line_width",0);
     lc.setPropertyValue("height",width);
-    lc.setPropertyValue("width",385);
+    lc.setPropertyValue("width",420);
     lc.setPropertyValue("border_width",1);
     lc.setPropertyValue("border_color","MEDM_COLOR_5");
     lc.setPropertyValue("background_color","Read_Background");

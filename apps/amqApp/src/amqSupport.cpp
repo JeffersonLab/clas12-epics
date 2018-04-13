@@ -80,7 +80,7 @@ typedef long (*fptr)(void *precord); //needed to call process(precord)
 
 Thread *consumerThread;        //The main thread
 
-#define MAXPV 100              //Maximum number of PVs
+#define MAXPV 1000              //Maximum number of PVs
 
 static waveformRecord* rawmessage = NULL; //if we want to store the raw mwssage in a char waveform
 static char *jsonKeyFull[MAXPV];          //json keys for all full names

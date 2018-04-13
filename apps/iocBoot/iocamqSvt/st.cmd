@@ -21,13 +21,13 @@ dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R2:botAvg:,NELM=42,F
 dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R3:topAvg:,NELM=42,FTVL=FLOAT,PERIOD=5,FNAME=wflist-r3-top.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R3:botAvg:,NELM=42,FTVL=FLOAT,PERIOD=5,FNAME=wflist-r3-bot.txt")
 
-dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
-dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
-
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMERROR")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMERROR")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMSTATE")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMSTATE")
+
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 cd ${TOP}/iocBoot/${IOC}
 

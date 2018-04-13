@@ -22,7 +22,6 @@ DB += amqSplitFT.db
 DB += amqTrigBit-sums.db
 DB += amqSvt.substitutions
 DB += amqSvt2.substitutions
-DB += amqSvt3.substitutions
 DB += amqSvt-calc-slot.db
 DB += amqSvt-calc-sector.db
 DB += amqSvt-calc.db

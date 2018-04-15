@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# hack to get stuff from DAQ into EPICS
+#
+
 import epics,time,subprocess,os,re
 
 os.putenv('MYSQL_HOST','clondb1')
@@ -14,44 +18,63 @@ CFG={
 'B_DAQ:run_time':     {'ini':-1,   'cmd':['run_time']},
 'B_DAQ:run_ndata':    {'ini':-1,   'cmd':['run_ndata']},
 'B_DAQ:run_nevents':  {'ini':-1,   'cmd':['run_nevents']},
-'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
-'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
+'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 }
 
 HBEAT=epics.pv.PV('B_DAQ:livetime_heartbeat')
 
-nonNumber=re.compile(r'[^\d.]+')
+NONNUMBER=re.compile(r'[^\d.]+')
 
+# initialize PVs:
 for pvName in CFG.keys():
   CFG[pvName]['pv']=epics.pv.PV(pvName)
   CFG[pvName]['pv'].put(CFG[pvName]['ini'])
 
-ii=0
+NPOLLS=0
+
 while True:
 
   success=True
+
   for pvName in CFG.keys():
+
     try:
-      if 'skip' in CFG[pvName] and ii%CFG[pvName]['skip']!=0:
+
+      # skip slow-rate pvs:
+      if 'skip' in CFG[pvName] and NPOLLS%CFG[pvName]['skip']!=0:
         continue
+
+      # run the command, collect its output:
       xx=subprocess.check_output(CFG[pvName]['cmd']).strip()
       yy=xx
+
+      # if it's a number, strip all non-numbers:
       if type(CFG[pvName]['ini']) is not str:
-        yy=re.sub(nonNumber,'',xx)
+        yy=re.sub(NONNUMBER,'',xx)
+
+      # treat livetime specially:
       if pvName=='B_DAQ:livetime':
         if xx.find('Livetime')==0:
           jj=HBEAT.get()
           HBEAT.put(jj+1)
           CFG[pvName]['pv'].put(yy)
+
+      # treat everything else uniformly:
       else:
+        if 'scale' in CFG[pvName]:
+          yy = float(yy)
+          yy *= CFG[pvName]['scale']
         CFG[pvName]['pv'].put(yy)
+
     except:
       success=False
       print 'Error on '+pvName
-  if success:
-    ii+=1
-  if ii>1e8:
-    ii=0
+
+  if success: NPOLLS+=1
+
+  # avoid overflow arbitrarily:
+  if NPOLLS>1e8: NPOLLS=0
 
   time.sleep(2)
 

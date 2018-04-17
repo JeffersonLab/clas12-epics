@@ -33,6 +33,9 @@ dbLoadRecords("db/waveformApp.db","P=B_SVT_LV_A_,R=I:,NELM=132,FTVL=FLOAT,PERIOD
 
 dbLoadRecords("db/seq_svtOnOff-1R.db","R=2")
 
+dbLoadRecords("db/svt-averages-R2.db","SIDE=T")
+dbLoadRecords("db/svt-averages-R2.db","SIDE=B")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

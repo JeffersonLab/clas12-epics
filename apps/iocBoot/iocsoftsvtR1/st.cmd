@@ -28,6 +28,9 @@ dbLoadRecords("db/svtWienerCrate2.db","HOST=svtvme1")
 dbLoadRecords("db/seq_svtOnOff-1R.db","R=1")
 dbLoadRecords("db/seq_svtOnOff-All.db")
 
+dbLoadRecords("db/svt-averages-R1.db","SIDE=T")
+dbLoadRecords("db/svt-averages-R1.db","SIDE=B")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

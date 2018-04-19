@@ -30,6 +30,7 @@ devSnmpSetSnmpVersion("${AKCP3}",SNMP_VERSION_1)
 
 dbLoadTemplate("db/hallWeather.substitutions")
 dbLoadRecords("db/weather_cRIO.db")
+dbLoadRecords("db/labWeather_cRIO.db")
 
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")

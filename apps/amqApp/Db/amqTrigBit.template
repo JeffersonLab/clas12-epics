@@ -64,11 +64,22 @@ record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
     field(INPA,"scaler_calc1b")
     field(INPB,"B_DAQ_VTPGT:TrigBit:$(N):norm")
     field(INPC,"B_DAQ_VTPGT:TrigBit:$(N):normLimit")
-    field(INPD,"6")
+    field(INPD,"B_DAQ:TrigBit:alarms:minCurrent")
     field(INPE,"B_livetime")
-    field(INPF,"B_SACLAYTGT:LS_TH") # full target
-    field(CALC,"C>0&&A>D&&B<C&&(E>10&&E<99.99)&&F=1")
+    field(CALC,"C>0&&A>D&&B<C&&(E>10&&E<99.99)")
     field(HIGH,"1")
     field(HSV,"MAJOR")
+}
+
+record(calcout,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm:set") {
+    field(SCAN,"Passive")
+    field(INPA,"B_DAQ_VTPGT:TrigBit:$(N)")
+    field(INPB,"IPM2C21A")
+    field(INPC,"B_DAQ:TrigBit:alarms:minCurrent")
+    field(CALC,"B>C")
+    field(OCAL,"(A-SQRT(A)*6)/B")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(OUT,"B_DAQ_VTPGT:TrigBit:$(N):normLimit PP")
 }
 

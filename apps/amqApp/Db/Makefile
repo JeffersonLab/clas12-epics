@@ -32,6 +32,7 @@ DB += amqRocsBusy.db
 DB += amqRocsRate.db
 DB += amqRocsRate.substitutions
 DB += amqRocsRate-sums.db
+DB += amqTrigBit-alarms-set.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

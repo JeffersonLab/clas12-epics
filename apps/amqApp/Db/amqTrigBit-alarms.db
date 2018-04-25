@@ -1,4 +1,17 @@
 
+record(bi,"B_DAQ:TrigBit:alarms:enable") {
+    field(ONAM,"Disabled")
+    field(ZNAM,"Enabled")
+    field(VAL,"1")
+    field(PINI,"1")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_DAQ:TrigBit:alarms:minCurrent") {
+    field(VAL,"25")
+    field(PINI,"1")
+    info(autosaveFields_pass0,"VAL")
+}
+
 record(ai,"B_DAQ_VTPGT:TrigBit:1-6:tolerance") {
     field(VAL,"0.65")
     field(PINI,1)
@@ -81,7 +94,9 @@ record(calc,"B_DAQ_VTPGT:TrigBit:1-6:alarm") {
     field(INPF,"B_DAQ_VTPGT:TrigBit:6:alarm")
     field(INPG,"IPM2C21A")
     field(INPH,"B_DAQ:coda_status")
-    field(CALC,"H=1&&G>0.5 && (A||B||C||D||E||F)")
+    field(INPI,"B_DAQ:TrigBit:alarms:enable")
+    field(INPJ,"B_DAQ:TrigBit:alarms:minCurrent")
+    field(CALC,"H=1&&G>J&&I=1 && (A||B||C||D||E||F)")
     field(HSV,"MAJOR")
     field(HIGH,"1")
 }
@@ -148,7 +163,10 @@ record(calc,"B_DAQ_VTPGT:TrigBit:normAlarm") {
     field(INPB,"B_DAQ_VTPGT:TrigBit:B:normAlarm")
     field(INPC,"B_DAQ_VTPGT:TrigBit:C:normAlarm")
     field(INPD,"B_DAQ:coda_status")
-    field(CALC,"D=1&&(A||B||C)")
+    field(INPE,"B_DAQ:TrigBit:alarms:enable")
+    field(INPF,"B_DAQ:TrigBit:alarms:minCurrent")
+    field(INPG,"IPM2C21A")
+    field(CALC,"D=1&&(A||B||C)&&G>F&&E=1")
     field(HIGH,1)
     field(HSV,"MAJOR")
 }

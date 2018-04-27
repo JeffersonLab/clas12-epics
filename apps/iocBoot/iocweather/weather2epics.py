@@ -5,7 +5,7 @@
 
 import urllib.request
 import epics
-import time
+import time,datetime
 
 URL = "https://www.jlab.org/fm/wx/VWS/data/data2.csv"
 
@@ -19,20 +19,30 @@ CFG = {
 'B_SYS_WEATHER_OUT_WindChill': {'col': 28}
 }
 
+CONSECERR=0
+LASTUPDATE='Never'
+
 # Initalize PVs
 for pvName in CFG.keys():
   CFG[pvName]['pv'] = epics.pv.PV(pvName)
 
 while True:
 
+  error=False
+  now=str(datetime.datetime.now())
+
   try:
     resp = urllib.request.urlopen(URL)
   except Exception as e:
-    print("Failed to get FM WX Webpage")
+    print(now+" Failed to get FM WX Webpage")
+    error=True
 
   # Only parse response if it was OK 
-  if resp.getcode() == 200:
+  if resp.getcode() != 200:
+    print(now+" Error from server")
+    error=True
 
+  else:
     data = resp.read().decode('utf-8').split(',')
 
     for pvName in CFG.keys():
@@ -41,11 +51,24 @@ while True:
         val = float(data[CFG[pvName]['col']])
         CFG[pvName]['pv'].put(val)
       except ValueError as e:
-        print('ValueError on ',pvName)
+        print(now+' ValueError on ',pvName)
+        error=True
         pass
       except IndexError as e:
-        print('IndexError on ',pvName)
+        print(now+' IndexError on ',pvName)
+        error=True
         pass
 
-  time.sleep(5)
+  if error:
+    CONSECERR += 1
+  else:
+    CONSECERR = 0
+    LASTUPDATE = now
+
+  if CONSECERR>30:
+    print ('ERROR:  Last Update: '+LASTUPDATE)
+    time.sleep(20)
+
+
+  time.sleep(10)
 

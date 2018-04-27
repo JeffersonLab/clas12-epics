@@ -51,7 +51,10 @@ var keepers=[1,2,3,4,5,6];
     } 
 */    
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    lc.setPropertyValue("opi_file","/CLAS12_Share/apps/amqApp/trigger-row.opi");
+    
+    if (novice=="1") lc.setPropertyValue("opi_file","/CLAS12_Share/apps/amqApp/trigger-row-novice.opi");
+    else lc.setPropertyValue("opi_file","/CLAS12_Share/apps/amqApp/trigger-row.opi");
+    
     lc.setPropertyValue("auto_size",true);
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);

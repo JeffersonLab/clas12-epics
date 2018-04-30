@@ -33,7 +33,7 @@ dbLoadTemplate("db/mcc_fsd.substitutions")
 #dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=MASK,I=ISD2H001HALOMASKr,ZSV=NO_ALARM,OSV=MAJOR")
 #dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=TRIP,I=ISD2H001HALOTESTr,ZSV=NO_ALARM,OSV=MAJOR")
 #dbLoadRecords("db/mcc_fsd_aliases.db")
-
+dbLoadRecords("db/mcc_fsdGlobal.db")
 
 cd ${TOP}/iocBoot/${IOC}
 

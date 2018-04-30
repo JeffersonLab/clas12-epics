@@ -60,6 +60,6 @@ var color7 = ColorFontUtil.getColorFromRGB(229,0,87);
 var color8 = ColorFontUtil.getColorFromRGB(243,0,53);
 var color9 = ColorFontUtil.getColorFromRGB(255,0,0);
 
-var bgcolors=[color0,color1,color2,color3,color4,color5,color6,color7,color8,color9,"MEDM_COLOR_23","MEDM_COLOR_29"];
+var bgcolors=[color0,color1,color2,color3,color4,color5,color6,color7,color8,color9,"MEDM_COLOR_23","Write_Foreground"];
 
 widget.setPropertyValue("background_color",bgcolors[bin]);

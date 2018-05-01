@@ -11,16 +11,18 @@ os.putenv('SESSION','clasprod')
 
 CFG={
 'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
-'B_DAQ:run_number':   {'ini':-1,   'cmd':['run_number']},
-'B_DAQ:run_nfiles':   {'ini':-1,   'cmd':['run_nfiles']},
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
-'B_DAQ:run_time':     {'ini':-1,   'cmd':['run_time']},
-'B_DAQ:run_ndata':    {'ini':-1,   'cmd':['run_ndata']},
-'B_DAQ:run_nevents':  {'ini':-1,   'cmd':['run_nevents']},
 'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
 'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 }
+
+# These are proven unreliable, so useless:
+#'B_DAQ:run_number':   {'ini':-1,   'cmd':['run_number']},
+#'B_DAQ:run_nfiles':   {'ini':-1,   'cmd':['run_nfiles']},
+#'B_DAQ:run_time':     {'ini':-1,   'cmd':['run_time']},
+#'B_DAQ:run_ndata':    {'ini':-1,   'cmd':['run_ndata']},
+#'B_DAQ:run_nevents':  {'ini':-1,   'cmd':['run_nevents']},
 
 HBEAT=epics.pv.PV('B_DAQ:livetime_heartbeat')
 
@@ -63,8 +65,8 @@ while True:
           jj=HBEAT.get()
           HBEAT.put(jj+1)
           CFG[pvName]['pv'].put(yy)
-#        else:
-#          CFG[pvName]['pv'].put(CFG[pvName]['ini'])
+        else:
+          CFG[pvName]['pv'].put(CFG[pvName]['ini'])
 
       # treat everything else uniformly:
       else:

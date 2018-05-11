@@ -21,6 +21,8 @@ dbLoadRecords("db/save_restoreStatus.db", "P=iocclasschv:")
 
 dbLoadRecords("db/sy527-reset.db","P=B_HW_HVDC1,Card=0,Chan=7,Value=1")
 
+dbLoadRecords("db/240.db")
+
 cd startup
 
 ## autosave setup

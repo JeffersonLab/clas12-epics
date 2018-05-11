@@ -17,6 +17,8 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadTemplate("db/amqRocsRate.substitutions")
 dbLoadRecords("db/amqRocsRate-sums.db","P=B_DAQ:STA")
 
+dbLoadTemplate("db/amqLatency.substitutions")
+
 cd ${TOP}/iocBoot/${IOC}
 
 #< save_restore.cmd

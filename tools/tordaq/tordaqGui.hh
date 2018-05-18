@@ -44,9 +44,10 @@
 
 class tordaqGui: public TGMainFrame {
     private:
-        int colors[5];
-        TRootEmbeddedCanvas *canvas1;
-        TRootEmbeddedCanvas *canvas2;
+        static const int NCOLORS=5;
+        int colors[NCOLORS];
+        TRootEmbeddedCanvas *canvas1=NULL;
+        TRootEmbeddedCanvas *canvas2=NULL;
         TGStatusBar          *fStatusBar;
         TGLabel *fileLabel;
         TGNumberEntryField *delayField;
@@ -58,6 +59,10 @@ class tordaqGui: public TGMainFrame {
         TGTextButton *yZoomoutBtn;
         TGTextButton *yZoominBtn;
         TGTextButton *panleftBtn;
+        TGTextButton *yPanUpBtn;
+        TGTextButton *yPanDownBtn;
+        TGTextButton *xSyncUpBtn;
+        TGTextButton *xSyncDownBtn;
         TGTextButton *panrightBtn;
         TGCheckButton *denoiseCheck;
         TGHSlider *zoomSlider;
@@ -65,19 +70,18 @@ class tordaqGui: public TGMainFrame {
         TGLabel *zoomSliderLabelMin;
         TGLabel *zoomSliderLabelMid;
         TGLabel *zoomSliderLabelMax;
-        TGCheckButton* showAllCheck;
-        std::vector <TGCheckButton*> selectors1;
-        std::vector <TGCheckButton*> selectors2;
+        TGCheckButton* showAllCheck=NULL;
         std::vector <TGComboBox*> combos1;
+        std::vector <TGComboBox*> combos2;
         std::vector <TH1*> histos1;
+        std::vector <TH1*> histos2;
         TLegend *legend1;
-        TGComboBox *combo2;
+        TLegend *legend2;
         TFile *datafile;
         TTree *datatree;
         TTimeStamp starttime;
         std::vector <TH1*> dataHistos1;
-        std::vector <TH1*> dataHistos1N;
-        std::vector <TH1*> dataHistos1S;
+        std::vector <TH1*> dataHistos2;
         tordaqReader tdReader;
         //tordaqData tdData;
 
@@ -88,15 +92,24 @@ class tordaqGui: public TGMainFrame {
         void *DoOpen1(void *ptr);
         void DoOpen(TString filename);
         inline void DoOpen() { DoOpen(""); }
-        void Draw1();
-        void Update1(const double,const double);
-        void ZoomIn1();
-        void ZoomOut1();
-        void yZoomIn1();
-        void yZoomOut1();
-        void PanLeft1();
-        void PanRight1();
-        void doZoomSlider1();
+        void Draw();
+        void Update(const double,const double,const double,const double);
+        void Update(TCanvas *,std::vector<TH1*>*,const double,const double,const double,const double);
+        void xZoomIn();
+        void xZoomOut();
+        void yZoomIn();
+        void yZoomOut();
+        void xPanLeft();
+        void xPanRight();
+        void xSyncUp();
+        void xSyncDown();
+        void yPanUp();
+        void yPanDown();
+        void yPanUp(TCanvas *,std::vector<TH1*>*);
+        void yPanDown(TCanvas *,std::vector<TH1*>*);
+        void yZoomIn(TCanvas *,std::vector<TH1*>*);
+        void yZoomOut(TCanvas *,std::vector<TH1*>*);
+        void doZoomSlider();
         void SetStyle()
         {
             // Fill color

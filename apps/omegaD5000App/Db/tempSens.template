@@ -1,0 +1,37 @@
+record(ai,"$(P)$(CHAN):RAW") {
+    field(DESC, "Omega Temperature")
+    field(DTYP, "stream")
+    field(INP,  "@omegaD5311.proto getTemp($(CHAN)) $(PORT)")
+    field(EGU,  "F")
+    field(PREC, "$(PREC)")
+    field(SCAN, "$(SCAN)")
+    field(FLNK, "$(P)$(CHAN):CAL")
+}
+
+record(calc, "$(P)$(CHAN):CAL") {
+    field(CALC, "A*B+C")
+    field(INPA, "$(P)$(CHAN):RAW MSS")
+    field(INPB, "1.0")
+    field(INPC, "0.0")
+    field(EGU,  "F")
+    field(PREC, "2")
+    field(FLNK, "$(P)$(CHAN)_F")
+}
+
+record(ai, "$(P)$(CHAN)_F") {
+	alias($(P)$(CHAN))
+	field(INP, "$(P)$(CHAN):CAL MSS")
+    field(EGU,  "F")
+    field(PREC, "2")
+    field(FLNK, "$(P)$(CHAN)_C")
+}
+
+record(calc, "$(P)$(CHAN)_C") {
+    field(CALC, "(A-32)*(5/9)")
+    field(INPA, "$(P)$(CHAN):CAL MSS")
+    field(EGU,  "C")
+    field(PREC, "2")
+}
+
+# TODO: To allow old screen to work.  Fix old screens.
+alias($(P)$(CHAN)_F, $(P)$(CHAN)c)

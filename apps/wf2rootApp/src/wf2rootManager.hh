@@ -71,7 +71,7 @@ public:
 	}
 
 	void StartDAQ(string dir, string prefix, string suffix, long nlim);
-	void NewRootFile();
+	bool NewRootFile();
 	void WriteFile(const char* channelName, struct timespec* timeStamp,
 			float* buffPtr, int nElm);
 	void CloseFile();

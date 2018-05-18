@@ -217,7 +217,26 @@ $(pv_value)</tooltip>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
     <horizontal_alignment>1</horizontal_alignment>
-    <rules />
+    <rules>
+      <rule name="Rule" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pv0==2">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0==1">
+          <value>
+            <color name="Minor" red="255" green="128" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="true">
+          <value>
+            <color name="Read_Background" red="77" green="77" blue="77" />
+          </value>
+        </exp>
+        <pv trig="true">$(PV):alarm.SEVR</pv>
+      </rule>
+    </rules>
     <pv_value />
     <auto_size>false</auto_size>
     <text>##.###</text>

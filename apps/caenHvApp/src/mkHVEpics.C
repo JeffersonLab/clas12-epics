@@ -97,7 +97,7 @@ const char *stFileTail[]=   {  "",
                                "",
 			       "iocInit()",
 			       "",
-                               "caPutLogInit(\"clonioc2:7011\")",
+                               "caPutLogInit(\"clonioc1:7011\")",
 			       "",
 			       NULL};
 
@@ -112,7 +112,7 @@ const char *subFileTail[]  =  {"}",
 //some default values for file and directory names
 char bootDir[]    = "../../../iocBoot";
 char iocDir[]     = "ioccaenhv";
-char dbDir[]      = "../../Db";
+char dbDir[]      = "../../Db/subs";
 
 char fullHVName[] = "ALL";
 

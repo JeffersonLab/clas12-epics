@@ -2,27 +2,6 @@
 <config name="HallB">
     <component name="COMMS">
         <component name="cRIO Comms">
-            <automated_action>
-                <title>Auto Email (beng)</title>
-                <details>mailto:beng@jlab.org</details>
-                <delay>60</delay>
-            </automated_action>
-            <automated_action>
-                <title>Auto Email (mcmullen)</title>
-                <details>mailto:mcmullen@jlab.org</details>
-                <delay>60</delay>
-            </automated_action>
-            <automated_action>
-                <title>Auto Email (wmoore)</title>
-                <details>mailto:wmoore@jlab.org</details>
-                <delay>60</delay>
-            </automated_action>
-
-            <pv name="B_HW_CRIO_DEV_HEARTBEAT_STAT">
-                <description>cRIO comm</description>
-                <latching>true</latching>
-                <annunciating>true</annunciating>
-            </pv>
             <pv name="B_HW_CRIO_FC_HEARTBEAT_STAT">
                 <description>cRIO comm</description>
                 <latching>true</latching>
@@ -33,8 +12,13 @@
                 <latching>true</latching>
                 <annunciating>true</annunciating>
             </pv>
-            <pv name="B_HW_CRIO_HTCC_HEARTBEAT_STAT">
+            <pv name="B_HW_CRIO_SF_HEARTBEAT_STAT">
                 <description>cRIO comm</description>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+            </pv>
+            <pv name="B_HW_CRIO_HTCC_HEARTBEAT_STAT">
+                <description>cRIO comm (HTCC Gas System)</description>
                 <latching>true</latching>
                 <annunciating>true</annunciating>
                 <automated_action>
@@ -43,16 +27,22 @@
                     <delay>60</delay>
                 </automated_action>
             </pv>
-            <pv name="B_HW_CRIO_SF_HEARTBEAT_STAT">
-                <description>cRIO comm</description>
+            <pv name="B_HW_CRIO_RICH_HEARTBEAT_STAT">
+                <description>cRIO comm (RICH Hardware Interlocks)</description>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <automated_action>
+                    <title>Auto Email (kubarovsky)</title>
+                    <details>mailto:vpk@jlab.org</details>
+                    <delay>60</delay>
+                </automated_action>
+            </pv>
+            <pv name="B_HW_CRIO_FT_HEARTBEAT_STAT">
+                <description>cRIO comm (Forward Tagger Hardware Interlocks)</description>
                 <latching>true</latching>
                 <annunciating>true</annunciating>
             </pv>
-            <pv name="B_HW_CRIO_SVT_HEARTBEAT_STAT">
-                <description>cRIO comm</description>
-                <latching>true</latching>
-                <annunciating>true</annunciating>
-            </pv>
+
         </component>
     </component>
 </config>

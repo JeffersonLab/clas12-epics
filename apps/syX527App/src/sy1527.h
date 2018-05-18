@@ -5,10 +5,11 @@
 
 #define MAX_CAEN_NAME  81
 #define MAX_SLOT  16
-#define MAX_CHAN  30
+#define MAX_CHAN  32
 #define MAX_PARAM 40
 /// my_n_smi:
 #define MAX_BOARDPARTS 24
+#define MAX_SYSPROPS 20
 
 #define MAX_HVPS        50
 #define CAENHV_OK       0
@@ -50,7 +51,7 @@
 /// 10 Channel is in calibration error
 #define BIT_CALIBERROR 1 << 10 
 /// 11 Channel is unplugged
-#define BIT_CHUNPLAGGED 1 << 11
+#define BIT_CHUNPLUGGED 1 << 11
 /// my: 
 #define BIT_OFF 1 << 11
 /// my_n_smi:
@@ -59,7 +60,6 @@
 #define BIT_CRATE_OFF_ON_WAY 1 << 14
 
 /// 12 ... 31 Reserved, forced to 0
-
 
 
 ///==============================================================================
@@ -82,11 +82,20 @@ int  CAENHVGetChParam(const char *SystemName, ushort slot, const char *ParName,
 int  CAENHVSetChParam(const char *SystemName, ushort slot, const char *ParName,
                       ushort ChNum, const ushort *ChList, void *ParValue);
 
+int  CAENHVGetChParamInfo(const char *SystemName, ushort slot, ushort Ch,
+                      char **ParNameList);
+
+int  CAENHVGetBdParamInfo(const char *SystemName, ushort slot,
+                      char **ParNameList);
+
 int  CAENHVGetChParamProp(const char *SystemName, ushort slot, ushort Ch,
                       const char *ParName, const char *PropName, void *retval);
 
 int  CAENHVGetSysProp(const char *SystemName, const char *PropName, void *Result);
 
+int  CAENHVGetExecCommList(const char *, ushort *, char **);
+int  CAENHVExecComm(const char *, const char *);
+int  CAENHVSetBdParam(const char*,ushort,ushort*,const char*,void *);
 ///==============================================================================
 
 
@@ -104,7 +113,7 @@ typedef struct channel
   char          name[MAX_CAEN_NAME];
   float         fval[MAX_PARAM];
   unsigned long lval[MAX_PARAM];
-  int           setflag[MAX_PARAM]; /* if 1, need to write */
+  int           setflag[MAX_PARAM]; /* if 1, n:eed to write */
 } CHANNEL;
 
 typedef struct board
@@ -120,6 +129,34 @@ typedef struct board
   unsigned long partypes[MAX_PARAM];
   CHANNEL       channel[MAX_CHAN];
   int           setflag; /* if 1, need to write */
+  int V0Set;
+  int I0Set;
+  int V1Set;
+  int I1Set;
+  int RUp;
+  int RDWn;
+  int Trip;
+  int SVMax;
+  int VMon;
+  int IMon;
+  int Status;
+  int Pw;
+  int PwEn;
+  int TripInt;
+  int TripExt;
+  int PDwn;
+  int Tdrift;
+  int RUpTime;
+  int RDwTime;
+  int UNVThr;
+  int OVVThr;
+  int VCon;
+  int Temp;
+  int ChToGroup;
+  int OnGrDel;
+  int OffGrDel;
+  int Intck;
+  int ImRange;
 } BOARD;
 
 typedef struct sys
@@ -130,10 +167,21 @@ typedef struct sys
   BOARD board[MAX_SLOT];
   int   setflag; /* if 1, need to write */
   char  IPADDR[MAX_CAEN_NAME]; /// my:
+  char  ModelName[2*MAX_CAEN_NAME];
+  char  SwRelease[2*MAX_CAEN_NAME];
+  char  HVFanStat[2*MAX_CAEN_NAME];
+  char  HVFanSpeed[2*MAX_CAEN_NAME];
+  char  PWFanStat[2*MAX_CAEN_NAME];
+  char  HvPwSM[2*MAX_CAEN_NAME];
+  char  PWVoltage[2*MAX_CAEN_NAME];
+  float HVFanStats[MAX_SYSPROPS];
+  float PWFanStats[MAX_SYSPROPS];
+  float PWVoltages[MAX_SYSPROPS];
 } HV;
 
 int boards_status[MAX_HVPS][MAX_SLOT][MAX_BOARDPARTS]; /// my: smi temporal: should be dynamic
 
+void printBoard(BOARD bb);
 
 /* functions */
 
@@ -147,6 +195,18 @@ int
 sy1527GetMap(unsigned int id);
 int
 sy1527PrintMap(unsigned int id);
+int
+sy1527PrintParams(unsigned int id);
+int
+sy1527PrintSysProp(unsigned int id,const char* prop);
+int
+sy1527PrintSysProps(unsigned int id);
+int
+sy1527PrintExecCommList(unsigned int id);
+int
+sy1527ExecComm(unsigned int id,const char* cmd);
+int
+sy1527GetSystemProps(unsigned int id);
 void *
 sy1527MainframeThread(void *arg);
 int
@@ -156,27 +216,12 @@ sy1527Start(unsigned id, char *ip_address);
 int
 sy1527Stop(unsigned id);
 
-
 int
 sy1527SetMainframeOnOff(unsigned int id, unsigned int on_off);
 
-int /// my_n: adding heart beat
+int
 sy1527GetHeartBeat(unsigned int id, unsigned int board,
                            unsigned int chan);
-
-int /// my: smi
-sy1527SetBoardOnOff(unsigned int id, unsigned int slot, unsigned int on_off); 
-
-int sy1527BoardSmiMonitor ///  my: smi
-(char *smi_obj_name, unsigned int id, unsigned int board, unsigned int first_channel, unsigned int ch_numbers);
-
-int sy1527CrateSmiInit ///  my: smi  my_n_smi
-(char *smi_obj_name, unsigned int id);
-
-int sy1527BoardSmiControl ///  my: smi
-(char *smi_obj_name, unsigned int id, unsigned int first_board,
-unsigned int first_channel, unsigned int ch_numbers, unsigned int onoff);
-
 int
 sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm);
 
@@ -221,6 +266,9 @@ sy1527SetChannelOnOff(unsigned int id, unsigned int board,
 unsigned int
 sy1527GetChannelOnOff(unsigned int id, unsigned int board,
                       unsigned int chan);
+unsigned int
+sy1527GetChannelDemandOnOff(unsigned int id, unsigned int board,
+                            unsigned int chan);
 int
 sy1527SetChannelEnableDisable(unsigned int id, unsigned int board,
                               unsigned int chan, unsigned int u);
@@ -233,3 +281,74 @@ sy1527GetChannelStatus(unsigned int id, unsigned int board,
 float
 sy1527GetChannelTripTime(unsigned int id, unsigned int board,
                          unsigned int chan);
+int
+sy1527SetChannelTripTime(unsigned int id, unsigned int board,
+        unsigned int chan, float u);
+
+
+float
+sy1527GetChannelConnectorVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelTemperature(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+float
+sy1527GetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan);
+int
+sy1527SetChannelOverVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan,float u);
+int
+sy1527SetChannelUnderVoltage(unsigned int id, unsigned int board,
+                           unsigned int chan,float u);
+
+int
+sy1527SetChannelRange(unsigned int id, unsigned int board,
+                           unsigned int chan, unsigned int u);
+unsigned int
+sy1527GetChannelRange(unsigned int id, unsigned int board,
+                           unsigned int chan);
+
+int
+sy1527SetChannelInterlock(unsigned int id, unsigned int board,
+                           unsigned int chan, unsigned int u);
+unsigned int
+sy1527GetChannelInterlock(unsigned int id, unsigned int board,
+                           unsigned int chan);
+
+void sy1527GetBoardModelName(unsigned int chassis,unsigned int slot,char* value);
+void sy1527GetMainframeSwRelease(unsigned int id,char* value);
+void sy1527GetMainframeModelName(unsigned int id,char* value);
+void sy1527GetMainframeHVFanStat(unsigned int id,char* value);
+void sy1527GetMainframePWFanStat(unsigned int id,char* value);
+void sy1527GetMainframePWVoltage(unsigned int id,char* value);
+void sy1527GetMainframeHvPwSM(unsigned int id,char* value);
+void sy1527GetMainframeHVFanStats(unsigned int id,float* value);
+void sy1527GetMainframePWFanStats(unsigned int id,float* value);
+void sy1527GetMainframePWVoltages(unsigned int id,float* value);
+
+void
+sy1527SetBoardParams(BOARD *bb);
+
+int sy1527BoardClearAlarm(unsigned int id,unsigned int slot);
+int sy1527PrintBoardProps(unsigned int id,unsigned int slot);
+
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+// SMI:
+int
+sy1527SetBoardOnOff(unsigned int id, unsigned int slot, unsigned int on_off); 
+
+int sy1527BoardSmiMonitor
+(char *smi_obj_name, unsigned int id, unsigned int board, unsigned int first_channel, unsigned int ch_numbers);
+
+int sy1527CrateSmiInit
+(char *smi_obj_name, unsigned int id);
+
+int sy1527BoardSmiControl
+(char *smi_obj_name, unsigned int id, unsigned int first_board,
+unsigned int first_channel, unsigned int ch_numbers, unsigned int onoff);
+

@@ -1,0 +1,20 @@
+#!../../bin/linux-x86_64/iocscalers
+< envPaths
+cd ${TOP}
+
+
+
+
+## Register all support components
+dbLoadDatabase("dbd/iocscalers.dbd")
+iocscalers_registerRecordDeviceDriver(pdbbase)
+
+
+
+dbLoadRecords("db/jscalers_RICH_ColorScale.db")
+
+cd ${TOP}/iocBoot/${IOC}
+
+
+iocInit
+

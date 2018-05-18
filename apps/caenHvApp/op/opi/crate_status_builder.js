@@ -8,10 +8,9 @@ var argh = widget.getMacroValue("ARGH");
 
 //java.lang.System.out.println("crate_status_builder.js  " + argh + " " + crate + " " + nslot + " " + nchan);
 
-
-for (var chan=0; chan < 24+1; chan++)
+for (var chan=0; chan < (parseInt(nchan)+1); chan++)
 {
-    //java.lang.System.out.print(" " + chan);
+    //java.lang.System.out.println(" " + chan+" "+nchan);
 
 	var head = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.Label");
 	head.setWidth(50);
@@ -41,7 +40,7 @@ for (var slot=0; slot<nslot; slot++)
   
   //lc.setWidth(56);
   lc.setWidth(56);
-  lc.setHeight(560);
+  lc.setHeight(740);
   lc.setPropertyValue("border_style",0);
   lc.addMacro("SLOT",slot);
   lc.addMacro("NCHAN",nchan);

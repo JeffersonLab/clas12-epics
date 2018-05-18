@@ -1,0 +1,282 @@
+
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") 
+{
+   field(DESC, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element)")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element)")
+}
+
+
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Name") 
+{
+   field(DESC, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Name")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Name")
+}
+
+record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Alias") 
+{
+   field(DESC,"B_DET_$(Det)_$(Sys)_$(Element)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):Alias")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):Alias")
+}
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmon")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmon")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):imon")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):imon")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vsetrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vsetrbk")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):isetrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):isetrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):isetrbk")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmaxrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmaxrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmaxrbk")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):ruprbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):ruprbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):ruprbk")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(bo, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff") 
+{
+   field(DESC,"#PB")
+   field(OMSL,"supervisory")
+   field(ZNAM,"OFF")
+   field(ONAM,"ON")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):pwonoff")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):pwonoff")
+}
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset") 
+{
+   field(DESC,"#GR")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vset")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vset")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):iset") 
+{
+   field(DESC,"#GR")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):iset")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):iset")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):trip") 
+{
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):trip")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):trip")   
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rup") {
+   field(DESC,"#PD")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):rup")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):rup")   
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rdn") 
+{
+   field(DESC,"#PD")
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):rdn")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):rdn")   
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmax") 
+{
+   field(OMSL,"supervisory")
+   field(SCAN,"Passive")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):vmax")   
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vmax")   
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):rdnrbk")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):rdnrbk")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):rdnrbk")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+	
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
+{
+   field(VAL,"1")
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):stat")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):stat")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+{
+   field(PREC,"2")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):comms")
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):comms")
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}   
+
+record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
+{
+   field(VAL,"$(CrType)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):type")   
+   alias("B_SYS_$(Sys)_$(Det)_$(Element):type")   
+   info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
+#This record is not used. Calculation is done in :alarm subroutine record. 
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vtol")
+{
+   field(VAL,"0")
+   field(SCAN,"Passive")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):vtol")
+   field(INPA,"0.01")   
+   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
+   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+   field(CALC,"C>(B+A*B)?1:(C<(B-A*B)?2:0)")
+   #field(HIHI,"0.1")
+   field(HIGH,"1")
+   field(LOW,"2")
+   #field(LOLO,"-0.1")
+   field(HSV,"MINOR")
+   field(HHSV,"MAJOR")
+   field(LSV,"MINOR")
+   field(LLSV,"MAJOR")
+}
+
+#This record uses :comms, :stat, and voltages, establishes precedence for the 
+#alarming, and sends an output value to the mbbi record :alarmstate. Calls the
+#subroutine richproc in richalarm.c -- documentation on the alarm precedence is
+#in that file
+
+record(sub,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarm"){
+   alias("B_DET_$(Det)_$(Sys)_$(Element):alarm")
+   field(SCAN,"Passive")
+   field(INAM,"richinit")
+   field(SNAM,"richproc")
+   field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
+   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms CPP")
+   #field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):combined ")
+   field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
+   field(INPF,"0.01")
+   field(INPG,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).STAT")
+}
+
+#This record allows you to visualize what bits are set with the byte monitor 
+#widget. It is not actually used in setting alarms.
+
+record(sub,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):setbits"){
+   alias("B_DET_$(Det)_$(Sys)_$(Element):setbits")
+   field(SCAN,"Passive")
+   field(VAL,"12")
+   field(INAM,"richinit")
+   field(SNAM,"richSetBits")
+   field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
+   field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+   field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms CPP")
+   #field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):combined ")
+   field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset CPP")
+   field(INPF,"0.01")
+
+}
+#This record defines all of the different alarm stats, gets the values from the
+#subroutine record :alarm.
+
+record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarmstate"){
+  alias("B_DET_$(Det)_$(Sys)_$(Element):alarmstate")
+  field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):alarm CPP")
+  field(SCAN,"Passive")
+  field(ZRVL,"0")
+  field(ZRST,"Comms is off")
+  field(ZRSV,"MAJOR")
+  field(ONVL,"1")
+  field(ONST,"ChannelNotOn")
+  field(ONSV,"MINOR")
+  field(TWVL,"2")
+  field(TWST,"RUP")
+  field(TWSV,"MINOR") 
+  field(THVL,"3")
+  field(THST,"RDN")
+  field(THSV,"MINOR")
+  field(FRVL,"4")
+  field(FRST,"OVC")
+  field(FRSV,"MAJOR")
+  field(FVVL,"5")
+  field(FVST,"OVV")
+  field(FVSV,"MINOR")
+  field(SXVL,"6")
+  field(SXST,"UNV")
+  field(SXSV,"MINOR")
+  field(SVVL,"7")
+  field(SVST,"ExTrip")
+  field(SVSV,"MINOR")
+  field(EIVL,"8")
+  field(EIST,"MaxV")
+  field(EISV,"MINOR")
+  field(NIVL,"9")
+  field(NIST,"ExDis")
+  field(NISV,"MINOR")
+  field(TEVL,"10")
+  field(TEST,"InTrip")
+  field(TESV,"MINOR")
+  field(ELVL,"11")
+  field(ELST,"CalEr")
+  field(ELSV,"MINOR")
+  field(TVVL,"12")
+  field(TVST,"ChUn")
+  field(TVSV,"MINOR")
+  field(TTVL,"13")
+  field(TTST,"Voltage High")
+  field(TTSV,"MINOR")
+  field(FTVL,"14")
+  field(FTST,"Voltage Low")
+  field(FTSV,"MINOR")
+  field(FFVL,"15")
+  field(FFST," ")
+  field(FFSV,"NO_ALARM")
+  info(autosaveFields_pass0, "ZRSV ONSV TWSV THSV FRSV FVSV SXSV SVSV EISV NISV TESV ELSV TVSV TTSV FTSV FFSV")
+}
+

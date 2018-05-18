@@ -15,26 +15,8 @@ epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES","100000")
 
 ## Configure devices
 
-# hallb-gpib00:
-#drvAsynIPPortConfigure("L0",129.57.160.95:1234,0,0,0)
-
-# hallb-gpib17:
-drvAsynIPPortConfigure("L0",129.57.160.30:1234,0,0,0)
-
-
-
-
-# hallb-gpib06:
-#drvAsynIPPortConfigure("L0",129.57.160.101:1234,0,0,0)
-
-# hallb-gpib13:
-#drvAsynIPPortConfigure("L0",129.57.86.140:1234,0,0,0)
-
-# hallb-gpib12:
-#drvAsynIPPortConfigure("L0",129.57.160.107:1234,0,0,0)
-
 # hallb-gpib21:
-#drvAsynIPPortConfigure("L0",129.57.86.139:1234,0,0,0)
+drvAsynIPPortConfigure("L0",129.57.160.166:1234,0,0,0)
 
 asynSetTraceMask("L0",-1,0x09)
 asynSetTraceIOMask("L0",-1,0x02)

@@ -23,6 +23,8 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadTemplate("db/torus_force.substitutions")
 dbLoadTemplate("db/torus_force_addons.substitutions")
 
+dbLoadRecords("db/torus_fieldAverage.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup

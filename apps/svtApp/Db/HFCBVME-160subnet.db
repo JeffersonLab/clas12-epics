@@ -1,0 +1,22 @@
+
+record(calc,"B_SVT$(T)_$(H)$(S)dly") {
+    field(SCAN,"1 second")
+	field(FLNK,"B_SVT$(T)_$(H)$(S)Alm")
+	field(CALC,"B>10?A:0")
+	field(INPA,"B_SVT_LV_VD_$(LVD):onOff")
+	field(INPB,"B_SVT_LV_VD_$(LVD):onOff_db")
+}
+record(calc,"B_SVT$(T)_$(H)$(S)Alm") {
+	field(CALC,"D>4?(A*C*D*(-1)):(A*C*D)")
+	field(INPA,"B_SVT$(T)_$(H)$(S)dly NPP NMS")
+	field(INPC,"B_SVT$(T)_$(H)$(S).SEVR NPP NMS")
+	field(INPD,"B_SVT$(T)_$(H)$(S).STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}

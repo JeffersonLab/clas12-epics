@@ -4,10 +4,18 @@ option +c;  /* wait for db connections */
 
 /* define target positions */
 
-#define LEFT_FOIL        5.45
-#define EMPTY_POSITION   3.44
-#define RIGHT_FOIL       0.60
-#define ALUMINUM         2.35
+// Prior to November 2017:
+//#define LEFT_FOIL        5.45
+//#define EMPTY_POSITION   3.44
+//#define RIGHT_FOIL       0.60
+//#define ALUMINUM         2.35
+
+// Shifted 0.06 inches beam-left based on Stpan's measurements:
+#define LEFT_FOIL        5.39
+#define EMPTY_POSITION   3.38
+#define RIGHT_FOIL       0.54
+#define ALUMINUM         2.29
+
 #define LARGE_POSITIVE  20.00
 #define LARGE_NEGATIVE -20.00
 

@@ -1,62 +1,46 @@
 TOP=../..
 
 include $(TOP)/configure/CONFIG
+
 #----------------------------------------
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 
 #=============================
-# Build the IOC support library
-
-LIBRARY_IOC_vxWorks += bomSupport
-
-DBD += bomSupport.dbd
-
-bomSupport_DBD += base.dbd
-bomSupport_DBD += asyn.dbd
-bomSupport_DBD += stdSupport.dbd
-bomSupport_DBD += mcaSupport.dbd
-bomSupport_DBD += SIS38XXSupport.dbd
-bomSupport_DBD += histogramRecord.dbd
-bomSupport_DBD += sub_funcs.dbd
-
-bomSupport_SRCS += sub_funcs.c
-
-bomSupport_LIBS += SIS38XX mca
-bomSupport_LIBS += std
-bomSupport_LIBS += asyn
-bomSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
-
-#=============================
 # Build the IOC application
+STATIC_BUILD=YES
 
-PROD_IOC_vxWorks = bom
-# bom.dbd will be created and installed
-DBD += bom.dbd
+PROD_Linux += iocbom
 
-bom_DBD += bomSupport.dbd
-bom_DBD += asSupport.dbd
+# <name>.dbd will be created from <name>Include.dbd
+DBD += iocbom.dbd
 
-# bom_registerRecordDeviceDriver.cpp derives from bom.dbd
-#bom_SRCS += bom_registerRecordDeviceDriver.cpp
+# <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
+iocbom_SRCS += iocbom_registerRecordDeviceDriver.cpp
+iocbom_SRCS += devBOM.c
+iocbom_SRCS += bom_ioc.cpp
 
 # Build the main IOC entry point on workstation OSs.
-bom_SRCS_DEFAULT += bomMain.cpp
-bom_SRCS_vxWorks += bom_registerRecordDeviceDriver.cpp
+iocbom_SRCS_DEFAULT += iocbomMain.cpp
+iocbom_SRCS_vxWorks += -nil-
 
-# Add support from base/src/vxWorks if needed
-bom_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
+iocbom_LIBS += seq pv
 
-# Link in the code from the support library
-bom_LIBS += bomSupport
-bom_LIBS += SIS38XX mca
-bom_LIBS += std
-bom_LIBS += autosave
-bom_LIBS += asyn
-bom_LIBS += $(EPICS_BASE_IOC_LIBS)
+iocbom_LIBS += bomDrv
+iocbom_LIBS += rol
+iocbom_LIBS += devIocStats
+iocbom_LIBS += autosave
+#iocbom_LIBS += waveformApp
+iocbom_LIBS += $(EPICS_BASE_IOC_LIBS)
 
-#=============================
+rol_DIR         += $(ROL_LIB)
+
+PROD_LIBS       += mysql4.1.20
+mysql4.1.20_DIR += $(MYSQL_LIB)
+
+USR_INCLUDES += $(ROL_INCLUDE)
+
+#===========================
 
 include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
-

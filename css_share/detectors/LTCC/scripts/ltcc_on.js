@@ -20,6 +20,9 @@ var nchans=18;
 
 for (var isec=1; isec<=nsectors; isec++)
 {
+    // 1 and 4 are not installed:
+    if (isec==1 || isec==4) continue;
+    
     if (sector!=0 && isec!=sector) continue;
 
     for (var ilr=0; ilr<lrs.length; ilr++)

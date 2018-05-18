@@ -1,0 +1,836 @@
+
+file {
+	name="/usr/clas12/hps/prod/apps/lakeshore450App/medm/lakeshore450.adl"
+	version=030108
+}
+display {
+	object {
+		x=1063
+		y=549
+		width=400
+		height=550
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=223
+		width=380
+		height=120
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+rectangle {
+	object {
+		x=12
+		y=476
+		width=380
+		height=65
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=351
+		width=110
+		height=15
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=366
+		width=380
+		height=85
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+rectangle {
+	object {
+		x=10
+		y=208
+		width=110
+		height=15
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+text {
+	object {
+		x=15
+		y=208
+		width=90
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Settings"
+}
+"text update" {
+	object {
+		x=264
+		y=487
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)MODE"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=264
+		y=281
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)UNITS"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+menu {
+	object {
+		x=151
+		y=306
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)ACDC:SET"
+		clr=14
+		bclr=4
+	}
+}
+menu {
+	object {
+		x=151
+		y=281
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)UNITS:SET"
+		clr=14
+		bclr=4
+	}
+}
+text {
+	object {
+		x=40
+		y=306
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="AC/DC"
+}
+text {
+	object {
+		x=40
+		y=281
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Units"
+}
+text {
+	object {
+		x=27
+		y=89
+		width=105
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Field"
+}
+text {
+	object {
+		x=38
+		y=256
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Range"
+}
+"text update" {
+	object {
+		x=264
+		y=256
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)RANGE"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=400
+		height=40
+	}
+	"basic attribute" {
+		clr=29
+	}
+}
+text {
+	object {
+		x=0
+		y=5
+		width=400
+		height=10
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="LakeShore Cryotronics"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=0
+		y=20
+		width=400
+		height=10
+	}
+	"basic attribute" {
+		clr=0
+	}
+	textix="Model 450 Gaussmeter"
+	align="horiz. centered"
+}
+menu {
+	object {
+		x=151
+		y=256
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)RANGE:SET"
+		clr=14
+		bclr=4
+	}
+}
+text {
+	object {
+		x=38
+		y=231
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Auto Range"
+}
+"text update" {
+	object {
+		x=264
+		y=231
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)AUTO_RANGE"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	format="exponential"
+	limits {
+	}
+}
+menu {
+	object {
+		x=151
+		y=231
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)AUTO_RANGE:SET"
+		clr=14
+		bclr=4
+	}
+}
+text {
+	object {
+		x=40
+		y=372
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Probe Type"
+}
+"text update" {
+	object {
+		x=264
+		y=372
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)PROBETYPE"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=40
+		y=397
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Field Compensation"
+}
+menu {
+	object {
+		x=151
+		y=397
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)FIELDCOMP:SET"
+		clr=14
+		bclr=4
+	}
+}
+"text update" {
+	object {
+		x=264
+		y=397
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)FIELDCOMP"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=40
+		y=422
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Temp Compensation"
+}
+menu {
+	object {
+		x=151
+		y=422
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)TEMPCOMP:SET"
+		clr=14
+		bclr=4
+	}
+}
+"text update" {
+	object {
+		x=264
+		y=422
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)TEMPCOMP"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=40
+		y=487
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Mode"
+}
+"text update" {
+	object {
+		x=264
+		y=306
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)ACDC"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=5
+		y=20
+		width=100
+		height=15
+	}
+	monitor {
+		chan="$(P)FIELD:RAW.STAT"
+		clr=15
+		bclr=29
+	}
+	clrmod="alarm"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=5
+		width=100
+		height=10
+	}
+	"basic attribute" {
+		clr=3
+	}
+	textix="$(P)"
+}
+"related display" {
+	object {
+		x=370
+		y=10
+		width=20
+		height=20
+	}
+	display[0] {
+		label="Comm (Asyn)"
+		name="asynRecord.adl"
+		args="P=$(P),R=ASYN"
+	}
+	display[1] {
+		label="IOC Stats"
+		name="ioc_stats_soft.adl"
+		args="ioc=ioclakeshore450"
+	}
+	display[2] {
+		label="Autosave"
+		name="autosave.adl"
+		args="P=ioclakeshore450:"
+	}
+	clr=14
+	bclr=5
+}
+text {
+	object {
+		x=15
+		y=351
+		width=90
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Probe"
+}
+text {
+	object {
+		x=40
+		y=513
+		width=105
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Lock"
+}
+menu {
+	object {
+		x=151
+		y=513
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)LOCK:SET"
+		clr=14
+		bclr=4
+	}
+}
+"text update" {
+	object {
+		x=264
+		y=513
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)LOCK"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+menu {
+	object {
+		x=151
+		y=487
+		width=105
+		height=20
+	}
+	control {
+		chan="$(P)MODE:SET"
+		clr=14
+		bclr=4
+	}
+}
+rectangle {
+	object {
+		x=12
+		y=461
+		width=110
+		height=15
+	}
+	"basic attribute" {
+		clr=5
+	}
+}
+text {
+	object {
+		x=17
+		y=461
+		width=90
+		height=15
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Front Panel"
+}
+"related display" {
+	object {
+		x=78
+		y=256
+		width=70
+		height=20
+	}
+	display[0] {
+		label="Ranges"
+		name="lakeshore450_ranges.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=5
+	label="Tables..."
+}
+text {
+	object {
+		x=27
+		y=179
+		width=105
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Units"
+}
+text {
+	object {
+		x=27
+		y=165
+		width=105
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Multiplier (u,m,k,_)"
+}
+"text update" {
+	object {
+		x=151
+		y=161
+		width=105
+		height=20
+	}
+	monitor {
+		chan="$(P)FIELD:MULT"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=27
+		y=141
+		width=105
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Raw Amplitude"
+}
+"text update" {
+	object {
+		x=151
+		y=137
+		width=130
+		height=20
+	}
+	monitor {
+		chan="$(P)FIELD:RAW"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=256
+		y=161
+		width=25
+		height=20
+	}
+	monitor {
+		chan="$(P)UNITS"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=293
+		y=145
+		width=100
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Field = "
+}
+text {
+	object {
+		x=293
+		y=162
+		width=100
+		height=21
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Raw * Multiplier"
+}
+"text entry" {
+	object {
+		x=151
+		y=49
+		width=130
+		height=20
+	}
+	control {
+		chan="$(P)FIELD.DESC"
+		clr=14
+		bclr=5
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=27
+		y=53
+		width=105
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Description"
+}
+"text update" {
+	object {
+		x=151
+		y=85
+		width=105
+		height=25
+	}
+	monitor {
+		chan="$(P)FIELD"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=256
+		y=85
+		width=25
+		height=25
+	}
+	monitor {
+		chan="$(P)UNITS"
+		clr=15
+		bclr=12
+	}
+	align="horiz. centered"
+	limits {
+	}
+}

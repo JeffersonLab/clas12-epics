@@ -1,0 +1,53 @@
+#
+# datatype_sol_em_force.db
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PLCID - PLC ID set in startup
+#   LC    - loadCell, PLC base tag (ex. RS86107DS_BL_B)
+#   DESC  - description
+# 
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   June 2017
+#
+
+record(ai, "$(P)$(R)$(LC):EM_FORCE") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(LC).value")
+    field(SCAN, "1 second")
+    field(EGU,  "lb")
+    field(PREC, "0")
+}
+
+record(ai, "$(P)$(R)$(LC):EM_RAMPDOWN") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(LC).Limit_1")
+    field(SCAN, "1 second")
+    field(EGU,  "lb")
+    field(PREC, "0")
+}
+
+record(ai, "$(P)$(R)$(LC):EM_FASTDUMP") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(LC).Limit_2")
+    field(SCAN, "1 second")
+    field(EGU,  "lb")
+    field(PREC, "0")
+}
+
+record(bo, "$(P)$(R)$(LC):EnableIntlk") {
+    field(DTYP, "EtherIP")
+    field(OUT,  "@$(PLCID) $(LC).EnableInterlock S 1")
+}
+
+record(bi, "$(P)$(R)$(LC):Intlk") {
+    field(DTYP, "EtherIP")
+    field(INP,  "@$(PLCID) $(LC).Interlock")
+    field(SCAN, "1 second")
+    field(ZNAM, "OK")
+    field(ONAM, "ERROR")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
+}
+

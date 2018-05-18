@@ -1,0 +1,32 @@
+
+record(ao,"B_IA_$(P)") {
+    field(OMSL,"supervisory")
+    field(OUT,"$(P)")
+}
+record(ai,"B_IA_$(P):baseline") {
+}
+
+record(calc,"B_IA_$(P):init") {
+    field(SCAN,"Passive")
+    field(INPA,"$(P)")
+    field(CALC,"A")
+    field(FLNK,"B_IA_$(P):init2.PROC")
+}
+record(seq,"B_IA_$(P):init2") {
+    field(LNK1,"B_IA_$(P) CPP")
+    field(LNK2,"B_IA_$(P):baseline CPP")
+    field(DOL1,"B_IA_$(P):init")
+    field(DOL2,"B_IA_$(P):init")
+}
+
+record(ai,"B_IA_$(P):offset") {
+    field(VAL,"0")
+    field(FLNK,"B_IA_$(P):offset2 CPP")
+}
+record(calcout,"B_IA_$(P):offset2") {
+    field(INPA,"B_IA_$(P):baseline")
+    field(INPB,"B_IA_$(P):offset")
+    field(CALC,"A+B")
+    field(OUT,"B_IA_$(P) CPP")
+}
+

@@ -217,6 +217,11 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
     printf("CAEN_HVload: request for HVL\n");
     sy1527SetChannelMaxVoltage(id, slot, channel, value);
   }
+  else if(!strncmp("PRD",property,3))
+  {
+    printf("CAEN_HVload: request for PRD\n");
+    sy1527SetChannelTripTime(id, slot, channel, value);
+  }
 
   return(0);
 }
@@ -307,6 +312,7 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_MVDZ] = 0.0;  // m
   property[PROP_MCDZ] = 0.0;  // n
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
+  property[PROP_TT] = sy1527GetChannelTripTime(id,slot,channel); //p
 
   property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// my_n:  // t
 
@@ -320,17 +326,34 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   // this is what we alarm on:
   *delta=0;
 
+#define HRDWERROR  999999
+#define COMMERROR -999999
+#define MISMERROR -111111
+
+  const int prop=property[PROP_ST];
+
+  // If channel is ON, then delta is difference between measured and demand voltages,
+  // This should allow to alarm any time a channel is turned on or off, in addition
+  // to serving as a voltage tolerance alarm.
+  if ( prop & (BIT527_ON) || prop & (BIT527_RUP) || prop & (BIT527_RDN ) )   
+    *delta =  property[PROP_MV] - property[PROP_DV];
+/*
   // delta is difference between measured and demand voltages
   // if channel is not ON, or RAMPING, do not set delta
   if ( ((int)property[PROP_ST] & (BIT527_ON) ) )
     if ( ! ((int)property[PROP_ST] & (BIT527_RUP | BIT527_RDN) ) )
       *delta =  property[PROP_MV] - property[PROP_DV];
+*/
 
   // if ERROR bits are set, override delta with very big number
-  if( ((int)property[PROP_ST] & (BIT527_EXTRIP | BIT527_INTRIP | BIT527_OVV | BIT527_OVC | BIT527_KILL)   ) ) *delta=99999;
+  if( ((int)property[PROP_ST] & (BIT527_EXTRIP | BIT527_INTRIP | BIT527_OVV | BIT527_OVC | BIT527_KILL)   ) ) 
+    *delta=HRDWERROR;
 
   // if HEARTBEAT error, override delta with very big negative number
-  if( (int)property[PROP_HBEAT] ) *delta=-99999;
+  if( (int)property[PROP_HBEAT] ) *delta=COMMERROR;
+
+  // negative status when comms error:
+  //if (property[PROP_HBEAT]) property[PROP_ST]=-property[PROP_ST];
 
   return(0);
 

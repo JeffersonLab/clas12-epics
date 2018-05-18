@@ -38,7 +38,7 @@ DICTFILE=$(SCRIPTDIR)/$(OUTNAME)NodesDict.py
 RECDUMP = ./sub2dump.sh
 PARSER = ./parseEpicsRecordDump
 
-TARGETS += $(DICTFILE)
+#TARGETS += $(DICTFILE)
 
 #=============================
 

@@ -234,6 +234,7 @@ record(stringout, "$(P):setformexp")
 }
 record(ao,"$(P):setrange")
 {
+    field(PREC,1)
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto putFloat(:VOLT:RANGE) $(PORT)")
     field(FLNK, "$(P):range")
@@ -275,12 +276,15 @@ record(stringout,"$(P):setdaqmode")
 }
 record(ao,"$(P):setaperture")
 {
+    field(EGU,"s")
+    field(PREC,7)
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto putFloat(:VOLT:APER) $(PORT)")
     field(FLNK, "$(P):aperture")
 }
 record(ao,"$(P):setnplc")
 {
+    field(PREC,"2")
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto putFloat(:VOLT:NPLC) $(PORT)")
     field(FLNK, "$(P):nplc")
@@ -363,24 +367,24 @@ record(bo,"$(P):enterkey")
 {
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto pressKey(18) $(PORT)")
-#    field(FLNK,"$(P):waitAndReadDisplay")
+    field(FLNK,"$(P):waitAndReadDisplay")
 }
 record(bo,"$(P):triggerkey")
 {
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto pressKey(30) $(PORT)")
-#    field(FLNK,"$(P):waitAndReadDisplay")
+    field(FLNK,"$(P):waitAndReadDisplay")
 }
 record(bo,"$(P):exitkey")
 {
     field(DTYP,"stream")
     field(OUT,"@keithley2001.proto pressKey(11) $(PORT)")
-#    field(FLNK,"$(P):waitAndReadDisplay")
+    field(FLNK,"$(P):waitAndReadDisplay")
 }
 record(calcout,"$(P):waitAndReadDisplay")
 {
     field(SCAN,"Passive")
-    field(ODLY,10)
+    field(ODLY,3)
     field(OVAL,1)
     field(OUT,"$(P):display.PROC")
 }

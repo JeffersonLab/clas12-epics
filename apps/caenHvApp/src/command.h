@@ -18,5 +18,22 @@
 #define S_CHHV    0x0B    /* Set CHANNEL HV on/off          */ 
 #define S_BDHV    0x0C    /* Set BOARD HV on/off            */ 
 #define S_VMAX    0x0D    /* Set MAX CHANNEL VOLATAGE       */ 
+#define S_CLR     0x0E    /* Clear Alarm (entire mainframe) */ 
+
+// LV Boards:
+#define S_UNVT    0x10    /* Set Under Voltage Threshold    */
+#define S_OVVT    0x11    /* Set Over  Voltage Threshold    */
+#define S_INTLK   0x12    /* Set Interlock Status           */
+
+// Dual Range Boards:
+#define S_RANGE   0x20    /* Set Range                      */
+
+#define G_HVFS    0x01    /* HV Fan Stat                    */
+#define G_PWFS    0x02    /* PW Fan Stat                    */
+#define G_PWV     0x03    /* PW Voltage                     */
+#define G_HVPW    0x04    /* HvPwSM                         */
+#define G_MOD     0x05    /* Model Name                     */
+#define G_SWR     0x06    /* Sowftware Release              */
+#define G_BDMOD   0x07    /* Board Model Name               */
 
 #endif

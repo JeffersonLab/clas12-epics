@@ -1,0 +1,17 @@
+#
+# mmgas_status_calc.template
+#
+# Fault summation for Warning and Fault indictors 
+#
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   June 2017
+#
+record(calc, "$(P)$(R)_STAT") {
+    field(INPA, "$(P)$(R)_WRN CPP")
+    field(INPB, "$(P)$(R)_FLT CPP")
+    field(CALC, "A+B")
+    field(HIGH, "1")
+    field(HSV,  "MINOR")
+    field(HIHI, "2")
+    field(HHSV, "MAJOR")
+}

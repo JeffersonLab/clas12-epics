@@ -20,6 +20,14 @@ REQ += datatype_straingage.req
 REQ += torus_force_settings.req
 REQ += torus_vacuum_settings.req
 
+BEAST += solenoid_comm.xml
+BEAST += solenoid_cooldown.xml
+BEAST += solenoid_force.xml
+BEAST += solenoid_interlocks.xml
+BEAST += solenoid_LHe.xml
+BEAST += solenoid_vacuum.xml
+
+BEAST += torus_comm.xml
 BEAST += torus_cooldown_interlocks.xml
 BEAST += torus_cooldown.xml
 BEAST += torus_force_loadcells_contacts.xml
@@ -53,4 +61,7 @@ include $(TOP)/configure/RULES
 
 ../%_PLC.req: ../%.L5X 
 	$(TOP)/../tools/RSLogixToEPICS/convertRSLogix2EPICS.py -c $(TOP)/../tools/RSLogixToEPICS/convert.cfg -x $< -s $@
+
+../%.xml: ../%.csv
+	$(TOP)/../bin/csv2beast.py $<
 

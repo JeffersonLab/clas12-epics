@@ -8,6 +8,7 @@
 #-----------------------------------------------------------------------
 # Version History
 #-----------------------------------------------------------------------
+# 2.62 2016       baltzell@jlab.org - added -R option to send ctrl-x
 # 2.61 2014/10/23 wmoore@jlab.org - modified for HPS usage
 # 2.60 2013/08/29 cuffe@jlab.org - rewrite to change IFS for config file
 # 1.00 2008/09/19 cuffe@jlab.org - inital revision
@@ -42,34 +43,32 @@ HOSTNAME='/bin/hostname'
 HOST=`hostname -s`
 ID='/usr/bin/id'
 TELNET='/usr/bin/telnet'
+NETCAT='/usr/bin/nc'
 SSH='/usr/bin/ssh -xt'
 APP_EXE=$APP_DIR/procServ
 
-BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE"
+BINARY_LIST="$HOSTNAME $ID $TELNET $SSH $APP_EXE $NETCAT"
 
 #-----------------------------------------------------------------------
 # Global Functions
 #-----------------------------------------------------------------------
 function usage {
-    echo "usage: $SCRIPT_NAME [-h] [-R] iocname"
+    echo "usage: $SCRIPT_NAME [OPTIONS] [iocname]"
     echo ""
-    echo "[-h] Print Help"
-    echo "[-R] Reboot IOC Non-Interactively (send ctrl-X through netcat)"
+    echo "OPTIONS"
+    echo "    -h,  Print Help"
+    echo "    -p,  Print config file"
+    echo "    -R,  Reboot IOC Non-Interactively (send ctrl-x via netcat)"
     echo ""
-    echo "Examples:"
-    echo "$SCRIPT_NAME [-h]"
-    echo "$SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
+    echo "EXAMPLES"
+    echo "    $SCRIPT_NAME iocsofthrt - start a console on ioc iocsofthrt"
     echo ""
-    echo "CONFIGURATION FILES:"
-    echo "--------------------"
+    echo "CONFIGURATION FILE(S)"
+    echo "---------------------"
     for FILE in $FILE_LIST     
     do
         echo $FILE
     done
-    
-    echo ""
-
-    printconfig
 }
 
 function checkfile {
@@ -147,6 +146,13 @@ function parseconfig {
 }
 
 function printconfig {
+    echo "CONFIGURATION FILE(S)"
+    echo "---------------------"
+    for FILE in $FILE_LIST     
+    do
+        echo $FILE
+    done
+    echo ""
     echo "IOC CONFIGURATION"
     echo "-----------------"
     for i in ${iocs[*]}
@@ -154,7 +160,6 @@ function printconfig {
         #echo IOC configured STATUS to run HOST:PORT
         echo "$i $(eval echo \$${i}_status) to run on $(eval echo \$${i}_host):$(eval echo \$${i}_port)"
         done
-    echo ""
 }
 
 #-----------------------------------------------------------------------
@@ -164,10 +169,13 @@ parseconfig
 
 reboot=0
 
-while getopts hR opt; do
+while getopts hpR opt; do
     case $opt in
         
     h) usage 
+       return 0
+       ;;
+    p) printconfig
        return 0
        ;;
    R) reboot=1
@@ -230,6 +238,8 @@ if [ $ret = 1 ]; then
     echo "$1 was found disabled in the configuration file" 
     echo "     $CONFIG_FILE"
     echo "You may need to update this file before continuing"
+    echo
+    echo "Press Return to Continue ..."
     echo ""
     printconfig
     echo ""
@@ -250,12 +260,15 @@ if [ $ret = 0 ]; then
     echo "$1 was not found in the configuration file" 
     echo "     $CONFIG_FILE"
     echo "You may need to update this file before continuing"
-    echo ""
+    echo
+    echo "Press Return to Continue ..."
+    read a
     printconfig
     echo ""
     exit 1
 fi
-      
+
+# This will send ctrl-x through netcat (doesn't work with telnet):
 rebootcmd="echo 18 | xxd -r -p | nc localhost $(eval echo \$${1}_port)"
 
 if [ "$(eval echo \$${1}_host)" = "$HOST" ] ; then

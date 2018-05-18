@@ -1,0 +1,76 @@
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+#----------------------------------------
+#  ADD MACRO DEFINITIONS BELOW HERE
+
+# xxxRecord.h will be created from xxxRecord.dbd
+DBDINC += xxxRecord
+
+# Install xxxSupport.dbd into <top>/dbd
+DBD += xxxSupport.dbd
+
+# Build an IOC support library
+#LIBRARY_IOC += amqSupport
+LIBRARY_IOC_linux-x86_64 += amqSupport
+LIBRARY_IOC = $(LIBRARY_IOC_$(T_A))
+
+# Compile and add the code to the support library
+amqSupport_SRCS += xxxRecord.c
+amqSupport_SRCS += devXxxSoft.c
+
+# Link locally-provided code into the support library,
+# rather than directly into the IOC application.
+# This is required for Windows DLL builds.
+amqSupport_SRCS += dbSubExample.c
+amqSupport_SRCS += amqHello.c
+amqSupport_SRCS += initTrace.c
+amqSupport_SRCS += ipc_example_ken.cpp
+
+amqSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
+amqSupport_LIBS += amqSupport
+amqSupport_LIBS += activemq-cpp
+
+
+USR_INCLUDES += -I$(IPC_HOME)/src/main -I/usr/include/apr-1
+
+# Build the IOC application
+PROD_IOC_linux-x86_64 += amq
+PROD_IOC = $(PROD_IOC_$(T_A))
+
+#PROD_IOC = amq
+
+# amq.dbd will be created and installed
+DBD += amq.dbd
+
+# amq.dbd will include these files:
+amq_DBD += base.dbd
+amq_DBD += xxxSupport.dbd
+amq_DBD += dbSubExample.dbd
+amq_DBD += amqHello.dbd
+amq_DBD += mHello.dbd
+amq_DBD += initTrace.dbd
+
+# amq_registerRecordDeviceDriver.cpp derives from amq.dbd
+amq_SRCS += amq_registerRecordDeviceDriver.cpp
+
+# Build the main IOC entry point where needed
+amq_SRCS_DEFAULT += amqMain.cpp
+amq_SRCS_vxWorks += -nil-
+
+# Add support from base/src/vxWorks if needed
+#amq_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
+
+# Link in the code from our support library
+amq_LIBS += amqSupport
+amq_LIBS += activemq-cpp
+
+
+# Finally link IOC to the EPICS Base libraries
+amq_LIBS += $(EPICS_BASE_IOC_LIBS)
+
+include $(TOP)/configure/RULES
+#----------------------------------------
+#  ADD EXTRA GNUMAKE RULES BELOW HERE
+
+USR_CXXFLAGS +=  -std=c++11

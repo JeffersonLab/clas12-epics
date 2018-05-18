@@ -13,3 +13,27 @@ grecord(ai, "B_FSD_DOWNSTREAM")
   field(SCAN,"1 second")
   field(INP,"ISD2H001HALORATE02")
 }
+
+
+record(ai,"B_FSD_ISDDESTai")
+{
+    field(PINI,1)
+    field(VAL,0)
+}
+record(bo,"B_FSD_ISDDEST")
+{
+    field(OMSL,"closed_loop")
+    field(DOL,"B_FSD_ISDDESTai CPP")
+    field(ZNAM,"No HallB")
+    field(ONAM,"HallB")
+}
+record(scalcout,"B_FSD_ISDDESTcalc") 
+{
+  field(SCAN,"1 second")
+  field(INAA,"ISDXXXXdest")
+  field(CALC,"AA['HallB','HallB']=''")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"B_FSD_ISDDESTai PP")
+}
+

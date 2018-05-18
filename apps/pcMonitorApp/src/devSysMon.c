@@ -366,7 +366,7 @@ enum meminfo_row { meminfo_main = 0,
 
 
 enum meminfo_col { meminfo_total = 0, meminfo_used, meminfo_free,
-    meminfo_shared, meminfo_buffers, meminfo_cached
+    meminfo_shared, meminfo_buffers, meminfo_cached, meminfo_active
 };
 
 
@@ -462,6 +462,13 @@ unsigned  long **meminfo(void){
                 p+=k;
                 sscanf(p," %lu",&(row[meminfo_swap][meminfo_free]));
                 row[meminfo_swap][meminfo_free]<<=10;
+                while(*p++ != '\n');
+            }
+            else if(!strcmp(fieldbuf,"Active:")) {
+                if (DEBUG) fprintf(stderr,"H meminfo\n");
+                p+=k;
+                sscanf(p," %lu",&(row[meminfo_main][meminfo_active]));
+                row[meminfo_main][meminfo_active]<<=10;
                 while(*p++ != '\n');
             }
             else {
@@ -657,25 +664,27 @@ static long read_MEM_load(pAiIn)
         }
     }
     if(!strcmp(pvmeio->parm,"MEMAV"))
-        pAiIn->val=mem[meminfo_main][meminfo_total] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_total] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"MEMUSED"))
-        pAiIn->val=mem[meminfo_main][meminfo_used] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_used] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"MEMFREE"))
-        pAiIn->val=mem[meminfo_main][meminfo_free] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_free] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"MEMSHRD"))
-        pAiIn->val=mem[meminfo_main][meminfo_shared] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_shared] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"MEMBUFF"))
-        pAiIn->val=mem[meminfo_main][meminfo_buffers] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_buffers] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"SWAPAV"))
-        pAiIn->val=mem[meminfo_swap][meminfo_total] >> 10;
+        pAiIn->val=(mem[meminfo_swap][meminfo_total] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"SWAPUSED"))
-        pAiIn->val=mem[meminfo_swap][meminfo_used] >> 10;
+        pAiIn->val=(mem[meminfo_swap][meminfo_used] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"SWAPFREE"))
-        pAiIn->val=mem[meminfo_swap][meminfo_free] >> 10;
+        pAiIn->val=(mem[meminfo_swap][meminfo_free] >> 10)*1e-3;
     else if (!strcmp(pvmeio->parm,"SWAPCACH"))
-        pAiIn->val=mem[meminfo_total][meminfo_cached] >> 10;
+        pAiIn->val=(mem[meminfo_total][meminfo_cached] >> 10)*1e-3;
+    else if (!strcmp(pvmeio->parm,"MEMACTIVE"))
+        pAiIn->val=(mem[meminfo_main][meminfo_active] >> 10)*1e-3;
     else 
-        pAiIn->val=mem[meminfo_main][meminfo_free] >> 10;
+        pAiIn->val=(mem[meminfo_main][meminfo_free] >> 10)*1e-3;
 
     if(!status) pAiIn->udf = FALSE;
     if (DEBUG) fprintf(stderr,"exit read_MEM_load\n");
@@ -782,13 +791,13 @@ static long read_uptime_Info(pStringIn)
     }
     else{
         if(!strcmp(pvmeio->parm,"SYSNAME"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.sysname);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.sysname);
         else if(!strcmp(pvmeio->parm,"RELEASE"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.release);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.release);
         else if(!strcmp(pvmeio->parm,"VERSION"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.version);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.version);
         else if(!strcmp(pvmeio->parm,"MACHINE"))
-            sprintf(pStringIn->val,"%.*s",sizeof(pStringIn->val)-1,name.machine);
+            sprintf(pStringIn->val,"%.*s",(int)sizeof(pStringIn->val)-1,name.machine);
     }
 
     /* if(!status) */ pStringIn->udf = FALSE;

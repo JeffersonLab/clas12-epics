@@ -1,0 +1,88 @@
+
+record(acalcout,"B_SVT_DAQ_R1a:$(SUFFIX)") {
+    field(SCAN,"5 second")
+    field(INAA,"B_SVT_DAQ_R1S1:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R1S2:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R1S3:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R1S4:$(SUFFIX)")
+    field(INEE,"B_SVT_DAQ_R1S5:$(SUFFIX)")
+    field(INFF,"B_SVT_DAQ_R1S6:$(SUFFIX)")
+    field(INGG,"B_SVT_DAQ_R1S7:$(SUFFIX)")
+    field(INHH,"B_SVT_DAQ_R1S8:$(SUFFIX)")
+    field(INII,"B_SVT_DAQ_R1S9:$(SUFFIX)")
+    field(INJJ,"B_SVT_DAQ_R1S10:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD+EE+FF+GG+HH+II+JJ)*10")
+	field(FLNK,"B_SVT_DAQ_R1:$(SUFFIX).PROC")
+}
+record(calc,"B_SVT_DAQ_R1:$(SUFFIX)") {
+	field(INPA,"B_SVT_DAQ_R1a:$(SUFFIX)")
+	field(CALC,"A")
+}
+
+record(acalcout,"B_SVT_DAQ_R2a:$(SUFFIX)") {
+    field(SCAN,"5 second")
+    field(INAA,"B_SVT_DAQ_R2S1:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R2S2:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R2S3:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R2S4:$(SUFFIX)")
+    field(INEE,"B_SVT_DAQ_R2S5:$(SUFFIX)")
+    field(INFF,"B_SVT_DAQ_R2S6:$(SUFFIX)")
+    field(INGG,"B_SVT_DAQ_R2S7:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD+EE+FF+GG)*7")
+	field(FLNK,"B_SVT_DAQ_R2b:$(SUFFIX).PROC")
+}
+record(acalcout,"B_SVT_DAQ_R2b:$(SUFFIX)") {
+    field(INAA,"B_SVT_DAQ_R2S8:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R2S9:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R2S10:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R2S11:$(SUFFIX)")
+    field(INEE,"B_SVT_DAQ_R2S12:$(SUFFIX)")
+    field(INFF,"B_SVT_DAQ_R2S13:$(SUFFIX)")
+    field(INGG,"B_SVT_DAQ_R2S14:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD+EE+FF+GG)*7")
+	field(FLNK,"B_SVT_DAQ_R2:$(SUFFIX).PROC")
+}
+record(calc,"B_SVT_DAQ_R2:$(SUFFIX)") {
+	field(INPA,"B_SVT_DAQ_R2a:$(SUFFIX)")
+	field(INPB,"B_SVT_DAQ_R2b:$(SUFFIX)")
+	field(CALC,"A+B")
+}
+
+record(acalcout,"B_SVT_DAQ_R3a:$(SUFFIX)") {
+    field(SCAN,"5 second")
+    field(INAA,"B_SVT_DAQ_R3S1:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R3S2:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R3S3:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R3S4:$(SUFFIX)")
+    field(INEE,"B_SVT_DAQ_R3S5:$(SUFFIX)")
+    field(INFF,"B_SVT_DAQ_R3S6:$(SUFFIX)")
+    field(INGG,"B_SVT_DAQ_R3S7:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD+EE+FF+GG)*7")
+	field(FLNK,"B_SVT_DAQ_R3b:$(SUFFIX).PROC")
+}
+record(acalcout,"B_SVT_DAQ_R3b:$(SUFFIX)") {
+    field(INAA,"B_SVT_DAQ_R3S8:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R3S9:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R3S10:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R3S11:$(SUFFIX)")
+    field(INEE,"B_SVT_DAQ_R3S12:$(SUFFIX)")
+    field(INFF,"B_SVT_DAQ_R3S13:$(SUFFIX)")
+    field(INGG,"B_SVT_DAQ_R3S14:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD+EE+FF+GG)*7")
+	field(FLNK,"B_SVT_DAQ_R3c:$(SUFFIX).PROC")
+}
+record(acalcout,"B_SVT_DAQ_R3c:$(SUFFIX)") {
+    field(INAA,"B_SVT_DAQ_R3S15:$(SUFFIX)")
+    field(INBB,"B_SVT_DAQ_R3S16:$(SUFFIX)")
+    field(INCC,"B_SVT_DAQ_R3S17:$(SUFFIX)")
+    field(INDD,"B_SVT_DAQ_R3S18:$(SUFFIX)")
+    field(CALC,"AVG(AA+BB+CC+DD)*4")
+	field(FLNK,"B_SVT_DAQ_R3:$(SUFFIX).PROC")
+}
+record(calc,"B_SVT_DAQ_R3:$(SUFFIX)") {
+	field(INPA,"B_SVT_DAQ_R3a:$(SUFFIX)")
+	field(INPB,"B_SVT_DAQ_R3b:$(SUFFIX)")
+	field(INPC,"B_SVT_DAQ_R3c:$(SUFFIX)")
+	field(CALC,"A+B+C")
+}
+

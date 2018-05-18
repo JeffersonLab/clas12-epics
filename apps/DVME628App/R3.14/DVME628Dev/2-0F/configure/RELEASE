@@ -1,0 +1,26 @@
+#RELEASE Location of external products
+# Run "gnumake clean uninstall install" in the application
+# top directory each time this file is changed.
+#
+# NOTE: The build does not check dependancies on files
+# external to this application. Thus you should run
+# "gnumake clean uninstall install" in the top directory
+# each time EPICS_BASE, SNCSEQ, or any other external
+# module defined in the RELEASE file is rebuilt.
+
+TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/topver
+
+# If you don't want to install into $(TOP) then
+# define INSTALL_LOCATION_APP here
+
+FELSITE  = /usr/felsite/op/prod_R3.14.11.J1
+OPSSITE  = /cs/op/prod_R3.14.11.J1
+DVLSITE  = /cs/dvl/prod_R3.14.11.J1
+SUPPORT  = /usr/dvlepics/epics/R3.14.11.J1/support
+
+INSTALL_LOCATION_APP= $(FELSITE)/DVME628Dev/2-0
+#INSTALL_LOCATION_APP= $(OPSSITE)/DVME628Dev/2-0
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/usr/dvlepics/epics/R3.14.11.J1
+

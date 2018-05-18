@@ -28,15 +28,14 @@ drvAsynIPPortConfigure("L1","fastlightpulser1:5000 UDP",0,0,0)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
-dbLoadRecords("db/genFlasher.db","P=B_DET_HTCC_FLASHER,R=:asyn,PORT=L1");
-
+dbLoadRecords("db/genFlasher.db","P=B_HW_FLASHER_HTCC-CTOF,R=:asyn,PORT=L1");
+#dbLoadRecords("db/genFlasher.db","P=B_HW_GENFLASHER_HTCC-CTOF,R=:asyn,PORT=L1");
 
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
 
-## Start any sequence programs
-#seq sncxxx,"user=klivHost"
-
 #init some values
-dbpf("B_DET_FTH_FLASHER:DATA_FILE_LOAD","./genFlasherDEfault.dat")
-dbpf("B_DET_FTH_FLASHER:DATA_FILE_SAVE","./genFlasherDEfault.dat")
+dbpf("B_HW_FLASHER_HTCC-CTOF:F0_DATA_FILE_LOAD","/home/clasrun/htcc/flasher/HTCC_FlasherDefault.dat")
+dbpf("B_HW_FLASHER_HTCC-CTOF:F0_DATA_FILE_SAVE","/home/clasrun/htcc/flasher/HTCC_FlasherDefault.dat")
+dbpf("B_HW_FLASHER_HTCC-CTOF:F1_DATA_FILE_LOAD","/home/clasrun/htcc/flasher/CTOF_FlasherDefault.dat")
+dbpf("B_HW_FLASHER_HTCC-CTOF:F1_DATA_FILE_SAVE","/home/clasrun/htcc/flasher/CTOF_FlasherDefault.dat")

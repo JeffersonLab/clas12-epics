@@ -44,7 +44,7 @@ setenv EPICS_BASE /usr/clas12/${EPICS_VER}/base$RHEL_VER
 setenv EPICS_EXTENSIONS /usr/clas12/${EPICS_VER}/extensions$RHEL_VER
 
 # sergey: added /usr/local/share/snmp/mibs, it exist on VME controllers and /usr/share/snmp/mibs exist on RHELs
-setenv MIBDIRS /usr/clas12/R$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
+setenv MIBDIRS /usr/clas12/$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 setenv MIBS ALL
 
 # set EPICS host architecture
@@ -71,7 +71,7 @@ if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${EPICS_BASE}/lib/${EPICS_HOST_ARCH}:${EPICS_EXTENSIONS}/lib/${EPICS_HOST_ARCH}:/usr/clas12/third-party-libs/net-snmp-5.8.dev/x86_64/lib"
 
 setenv EPICS_CA_AUTO_ADDR_LIST no
-setenv EPICS_CA_ADDR_LIST "129.57.255.12 129.57.163.255"
+setenv EPICS_CA_ADDR_LIST "129.57.255.12 129.57.163.255 129.57.231.255"
 
 ## Pezca
 if ( ! $?PERL5LIB ) setenv PERL5LIB
@@ -82,8 +82,24 @@ set css_script_dir="${EPICS}/css_share/common/scripts"
 
 set -f path=("${script_dir}" $path:q)
 
+if ( ! $?ROOTSYS ) then
+  setenv ROOTSYS /apps/root/5.34.21
+  set -f path=("$ROOTSYS/bin" $path:q)
+  if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH 
+  setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$ROOTSYS/lib"
+endif
+
 if ( ! $?PYTHONPATH ) setenv PYTHONPATH 
 setenv PYTHONPATH "${PYTHONPATH}:${script_dir}:${css_script_dir}:/usr/clas12/third-party-libs/pyepics-RHEL7"
+setenv PYTHONPATH "${PYTHONPATH}:${ROOTSYS}/lib"
 
 setenv EPICS_SCRIPTS "${script_dir}"
+
+# This sometimes hangs and can NOT be in the .setup (do it in the repeer executable instead):
+#source ${EPICS}/tools/reeper/thisreeper.csh
+
+## CS-Studio
+setenv DIIRT_HOME ${EPICS}/css_share/common/prefs/diirt
+# RHEL7.4 gtk3 patches break eclipse/css, new css versions unaffected.
+setenv SWT_GTK3 0
 

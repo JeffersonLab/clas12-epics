@@ -10,7 +10,6 @@ var type = widget.getMacroValue("TYPE");
 
 //java.lang.System.out.println("set_status.js");
 
-
 if (type == "527")
 {
 	
@@ -65,8 +64,10 @@ else if (type == "1527" || type == "4527")
 	var istatus2;
 	try { istatus2 = PVUtil.getDouble(pvs[1]); }
 	catch (ee) {}
-		
-	if (istatus2==0)
+	
+
+
+	if (istatus2==0 && istatus>=0)
 	{
 		var statuses=["ON","RUP",  "RDN",  "OVC",  "OVV",  "UNV",  "ExTrip","MAXV", "ExDis",       "InTrip","CalEr","ChUn"];
 		var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Disconnected","Major","Major","Disconnected"];
@@ -81,12 +82,12 @@ else if (type == "1527" || type == "4527")
 		  } 
 		}
 		if (istatus == 0) { 
-		  widget.setPropertyValue("background_color","Off");
+		  widget.setPropertyValue("foreground_color","Off");
 		  widget.setPropertyValue("background_color","Off");
 		}
 		else
 		{
-		  widget.setPropertyValue("background_color",bgcolors[theStatus]);	
+		  widget.setPropertyValue("foreground_color",bgcolors[theStatus]);	
 		  widget.setPropertyValue("background_color",bgcolors[theStatus]);		  	  
 		}
      }

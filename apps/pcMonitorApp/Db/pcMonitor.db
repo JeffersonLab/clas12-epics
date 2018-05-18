@@ -20,7 +20,7 @@ record(calcout,"$(NAME):CALCSTATUS")
     #field(INPE,"$(NAME):FDAV NPP MS")
     field(CALC,"1")
     field(OUT,"$(NAME):STATUS PP MS")
-    field(SCAN,"1 second")
+    field(SCAN,"10 second")
 }
 
 record(bi,"$(NAME):STATUS")
@@ -48,7 +48,7 @@ record (bo, "$(NAME):WD")
 
 record(calc,"$(NAME):HBTMOD") {
     field(DESC, "Heartbeat mod 9")
-    field(SCAN, "1 second")
+    field(SCAN, "10 second")
     field(CALC, "A%9")
     field(INPA, "$(NAME):HBT.VAL .NPP.NMS")
     field(EGU,  "ticks")
@@ -56,7 +56,7 @@ record(calc,"$(NAME):HBTMOD") {
 }
 record(calc,"$(NAME):HBT") {
     field(DESC, "IOC heartbeat")
-    field(SCAN, "1 second")
+    field(SCAN, "10 second")
     field(FLNK, "$(NAME):HBTMOD.VAL ")
     field(CALC, "A>=B?0:A+1")
     field(INPA, "$(NAME):HBT.VAL .NPP.NMS")
@@ -75,7 +75,7 @@ record(ai, "$(NAME):MEM")
 {
         field(DESC, "Avg Load")
         field(DTYP, "MemLoad")
-        field(SCAN,"5 second")
+        field(SCAN,"10 second")
 	field(PREC,"0")
         field(INP, "#C0 S0 @PROC")
 	field(PINI,"YES")
@@ -89,8 +89,9 @@ record(ai, "$(NAME):MEMAV")
         field(DTYP, "MemLoad")
 	field(PREC,"0")	
         field(INP, "#C0 S0 @MEMAV")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):MEMUSED")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):MEMUSED")
@@ -99,8 +100,9 @@ record(ai, "$(NAME):MEMUSED")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @MEMUSED")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):MEMFREE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 record(ai, "$(NAME):MEMFREE")
 {
@@ -108,8 +110,9 @@ record(ai, "$(NAME):MEMFREE")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @MEMFREE")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):MEMSHRD")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):MEMSHRD")
@@ -118,8 +121,9 @@ record(ai, "$(NAME):MEMSHRD")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @MEMSHRD")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):MEMBUFF")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):MEMBUFF")
@@ -128,8 +132,9 @@ record(ai, "$(NAME):MEMBUFF")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @MEMBUFF")
-	field(EGU, "KB")
+	field(EGU, "MB")
 	field(FLNK,"$(NAME):SWAPAV")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):SWAPAV")
@@ -138,8 +143,9 @@ record(ai, "$(NAME):SWAPAV")
         field(DTYP, "MemLoad")
 	field(PREC,"0")	
         field(INP, "#C0 S0 @SWAPAV")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):SWAPUSED")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):SWAPUSED")
@@ -148,8 +154,9 @@ record(ai, "$(NAME):SWAPUSED")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @SWAPUSED")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):SWAPFREE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 record(ai, "$(NAME):SWAPFREE")
 {
@@ -157,16 +164,62 @@ record(ai, "$(NAME):SWAPFREE")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
         field(INP, "#C0 S0 @SWAPFREE")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(FLNK,"$(NAME):SWAPCACH")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 record(ai, "$(NAME):SWAPCACH")
 {
         field(DESC, "Avg Load")
         field(DTYP, "MemLoad")
 	field(PREC,"0")
-	field(EGU, "KB")
+	field(EGU, "MB")
         field(INP, "#C0 S0 @SWAPCACH")
+        field(FLNK,"$(NAME):MEMACTIVE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
+}
+record(ai, "$(NAME):MEMACTIVE")
+{
+        field(DESC, "Avg Load")
+        field(DTYP, "MemLoad")
+	field(PREC,"0")
+        field(INP, "#C0 S0 @MEMACTIVE")
+	field(EGU, "MB")
+        field(FLNK,"$(NAME):FRACMEMACTIVE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
+}
+
+record(calc, "$(NAME):FRACMEMACTIVE")
+{
+    field(DESC,"Fraction of Memory Used")
+    field(PREC,"1")
+    field(EGU,"%")
+    field(INPA,"$(NAME):MEMACTIVE")
+    field(INPB,"$(NAME):MEMAV")
+    field(CALC,"A/B*100")
+    field(FLNK,"$(NAME):FRACMEMUSED")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
+}
+record(calc, "$(NAME):FRACMEMUSED")
+{
+    field(DESC,"Fraction of Memory Used")
+    field(PREC,"1")
+    field(EGU,"%")
+    field(INPA,"$(NAME):MEMUSED")
+    field(INPB,"$(NAME):MEMAV")
+    field(CALC,"A/B*100")
+    field(FLNK,"$(NAME):FRACSWAPUSED")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
+}
+record(calc, "$(NAME):FRACSWAPUSED")
+{
+    field(DESC,"Fraction of Memory Used")
+    field(PREC,"1")
+    field(EGU,"%")
+    field(INPA,"$(NAME):SWAPUSED")
+    field(INPB,"$(NAME):SWAPFREE")
+    field(CALC,"A/(A+B)*100")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 #----------------------------------------------
@@ -212,6 +265,7 @@ record(ai, "$(NAME):LOAD1MIN")
 	field(PREC,"2")
 	field(PINI, "YES")
 	field(FLNK,"$(NAME):LOAD5MIN")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):LOAD5MIN")
@@ -221,6 +275,7 @@ record(ai, "$(NAME):LOAD5MIN")
         field(INP, "#C0 S0 @5min")
 	field(PREC,"2")
         field(FLNK,"$(NAME):LOAD15MIN")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 record(ai, "$(NAME):LOAD15MIN")
 {
@@ -228,6 +283,7 @@ record(ai, "$(NAME):LOAD15MIN")
         field(DTYP, "AvgLoad")
         field(INP, "#C0 S0 @15min")
 	field(PREC,"2")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 #----------------------------------------------------
@@ -240,10 +296,11 @@ record(ai, "$(NAME):CPU")
 {
         field(DESC, "Avg Load")
         field(DTYP, "CpuLoad")
-        field(SCAN,"5 second")
+        field(SCAN,"10 second")
         field(INP, "#C0 S0 @PROC")
 	field(PINI,"YES")
 	field(FLNK,"$(NAME):CPUIDLE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 
@@ -255,6 +312,7 @@ record(ai, "$(NAME):CPUIDLE")
         field(INP, "#C0 S0 @IDLE")
 	field(EGU, "%")
         field(FLNK,"$(NAME):CPUNICE")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):CPUNICE")
@@ -266,6 +324,7 @@ record(ai, "$(NAME):CPUNICE")
 	field(PREC,"2")
 
         field(FLNK,"$(NAME):CPUSYSTEM")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):CPUSYSTEM")
@@ -276,6 +335,7 @@ record(ai, "$(NAME):CPUSYSTEM")
 	field(PREC,"2")
 	field(EGU, "%")
         field(FLNK,"$(NAME):CPUUSER")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(ai, "$(NAME):CPUUSER")
@@ -286,12 +346,13 @@ record(ai, "$(NAME):CPUUSER")
         field(INP, "#C0 S0 @USER")
 	field(EGU, "%")
 	field(FLNK,"$(NAME):LOAD")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 record(calc, "$(NAME):LOAD")
 {
         field(DESC, "CPU LOAD")
-	field(PREC,"2")
+	field(PREC,"1")
         field(INPA, "$(NAME):CPUUSER")
 	field(INPB, "$(NAME):CPUNICE")
 	field(INPC, "$(NAME):CPUSYSTEM")
@@ -302,6 +363,7 @@ record(calc, "$(NAME):LOAD")
     	field(HIGH, "70")
     	field(HHSV, "MAJOR")
     	field(HSV,  "MINOR")
+        info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
 }
 
 #-------------------------------------------------

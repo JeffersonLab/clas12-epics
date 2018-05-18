@@ -1,5 +1,8 @@
 package org.jlab.hallb.AutoLogEntry;
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -18,15 +21,18 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
+  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","CLAS12ANA","HBDAQ","HBTRIGGER","BBEAM","TLOG"};
+
 //  String RUNDBSESSION=System.getenv("SESSION");
 //  String RUNDBEXPID=System.getenv("EXPID");
 //  String RUNDBTABLE="daq_"+RUNDBEXPID;
 //  String RUNDBUSER=RUNDBEXPID;
-  
+ 
+  // kpp settings:
   String RUNDBSESSION="clasprod";
   String RUNDBTABLE="daq_clasrun";
 
-  // hps 2015 settings:
+  // hps settings:
   //String RUNDBSESSION="clashps";
   //String RUNDBTABLE="daq_clasrun";
   
@@ -42,20 +48,40 @@ public class MakeLogEntry
 
   JTextArea LOGTEXT = new JTextArea("Enter Comments Here", 20, 40);
   JTextArea LOGTITLE = new JTextArea("Title", 20, 40);
+  JTextArea EMAILTEXT = new JTextArea("Email", 20, 40);
+  JTextArea MAKERTEXT = new JTextArea("Maker", 20, 40);
   JTextPane STATUSTEXT = null;
   JPanel IMPANEL=new JPanel();
   JFrame FRAME;
+    
+  JComboBox<String> LOGBOOKCHOICE=new JComboBox<>(LOGBOOKS);
 
+  //CheckComboBox LOGBOOKCHOICE;
+
+  final boolean DEBUG=false;
+
+  String stockTitle="";
+
+  boolean DOTABS=true;
   ArrayList<JPanel> IMPANELS = new ArrayList<JPanel>();
   ArrayList<String> IMPATHS = new ArrayList<String>();
   JTabbedPane IMTABS;
+	JButton ADDTABBTN = new JButton("+");
 
   int IMGHEIGHT = 200;
   int IMGWIDTH = 300;
 
+  public void MakeLogEntry() {
+
+      //Set dog=new LinkedHashSet();
+      //for (String ss : LOGBOOKS) dog.add(ss);
+      //LOGBOOKCHOICE=new CheckComboBox(dog);
+  }
+
+
   public static void main( String[] args )
   {
-    System.out.println("Running MakeLogEntry ...");
+    //System.out.println("Running MakeLogEntry ...");
     try {
       MakeLogEntry obj = new MakeLogEntry();
       obj.run(args);
@@ -65,6 +91,9 @@ public class MakeLogEntry
 
   public void run(String[] args)
   {
+      File fff= new File(SCREENSHOTDIR);
+      fff.mkdir();
+
     try {
       // interpret arguments:
       String screenName=null;
@@ -77,8 +106,24 @@ public class MakeLogEntry
         {
           if      (args[ii].equals("-w")) windowId = args[++ii];
           else if (args[ii].equals("-m")) screenName = args[++ii];
-          else if (args[ii].equals("-l")) LOGBOOKNAME = args[++ii];
+          else if (args[ii].equals("-l")) {
+              LOGBOOKNAME = args[++ii];
+              boolean found=false;
+              for (String ss : LOGBOOKS)
+              {
+                  if (LOGBOOKNAME.equals(ss)) {
+                      found=true;
+                      break;
+                  }
+                  
+              }
+              if (!found) {
+                  System.err.println("Invalid logbook name: "+LOGBOOKNAME);
+                  LOGBOOKNAME="HBLOG";
+              }
+          }
           else if (args[ii].equals("-s")) RUNDBSESSION = args[++ii];
+          else if (args[ii].equals("-t")) DOTABS = Boolean.parseBoolean(args[++ii]);
           else System.err.println("Invalid Argument: >"+args[ii]+"<");
         }
       }
@@ -138,13 +183,11 @@ public class MakeLogEntry
 
   public String takeScreenshot(String winId, String medmName)
   {
-    // use xwd and convert to take screenshot of X-window 
     String imgPath = null;
     try {
-      String windowID = winId==null ? getWindowID() : winId;
       String stub = medmName; // command-line argument
       Date date = new Date();
-      String timeStamp = String.format("%tY-%tm-%td_%tH-%tM-%tS",
+      String timeStamp = String.format("%tY%tm%td_%tH%tM%tS",
           date,date,date,date,date,date);
       if (stub==null)
       {
@@ -153,9 +196,18 @@ public class MakeLogEntry
           stub=stub.substring(0,stub.indexOf('.'));
       }
       imgPath = SCREENSHOTDIR+stub+"_"+timeStamp+".gif";
-      System.out.println(imgPath);
-      String[] cmd = {"/bin/sh", "-c", "xwd -id " + windowID + " | convert - " + imgPath };
-      Runtime.getRuntime().exec(cmd);
+      if (DEBUG) System.out.println(imgPath);
+      if (winId==null) 
+      {
+        System.err.println("Running import ...");
+        String[] cmd={"import",imgPath};
+        Runtime.getRuntime().exec(cmd);
+      }
+      else
+      {
+        String[] cmd = {"xwd"," -id "+getWindowID()+" | convert - "+imgPath};
+        Runtime.getRuntime().exec(cmd);
+      }
     }
     catch (Exception e) { e.printStackTrace(); java.lang.System.exit(0); }
     return imgPath;
@@ -164,31 +216,37 @@ public class MakeLogEntry
   public BufferedImage readScreenshot(String filename)
   {
     // try/wait for file to register, and sleep before reading it.
-    // these loops, sleeps, tests were found to be important for reliability
+    // all these loops, sleeps, tests were found to be important for reliability
     File file=null;
     BufferedImage imbuff = null;
     try {
       int count=0;
       boolean goodFile=false;
-      for (count=0; count<50; count++) {
+      for (count=0; count<100; count++) {
         file=new File(filename);
         if (file.isFile()) { goodFile=true; break; }
         sleep(200);
       }
       if (!goodFile) 
       {
-        System.err.println("File DNE:  "+filename);
+        //System.err.println("File DNE:  "+filename);
+        updateStatusPane("Error Displaying Screenshot (1).  Try Again.",Color.RED);
         return null;
       }
-      if (count>5) System.err.println("MakeLogEntry.java:  WAITCOUNT1:  "+count);
+      //if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT1:  "+count);
+    updateStatusPane("Reading Screenshot ...",Color.BLACK);
       sleep(500);
-      for (count=0; count<50; count++) {
+      for (count=0; count<200; count++) {
         imbuff=ImageIO.read(file);
         if (imbuff==null) sleep(200);
         else break;
       }
-      if (count>5) System.err.println("MakeLogEntry.java:  WAITCOUNT2:  "+count);
-      if (imbuff==null) System.err.println("Error Reading Screenshot.");
+//      if (count>10) System.err.println("MakeLogEntry.java:  WAITCOUNT2:  "+count);
+      if (imbuff==null) 
+      {
+        //System.err.println("Error Displaying Screenshot.");
+        updateStatusPane("Error Displaying Screenshot (2).  Try Again.",Color.RED);
+      }
     }
     catch (IOException e) { e.printStackTrace(); }
     return imbuff;
@@ -197,18 +255,25 @@ public class MakeLogEntry
   public void showScreenshot(String filename)
   {
     IMPANEL.removeAll();
-    IMPANEL.updateUI();
     if (filename != null)
     {
       BufferedImage imbuff = readScreenshot(filename);
       Image image = getScaledImage(imbuff);
       ImageIcon imicon=new ImageIcon(image);
-      IMPANEL.add(new JLabel(imicon));
-      
-      //final int ii=IMTABS.getSelectedIndex();
-      //if (ii>=0 && ii<IMPANELS.size())
-      //  IMPANELS.get(ii).add(new JLabel(imicon));
+      if (DOTABS)
+      { 
+        final int ii=IMTABS.getSelectedIndex();
+        if (ii>=0 && ii<IMPANELS.size()) {
+          if (DEBUG) System.out.println("showScreenshot:  "+ii);
+          IMPATHS.set(ii,filename);
+          IMPANELS.get(ii).removeAll();
+          IMPANELS.get(ii).add(new JLabel(imicon));
+        }
+      }
+      else IMPANEL.add(new JLabel(imicon));
     }
+    for (JPanel jp : IMPANELS) jp.updateUI();
+    IMPANEL.updateUI();
   }
 
   public Image getScaledImage(BufferedImage imbuff)
@@ -251,12 +316,25 @@ public class MakeLogEntry
   {
     LOGTITLE.setText("Run #"+Integer.toString(getRunNumber())+":  ");
     LOGTITLE.updateUI();
+    stockTitle=LOGTITLE.getText();
   }
   
   public void initLogComments()
   {
     LOGTEXT.setText("Enter Comments Here");
     LOGTEXT.updateUI();
+  }
+
+  public void initEmail()
+  {
+      EMAILTEXT.setText("");
+      EMAILTEXT.updateUI();
+  }
+  
+  public void initMaker()
+  {
+      MAKERTEXT.setText("");
+      MAKERTEXT.updateUI();
   }
 
   public void makeGui()
@@ -268,16 +346,33 @@ public class MakeLogEntry
     
     // status line:
     STATUSTEXT = makeTextPane("",Color.RED);
-    STATUSTEXT.setPreferredSize(new Dimension(400,25));
+    STATUSTEXT.setPreferredSize(new Dimension(500,25));
 
     // log title entry:
     initLogTitle();
     LOGTITLE.setVisible(true);
     LOGTITLE.setEditable(true);
     LOGTITLE.setForeground(Color.BLUE);
-    LOGTITLE.setFont(new Font("Dialog.plain",0,18));
-    LOGTITLE.setPreferredSize(new Dimension(400, 20));
+    LOGTITLE.setFont(new Font("Dialog.plain",0,15));
+    LOGTITLE.setPreferredSize(new Dimension(400, 15));
     LOGTITLE.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    
+    initEmail();
+    EMAILTEXT.setVisible(true);
+    EMAILTEXT.setEditable(true);
+    EMAILTEXT.setForeground(Color.BLUE);
+    EMAILTEXT.setFont(new Font("Dialog.plain",0,15));
+    EMAILTEXT.setPreferredSize(new Dimension(400, 15));
+    EMAILTEXT.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
+    initMaker();
+    MAKERTEXT.setVisible(true);
+    MAKERTEXT.setEditable(true);
+    MAKERTEXT.setForeground(Color.BLUE);
+    MAKERTEXT.setFont(new Font("Dialog.plain",0,15));
+    MAKERTEXT.setPreferredSize(new Dimension(400, 15));
+    MAKERTEXT.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+
 
     // log text entry:
     LOGTEXT.setLineWrap(true);
@@ -315,13 +410,15 @@ public class MakeLogEntry
 
     Border lbd=BorderFactory.createLineBorder(Color.GRAY);
     
+    LOGBOOKCHOICE.setSelectedItem(LOGBOOKNAME);
+
     // button panel:
     JPanel buttonPanel = new JPanel();
     buttonPanel.setOpaque(false);
-    buttonPanel.add(butScreenshot);
+    if (!DOTABS) buttonPanel.add(butScreenshot);
     buttonPanel.add(butSubmit);
     buttonPanel.add(butClear);
-    buttonPanel.add(butCancel);
+    //buttonPanel.add(butCancel);
     buttonPanel.add(STATUSTEXT);
 
     // comments panel:
@@ -343,42 +440,85 @@ public class MakeLogEntry
     titlePanel.setOpaque(false);
     titlePanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
     titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.LINE_AXIS));
-    titlePanel.setPreferredSize(new Dimension(200, 50));
+    titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
+    titlePanel.add(LOGBOOKCHOICE);
 
-    //JPanel tabPanel = makeTabbedPane();
-    //tabPanel.add(screenshotPanel);
-    //tabPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshots"));
+    JPanel emailPanel = new JPanel();
+    emailPanel.setOpaque(false);
+    emailPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Email Notify"));
+    emailPanel.setLayout(new BoxLayout(emailPanel,BoxLayout.LINE_AXIS));
+    emailPanel.setPreferredSize(new Dimension(100, 42));
+    emailPanel.add(EMAILTEXT);
+    
+    JPanel makerPanel = new JPanel();
+    makerPanel.setOpaque(false);
+    makerPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Entry Makers"));
+    makerPanel.setLayout(new BoxLayout(makerPanel,BoxLayout.LINE_AXIS));
+    makerPanel.setPreferredSize(new Dimension(100, 42));
+    makerPanel.add(MAKERTEXT);
+
+    JPanel myPanel = new JPanel();
+    myPanel.setOpaque(false);
+    //myPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Entry Makers"));
+    myPanel.setLayout(new BoxLayout(myPanel,BoxLayout.LINE_AXIS));
+    myPanel.setPreferredSize(new Dimension(200, 42));
+    myPanel.add(emailPanel);
+    myPanel.add(makerPanel);
+
+
+
+
+    JPanel topPanel = new JPanel();
+    topPanel.setOpaque(false);
+   // topPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Title"));
+    topPanel.setLayout(new BoxLayout(topPanel,BoxLayout.PAGE_AXIS));
+    topPanel.setPreferredSize(new Dimension(200, 84));
+    topPanel.add(titlePanel);
+    topPanel.add(myPanel);
+//    topPanel.add(emailPanel);
+//    topPanel.add(makerPanel);
+
+    JPanel tabPanel=null;
+    if (DOTABS)
+    {
+      tabPanel = makeTabbedPane();
+      tabPanel.add(screenshotPanel);
+      tabPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Screenshots"));
+    }
 
     // main frame:
-    FRAME = new JFrame("JLab Logbook Entry:  "+LOGBOOKNAME);
+    FRAME = new JFrame("JLab Logbook Entry.");//:  "+LOGBOOKNAME);
     FRAME.getContentPane().setBackground(Color.LIGHT_GRAY);
     FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     FRAME.add(commentsPanel, BorderLayout.CENTER);
     FRAME.add(buttonPanel, "South");
-    FRAME.add(titlePanel, "North");
-    //FRAME.add(tabPanel,"East");
-    FRAME.add(screenshotPanel,"East");
+    FRAME.add(topPanel, "North");
+    //FRAME.add(titlePanel, "North");
+    if (DOTABS) FRAME.add(tabPanel,"West");
+    else        FRAME.add(screenshotPanel,"West");
     FRAME.pack();
+//    FRAME.setResizable(false);
     FRAME.setVisible(true);
+  }
+
+  public JPanel makeImagePane()
+  {
+    JPanel jp=new JPanel();
+    jp.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
+    jp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+    jp.setOpaque(false);
+    return jp;
   }
 
   public JPanel makeTabbedPane()
   {
-    for (int ii=0; ii<10; ii++) {
-      JPanel jp=new JPanel();
-      jp.setPreferredSize(new Dimension(IMGWIDTH,IMGHEIGHT));
-      jp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-      jp.setOpaque(false);
-      IMPANELS.add(jp);
-    }
-		JPanel buttonPanel = new JPanel();
+    JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
-		JButton shotButton = new JButton("Capture");
-		JButton addButton = new JButton("+");
+		JButton shotButton = new JButton("Take Screenshot");
 		JButton removeButton = new JButton("-");
 		buttonPanel.add(shotButton);
-		buttonPanel.add(addButton);
+		buttonPanel.add(ADDTABBTN);
 		buttonPanel.add(removeButton);
     IMTABS = new JTabbedPane();
     SpringLayout layout = new SpringLayout();
@@ -386,31 +526,39 @@ public class MakeLogEntry
     tabPanel.setLayout(layout);
     tabPanel.add(IMTABS);
     tabPanel.add(buttonPanel);
+    IMTABS.setBackground(Color.LIGHT_GRAY);
 		layout.putConstraint(SpringLayout.EAST, buttonPanel, 0, SpringLayout.EAST, tabPanel);
 		layout.putConstraint(SpringLayout.WEST, buttonPanel, 0, SpringLayout.WEST, tabPanel);
 		layout.putConstraint(SpringLayout.SOUTH, buttonPanel, 0, SpringLayout.SOUTH, tabPanel);
 		layout.putConstraint(SpringLayout.EAST, IMTABS, 0, SpringLayout.EAST, tabPanel);
 		layout.putConstraint(SpringLayout.WEST, IMTABS, 0, SpringLayout.WEST, tabPanel);
 		layout.putConstraint(SpringLayout.NORTH, IMTABS, 0, SpringLayout.NORTH, tabPanel);
-		layout.putConstraint(SpringLayout.SOUTH, IMTABS, -10, SpringLayout.NORTH, buttonPanel);
+		layout.putConstraint(SpringLayout.SOUTH, IMTABS, 0, SpringLayout.NORTH, buttonPanel);
 		
-    addButton.addActionListener(new ActionListener() {
+    ADDTABBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
         int ii=IMTABS.getTabCount();
-        JPanel jj=IMPANELS.get(ii);
-				IMTABS.addTab("#" + (ii + 1), jj);
+        JPanel ip=makeImagePane();
+        IMPANELS.add(ip);
+        IMPATHS.add("");
+				IMTABS.addTab("#" + (ii + 1),ip);
 				IMTABS.setSelectedIndex(IMTABS.getTabCount() - 1);
+        if (DEBUG) System.out.println("Adding TabIndex "+ii);
 			}
 		});
-    addButton.doClick();
+    ADDTABBTN.doClick();
+
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
         int ii=IMTABS.getSelectedIndex();
 				if (ii != -1) {
+          if (DEBUG) System.out.println("Removing Tab Index "+ii);
 					IMTABS.remove(ii);
           IMPANELS.get(ii).removeAll();
-          IMPANELS.get(ii).updateUI();
+          IMPANELS.remove(ii);
+          IMPATHS.remove(ii);
 					for(int tabIndex = 0; tabIndex < IMTABS.getTabCount(); tabIndex++) {
+            if (DEBUG) System.out.println("Setting TabIndex "+tabIndex+" Title ");
 						IMTABS.setTitleAt(tabIndex, "#" + (tabIndex + 1));
 					}
 				}
@@ -462,20 +610,55 @@ public class MakeLogEntry
 
   public void submitElog()
   {
-    LogEntry entry = new LogEntry("", LOGBOOKNAME);
+    if (LOGTITLE.getText().equals(stockTitle) ||
+        LOGTITLE.getText().equals(""))
+    {
+      updateStatusPane("ERROR:  Update Log Title Before Submitting.",Color.RED);
+      return;
+    }
+    //LogEntry entry = new LogEntry("", LOGBOOKNAME);
+    LogEntry entry = new LogEntry("", (String)LOGBOOKCHOICE.getSelectedObjects()[0]);
     //entry.setEmailNotify("rafopar@jlab.org");
     try {
-      entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);
+      if (DOTABS)
+      {
+        for (int jj=0; jj<IMPATHS.size(); jj++) {
+          if (IMPATHS.get(jj).equals("")) continue;
+          if (DEBUG) System.out.println("Logging Image #"+jj+": "+IMPATHS.get(jj));
+          entry.addAttachment(IMPATHS.get(jj),IMPATHS.get(jj));
+        }
+      }
+      else if (!IMGPATH.equals("")) entry.addAttachment(IMGPATH,"Snapshot of "+IMGPATH);
       entry.setTitle(LOGTITLE.getText());
-      entry.setBody(LOGTEXT.getText());
-      long logNumber = entry.submitNow();
+      entry.setBody(LOGTEXT.getText().replaceFirst("Enter Comments Here",""));
+      if (EMAILTEXT.getText().contains("@")) {
+          String asdf="";
+          String comma="";
+          String qwer=EMAILTEXT.getText().replaceAll("^[,\\s]+","");
+          for (String ss : qwer.split("[,\\s]+")) {
+              asdf+=comma+ss;
+              comma=",";
+          }
+          entry.setEmailNotify(asdf);
+      }
+      if (!MAKERTEXT.getText().equals("")) {
+          String asdf="";
+          String comma="";
+          String qwer=MAKERTEXT.getText().replaceAll("^[,\\s]+","");
+          for (String ss : qwer.split("[,\\s]+")) {
+              asdf+=comma+ss;
+              comma=",";
+          }
+          entry.setEntryMakers(asdf);
+      }
+      final long logNumber = entry.submitNow();
       //entry.submit();
       //System.out.println(entry.getXML());
-      System.out.println("Log #" + logNumber+" Submitted.");
+      if (DEBUG) System.out.println("Log #" + logNumber+" Submitted.");
       updateStatusPane("Log #"+logNumber+" Submitted.",Color.RED);
     }
     catch (Exception e) { 
-      System.err.println("Error Submitting To Logbook:\n"+e.getMessage());
+      System.err.println("\nError Submitting To Logbook:\n"+e.getMessage());
       updateStatusPane("Error Submitting To Logbook.",Color.RED);
     }
   }
@@ -490,7 +673,7 @@ public class MakeLogEntry
       if (imgpath.indexOf(home)==0)
         imgpath="~"+imgpath.substring(home.length(),imgpath.length());
       showScreenshot(IMGPATH);
-      updateStatusPane(imgpath,Color.BLACK,11);
+      updateStatusPane("Last Screenshot: "+imgpath,Color.BLACK,11);
     }
   }
   class submitAction implements ActionListener
@@ -504,10 +687,18 @@ public class MakeLogEntry
   class clearAction implements ActionListener
   {
     public void actionPerformed (ActionEvent e) {
+      while (IMTABS.getTabCount()>1) IMTABS.remove(IMTABS.getTabCount()-1);
+      IMTABS.removeAll();
+      IMPATHS.clear();
+      IMPANELS.clear();
+      ADDTABBTN.doClick(); 
+      IMTABS.updateUI();
       showScreenshot(null);
       updateStatusPane("",Color.BLACK);
       initLogTitle();
       initLogComments();
+      initEmail();
+      initMaker();
       IMGPATH=null;
     }
   }

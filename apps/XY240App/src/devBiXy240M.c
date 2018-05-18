@@ -34,7 +34,7 @@
 #include	<devSup.h>
 #include	<module_types.h>
 #include	<biRecord.h>
-
+#include    <epicsExport.h>
 
 extern int errVerbose;
 extern int Xycom240M_Initialized;
@@ -62,6 +62,7 @@ struct {
 	NULL,
 	read_bi};
 
+epicsExportAddress(dset,devBiXy240M);
 
 static long init(after)
 int after;

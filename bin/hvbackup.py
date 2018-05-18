@@ -5,16 +5,20 @@ import getpass,grp,pwd
 import subprocess,re
 import epics
 
-def exit(text):
-  mess = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+def exit(text,parent):
+  mess = gtk.MessageDialog(parent=parent,buttons=gtk.BUTTONS_OK)
   mess.set_markup(text)
+  #mess.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
   mess.run()
+  #mess.move(parent.get_position())
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','RICH_LV','MVT_LV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
-DETS=DETSHV+DETSLV
+DETSVT=['SVT']
+MISC=['BUFFERDEWAR']
+DETS=DETSHV+DETSLV+DETSVT+MISC
 
 FIELDS_HV_BURT=[':vset',':vmax',':iset',':trip',':rup',':rdn']
 
@@ -26,10 +30,10 @@ DATADIR='/usr/clas12/DATA/burt'
 
 SCRIPTPATH=os.path.dirname(os.path.realpath(__file__))
 RELEASEPATH=re.search('(^.*/release/\d[\.\d]+)',SCRIPTPATH)
-if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path')
+if RELEASEPATH==None: exit('Cannot Find hvbackup.py Path',None)
 RELEASEPATH=RELEASEPATH.group(1)
 REQDIR=RELEASEPATH+'/epics/tools/burtreq'
-if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR)
+if not os.path.exists(REQDIR): exit('Missing REQDIR:  '+REQDIR,None)
 
 def getChannels(det,sector=None):
   # THIS IS ONLY USED TO GENERATE THE REQ FILES
@@ -103,6 +107,27 @@ def getChannels(det,sector=None):
     for ss in sectors:
       for rr in [1,2,3]:
         prefixes.append('B_DET_DC_LV_SEC%d_R%d'%(ss,rr))
+  elif det=='MVT_HV':
+    for ll in [1,2,3,4,5,6]:
+      prefixes.append('B_DET_FMT_HV_IN_L%d_STRIP'%(ll))
+      prefixes.append('B_DET_FMT_HV_OUT_L%d_STRIP'%(ll))
+      prefixes.append('B_DET_FMT_HV_L%d_DRIFT'%(ll))
+    for ss in [1,2,3]:
+      for ll in [1,2,3,4,5,6]:
+        prefixes.append('B_DET_BMT_HV_SEC%d_L%d_DRIFT'%(ss,ll))
+        prefixes.append('B_DET_BMT_HV_SEC%d_L%d_STRIP'%(ss,ll))
+  elif det=='CND_HV':
+    for imo in ['Inner','Middle','Outer']:
+      for seg in range(1,25):
+        for ch in [1,2]:
+          prefixes.append('B_DET_CND_HV_%s_Seg%.2d_E%d'%(imo,seg,ch))
+  elif det=='MVT_LV':
+    sys.exit('NOT READY FOR MVT_LV')
+  elif det=='RICH_HV':
+    for tile in range(138):
+      prefixes.append('B_DET_RICH_HV_TILE%.3d'%(tile+1))
+  elif det=='RICH_LV':
+    sys.exit('NOT READY FOR RICH_LV')
 
   return prefixes
 
@@ -129,18 +154,50 @@ def printPVsMya(det,sector=None):
         elif det=='DC_HV':  deadband=0.1
       print channel+field,deadband
 
+def printPVsAlarm(det):
+  pvxml='''
+      <pv name="___PV___">
+        <description>___DESC___</description>
+        <latching>true</latching>
+        <annunciating>true</annunciating>
+        <delay>10.0</delay>
+        <count>0</count>
+        <guidance>
+          <title>Guidance</title>
+          <details>Try to reset the voltage channel using the GUI. If problem persists, contact the expert.</details>
+        </guidance>
+        <display>
+          <title>Open HV GUI</title>
+          <details>/CLAS12_Share/apps/clasTreeApp/HVMonitor.opi "TYPE=4527,P=___PREFIX___,E=___PV___"</details>
+        </display>
+      </pv>'''
+  detname=det.split('_')[0]
+  system=det.split('_')[1]
+  print '  <component name="'+detname+'">'
+  print '    <component name="'+system+'">'
+  for channel in getChannels(det):
+    xx=pvxml.replace('___DESC___',detname + ' ' + system)
+    xx=xx.replace('___PV___',channel)
+    xx=xx.replace('___PREFIX___','B_DET_'+detname+'_'+system)
+    print xx
+  print '    </component>'
+  print '  </component>'
+
 def saveBurt(snpFilename,det,sector=None):
   reqFilename=REQDIR+'/'+det+'.req'
-  if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename)
-  burtopts='-f '+reqFilename+' -o '+snpFilename
-  p = subprocess.Popen(['burtrb', burtopts], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+  if not os.path.exists(reqFilename): exit('Missing burt REQ file:  '+reqFilename,None)
+  cmd=['burtrb','-f',reqFilename,'-o',snpFilename]
+  print ' '.join(cmd)
+  p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
   return [out,err]
 
 def restoreBurt(snpFilename):
-  burtopts='-f '+snpFilename
-  p = subprocess.Popen(['burtwb', burtopts], stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+  cmd=['burtwb','-f',snpFilename]
+  print ' '.join(cmd)
+  p = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   out, err = p.communicate()
+  print out,err
   return [out,err]
 
 class SaveRestore:
@@ -149,33 +206,35 @@ class SaveRestore:
   entry = gtk.Entry(max=0)
   progressBar = None
   filename = None
+  oldChooser = None
+  newChooser = None
 
   def chooseOldBackup(self,det):
-    chooser = gtk.FileChooserDialog(
+    self.oldChooser = gtk.FileChooserDialog(
       title='RESTORE HV BACKUP',
       parent=None,
       action=gtk.FILE_CHOOSER_ACTION_OPEN,
       buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
                gtk.STOCK_OPEN,  gtk.RESPONSE_OK)
       )
-    chooser.set_preview_widget_active(True)
-    chooser.set_default_size(800,300)
-    chooser.set_default_response(gtk.RESPONSE_CANCEL)
-    chooser.set_current_folder(DATADIR+'/'+det)
+    self.oldChooser.set_preview_widget_active(True)
+    self.oldChooser.set_default_size(800,300)
+    self.oldChooser.set_default_response(gtk.RESPONSE_CANCEL)
+    self.oldChooser.set_current_folder(DATADIR+'/'+det)
     self.filename = None
-    response = chooser.run()
-    if response == gtk.RESPONSE_OK: self.filename = chooser.get_filename()
-    chooser.destroy()
-    if self.filename==None: exit('RESTORE CANCELLED.')
-    if not os.path.exists(self.filename): exit('FILE D.N.E.\n\nRESTORE CANCELLED.')
+    response = self.oldChooser.run()
+    if response == gtk.RESPONSE_OK: self.filename = self.oldChooser.get_filename()
+    self.oldChooser.destroy()
+    if self.filename==None: exit('RESTORE CANCELLED.',None)
+    if not os.path.exists(self.filename): exit('FILE D.N.E.\n\nRESTORE CANCELLED.',None)
     return self.filename
 
   def chooseNewBackup(self,det,sec):
-    win = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    win.set_default_size(400,100)
-    win.set_title('CREATE HV BACKUP')
+    newChooser = gtk.Window(gtk.WINDOW_TOPLEVEL)
+    newChooser.set_default_size(400,100)
+    newChooser.set_title('CREATE HV BACKUP')
     box = gtk.VBox(False, 0)
-    win.add(box)
+    newChooser.add(box)
     box.show()
     text = gtk.Label()
     text2 = gtk.Label()
@@ -190,14 +249,14 @@ class SaveRestore:
     box.pack_start(self.entry,True,True,0)
     self.entry.show()
     button = gtk.Button(stock=gtk.STOCK_OK)
-    button.connect('clicked',self.readEntry,win)
+    button.connect('clicked',self.readEntry,newChooser)
     box.pack_start(button,True,True,0)
     button.show()
     self.progressBar=gtk.ProgressBar(adjustment=None)
     self.progressBar.show()
     box.pack_start(self.progressBar)
     self.filename = None
-    win.show()
+    newChooser.show()
     gtk.main()
 #        win.destroy()
     return DATADIR+'/'+det+'/'+self.filename
@@ -215,11 +274,12 @@ class SaveRestore:
 
   def saveBurt(self,snpFilename,det,sector):
     [out,err]=saveBurt(snpFilename,det,sector)
-    exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename)
+    print out,err
+    exit('BACKEDUP SETTINGS TO:\n\n'+snpFilename,self.newChooser)
 
   def restoreBurt(self,snpFilename):
     [out,err]=restoreBurt(snpFilename)
-    exit('RESTORED SETTINGS FROM\n\n'+snpFilename)
+    exit('RESTORED SETTINGS FROM\n\n'+snpFilename,None)
 
 #def getParent():
 #  os.getppid()
@@ -236,6 +296,7 @@ def main():
   saverestore=None
   printMya=False
   printBurt=False
+  printAlarm=False
 
   for arg in sys.argv[:]:
     if arg=='-h' or arg=='--help':
@@ -245,6 +306,9 @@ def main():
       sys.argv.remove(arg)
     elif arg=='-b':
       printBurt=True
+      sys.argv.remove(arg)
+    elif arg=='-a':
+      printAlarm=True
       sys.argv.remove(arg)
     elif arg.find('=')>=0:
       (key,val)=arg.split('=',1)
@@ -262,6 +326,9 @@ def main():
     sys.exit()
   if printMya:
     printPVsMya(det)
+    sys.exit()
+  if printAlarm:
+    printPVsAlarm(det)
     sys.exit()
 
   if len(sys.argv)!=1: sys.exit(usage)

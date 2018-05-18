@@ -22,6 +22,7 @@ ioccaen_SRCS_vxWorks += -nil-
 # CAEN_HV/include
 USR_INCLUDES += -I$(TOP)/include
 
+ioccaen_LIBS += calc
 ioccaen_LIBS += sy1527epics1
 ioccaen_LIBS += caenhvwrapper 
 ioccaen_LIBS += hscaenet 

@@ -5,9 +5,11 @@ include $(TOP)/configure/CONFIG
 
 # Install databases, templates & substitutions like this
 DB += $(wildcard ../*.db)
+DB += $(wildcard ../*.template)
 DB += $(wildcard ../*.substitutions)
 
 BEAST += mcc_alarm.xml
+BEAST += bufferDewar.xml
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

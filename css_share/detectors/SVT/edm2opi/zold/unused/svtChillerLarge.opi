@@ -1,0 +1,2100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0">
+  <x>128</x>
+  <y>120</y>
+  <width>655</width>
+  <height>700</height>
+  <font>
+    <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+  </font>
+  <foreground_color>
+    <color blue="133" green="133" name="grey-8" red="133"/>
+  </foreground_color>
+  <background_color>
+    <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+  </background_color>
+  <show_grid>false</show_grid>
+  <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <line_width>1</line_width>
+    <x>0</x>
+    <y>0</y>
+    <width>656</width>
+    <height>26</height>
+    <name>EDM Rectangle</name>
+    <line_color>
+      <color blue="205" green="220" name="LINAC canvas" red="206"/>
+    </line_color>
+    <transparent>false</transparent>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <visible>true</visible>
+    <line_style>0</line_style>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>7</x>
+    <y>39</y>
+    <name>0</name>
+    <width>234</width>
+    <height>72</height>
+    <lock_children>true</lock_children>
+    <border_style>0</border_style>
+    <show_scrollbar>false</show_scrollbar>
+    <transparent>true</transparent>
+    <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>11</x>
+      <y>16</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="1"/>
+      </font>
+      <width>91</width>
+      <height>21</height>
+      <name>EDM Message Button</name>
+      <push_action_index>0</push_action_index>
+      <released_action_index>1</released_action_index>
+      <actions hook="true" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:ONOFF</pv_name>
+          <value>1</value>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:ONOFF</pv_name>
+          <value>1</value>
+        </action>
+      </actions>
+      <rules>
+        <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+          <exp bool_exp="widget.getValue() == 1">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:ONOFF</pv>
+        </rule>
+      </rules>
+      <show_led>false</show_led>
+      <show_boolean_label>true</show_boolean_label>
+      <square_button>true</square_button>
+      <on_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </on_color>
+      <off_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </off_color>
+      <on_label>CHILLER ON</on_label>
+      <off_label>CHILLER ON</off_label>
+      <toggle_button>false</toggle_button>
+      <show_confirm_dialog>0</show_confirm_dialog>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>115</x>
+      <y>16</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="1"/>
+      </font>
+      <width>91</width>
+      <height>21</height>
+      <name>EDM Message Button</name>
+      <push_action_index>0</push_action_index>
+      <released_action_index>1</released_action_index>
+      <actions hook="true" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:ONOFF</pv_name>
+          <value>0</value>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:ONOFF</pv_name>
+          <value>0</value>
+        </action>
+      </actions>
+      <rules>
+        <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+          <exp bool_exp="widget.getValue() == 1">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:ONOFF</pv>
+        </rule>
+      </rules>
+      <show_led>false</show_led>
+      <show_boolean_label>true</show_boolean_label>
+      <square_button>true</square_button>
+      <on_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </on_color>
+      <off_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </off_color>
+      <on_label>CHILLER OFF</on_label>
+      <off_label>CHILLER OFF</off_label>
+      <toggle_button>false</toggle_button>
+      <show_confirm_dialog>0</show_confirm_dialog>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>51</x>
+      <y>48</y>
+      <width>120</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <rules>
+        <rule name="visibleRule" out_exp="false" prop_id="visible">
+          <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;1.0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>false</value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:GetMODE02</pv>
+        </rule>
+      </rules>
+      <name>EDM Label</name>
+      <text>CHILLER ON</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>50</x>
+      <y>47</y>
+      <width>120</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <rules>
+        <rule name="visibleRule" out_exp="false" prop_id="visible">
+          <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>false</value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:GetMODE02</pv>
+        </rule>
+      </rules>
+      <name>EDM Label</name>
+      <text>CHILLER OFF</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="255" green="255" name="Controller/alt" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="255" green="255" name="Controller/alt" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <line_width>2</line_width>
+      <x>-1</x>
+      <y>-1</y>
+      <width>235</width>
+      <height>73</height>
+      <name>EDM Rectangle</name>
+      <line_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </line_color>
+      <transparent>true</transparent>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <visible>true</visible>
+      <line_style>0</line_style>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>212</x>
+    <y>1</y>
+    <width>225</width>
+    <height>27</height>
+    <font>
+      <fontdata fontName="helvetica" height="24" pixels="true" style="0"/>
+    </font>
+    <name>EDM Label</name>
+    <text>SVT Chiller Controls</text>
+    <auto_size>true</auto_size>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>13</x>
+    <y>321</y>
+    <name>1</name>
+    <width>388</width>
+    <height>154</height>
+    <lock_children>true</lock_children>
+    <border_style>0</border_style>
+    <show_scrollbar>false</show_scrollbar>
+    <transparent>true</transparent>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+      <x>267</x>
+      <y>132</y>
+      <width>119</width>
+      <height>21</height>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="165" green="178" name="LINAC help" red="166"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <pv_name>B_SVT_CHILLER:GetSP03</pv_name>
+      <precision_from_pv>false</precision_from_pv>
+      <show_units>false</show_units>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision>0</precision>
+      <horizontal_alignment>0</horizontal_alignment>
+      <format_type>1</format_type>
+      <border_style>None</border_style>
+      <transparent>false</transparent>
+      <name>EDM TextInput</name>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+      <x>267</x>
+      <y>80</y>
+      <width>119</width>
+      <height>21</height>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="165" green="178" name="LINAC help" red="166"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <pv_name>B_SVT_CHILLER:GetSP04</pv_name>
+      <precision_from_pv>false</precision_from_pv>
+      <show_units>false</show_units>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision>0</precision>
+      <horizontal_alignment>0</horizontal_alignment>
+      <format_type>1</format_type>
+      <border_style>None</border_style>
+      <transparent>false</transparent>
+      <name>EDM TextInput</name>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+      <x>267</x>
+      <y>106</y>
+      <width>119</width>
+      <height>21</height>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="165" green="178" name="LINAC help" red="166"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <pv_name>B_SVT_CHILLER:GetSP05</pv_name>
+      <precision_from_pv>false</precision_from_pv>
+      <show_units>false</show_units>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision>0</precision>
+      <horizontal_alignment>0</horizontal_alignment>
+      <format_type>1</format_type>
+      <border_style>None</border_style>
+      <transparent>false</transparent>
+      <name>EDM TextInput</name>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0">
+      <x>152</x>
+      <y>80</y>
+      <width>100</width>
+      <height>20</height>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+      </font>
+      <pv_name>B_SVT_CHILLER:SetSP04</pv_name>
+      <precision_from_pv>false</precision_from_pv>
+      <show_units>false</show_units>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision>0</precision>
+      <horizontal_alignment>0</horizontal_alignment>
+      <format_type>1</format_type>
+      <border_style>None</border_style>
+      <transparent>false</transparent>
+      <name>EDM TextInput</name>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0">
+      <x>151</x>
+      <y>106</y>
+      <width>100</width>
+      <height>20</height>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+      </font>
+      <pv_name>B_SVT_CHILLER:SetSP05</pv_name>
+      <precision_from_pv>false</precision_from_pv>
+      <show_units>false</show_units>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision>0</precision>
+      <horizontal_alignment>0</horizontal_alignment>
+      <format_type>1</format_type>
+      <border_style>None</border_style>
+      <transparent>false</transparent>
+      <name>EDM TextInput</name>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>0</x>
+      <y>132</y>
+      <width>150</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <name>EDM Label</name>
+      <text>OverTemp Trip</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>0</x>
+      <y>80</y>
+      <width>150</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <name>EDM Label</name>
+      <text>Temp Hi Limit</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>0</x>
+      <y>106</y>
+      <width>150</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <name>EDM Label</name>
+      <text>Temp Low Limit</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>0</x>
+      <y>0</y>
+      <name>0</name>
+      <width>388</width>
+      <height>77</height>
+      <lock_children>true</lock_children>
+      <border_style>0</border_style>
+      <show_scrollbar>false</show_scrollbar>
+      <transparent>true</transparent>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+        <x>267</x>
+        <y>27</y>
+        <width>120</width>
+        <height>21</height>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <background_color>
+          <color blue="165" green="178" name="LINAC help" red="166"/>
+        </background_color>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <pv_name>B_SVT_CHILLER:GetPV00</pv_name>
+        <precision_from_pv>false</precision_from_pv>
+        <show_units>false</show_units>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <precision>0</precision>
+        <horizontal_alignment>0</horizontal_alignment>
+        <format_type>1</format_type>
+        <border_style>None</border_style>
+        <transparent>false</transparent>
+        <name>EDM TextInput</name>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+        <x>267</x>
+        <y>0</y>
+        <width>120</width>
+        <height>21</height>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <background_color>
+          <color blue="165" green="178" name="LINAC help" red="166"/>
+        </background_color>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <pv_name>B_SVT_CHILLER:GetSP00</pv_name>
+        <precision_from_pv>false</precision_from_pv>
+        <show_units>false</show_units>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <precision>0</precision>
+        <horizontal_alignment>0</horizontal_alignment>
+        <format_type>1</format_type>
+        <border_style>None</border_style>
+        <transparent>false</transparent>
+        <name>EDM TextInput</name>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+        <x>267</x>
+        <y>54</y>
+        <width>120</width>
+        <height>21</height>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <background_color>
+          <color blue="165" green="178" name="LINAC help" red="166"/>
+        </background_color>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <pv_name>B_SVT_CHILLER:GetPV01</pv_name>
+        <precision_from_pv>false</precision_from_pv>
+        <show_units>false</show_units>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <precision>0</precision>
+        <horizontal_alignment>0</horizontal_alignment>
+        <format_type>1</format_type>
+        <border_style>None</border_style>
+        <transparent>false</transparent>
+        <name>EDM TextInput</name>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="1.0">
+        <x>153</x>
+        <y>0</y>
+        <width>100</width>
+        <height>20</height>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <font>
+          <fontdata fontName="helvetica" height="12" pixels="true" style="0"/>
+        </font>
+        <pv_name>B_SVT_CHILLER:SetSP00</pv_name>
+        <precision_from_pv>false</precision_from_pv>
+        <show_units>false</show_units>
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <precision>0</precision>
+        <horizontal_alignment>0</horizontal_alignment>
+        <format_type>1</format_type>
+        <border_style>None</border_style>
+        <transparent>false</transparent>
+        <name>EDM TextInput</name>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>27</y>
+        <width>150</width>
+        <height>22</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>External Temp</text>
+        <auto_size>false</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>0</y>
+        <width>150</width>
+        <height>22</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Temp Setpoint</text>
+        <auto_size>false</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>54</y>
+        <width>150</width>
+        <height>22</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Controlled Temp</text>
+        <auto_size>false</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>7</x>
+    <y>119</y>
+    <name>2</name>
+    <width>376</width>
+    <height>94</height>
+    <lock_children>true</lock_children>
+    <border_style>0</border_style>
+    <show_scrollbar>false</show_scrollbar>
+    <transparent>true</transparent>
+    <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>6</x>
+      <y>23</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="1"/>
+      </font>
+      <width>111</width>
+      <height>21</height>
+      <name>EDM Message Button</name>
+      <push_action_index>0</push_action_index>
+      <released_action_index>1</released_action_index>
+      <actions hook="true" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>0</value>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>0</value>
+        </action>
+      </actions>
+      <rules>
+        <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+          <exp bool_exp="widget.getValue() == 1">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:SetSP02</pv>
+        </rule>
+      </rules>
+      <show_led>false</show_led>
+      <show_boolean_label>true</show_boolean_label>
+      <square_button>true</square_button>
+      <on_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </on_color>
+      <off_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </off_color>
+      <on_label>COOLING OFF</on_label>
+      <off_label>COOLING OFF</off_label>
+      <toggle_button>false</toggle_button>
+      <show_confirm_dialog>0</show_confirm_dialog>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>131</x>
+      <y>23</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="1"/>
+      </font>
+      <width>111</width>
+      <height>21</height>
+      <name>EDM Message Button</name>
+      <push_action_index>0</push_action_index>
+      <released_action_index>1</released_action_index>
+      <actions hook="true" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>1</value>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>1</value>
+        </action>
+      </actions>
+      <rules>
+        <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+          <exp bool_exp="widget.getValue() == 1">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:SetSP02</pv>
+        </rule>
+      </rules>
+      <show_led>false</show_led>
+      <show_boolean_label>true</show_boolean_label>
+      <square_button>true</square_button>
+      <on_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </on_color>
+      <off_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </off_color>
+      <on_label>COOLING ON</on_label>
+      <off_label>COOLING ON</off_label>
+      <toggle_button>false</toggle_button>
+      <show_confirm_dialog>0</show_confirm_dialog>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>125</x>
+      <y>56</y>
+      <width>140</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <rules>
+        <rule name="visibleRule" out_exp="false" prop_id="visible">
+          <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>false</value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:GetSP02</pv>
+        </rule>
+      </rules>
+      <name>EDM Label</name>
+      <text>COOLING ON</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>124</x>
+      <y>55</y>
+      <width>140</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <rules>
+        <rule name="visibleRule" out_exp="false" prop_id="visible">
+          <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;1.0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>false</value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:GetSP02</pv>
+        </rule>
+      </rules>
+      <name>EDM Label</name>
+      <text>COOLING OFF</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="255" green="255" name="Controller/alt" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="255" green="255" name="Controller/alt" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>258</x>
+      <y>23</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <font>
+        <fontdata fontName="helvetica" height="12" pixels="true" style="1"/>
+      </font>
+      <width>111</width>
+      <height>21</height>
+      <name>EDM Message Button</name>
+      <push_action_index>0</push_action_index>
+      <released_action_index>1</released_action_index>
+      <actions hook="true" hook_all="true">
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>2</value>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>B_SVT_CHILLER:SetSP02</pv_name>
+          <value>2</value>
+        </action>
+      </actions>
+      <rules>
+        <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+          <exp bool_exp="widget.getValue() == 1">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <exp bool_exp="true">
+            <value>
+              <color blue="184" green="198" name="LINAC title" red="185"/>
+            </value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:SetSP02</pv>
+        </rule>
+      </rules>
+      <show_led>false</show_led>
+      <show_boolean_label>true</show_boolean_label>
+      <square_button>true</square_button>
+      <on_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </on_color>
+      <off_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </off_color>
+      <on_label>COOLING AUTO</on_label>
+      <off_label>COOLING AUTO</off_label>
+      <toggle_button>false</toggle_button>
+      <show_confirm_dialog>0</show_confirm_dialog>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>124</x>
+      <y>55</y>
+      <width>150</width>
+      <height>20</height>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <rules>
+        <rule name="visibleRule" out_exp="false" prop_id="visible">
+          <exp bool_exp="pv0>=2.0&amp;&amp; pv0&lt;3.0">
+            <value>true</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>false</value>
+          </exp>
+          <pv trig="true">B_SVT_CHILLER:GetSP02</pv>
+        </rule>
+      </rules>
+      <name>EDM Label</name>
+      <text>COOLING AUTO</text>
+      <auto_size>false</auto_size>
+      <border_style>0</border_style>
+      <border_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </border_color>
+      <background_color>
+        <color blue="255" green="255" name="Disconn/Invalid" red="255"/>
+      </background_color>
+      <foreground_color>
+        <color blue="0" green="255" name="Monitor: NORMAL" red="0"/>
+      </foreground_color>
+      <transparent>true</transparent>
+      <horizontal_alignment>0</horizontal_alignment>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <line_width>2</line_width>
+      <x>-1</x>
+      <y>-1</y>
+      <width>377</width>
+      <height>95</height>
+      <name>EDM Rectangle</name>
+      <line_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </line_color>
+      <transparent>true</transparent>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <visible>true</visible>
+      <line_style>0</line_style>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>6</x>
+    <y>221</y>
+    <name>3</name>
+    <width>376</width>
+    <height>83</height>
+    <lock_children>true</lock_children>
+    <border_style>0</border_style>
+    <show_scrollbar>false</show_scrollbar>
+    <transparent>true</transparent>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>18</x>
+      <y>27</y>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <width>161</width>
+      <height>31</height>
+      <name>EDM menu button</name>
+      <pv_name>B_SVT_CHILLER:SetPL</pv_name>
+      <actions_from_pv>true</actions_from_pv>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+      <background_color>
+        <color blue="165" green="178" name="LINAC help" red="166"/>
+      </background_color>
+      <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+      <font>
+        <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+      </font>
+      <line_width>1</line_width>
+      <x>194</x>
+      <y>27</y>
+      <width>161</width>
+      <height>31</height>
+      <name>EDM Text Update</name>
+      <pv_name>B_SVT_CHILLER:PUMPLEVEL</pv_name>
+      <transparent>false</transparent>
+      <horizontal_alignment>1</horizontal_alignment>
+      <border_width>0</border_width>
+      <border_style>1</border_style>
+      <border_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </border_color>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <precision_from_pv>true</precision_from_pv>
+      <show_units>true</show_units>
+      <format_type>0</format_type>
+      <precision>0</precision>
+      <foreground_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </foreground_color>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <line_width>2</line_width>
+      <x>-1</x>
+      <y>-1</y>
+      <width>377</width>
+      <height>84</height>
+      <name>EDM Rectangle</name>
+      <line_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </line_color>
+      <transparent>true</transparent>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <visible>true</visible>
+      <line_style>0</line_style>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>408</x>
+    <y>111</y>
+    <width>2</width>
+    <height>0</height>
+    <font>
+      <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+    </font>
+    <rules>
+      <rule name="visibleRule" out_exp="false" prop_id="visible">
+        <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;0.0">
+          <value>true</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>false</value>
+        </exp>
+        <pv trig="true">B_SVT_CHILLER:STATUS</pv>
+      </rule>
+    </rules>
+    <name>EDM Label</name>
+    <text/>
+    <auto_size>true</auto_size>
+    <border_style>0</border_style>
+    <border_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </border_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <transparent>true</transparent>
+    <horizontal_alignment>0</horizontal_alignment>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>6</x>
+    <y>492</y>
+    <name>4</name>
+    <width>547</width>
+    <height>168</height>
+    <lock_children>true</lock_children>
+    <border_style>0</border_style>
+    <show_scrollbar>false</show_scrollbar>
+    <transparent>true</transparent>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <x>16</x>
+      <y>17</y>
+      <name>0</name>
+      <width>504</width>
+      <height>134</height>
+      <lock_children>true</lock_children>
+      <border_style>0</border_style>
+      <show_scrollbar>false</show_scrollbar>
+      <transparent>true</transparent>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>173</x>
+        <y>0</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:STATUS</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>173</x>
+        <y>56</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ALARM</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>173</x>
+        <y>83</y>
+        <width>55</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:WARN</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>WARN</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="255" green="255" name="Controller/alt" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="255" green="255" name="Controller/alt" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>441</x>
+        <y>0</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:OVERTEMP</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>441</x>
+        <y>28</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:LOWLEVEL</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>441</x>
+        <y>56</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:HIGHLEVEL</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>441</x>
+        <y>83</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ECVM</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>1</y>
+        <width>110</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Status</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:STATUS</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>144</x>
+        <y>0</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>27</y>
+        <width>97</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Error</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ERROR</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>144</x>
+        <y>28</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>54</y>
+        <width>102</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Alarm</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ALARM</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>144</x>
+        <y>55</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>82</y>
+        <width>125</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Warning</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:WARN</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>144</x>
+        <y>83</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>254</x>
+        <y>1</y>
+        <width>145</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller OverTemp</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:OVERTEMP</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>414</x>
+        <y>0</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>254</x>
+        <y>27</y>
+        <width>141</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Low Level</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:LOWLEVEL</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>414</x>
+        <y>28</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>254</x>
+        <y>54</y>
+        <width>144</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller High Level</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:HIGHLEVEL</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>414</x>
+        <y>55</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>254</x>
+        <y>82</y>
+        <width>123</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller External</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=0.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ECVM</pv>
+          </rule>
+        </rules>
+        <line_width>1</line_width>
+        <x>414</x>
+        <y>83</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>173</x>
+        <y>28</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;2.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:ERROR</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>173</x>
+        <y>112</y>
+        <width>62</width>
+        <height>21</height>
+        <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=23.0&amp;&amp; pv0&lt;0.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetPV00</pv>
+          </rule>
+          <rule name="backcolor_alarm" out_exp="false" prop_id="foreground_color">
+            <exp bool_exp="pvSev0==-1">
+              <value>
+                <color name="Invalid"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==1">
+              <value>
+                <color name="Major"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==2">
+              <value>
+                <color name="Minor"/>
+              </value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetPV00</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>0</x>
+        <y>110</y>
+        <width>118</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>External Temp</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <line_width>1</line_width>
+        <x>144</x>
+        <y>111</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <rules>
+          <rule name="lineColorAlarmRule" out_exp="false" prop_id="line_color">
+            <exp bool_exp="pvSev0==-1">
+              <value>
+                <color name="Invalid"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==1">
+              <value>
+                <color name="Major"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==2">
+              <value>
+                <color name="Minor"/>
+              </value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetPV00</pv>
+          </rule>
+          <rule name="backColorAlarmRule" out_exp="false" prop_id="background_color">
+            <exp bool_exp="pvSev0==-1">
+              <value>
+                <color name="Invalid"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==1">
+              <value>
+                <color name="Major"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==2">
+              <value>
+                <color name="Minor"/>
+              </value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetPV00</pv>
+          </rule>
+        </rules>
+        <line_style>0</line_style>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>441</x>
+        <y>111</y>
+        <width>62</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <rules>
+          <rule name="visibleRule" out_exp="false" prop_id="visible">
+            <exp bool_exp="pv0>=1.0&amp;&amp; pv0&lt;100.0">
+              <value>true</value>
+            </exp>
+            <exp bool_exp="true">
+              <value>false</value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetSP00.STAT</pv>
+          </rule>
+        </rules>
+        <name>EDM Label</name>
+        <text>ALARM</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="Major" red="255"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <x>254</x>
+        <y>110</y>
+        <width>115</width>
+        <height>21</height>
+        <font>
+          <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+        </font>
+        <name>EDM Label</name>
+        <text>Chiller Comm.</text>
+        <auto_size>true</auto_size>
+        <border_style>0</border_style>
+        <border_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </border_color>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <foreground_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </foreground_color>
+        <transparent>true</transparent>
+        <horizontal_alignment>0</horizontal_alignment>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+        <border_alarm_sensitive>false</border_alarm_sensitive>
+        <line_width>1</line_width>
+        <x>414</x>
+        <y>111</y>
+        <width>21</width>
+        <height>21</height>
+        <name>EDM Rectangle</name>
+        <line_color>
+          <color blue="0" green="0" name="black-14" red="0"/>
+        </line_color>
+        <transparent>false</transparent>
+        <background_color>
+          <color blue="184" green="198" name="LINAC title" red="185"/>
+        </background_color>
+        <visible>true</visible>
+        <rules>
+          <rule name="lineColorAlarmRule" out_exp="false" prop_id="line_color">
+            <exp bool_exp="pvSev0==-1">
+              <value>
+                <color name="Invalid"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==1">
+              <value>
+                <color name="Major"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==2">
+              <value>
+                <color name="Minor"/>
+              </value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetSP00</pv>
+          </rule>
+          <rule name="backColorAlarmRule" out_exp="false" prop_id="background_color">
+            <exp bool_exp="pvSev0==-1">
+              <value>
+                <color name="Invalid"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==1">
+              <value>
+                <color name="Major"/>
+              </value>
+            </exp>
+            <exp bool_exp="pvSev0==2">
+              <value>
+                <color name="Minor"/>
+              </value>
+            </exp>
+            <pv trig="true">B_SVT_CHILLER:GetSP00</pv>
+          </rule>
+        </rules>
+        <line_style>0</line_style>
+      </widget>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0">
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <line_width>2</line_width>
+      <x>-1</x>
+      <y>-1</y>
+      <width>548</width>
+      <height>169</height>
+      <name>EDM Rectangle</name>
+      <line_color>
+        <color blue="0" green="0" name="black-14" red="0"/>
+      </line_color>
+      <transparent>true</transparent>
+      <background_color>
+        <color blue="184" green="198" name="LINAC title" red="185"/>
+      </background_color>
+      <visible>true</visible>
+      <line_style>0</line_style>
+    </widget>
+  </widget>
+</display>

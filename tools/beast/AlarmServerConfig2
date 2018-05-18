@@ -1,0 +1,59 @@
+#!/bin/sh
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+EXE_DIR=/usr/clas12/css/4.3.3/linux-x86_64/bin
+INI_DIR=/usr/clas12/release/pro/epics/tools/beast
+XML_DIR=/usr/clas12/release/pro/epics/apps/beast
+
+if [ "$1" != "" ]; then
+    ROOT=$1
+    ROOT_XML=$INI_DIR/$1_root.xml
+    ROOT_INC=$INI_DIR/$1_includes.cfg
+else
+    echo "Usage: $0 <root> [xmlfile1 [xmlfile2 [xmlfile3 ...]]]"
+    exit
+fi
+
+# if input xml file(s) given on command line, do not delete database, just modify
+if [ "$#" -gt 1 ]; then
+
+    for xx in "${@:2}"; do
+        if [ ! -e "$xx" ]; then
+            echo "$0:  file not found ($xx)"
+            exit
+        fi
+    done
+    for xx in "${@:2}"; do
+        $EXE_DIR/AlarmConfigTool -root $ROOT -modify -file $xx -data /dev/null
+    done
+
+# if no input xml file(s) given, delete database, and read in all xmls in XML_DIR
+else
+
+    if [ -e "$ROOT_XML" ]; then
+        # Delete existing database
+        echo $EXE_DIR/AlarmConfigTool -root $ROOT -import -file $ROOT_XML -data /dev/null
+    else
+        echo "$0: file not found ($ROOT_XML)"
+        exit
+    fi
+
+    if [ -e "$ROOT_INC" ]; then
+        # Import all included XMLs
+        while read line
+        do 
+            [[ "$line" =~ ^#.*$ ]] && continue 
+            XML_FILE="$XML_DIR/$line"
+            if [ -f "$XML_FILE" ]; then
+                echo $EXE_DIR/AlarmConfigTool -root $ROOT -modify -file $XML_FILE -data /dev/null
+            fi
+        done <  $ROOT_INC
+    fi
+
+fi
+
+# Export full generated alarm tree
+echo $EXE_DIR/AlarmConfigTool -root $ROOT -export -file $INI_DIR/$ROOT\_tree.xml -data /dev/null
+

@@ -1,19 +1,22 @@
 TOP=../..
 include $(TOP)/configure/CONFIG
 #----------------------------------------
-#  ADD MACRO DEFINITIONS BELOW HERE
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
 
-# Install databases, templates & substitutions like this
-#DB += dbExample1.db
-DB += bom_scaler.db
-DB += bom_read_control.db
-DB += bom_stop_start.db
-DB += bom_sum.db
+#----------------------------------------------------
+#  Optimization of db files using dbst (DEFAULT: NO)
+#DB_OPT = YES
 
+#----------------------------------------------------
+DB += $(wildcard ../*.db)
+DB += $(wildcard ../*.substitutions)
+DB += $(wildcard ../*.template)
+
+#----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 
 include $(TOP)/configure/RULES
 #----------------------------------------
-#  ADD EXTRA GNUMAKE RULES BELOW HERE
+#  ADD RULES AFTER THIS LINE
 

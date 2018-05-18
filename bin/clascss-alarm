@@ -7,7 +7,7 @@
 
 host=`hostname`
 
-disallowedHosts=( clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 )
+disallowedHosts=( clondb1 clondb2 clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 clondaq1 clondaq2 clondaq3 clondaq4 clondaq5 clondaq6 clondaq7)
 for xx in "${disallowedHosts[@]}"
 do
   if [ "$host" == "$xx" ] || [ "$host" == "$xx.jlab.org" ]
@@ -26,9 +26,19 @@ tmp_path=/tmp/CSS-Workspaces
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 share=$DIR/../css_share
 
-plugin_profile=$share/common/prefs/plugin_customization.ini
-#plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
-workspace=$share/common/workspaces/Default_Torus
+plugin_dir=$share/common/prefs
+
+workspace_basename=Default_Torus
+plugin_basename=plugin_customization.ini
+if [ "$1" == "alarmsu" ]
+then
+  plugin_basename=plugin_customization-alarmsu.ini
+  workspace_basename=alarmsu
+fi
+
+plugin_profile=$plugin_dir/$plugin_basename
+
+workspace=$share/common/workspaces/$workspace_basename
 
 # generate a temporary css workspace:
 #   Note: needs rw from all groups onliners, clas, etc.
@@ -42,7 +52,7 @@ cp -rf $plugin_profile $wsp
 
 # we want to run *everything* from the wsp workspace:
 css -data $wsp \
-    -pluginCustomization $wsp/plugin_customization.ini \
+    -pluginCustomization $wsp/$plugin_basename \
     -share_link $share=/CLAS12_Share \
     -nosplash
 

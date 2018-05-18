@@ -1,0 +1,121 @@
+
+############################################################
+# dummy, just for alias resolution .NAME:
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") {
+    alias("B_DET_$(Det)_$(Sys)_$(Element)")
+}
+
+############################################################
+# set thresholds:
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgSet") {
+    field(DTYP,"JLAB_SCALERS")
+    field(DESC,"scaler threshold TRG")
+    field(OUT,"#C$(CScode) S$(ThreshTRG)")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgSet")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet") {
+    field(DTYP,"JLAB_SCALERS")
+    field(DESC,"scaler threshold TDC")
+    field(OUT,"#C$(CScode) S$(ThreshTDC)")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcSet")
+}
+
+############################################################
+# read thresholds:
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrg") {
+    field(DTYP,"JLAB_SCALERS")
+    field(DESC,"scaler threshold TRG")
+    field(INP,"#C$(CScode) S$(ThreshTRG)")
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrg")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc") {
+    field(DTYP,"JLAB_SCALERS")
+    field(DESC,"scaler threshold TDC")
+    field(INP,"#C$(CScode) S$(ThreshTDC)")
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdc")
+}
+
+############################################################
+# "baseline" thresholds (value at IOC startup):
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdc CP")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase")
+    field(CALC,"B>0 ? B : A")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcBase")
+}
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrg CP")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase")
+    field(CALC,"B>0 ? B : A")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgBase")
+}
+
+############################################################
+# offset thresholds relative to baseline:
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff") {
+    field(VAL,"0")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcOff")
+}
+record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff") {
+    field(VAL,"0")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgOff")
+}
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcAdj") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcOff")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcBase")
+    field(CALC,"A+B")
+    field(OOPT,"On Change")
+    field(DOPT,"Use CALC")
+    field(OUT,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTdcSet CPP")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTdcAdj")
+}
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgAdj") {
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgOff")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgBase")
+    field(CALC,"A+B")
+    field(OOPT,"On Change")
+    field(DOPT,"Use CALC")
+    field(OUT,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):tTrgSet CPP")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):tTrgAdj")
+}
+
+############################################################
+# read scalers:
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrgG") {
+    field(DESC,"TRG Gated")
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(CountsGTRG)") 
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):c1")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):cTrgG")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdcG") {
+    field(DESC,"TDC Gated")
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(CountsGTDC)") 
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):c2")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):cTdcG")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTrg") {
+    field(DESC,"TRG")
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(CountsTRG)") 
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):c3")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):cTrg")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cTdc") {
+    field(DESC,"TDC")
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(CountsTDC)") 
+    field(SCAN,"2 second")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):c4")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):cTdc")
+}
+
+

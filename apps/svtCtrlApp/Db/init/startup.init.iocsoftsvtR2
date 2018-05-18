@@ -1,0 +1,25 @@
+# IOC: <iocsoftsvtR2>
+# APP: iocsoftsvtApps
+# Third load (start up sequencers)
+seq &seq_crate4Off
+epicsThreadSleep(5)
+seq &modCntrl,"MODULE=R2S1,HS=9,LS=1"
+seq &modCntrl,"MODULE=R2S2,HS=9,LS=1"
+seq &modCntrl,"MODULE=R2S3,HS=9,LS=2"
+seq &modCntrl,"MODULE=R2S4,HS=9,LS=2"
+seq &modCntrl,"MODULE=R2S5,HS=9,LS=3"
+seq &modCntrl,"MODULE=R2S6,HS=9,LS=3"
+seq &modCntrl,"MODULE=R2S7,HS=9,LS=4"
+seq &modCntrl,"MODULE=R2S8,HS=9,LS=4"
+seq &modCntrl,"MODULE=R2S9,HS=10,LS=5"
+seq &modCntrl,"MODULE=R2S10,HS=10,LS=5"
+seq &modCntrl,"MODULE=R2S11,HS=10,LS=6"
+seq &modCntrl,"MODULE=R2S12,HS=10,LS=6"
+seq &modCntrl,"MODULE=R2S13,HS=10,LS=7"
+seq &modCntrl,"MODULE=R2S14,HS=10,LS=7"
+# Different Interlock value for LV Digital Current
+< R2_LV_VD_ntrlk.init
+epicsThreadSleep(5)
+# HV default setpoints
+< R2_HV_setpt.init
+

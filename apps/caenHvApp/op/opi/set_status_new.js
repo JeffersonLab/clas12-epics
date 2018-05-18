@@ -59,7 +59,7 @@ else if (type == "1527" || type == "4527")
 {	
 	var istatus2 = PVUtil.getDouble(pvs[1]);
 		
-	if (istatus2==0)
+	if (istatus2==0 && istatus>=0)
 	{
 		var statuses=["ON","RUP",  "RDN",  "OVC",  "OVV",  "UNV",  "ExTrip","MAXV", "ExDis",       "InTrip","CalEr","ChUn"];
 		var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Disconnected","Major","Major","Disconnected"];

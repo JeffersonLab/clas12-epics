@@ -78,7 +78,6 @@ if len(csvFiles) == 0:
     print "No files to be processed"
     exit(0)
 
-print "Processing files:"
 csvFiles.sort(key=str.lower)
 
 for csvFile in csvFiles:
@@ -86,7 +85,7 @@ for csvFile in csvFiles:
         print "Warning: empty file, skipping " + csvFile
         continue
 
-    print "  " + csvFile
+    print "Processing BEAST file " + csvFile
     xmlFile = csvFile[:-4] + '.xml'
     csvData = csv.reader(open(csvFile))
     try:

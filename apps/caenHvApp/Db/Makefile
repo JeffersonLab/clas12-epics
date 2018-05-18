@@ -9,9 +9,11 @@ include $(TOP)/configure/CONFIG
 
 #----------------------------------------------------
 DB    += caenhv.db
-DB    += HVDC_VSCAN.db
-DB    += $(wildcard ../*.substitutions)
-DB    += $(wildcard ../*sums*.db)
+DB    += caenlv.db
+DB    += caenboard.db
+DB    += caenchassis.db
+DB    += accessControl.db
+DB    += caenhv_genericStat.db
 
 BEAST += HValarm.xml HValarmDetBased.xml HValarmBeamline.xml
 

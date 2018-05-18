@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 DB += joerger.db
 DB += fcup_calc.db
 DB += photon_ratio.db
+DB += scaler-ped.db
 
 REQ += joerger_settings.req
 REQ += fcup_calc_settings.req

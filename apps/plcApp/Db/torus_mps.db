@@ -260,6 +260,14 @@ record(ao, "$(P)$(R)StopRamp") {
     field(OUT,  "$(P)$(R)Iset PP")
 }
 
+record(bi, "$(P)$(R)Ramping") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Torus_ramping")
+    field(ZNAM, "")
+    field(ONAM, "RAMPING")
+}
+
 #
 # Interlock Summations
 #
@@ -276,12 +284,16 @@ record(calc, "$(P)$(R)IntlkFastDumpSum") {
     field(INPI, "$(P)$(R)QD_Sum3 CP")
     field(INPJ, "$(P)$(R)PLC_Fast_Dump CP")
     field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+    field(HIHI, "1")
+    field(HHSV, "MAJOR")
 }
 
 record(calc, "$(P)$(R)IntlkInternalSum") {
     field(DESC, "MPS Internal")
     field(INPA, "$(P)$(R)Status.B9 CP")
     field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+    field(HIHI, "1")
+    field(HHSV, "MAJOR")
 }
 
 record(calc, "$(P)$(R)IntlkCtrlRampSum") {
@@ -299,12 +311,19 @@ record(calc, "$(P)$(R)IntlkCtrlRampSum") {
     field(INPK, "$(P)$(R)FastDAQ_Comm_Error CP")
     field(INPL, "$(P)$(R)IntlkCtrlRampSum2 CP")
     field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+    field(HIHI, "1")
+    field(HHSV, "MAJOR")
 }
 
 record(calc, "$(P)$(R)IntlkCtrlRampSum2") {
     field(DESC, "Controlled Ramp")
     field(INPA, "$(P)$(R)Splice_Overtemp CP")
+    field(INPB, "$(P)$(R)UPS_Battery_Low CP")
+    field(INPC, "$(P)$(R)FIRE CP")
+    field(INPD, "$(P)$(R)SOL_Quench CP")
     field(CALC, "A|B|C|D|E|F|G|H|I|J|K|L")
+    field(HIHI, "1")
+    field(HHSV, "MAJOR")
 }
 
 #
@@ -316,4 +335,20 @@ record(calc, "$(P)$(R)FastDAQ_Status") {
     field(CALC, "A=0&&B=1?1:0")
     field(HIGH, "1")
     field(HSV,  "MAJOR")
+}
+
+#
+# Alarm for ramping or offset in requested current
+#
+record(calc, "$(P)$(R)I_WARNING") {
+    field(INPA, "$(P)$(R)OnOff CP")
+    field(INPB, "$(P)$(R)I_MPS CP")
+    field(INPC, "$(P)$(R)Iset CP")
+    # INPD = Tolerance
+    field(CALC, "A=0&&(abs(B-C)>D)?1:0")
+    field(PREC, "2")
+    field(HIGH, "1")
+    field(HSV,  "MAJOR")
+    info(autosaveFields_pass0, "D")
+
 }

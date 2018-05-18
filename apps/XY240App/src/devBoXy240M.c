@@ -35,7 +35,7 @@
 #include	<devSup.h>
 #include	<module_types.h>
 #include	<boRecord.h>
-
+#include    <epicsExport.h>
 
 extern int errVerbose;
 extern int Xycom240M_Initialized;
@@ -63,6 +63,7 @@ struct {
 	NULL,
 	write_bo};
 
+epicsExportAddress(dset,devBoXy240M);
 
 static long init(after)
 int after;

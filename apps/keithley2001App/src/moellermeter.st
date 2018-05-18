@@ -17,6 +17,8 @@ trigger
   |-writeout
 */
 
+#define MAXSAMP 4000
+
 %{
 FILE* fd=NULL;
 void openFile(char* basename)
@@ -37,7 +39,7 @@ void openFile(char* basename)
     strcat(filepath,basename);
     fd=fopen(filepath,"w");
 }
-int writeFile(float data[1000],float aperture,float current,int nsamp)
+int writeFile(float data[MAXSAMP],float aperture,float current,int nsamp)
 {
     int ii;
     fprintf(fd,"%.8f %.8f %8d\n",current,aperture,nsamp);
@@ -65,7 +67,7 @@ short opc;             assign opc           to "{P}:opc";
 short setopc;          assign setopc        to "{P}:setopc";
 int nsamples;          assign nsamples      to "{P}:tracpoints";
 float aperture;        assign aperture      to "{P}:aperture";
-float readoutData[1000];   assign readoutData       to "{P}:data";
+float readoutData[MAXSAMP];   assign readoutData       to "{P}:data";
 short readoutActive;   assign readoutActive to "{P}:data.PACT";
 short goreadout;       assign goreadout     to "{P}:data.PROC";
 short pvReset;         assign pvReset       to "{P}:reset";
@@ -208,7 +210,7 @@ ss seqMoellermeter
             sprintf(msg,"Zeroing EPICS Waveform ...");
             pvPut(msg);
             counter=0;
-            while (counter<1000)
+            while (counter<MAXSAMP)
             {
                 readoutData[counter]=0.;
                 counter++;

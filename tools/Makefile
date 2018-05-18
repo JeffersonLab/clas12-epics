@@ -1,5 +1,10 @@
 TOOLDIRS := ${shell find . -maxdepth 1 ! -path . -type d -print}
 
+# remove nonconformant tools:
+TOOLDIRS := $(filter-out ./cyber, $(TOOLDIRS))
+TOOLDIRS := $(filter-out ./reeper, $(TOOLDIRS))
+
+
 .PHONY: all clean distclean install uninstall 
 
 all:

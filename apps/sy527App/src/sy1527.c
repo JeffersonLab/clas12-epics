@@ -8,6 +8,8 @@
 // 2016, N. Baltzell, implemented group write, unfinished:
 //#define GROUPOPS_WRITE
 
+//#define BENCHMARK
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,9 +35,9 @@ static pthread_mutex_t mainframe_mutex[MAX_HVPS]; /* to access one mainframe */
 #define LOCK_MAINFRAME(id_m)   pthread_mutex_lock(&mainframe_mutex[id_m])
 #define UNLOCK_MAINFRAME(id_m) pthread_mutex_unlock(&mainframe_mutex[id_m])
 
-const int maxConsecutiveBadReads=100;
-int nConsecutiveGoodReads=0;
-int nConsecutiveBadReads=0;
+const int maxConsecutiveBadReads=20;
+int nConsecutiveGoodReads[MAX_HVPS]={};
+int nConsecutiveBadReads[MAX_HVPS]={};
 
 /* flag to tell mainframe thread it is time to exit */
 static int force_exit[MAX_HVPS];
@@ -480,16 +482,20 @@ sy1527GetGroup(unsigned int id,unsigned int group)
   // if any slot/chan in group does not match expected, ignore this read:
   if (nchan<=0 || sy1527CheckChannelList(groupexp,nchan,slot,chan) != CAENHV_OK)
   {
-    if (nConsecutiveGoodReads < 10) 
+    if (nConsecutiveGoodReads[id] < 10) 
     {
       time_t tnow;
       char tbuff[26];
       time(&tnow);
       strftime(tbuff,26,"%Y-%m-%d %H:%M:%S",localtime(&tnow));
-      printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads,tbuff);
+      printf("sy1527GetGroup:  (consecutiveGood=%d) ChannelList ERROR:  %s\n",nConsecutiveGoodReads[id],tbuff);
     }
-    nConsecutiveGoodReads=0;
-    nConsecutiveBadReads++;
+
+    // just don't let it overflow:
+    if (nConsecutiveBadReads[id]>1e6) nConsecutiveBadReads[id]=1e2;
+    
+    nConsecutiveGoodReads[id]=0;
+    nConsecutiveBadReads[id]++;
     return (CAENHV_SYSERR);
   }
 
@@ -517,8 +523,11 @@ sy1527GetGroup(unsigned int id,unsigned int group)
   }
   UNLOCK_MAINFRAME(id);
 
-  nConsecutiveGoodReads++;
-  nConsecutiveBadReads=0;
+  // just don't let it overflow:
+  if (nConsecutiveGoodReads[id]>1e6) nConsecutiveGoodReads[id]=1e2;
+
+  nConsecutiveGoodReads[id]++;
+  nConsecutiveBadReads[id]=0;
   return(CAENHV_OK);
 }
 
@@ -1143,11 +1152,14 @@ sy1527GetMap(unsigned int id)
           }
         }
 #ifdef USE_CAEN527
-        else if(strstr(Measure[id].board[i].modelname,"A944") || strstr(Measure[id].board[i].modelname,"A934") ) // my:
+        else if(strstr(Measure[id].board[i].modelname,"A944") || 
+                strstr(Measure[id].board[i].modelname,"A934") ||
+                strstr(Measure[id].board[i].modelname,"A734") )
         {
 
-          if(strstr(Measure[id].board[i].modelname,"A944") )printf("found board A944\n"); //my:
-          else if(strstr(Measure[id].board[i].modelname,"A934") )printf("found board A934\n"); //my:
+          if      (strstr(Measure[id].board[i].modelname,"A944") )printf("found board A944\n");
+          else if (strstr(Measure[id].board[i].modelname,"A934") )printf("found board A934\n");
+          else if (strstr(Measure[id].board[i].modelname,"A734") )printf("found board A734\n");
 
           Measure[id].board[i].nparams = nA944param;
           Demand[id].board[i].nparams = nA944param;
@@ -1406,9 +1418,9 @@ sy1527MainframeThread(void *arg)
     // Unlock for the WRITE queue:
     UNLOCK_MAINFRAME(id);
 
-
-//    Let's time read speed:
-//    clock_t diff, start = clock();
+#ifdef BENCHMARK
+    clock_t diff, start = clock();
+#endif
 
 #ifdef GROUPOPS_READ
 
@@ -1439,13 +1451,14 @@ sy1527MainframeThread(void *arg)
 
 #endif
 
-//    diff = clock() - start;
-//    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
-//#ifdef GROUPOPS_READ
-//    printf("sy1527MainframeThread:  [%d]  Group Read Time = %.0f ms\n",id,msec);
-//#else
-//    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
-//#endif
+//    if (ret != CAENHV_OK) nConsecutiveBadReads[id] ++;
+//    else                  nConsecutiveBadReads[id]=0;
+
+#ifdef BENCHMARK
+    diff = clock() - start;
+    float msec = ((float)diff*1000) / CLOCKS_PER_SEC;
+    printf("sy1527MainframeThread:  [%d]  Read Time = %.0f ms\n",id,msec);
+#endif
 
     for (i=0; i<nmainframes; i++)
     {
@@ -1830,8 +1843,8 @@ sy1527GetHeartBeat(unsigned int id, unsigned int board,
   {
     if      (mainframes_disconnect[i10]==1)        absent_error=3;
     else if (Demand[id].board[board].nchannels==0) absent_error=2;
+    else if (nConsecutiveBadReads[id] > maxConsecutiveBadReads) absent_error=4;
   }
-  if (nConsecutiveBadReads > maxConsecutiveBadReads) absent_error=4;
   return absent_error;
 }
 
@@ -2056,6 +2069,15 @@ sy1527GetChannelTripTime(unsigned int id, unsigned int board,
 u=Measure[id].board[board].channel[chan].fval[Trip];
   UNLOCK_MAINFRAME(id);
   return u;
+}
+int
+sy1527SetChannelTripTime(unsigned int id, unsigned int board,
+                         unsigned int chan, float u)
+{
+  LOCK_MAINFRAME(id);
+  SET_FVALUE(Trip, u);
+  UNLOCK_MAINFRAME(id);
+  return(0);
 }
 
 

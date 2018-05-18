@@ -20,6 +20,21 @@ dbLoadRecords("db/hall_target.db")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
+# these to be run as user=clasioc:
+#dbLoadTemplate("db/hallb_ia.substitutions")
+#dbLoadRecords("db/hallb_ia.db")
+# string parse
+#dbLoadRecords("db/mcc_locks.db")
+
+# calculate running averages:
+dbLoadTemplate("db/mcc_fsd.substitutions")
+
+# breakout FSD bits into single records:
+#dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=MASK,I=ISD2H001HALOMASKr,ZSV=NO_ALARM,OSV=MAJOR")
+#dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=TRIP,I=ISD2H001HALOTESTr,ZSV=NO_ALARM,OSV=MAJOR")
+#dbLoadRecords("db/mcc_fsd_aliases.db")
+dbLoadRecords("db/mcc_fsdGlobal.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -32,5 +47,11 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
-#dbl > pv.list
+dbl > pv.list
+
+#epicsThreadSleep(2)
+#dbpf "B_IA_C1068_QDAC07:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC08:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC09:init.PROC", "1"
+#dbpf "B_IA_C1068_QDAC10:init.PROC", "1"
 

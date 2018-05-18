@@ -8,12 +8,9 @@ include $(TOP)/configure/CONFIG
 #DB_OPT = YES
 
 #----------------------------------------------------
-# Create and install (or just install)
-# databases, templates, substitutions like this
-DB += ftcIntlk_hvQ.db
-DB += ftcIntlk_lv2Q.db
-DB += ftcIntlk.substitutions
-DB += ftcIntlk_test.db
+DB += $(wildcard ../*.db)
+DB += $(wildcard ../*.template)
+DB += $(wildcard ../*.substitutions)
 
 DB_INSTALLS += $(DEVIOCSTATS)/db/iocAdminSoft.db
 

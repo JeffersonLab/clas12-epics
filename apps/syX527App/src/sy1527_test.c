@@ -9,22 +9,57 @@
 
 #include "sy1527.h"
 
-int main()
+int main(int argc,char** argv)
 {
   int i, id = 0, board = 0, channel = 2;
-  char *ip_address="129.57.167.53";
+  char ip_address[100]="129.57.86.43";
   float u, uset, uget;
   unsigned int l, lget, active, onoff, alarm, itmp;
+
+  if (argc>1)
+    strcpy(ip_address,argv[1]);
 
   printf("\n\n=============== CAEN mainframe SY1527/SY4527 test ===============\n");
   printf("===== ip_address= %s =====\n\n\n",ip_address);
 
   sy1527Start(id, ip_address);
 
-  printf("====================== 333333333333\n");
-  sy1527PrintMap(id);
-  printf("====================== 444444444444\n");
+  //sy1527GetMap(id);
+  
+  printf("\n\n======= sy1527PrintParams =======\n");
+  sy1527PrintParams(id);
 
+  //sy1527PrintMap(id);
+
+  printf("\n\n======= sy1527PrintSysProps =======\n");
+  sy1527PrintSysProps(id);
+
+  printf("\n\n======= sy1527PrintExecCommList =======\n");
+  sy1527PrintExecCommList(id);
+ 
+  printf("\n\n======= sy1527PrintBoardProps =======\n");
+  sy1527PrintBoardProps(id,0);
+  sy1527PrintBoardProps(id,1);
+  sy1527PrintBoardProps(id,2);
+  sy1527PrintBoardProps(id,3);
+  sy1527PrintBoardProps(id,4);
+  sy1527PrintBoardProps(id,5);
+  sy1527PrintBoardProps(id,6);
+  sy1527PrintBoardProps(id,7);
+  sy1527PrintBoardProps(id,8);
+  sy1527PrintBoardProps(id,9);
+  sy1527PrintBoardProps(id,10);
+  sy1527PrintBoardProps(id,11);
+  sy1527PrintBoardProps(id,12);
+  sy1527PrintBoardProps(id,13);
+  sy1527PrintBoardProps(id,14);
+  sy1527PrintBoardProps(id,15);
+
+  sy1527BoardClearAlarm(id,0);
+
+  printf("\n\n======= sy1527ExecComm(ClearAlarm) =======\n");
+  sy1527ExecComm(id,"ClearAlarm");
+  
   return(0);
 
 

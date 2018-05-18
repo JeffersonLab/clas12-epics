@@ -18,6 +18,7 @@ sy2604_DBD += drvAsynIPPort.dbd
 sy2604_DBD += asyn.dbd
 sy2604_DBD += devIocStats.dbd
 sy2604_DBD += asSupport.dbd
+sy2604_DBD += caPutLog.dbd
 
 # sy2604_registerRecordDeviceDriver.cpp derives from sy2604.dbd
 sy2604_SRCS += sy2604_registerRecordDeviceDriver.cpp
@@ -30,6 +31,7 @@ sy2604_LIBS += stream
 sy2604_LIBS += asyn
 sy2604_LIBS += autosave
 sy2604_LIBS += devIocStats
+sy2604_LIBS += caPutLog
 sy2604_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Finally link to the EPICS Base libraries

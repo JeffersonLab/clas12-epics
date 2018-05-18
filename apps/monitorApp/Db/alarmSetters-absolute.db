@@ -1,0 +1,34 @@
+#
+# N. Baltzell
+#
+# alarm setters, based on current value and absolute tolerance
+#
+
+record(ai,"$(P)$(R=):minorTolerance") {
+    field(VAL,"0.5")
+    field(PINI,1)
+    info(autosaveFields,"VAL")
+}
+
+record(calcout,"$(P)$(R=):HIGHCALC") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)")
+    field(INPB,"$(P)$(R=):minorTolerance")
+    field(CALC,"A + B")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R=):HIGH PP")
+    info(autosaveFields_pass0,"VAL")
+}
+
+record(calcout,"$(P)$(R=):LOWCALC") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)")
+    field(INPB,"$(P)$(R=):minorTolerance")
+    field(CALC,"A - B")
+    field(DOPT,"Use CALC")
+    field(OOPT,"On Change")
+    field(OUT,"$(P)$(R=):LOW PP")
+    info(autosaveFields_pass0,"VAL")
+}
+

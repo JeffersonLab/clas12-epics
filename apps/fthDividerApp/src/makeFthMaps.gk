@@ -23,7 +23,7 @@ half["2"]="Bottom";
 		    if((y==-5)||(x==-5)) size=1
 		    
 		    if((x==-9)&&((y==-7)||(y==6))) size=1
-		    if((x==-7)&&((y==-9)||(y==8))) size=1
+   		    if((x==-7)&&((y==-9)||(y==8))) size=1
 		    if((x==-4)&&((y==-4)||(y==3))) size=1 
 		    if((x==3)&&((y==-4)||(y==3))) size=1
 		    if((x==6)&&((y==-9)||(y==8))) size=1
@@ -47,7 +47,8 @@ half["2"]="Bottom";
 	#print $0
 	#
 	if($0 !~ "Slot"){
-	    #divindex=(16*($1-3))+$2
+	    if($1<13) divindex=(16*($1-3))+$2
+	    else      divindex=(16*($1-5))+$2
 	    slot[divindex]=$1
 	    chan[divindex]=$2
 	    sector[divindex]=$3
@@ -63,7 +64,7 @@ half["2"]="Bottom";
 	    boardi[bname]++;
 	    boardhv[bname]=($6 - 1)*12 + $7 + 1;
 	    boardch[bname]=sprintf("%s,%03d",boardch[bname],divindex);
-	    divindex++;
+	    #divindex++;
 	}
     }
 }
@@ -109,7 +110,28 @@ END{
     printf "file \"%s\" {\n","db/fthDividerChan.db" > subfile
     print "    pattern {I,\t\tX,\tY,\tSIZE,\tSLOT,\tCHAN,\tLAYER,\tSECTOR,\tELEM,\tHVCHAN\t}" > subfile
 
-    for(divindex in slot){
+    #for(divindex in slot){
+    dummy=990;
+    for(divindex=0;divindex<240;divindex++){
+	if(!(divindex in slot)){
+	    ch=divindex%16
+	    if(divindex<120) sl=int(divindex/16)+3
+	    else             sl=int(divindex/16)+5
+	    sector[divindex]=dummy;
+	    element[divindex]=dummy;
+	    enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
+	    xcoord[enam]=dummy
+	    ycoord[enam]=dummy
+	    tsize[enam]=dummy
+	    slot[divindex]=sl
+	    chan[divindex]=ch
+	    layer[divindex]=1
+	    sector[divindex]dummy
+	    element[divindex]dummy;
+	    if(divindex>=232)h[divindex]=30
+	    else h[divindex]=15
+	    dummy++
+	}
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
 	printf "            {\"%03d\",\t\"%s\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\",\t\"%s\",\t\"%s\",\t\"%02d\",\t\"%02d\"\t}\n",divindex,  xcoord[enam], ycoord[enam], tsize[enam], slot[divindex], chan[divindex],   layer[divindex], sector[divindex],  element[divindex], h[divindex] > subfile;
     }
@@ -125,56 +147,60 @@ END{
 
     printf "##This lot for the TOP module\n"   > initfile
     printf "##Set the default init files (in user space)\n"     > initfile
-    printf "caput -S ${Prefix}:DATA_FILE_LOAD ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat\n"   > initfile
-    printf "caput -S ${Prefix}:DATA_FILE_SAVE ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat\n"   > initfile
+#    printf "caput -S ${Prefix}:DATA_FILE_LOAD ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat\n"   > initfile
+#    printf "caput -S ${Prefix}:DATA_FILE_SAVE ${scriptdir}/fthDividerData/fthDividerDefaultChannels.dat\n"   > initfile
+    printf "caput -S ${Prefix}:DATA_FILE_LOAD /home/clasrun/FT/FThodo/HVDivider/fthDividerDefaultChannels.dat\n" > initfile
+    printf "caput -S ${Prefix}:DATA_FILE_SAVE /home/clasrun/FT/FThodo/HVDivider/fthDividerDefaultChannels.dat\n" > initfile
 
     print "#Init tables for positions of channels etc\n\n" > initfile 
 
-    printf "caput -a ${Prefix}:X_TABLE 232 " > initfile	
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:X_TABLE 240 " > initfile	
+    for(divindex=0;divindex<240;divindex++){
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
 	printf "%d ",xcoord[enam] > initfile
     }
     printf "\n\n" > initfile
-    printf "caput -a ${Prefix}:Y_TABLE 232 " > initfile	
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:Y_TABLE 240 " > initfile	
+    for(divindex=0;divindex<240;divindex++){
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
 	printf "%d ",ycoord[enam] > initfile
     }
     printf "\n\n" > initfile
-    printf "caput -a ${Prefix}:SIZE_TABLE 232 "	 > initfile
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:SIZE_TABLE 240 "	 > initfile
+    for(divindex=0;divindex<240;divindex++){
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
 	printf "%d ",tsize[enam] > initfile
     }
   
     printf "\n\n" > initfile
-    printf "caput -a ${Prefix}:LAYER_TABLE 232 "	 > initfile
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:LAYER_TABLE 240 "	 > initfile
+    for(divindex=0;divindex<240;divindex++){
 	enam=sprintf("S%sE%s",sector[divindex],element[divindex]);
 	printf "%d ",layer[divindex] > initfile
     }
     printf "\n\n" > initfile
 
     printf "\n\n" > initfile
-    printf "caput -a ${Prefix}:HV_TABLE 232 "	 > initfile
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:HV_TABLE 240 "	 > initfile
+    for(divindex=0;divindex<240;divindex++){
 	printf "%d ",h[divindex] > initfile
     }
     printf "\n\n" > initfile
 
-    printf "caput -a ${Prefix}:SLOT_TABLE 232 "	 > initfile
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:SLOT_TABLE 240 "	 > initfile
+    for(divindex=0;divindex<240;divindex++){
 	printf "%d ",slot[divindex] > initfile
     }
     printf "\n\n" > initfile
  
-    printf "caput -a ${Prefix}:CHAN_TABLE 232 "	 > initfile
-    for(divindex=0;divindex<232;divindex++){
+    printf "caput -a ${Prefix}:CHAN_TABLE 240 "	 > initfile
+    for(divindex=0;divindex<240;divindex++){
 	printf "%d ",chan[divindex] > initfile
     }
     printf "\n\n" > initfile
   
+    printf "../../scripts/loadDividerChannelsFromFile.sh ${Prefix}" > initfile
+
     com=sprintf("chmod +x %s", initfile);
     system(com);
   

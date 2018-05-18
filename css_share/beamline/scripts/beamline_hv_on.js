@@ -20,7 +20,8 @@ var ss=[
   "DownstreamTop",
   "DownstreamLeft",
   "DownstreamRight",
-  "SLM"
+  "SLM",
+  "BOM"
 ];
 
 {

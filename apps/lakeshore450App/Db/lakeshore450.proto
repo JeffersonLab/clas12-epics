@@ -1,0 +1,129 @@
+#
+# Lakeshore Model 450 Gaussmeter
+# 
+# Author: Wesley Moore (wmoore@jlab.org)
+# Date:   Oct. 2014
+#
+
+Terminator   = CR LF;
+ReadTimeout  = 1000;
+ReplyTimeout = 1000;
+
+#######################################
+# Interface Commands
+#######################################
+getLock {
+    out "LOCK?";
+    in  "%d";
+}
+setLock {
+    out "LOCK %d";
+    @init { getLock; }
+}
+
+getMode {
+    out "MODE?";
+    in  "%d";
+}
+setMode {
+    out "MODE %d";
+    @init { getMode; }
+}
+
+#######################################
+# Device Specific Commands
+#######################################
+getACDC {
+    out "ACDC?";
+    in  "%d";
+}
+setACDC {
+    out "ACDC %d";
+    @init { getACDC; }
+}
+
+getAutoRange {
+    out "AUTO?";
+    in  "%d";
+}
+
+setAutoRange {
+    out "AUTO %d";
+    @init { getAutoRange; }
+}
+
+getField {
+    ExtraInput = Ignore;    # depending on field length, it will return with spaces
+    out "FIELD?";
+    in  "%f";
+}
+
+getFieldM {
+    out "FIELDM?";
+    in  "%{u|m|k| }";
+}
+
+getFilt {
+    out "FILT?";
+    in  "%d";
+}
+setFilt {
+    out "FILT %d";
+    @init { getFilt; }
+}
+
+getFnum {
+    out "FNUM?";
+    in  "%d";
+}
+
+setFnum {
+    out "FNUM %d";
+    @init { getFnum; }
+}
+
+getRange {
+    out "RANGE?";
+    in  "%d";
+}
+setRange {
+    out "RANGE %d";
+    @init { getRange; }
+}
+
+getUnits {
+    out "UNIT?";
+    in  "%s";
+}
+
+setUnits {
+    out "UNIT %s";
+    @init { getUnits; }
+}
+
+#######################################
+# Probe Specific Commands
+#######################################
+getProbeType {
+    out "TYPE?";
+    in  "%d";
+}
+
+getFieldComp {
+    out "FCOMP?";
+    in  "%d";
+}
+
+setFieldComp {
+    out "FCOMP %d";
+    @init { getFieldComp; }
+}
+
+getTempComp {
+    out "TCOMP?";
+    in  "%d";
+}
+setTempComp {
+    out "TCOMP %d";
+    @init { getTempComp; }
+}

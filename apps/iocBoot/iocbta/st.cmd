@@ -4,6 +4,8 @@
 ## everywhere it appears in this file
 
 < envPaths
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255 129.57.242.4")
+
 cd "${TOP}"
 
 ## Register all support components
@@ -24,4 +26,7 @@ iocInit
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+#seq &bta, "hall=B,ioc=classc6"
+
 

@@ -1,0 +1,83 @@
+
+# SENSE: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sa:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S01-08 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S09-16 CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S17-24 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sb:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S25-32 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S33-48 CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S49-64 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sc:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S65-80 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S81-112 CPP")
+    field(CALC,"A>-9000 && B>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sa:isComm CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sb:isComm CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Sc:isComm CPP")
+    field(CALC,"A=1 && B=1 && C=1")
+}
+
+
+# FIELD: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fa:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F01-08 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F09-16 CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F17-24 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fb:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F25-32 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F33-48 CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F49-64 CPP")
+    field(CALC,"A>-9000 && B>-9000 && C>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fc:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F65-80 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F81-112 CPP")
+    field(CALC,"A>-9000 && B>-9000")
+}
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fa:isComm CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fb:isComm CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_Fc:isComm CPP")
+    field(CALC,"A=1 && B=1 && C=1")
+}
+
+
+# GUARD: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G:isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G01-32 CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G33-112 CPP")
+    field(CALC,"A>-9000 && B>-9000")
+}
+
+
+# TOTAL: ####################################################
+
+record(calc,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L):isComm")
+{
+    field(INPA,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_S:isComm CPP")
+    field(INPB,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_F:isComm CPP")
+    field(INPC,"B_DET_DC_HV_SEC$(SEC)_R$(R)_SL$(L)_G:isComm CPP")
+    field(CALC,"A=1&&B=1&&C=1")
+}
+

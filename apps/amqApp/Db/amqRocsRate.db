@@ -1,0 +1,59 @@
+record(subArray,"B_DAQ:STA:$(R):eventsA") {
+    field(FTVL,"FLOAT")
+    field(INP,"B_DAQ:STA:$(R) CPP")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,0)
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):eventRateA.PROC")
+}
+record(subArray,"B_DAQ:STA:$(R):eventRateA") {
+    field(FTVL,"FLOAT")
+    field(INP,"B_DAQ:STA:$(R)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,1)
+    field(EGU,"Hz")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):dataSizeA.PROC")
+}
+record(subArray,"B_DAQ:STA:$(R):dataSizeA") {
+    field(FTVL,"FLOAT")
+    field(INP,"B_DAQ:STA:$(R)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,2)
+    field(EGU,"MB")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):dataRateA.PROC")
+}
+record(subArray,"B_DAQ:STA:$(R):dataRateA") {
+    field(FTVL,"FLOAT")
+    field(INP,"B_DAQ:STA:$(R)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,3)
+    field(EGU,"MB/s")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):events.PROC")
+}
+record(ai,"B_DAQ:STA:$(R):events") {
+    field(INP,"B_DAQ:STA:$(R):eventsA")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):eventRate.PROC")
+}
+record(ai,"B_DAQ:STA:$(R):eventRate") {
+    field(INP,"B_DAQ:STA:$(R):eventRateA")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):dataSize.PROC")
+}
+record(ai,"B_DAQ:STA:$(R):dataSize") {
+    field(INP,"B_DAQ:STA:$(R):dataSizeA")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:STA:$(R):dataRate.PROC")
+}
+record(ai,"B_DAQ:STA:$(R):dataRate") {
+    field(DESC,"$(DESC)")
+    field(INP,"B_DAQ:STA:$(R):dataRateA")
+}
+

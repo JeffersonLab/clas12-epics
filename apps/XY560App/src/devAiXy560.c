@@ -50,6 +50,7 @@
 #include	<dbScan.h>
 #include	<module_types.h>
 #include	<aiRecord.h>
+#include    <epicsExport.h>
 
 extern int Xy560_driver(short, short, short*);
 extern int Xy560_getioscanpvt(short, IOSCANPVT*);
@@ -75,7 +76,7 @@ struct {
 	get_ioint_info,
 	read_ai,
 	special_linconv};
-
+epicsExportAddress(dset,devAiXy560);
 
 static long init_record(pai)
     struct aiRecord	*pai;

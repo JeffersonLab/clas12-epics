@@ -1,0 +1,1 @@
+../fthDividerApp/op/scripts/initFthDivider.sh

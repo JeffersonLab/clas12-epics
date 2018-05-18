@@ -1,0 +1,20 @@
+UAG(sol_cryo) { 
+    bruhwel,
+    dinsley,
+    ghoshal,
+    kashy,
+    ruben,
+    sandoval,
+    wmoore
+}
+
+ASG(DEFAULT) {
+    INPA($(P)$(R)CAS_READWRITE)
+    RULE(1,READ)
+    RULE(1,WRITE,TRAPWRITE) {
+        UAG(sol_cryo)
+    }
+    RULE(1,WRITE,TRAPWRITE) {
+        CALC("A=1")
+    }
+}

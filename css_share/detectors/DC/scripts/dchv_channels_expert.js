@@ -40,7 +40,7 @@ for (var isec=1; isec<=NSECTORS; isec++) {
             //if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
             //else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
             //lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novmax.opi");
-            lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi");
+            lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel-WITHTRIP.opi");
             
             //try   { lc.setPropertyValue("resize_behaviour",1); }
             //catch (err) { lc.setPropertyValue("auto_size",true); }

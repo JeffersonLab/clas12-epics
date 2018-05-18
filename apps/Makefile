@@ -20,15 +20,20 @@ iocBoot_DEPEND_DIRS    += $(filter %App,$(DIRS))
 # Set app dependencies
 #
 clasTreeApp_DEPEND_DIRS  += caenHvApp
+svtApp_DEPEND_DIRS += highlandV450App
 caenHvApp_DEPEND_DIRS  += syX527App
-classc1App_DEPEND_DIRS += bomApp harp_genericApp kepcoApp scalerApp	# vme crate
+classc1App_DEPEND_DIRS += harp_genericApp kepcoApp scalerApp	# vme crate
 classc4App_DEPEND_DIRS += harp_genericApp scalerApp sixtyHzApp 	# vme crate
 classc6App_DEPEND_DIRS += btaApp
 classc8App_DEPEND_DIRS += struckDaqApp
+classc3App_DEPEND_DIRS += XY560App
 jscalerApp_DEPEND_DIRS += jscalerDrvApp
 kepcoApp_DEPEND_DIRS   += DVME628App
 dynabcApp_DEPEND_DIRS  += XY240App
 taggerTempApp_DEPEND_DIRS += XY560App
+testApp_DEPEND_DIRS += waveformApp
+svtCtrlApp_DEPEND_DIRS += waveformApp
+jscalerApp_DEPEND_DIRS += waveformApp
 
 include $(TOP)/configure/RULES_TOP
 

@@ -1,0 +1,1 @@
+../caenHv527App/op/scripts/dchvMorganTestCfg.sh

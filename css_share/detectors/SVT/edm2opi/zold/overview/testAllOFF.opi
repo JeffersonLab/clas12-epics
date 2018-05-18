@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0">
+  <x>9</x>
+  <y>468</y>
+  <width>500</width>
+  <height>300</height>
+  <font>
+    <fontdata fontName="helvetica" height="18" pixels="true" style="0"/>
+  </font>
+  <foreground_color>
+    <color blue="133" green="133" name="grey-8" red="133"/>
+  </foreground_color>
+  <background_color>
+    <color blue="200" green="200" name="GLOBAL canvas" red="200"/>
+  </background_color>
+  <show_grid>false</show_grid>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="1.0">
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <x>33</x>
+    <y>51</y>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="1"/>
+    </font>
+    <width>104</width>
+    <height>31</height>
+    <name>EDM Message Button</name>
+    <text>ALL OFF</text>
+    <pv_name>B_SVT_ALL_OFF</pv_name>
+    <actions hook="true" hook_all="true">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>1</value>
+      </action>
+    </actions>
+    <rules>
+      <rule name="OnOffBackgroundRule" out_exp="false" prop_id="background_color">
+        <exp bool_exp="widget.getValue() == 1">
+          <value>
+            <color blue="184" green="198" name="LINAC title" red="185"/>
+          </value>
+        </exp>
+        <exp bool_exp="true">
+          <value>
+            <color blue="184" green="198" name="LINAC title" red="185"/>
+          </value>
+        </exp>
+        <pv trig="true">B_SVT_ALL_OFF</pv>
+      </rule>
+    </rules>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>150</x>
+    <y>61</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>B_SVT_ALL_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>310</x>
+    <y>61</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>vmetlsvt1:CRATEPB_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>312</x>
+    <y>95</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>vmetlsvt2:CRATEPB_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>308</x>
+    <y>129</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>vmetlsvt3:CRATEPB_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>310</x>
+    <y>163</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>vmetlsvt4:CRATEPB_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0">
+    <x>311</x>
+    <y>201</y>
+    <width>99</width>
+    <height>16</height>
+    <foreground_color>
+      <color blue="0" green="0" name="black-14" red="0"/>
+    </foreground_color>
+    <background_color>
+      <color blue="184" green="198" name="LINAC title" red="185"/>
+    </background_color>
+    <font>
+      <fontdata fontName="helvetica" height="14" pixels="true" style="0"/>
+    </font>
+    <name>EDM TextInput</name>
+    <pv_name>vmetlsvt5:CRATEPB_OFF</pv_name>
+    <precision_from_pv>true</precision_from_pv>
+    <show_units>false</show_units>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <precision>0</precision>
+    <horizontal_alignment>1</horizontal_alignment>
+    <format_type>0</format_type>
+    <border_style>None</border_style>
+    <transparent>true</transparent>
+  </widget>
+</display>

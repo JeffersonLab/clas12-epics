@@ -33,6 +33,8 @@ chiller_DBD += base.dbd
 chiller_DBD += chillerSupport.dbd
 chiller_DBD += asSupport.dbd
 chiller_DBD += devIocStats.dbd
+chiller_DBD += calc.dbd
+chiller_DBD += sCalcoutRecord.dbd
 
 # chiller_registerRecordDeviceDriver.cpp derives from chiller.dbd
 chiller_SRCS += chiller_registerRecordDeviceDriver.cpp
@@ -50,6 +52,7 @@ chiller_LIBS += stream
 chiller_LIBS += autosave
 chiller_LIBS += devIocStats
 chiller_LIBS += asyn
+chiller_LIBS += calc
 chiller_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

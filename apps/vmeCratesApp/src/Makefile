@@ -13,6 +13,7 @@ vmeCrates_DBD += snmp.dbd
 vmeCrates_DBD += devSnmp.dbd
 vmeCrates_DBD += devIocStats.dbd
 vmeCrates_DBD += asSupport.dbd
+vmeCrates_DBD += caPutLog.dbd
 
 # vmeCrates_registerRecordDeviceDriver.cpp derives from mpodLv.dbd
 vmeCrates_SRCS += vmeCrates_registerRecordDeviceDriver.cpp
@@ -26,6 +27,7 @@ vmeCrates_LIBS += $(EPICS_BASE_IOC_LIBS)
 vmeCrates_LIBS += devSnmp
 vmeCrates_LIBS += autosave
 vmeCrates_LIBS += devIocStats
+vmeCrates_LIBS += caPutLog
 
 include $(TOP)/configure/RULES
 

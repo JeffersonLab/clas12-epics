@@ -9,7 +9,7 @@ cd "${TOP}"
 dbLoadDatabase("dbd/chiller.dbd")
 chiller_registerRecordDeviceDriver(pdbbase)
 
-drvAsynIPPortConfigure("SER3", "hallb-moxa1:4003")
+drvAsynIPPortConfigure("SER3", "hallb-moxa5:4001")
 
 ## debugging...
 #asynSetTraceMask("SER3",-1,0x09)

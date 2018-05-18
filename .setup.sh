@@ -50,16 +50,23 @@ then
   fi
 fi
 
+if ! [ -d "$ROOTSYS" ]
+then
+  source /apps/root/5.34.21/bin/thisroot.sh
+fi
+
 export EPICS_HOST_ARCH
 export EPICS_SCRIPTS=${EPICS}/apps/scripts
 export EPICS_CA_AUTO_ADDR_LIST=no
-export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255"
+#export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255 129.57.231.255 129.57.86.35"
+export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255 129.57.231.255"
 
 export PERL5LIB=${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86_64-linux-thread-multi
 
 PYTHONPATH=${PYTHONPATH}:${EPICS_SCRIPTS}
 PYTHONPATH=${PYTHONPATH}:${EPICS}/css_share/common/scripts
 PYTHONPATH=${PYTHONPATH}:/usr/clas12/third-party-libs/pyepics-RHEL7
+PYTHONPATH=${PYTHONPATH}:${ROOTSYS}/lib
 export PYTHONPATH
 
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${ROOTSYS}/lib
@@ -71,12 +78,13 @@ export LD_LIBRARY_PATH
 PATH=${PATH}:${ROOTSYS}/bin
 PATH=${PATH}:${EPICS_BASE}/bin/${EPICS_HOST_ARCH}
 PATH=${PATH}:${EPICS_EXTENSIONS}/bin/${EPICS_HOST_ARCH}
-PATH=${PATH}:${EPICS_BIN}
+PATH=${PATH}:${EPICS}/bin
 PATH=${PATH}:/usr/clas12/css/pro/${EPICS_HOST_ARCH}/bin
 PATH=${PATH}:/usr/csite/certified/bin
 PATH=${PATH}:${EPICS_SCRIPTS}
 export PATH
 
-export MIBDIRS=/usr/clas12/R${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
+
+export MIBDIRS=/usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
 export MIBS=ALL
 

@@ -35,6 +35,8 @@ for (var slot=0; slot<4; slot++)
 var ud=["U","D"];
 for (var ich=1; ich<=48; ich++)
 {
+    if (ich==14) continue;
+
     for (var iud=0; iud<ud.length; iud++)
     {
         var ch=ich;

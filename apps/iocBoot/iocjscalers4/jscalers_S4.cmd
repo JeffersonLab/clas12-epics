@@ -21,6 +21,7 @@ scanOnceSetQueueSize(5000)
 
 ## Load record instances
 dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_S4_ECAL_FADC.substitutions")
 dbLoadTemplate("db/jscalers_S4_PCAL_FADC.substitutions")
@@ -31,24 +32,25 @@ dbLoadTemplate("db/jscalers_S4_PCAL_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S4_FTOF_DISC.substitutions")
 dbLoadTemplate("db/jscalers_S4_LTCC_DISC.substitutions")
 
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=FADC,SEC=4,CH=1")
-dbLoadRecords("db/jscalers_ECAL_sums.db","TYPE=DISC,SEC=4,CH=3")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=FADC,SEC=4,CH=1")
-dbLoadRecords("db/jscalers_PCAL_sums.db","TYPE=DISC,SEC=4,CH=3")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=FADC,SEC=4,CH=1")
-dbLoadRecords("db/jscalers_FTOF_sums.db","TYPE=DISC,SEC=4,CH=3")
-dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=FADC,SEC=4,CH=1")
-dbLoadRecords("db/jscalers_LTCC_sums.db","TYPE=DISC,SEC=4,CH=3")
-
 dbLoadTemplate("db/jscalers_TDCFTOF4_RF.substitutions")
 dbLoadTemplate("db/jscalers_TDCPCAL4_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_TDCFTOF4_TRIG.substitutions")
 
+dbLoadRecords("db/jscalers_wf.db","S=4")
+dbLoadTemplate("db/jscalers_wf_S4.substitutions")
+dbLoadTemplate("db/jscalers_puts_S4.substitutions")
+
 cd ${TOP}/iocBoot/${IOC}
+
+< save_restore.cmd
 
 iocInit
 
-#seq seqJscalersFC, "S=4"
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+seq seqJscalersF, "S=4"
 
 dbl > pv.list
 

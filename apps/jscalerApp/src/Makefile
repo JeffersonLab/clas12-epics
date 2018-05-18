@@ -23,12 +23,15 @@ iocscalers_SRCS += jscalers_ioc.cpp
 iocscalers_SRCS_DEFAULT += iocscalersMain.cpp
 iocscalers_SRCS_vxWorks += -nil-
 
-iocscalers_SRCS += jscalers_fcsector.st
+iocscalers_SRCS += jscalersF.st
+iocscalers_SRCS += jscalersC.st
 iocscalers_LIBS += seq pv
 
 iocscalers_LIBS += jscalers
 iocscalers_LIBS += rol
 iocscalers_LIBS += devIocStats
+iocscalers_LIBS += autosave
+iocscalers_LIBS += waveformApp
 iocscalers_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 rol_DIR         += $(ROL_LIB)

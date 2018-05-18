@@ -21,6 +21,8 @@
 
 int wf2rootDebug;
 
+int errorCounter=0;
+
 /*
  * Initialize record to kill IOC
  */
@@ -122,8 +124,12 @@ static long wf2rootDataProcess(aSubRecord *record) {
 		if (GetBufferSize() < 1000) {
 			WriteRootFile(record->b, &posixTime, record->vala, record->noa);
 		} else {
-			printf("Buffer length exceeds 1000, exiting the program!");
-			return 1;
+      if (++errorCounter > 100) {
+        printf("Buffer length exceeds 1000, exiting the program!");
+        errorCounter=0;
+      }
+      ((long*) record->vale)[0] = -9999;
+      return 1;
 		}
 	}
 	if (wf2rootDebug > 2) {

@@ -1,6 +1,6 @@
 
-/* sy1527epics1.c - EPICS driver support for CAEN SY1527 HV mainframe */
-/*                  (a la Lecroy)                                     */
+// sy1527epics1.c - EPICS driver support for CAEN SY1527 HV mainframe
+//                  (a la Lecroy)                                    
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,41 +11,33 @@
 #include "sy1527epics1.h"
 #include <unistd.h>
 
-/* static structure to keep track of active channels */
-/// my: static double properties[MAX_HVPS][NUM_CAEN_PROP];
-
-
-/* open communication with mainframe under logical number 'id' */
+// open communication with mainframe under logical number 'id'
 int
 CAEN_HVstart(unsigned id, char *ip_address)
 {
   return(sy1527Start(id,ip_address));
 }
 
-/* close communication with mainframe under logical number 'id' */
+// close communication with mainframe under logical number 'id'
 int
 CAEN_HVstop(unsigned id)
 {
   return(sy1527Stop(id));
 }
 
-/* returns 1 if mainframe is ON, otherwise returns 0 */
+// returns 1 if mainframe is ON, otherwise returns 0
 int
-CAEN_GetHv(unsigned id, int *onoff1) // my: &onoff
+CAEN_GetHv(unsigned id, int *onoff1)
 {
  int active, onoff, alarm;
- /// int active, alarm;  /// my:
 
- int retv=  /// my:
- sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
+ int retv=sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
 
- //printf("============== %d\n", onoff); // my:
  *onoff1=onoff; 
- /// my: return(onoff)
- return retv; /// my:
+ return retv;
 }
 
-/* returns 1 if any channel is alarming, otherwise returns 0 */
+// returns 1 if any channel is alarming, otherwise returns 0
 int
 CAEN_GetAlarm(unsigned id)
 {
@@ -56,7 +48,6 @@ CAEN_GetAlarm(unsigned id)
   return(alarm);
 }
 
-/* */
 int
 CAEN_GetValidity(unsigned id)
 {
@@ -67,7 +58,7 @@ CAEN_GetValidity(unsigned id)
   return(active);
 }
 
-/* set HV on/off for whole mainframe */
+// set HV on/off for whole mainframe
 int
 CAEN_SetHV(unsigned id, unsigned char on_off)
 {
@@ -78,7 +69,6 @@ CAEN_SetHV(unsigned id, unsigned char on_off)
   return(0);
 }
 
-/* */
 STATUS
 CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
             char *property, float value)
@@ -119,11 +109,11 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
       id,slot,channel,value);
     if(value > 0.5)
     {
-      /* enable the channel */
+      // enable the channel
       sy1527SetChannelEnableDisable(id, slot, channel, 1);
       sleep(2);
 
-      /* if mainframe is ON, turn channel ON */
+      // if mainframe is ON, turn channel ON
 	  {
         int active, onoff, alarm;
         sy1527GetMainframeStatus(id, &active, &onoff, &alarm);
@@ -136,7 +126,7 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
 	}
     else
     {
-      /* disable the channel */
+      // disable the channel
       sy1527SetChannelOnOff(id, slot, channel, 0);
       sleep(2);
       sy1527SetChannelEnableDisable(id, slot, channel, 0);
@@ -177,11 +167,25 @@ CAEN_HVload(unsigned id, unsigned slot, unsigned channel,
     printf("CAEN_HVload: request for HVL\n");
     sy1527SetChannelMaxVoltage(id, slot, channel, value);
   }
+  else if(!strncmp("PRD",property,3))
+  {
+    printf("CAEN_HVload: request for PRD\n");
+    sy1527SetChannelTripTime(id, slot, channel, value);
+  }
+  else if(!strncmp("UNVT",property,3))
+  {
+    printf("CAEN_HVload: request for UNVT\n");
+    sy1527SetChannelUnderVoltage(id, slot, channel, value);
+  }
+  else if(!strncmp("OVVT",property,3))
+  {
+    printf("CAEN_HVload: request for OVVT\n");
+    sy1527SetChannelOverVoltage(id, slot, channel, value);
+  }
 
   return(0);
 }
 
-/* */
 STATUS
 CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
                  char *property, float *value)
@@ -241,21 +245,38 @@ CAEN_GetProperty(unsigned id, unsigned slot, unsigned channel,
    /// printf("CAEN_GetProperty: request for HVL\n");
     *value = sy1527GetChannelMaxVoltage(id, slot, channel);
   }
-  else if(!strncmp("PRD",property,3))  /// my:
+  else if(!strncmp("PRD",property,3))
   {
    /// printf("CAEN_GetProperty: request for Trip Time\n");
     *value = sy1527GetChannelTripTime(id, slot, channel);
-//printf(" PRD *value=%f\n",v);
-  }  
+  }
+  else if (!strncmp("UNVT",property,4))
+  {
+      *value = sy1527GetChannelUnderVoltage(id, slot, channel);
+  }
+  else if (!strncmp("OVVT",property,4))
+  {
+      *value = sy1527GetChannelOverVoltage(id, slot, channel);
+  }
+  else if (!strncmp("RANGE",property,4))
+  {
+      *value = sy1527GetChannelRange(id, slot, channel);
+  }
+  else if (!strncmp("INTLK",property,5))
+  {
+      *value = sy1527GetChannelInterlock(id, slot, channel);
+  }
   return(0);
 }
 
-/* returns all values for one channel */
+// returns all values for one channel
 STATUS
 CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
                 double *property, double *delta)
 {
-  /*  printf("CAEN_GetChannel reached\n"); */
+  float tmp;
+  const unsigned int demandOn = sy1527GetChannelDemandOnOff(id,slot,channel);
+
   property[PROP_MC] = sy1527GetChannelMeasuredCurrent(id, slot, channel); // e
   property[PROP_MV] = sy1527GetChannelMeasuredVoltage(id, slot, channel); // f
   property[PROP_DV] = sy1527GetChannelDemandVoltage(id, slot, channel);   // g
@@ -264,27 +285,67 @@ CAEN_GetChannel(unsigned id, unsigned slot, unsigned channel,
   property[PROP_TC] = sy1527GetChannelMaxCurrent(id, slot, channel);      // j
   property[PROP_CE] = (float) sy1527GetChannelEnableDisable(id, slot, channel);  // k
   property[PROP_ST] = (float) sy1527GetChannelStatus(id, slot, channel);  // l
-  property[PROP_MVDZ] = 0.0;  // m
-  property[PROP_MCDZ] = 0.0;  // n
   property[PROP_HVL] = sy1527GetChannelMaxVoltage(id, slot, channel); //o
+  property[PROP_TT] = sy1527GetChannelTripTime(id,slot,channel); //p
 
-  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); /// my_n:  // t
+  // LV-Only:
+  property[PROP_UNVT] = sy1527GetChannelUnderVoltage(id, slot, channel); // m
+  property[PROP_OVVT] = sy1527GetChannelOverVoltage(id, slot, channel); // n
+  // let LV/HV share one bigsub field (PROP_TT/PROP_TEMP):
+  tmp = sy1527GetChannelTemperature(id, slot, channel); // p
+  if (tmp>=0) property[PROP_TEMP] = tmp;
+  property[PROP_VCON] = sy1527GetChannelConnectorVoltage(id, slot, channel); // q
+  property[PROP_INTLK] = sy1527GetChannelInterlock(id, slot, channel); // r
+
+  // Dual-Range Only:
+  property[PROP_RANGE] = sy1527GetChannelRange(id, slot, channel); // s
+
+  property[PROP_HBEAT] = sy1527GetHeartBeat(id, slot, channel); // t
 
   // this is what we alarm on:
   *delta=0;
-
-  // delta is difference between measured and demand voltages
-  // if channel is OFF, or not ON, or RAMPING, do not set delta
-  if( ! ((int)property[PROP_ST] & (BIT_OFF) ) )
-    if ( ((int)property[PROP_ST] & (BIT_ON) ) )
-      if ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
-        *delta =  property[PROP_MV] - property[PROP_DV];
-
-  // if ERROR bits are set, override delta with very big number
-  if( ((int)property[PROP_ST] & (BIT_INTTRIP |  BIT_OVERVOLT | BIT_OVERCUR )   ) ) *delta=99999;
-
+ 
+#define HRDWERROR  999999
+#define COMMERROR -999999
+#define MISMERROR -111111
+  
   // if HEARTBEAT error, override delta with very big negative number
-  if( (int)property[PROP_HBEAT] ) *delta=-99999;
+  if ( (int)property[PROP_HBEAT] )
+    *delta = COMMERROR;
+
+  // if ERROR bits are set, override delta with very big positive number
+  else if ( ( (int)property[PROP_ST] & 
+    (BIT_INTTRIP |
+     BIT_EXTTRIP |
+     BIT_OVERVOLT |
+     BIT_OVERCUR |
+     BIT_UNDERVOLT |
+     BIT_MAXVOLT |
+     BIT_EXTDISABLED |
+     BIT_CALIBERROR |
+     BIT_CHUNPLUGGED) ) )
+    *delta = HRDWERROR;
+  
+  // Mismatch between ON/OFF request and status reported by hardware:
+  else if ( demandOn && !((int)property[PROP_ST] & (BIT_ON)) ) {
+    printf("!!! %d %d\n",demandOn,(int)property[PROP_ST]);
+    *delta = MISMERROR;
+  }
+ 
+  // If channel is ON, then delta is difference between measured and demand voltages.
+  // This allows to alarm any time a channel is turned on or off, in addition
+  // to serving as a voltage tolerance alarm.
+  else if ( ((int)property[PROP_ST] & (BIT_ON) ) )
+    *delta =  property[PROP_MV] - property[PROP_DV];
+ 
+  // We used to not set delta if in RUP/DRN state:
+  // ( ! ((int)property[PROP_ST] & (BIT_RAMPUP | BIT_RAMPDOWN) ) )
+
+  // negative status when comms error (for archiving):
+  if (property[PROP_HBEAT]>1e-5) {
+      if (property[PROP_ST]<1e-5) property[PROP_ST]=COMMERROR;
+      else                        property[PROP_ST]=-100000*property[PROP_ST];
+  }
 
   return(0);
 }

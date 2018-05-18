@@ -1,0 +1,133 @@
+
+# replicating the interlocks from SVT.alhConfig
+
+record(fanout,"B_SVT_INTLK:ALLOFF")
+{
+  field(LNK1,"B_SVT_INTLK:HVLVOFF")
+  field(LNK2,"B_SVT_INTLK:CHILLEROFF")
+}
+record(ao,"B_SVT_INTLK:HVLVOFF")
+{
+  field(OMSL,"closed_loop")
+  field(OUT,"B_SVT_ALL_OFF")
+  field(OVAL,"1")
+}
+record(ao,"B_SVT_INTLK:CHILLEROFF")
+{
+  field(OMSL,"closed_loop")
+  field(OUT,"B_SVT_CHILLER:ONOFF")
+  field(OVAL,"0")
+}
+
+#
+# SEVR==0 - NO_ALARM
+# SEVR==1 - MINOR
+# SEVR==2 - MAJOR
+#
+# STAT==0  - NO_ALARM
+# STAT==1  - READ 
+# STAT==2  - WRITE
+# STAT==3  - HIHI
+# STAT==4  - HIGH
+# STAT==5  - LOLO 
+# STAT==6  - LOW
+# STAT==7  - STATE
+# STAT==8  - COS 
+# STAT==9  - COMM
+# STAT==10 - TIMEOUT
+#
+
+record(calcout,"B_SVT_INTLK:HumidityHHLL")
+{
+  field(INPA,"B_SVT_V450_Humidity_Master.STAT")
+  field(CALC,"A=3||A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:AmbientHH")
+{
+  field(INPA,"B_SVT_V450_Ambinet_Master.STAT")
+  field(CALC,"A=3 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:HVLVOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:AmbientLL")
+{
+  field(INPA,"B_SVT_V450_Ambient_Master.STAT")
+  field(CALC,"A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:DewpointLL")
+{
+  field(INPA,"B_SVT_V450_Dewpoint_Master.STAT")
+  field(CALC,"A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:InletFlowHHLL")
+{
+  field(INPA,"B_SVT_Cool_Inlet_Flow:Alm.STAT")
+  field(CALC,"A==3||A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:OutletFlowHHLL")
+{
+  field(INPA,"B_SVT_Cool_Outlet_Flow:Alm.STAT")
+  field(CALC,"A==3||A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:InletTempHH")
+{
+  field(INPA,"B_SVT_Cool_Inlet_Temp:Alm.STAT")
+  field(CALC,"A==3 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:HVLVOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:InletTempLL")
+{
+  field(INPA,"B_SVT_Cool_Inlet_Temp:Alm.STAT")
+  field(CALC,"A==5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:R4OutletFlowHHLL")
+{
+  field(INPA,"B_SVT_R4_Cool_Flow:Alm.STAT")
+  field(CALC,"A==3||A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+record(calcout,"B_SVT_INTLK:ChillerExtTempHHLL")
+{
+  field(INPA,"B_SVT_CHILLER.GetPV00.STAT")
+  field(CALC,"A==3||A=5 ? 1 : 0")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_SVT_INTLK:ALLOFF.PROC")
+  field(DOPT,"Use OCAL")
+  field(OCAL,"1")
+}
+
+
+
+

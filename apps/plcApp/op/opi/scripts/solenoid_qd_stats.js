@@ -21,3 +21,5 @@ for (var i=1; i<=21; i++) {
 	PV_NAME = P + i;
 	createRow(DESC, PV_NAME);
 }
+
+createRow("IDCCT1", "B_SOL:QD:IDCCT1");

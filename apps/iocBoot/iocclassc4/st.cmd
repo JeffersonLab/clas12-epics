@@ -2,7 +2,7 @@
 ## The following is needed if your board support package doesn't at boot time
 ## automatically cd to the directory containing its startup script
 ##
-cd "/home/wmoore/workspaces/clas12-import-dev/apps/iocBoot/iocclassc4"
+###cd "/home/wmoore/workspaces/clas12-import-dev/apps/iocBoot/iocclassc4"
 
 ############################################################################
 < cdCommands
@@ -70,7 +70,7 @@ dbLoadTemplate("joerger_classc4.substitutions")
 # from scalerApp
 dbLoadRecords("$(TOP)/db/fcup_calc.db", "P=HB:,R=fcup,SCLR=scalerS2b")
 # from fcup_gainApp - DVME628, base address is hardcoded into the driver
-dbLoadDatabase("$(TOP)/db/fcup_cal.db")
+dbLoadRecords("$(TOP)/db/fcup_cal.db")
 
 ## harp_generic
 # OMS VME driver setup parameters: 

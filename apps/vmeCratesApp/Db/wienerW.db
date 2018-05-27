@@ -6,7 +6,7 @@ record (longout,"$(HOST):sysMainSwitch")
 	field (DESC,"Try to switch crate on/off. OFF=0, ON=1")
 #        field (FLNK,"$(HOST):mainOn.PROC")
 }
-record (longout,"$(HOST):sysVmeSysReset")
+record (longout,"$(HOST):sysVmeSysReset:raw")
 {
 	field (DTYP,"Snmp")
 	field (OUT,"@$(IP) guru %(MIB)sysVmeSysReset.0 INTEGER: 100 i" )
@@ -27,5 +27,15 @@ record (longout,"$(HOST):fanNominalSpeed")
         field (OUT,"@$(IP) guru %(MIB)fanNominalSpeed.0 INTEGER: 100 i")
         field (SCAN,"Passive")
         field (DESC,"Nominal fan speed in RPM")
+}
+
+record(seq,"$(HOST):sysMainReset") 
+{
+    field(LNK1,"$(HOST):sysMainSwitch PP")
+    field(DOL1,0)
+    field(DLY1,0)
+    field(LNK2,"$(HOST):sysMainSwitch PP")
+    field(DOL2,1)
+    field(DLY2,30)
 }
 

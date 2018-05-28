@@ -51,6 +51,8 @@ record (bi, "$(P):pwrbk")
     field (DTYP, "stream")
     field (SCAN, "$(SCAN)")
     field (INP,  "@A6551.proto getOnOff $(PORT)")
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
 #    field (FLNK, "$(P):comm.PROC")
 }
 #####################################################################
@@ -122,6 +124,8 @@ record (bi, "$(P):ocsetrbk")
     field (DTYP, "stream")
     field (INP,  "@A6551.proto getOcOnOff $(PORT)")
     field (PINI, 1)
+    field (ZNAM, "OFF")
+    field (ONAM, "ON")
 }
 #####################################################################
 
@@ -145,31 +149,49 @@ record (calc, "$(P):vstat")
   field(INPD,"0.1")
   field(CALC,"abs(A-B)<D && abs(A-C)<D ? 0 : 1")
 }
-record (calc, "$(P):alarm")
+
+record(calc, "$(P):vStatCalc")
 {
     field (SCAN, "Passive")
-    field (INPA, "$(P):comms CPP")
-    field (INPB, "$(P):pwrbk CPP")
-    field (INPC, "$(P):vstat CPP")
-    field (INPD, "$(P):ocstat CPP")
-    field (INPE, "$(P):imon CPP MS")
-    field (HHSV, "MAJOR")
-    field (HIHI, 1)
-    field (LOLO, -1)
-    field (CALC, "A=1 ? -1 : ( D>0 ? 1 : (B=1 ? C : 0) )")
+    field (INPA, "$(P):pwrbk CPP NMS")
+    field (INPB, "$(P):vstat CPP NMS")
+    field (INPC, "$(P):vmon.STAT CPP NMS")
+    field (CALC, "A && (B || (C>2 && C<7))")
 }
-#record (mbbi, "$(P):stat") {
-#    field (ZRST,"Off")
-#    field (ONST,"On")
-#    field (TWST,"Voltage out of range")
-#    field (THST,"Over current protection")
-#    field (FRST,"Current out of range")
-#    field (ZRSV,"MINOR")
-#    field (ONSV,"NO_ALARM")
-#    field (TWSV,"MINOR")
-#    field (THSV,"MAJOR")
-#    field (FRSV,"MAJOR")
-#}
+record(calc, "$(P):iStatCalc")
+{
+    field (SCAN, "Passive")
+    field (INPA, "$(P):pwrbk CPP NMS")
+    field (INPB, "$(P):ocstat CPP NMS")
+    field (INPC, "$(P):imon.STAT CPP NMS")
+    field (CALC, "A && (B || (C>2 && C<7))")
+}
+
+record (calc, "$(P):alarmCalc")
+{
+    field (SCAN, "Passive")
+    field (INPA, "$(P):comms CPP NMS")
+    field (INPB, "$(P):pwrbk CPP NMS")
+    field (INPC, "$(P):vStatCalc CPP NMS")
+    field (INPD, "$(P):iStatCalc CPP NMS")
+    field (CALC, "A ? 4 : C ? 2 : D ? 3 : B")
+    field (FLNK,"$(P):alarm.PROC")
+
+}
+record (mbbi, "$(P):alarm") {
+    field (INP, "$(P):alarmCalc NMS")
+    field (ZRST,"Off")
+    field (ONST,"On")
+    field (TWST,"Voltage Error")
+    field (THST,"Current Error")
+    field (FRST,"Communications Error")
+    field (ZRSV,"MINOR")
+    field (ONSV,"NO_ALARM")
+    field (TWSV,"MAJOR")
+    field (THSV,"MAJOR")
+    field (FRSV,"MAJOR")
+    field (FVSV,"MAJOR")
+}
 
 
 

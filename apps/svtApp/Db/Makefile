@@ -12,6 +12,7 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 
 DB += $(wildcard ../*.substitutions)
+DB += $(wildcard ../*.template)
 DB += $(wildcard ../*.db)
 
 #----------------------------------------------------

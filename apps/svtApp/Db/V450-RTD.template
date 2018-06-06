@@ -1,0 +1,44 @@
+#
+# Records for one Highland V450 RTD input with PT100 or board temperature
+#
+# Each V450 has 4 RTD channels, A/B/C/D, and one board temperature.
+# Corresponding device signal numbers are 16/17/18/19 and 20.
+# 
+# macros:
+# C = card number
+# S = signal number
+# P = prefix
+# R = optional 2nd prefix
+# T = optional separator
+# ALIAS
+#
+
+record(ai,"$(P)$(R=)$(T=)raw") {
+	field(DESC,"RTD ")
+	field(SCAN,"1 second")
+	field(DTYP,"V450")
+	field(FLNK,"$(P)$(R=)")
+	field(INP,"#C$(C) S$(S) @")
+	field(EGU,"degC * 16")
+    alias("$(ALIAS)$(T=)raw")
+}
+
+record(calc,"$(P)$(R=)") {
+	field(DESC,"V450 RTD/board temp")
+	field(FLNK,"$(P)$(R=)$(T=)Alm")
+	field(CALC,"A/16.0")
+	field(INPA,"$(P)$(R=)$(T=)raw NPP MS")
+	field(EGU,"degC")
+	field(PREC,"3")
+	field(HIHI,"33")
+	field(LOLO,"0")
+	field(HIGH,"30")
+	field(LOW,"1")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+    info(autosaveFields_pass0,"LOLO LOW HIGH HIHI LLSV LSV HSV HHSV")
+    alias("$(ALIAS)")
+}
+

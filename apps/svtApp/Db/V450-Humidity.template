@@ -1,0 +1,52 @@
+#
+# Records for one Highland V450 analog input used for Honeywell HIH-4031 humidity sensor.
+#
+# Each V450 has 16 analog inputs.
+# Corresponding device signal numbers are 0-15.
+#
+# macros:
+# C = card number
+# S = signal number
+# P = prefix
+# R = optional 2nd prefix
+# T = optional separator
+# ALIAS
+#
+
+record(ai,"$(P)$(R=)$(T=)raw") {
+	field(DESC,"V450 32-bit raw read")
+	field(SCAN,"1 second")
+	field(DTYP,"V450")
+	field(FLNK,"$(P)$(R=)$(T=)v")
+	field(INP,"#C$(C) S$(S) @")
+	field(PREC,"0")
+	field(EGU,"counts")
+    alias("$(ALIAS)$(T=)raw")
+}
+record(calc,"$(P)$(R=)$(T=)v") {
+	field(DESC,"V450 voltage out")
+	field(FLNK,"$(P)$(R=)")
+	field(CALC,"A * 12.5/(2**31)")
+	field(INPA,"$(P)$(R=)$(T=)raw.VAL NPP MS")
+	field(EGU,"V")
+	field(PREC,"3")
+    alias("$(ALIAS)$(T=)v")
+}
+record(calc,"$(P)$(R=)") {
+	field(DESC,"Honewell HIH-4301 Humidity Sensor")
+    #field(CALC,"(A - 0.8)/0.031")   # from SVT
+	field(CALC,"(A - 0.826)/0.0315") # from Honeywell
+	field(INPA,"$(P)$(R=)$(T=)v.VAL NPP MS")
+	field(EGU,"%")
+	field(PREC,"2")
+	field(HIHI,"70")
+	field(LOLO,"1")
+	field(HIGH,"60")
+	field(LOW,"0")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+    alias("$(ALIAS)")
+}
+

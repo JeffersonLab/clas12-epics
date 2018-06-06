@@ -1,0 +1,75 @@
+#
+# Dewpoint calculations
+# based on Relative Humidity (%) and Temperature (C) inputs
+#
+# macros:
+# P = prefix
+# R = optional 2nd prefix
+# T = optional separator
+# HUMID = humidity pv
+# TEMP = temperature pv
+# ALIAS
+#
+
+record(calc,"$(P)$(R=)$(T=)SimpleDp") {
+	field(DESC,"Simple Dewpoint RH > 50%")
+	field(SCAN,"1 second")
+	field(FLNK,"$(P)$(R=)")
+	field(CALC,"B - ((100-A) / 5)")
+	field(INPA,"$(HUMID) NPP MS")
+	field(INPB,"$(TEMP) PP NMS")
+	field(PREC,"3")
+    field(EGU,"degC")
+}
+record(calc,"$(P)$(R=)$(T=)HumCalc") {
+	field(DESC,"Humidity calculation per Magnus formula")
+	field(SCAN,"1 second")
+	field(FLNK,"$(P)$(R=)$(T=)MagnusDp")
+	field(CALC,"(A>0)?((LOG(A)-2)/D+(F*B)/(E+B)):0")
+	field(INPA,"$(HUMID) PP MS")
+	field(INPB,"$(TEMP) PP NMS")
+	field(INPD,"0.4343")
+	field(INPE,"243.12")
+	field(INPF,"17.62")
+	field(PREC,"3")
+    field(EGU,"%")
+}
+record(calc,"$(P)$(R=)$(T=)MagnusDp") {
+	field(DESC,"Magnus formula Dewpoint calculation")
+	field(CALC,"243.12*A/(17.62-A)")
+	field(INPA,"$(P)$(R=)$(T=)HumCalc NPP NMS")
+	field(PREC,"3")
+    field(EGU,"degC")
+}
+record(mbbo,"$(P)$(R=)$(T=)Dn") {
+	field(DESC,"Dewpoint Calculation Selector")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"$(P)$(R=)")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(ZRST,"Simple")
+	field(ONST,"Magnus")
+    field(VAL,"1")
+    info(autosaveFields_pass0,"VAL")
+}
+record(sel,"$(P)$(R=)") {
+	field(NVL,"$(P)$(R=)$(T=)Dn NPP NMS")
+	field(INPA,"$(P)$(R=)$(T=)SimpleDp NPP MS")
+	field(INPB,"$(P)$(R=)$(T=)MagnusDp NPP MS")
+}
+
+record(calc,"$(P)$(R=)$(T=)Alarm") {
+	field(DESC,"Dewpoint Alarm calc")
+	field(SCAN,"1 second")
+	field(CALC,"A-B")
+	field(INPA,"$(TEMP) NPP NMS")
+	field(INPB,"$(P)$(R=) NPP MS")
+	field(PREC,"3")
+    field(EGU,"degC")
+	field(LOLO,"3")
+	field(LOW,"5")
+	field(LLSV,"MAJOR")
+	field(LSV,"MINOR")
+    info(autosaveFields_pass0,"LOLO LOW LLSV LSV")
+}
+

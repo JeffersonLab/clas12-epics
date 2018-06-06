@@ -23,6 +23,8 @@ dbLoadRecords("db/svtWatchdogVme.db")
 
 dbLoadRecords("db/V450-alias.db")
 
+dbLoadTemplate("db/V450-MVT.substitutions")
+
 # Why did we do this?
 #dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks-noReboot.db","IOC=iocvmesvt")
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocvmesvt")
@@ -50,5 +52,5 @@ create_monitor_set("info_settings.req", 30, "P=iocvmesvt:")
 
 dbpf("${IOC}:SysReset.ASG","ALLWRITE")
 
-#dbl > pv.list
+dbl > pv.list
 

@@ -1,0 +1,218 @@
+
+record(stringin, "$(P)$(R)VERSION") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getVersion($(P)$(R)VERSION2) $(PORT)")
+    field(VAL,  "")
+    field(PINI, "1")
+}
+record(stringin, "$(P)$(R)VERSION2") {
+}
+
+record(stringin, "$(P)$(R)STATUS") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getStatus $(PORT)")
+    field(VAL,  "")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)$(R)STATUS_CALC")
+}
+# Status is an Error if starts with a '-'
+record(scalcout, "$(P)$(R)STATUS_CALC") {
+    field(INAA,"$(P)$(R)STATUS")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+    field(CALC,"AA[1,1]=='-'")
+}
+
+# Read EGU from different channel and write back to .EGU
+# - uses :EGU and :CONV_EGU
+record(ai, "$(P)$(R)TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(pv_00) $(PORT)")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+	field(FLNK, "$(P)$(R)TEMP:EGU")
+}
+record(bi, "$(P)$(R)TEMP:EGU") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(sp_07) $(PORT)")
+    field(ZNAM, "C")
+    field(ONAM, "F")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)$(R)TEMP:CONV_EGU")
+}
+record(stringout, "$(P)$(R)TEMP:CONV_EGU") {
+    field(DOL,  "$(P)$(R)TEMP:EGU")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)TEMP.EGU")
+}
+
+record(ai, "$(P)$(R)HTR_PWR") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(pv_01) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "%")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)EXT:TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(pv_02) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)SAFETY:TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(pv_03) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)SAFETY:TEMP:RD_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(pv_04) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP1") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_00) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP2") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_01) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP3") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_02) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P)$(R)TEMP:WARN_HI") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_03) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)TEMP:WARN_LO") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_04) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)FLOW") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_08) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)PRES") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getAi(sp_09) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "1 second")
+}
+
+
+
+record(mbbi, "$(P)$(R)TEMP:MODE:RD_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(sp_09) $(PORT)")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "3")
+    field(SCAN, "1 second")
+}
+record(sel,"$(P)$(R)TEMP:RD_SP") {
+    field(SELM,"Specified")
+    field(INPA,"$(P)$(R)TEMP:RD_SP1")
+    field(INPB,"$(P)$(R)TEMP:RD_SP2")
+    field(INPC,"$(P)$(R)TEMP:RD_SP3")
+    field(NVL,"$(P)$(R)TEMP:MODE:RD_SP PP")
+}
+record(mbbi, "$(P)$(R)CTRL_MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(mode_04) $(PORT)")
+    field(ZRST, "Internal")
+    field(ONST, "External")
+    field(SCAN, "1 second")
+}
+record(mbbi, "$(P)$(R)CIRC_MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(mode_05) $(PORT)")
+    field(ZRST, "Stop")
+    field(ONST, "Start")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)COOL_PWR:MAX") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(hil_00) $(PORT)")
+    field(EGU, "%")
+    field(SCAN, "1 second")
+}
+record(ai, "$(P)$(R)HTR_PWR:MAX") {
+    field(DTYP, "stream")
+    field(INP,  "@presto.proto getInt(hil_01) $(PORT)")
+    field(EGU, "%")
+    field(SCAN, "1 second")
+}
+
+########################################
+# Control Commands
+########################################
+record(ao, "$(P)$(R)TEMP:MODE:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(mode_01) $(PORT)")
+}
+record(bo, "$(P)$(R)CTRL_MODE:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(mode_02) $(PORT)")
+    field(ZNAM, "Internal")
+    field(ONAM, "External")
+}
+record(bo, "$(P)$(R)START_STOP:CTRL") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(mode_05) $(PORT)")
+    field(ZNAM, "Stop")
+    field(ONAM, "Start")
+}
+
+
+record(ao, "$(P)$(R)TEMP:SP1") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setAo(sp_00) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:SP2") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setAo(sp_01) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:SP3") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setAo(sp_02) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:WARN_HI:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setAo(sp_03) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:WARN_LO:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setAo(sp_04) $(PORT)")
+}
+record(ao, "$(P)$(R)PRES_STAGE:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(sp_07) $(PORT)")
+}
+record(ao, "$(P)$(R)HTR_PWR:MAX:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(hil_01) $(PORT)")
+}
+record(ao, "$(P)$(R)HTR_PWR:MAX:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@presto.proto setInt(hil_01) $(PORT)")
+# requires a preceeding negative sign
+    field(DRVH, "0")
+    field(DRVL, "-100")
+}
+

@@ -11,7 +11,7 @@ if (response)
 
     for (var cc=1; cc<=48; cc++)
     {
-        if (cc==14) continue;
+        //if (cc==14) continue;
 
         if (cc<10) cc="0"+cc;
         pvU = prefix + "U" + cc + ":pwonoff";

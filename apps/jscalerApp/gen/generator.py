@@ -419,6 +419,19 @@ def mkChannelsFTH(firstCrateNumber,spreadsheet='fth.txt'):
     channels.append(channel)
   return channels
 
+def mkChannelsBAND(crateNumber):
+  channels=[]
+  fileName='band-fadc.csv'
+  for line in open(fileName,'r').readlines():
+    cols=line.strip().split(',')
+    if len(cols)!=9 or cols[0]!='S': continue
+    cr,sl,ch,ele=cols[2],int(cols[4]),int(cols[5]),cols[8]
+    channel={'Sl':'%.2d'%(sl),'Ch':'%.2d'%(ch),'CrName':cr,'Det':'BAND','Sys':'FADC'}
+    channel['Element']=ele
+    setCodes(crateNumber,channel)
+    channels.append(channel)
+  return channels
+
 def mkCrates(channels,subfileName):
   crates=[]
   for channel in channels:
@@ -495,5 +508,8 @@ def mkDetector(channels,subFileName,startupFileName):
 #mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
 #mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
 
-mkDetector(mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
+#mkDetector(mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
+
+mkDetector(mkChannelsBAND(5),'jscalers_BAND_FADC.substitutions','jscalers_BAND.cmd')
+
 

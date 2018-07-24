@@ -9,7 +9,7 @@ Start_SCALERS_CRATE("1","ADCFT1")
 Start_SCALERS_CRATE("2","ADCFT2")
 Start_SCALERS_CRATE("3","ADCFT3")
 Start_SCALERS_CRATE("4","ADCCND1")
-
+#Start_SCALERS_CRATE("5","ADCBAND")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -26,6 +26,8 @@ dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")
 dbLoadTemplate("db/jscalers_FTH_FADC.substitutions")
 
 dbLoadTemplate("db/jscalers_CND_FADC.substitutions")
+
+#dbLoadTemplate("db/jscalers_BAND_FADC.substitutions")
 
 dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")

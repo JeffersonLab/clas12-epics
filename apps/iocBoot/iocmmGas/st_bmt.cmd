@@ -11,9 +11,11 @@ mmGas_registerRecordDeviceDriver(pdbbase)
 
 ## Configure modbus ports
 drvAsynIPPortConfigure("TCP505","129.57.160.181:505",0,0,1)
-
+drvAsynIPPortConfigure("TCP508","129.57.160.224:508",0,0,1)
+        
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
 modbusInterposeConfig("TCP505",0,5000,0)
+modbusInterposeConfig("TCP508",0,5000,0)
 
 # Debugging...
 #asynSetTraceMask("TCP505",0,9)
@@ -27,10 +29,14 @@ drvModbusAsynConfigure("R505", "TCP505", 0, 3,  0, 33, 0, 1000, "Siemens")
 drvModbusAsynConfigure("W505", "TCP505", 0, 6,  32, 1, 0, 1000, "Siemens")
 drvModbusAsynConfigure("W505A","TCP505", 0,16,  0, 33, 0, 0,    "Siemens")
 
+drvModbusAsynConfigure("R508", "TCP508", 0, 3,  0, 43, 0, 1000, "Siemens")
+
 ## Load record instances
- dbLoadRecords("db/save_restoreStatus.db", "P=$(IOC):")
+dbLoadRecords("db/save_restoreStatus.db", "P=$(IOC):")
 dbLoadRecords("db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadTemplate("db/mmgas_bmt.substitutions")
+
+dbLoadTemplate("db/mmgas_weather.substitutions")
 
 dbLoadRecords("db/mvt_gasOnOff.db")
 

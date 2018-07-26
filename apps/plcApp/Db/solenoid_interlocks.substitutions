@@ -69,3 +69,44 @@ file "db/torus_bo_generic.db" {
     # Section 4, Comm Resets
     { PLC_SOL, B_SOL:, MPS:, LampTestReset,       "", Reset, "Reset CryoCon Comm" }
 }
+
+#
+# SOE Timestamps (epoch)
+#
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU }
+    # LOWER
+    { PLC_SOL, B_SOL:, MPS:, TSL_VCL_Lead_T,        Solenoid_EN2T2:7:I.Timestamp[0].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_LHe_LL1,           Solenoid_EN2T2:7:I.Timestamp[1].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_LHe_LL2,           Solenoid_EN2T2:7:I.Timestamp[2].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Splice_T1,         Solenoid_EN2T2:7:I.Timestamp[3].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Splice_T2,         Solenoid_EN2T2:7:I.Timestamp[4].OffOn[0],   "epoch" }
+    # 5 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSL_PLC_Fast_Dump,     Solenoid_EN2T2:7:I.Timestamp[6].OffOn[0],   "epoch" }
+    # 7 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSL_Watchdog,          Solenoid_EN2T2:7:I.Timestamp[8].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Lead_Water_Flow,   Solenoid_EN2T2:7:I.Timestamp[9].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_VT_Cable,          Solenoid_EN2T2:7:I.Timestamp[10].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_System_Cable,      Solenoid_EN2T2:7:I.Timestamp[11].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_QD1_Sum,           Solenoid_EN2T2:7:I.Timestamp[12].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_QD2_Sum,           Solenoid_EN2T2:7:I.Timestamp[13].OffOn[0],  "epoch" }
+    # 14 - Spare
+    # 15 - Spare
+    # UPPER
+    { PLC_SOL, B_SOL:, MPS:, TSU_VCL_Lead_T,        Solenoid_EN2T2:7:I.Timestamp[0].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_LHe_LL1,           Solenoid_EN2T2:7:I.Timestamp[1].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_LHe_LL2,           Solenoid_EN2T2:7:I.Timestamp[2].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Splice_T1,         Solenoid_EN2T2:7:I.Timestamp[3].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Splice_T2,         Solenoid_EN2T2:7:I.Timestamp[4].OffOn[1],   "epoch" }
+    # 5 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSU_PLC_Fast_Dump,     Solenoid_EN2T2:7:I.Timestamp[6].OffOn[1],   "epoch" }
+    # 7 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSU_Watchdog,          Solenoid_EN2T2:7:I.Timestamp[8].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Lead_Water_Flow,   Solenoid_EN2T2:7:I.Timestamp[9].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_VT_Cable,          Solenoid_EN2T2:7:I.Timestamp[10].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_System_Cable,      Solenoid_EN2T2:7:I.Timestamp[11].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_QD1_Sum,           Solenoid_EN2T2:7:I.Timestamp[12].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_QD2_Sum,           Solenoid_EN2T2:7:I.Timestamp[13].OffOn[1],  "epoch" }
+    # 14 - Spare
+    # 15 - Spare
+}

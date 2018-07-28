@@ -14,8 +14,8 @@ def exit(text,parent):
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','RICH_LV','MVT_LV']
-DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','BAND_HV']
+DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV','RICH_LV','MVT_LV']
 DETSVT=['SVT']
 MISC=['BUFFERDEWAR']
 DETS=DETSHV+DETSLV+DETSVT+MISC
@@ -121,6 +121,26 @@ def getChannels(det,sector=None):
       for seg in range(1,25):
         for ch in [1,2]:
           prefixes.append('B_DET_CND_HV_%s_Seg%.2d_E%d'%(imo,seg,ch))
+  elif det=='BAND_HV':
+    prefix='B_DET_BAND_HV_'
+    nChans_noAB=10;
+    layers=['1','2','3','4','5','V']
+    nChans_AB={'1':6,'2':6,'3':6,'4':6,'5':5,'V':6}
+    nChans_noAB2={'1':2,'2':2,'3':2,'4':2,'5':0,'V':2}
+    sides={'1':['L','R'],'2':['L','R'],'3':['L','R'],'4':['L','R'],'5':['L','R'],'V':['']}
+    for layer in layers:
+      for side in sides[layer]:
+        if side!='': side='_'+side
+        iChan=1
+        while iChan<=nChans_noAB+nChans_AB[layer]+nChans_noAB2[layer]:
+          if iChan>nChans_noAB+nChans_AB[layer]:
+            prefixes.append('%s%s%.2d%s'%(prefix,layer,iChan,side))
+          elif iChan>nChans_noAB:
+            prefixes.append('%s%s%.2dA%s'%(prefix,layer,iChan,side))
+            prefixes.append('%s%s%.2dB%s'%(prefix,layer,iChan,side))
+          else:
+            prefixes.append('%s%s%.2d%s'%(prefix,layer,iChan,side))
+          iChan+=1
   elif det=='MVT_LV':
     sys.exit('NOT READY FOR MVT_LV')
   elif det=='RICH_HV':

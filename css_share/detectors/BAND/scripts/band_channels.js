@@ -5,15 +5,19 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 var novice = PVUtil.getDouble(pvs[0]);
 var layer = widget.getMacroValue("LAYER");
 var side  = widget.getMacroValue("SIDE");
+var scaler = widget.getMacroValue("SCALER");
 
-var prefix="B_DET_BAND_HV_";
+var prefix="B_DET_BAND_";
 var nChans_noAB=10;
 var layers=["1","2","3","4","5","V"];
 var nChans_AB=[6,6,6,6,5,6];
 var nChans_noAB2=[2,2,2,2,0,2];
 var sides=[["L","R"],["L","R"],["L","R"],["L","R"],["L","R"],[""]];
 
-java.lang.System.out.println(novice+" "+layer+" "+side);
+if (scaler==1) prefix+='FADC_';
+else           prefix+='HV_';
+
+//java.lang.System.out.println(novice+" "+layer+" "+side);
 
 function mkChan(layer,side,chan,suff) {
     
@@ -22,8 +26,9 @@ function mkChan(layer,side,chan,suff) {
     //java.lang.System.out.println("MK:"+pv);
 
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
-    else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
+    if      (scaler==1){ lc.setPropertyValue("opi_file","/CLAS12_Share/detectors/scalers/jscaler_fadc_det-hw-counts.opi"); }
+    else if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
+    else               { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     //    lc.setPropertyValue("resize_behavior",2);
@@ -31,8 +36,14 @@ function mkChan(layer,side,chan,suff) {
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);
     lc.setPropertyValue("background_color","Header_Background");
-    lc.addMacro("C",chan);
-    lc.addMacro("P",pv);
+    if (scaler==0) {
+        lc.addMacro("C",chan);
+        lc.addMacro("P",pv);
+    }
+    else {
+        lc.addMacro("P",prefix);
+        lc.addMacro("R",layer+chan2+suff+side);
+    }
     widget.addChildToBottom(lc);
 }
 

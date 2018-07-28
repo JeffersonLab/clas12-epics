@@ -9,6 +9,7 @@ Start_SCALERS_CRATE("1","ADCFT1")
 Start_SCALERS_CRATE("2","ADCFT2")
 Start_SCALERS_CRATE("3","ADCFT3")
 Start_SCALERS_CRATE("4","ADCCND1")
+
 #Start_SCALERS_CRATE("5","ADCBAND")
 
 ## Register all support components
@@ -39,6 +40,8 @@ dbLoadRecords("db/waveformApp.db","P=B_DET_FTH_,R=FADC:t:,NELM=232,FTVL=FLOAT,PE
 dbLoadRecords("db/waveformApp.db","P=B_DET_CND_,R=FADC:,  NELM=144,FTVL=FLOAT,PERIOD=1, FNAME=cndfadc.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_CND_,R=FADC:t:,NELM=144,FTVL=FLOAT,PERIOD=1, FNAME=cndfadcT.txt")
 
+#dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=257,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc.txt")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -57,6 +60,8 @@ seq waveform, "P=B_DET_FTH_,R=FADC:"
 seq waveform, "P=B_DET_FTH_,R=FADC:t:"
 seq waveform, "P=B_DET_CND_,R=FADC:"
 seq waveform, "P=B_DET_CND_,R=FADC:t:"
+
+#seq waveform, "P=B_DET_BAND_,R=FADC:"
 
 dbl > pv.list
 

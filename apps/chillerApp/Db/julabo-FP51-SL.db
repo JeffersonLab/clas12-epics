@@ -27,14 +27,14 @@ record(scalcout, "$(P)$(R)STATUS_CALC") {
 # - uses :EGU and :CONV_EGU
 record(ai, "$(P)$(R)TEMP") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(pv_00) $(PORT)")
+    field(INP,  "@julabo.proto getAi(pv_00) $(PORT)")
     field(PREC, "2")
     field(SCAN, "1 second")
 	field(FLNK, "$(P)$(R)TEMP:EGU")
 }
 record(bi, "$(P)$(R)TEMP:EGU") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(sp_07) $(PORT)")
+    field(INP,  "@julabo.proto getInt(sp_07) $(PORT)")
     field(ZNAM, "C")
     field(ONAM, "F")
     field(SCAN, "1 second")
@@ -48,69 +48,69 @@ record(stringout, "$(P)$(R)TEMP:CONV_EGU") {
 
 record(ai, "$(P)$(R)HTR_PWR") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(pv_01) $(PORT)")
+    field(INP,  "@julabo.proto getAi(pv_01) $(PORT)")
     field(PREC, "1")
     field(EGU,  "%")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)EXT:TEMP") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(pv_02) $(PORT)")
+    field(INP,  "@julabo.proto getAi(pv_02) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)SAFETY:TEMP") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(pv_03) $(PORT)")
+    field(INP,  "@julabo.proto getAi(pv_03) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)SAFETY:TEMP:RD_SP") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(pv_04) $(PORT)")
+    field(INP,  "@julabo.proto getAi(pv_04) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)TEMP:RD_SP1") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_00) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_00) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)TEMP:RD_SP2") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_01) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_01) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)TEMP:RD_SP3") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_02) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_02) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 
 record(ai, "$(P)$(R)TEMP:WARN_HI") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_03) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_03) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)TEMP:WARN_LO") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_04) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_04) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)FLOW") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_08) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_08) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)PRES") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getAi(sp_09) $(PORT)")
+    field(INP,  "@julabo.proto getAi(sp_09) $(PORT)")
     field(PREC, "1")
     field(SCAN, "1 second")
 }
@@ -119,7 +119,7 @@ record(ai, "$(P)$(R)PRES") {
 
 record(mbbi, "$(P)$(R)TEMP:MODE:RD_SP") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(sp_09) $(PORT)")
+    field(INP,  "@julabo.proto getInt(sp_09) $(PORT)")
     field(ZRST, "1")
     field(ONST, "2")
     field(TWST, "3")
@@ -134,27 +134,27 @@ record(sel,"$(P)$(R)TEMP:RD_SP") {
 }
 record(mbbi, "$(P)$(R)CTRL_MODE") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(mode_04) $(PORT)")
+    field(INP,  "@julabo.proto getInt(mode_04) $(PORT)")
     field(ZRST, "Internal")
     field(ONST, "External")
     field(SCAN, "1 second")
 }
 record(mbbi, "$(P)$(R)CIRC_MODE") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(mode_05) $(PORT)")
+    field(INP,  "@julabo.proto getInt(mode_05) $(PORT)")
     field(ZRST, "Stop")
     field(ONST, "Start")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)COOL_PWR:MAX") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(hil_00) $(PORT)")
+    field(INP,  "@julabo.proto getInt(hil_00) $(PORT)")
     field(EGU, "%")
     field(SCAN, "1 second")
 }
 record(ai, "$(P)$(R)HTR_PWR:MAX") {
     field(DTYP, "stream")
-    field(INP,  "@presto.proto getInt(hil_01) $(PORT)")
+    field(INP,  "@julabo.proto getInt(hil_01) $(PORT)")
     field(EGU, "%")
     field(SCAN, "1 second")
 }
@@ -164,17 +164,17 @@ record(ai, "$(P)$(R)HTR_PWR:MAX") {
 ########################################
 record(ao, "$(P)$(R)TEMP:MODE:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(mode_01) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(mode_01) $(PORT)")
 }
 record(bo, "$(P)$(R)CTRL_MODE:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(mode_02) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(mode_02) $(PORT)")
     field(ZNAM, "Internal")
     field(ONAM, "External")
 }
 record(bo, "$(P)$(R)START_STOP:CTRL") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(mode_05) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(mode_05) $(PORT)")
     field(ZNAM, "Stop")
     field(ONAM, "Start")
 }
@@ -182,35 +182,35 @@ record(bo, "$(P)$(R)START_STOP:CTRL") {
 
 record(ao, "$(P)$(R)TEMP:SP1") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setAo(sp_00) $(PORT)")
+    field(OUT,  "@julabo.proto setAo(sp_00) $(PORT)")
 }
 record(ao, "$(P)$(R)TEMP:SP2") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setAo(sp_01) $(PORT)")
+    field(OUT,  "@julabo.proto setAo(sp_01) $(PORT)")
 }
 record(ao, "$(P)$(R)TEMP:SP3") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setAo(sp_02) $(PORT)")
+    field(OUT,  "@julabo.proto setAo(sp_02) $(PORT)")
 }
 record(ao, "$(P)$(R)TEMP:WARN_HI:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setAo(sp_03) $(PORT)")
+    field(OUT,  "@julabo.proto setAo(sp_03) $(PORT)")
 }
 record(ao, "$(P)$(R)TEMP:WARN_LO:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setAo(sp_04) $(PORT)")
+    field(OUT,  "@julabo.proto setAo(sp_04) $(PORT)")
 }
 record(ao, "$(P)$(R)PRES_STAGE:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(sp_07) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(sp_07) $(PORT)")
 }
 record(ao, "$(P)$(R)HTR_PWR:MAX:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(hil_01) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(hil_01) $(PORT)")
 }
 record(ao, "$(P)$(R)HTR_PWR:MAX:SP") {
     field(DTYP, "stream")
-    field(OUT,  "@presto.proto setInt(hil_01) $(PORT)")
+    field(OUT,  "@julabo.proto setInt(hil_01) $(PORT)")
 # requires a preceeding negative sign
     field(DRVH, "0")
     field(DRVL, "-100")

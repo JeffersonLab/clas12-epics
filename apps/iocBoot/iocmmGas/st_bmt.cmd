@@ -37,6 +37,8 @@ dbLoadRecords("db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadTemplate("db/mmgas_bmt.substitutions")
 
 dbLoadTemplate("db/mmgas_weather.substitutions")
+dbLoadRecords("db/mmgas_weather_aliases.db")
+dbLoadRecords("db/mmgas_weather_avg.db")
 
 dbLoadRecords("db/mvt_gasOnOff.db")
 

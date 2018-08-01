@@ -18,7 +18,10 @@ DB += mmgas_global_status.template
 DB += mmgas_bmt.substitutions
 DB += mmgas_fmt.substitutions
 DB += mmgas_ftt.substitutions
+
 DB += mmgas_weather.substitutions
+DB += mmgas_weather_aliases.db
+DB += mmgas_weather_avg.db
 
 DB += mvt_gasOnOff.db
 

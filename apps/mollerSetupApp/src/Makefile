@@ -6,19 +6,23 @@ include $(TOP)/configure/CONFIG
 
 # Build an IOC support library
 LIBRARY_IOC_vxWorks += mollerSetupSupport
+LIBRARY_IOC_Linux += mollerSetupSupport
 DBD += mollerSetupSupport.dbd
 
 mollerSetupSupport_DBD += mollerSetupSNC.dbd
 
 # Compile and add the code to the support library
-mollerSetupSupport_SRCS += moller_oplog_remote.c
-mollerSetupSupport_SRCS += moller_setup.st
+#mollerSetupSupport_SRCS += moller_oplog_remote.c
+#mollerSetupSupport_SRCS += moller_setup.st
+mollerSetupSupport_SRCS += automoller.st
 
 mollerSetupSupport_LIBS += seq pv
 mollerSetupSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Build the IOC application
 PROD_IOC_vxWorks = mollerSetup
+
+PROD_IOC_Linux = mollerSetup
 
 # mollerSetup.dbd will be created and installed
 DBD += mollerSetup.dbd

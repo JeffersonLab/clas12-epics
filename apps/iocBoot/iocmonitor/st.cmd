@@ -15,9 +15,6 @@ scanOnceSetQueueSize(10000)
 dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")
 dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
 
-# remove this from iocmonitor after ioctorusForce is restarted:
-dbLoadRecords("db/torus_fieldAverage.db")
-
 dbLoadRecords("db/collimator_alarm.db")
 
 # cross-IOC hv stuff:

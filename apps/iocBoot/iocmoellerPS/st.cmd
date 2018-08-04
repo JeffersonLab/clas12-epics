@@ -18,8 +18,8 @@ drvAsynIPPortConfigure("SER1", "hallb-moxa6:4001")
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
-dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOELLER1_,PORT=SER1,ADDR=1")
-# dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOELLER2_,PORT=SER2,ADDR=1")
+#dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOELLER1_,PORT=SER1,ADDR=1")
+dbLoadRecords("db/SCE410.db", "P=B_MOLLER_,R=HELMHOLTZ_,PORT=SER1,ADDR=1")
 
 cd "${TOP}/iocBoot/${IOC}"
 

@@ -26,6 +26,10 @@ dbLoadTemplate("db/ftofOnOff.substitutions")
 dbLoadTemplate("db/hvOnOff.substitutions")
 dbLoadRecords("db/ltccOnOff.db","ONOFF=ON")
 dbLoadRecords("db/ltccOnOff.db","ONOFF=OFF")
+
+dbLoadRecords("db/caenhv_DC_onoff.db")
+dbLoadTemplate("db/dcOnOff.substitutions")
+
 dbLoadRecords("db/svt-sums-global.db")
 
 dbLoadRecords("db/beamCurrentRatios.db")

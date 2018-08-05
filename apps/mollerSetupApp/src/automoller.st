@@ -6,13 +6,20 @@ option -r;
 // safe mode:
 option +s;
 
+#define DC_ALARM 1
+#define SVT_ALARM 2
+#define MVT_ALARM 3
+#define QUAD_ALARM 4
+#define HELM_ALARM 5
+
 int isMollerRunning;
-int detectorsOff;
+int turnDetectorsOff;
+float hv_slm_default;
 
 string stmp;
-string msg;      assign msg   to "{P}ctrl:msg";
-string alarm;    assign alarm to "{P}ctrl:alarm";
-int logentry;    assign logentry to "{P}ctrl:logentry"; monitor logentry;
+string msg;   assign msg   to "{P}ctrl:msg";
+int alarm;    assign alarm to "{P}ctrl:alarm";
+int logentry; assign logentry to "{P}ctrl:logentry"; monitor logentry;
 
 // User Controls:
 int moller_enter; assign moller_enter to "{P}ctrl:enter"; monitor moller_enter;
@@ -27,7 +34,6 @@ float helm_icfg;   assign helm_icfg     to "{P}cfg:helm:iset";
 int helm_polcfg;   assign helm_polcfg   to "{P}cfg:helm:pol";
 int tgt_cfg;       assign tgt_cfg       to "{P}cfg:tgt:pos";
 float hv_slm_vcfg; assign hv_slm_vcfg   to "{P}cfg:slm:vset";
-float hv_slm_default;
 
 monitor quad_icfg;    evflag ev_quad_icfg;    sync quad_icfg   ev_quad_icfg;
 monitor helm_icfg;    evflag ev_helm_icfg;    sync helm_icfg   ev_helm_icfg;
@@ -70,14 +76,13 @@ float tgt_calib;  assign tgt_calib    to "moller_target_calib";
 float tgt_cmd;    assign tgt_cmd      to "moller_target_command";
 float tgt_left;   assign tgt_left     to "moller_target_left";
 float tgt_right;  assign tgt_right    to "moller_target_right";
-float tgt_empty;  assign tgt_empty    to "moller_target_empty";
+float tgt_empty;  assign tgt_empty    to "moller_target_empty"; monitor tgt_empty;
 float tgt_moving; assign tgt_moving   to "moeller_target.MOVN"; monitor tgt_moving;
 
 // High Voltage:
 float hv_dc_off;    assign hv_dc_off    to "{S}B_DET_DC_HV:OFF";
 float hv_svt_off;   assign hv_svt_off   to "{S}B_SVT_SEQ:btnOff";
 float hv_bmt_off;   assign hv_bmt_off   to "{S}B_DET_BMT_HV:pwoff";
-float hv_fmt_off;   assign hv_fmt_off   to "{S}B_DET_FMT_HV:pwoff";
 
 float hv_slm_onoff;   assign hv_slm_onoff to   "B_DET_BLINE_HV_SLM:pwonoff";
 float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
@@ -86,14 +91,13 @@ float hv_slm_stat;    assign hv_slm_stat to    "B_DET_BLINE_HV_SLM:stat"; monito
 
 int hv_svt_stat; assign hv_svt_stat to "{S}B_SVT:status"; // 0=ALLOFF,1=ALLON,2=MIXED
 int hv_bmt_stat; assign hv_bmt_stat to "{S}B_DET_BMT_HV:stat";
-int hv_fmt_stat; assign hv_fmt_stat to "{S}B_DET_FMT_HV:stat";
 int hv_dc_stat;  assign hv_dc_stat to "{S}B_DET_DC_HV:isOff";
 
 // asym DAQ:
 int moller_accumulate; assign moller_accumulate to "moller_accumulate";
 int moller_reset;      assign moller_reset      to "moller_reset";
-string filename; assign filename to "asym_filename";
-float polarization;    assign polarization to  "beam_polarization";
+string filename;       assign filename      to "asym_filename";
+float polarization;    assign polarization  to "beam_polarization";
 float epolarization;   assign epolarization to "beam_polarization_error";
 
 %{
@@ -111,20 +115,18 @@ void makeLogEntry(
     char cmd[1000];
     char body[1000];
     sprintf(body,
-            "Polarization = %.1f(%.1f)\n"
-            "Beam Energy = %.1f\n"
-            "SLM Voltage = %.1f\n"
-            "Quad Current = %.1f\n"
-            "Helmholtz Current = %.1f\n"
-            "Target Position = %d\n"
-            "Half Wave Plate = %d\n"
-            "Filename = %s/%s",
-            pol,epol,energy,hv,quad,helm,tgt,hwp,dir,filename);
-    fprintf(stderr,"doggy");
-    sprintf(cmd,"logentry -l TLOG -t MollerRun -b %s/%s",dir,filename);
-    //sprintf(cmd,"logentry -l TLOG -t MollerRUn -a %s/%s -b '%s'",dir,filename,body);
+            "Polarization = %.1f +/- %.1f<br>"
+            "Half Wave Plate = %d<br>"
+            "Target Position = %d<br>"
+            "Beam Energy = %.1f<br>"
+            "Quad Current = %.1f<br>"
+            "Helmholtz Current = %.1f<br>"
+            "SLM Voltage = %.1f<br>"
+            "Filename = %s/%s<br>",
+            pol,epol,hwp,tgt,energy,quad,helm,hv,dir,filename);
+    sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Test Run' -a %s/%s -b -",body,dir,filename);
     fprintf(stderr,cmd);
-    //system(cmd);
+	system(cmd);
 }
 }%
 
@@ -133,7 +135,7 @@ ss automoller {
     // just connect to pvs:
     state start {
         entry {
-            detectorsOff=0;
+            turnDetectorsOff=0;
             isMollerRunning=0;
             sprintf(msg,"connecting ...");
             printf("%s\n",msg);
@@ -160,7 +162,7 @@ ss automoller {
             //efClear(ev_moller_accumulate);
         }
         when () {
-            sprintf(msg,"Ready and Waiting ...");
+            sprintf(msg,"Non-Moller Configuration.");
             printf("%s\n",msg);
             pvPut(msg);
         } state listen
@@ -212,6 +214,11 @@ ss automoller {
             sprintf(msg,"%s",stmp);
             pvPut(msg);
         } state listen
+		
+		when (moller_recfg) {
+			moller_recfg=0;
+			pvPut(moller_recfg);
+		} state reconfigure
 
         when (moller_enter) {
             sprintf(msg,"Entering Moller Configuration ...");
@@ -240,19 +247,26 @@ ss automoller {
         } state stopDaq
 
         when (logentry) {
-            moller_accumulate=1;
-            pvPut(moller_accumulate);
-            logentry=0;
-            pvPut(logentry);
-            pvGet(filename);
-            pvGet(beamEnergy);
-            pvGet(halfwaveplate);
-            pvGet(polarization);
-            pvGet(epolarization);
-            sprintf(msg,"Generating Logbook Entry ...");
-            pvPut(msg);
-            epicsThreadSleep(5);
-            makeLogEntry(filename,polarization,epolarization,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate);
+            if (isMollerRunning) {
+                sprintf(msg,"Moller Run in Progress.  Stop it to make Log Entry.");
+                printf("%s\n",msg);
+                pvPut(msg);
+            }
+            else {
+                sprintf(msg,"Generating Logbook Entry ...");
+                pvPut(msg);
+                logentry=0;
+                pvPut(logentry);
+                pvGet(filename);
+                pvGet(beamEnergy);
+                pvGet(halfwaveplate);
+                pvGet(polarization);
+                pvGet(epolarization);
+                epicsThreadSleep(5);
+                makeLogEntry(filename,polarization,epolarization,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate);
+                sprintf(msg,"Check logbook for new entry.");
+                pvPut(msg);
+            }
         } state listen
 
         when () {
@@ -261,7 +275,48 @@ ss automoller {
     }
 
 ///////////////////////////////////////////////////
+
+	state reconfigure {
+
+		entry {
+			sprintf(stmp,"%s",msg);
+			if (isMollerRunning) {
+				sprintf(msg,"Ignoring Reconfigure Mid-Run ...");
+				pvPut(msg);
+			}
+			else {
+				sprintf(stmp,"%s",msg);
+				sprintf(msg,"Reconfiguring ...");
+				pvPut(msg);
+				quadB_iset = quad_icfg;
+				quadC_iset = quad_icfg;
+				helm_iset = helm_icfg*(2*helm_polcfg-1);
+				hv_slm_vset = hv_slm_vcfg;
+				tgt_cmd = tgt_cfg;
+				pvPut(quadB_iset);
+				pvPut(quadC_iset);
+				pvPut(helm_iset);
+				pvPut(hv_slm_vset);
+				pvPut(tgt_cmd);
+				epicsThreadSleep(5);
+			}
+		}
+
+		when (delay(1) && tgt_moving==0) {
+		} state listen
+		
+		exit {
+			sprintf(msg,"%s",stmp);
+			pvPut(msg);
+		}
+	}
+
     state enterMoller {
+		entry {
+            sprintf(msg,"Entering Moller Configuration ...");
+            printf("%s\n",msg);
+            pvPut(msg);
+		}
         when (delay(2)) {} state checkTagger
     }
 
@@ -277,54 +332,56 @@ ss automoller {
     }
 
     state hvOff {
-        
+      
+		// execute entry block even if previous state was the same:
+		option -e;
+
         entry {
-            sprintf(msg,"Turning HV Off ...");
-            printf("%s\n",msg);
-            pvPut(msg);
-            if (detectorsOff) {
-                hv_dc_off=1;
-                pvPut(hv_dc_off);
-                hv_svt_off=1;
-                pvPut(hv_svt_off);
-                hv_bmt_off=1;
-                pvPut(hv_bmt_off);
+            if (turnDetectorsOff) {
+				sprintf(msg,"Turning HV Off ...");
+				printf("%s\n",msg);
+				pvPut(msg);
+				if (hv_dc_stat!=0) {
+					hv_dc_off=1;
+					pvPut(hv_dc_off);
+				}
+				if (hv_svt_stat!=0) {
+					hv_svt_off=1;
+					pvPut(hv_svt_off);
+				}
+				if (hv_bmt_stat!=0) {
+					hv_bmt_off=1;
+					pvPut(hv_bmt_off);
+				}
             }
         }
 
-        when (!detectorsOff && delay(2)) {} state setSlm
+        when (delay(2) && !turnDetectorsOff) {} state setSlm
 
-        when (hv_dc_stat==0 && hv_svt_stat==0 && hv_bmt_stat==0) {} state setSlm
+        when (delay(5) &&
+			  hv_dc_stat==0 &&
+			  hv_svt_stat==0 &&
+			  hv_bmt_stat==0) {} state setSlm
         
-        when (delay(20) && hv_dc_stat!=0) {
-            hv_dc_off=1;
-            pvPut(hv_dc_off);
-            epicsThreadSleep(5);
-        } state hvOff
-
-        when (delay(20) && hv_svt_stat!=0) {
-            hv_svt_off=1;
-            pvPut(hv_svt_off);
-            epicsThreadSleep(5);
-        } state hvOff
-        
-        when (delay(20) && hv_bmt_stat!=0) {
-            hv_bmt_off=1;
-            pvPut(hv_bmt_off);
-            epicsThreadSleep(5);
-        } state hvOff
+        when (delay(20) && hv_bmt_stat!=0) {} state hvOff
+        when (delay(30) && hv_dc_stat!=0)  {} state hvOff
+        when (delay(60) && hv_svt_stat!=0) {} state hvOff
         
         when (delay(90)) {
             if (hv_dc_stat!=0) {
+				alarm=DC_ALARM;
                 sprintf(msg,"ERROR turning DC HV Off.  Aborted Moller Run.");
             }
             else if (hv_svt_stat!=0) {
+				alarm=SVT_ALARM;
                 sprintf(msg,"ERROR turning SVT HV Off.  Aborted Moller Run.");
             }
             else if (hv_bmt_stat!=0) {
+				alarm=MVT_ALARM;
                 sprintf(msg,"ERROR turning BMT HV Off.  Aborted Moller Run.");
             }
             printf("%s\n",msg);
+			pvPut(alarm);
             pvPut(msg);
         } state listen
         
@@ -482,18 +539,7 @@ ss automoller {
             printf("%s\n",msg);
             pvPut(msg);
         }
-        when (delay(1)) {} state restoreSlm
-    }
-
-    state restoreSlm {
-        entry {
-            sprintf(msg,"Restoring SLM settings ...");
-            printf("%s\n",msg);
-            pvPut(msg);
-            hv_slm_vset=hv_slm_default;
-            pvPut(hv_slm_vset);
-        }
-        when () {} state quadsOff
+        when (delay(1)) {} state quadsOff
     }
 
     state quadsOff {
@@ -509,9 +555,8 @@ ss automoller {
             pvPut(quadB_off);
             quadC_off = 0;
             pvPut(quadC_off);
-            epicsThreadSleep(5);
         }
-        when () {} state helmholtzOff
+        when (delay(5)) {} state helmholtzOff
     }
 
     state helmholtzOff {
@@ -523,9 +568,19 @@ ss automoller {
             pvPut(helm_iset);
             helm_off=1;
             pvPut(helm_off);
-            epicsThreadSleep(2);
         }
-        when () {} state retractTarget
+        when (delay(5)) {} state restoreSlm
+    }
+    
+	state restoreSlm {
+        entry {
+            sprintf(msg,"Restoring SLM settings ...");
+            printf("%s\n",msg);
+            pvPut(msg);
+            hv_slm_vset=hv_slm_default;
+            pvPut(hv_slm_vset);
+        }
+        when (delay(2)) {} state retractTarget
     }
     
     state retractTarget {
@@ -535,9 +590,8 @@ ss automoller {
             pvPut(msg);
             tgt_go_empty=1;
             pvPut(tgt_go_empty);
-            epicsThreadSleep(1);
         }
-        when (delay(10) && tgt_moving==0) {
+        when (delay(10) && tgt_moving==0 && tgt_empty==1) {
             sprintf(msg,"Non-Moller Configuration Restored.");
             printf("%s\n",msg);
             pvPut(msg);

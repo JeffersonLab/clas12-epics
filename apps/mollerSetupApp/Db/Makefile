@@ -6,6 +6,7 @@ include $(TOP)/configure/CONFIG
 # Install databases, templates & substitutions like this
 DB += moller_setup.db
 DB += automoller.db
+DB += automoller-sim.db
 
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>

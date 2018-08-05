@@ -8,7 +8,8 @@ cd ${TOP}
 dbLoadDatabase "dbd/mollerSetup.dbd"
 mollerSetup_registerRecordDeviceDriver pdbbase
 
-dbLoadRecords("db/automoller.db","P=B_MOLLER:,S=SIM:")
+dbLoadRecords("db/automoller.db","P=B_MOLLER:")
+dbLoadRecords("db/automoller-sim.db","P=B_MOLLER:,S=SIM:")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -1,3 +1,12 @@
+#
+# Records for automoller.st
+#
+# N. Baltzell, 2018
+#
+
+###############################################
+# status stuff:
+
 record(stringin,"$(P)ctrl:msg") {
     field(VAL,"Uninitialized")
 }
@@ -15,7 +24,22 @@ record(mbbi,"$(P)ctrl:alarm") {
     field(FRSV,"MAJOR")
     field(FVSV,"MAJOR")
     field(SXSV,"MAJOR")
+    field(VAL,0)
+    field(PINI,1)
 }
+record(ai,"$(P)ctrl:runno") {
+    field(VAL,1000)
+    info(autosaveFields_pass0,"VAL")
+}
+record(stringin,"$(P)ctrl:logcomments") {
+    field(VAL,"None")
+}
+record(stringin,"$(P)ctrl:logusers") {
+    field(VAL,"")
+}
+
+###############################################
+# user controls:
 
 record(bo,"$(P)ctrl:enter") {
     field(ZNAM,"N/A")
@@ -41,6 +65,9 @@ record(bo,"$(P)ctrl:logentry") {
     field(ZNAM,"N/A")
     field(ONAM,"Go")
 }
+
+###############################################
+# configuration settings:
 
 record(calcout,"$(P)cfg:quad:icalc") {
     field(INPA,"MBSY2C_energy")
@@ -74,5 +101,6 @@ record(mbbi,"$(P)cfg:tgt:pos") {
     field(TTST,"Right")
     field(FTST,"Aluminum")
     field(VAL,"11")
+    info(autosaveFields_pass0,"VAL")
 }
 

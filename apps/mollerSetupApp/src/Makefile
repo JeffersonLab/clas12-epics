@@ -29,6 +29,8 @@ DBD += mollerSetup.dbd
 
 # mollerSetup.dbd will include these files:
 mollerSetup_DBD += base.dbd
+mollerSetup_DBD += devIocStats.dbd
+mollerSetup_DBD += asSupport.dbd
 mollerSetup_DBD += mollerSetupSupport.dbd
 
 # mollerSetup_registerRecordDeviceDriver.cpp derives from mollerSetup.dbd
@@ -44,6 +46,8 @@ mollerSetup_SRCS_vxWorks += -nil-
 # Link in the code from our support library
 mollerSetup_LIBS += mollerSetupSupport
 mollerSetup_LIBS += seq pv
+mollerSetup_LIBS += autosave
+mollerSetup_LIBS += devIocStats
 mollerSetup_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

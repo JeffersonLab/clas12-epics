@@ -24,3 +24,27 @@ file "db/mmgas_asyn_aiFloat64.template" { pattern
     {B_DET_MM_, HUMID_05,  R508,   40,     FLOAT32_BE, 0,    0,    1,      "%", "I/O Intr"}
     {B_DET_MM_, HUMID_06,  R508,   42,     FLOAT32_BE, 0,    0,    1,      "%", "I/O Intr"}
 }
+
+file "db/mmgas_asyn_aoFloat64.template" { pattern
+    {P,         R                       PORT,  OFFSET, DATA_TYPE,  DRVL, DRVH,  PREC, EGU}
+    {B_DET_MM_, HUMID_SCAN_HOURS_SET,   W508A, 0,      INT32_BE,   0,    99999, 0,    hr}
+    {B_DET_MM_, HUMID_SCAN_MINUTES_SET, W508A, 2,      INT32_BE,   0,    59,    0,    min}
+    {B_DET_MM_, HUMID_SCAN_SECONDS_SET, W508A, 4,      INT32_BE,   0,    59,    0,    sec}
+}
+file "db/mmgas_asyn_aiFloat64.template" { pattern
+    {P,         R                   PORT, OFFSET, DATA_TYPE,  LOPR, HOPR, PREC, EGU, SCAN}
+    {B_DET_MM_, HUMID_SCAN_HOURS,   R508, 44,     INT32_BE,   0,    0,    1,    hr,  "I/O Intr"}
+    {B_DET_MM_, HUMID_SCAN_MINUTES, R508, 46,     INT32_BE,   0,    0,    1,    min, "I/O Intr"}
+    {B_DET_MM_, HUMID_SCAN_SECONDS, R508, 48,     INT32_BE,   0,    0,    1,    sec, "I/O Intr"}
+}
+file "db/mmgas_asyn_bo_bit.template" { pattern
+    {P,         R,                PORT   OFFSET, MASK,  HIGH, ZNAM,         ONAM}
+    {B_DET_MM_, HUMID_SCAN_START, W508B, 0,      256,   1,    "Start Scan", "Start Scan"}
+    {B_DET_MM_, HUMID_SCAN_STOP,  W508B, 0,      512,   1,    "Stop Scan",  "Stop Scan"}
+}
+file "db/mmgas_asyn_bi_bit.template" { pattern
+    {P,         R,                  PORT, OFFSET, MASK, ZNAM,   ONAM,   ZSV,      OSV,      SCAN}
+    {B_DET_MM_, HUMID_SCAN_STATUS,  R508, 50,     1024, Stopped,Running,NO_ALARM, NO_ALARM, "I/O Intr"}
+}
+
+

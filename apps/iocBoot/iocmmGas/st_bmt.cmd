@@ -29,7 +29,9 @@ drvModbusAsynConfigure("R505", "TCP505", 0, 3,  0, 33, 0, 1000, "Siemens")
 drvModbusAsynConfigure("W505", "TCP505", 0, 6,  32, 1, 0, 1000, "Siemens")
 drvModbusAsynConfigure("W505A","TCP505", 0,16,  0, 33, 0, 0,    "Siemens")
 
-drvModbusAsynConfigure("R508", "TCP508", 0, 3,  0, 43, 0, 1000, "Siemens")
+drvModbusAsynConfigure("R508", "TCP508", 0, 3,  0, 51, 0, 1000, "Siemens")
+drvModbusAsynConfigure("W508A","TCP508", 0,16, 44, 6,  0, 0,    "Siemens")
+drvModbusAsynConfigure("W508B","TCP508", 0, 6, 50, 1,  0, 1000, "Siemens")
 
 ## Load record instances
 dbLoadRecords("db/save_restoreStatus.db", "P=$(IOC):")

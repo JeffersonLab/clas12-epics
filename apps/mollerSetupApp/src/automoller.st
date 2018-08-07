@@ -117,6 +117,9 @@ int moller_reset;      assign moller_reset      to "moller_reset";
 string filename;       assign filename          to "asym_filename";
 float polarization;    assign polarization      to "beam_polarization";
 float epolarization;   assign epolarization     to "beam_polarization_error";
+float slmbca;          assign slmbca            to "q_asym_3";
+float slmebca;         assign slmebca           to "d_asym_3";
+
 #define STARTDAQ 0
 #define STOPDAQ 1
 
@@ -126,6 +129,8 @@ void makeLogEntry(
         char* filename,
         float pol,
         float epol,
+        float bca,
+        float ebca,
         float energy,
         float hv,
         float quad,
@@ -142,17 +147,20 @@ void makeLogEntry(
     sprintf(filename,"moeller_04-16-18_19:37:57.txt");
     sprintf(body,
             "User Comments = %s<br><br>"
-            "Polarization = %.1f +/- %.1f<br>"
-            "Half Wave Plate = %d<br>"
-            "Target Position = %d<br>"
-            "Beam Energy = %.1f<br>"
-            "Quad Current = %.1f<br>"
-            "Helmholtz Current = %.1f<br>"
-            "SLM Voltage = %.1f<br>"
-            "Filename = %s/%s<br>"
-            "Moller Run Number = %d<br>"
-            "CODA Run Number = %d<br>",
-            logcom,pol,epol,hwp,tgt,energy,quad,helm,hv,dir,filename,runno,coda_runno);
+            "<table>"
+            "<tr><td>Polarization </td><td> %.3f +/- %.3f</td></tr>"
+            "<tr><td>Beam Charge Asymmetry </td><td> %.3f +/- %.3f</td></tr>"
+            "<tr><td>Half Wave Plate </td><td> %d</td></tr>"
+            "<tr><td>Target Position </td><td> %d</td></tr>"
+            "<tr><td>Beam Energy </td><td> %.3f</td></tr>"
+            "<tr><td>Quad Current </td><td> %.3f</td></tr>"
+            "<tr><td>Helmholtz Current </td><td> %.3f</td></tr>"
+            "<tr><td>SLM Voltage </td><td> %.3f</td></tr>"
+            "<tr><td>Filename </td><td> %s/%s</td></tr>"
+            "<tr><td>Moller Run Number </td><td> %d</td></tr>"
+            "<tr><td>CODA Run Number </td><td> %d</td></tr>"
+            "</table>",
+            logcom,pol,epol,bca,ebca,hwp,tgt,energy,quad,helm,hv,dir,filename,runno,coda_runno);
     sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);
@@ -311,8 +319,10 @@ ss automoller {
                 pvGet(logcomments);
                 pvGet(runno);
                 pvGet(coda_runno);
+                pvGet(slmbca);
+                pvGet(slmebca);
                 epicsThreadSleep(4);
-                makeLogEntry(filename,polarization,epolarization,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno);
+                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno);
                 epicsThreadSleep(2);
                 sprintf(msg,"Check Logbook for New Entry!");
                 pvPut(msg);
@@ -540,7 +550,10 @@ ss automoller {
 
         when (delay(10) && tgt_moving==0) {
             isMollerConfigured=1;
-        } state startDaq
+            sprintf(msg,"Moller Configuration Ready.");
+            printf("%s\n",msg);
+            pvPut(msg);
+        } state listen
 
         when (delay(90)) {
             sprintf(msg,"ERROR inserting target.  Aborted Moller Run.");

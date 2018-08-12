@@ -10,20 +10,27 @@
 record(stringin,"$(P)ctrl:msg") {
     field(VAL,"Uninitialized")
 }
-record(mbbi,"$(P)ctrl:alarm") {
-    field(ZRST,"Ok")
-    field(ONST,"Error on DC HV OFF")
-    field(TWST,"Error on SVT OFF")
-    field(THST,"Error on MVT OFF")
-    field(FRST,"Error on Quads ON")
-    field(FVST,"Error on Helmhotz ON")
+record(mbbi,"$(P)ctrl:status") {
+    field(ZRST,"Not Configured")
+    field(ONST,"Configuring")
+    field(TWST,"Configured")
+    field(THST,"Run In Progress")
+    field(FRST,"DC HV OFF Error")
+    field(FVST,"SVT OFF Error")
+    field(SXST,"MVT OFF Error")
+    field(SVST,"Quads Error")
+    field(EIST,"Helmhotz Error")
+    field(NIST,"Target Error")
     field(ZRSV,"NO_ALARM")
-    field(ONSV,"MAJOR")
-    field(TWSV,"MAJOR")
-    field(THSV,"MAJOR")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
     field(FRSV,"MAJOR")
     field(FVSV,"MAJOR")
     field(SXSV,"MAJOR")
+    field(SVSV,"MAJOR")
+    field(EISV,"MAJOR")
+    field(NISV,"MAJOR")
     field(VAL,0)
     field(PINI,1)
 }
@@ -64,6 +71,13 @@ record(bo,"$(P)ctrl:stop") {
 record(bo,"$(P)ctrl:logentry") {
     field(ZNAM,"N/A")
     field(ONAM,"Go")
+}
+record(calcout,"$(P)ctrl:toggle") {
+    field(INPA,"moller_accumulate")
+    field(OUT,"moller_accumulate CPP")
+    field(CALC,"A=0?1:0")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
 }
 
 ###############################################

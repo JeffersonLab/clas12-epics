@@ -3088,6 +3088,12 @@ $(pv_value)</tooltip>
         <wait_time>10</wait_time>
         <description>Strip Charts</description>
       </action>
+      <action type="EXECUTE_CMD">
+        <command>/usr/clas12/release/pro/epics/css_share/detectors/FTC/scripts/ftc_scalers.py</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>FTC FADC Scalers</description>
+      </action>
       <action type="OPEN_DISPLAY">
         <path>../../apps/cRioIntlkApp/FT-hwintlk.opi</path>
         <macros>
@@ -3096,11 +3102,13 @@ $(pv_value)</tooltip>
         <replace>2</replace>
         <description>FT Hard Interlocks</description>
       </action>
-      <action type="EXECUTE_CMD">
-        <command>/usr/clas12/release/pro/epics/css_share/detectors/FTC/scripts/ftc_scalers.py</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>FTC FADC Scalers</description>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/ftIntlkApp/ftchIntlks.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>FT Soft Interlocks</description>
       </action>
     </actions>
     <font>

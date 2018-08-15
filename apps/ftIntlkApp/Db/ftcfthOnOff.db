@@ -1,0 +1,44 @@
+record(seq,"B_DET_FTC_HV:OFF") {
+    field(LNK1,"B_DET_FTC_HV_Q1:sethvoff PP")
+    field(LNK2,"B_DET_FTC_HV_Q2:sethvoff PP")
+    field(LNK3,"B_DET_FTC_HV_Q3:sethvoff PP")
+    field(LNK4,"B_DET_FTC_HV_Q4:sethvoff PP")
+    field(DO1,1)
+    field(DO2,1)
+    field(DO3,1)
+    field(DO4,1)
+}
+record(seq,"B_DET_FTC_LV:OFF") {
+    field(LNK1,"B_DET_FTC_LV_Q1Q4:setlvoff PP")
+    field(LNK2,"B_DET_FTC_LV_Q2Q3:setlvoff PP")
+    field(DO1,1)
+    field(DO2,1)
+}
+
+record(seq,"B_DET_FTC_HVLV:OFF") {
+    field(LNK1,"B_DET_FTC_HV:OFF PP")
+    field(LNK2,"B_DET_FTC_LV:OFF PP")
+    field(DO1,1)
+    field(DO2,1)
+    field(DLY1,0)
+    field(DLY2,60)
+}
+record(seq,"B_DET_FTH_HVLV:OFF") {
+    field(LNK1,"B_DET_FTH_HV:OFF PP")
+    field(LNK2,"B_DET_FTH_LV_P:switch PP")
+    field(LNK3,"B_DET_FTH_LV_N:switch PP")
+    field(DO1,1)
+    field(DO2,0)
+    field(DO3,0)
+    field(DLY1,0)
+    field(DLY2,0)
+    field(DLY3,0)
+}
+
+record(seq,"B_DET_FTC:OFF") {
+    field(LNK1,"B_DET_FTC:CHILLER:stop PP")
+    field(LNK2,"B_DET_FTC_HVLV:OFF PP")
+    field(DO1,1)
+    field(DO2,1)
+}
+

@@ -19,7 +19,7 @@ record(calc,"$(P)$(R=)$(T=)SimpleDp") {
 	field(INPA,"$(HUMID) NPP MS")
 	field(INPB,"$(TEMP) PP NMS")
 	field(PREC,"3")
-    field(EGU,"degC")
+    field(EGU,"C")
 }
 record(calc,"$(P)$(R=)$(T=)HumCalc") {
 	field(DESC,"Humidity calculation per Magnus formula")
@@ -39,7 +39,7 @@ record(calc,"$(P)$(R=)$(T=)MagnusDp") {
 	field(CALC,"243.12*A/(17.62-A)")
 	field(INPA,"$(P)$(R=)$(T=)HumCalc NPP NMS")
 	field(PREC,"3")
-    field(EGU,"degC")
+    field(EGU,"C")
 }
 record(mbbo,"$(P)$(R=)$(T=)Dn") {
 	field(DESC,"Dewpoint Calculation Selector")
@@ -56,6 +56,7 @@ record(sel,"$(P)$(R=)") {
 	field(NVL,"$(P)$(R=)$(T=)Dn NPP NMS")
 	field(INPA,"$(P)$(R=)$(T=)SimpleDp NPP MS")
 	field(INPB,"$(P)$(R=)$(T=)MagnusDp NPP MS")
+    field(EGU,"C")
 }
 
 record(calc,"$(P)$(R=)$(T=)Alarm") {
@@ -65,7 +66,7 @@ record(calc,"$(P)$(R=)$(T=)Alarm") {
 	field(INPA,"$(TEMP) NPP NMS")
 	field(INPB,"$(P)$(R=) NPP MS")
 	field(PREC,"3")
-    field(EGU,"degC")
+    field(EGU,"C")
 	field(LOLO,"3")
 	field(LOW,"5")
 	field(LLSV,"MAJOR")

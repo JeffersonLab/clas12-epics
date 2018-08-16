@@ -26,6 +26,7 @@ dbLoadRecords("db/ftcIntlk_lv2Q.db","P=B_DET_FTC_,Q1=2,Q2=3")
 
 dbLoadRecords("db/ftcfthOnOff.db")
 dbLoadTemplate("db/ftIntlk.substitutions")
+dbLoadRecords("db/ftIntlkSums.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 

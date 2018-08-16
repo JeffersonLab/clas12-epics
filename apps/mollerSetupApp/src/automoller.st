@@ -107,6 +107,9 @@ float tgt_moving; assign tgt_moving   to "moeller_target.MOVN"; monitor tgt_movi
 float hv_dc_off;      assign hv_dc_off      to "{S}B_DET_DC_HV:OFF";
 float hv_svt_off;     assign hv_svt_off     to "{S}B_SVT_SEQ:btnOff";
 float hv_bmt_off;     assign hv_bmt_off     to "{S}B_DET_BMT_HV:pwoff";
+float hv_ftc_off;     assign hv_ftc_off     to "{S}B_DET_FTC_HV:OFF";
+float hv_fth_off;     assign hv_fth_off     to "{S}B_DET_FTH_HV:OFF";
+float hv_ftt_off;     assign hv_ftt_off     to "{S}B_DET_FTT_HV:OFF";
 float hv_slm_onoff;   assign hv_slm_onoff   to "B_DET_BLINE_HV_SLM:pwonoff";
 float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
 float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
@@ -436,6 +439,12 @@ ss automoller {
                 sprintf(msg,"Checking and Waiting for HV Off ...");
                 printf("%s\n",msg);
                 pvPut(msg);
+                hv_ftc_off=1;
+                hv_fth_off=1;
+                hv_ftt_off=1;
+                pvPut(hv_ftc_off);
+                pvPut(hv_fth_off);
+                pvPut(hv_ftt_off);
                 epicsThreadSleep(5);
             }
         }

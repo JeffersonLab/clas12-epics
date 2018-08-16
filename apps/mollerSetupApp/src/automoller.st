@@ -26,6 +26,18 @@ option +s;
 #define TGT_ALARM 9
 #define ACC_ALARM 10
 
+#define TGT_LEFT 11
+#define TGT_EMPTY 12
+#define TGT_RIGHT 13
+#define TGT_ALUM 14
+
+#define HWP_IN 0
+#define HWP_OUT 1
+
+%{epicsTimeStamp timeStamp;}%
+string runStartTime;
+string runEndTime;
+
 int isMollerRunning;
 int isMollerConfigured;
 int turnDetectorsOff;
@@ -64,7 +76,7 @@ monitor tgt_cfg;      evflag ev_tgt_cfg;      sync tgt_cfg     ev_tgt_cfg;
 float tagger_irbk; assign tagger_irbk to "{S}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
-float beamEnergy; assign beamEnergy to "{S}MBSY2C_energy";
+float beamEnergy; assign beamEnergy to "MBSY2C_energy";
 
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
@@ -104,16 +116,17 @@ float tgt_empty;  assign tgt_empty    to "moller_target_empty"; monitor tgt_empt
 float tgt_moving; assign tgt_moving   to "moeller_target.MOVN"; monitor tgt_moving;
 
 // High Voltage Controls:
+float hv_slm_onoff;   assign hv_slm_onoff   to "B_DET_BLINE_HV_SLM:pwonoff";
+float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
+float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
+float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
 float hv_dc_off;      assign hv_dc_off      to "{S}B_DET_DC_HV:OFF";
 float hv_svt_off;     assign hv_svt_off     to "{S}B_SVT_SEQ:btnOff";
 float hv_bmt_off;     assign hv_bmt_off     to "{S}B_DET_BMT_HV:pwoff";
 float hv_ftc_off;     assign hv_ftc_off     to "{S}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{S}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{S}B_DET_FTT_HV:OFF";
-float hv_slm_onoff;   assign hv_slm_onoff   to "B_DET_BLINE_HV_SLM:pwonoff";
-float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
-float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
-float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
+float hv_ctof_off;    assign hv_ctof_off    to "{S}B_DET_CTOF_HV:OFF";
 int hv_svt_stat;      assign hv_svt_stat    to "{S}B_SVT:status";            monitor hv_svt_stat;
 int hv_bmt_stat;      assign hv_bmt_stat    to "{S}B_DET_BMT_HV:stat";       monitor hv_bmt_stat;
 int hv_dc_stat;       assign hv_dc_stat     to "{S}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
@@ -147,27 +160,60 @@ void makeLogEntry(
         char* logcom,
         char* logusr,
         int runno,
-        int coda_runno) {
+        int coda_runno,
+        char* startTime,
+        char* endTime) {
     char *dir="/home/epics/DATA/MOELLER";
     char cmd[1000];
     char body[1000];
+    char stgt[100];
+    char shwp[100];
+    switch (tgt) {
+        case TGT_LEFT:
+            strcpy(stgt,"Left");
+            break;
+        case TGT_RIGHT:
+            strcpy(stgt,"Right");
+            break;
+        case TGT_EMPTY:
+            strcpy(stgt,"Empty");
+            break;
+        case TGT_ALUM:
+            strcpy(stgt,"Aluminum");
+            break;
+        default:
+            strcpy(stgt,"Unknown");
+            break;
+    }
+    switch (hwp) {
+        case HWP_IN:
+            strcpy(shwp,"IN");
+            break;
+        case HWP_OUT:
+            strcpy(shwp,"OUT");
+            break;
+        default:
+            strcpy(shwp,"Unknown");
+            break;
+    }
     sprintf(filename,"moeller_04-16-18_19:37:57.txt");
     sprintf(body,
             "User Comments = %s<br><br>"
-            "<table>"
-            "<tr><td>Polarization </td><td> %.3f +/- %.3f</td></tr>"
+            "<table border=1>"
+            "<tr><td>Polarization (%) </td><td> %.3f +/- %.3f</td></tr>"
             "<tr><td>Beam Charge Asymmetry </td><td> %.3f +/- %.3f</td></tr>"
-            "<tr><td>Half Wave Plate </td><td> %d</td></tr>"
-            "<tr><td>Target Position </td><td> %d</td></tr>"
-            "<tr><td>Beam Energy </td><td> %.3f</td></tr>"
-            "<tr><td>Quad Current </td><td> %.3f</td></tr>"
-            "<tr><td>Helmholtz Current </td><td> %.3f</td></tr>"
-            "<tr><td>SLM Voltage </td><td> %.3f</td></tr>"
-            "<tr><td>Filename </td><td> %s/%s</td></tr>"
-            "<tr><td>Moller Run Number </td><td> %d</td></tr>"
+            "<tr><td>Half Wave Plate </td><td> %s</td></tr>"
+            "<tr><td>Target Position </td><td> %s</td></tr>"
+            "<tr><td>Beam Energy (MeV) </td><td> %.3f</td></tr>"
+            "<tr><td>Quad Current (A) </td><td> %.3f</td></tr>"
+            "<tr><td>Helmholtz Current (A) </td><td> %.3f</td></tr>"
+            "<tr><td>SLM Voltage (V) </td><td> %.3f</td></tr>"
             "<tr><td>CODA Run Number </td><td> %d</td></tr>"
+            "<tr><td>Moller Run Number </td><td> %d</td></tr>"
+            "<tr><td>Run Start Time </td><td> %s</td></tr>"
+            "<tr><td>Run End Time </td><td> %s</td></tr>"
             "</table>",
-            logcom,pol,epol,bca,ebca,hwp,tgt,energy,quad,helm,hv,dir,filename,runno,coda_runno);
+            logcom,pol,epol,bca,ebca,shwp,stgt,energy,quad,helm,hv,coda_runno,runno,startTime,endTime);
     sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);
@@ -301,15 +347,15 @@ ss automoller {
     state logentry {
 
         // require stopping run before logbook entry:
-        when (isMollerRunning) {
-            sprintf(stmp,"%s",msg);
-            sprintf(msg,"No Log Entry.  Stop Moller Run First.");
-            printf("%s\n",msg);
-            pvPut(msg);
-            epicsThreadSleep(2);
-            sprintf(msg,"%s",stmp);
-            pvPut(msg);
-        } state listen
+        //when (isMollerRunning) {
+        //    sprintf(stmp,"%s",msg);
+        //    sprintf(msg,"No Log Entry.  Stop Moller Run First.");
+        //    printf("%s\n",msg);
+        //    pvPut(msg);
+        //    epicsThreadSleep(2);
+        //    sprintf(msg,"%s",stmp);
+        //    pvPut(msg);
+        //} state listen
         
         when () {
             pvGet(logusers);
@@ -333,7 +379,7 @@ ss automoller {
                 pvGet(slmbca);
                 pvGet(slmebca);
                 epicsThreadSleep(4);
-                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno);
+                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
                 epicsThreadSleep(2);
                 sprintf(msg,"Check Logbook for New Entry!");
                 pvPut(msg);
@@ -618,6 +664,9 @@ ss automoller {
             sprintf(msg,"Starting DAQ  ...");
             printf("%s\n",msg);
             pvPut(msg);
+            epicsTimeGetCurrent(&timeStamp);
+            epicsTimeToStrftime(runStartTime,40,"%m/%d/%Y %H:%M:%S",&timeStamp);
+            sprintf(runEndTime,"N/A");
             moller_accumulate=STARTDAQ;
             pvPut(moller_accumulate);
             moller_reset=1;
@@ -655,6 +704,8 @@ ss automoller {
             pvPut(msg);
             moller_accumulate=STOPDAQ;
             pvPut(moller_accumulate);
+            epicsTimeGetCurrent(&timeStamp);
+            epicsTimeToStrftime(runEndTime,40,"%m/%d/%Y %H:%M:%S",&timeStamp);
             epicsThreadSleep(1);
             sprintf(msg,"DAQ Stopped.");
             printf("%s\n",msg);

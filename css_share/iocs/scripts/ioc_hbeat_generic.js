@@ -54,9 +54,11 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
         if (!lines[ii].startsWith("ioc") && !lines[ii].startsWith("classc")) {
-            //insertGap(1);
-            insertLine();
-            //insertGap(1);
+            if (lines[ii].startsWith("#")) {
+                //insertGap(1);
+                insertLine();
+                //insertGap(1)
+            }
             continue;
         }
 

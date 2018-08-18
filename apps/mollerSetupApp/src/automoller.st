@@ -14,25 +14,7 @@ option -r;
 // safe mode:
 option +s;
 
-#define NOT_CONFIGURED 0
-#define CONFIGURING 1 
-#define CONFIGURED 2
-#define RUN_IN_PROGRESS 3
-#define DC_ALARM 4
-#define SVT_ALARM 5
-#define MVT_ALARM 6
-#define QUAD_ALARM 7
-#define HELM_ALARM 8
-#define TGT_ALARM 9
-#define ACC_ALARM 10
-
-#define TGT_LEFT 11
-#define TGT_EMPTY 12
-#define TGT_RIGHT 13
-#define TGT_ALUM 14
-
-#define HWP_IN 0
-#define HWP_OUT 1
+#include "automoller.h"
 
 %{epicsTimeStamp timeStamp;}%
 string runStartTime;
@@ -40,7 +22,6 @@ string runEndTime;
 
 int isMollerRunning;
 int isMollerConfigured;
-int turnDetectorsOff;
 float hv_slm_default;
 string stmp;
 
@@ -73,7 +54,7 @@ monitor helm_polcfg;  evflag ev_helm_polcfg;  sync helm_polcfg ev_helm_polcfg;
 monitor tgt_cfg;      evflag ev_tgt_cfg;      sync tgt_cfg     ev_tgt_cfg;
 
 // Tagger Current: 
-float tagger_irbk; assign tagger_irbk to "{S}TMIRBCK";  monitor tagger_irbk;
+float tagger_irbk; assign tagger_irbk to "{SIMTAG}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
 float beamEnergy; assign beamEnergy to "MBSY2C_energy";
@@ -85,24 +66,28 @@ int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
 
 // Quadrupole Controls:
-int quadB_on;      assign quadB_on to "{S}DYNABON";
-int quadC_on;      assign quadC_on to "{S}DYNACON";
-int quadB_off;     assign quadB_off to "{S}DYNABOFF";
-int quadC_off;     assign quadC_off to "{S}DYNACOFF";
-int quadB_reverse; assign quadB_reverse to "{S}DYNABREVERSE";
-int quadB_forward; assign quadB_forward to "{S}DYNABFORWARD";
-float quadB_iset;  assign quadB_iset to "{S}DYNABSETI";
-float quadC_iset;  assign quadC_iset to "{S}DYNACSETI";
-float quadB_imon;  assign quadB_imon to "{S}hallb_sf_xy560_0_14";
-float quadC_imon;  assign quadC_imon to "{S}hallb_sf_xy560_0_18";
+int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
+int quadC_on;      assign quadC_on      to "{SIMQUAD}DYNACON";
+int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
+int quadC_off;     assign quadC_off     to "{SIMQUAD}DYNACOFF";
+int quadB_reverse; assign quadB_reverse to "{SIMQUAD}DYNABREVERSE";
+int quadB_forward; assign quadB_forward to "{SIMQUAD}DYNABFORWARD";
+float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNABSETI";
+float quadC_iset;  assign quadC_iset    to "{SIMQUAD}DYNACSETI";
+float quadB_imon;  assign quadB_imon    to "{SIMQUAD}hallb_sf_xy560_0_14"; monitor quadB_imon;
+float quadC_imon;  assign quadC_imon    to "{SIMQUAD}hallb_sf_xy560_0_18"; monitor quadC_imon;
+int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNABRESET";
+int quadC_reset;   assign quadC_reset   to "{SIMQUAD}DYNACRESET";
+int quadB_revmon;  assign quadB_revmon  to "{SIMQUAD}DYNABRC";
+int quadB_fwdmon;  assign quadB_fwdmon  to "{SIMQUAD}DYNABFC";
 
 // Helmholtz Controls:
-int helm_state;     assign helm_state   to "{S}B_MOLLER_HELMHOLTZ_STATE";
-float helm_iset;    assign helm_iset    to "{S}B_MOLLER_HELMHOLTZ_CURRENT_SET";
-float helm_isetrbk; assign helm_isetrbk to "{S}B_MOLLER_HELMHOLTZ_CURRENT_SP";
-float helm_irbk;    assign helm_irbk    to "{S}B_MOLLER_HELMHOLTZ_CURRENT";
-int helm_on;        assign helm_on      to "{S}B_MOLLER_HELMHOLTZ_OPER";
-int helm_off;       assign helm_off     to "{S}B_MOLLER_HELMHOLTZ_OFF";
+int helm_state;     assign helm_state   to "{SIMHELM}B_MOLLER_HELMHOLTZ_STATE";
+float helm_iset;    assign helm_iset    to "{SIMHELM}B_MOLLER_HELMHOLTZ_CURRENT_SET";
+float helm_isetrbk; assign helm_isetrbk to "{SIMHELM}B_MOLLER_HELMHOLTZ_CURRENT_SP";
+float helm_imon;    assign helm_imon    to "{SIMHELM}B_MOLLER_HELMHOLTZ_CURRENT"; monitor helm_imon;
+int helm_on;        assign helm_on      to "{SIMHELM}B_MOLLER_HELMHOLTZ_OPER";
+int helm_off;       assign helm_off     to "{SIMHELM}B_MOLLER_HELMHOLTZ_OFF";
 
 // Target Motor Controls:
 int tgt_go_left;  assign tgt_go_left  to "moller_target_go_left";
@@ -120,16 +105,16 @@ float hv_slm_onoff;   assign hv_slm_onoff   to "B_DET_BLINE_HV_SLM:pwonoff";
 float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
 float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
 float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
-float hv_dc_off;      assign hv_dc_off      to "{S}B_DET_DC_HV:OFF";
-float hv_svt_off;     assign hv_svt_off     to "{S}B_SVT_SEQ:btnOff";
-float hv_bmt_off;     assign hv_bmt_off     to "{S}B_DET_BMT_HV:pwoff";
-float hv_ftc_off;     assign hv_ftc_off     to "{S}B_DET_FTC_HV:OFF";
-float hv_fth_off;     assign hv_fth_off     to "{S}B_DET_FTH_HV:OFF";
-float hv_ftt_off;     assign hv_ftt_off     to "{S}B_DET_FTT_HV:OFF";
-float hv_ctof_off;    assign hv_ctof_off    to "{S}B_DET_CTOF_HV:OFF";
-int hv_svt_stat;      assign hv_svt_stat    to "{S}B_SVT:status";            monitor hv_svt_stat;
-int hv_bmt_stat;      assign hv_bmt_stat    to "{S}B_DET_BMT_HV:stat";       monitor hv_bmt_stat;
-int hv_dc_stat;       assign hv_dc_stat     to "{S}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
+float hv_dc_off;      assign hv_dc_off      to "{SIMDET}B_DET_DC_HV:OFF";
+float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_SEQ:btnOff";
+float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:pwoff";
+float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
+float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
+float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
+float hv_ctof_off;    assign hv_ctof_off    to "{SIMDET}B_DET_CTOF_HV:OFF";
+int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";            monitor hv_svt_stat;
+int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat";       monitor hv_bmt_stat;
+int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
 
 // Low-level asym DAQ:
 int moller_accumulate; assign moller_accumulate to "moller_accumulate";
@@ -140,85 +125,10 @@ float epolarization;   assign epolarization     to "beam_polarization_error";
 float slmbca;          assign slmbca            to "q_asym_3";
 float slmebca;         assign slmebca           to "d_asym_3";
 
-#define STARTDAQ 0
-#define STOPDAQ 1
-
 %{
-extern int system(char*);
-void makeLogEntry(
-        char* filename,
-        float pol,
-        float epol,
-        float bca,
-        float ebca,
-        float energy,
-        float hv,
-        float quad,
-        float helm,
-        int tgt,
-        int hwp,
-        char* logcom,
-        char* logusr,
-        int runno,
-        int coda_runno,
-        char* startTime,
-        char* endTime) {
-    char *dir="/home/epics/DATA/MOELLER";
-    char cmd[1000];
-    char body[1000];
-    char stgt[100];
-    char shwp[100];
-    switch (tgt) {
-        case TGT_LEFT:
-            strcpy(stgt,"Left");
-            break;
-        case TGT_RIGHT:
-            strcpy(stgt,"Right");
-            break;
-        case TGT_EMPTY:
-            strcpy(stgt,"Empty");
-            break;
-        case TGT_ALUM:
-            strcpy(stgt,"Aluminum");
-            break;
-        default:
-            strcpy(stgt,"Unknown");
-            break;
-    }
-    switch (hwp) {
-        case HWP_IN:
-            strcpy(shwp,"IN");
-            break;
-        case HWP_OUT:
-            strcpy(shwp,"OUT");
-            break;
-        default:
-            strcpy(shwp,"Unknown");
-            break;
-    }
-    sprintf(filename,"moeller_04-16-18_19:37:57.txt");
-    sprintf(body,
-            "User Comments = %s<br><br>"
-            "<table border=1>"
-            "<tr><td>Polarization (%) </td><td> %.3f +/- %.3f</td></tr>"
-            "<tr><td>Beam Charge Asymmetry </td><td> %.3f +/- %.3f</td></tr>"
-            "<tr><td>Half Wave Plate </td><td> %s</td></tr>"
-            "<tr><td>Target Position </td><td> %s</td></tr>"
-            "<tr><td>Beam Energy (MeV) </td><td> %.3f</td></tr>"
-            "<tr><td>Quad Current (A) </td><td> %.3f</td></tr>"
-            "<tr><td>Helmholtz Current (A) </td><td> %.3f</td></tr>"
-            "<tr><td>SLM Voltage (V) </td><td> %.3f</td></tr>"
-            "<tr><td>CODA Run Number </td><td> %d</td></tr>"
-            "<tr><td>Moller Run Number </td><td> %d</td></tr>"
-            "<tr><td>Run Start Time </td><td> %s</td></tr>"
-            "<tr><td>Run End Time </td><td> %s</td></tr>"
-            "</table>",
-            logcom,pol,epol,bca,ebca,shwp,stgt,energy,quad,helm,hv,coda_runno,runno,startTime,endTime);
-    sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
-            body,runno,dir,filename,logusr);
-    fprintf(stderr,cmd);
-	system(cmd);
-}
+extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
+extern double fabs(double);
+int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
 }%
 
 ss automoller {
@@ -230,7 +140,6 @@ ss automoller {
             sprintf(msg,"Connecting ...");
             printf("%s\n",msg);
             pvPut(msg);
-            turnDetectorsOff=1;
             isMollerRunning=0;
             isMollerConfigured=0;
         }
@@ -306,40 +215,59 @@ ss automoller {
             pvPut(msg);
         } state listen
 		
-        // wait for valid user inputs:
+        // respond to valid user inputs:
 		when (moller_recfg) {
 			moller_recfg=0;
 			pvPut(moller_recfg);
 		} state reconfigure
-
         when (moller_enter) {
             moller_enter=0;
             pvPut(moller_enter);
         } state enterMoller
-
         when (moller_exit) {
             moller_exit=0;
             pvPut(moller_exit);
         } state exitMoller
-
         when (daq_start) {
             daq_start=0;
             pvPut(daq_start);
         } state startDaq
-
         when (daq_stop) {
             daq_stop=0;
             pvPut(daq_stop);
         } state stopDaq
-
         when (logentry) {
             logentry=0;
             pvPut(logentry);
         } state logentry
 
-        when () {
-            epicsThreadSleep(1);
+        // alarm on magnet currents:
+        when (isMollerConfigured) {
+            if (!equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) ||
+                !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
+                status=QUAD_ALARM;
+                pvPut(status);
+            }
+            else if (status==QUAD_ALARM) {
+                if (isMollerRunning) status=RUN_IN_PROGRESS;
+                else                 status=CONFIGURED;
+                pvPut(status);
+            }
+            if (!equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
+                status=HELM_ALARM;
+                pvPut(status);
+            }
+            else if (status==HELM_ALARM) {
+                if (isMollerRunning) status=RUN_IN_PROGRESS;
+                else                 status=CONFIGURED;
+                pvPut(status);
+            }
         } state listen
+        
+        //when () {
+        //    epicsThreadSleep(1);
+        //} state listen
+
     }
 
 ///////////////////////////////////////////////////
@@ -423,6 +351,8 @@ ss automoller {
 		when (delay(10) && tgt_moving==0) {
             sprintf(msg,"Moller Reconfiguration Complete.");
             pvPut(msg);
+            status=CONFIGURED;
+            pvPut(status);
 		} state listen
 	}
 
@@ -438,7 +368,7 @@ ss automoller {
     }
 
     state checkTagger {
-        when (tagger_irbk < 200) {
+        when (tagger_irbk < TAGGER_TOLERANCE) {
             sprintf(msg,"ERROR:  Tagger is Off.  Aborted Moller Run.");
             printf("%s\n",msg);
             pvPut(msg);
@@ -457,45 +387,43 @@ ss automoller {
         option -t;
 
         entry {
-            if (turnDetectorsOff) {
-				if (hv_svt_stat!=0) {
-                    sprintf(msg,"Turning SVT HV Off ...");
-                    printf("%s\n",msg);
-                    pvPut(msg);
-					hv_svt_off=1;
-					pvPut(hv_svt_off);
-                    epicsThreadSleep(1);
-				}
-				if (hv_dc_stat!=1) {
-                    sprintf(msg,"Turning DC HV Off ...");
-                    printf("%s\n",msg);
-                    pvPut(msg);
-					hv_dc_off=1;
-					pvPut(hv_dc_off);
-                    epicsThreadSleep(1);
-				}
-				if (hv_bmt_stat!=0) {
-                    sprintf(msg,"Turning BMT HV Off ...");
-                    printf("%s\n",msg);
-                    pvPut(msg);
-					hv_bmt_off=1;
-					pvPut(hv_bmt_off);
-                    epicsThreadSleep(1);
-				}
-                sprintf(msg,"Checking and Waiting for HV Off ...");
+            if (hv_svt_stat!=0) {
+                sprintf(msg,"Turning SVT HV Off ...");
                 printf("%s\n",msg);
                 pvPut(msg);
-                hv_ftc_off=1;
-                hv_fth_off=1;
-                hv_ftt_off=1;
-                pvPut(hv_ftc_off);
-                pvPut(hv_fth_off);
-                pvPut(hv_ftt_off);
-                epicsThreadSleep(5);
+                hv_svt_off=1;
+                pvPut(hv_svt_off);
+                epicsThreadSleep(1);
             }
+            if (hv_dc_stat!=1) {
+                sprintf(msg,"Turning DC HV Off ...");
+                printf("%s\n",msg);
+                pvPut(msg);
+                hv_dc_off=1;
+                pvPut(hv_dc_off);
+                epicsThreadSleep(1);
+            }
+            if (hv_bmt_stat!=0) {
+                sprintf(msg,"Turning BMT HV Off ...");
+                printf("%s\n",msg);
+                pvPut(msg);
+                hv_bmt_off=1;
+                pvPut(hv_bmt_off);
+                epicsThreadSleep(1);
+            }
+            sprintf(msg,"Confirming HV Off ...");
+            printf("%s\n",msg);
+            pvPut(msg);
+            hv_ftc_off=1;
+            hv_fth_off=1;
+            hv_ftt_off=1;
+            pvPut(hv_ftc_off);
+            pvPut(hv_fth_off);
+            pvPut(hv_ftt_off);
+            epicsThreadSleep(5);
         }
 
-        when (delay(2) && !turnDetectorsOff) {} state setSlm
+//        when (delay(2)) {} state setSlm
 
         when (delay(5) &&
 			  hv_dc_stat==1 &&
@@ -567,6 +495,10 @@ ss automoller {
     }
 
     state quadsOn {
+
+        // only reset timer if previous state was different:
+        option -t;
+
         entry {
             sprintf(msg,"Energizing Quadrupoles ...");
             printf("%s\n",msg);
@@ -582,7 +514,18 @@ ss automoller {
             epicsThreadSleep(5);
         }
 
-        when (delay(5)) {} state helmholtzOn
+        when (delay(5) &&
+              equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
+              equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
+        } state helmholtzOn
+
+        // catch errors when turning on Quads:
+//        when (delay(30)) {
+//            quadB_reset = 1;
+//            quadC_reset = 1;
+//            pvPut(quadB_reset);
+//            pvPut(quaC_reset);
+//        }
 
         when (delay(90)) {
 			status=QUAD_ALARM;
@@ -594,20 +537,26 @@ ss automoller {
     }
 
     state helmholtzOn {
+        
+        // only reset timer if previous state was different:
+        option -t;
+
         entry {
             sprintf(msg,"Energizing Helmholtz Coils ...");
             printf("%s\n",msg);
             pvPut(msg);
             helm_iset = helm_icfg*(2*helm_polcfg-1);
-            pvPut(helm_iset);
             helm_on = 1;
             pvPut(helm_on);
-            epicsThreadSleep(5);
+            epicsThreadSleep(1);
+            pvPut(helm_iset);
+            epicsThreadSleep(1);
         }
         
-        when () {} state insertTarget
+        when (delay(5) && equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
+        } state insertTarget
 
-        when (delay(90)) {
+        when (delay(20)) {
 			status=HELM_ALARM;
 			pvPut(status);
             sprintf(msg,"ERROR energizing Helmholtz.  Aborted Moller Run.");
@@ -748,12 +697,12 @@ ss automoller {
             printf("%s\n",msg);
             pvPut(msg);
             quadB_iset = 0;
-            pvPut(quadB_iset);
             quadC_iset = 0;
-            pvPut(quadC_iset);
             quadB_off = 0;
-            pvPut(quadB_off);
             quadC_off = 0;
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            pvPut(quadB_off);
             pvPut(quadC_off);
         }
         when (delay(5)) {} state helmholtzOff

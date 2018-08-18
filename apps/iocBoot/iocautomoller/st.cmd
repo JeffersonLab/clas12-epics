@@ -24,5 +24,5 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
-seq automoller "P=B_MOLLER:,S=SIM:"
+seq automoller "P=B_MOLLER:,SIMTAG=SIM:,SIMQUAD=SIM:,SIMDET=SIM:,SIMHELM="
 

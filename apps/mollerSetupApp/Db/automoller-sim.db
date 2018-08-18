@@ -1,12 +1,29 @@
 
 record(ai,"$(S)TMIRBCK"){field(TPRO,1) field(VAL,201) field(PINI,1)}
 record(ai,"$(S)MBSY2C_energy"){field(TPRO,1) field(VAL,0) field(PINI,1)}
-record(bo,"$(S)DYNABREVERSE"){field(TPRO,1) field(VAL,0) field(PINI,1)}
-record(bo,"$(S)DYNABFORWARD"){field(TPRO,1) field(VAL,0) field(PINI,1)}
+
 record(ao,"$(S)DYNABSETI"){field(TPRO,1) field(VAL,0) field(PINI,1)}
 record(ao,"$(S)DYNACSETI"){field(TPRO,1) field(VAL,0) field(PINI,1)}
 record(ai,"$(S)hallb_sf_xy560_0_14"){field(TPRO,1) field(VAL,0) field(PINI,1)}
 record(ai,"$(S)hallb_sf_xy560_0_18"){field(TPRO,1) field(VAL,0) field(PINI,1)}
+record(bi,"$(S)DYNABRC"){field(TPRO,1) field(VAL,0) field(PINI,1)}
+record(bi,"$(S)DYNABFC"){field(TPRO,1) field(VAL,0) field(PINI,1)}
+record(bi,"$(S)DYNABRESET"){}
+record(bi,"$(S)DYNACRESET"){}
+record(seq,"$(S)DYNABREVERSE") {
+    field(TPRO,1)
+    field(LNK1,"$(S)DYNABRC")
+    field(LNK2,"$(S)DYNABFC")
+    field(DO1,1)
+    field(DO2,0)
+}
+record(seq,"$(S)DYNABFORWARD") {
+    field(TPRO,1)
+    field(LNK1,"$(S)DYNABRC")
+    field(LNK2,"$(S)DYNABFC")
+    field(DO1,0)
+    field(DO2,1)
+}
 record(seq,"$(S)DYNABON"){
     field(TPRO,1)
     field(LNK1,"$(S)DYNABSETI PP")

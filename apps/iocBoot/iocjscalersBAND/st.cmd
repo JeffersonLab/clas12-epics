@@ -16,7 +16,7 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_BAND_FADC.substitutions")
 
-dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=257,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=111,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc-rga.txt")
 
 cd ${TOP}/iocBoot/${IOC}
 

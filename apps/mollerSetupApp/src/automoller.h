@@ -1,7 +1,7 @@
 
 // tolerances for magent currents:
 #define QUAD_TOLERANCE 100
-#define HELM_TOLERANCE 0.5
+#define HELM_TOLERANCE 0.1
 #define TAGGER_TOLERANCE 200
 
 // values for automoller status:

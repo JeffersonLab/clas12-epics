@@ -11,8 +11,9 @@ void makeLogEntry(
         float bca,
         float ebca,
         float energy,
-        float hv,
-        float quad,
+        float slmhv,
+        float quadB,
+        float quadC,
         float helm,
         int tgt,
         int hwp,
@@ -63,16 +64,16 @@ void makeLogEntry(
             "<tr><td>Beam Charge Asymmetry </td><td> %.3f +/- %.3f</td></tr>"
             "<tr><td>Half Wave Plate </td><td> %s</td></tr>"
             "<tr><td>Target Position </td><td> %s</td></tr>"
-            "<tr><td>Beam Energy (MeV) </td><td> %.3f</td></tr>"
-            "<tr><td>Quad Current (A) </td><td> %.3f</td></tr>"
-            "<tr><td>Helmholtz Current (A) </td><td> %.3f</td></tr>"
-            "<tr><td>SLM Voltage (V) </td><td> %.3f</td></tr>"
+            "<tr><td>Beam Energy (MeV) </td><td> %.1f</td></tr>"
+            "<tr><td>Quad Current (A) </td><td> %.1f/%.1f</td></tr>"
+            "<tr><td>Helmholtz Current (A) </td><td> %.1f</td></tr>"
+            "<tr><td>SLM Voltage (V) </td><td> %.1f</td></tr>"
             "<tr><td>CODA Run Number </td><td> %d</td></tr>"
             "<tr><td>Moller Run Number </td><td> %d</td></tr>"
             "<tr><td>Run Start Time </td><td> %s</td></tr>"
             "<tr><td>Run End Time </td><td> %s</td></tr>"
             "</table>",
-            logcom,pol,epol,bca,ebca,shwp,stgt,energy,quad,helm,hv,coda_runno,runno,startTime,endTime);
+            logcom,pol,epol,bca,ebca,shwp,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
     sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);

@@ -5,8 +5,7 @@
 //
 // N. Baltzell, 2018
 //
-
-program automoller
+program automoller ("P=B_MOLLER:,SIMTAG=,SIMQUAD=,SIMHELM=SIMDET=")
 
 // not reentrant (only one instance allowed):
 option -r;
@@ -23,12 +22,13 @@ string runEndTime;
 int isMollerRunning;
 int isMollerConfigured;
 float hv_slm_default;
+int itmp;
 string stmp;
 
 // Sequencer Status:
-string msg; assign msg   to "{P}ctrl:msg";
-int status;  assign status to "{P}ctrl:status";
-int runno;  assign runno to "{P}ctrl:runno";
+string msg; assign msg    to "{P}ctrl:msg";
+int status; assign status to "{P}ctrl:status";
+int runno;  assign runno  to "{P}ctrl:runno";
 
 // Logbook Entry:
 string logcomments; assign logcomments to "{P}ctrl:logcomments";
@@ -48,16 +48,19 @@ float helm_icfg;   assign helm_icfg     to "{P}cfg:helm:iset";
 int helm_polcfg;   assign helm_polcfg   to "{P}cfg:helm:pol";
 int tgt_cfg;       assign tgt_cfg       to "{P}cfg:tgt:pos";
 float hv_slm_vcfg; assign hv_slm_vcfg   to "{P}cfg:slm:vset"; monitor hv_slm_vcfg;
-monitor quad_icfg;    evflag ev_quad_icfg;    sync quad_icfg   ev_quad_icfg;
-monitor helm_icfg;    evflag ev_helm_icfg;    sync helm_icfg   ev_helm_icfg;
-monitor helm_polcfg;  evflag ev_helm_polcfg;  sync helm_polcfg ev_helm_polcfg;
-monitor tgt_cfg;      evflag ev_tgt_cfg;      sync tgt_cfg     ev_tgt_cfg;
+int   quad_icfg_auto;  assign quad_icfg_auto  to "{P}cfg:quad:iset:auto";
+float quad_icfg_1pass; assign quad_icfg_1pass to "{P}cfg:quad:iset:1pass";
+float quad_icfg_2pass; assign quad_icfg_2pass to "{P}cfg:quad:iset:2pass";
+float quad_icfg_3pass; assign quad_icfg_3pass to "{P}cfg:quad:iset:3pass";
+float quad_icfg_4pass; assign quad_icfg_4pass to "{P}cfg:quad:iset:4pass";
+float quad_icfg_5pass; assign quad_icfg_5pass to "{P}cfg:quad:iset:5pass";
 
 // Tagger Current: 
 float tagger_irbk; assign tagger_irbk to "{SIMTAG}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
 float beamEnergy; assign beamEnergy to "MBSY2C_energy";
+int   beamPasses; assign beamPasses to "MMSHLBPASS";
 
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
@@ -66,6 +69,8 @@ int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
 
 // Quadrupole Controls:
+int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNABPSON";
+int quadC_isOn;    assign quadC_isOn    to "{SIMQUAD}DYNACPSON";
 int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
 int quadC_on;      assign quadC_on      to "{SIMQUAD}DYNACON";
 int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
@@ -126,7 +131,7 @@ float slmbca;          assign slmbca            to "q_asym_3";
 float slmebca;         assign slmebca           to "d_asym_3";
 
 %{
-extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
+extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
 extern double fabs(double);
 int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
 }%
@@ -138,8 +143,7 @@ ss automoller {
 
         entry {
             sprintf(msg,"Connecting ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            printf("%s\n",msg); pvPut(msg);
             isMollerRunning=0;
             isMollerConfigured=0;
         }
@@ -147,8 +151,7 @@ ss automoller {
         when (pvConnectCount() < pvChannelCount())
         {
             sprintf(msg,"Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
-            printf("%s\n",msg);
-            pvPut(msg);
+            printf("%s\n",msg); pvPut(msg);
             epicsThreadSleep(1);
         } state start
 
@@ -159,13 +162,8 @@ ss automoller {
             pvPut(moller_reset);
 			status=NOT_CONFIGURED;
 			pvPut(status);
-            efClear(ev_quad_icfg);
-            efClear(ev_helm_icfg);
-            efClear(ev_helm_polcfg);
-            efClear(ev_tgt_cfg);
             sprintf(msg,"Non-Moller Configuration.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            printf("%s\n",msg); pvPut(msg);
         } state listen
 
     }
@@ -180,42 +178,7 @@ ss automoller {
             pvPut(msg);
             epicsThreadSleep(1);
         } state listen
-
-        // feedback for invalid user inputs:
-        when (efTestAndClear(ev_quad_icfg) && isMollerRunning) {
-            sprintf(stmp,"%s",msg);
-            sprintf(msg,"Ignoring Quad Reconfigure Mid-Run ...");
-            pvPut(msg);
-            epicsThreadSleep(1);
-            sprintf(msg,"%s",stmp);
-            pvPut(msg);
-        } state listen
-        when (efTestAndClear(ev_helm_icfg) && isMollerRunning) {
-            sprintf(stmp,"%s",msg);
-            sprintf(msg,"Ignoring Helmholtz Reconfigure Mid-Run ...");
-            pvPut(msg);
-            epicsThreadSleep(1);
-            sprintf(msg,"%s",stmp);
-            pvPut(msg);
-        } state listen
-        when (efTestAndClear(ev_helm_polcfg) && isMollerRunning) {
-            sprintf(stmp,"%s",msg);
-            sprintf(msg,"Ignoring Helmhotz Reconfigure Mid-Run ...");
-            pvPut(msg);
-            epicsThreadSleep(1);
-            sprintf(msg,"%s",stmp);
-            pvPut(msg);
-        } state listen
-        when (efTestAndClear(ev_tgt_cfg) && isMollerRunning) {
-            sprintf(stmp,"%s",msg);
-            sprintf(msg,"Ignoring Target Reconfigure Mid-Run ...");
-            pvPut(msg);
-            epicsThreadSleep(1);
-            sprintf(msg,"%s",stmp);
-            pvPut(msg);
-        } state listen
-		
-        // respond to valid user inputs:
+        
 		when (moller_recfg) {
 			moller_recfg=0;
 			pvPut(moller_recfg);
@@ -263,27 +226,11 @@ ss automoller {
                 pvPut(status);
             }
         } state listen
-        
-        //when () {
-        //    epicsThreadSleep(1);
-        //} state listen
-
     }
 
 ///////////////////////////////////////////////////
 
     state logentry {
-
-        // require stopping run before logbook entry:
-        //when (isMollerRunning) {
-        //    sprintf(stmp,"%s",msg);
-        //    sprintf(msg,"No Log Entry.  Stop Moller Run First.");
-        //    printf("%s\n",msg);
-        //    pvPut(msg);
-        //    epicsThreadSleep(2);
-        //    sprintf(msg,"%s",stmp);
-        //    pvPut(msg);
-        //} state listen
         
         when () {
             pvGet(logusers);
@@ -307,7 +254,7 @@ ss automoller {
                 pvGet(slmbca);
                 pvGet(slmebca);
                 epicsThreadSleep(4);
-                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quad_icfg,helm_icfg,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
+                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
                 epicsThreadSleep(2);
                 sprintf(msg,"Check Logbook for New Entry!");
                 pvPut(msg);
@@ -324,16 +271,20 @@ ss automoller {
 			if (isMollerRunning) {
                 sprintf(stmp,"%s",msg);
 				sprintf(msg,"No Reconfigure.  Stop Moller Run First.");
-				pvPut(msg);
+                printf("%s\n",msg); pvPut(msg);
                 epicsThreadSleep(2);
                 sprintf(msg,"%s",stmp);
-                pvPut(msg);
+                printf("%s\n",msg); pvPut(msg);
 			}
 			else {
 				sprintf(msg,"Reconfiguring ...");
-				pvPut(msg);
+                printf("%s\n",msg); pvPut(msg);
 				status=CONFIGURING;
 				pvPut(status);
+                pvGet(quad_icfg);
+                pvGet(helm_icfg);
+                pvGet(helm_polcfg);
+                pvGet(tgt_cfg);
 				quadB_iset = quad_icfg;
 				quadC_iset = quad_icfg;
 				helm_iset = helm_icfg*(2*helm_polcfg-1);
@@ -350,7 +301,7 @@ ss automoller {
 
 		when (delay(10) && tgt_moving==0) {
             sprintf(msg,"Moller Reconfiguration Complete.");
-            pvPut(msg);
+            printf("%s\n",msg); pvPut(msg);
             status=CONFIGURED;
             pvPut(status);
 		} state listen
@@ -363,11 +314,18 @@ ss automoller {
             sprintf(msg,"Entering Moller Configuration ...");
             printf("%s\n",msg);
             pvPut(msg);
+            epicsThreadSleep(1);
 		}
-        when (delay(2)) {} state checkTagger
+        when () {} state checkTagger
     }
 
     state checkTagger {
+        entry {
+            sprintf(msg,"Checking Tagger ...");
+            printf("%s\n",msg);
+            pvPut(msg);
+            epicsThreadSleep(1);
+        }
         when (tagger_irbk < TAGGER_TOLERANCE) {
             sprintf(msg,"ERROR:  Tagger is Off.  Aborted Moller Run.");
             printf("%s\n",msg);
@@ -423,8 +381,6 @@ ss automoller {
             epicsThreadSleep(5);
         }
 
-//        when (delay(2)) {} state setSlm
-
         when (delay(5) &&
 			  hv_dc_stat==1 &&
 			  hv_svt_stat==0 &&
@@ -470,7 +426,7 @@ ss automoller {
             pvPut(hv_slm_vset);
         }
         
-        when (hv_slm_vsetrbk==hv_slm_vcfg && hv_slm_stat==1) {} state quadsOn
+        when (hv_slm_vsetrbk==hv_slm_vcfg && hv_slm_stat==1) {} state quadsCalc
         
         when (delay(20) && hv_slm_stat!=1) {
             hv_slm_onoff=1;
@@ -488,10 +444,59 @@ ss automoller {
 			status=NOT_CONFIGURED;
 			pvPut(status);
             sprintf(msg,"ERROR setting SLM HV.  Aborted Moller Run.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            printf("%s\n",msg); pvPut(msg);
         } state listen
 
+    }
+
+    state quadsCalc {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            pvGet(quad_icfg);
+            pvGet(quad_icfg_auto);
+            itmp=0;
+            if (quad_icfg_auto) {
+                sprintf(msg,"Calculating Quadrupole Current ...");
+                printf("%s\n",msg); pvPut(msg);
+                epicsThreadSleep(1);
+                pvGet(beamPasses);
+                if (beamPasses==1) {
+                    pvGet(quad_icfg_1pass);
+                    quad_icfg = quad_icfg_1pass;
+                }
+                else if (beamPasses==2) {
+                    pvGet(quad_icfg_2pass);
+                    quad_icfg = quad_icfg_2pass;
+                }
+                else if (beamPasses==3) {
+                    pvGet(quad_icfg_3pass);
+                    quad_icfg = quad_icfg_3pass;
+                }
+                else if (beamPasses==4) {
+                    pvGet(quad_icfg_4pass);
+                    quad_icfg = quad_icfg_4pass;
+                }
+                else if (beamPasses==5) {
+                    pvGet(quad_icfg_5pass);
+                    quad_icfg = quad_icfg_5pass;
+                }
+                else {
+                    itmp=1;
+                }
+            }
+        }
+        
+        when (itmp!=0) {
+            sprintf(msg,"ERROR on #Passes for Quad Current.");
+            printf("%s\n",msg); pvPut(msg);
+        } state listen
+
+        when () {
+            pvPut(quad_icfg);
+        } state quadsOn
     }
 
     state quadsOn {
@@ -501,32 +506,63 @@ ss automoller {
 
         entry {
             sprintf(msg,"Energizing Quadrupoles ...");
-            printf("%s\n",msg);
-            pvPut(msg);
-            quadB_iset = quad_icfg;
-            pvPut(quadB_iset);
-            quadC_iset = quad_icfg;
-            pvPut(quadC_iset);
+            printf("%s\n",msg); pvPut(msg);
+            epicsThreadSleep(1);
+            quadB_reset = 1;
+            quadC_reset = 1;
+            // critical that resets complete before we do ON:
+            sprintf(msg,"Resetting Quadrupoles ...");
+            printf("%s\n",msg); pvPut(msg);
+            pvPutComplete(quadB_reset);
+            pvPutComplete(quadC_reset);
+            sprintf(msg,"Turning ON Quadrupoles ...");
+            printf("%s\n",msg); pvPut(msg);
             quadB_on = 1;
-            pvPut(quadB_on);
             quadC_on = 1;
+            pvPut(quadB_on);
             pvPut(quadC_on);
-            epicsThreadSleep(5);
+            epicsThreadSleep(1);
+            sprintf(msg,"Settting Quadrupole Current ...");
+            printf("%s\n",msg); pvPut(msg);
+            pvGet(quad_icfg);
+            quadB_iset = quad_icfg;
+            quadC_iset = quad_icfg;
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(1);
         }
 
-        when (delay(5) &&
+        when (delay(3) &&
               equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
               equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
         } state helmholtzOn
-
-        // catch errors when turning on Quads:
-//        when (delay(30)) {
-//            quadB_reset = 1;
-//            quadC_reset = 1;
-//            pvPut(quadB_reset);
-//            pvPut(quaC_reset);
-//        }
-
+/*
+        // check that Quads succeeded:
+        when (delay(30) && !equals(quadB_imon,quadB_iset,QUAD_TOLERANCE)) {
+            quadB_iset=0;
+            pvPut(quadB_iset);
+            quadB_off=1;
+            pvPut(quadB_off);
+            quadB_reset=1;
+            pvPut(quadB_reset);
+            quadB_on=1;
+            pvPut(quadB_on);
+            quadB_iset=quad_icfg;
+            pvPut(quadB_iset);
+        } state quadsOn
+        when (delay(30) && !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE)) {
+            quadC_iset=0;
+            pvPut(quadC_iset);
+            quadC_off=1;
+            pvPut(quadC_off);
+            quadC_reset=1;
+            pvPut(quadC_reset);
+            quadC_on=1;
+            pvPut(quadC_on);
+            quadC_iset=quad_icfg;
+            pvPut(quadC_iset);
+        } state quadsOn
+*/
         when (delay(90)) {
 			status=QUAD_ALARM;
 			pvPut(status);
@@ -545,6 +581,8 @@ ss automoller {
             sprintf(msg,"Energizing Helmholtz Coils ...");
             printf("%s\n",msg);
             pvPut(msg);
+            pvGet(helm_icfg);
+            pvGet(helm_polcfg);
             helm_iset = helm_icfg*(2*helm_polcfg-1);
             helm_on = 1;
             pvPut(helm_on);
@@ -553,7 +591,7 @@ ss automoller {
             epicsThreadSleep(1);
         }
         
-        when (delay(5) && equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
+        when (delay(3) && equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
         } state insertTarget
 
         when (delay(20)) {
@@ -570,6 +608,7 @@ ss automoller {
             sprintf(msg,"Inserting Moller Target ...");
             printf("%s\n",msg);
             pvPut(msg);
+            pvGet(tgt_cfg);
             tgt_cmd = tgt_cfg;
             pvPut(tgt_cmd);
         }

@@ -14,7 +14,7 @@ def exit(text,parent):
   mess.destroy()
   #sys.exit(text)
 
-DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','BAND_HV']
+DETSHV=['CTOF_HV','FTOF_HV','ECAL_HV','PCAL_HV','FTC_HV','LTCC_HV','HTCC_HV','DC_HV','FTH_HV','FTT_HV','CND_HV','RICH_HV','MVT_HV','BAND_HV','BLINE_HV']
 DETSLV=['CTOF_LV','FTC_LV','HTCC_LV','DC_LV','RICH_LV','MVT_LV']
 DETSVT=['SVT']
 MISC=['BUFFERDEWAR']
@@ -143,6 +143,23 @@ def getChannels(det,sector=None):
           iChan+=1
   elif det=='MVT_LV':
     sys.exit('NOT READY FOR MVT_LV')
+  elif det=='BLINE_HV':
+    pre='B_DET_BLINE_HV_'
+    prefixes.append(pre+'UpstreamLeft')
+    prefixes.append(pre+'UpstreamRight')
+    prefixes.append(pre+'TaggerLeft')
+    prefixes.append(pre+'TaggerRight')
+    prefixes.append(pre+'TaggerTop')
+    prefixes.append(pre+'MidstreamLeft')
+    prefixes.append(pre+'MidstreamRight')
+    prefixes.append(pre+'MidstreamTop')
+    prefixes.append(pre+'MidstreamBottom')
+    prefixes.append(pre+'DownstreamLeft')
+    prefixes.append(pre+'DownstreamRight')
+    prefixes.append(pre+'DownstreamTop')
+    prefixes.append(pre+'DownstreamBottom')
+    prefixes.append(pre+'SLM')
+    prefixes.append(pre+'BOM')
   elif det=='RICH_HV':
     for tile in range(138):
       prefixes.append('B_DET_RICH_HV_TILE%.3d'%(tile+1))

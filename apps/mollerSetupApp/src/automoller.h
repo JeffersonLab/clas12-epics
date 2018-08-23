@@ -31,3 +31,15 @@
 #define HWP_IN 0
 #define HWP_OUT 1
 
+#define _UNCONFIGURED 0x00
+#define _CONFIGURED   0x01
+#define _CONFIGURING  0x02
+#define _RUNNING      0x03
+#define _DC_ALARM     0x10
+#define _SVT_ALARM    0x20
+#define _MVT_ALARM    0x30
+#define _QUAD_ALARM   0x40
+#define _HELM_ALARM   0x50
+#define _TGT_ALARM    0x60
+#define _ACC_ALARM    0x70
+

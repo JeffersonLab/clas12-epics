@@ -12,6 +12,9 @@ SCE410Support_DBD += stream.dbd
 SCE410Support_DBD += asyn.dbd
 SCE410Support_DBD += drvAsynIPPort.dbd
 
+SCE410Support_DBD += calc.dbd
+SCE410Support_DBD += sCalcoutRecord.dbd
+
 # Build an IOC support library
 LIBRARY_IOC += SCE410Support
 
@@ -46,6 +49,7 @@ SCE410_LIBS += stream
 SCE410_LIBS += autosave
 SCE410_LIBS += devIocStats
 SCE410_LIBS += asyn
+SCE410_LIBS += calc
 SCE410_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 include $(TOP)/configure/RULES

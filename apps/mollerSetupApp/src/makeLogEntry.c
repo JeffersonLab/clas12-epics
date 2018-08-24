@@ -56,7 +56,7 @@ void makeLogEntry(
             strcpy(shwp,"Unknown");
             break;
     }
-    sprintf(filename,"moeller_04-16-18_19:37:57.txt");
+    //sprintf(filename,"moeller_04-16-18_19:37:57.txt");
     sprintf(body,
             "User Comments = %s<br><br>"
             "<table border=1>"
@@ -74,7 +74,7 @@ void makeLogEntry(
             "<tr><td>Run End Time </td><td> %s</td></tr>"
             "</table>",
             logcom,pol,epol,bca,ebca,shwp,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
-    sprintf(cmd,"echo '%s' | logentry --html -l TLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
+    sprintf(cmd,"echo '%s' | logentry --html -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);
 	system(cmd);

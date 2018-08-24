@@ -5,7 +5,8 @@
 //
 // N. Baltzell, 2018
 //
-program automoller ("P=B_MOLLER:,SIMTAG=SIM:,SIMQUAD=,SIMHELM=,SIMDET=SIM:")
+program automoller ("P=B_MOLLER:,SIMTAG=,SIMQUAD=,SIMHELM=,SIMDET=")
+//program automoller ("P=B_MOLLER:,SIMTAG=SIM:,SIMQUAD=,SIMHELM=,SIMDET=SIM:")
 
 // not reentrant (only one instance allowed):
 option -r;
@@ -14,12 +15,6 @@ option -r;
 option +s;
 
 #include "automoller.h"
-
-#define HELM_ON(ISET) \
-    helm_on=1;\
-    pvPut(helm_on);\
-    helm_iset=ISET;\
-    pvPut(helm_iset);
 
 #define MESSAGE(MSG) \
     sprintf(msg,#MSG);\
@@ -154,8 +149,7 @@ ss automoller {
     state start {
 
         entry {
-            sprintf(msg,"Connecting ...");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(Connecting ...);
             isMollerRunning=0;
             isMollerConfigured=0;
         }
@@ -175,8 +169,7 @@ ss automoller {
 			status=NOT_CONFIGURED;
 			pvPut(status);
             status2=_UNCONFIGURED;
-            sprintf(msg,"Non-Moller Configuration.");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(Non-Moller Configuration.);
         } state listen
 
     }
@@ -268,8 +261,7 @@ ss automoller {
                 pvPut(msg);
             }
             else {
-                sprintf(msg,"Generating Logbook Entry ...");
-                pvPut(msg);
+                MESSAGE(Generating Logbook Entry ...);
                 pvGet(filename);
                 pvGet(beamEnergy);
                 pvGet(halfwaveplate);
@@ -283,8 +275,7 @@ ss automoller {
                 epicsThreadSleep(4);
                 makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
                 epicsThreadSleep(2);
-                sprintf(msg,"Check Logbook for New Entry!");
-                pvPut(msg);
+                MESSAGE(Check Logbook for New Entry!);
                 sprintf(logcomments,"None");
                 pvPut(logcomments);
             }
@@ -297,15 +288,13 @@ ss automoller {
             // require stopping run before reconfigure:
 			if (isMollerRunning) {
                 sprintf(stmp,"%s",msg);
-				sprintf(msg,"No Reconfigure.  Stop Moller Run First.");
-                printf("%s\n",msg); pvPut(msg);
+                MESSAGE(No Reconfigure.  Stop Moller Run First.);
                 epicsThreadSleep(2);
                 sprintf(msg,"%s",stmp);
                 printf("%s\n",msg); pvPut(msg);
 			}
 			else {
-				sprintf(msg,"Reconfiguring ...");
-                printf("%s\n",msg); pvPut(msg);
+                MESSAGE(Reconfiguring ...);
 				status=CONFIGURING;
 				pvPut(status);
                 pvGet(quad_icfg);
@@ -327,8 +316,7 @@ ss automoller {
 		}
 
 		when (delay(10) && tgt_moving==0) {
-            sprintf(msg,"Moller Reconfiguration Complete.");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(Moller Reconfiguration Complete.);
             status=CONFIGURED;
             pvPut(status);
 		} state listen
@@ -338,9 +326,7 @@ ss automoller {
 		entry {
 			status=CONFIGURING;
 			pvPut(status);
-            sprintf(msg,"Entering Moller Configuration ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Entering Moller Configuration ...);
             epicsThreadSleep(1);
 		}
         when () {} state checkTagger
@@ -348,19 +334,15 @@ ss automoller {
 
     state checkTagger {
         entry {
-            sprintf(msg,"Checking Tagger ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Checking Tagger ...);
             epicsThreadSleep(1);
         }
         when (tagger_irbk < TAGGER_TOLERANCE) {
-            sprintf(msg,"ERROR:  Tagger is Off.  Aborted Moller Run.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(ERROR:  Tagger is Off.  Aborted Moller Run.);
 			status=NOT_CONFIGURED;
 			pvPut(status);
         } state listen
-        when () {} state setSlm //hvOff
+        when () {} state hvOff
     }
 
     state hvOff {
@@ -373,25 +355,19 @@ ss automoller {
 
         entry {
             if (hv_svt_stat!=0) {
-                sprintf(msg,"Turning SVT HV Off ...");
-                printf("%s\n",msg);
-                pvPut(msg);
+                MESSAGE(Turning SVT HV Off ...);
                 hv_svt_off=1;
                 pvPut(hv_svt_off);
                 epicsThreadSleep(1);
             }
             if (hv_dc_stat!=1) {
-                sprintf(msg,"Turning DC HV Off ...");
-                printf("%s\n",msg);
-                pvPut(msg);
+                MESSAGE(Turning DC HV Off ...);
                 hv_dc_off=1;
                 pvPut(hv_dc_off);
                 epicsThreadSleep(1);
             }
             if (hv_bmt_stat!=0) {
-                sprintf(msg,"Turning BMT HV Off ...");
-                printf("%s\n",msg);
-                pvPut(msg);
+                MESSAGE(Turning BMT HV Off ...);
                 hv_bmt_off=1;
                 pvPut(hv_bmt_off);
                 epicsThreadSleep(1);
@@ -404,9 +380,7 @@ ss automoller {
             pvPut(hv_fth_off);
             pvPut(hv_ftt_off);
             pvPut(hv_ctof_off);
-            sprintf(msg,"Confirming HV Off ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Confirming HV Off ...);
             epicsThreadSleep(5);
         }
 
@@ -418,19 +392,17 @@ ss automoller {
         when (delay(90)) {
             if (hv_dc_stat!=1) {
 				status=DC_ALARM;
-                sprintf(msg,"ERROR on DC HV Off.  Aborted Moller Run.");
+                MESSAGE(ERROR on DC HV Off.  Aborted Moller Run.);
             }
             else if (hv_svt_stat!=0) {
 				status=SVT_ALARM;
-                sprintf(msg,"ERROR on SVT HV Off.  Aborted Moller Run.");
+                MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
             }
             else if (hv_bmt_stat!=0) {
 				status=MVT_ALARM;
-                sprintf(msg,"ERROR on BMT HV Off.  Aborted Moller Run.");
+                MESSAGE(ERROR on BMT HV Off.  Aborted Moller Run.);
             }
-            printf("%s\n",msg);
 			pvPut(status);
-            pvPut(msg);
         } state listen
         
         when (delay(30) && hv_bmt_stat!=0) {} state hvOff
@@ -441,9 +413,7 @@ ss automoller {
     state setSlm {
 
         entry {
-            sprintf(msg,"Setting SLM HV ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Setting SLM HV ...);
             hv_slm_onoff=1;
             pvPut(hv_slm_onoff);
             pvGet(hv_slm_vsetrbk);
@@ -458,8 +428,7 @@ ss automoller {
         when (delay(90)) {
 			status=NOT_CONFIGURED;
 			pvPut(status);
-            sprintf(msg,"ERROR setting SLM HV.  Aborted Moller Run.");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(ERROR setting SLM HV.  Aborted Moller Run.);
         } state listen
 
         when (delay(20) && hv_slm_stat!=1) {
@@ -486,8 +455,7 @@ ss automoller {
             pvGet(quad_icfg_auto);
             itmp=0;
             if (quad_icfg_auto) {
-                sprintf(msg,"Calculating Quadrupole Current ...");
-                printf("%s\n",msg); pvPut(msg);
+                MESSAGE(Calculating Quadrupole Current ...);
                 epicsThreadSleep(1);
                 pvGet(beamPasses);
                 if (beamPasses==1) {
@@ -517,14 +485,12 @@ ss automoller {
         }
         
         when (itmp!=0) {
-            sprintf(msg,"ERROR on #Passes for Quad Current.");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(ERROR on #Passes for Quad Current.);
         } state listen
 
         when () {
             pvPut(quad_icfg);
-            sprintf(msg,"Turning ON Quadrupoles ...");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(Turning ON Quadrupoles ...);
         } state quadsOn
     }
 
@@ -553,8 +519,7 @@ ss automoller {
         when (delay(30)) {
 			status=QUAD_ALARM;
 			pvPut(status);
-            sprintf(msg,"ERROR energizing Quads.  Aborted Moller Run.");
-            printf("%s\n",msg);
+            MESSAGE(ERROR energizing Quads.  Aborted Moller Run.);
             pvPut(msg);
         } state listen
         
@@ -578,13 +543,13 @@ ss automoller {
         option -t;
 
         entry {
-            sprintf(msg,"Energizing Helmholtz Coils ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Energizing Helmholtz Coils ...);
             pvGet(helm_icfg);
             pvGet(helm_polcfg);
             helm_iset = helm_icfg*(2*helm_polcfg-1);
-            HELM_ON(helm_iset);
+            helm_on=1;
+            pvPut(helm_on);
+            pvPut(helm_iset);
             epicsThreadSleep(1);
         }
         
@@ -594,53 +559,40 @@ ss automoller {
         when (delay(25)) {
 			status=HELM_ALARM;
 			pvPut(status);
-            sprintf(msg,"ERROR energizing Helmholtz.  Aborted Moller Run.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(ERROR energizing Helmholtz.  Aborted Moller Run.);
         } state listen
         
         when (delay(15)) {
-            HELM_ON(helm_iset);
+            pvPut(helm_on);
+            pvPut(helm_iset);
             epicsThreadSleep(7);
         } state helmholtzOn
     }
 
     state insertTarget {
         entry {
-            sprintf(msg,"Inserting Moller Target ...");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(Inserting Moller Target ...);
             pvGet(tgt_cfg);
             tgt_cmd = tgt_cfg;
             pvPut(tgt_cmd);
         }
 
-        when (delay(90)) {
+        when (delay(120)) {
 			status=TGT_ALARM;
 			pvPut(status);
-            sprintf(msg,"ERROR inserting target.  Aborted Moller Run.");
-            printf("%s\n",msg); pvPut(msg);
+            MESSAGE(ERROR inserting target.  Aborted Moller Run.);
         } state listen
 
-        when (delay(10) && tgt_moving==0) {
-            if ( (tgt_cfg==TGT_LEFT  && tgt_left==1) ||
-                 (tgt_cfg==TGT_RIGHT && tgt_right==1) ||
-                 (tgt_cfg==TGT_EMPTY && tgt_empty==1) ||
-                 (tgt_cfg==TGT_ALUM  && tgt_alum==1)) {
-                isMollerConfigured=1;
-                status=CONFIGURED;
-                pvPut(status);
-//                sprintf(msg,"Moller Configuration Ready.");
-//                printf("%s\n",msg); pvPut(msg);
-                MESSAGE(Moller Configuration Ready.);
-            }
-            else {
-                status=TGT_ALARM;
-                pvPut(status);
-                sprintf(msg,"ERROR inserting target.  Aborted Moller Run.");
-                printf("%s\n",msg); pvPut(msg);
-            }
+        when (delay(10) && tgt_moving==0 &&
+             ( (tgt_cfg==TGT_LEFT  && tgt_left==1) ||
+               (tgt_cfg==TGT_RIGHT && tgt_right==1) ||
+               (tgt_cfg==TGT_EMPTY && tgt_empty==1) ||
+               (tgt_cfg==TGT_ALUM  && tgt_alum==1)) ) {
+            isMollerConfigured=1;
+            status=CONFIGURED;
+            pvPut(status);
+            MESSAGE(Moller Configuration Ready.);
         } state listen
-
     }
 
 
@@ -650,9 +602,7 @@ ss automoller {
 
         when (isMollerConfigured==0) {
             sprintf(stmp,msg);
-            sprintf(msg,"Enter Moller Config before starting DAQ.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Enter Moller Config before starting DAQ.);
             epicsThreadSleep(5);
             sprintf(msg,stmp);
             pvPut(msg);
@@ -660,9 +610,7 @@ ss automoller {
 
         when () {
             isMollerRunning=1;
-            sprintf(msg,"Starting DAQ  ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Starting DAQ  ...);
             epicsTimeGetCurrent(&timeStamp);
             epicsTimeToStrftime(runStartTime,40,"%m/%d/%Y %H:%M:%S",&timeStamp);
             sprintf(runEndTime,"N/A");
@@ -674,13 +622,9 @@ ss automoller {
             pvGet(runno);
             runno=runno+1;
             pvPut(runno);
-            sprintf(msg,"New Run Number and File ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(New Run Number and File ...);
             epicsThreadSleep(1);
-            sprintf(msg,"Moller Run in Progress ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Moller Run in Progress ...);
 			status=RUN_IN_PROGRESS;
 			pvPut(status);
         } state listen
@@ -689,26 +633,20 @@ ss automoller {
     state stopDaq {
 		when (!isMollerRunning) {
             sprintf(stmp,msg);
-            sprintf(msg,"Moller run is already stopped.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Moller run is already stopped.);
             epicsThreadSleep(5);
             sprintf(msg,stmp);
             pvPut(msg);
 		} state listen
         when () {
             isMollerRunning=0;
-            sprintf(msg,"Stopping DAQ  ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Stopping DAQ  ...);
             moller_accumulate=STOPDAQ;
             pvPut(moller_accumulate);
             epicsTimeGetCurrent(&timeStamp);
             epicsTimeToStrftime(runEndTime,40,"%m/%d/%Y %H:%M:%S",&timeStamp);
             epicsThreadSleep(1);
-            sprintf(msg,"DAQ Stopped.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(DAQ Stopped);
 			status=CONFIGURED;
 			pvPut(status);
         } state listen
@@ -717,23 +655,17 @@ ss automoller {
 ///////////////////////////////////////////////////
     state exitMoller {
         entry {
-            sprintf(msg,"Exiting Moller Configuration ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Exiting Moller Configuration ...);
             epicsThreadSleep(1);
             isMollerRunning=0;
             isMollerConfigured=0;
-            sprintf(msg,"Stopping DAQ  ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Stopping DAQ ...);
             moller_accumulate=STOPDAQ;
             pvPut(moller_accumulate);
 			status=CONFIGURED;
 			pvPut(status);
             epicsThreadSleep(2);
-            sprintf(msg,"Restoring non-Moller configuration ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Restoring non-Moller configuration ...);
 			status=NOT_CONFIGURED;
 			pvPut(status);
 			epicsThreadSleep(1);
@@ -746,9 +678,7 @@ ss automoller {
         option -t;
 
         entry {
-            sprintf(msg,"De-energizing Quadrupoles ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(De-energizing Quadrupoles ...);
             quadB_iset = 0;
             quadC_iset = 0;
             pvPut(quadB_iset);
@@ -765,31 +695,29 @@ ss automoller {
               quadC_imon<100) {
         } state helmholtzOff
 
-        when (delay(30)) {
+        when (delay(40)) {
 			status=QUAD_ALARM;
 			pvPut(status);
-            sprintf(msg,"ERROR de-energizing Quads.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(ERROR de-energizing Quads.);
         } state helmholtzOff
         
         when (delay(10)) {
             if (quadB_imon>100) pvPut(quadB_iset);
             if (quadC_imon>100) pvPut(quadC_iset);
+            epicsThreadSleep(1);
         } state quadsOff
 
         when (delay(5)) {
             if (quadB_isOn==1) pvPut(quadB_off);
             if (quadC_isOn==1) pvPut(quadC_off);
+            epicsThreadSleep(1);
         } state quadsOff
 
     }
 
     state helmholtzOff {
         entry {
-            sprintf(msg,"De-energizing Helmholtz ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(De-energizing Helmholtz ...);
             helm_iset=0;
             pvPut(helm_iset);
             helm_off=1;
@@ -801,9 +729,7 @@ ss automoller {
         when (delay(30)) {
 			status=HELM_ALARM;
 			pvPut(status);
-            sprintf(msg,"ERROR de-energizing Helmholtz.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(ERROR de-energizing Helmholtz.);
         } state restoreSlm
 
         when (delay(10)) {
@@ -816,9 +742,7 @@ ss automoller {
     
 	state restoreSlm {
         entry {
-            sprintf(msg,"Restoring SLM settings ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Restoring SLM settings ...);
             hv_slm_vset=hv_slm_default;
             pvPut(hv_slm_vset);
         }
@@ -827,25 +751,19 @@ ss automoller {
     
     state retractTarget {
         entry {
-            sprintf(msg,"Retracting Moller Target ...");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Retracting Moller Target ...);
             tgt_go_empty=1;
             pvPut(tgt_go_empty);
         }
-        
+
         when (delay(90)) {
-            sprintf(msg,"ERROR retracting target.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(ERROR retracting target.);
             status=TGT_ALARM;
             pvPut(status);
         } state listen
         
         when (delay(10) && tgt_moving==0 && tgt_empty==1) {
-            sprintf(msg,"Non-Moller Configuration Restored.");
-            printf("%s\n",msg);
-            pvPut(msg);
+            MESSAGE(Non-Moller Configuration Restored.);
         } state listen
     }
 }

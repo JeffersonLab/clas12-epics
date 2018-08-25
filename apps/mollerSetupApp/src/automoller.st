@@ -112,6 +112,10 @@ float tgt_empty;  assign tgt_empty    to "moller_target_empty"; monitor tgt_empt
 float tgt_alum;   assign tgt_alum     to "moller_target_al";    monitor tgt_alum;
 float tgt_moving; assign tgt_moving   to "moeller_target.MOVN"; monitor tgt_moving;
 
+// Collimator Motor Controls:
+int   colli_blank; assign colli_blank to "collimator_at_b";  monitor colli_blank;
+float colli_move;  assign colli_move  to "collimator.VAL";
+
 // High Voltage Controls:
 float hv_slm_onoff;   assign hv_slm_onoff   to "B_DET_BLINE_HV_SLM:pwonoff";
 float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; monitor hv_slm_vsetrbk;
@@ -245,6 +249,15 @@ ss automoller {
                 else                 status=CONFIGURED;
                 pvPut(status);
             }
+            if (!colli_blank) {
+                status=COLLI_ALARM;
+                pvPut(status);
+            }
+            else if (status==COLLI_ALARM) {
+                if (isMollerRunning) status=RUN_IN_PROGRESS;
+                else                 status=CONFIGURED;
+                pvPut(status);
+            }
         } state listen
     }
 
@@ -342,7 +355,23 @@ ss automoller {
 			status=NOT_CONFIGURED;
 			pvPut(status);
         } state listen
-        when () {} state hvOff
+        when () {} state insertCollimator
+    }
+
+    state insertCollimator {
+        entry {
+            MESSAGE(Inserting Collimator ...);
+            colli_move=COLLIMATOR_POSITION;
+            pvPut(colli_move);
+        }
+
+        when (colli_blank==1) {} state hvOff
+        
+        when (delay(60)) {
+            status=COLLI_ALARM;
+            pvPut(status);
+            MESSAGE(ERROR Inserting Collimator.  Aborted Moller Run.)
+        } state listen
     }
 
     state hvOff {

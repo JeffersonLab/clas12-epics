@@ -1,4 +1,7 @@
 
+// needs to go in records:
+#define COLLIMATOR_POSITION 7.0837
+
 // tolerances for magent currents:
 #define QUAD_TOLERANCE 100
 #define HELM_TOLERANCE 0.1
@@ -16,6 +19,7 @@
 #define HELM_ALARM 8
 #define TGT_ALARM 9
 #define ACC_ALARM 10
+#define COLLI_ALARM 11
 
 // from moller_targetApp:
 #define TGT_LEFT 11

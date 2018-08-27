@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys,datetime,subprocess
+import sys,datetime,subprocess,epics
 
 def getMyaTable(week,pv):
   cmd=['myget','-c',pv,'-b','-%dw'%(week),'-e','-%dw'%(week-1)]
@@ -93,9 +93,11 @@ if __name__ == '__main__':
   DATA=getPVs()
 
   # retrieve and analyze archive info:
+  print '\nRetrieving Hardware Aliases and Querying Archive ...'
   for det,data in DATA.iteritems():
-    print '\nQuerying Archive for ',det,' ',
+    print '\n',det,' ',
     for ii in range(len(data)):
+      data[ii]['hwname'] = epics.pv.PV(data[ii]['pv']+'.NAME').get()
       data[ii]['bits'] = countBits(getMyaTable(weekOffset,data[ii]['pv']))
       if ii%20==0:
         sys.stdout.write('.')
@@ -109,7 +111,7 @@ if __name__ == '__main__':
       else:
         for bb in badBits:
           if datum['bits'][bb]>threshold:
-            print datum['pv'],str(datum['bits'])
+            print datum['pv'],datum['hwname'],str(datum['bits'])
             break
   print bitDefs+'\n'
 

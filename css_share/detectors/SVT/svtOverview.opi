@@ -3519,19 +3519,32 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="WRITE_PV">
-        <pv_name>B_SVT_SEQ:btnOff</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>Turn All HV/LV OFF</description>
+      <action type="EXECUTE_CMD">
+        <command>burtrb -f /usr/clas12/DATA/burt/SVT/svt-hvoff.snap</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Turn All HV OFF</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>B_SVT_SEQ:btnOn</pv_name>
         <value>1</value>
         <timeout>10</timeout>
-        <confirm_message>Really Turn All SVT HV/LV ON?</confirm_message>
-        <description>Turn All HV/LV ON</description>
+        <confirm_message>Really Turn All SVT HV ON?</confirm_message>
+        <description>Turn All HV ON</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_SVT_SEQ:btnOff</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Turn All HV and LV OFF</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_SVT_SEQ:btnOn</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Turn All SVT HV and LV ON?</confirm_message>
+        <description>Turn All HV and LV ON</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>../../apps/svtCtrlApp/seq_svtOnOff-All.opi</path>

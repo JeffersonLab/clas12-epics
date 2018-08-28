@@ -394,7 +394,12 @@ void tordaqGui::DoOpen(TString filename="")
     
     if (dataHistos1.size() != tdReader.tdData.varnames.size())
          fileLabel->ChangeText(filename + " --   ERROR READING HISTOS.");
-    else fileLabel->ChangeText(filename);
+    else {
+        TString stmp=filename;
+        if (forceSynchro) stmp += " - SYNCHRO";
+        if (removeJitter) stmp += " - NOJITTER";
+        fileLabel->ChangeText(stmp);
+    }
     this->Layout();
 }
 

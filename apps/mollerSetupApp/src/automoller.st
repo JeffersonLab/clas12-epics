@@ -14,6 +14,9 @@ option -r;
 // safe mode:
 option +s;
 
+// whether to use Brian's quad calculation:
+#define USE_BRIANS_QUADS 0
+
 #include "automoller.h"
 
 #define MESSAGE(MSG) \
@@ -145,6 +148,27 @@ float slmebca;         assign slmebca           to "d_asym_3";
 extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
 extern double fabs(double);
 int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
+double calcQuadCurrent(float beamEnergy) {
+      const double a0=-0.703138;
+      const double a1=0.3467019;
+      const double a2=0.1071944;
+      const double a3=-0.00384008;
+      const double a4=7.38246E-05;
+      const double I0=15.20179318;
+      const double I1=74.67546956;
+      const double I2=4.819365945;
+      const double I3=-0.629171841;
+      const double I4=0.028959561;
+      const double I5=3.16195E-06;
+      // beamEnergy (GeV):
+      const double E=beamEnergy;
+      // magnetic field (kG):
+      const double B=a0+a1*E+a2*E*E+a3*E*E*E+a4*E*E*E*E;
+      // current per coil (A):
+      const double I=I0+I1*B+I2*B*B+I3*B*B*B+I4*B*B*B*B+I5*B*B*B*B*B;
+      // power supply current (A):
+      return I*3;
+}
 }%
 
 ss automoller {
@@ -486,6 +510,10 @@ ss automoller {
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
                 epicsThreadSleep(1);
+#if USE_BRIANS_QUADS
+                pvGet(beamEnergy);
+                quad_icfg = calcQuadCurrent(beamEnergy/1000);
+#else
                 pvGet(beamPasses);
                 if (beamPasses==1) {
                     pvGet(quad_icfg_1pass);
@@ -510,11 +538,16 @@ ss automoller {
                 else {
                     itmp=1;
                 }
+#endif
             }
         }
         
         when (itmp!=0) {
             MESSAGE(ERROR on #Passes for Quad Current.);
+        } state listen
+
+        when (quad_icfg>3300) {
+            MESSAGE(ERROR on Quad Current above 3300 A.);
         } state listen
 
         when () {

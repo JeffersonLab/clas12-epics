@@ -65,6 +65,10 @@ public :
        return sec + nsec/1e9 + (Double_t)iSample/FREQUENCY;
    }
    
+   Double_t getFirstTime() {
+       return first_sec + first_nsec/1e9;
+   }
+   
    Double_t getTime(Int_t iSample)
    {
        return getTime(record_tsec,record_tnsec,iSample);

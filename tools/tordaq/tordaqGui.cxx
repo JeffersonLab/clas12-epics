@@ -12,6 +12,7 @@ bool doSynchroAna=false;
 bool forceSynchro=false;
 bool saveSynchroPlots=false;
 bool removeJitter=false;
+bool stitchGaps=false;
 bool TWOPLOTS=false;
 
 TString getTimeString(const Double_t time)
@@ -254,6 +255,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     TString winnam="Hall-B VT Analyzer";
     if (forceSynchro) winnam += " - SYNCHRO";
     if (removeJitter) winnam += " - NOJITTER";
+    if (stitchGaps)   winnam += " - STITCHING";
     else  SetWindowName("Hall-B VT Analyzer");
     SetWindowName(winnam);
 
@@ -344,6 +346,7 @@ void tordaqGui::DoOpen(TString filename="")
         tdReader.doSynchroAna=doSynchroAna;
         tdReader.forceSynchro=forceSynchro;
         tdReader.removeJitter=removeJitter;
+        tdReader.stitchGaps=stitchGaps;
         tdReader.saveSynchroPlots=saveSynchroPlots;
         if (!tdReader.process())
         {
@@ -398,6 +401,7 @@ void tordaqGui::DoOpen(TString filename="")
         TString stmp=filename;
         if (forceSynchro) stmp += " - SYNCHRO";
         if (removeJitter) stmp += " - NOJITTER";
+        if (stitchGaps)   stmp += " - STITCHING";
         fileLabel->ChangeText(stmp);
     }
     this->Layout();
@@ -542,13 +546,14 @@ int main(int argc, char **argv)
 {    
     int itmp;
     const char* usage="\ntordaqGui [options] [filename]\n"
-        "\t -2 (display two plots instead of one)\n"
-        "\t -A (do synchronization analysis - memory intensive)\n"
-        "\t -H (save synchro analysis plots in tordaqSynchroAna.root)\n"
-        "\t -S (force synchronization to VT1)\n"
-        "\t -J (remove jitter)\n"
+        "\t -2 (display 2 plots instead of one)\n"
+        "\t -A (do synchronization Analysis - memory intensive)\n"
+        "\t -H (save synchro analysis Histograms in tordaqSynchroAna.root)\n"
+        "\t -S (force Synchronization to VT1)\n"
+        "\t -J (remove Jitter)\n"
+        "\t -D (Duplicate timestamp correction)\n"
         "\t -h (print usage)\n";
-    while ( (itmp=getopt(argc,argv,"ASH2Jh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"ASH2JDh")) != -1 )
     {
         switch (itmp)
         {
@@ -566,6 +571,9 @@ int main(int argc, char **argv)
                 break;
             case 'J':
                 removeJitter=true;
+                break;
+            case 'D':
+                stitchGaps=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

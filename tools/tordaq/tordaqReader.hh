@@ -33,6 +33,7 @@ public:
     bool doSynchroAna=false;
     bool forceSynchro=false;
     bool removeJitter=false;
+    bool stitchGaps=false;
     bool saveSynchroPlots=false;
     bool isTorus=true;
     bool isSolenoid=true;
@@ -84,6 +85,7 @@ public:
         if (doSynchroAna) std::cout<<std::endl<<"tordaqReader:  Performing synchronization analysis.  MEMORY INTENSIVE!"<<std::endl;
         if (forceSynchro) std::cout<<std::endl<<"tordaqReader:  FORCING SYNCHRONIZATION!"<<std::endl;
         if (removeJitter) std::cout<<std::endl<<"tordaqReader:  REMOVING JITTER!"<<std::endl;
+        if (stitchGaps)   std::cout<<std::endl<<"tordaqReader:  STITCHING GAPS!"<<std::endl;
         std::cout<<std::endl;
 
         // forceSynchro option is not always OK unless combined with with removeJitter
@@ -268,15 +270,22 @@ public:
             }
         }
 
-
         // setup dynamically allocated stuff:
         std::vector <double> lastUpdateTime;
         std::vector <bool> skipVars;
         std::vector < std::vector <int> > sampleFills;
         std::vector < TH1* > updatePeriod;
+        std::vector <double> previousTime;
+        std::vector <int> nGaps;
+        std::vector <int> nReadouts;
+        std::vector <std::vector <float>> previousReadout;
         for (unsigned int ii=0; ii<inTrees.size(); ii++) 
         {
             skipVars.push_back(false);
+            previousTime.push_back(-88888);
+            nGaps.push_back(0);
+            nReadouts.push_back(0);
+            previousReadout.push_back(std::vector <float>(tordaqData::WFLENGTH));
             if (doSynchroAna)
             {
                 // this is memory-intensive:
@@ -354,6 +363,42 @@ public:
             // all times are too early, skip to next entry:
             if (allEarly) continue;
 
+            // correct for consecutive duplicate timestamps:
+            if (stitchGaps) {
+                for (unsigned int iVar=0; iVar<inTrees.size(); iVar++) {
+
+                    if (previousTime[iVar]>0) {
+                        // if previous readout time is the "same" as this one,
+                        // increment this readout's timestamp by one readout period
+
+                        // anything smaller than this is considered to be the same:
+                        const double tolerance = ((double)tdData.UPDATEPERIOD)/10/1e9; // units=seconds
+
+                        // time difference between this and previous readout:
+                        const double delta = inTrees[iVar]->getTime(0) - previousTime[iVar]; 
+
+                        // correct the duplicate timestamp by shifting forward one period:
+                        if (fabs(delta) < tolerance) {
+                            nGaps[iVar]++;
+                            inTrees[iVar]->record_tnsec += ((double)tdData.UPDATEPERIOD);
+                            //bool same=true;
+                            //for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++) {
+                            //    if (fabs(previousReadout[iVar][iSamp]-inTrees[iVar]->record_data[iSamp])>1e-8) {
+                            //        same=false;
+                            //        break;
+                            //    }
+                            //}
+                        }
+                    }
+
+                    nReadouts[iVar]++;
+                    previousTime[iVar] = inTrees[iVar]->getTime(0);
+                    for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++) {
+                        previousReadout[iVar][iSamp]=inTrees[iVar]->record_data[iSamp];
+                    }
+                }
+            }
+
             for (int iSamp=0; iSamp<tordaqData::WFLENGTH; iSamp++)
             {
                 // if forcing synchronization, require that all trees are good:
@@ -369,6 +414,7 @@ public:
                     ntupleVars[2*iVar]=ntupleVars[2*iVar+1]=0;
                     if (!skipVars[iVar])
                     {
+
                         // get time and data for this sample:
                         data = inTrees[iVar]->record_data[iSamp];
                         if (removeJitter) {
@@ -426,9 +472,28 @@ public:
             }
             if (tooManySamples) break;
         }
-
-
-
+/*
+        if (stitchGaps)
+        {
+            std::cout<<std::endl<<std::endl<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*################# Gap Stitching ###########################################"<<std::endl;
+            std::cout<<"*"<<std::endl;
+            std::cout<<"* Output format:  (Number of Gaps Found / Total Readouts / Fraction)"<<std::endl;
+            std::cout<<"*"<<std::endl;
+            for (unsigned int ii=0; ii<nGaps.size(); ii++) {
+                fprintf(stdout,"*%7s:   (%8d / %8d / %.2f%%)\n",
+                        inTrees[ii]->fChain->GetName(),
+                        nReadouts[ii],
+                        nGaps[ii],
+                        100*((float)nGaps[ii])/nReadouts[ii]);
+            }
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<"*###########################################################################"<<std::endl;
+            std::cout<<std::endl<<std::endl<<std::endl;
+        }
+*/
         if (doSynchroAna)
         {
             // print out duplicates and missing samples info:
@@ -441,7 +506,8 @@ public:
             std::cout<<"*"<<std::endl;
             std::cout<<"*###################### Timestamps #########################################"<<std::endl;
             std::cout<<"* "<<std::endl;
-            std::cout<<"* These should all be exactly zero.  Anything non-zero is a problem."<<std::endl;
+            std::cout<<"* If you run with the -J option, these should all be exactly zero, otherwise"<<std::endl;
+            std::cout<<"  anything non-zero is a problem and warrants gap-stitching."<<std::endl;
             std::cout<<"* "<<std::endl;
             for (unsigned int ii=0; ii<updatePeriod.size(); ii++)
             {
@@ -449,7 +515,7 @@ public:
                 const double total=h->GetEntries();
                 const double duplicates=h->Integral(h->FindBin(-0.1),h->FindBin(0.1));
                 const double misses=h->Integral(h->FindBin(0.3),h->GetNbinsX());
-                fprintf(stdout,"*%7s:   Duplicates = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
+                fprintf(stdout,"*%7s:   Duplicates = (%8d / %.2f%%)    Missed = (%8d / %.2f%%)\n",
                         inTrees[ii]->fChain->GetName(),
                         duplicates,100*duplicates/total,
                         misses,100*misses/total);

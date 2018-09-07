@@ -13,14 +13,29 @@ record(stringin, "$(P)$(R)STATUS") {
     field(INP,  "@julabo.proto getStatus $(PORT)")
     field(VAL,  "")
     field(SCAN, "1 second")
-    field(FLNK, "$(P)$(R)STATUS_CALC")
+    field(FLNK, "$(P)$(R)STATUS_ERROR")
 }
 # Status is an Error if starts with a '-'
-record(scalcout, "$(P)$(R)STATUS_CALC") {
+record(scalcout, "$(P)$(R)STATUS_ERROR") {
     field(INAA,"$(P)$(R)STATUS")
     field(HIGH,"1")
     field(HSV,"MAJOR")
     field(CALC,"AA[1,1]=='-'")
+    field(FLNK,"$(P)$(R)STATUS_BITCALC")
+}
+record(scalcout, "$(P)$(R)STATUS_BITCALC") {
+    field(INAA,"$(P)$(R)STATUS")
+    field(CALC,"AA[1,2]=='01' || AA[1,2]=='02'")
+    field(FLNK,"$(P)$(R)STATUSBITAI")
+}
+record(ao,"$(P)$(R)STATUSBITAI") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)$(R)STATUS_BITCALC")
+    field(OUT,"$(P)$(R)STATUSBIT")
+}
+record(bi,"$(P)$(R)STATUSBIT") {
+    field(ONAM,"Running")
+    field(ZNAM,"Stopped")
 }
 
 # Read EGU from different channel and write back to .EGU
@@ -177,6 +192,11 @@ record(bo, "$(P)$(R)START_STOP:CTRL") {
     field(OUT,  "@julabo.proto setInt(mode_05) $(PORT)")
     field(ZNAM, "Stop")
     field(ONAM, "Start")
+}
+record(bo, "$(P)$(R)STOP") {
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)START_STOP:CTRL PP")
+    field(DOL,  "0")
 }
 
 

@@ -9,12 +9,19 @@ cd "${TOP}"
 dbLoadDatabase("dbd/svtChiller.dbd")
 svtChiller_registerRecordDeviceDriver(pdbbase)
 
-# when it's an Anova, we do some aliases to preserve rest of SVT controls system: 
+# Anova chiller:
+# (when it's an Anova, we do some aliases to preserve rest of SVT controls system) 
 drvAsynIPPortConfigure("L0",hallb-moxa1.jlab.org:4005)
 dbLoadRecords("db/anova.db","P=B_SVT_,R=CHILLER_N2_,PORT=L0")
 dbLoadRecords("db/svtChiller-anova2eco.db","P=B_SVT_CHILLER_N2"))
 
-# This is the SVT-N2 chiller:
+# Julabo chiller:
+# (when it's a Julabo, we do some aliases to preserve rest of SVT controls system) 
+#drvAsynIPPortConfigure("L2",hallb-moxa1.jlab.org:4007)
+#dbLoadRecords("db/anova.db","P=B_SVT_,R=CHILLER_,PORT=L2")
+#dbLoadRecords("db/svtChiller-anova2eco.db","P=B_SVT_CHILLER"))
+
+# Lauda chiller:
 drvAsynIPPortConfigure("L1",hallb-moxa1.jlab.org:4006)
 dbLoadRecords("db/Lauda_ECO.db","P=B_SVT_CHILLER,PORT=L1")
 

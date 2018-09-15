@@ -19,8 +19,9 @@ int main(int argc,char **argv)
         "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
-        "\t  -S (force synchronization to VT1)\n"
-        "\t  -J (remove jitter)\n"
+        "\t  -S (force Synchronization to VT1)\n"
+        "\t  -J (remove Jitter)\n"
+        "\t  -D (Duplicate timestamp correction)\n"
         "\t  -h (print usage)\n";
    
     const char* timeFormat="%Y-%m-%d_%H:%M:%S";
@@ -35,7 +36,7 @@ int main(int argc,char **argv)
     std::string sStartTime="";
     std::string sEndTime="";
     
-    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:RSJh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:DRSJh")) != -1 )
     {
         switch (itmp)
         {
@@ -70,6 +71,9 @@ int main(int argc,char **argv)
                 break;
             case 'J':
                 tdr.removeJitter=true;
+                break;
+            case 'D':
+                tdr.stitchGaps=true;
                 break;
             case 'h':
                 std::cout<<usage<<std::endl;

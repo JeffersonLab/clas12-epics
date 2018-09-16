@@ -19,29 +19,37 @@ record(stringin, "$(P)$(R)STATUS") {
     field(INP,  "@julabo.proto getStatus $(PORT)")
     field(VAL,  "")
     field(SCAN, "5 second")
-    field(FLNK, "$(P)$(R)STATUS_ERROR")
+    field(FLNK, "$(P)$(R)STATUS:CALC:ERROR")
 }
-# Status is an Error if starts with a '-'
-record(scalcout, "$(P)$(R)STATUS_ERROR") {
+# Status is an Error if starts with a '-':
+record(scalcout, "$(P)$(R)STATUS:CALC:ERROR") {
     field(INAA,"$(P)$(R)STATUS")
-    field(HIGH,"1")
-    field(HSV,"MAJOR")
     field(CALC,"AA[1,1]=='-'")
-    field(FLNK,"$(P)$(R)STATUS_BITCALC")
+    field(FLNK,"$(P)$(R)STATUS:CALC:ONOFF")
 }
-record(scalcout, "$(P)$(R)STATUS_BITCALC") {
+# Status is Running if starts with 01 or 03:
+record(scalcout, "$(P)$(R)STATUS:CALC:ONOFF") {
     field(INAA,"$(P)$(R)STATUS")
     field(CALC,"AA[0,1]=='01' || AA[0,1]=='03'")
-    field(FLNK,"$(P)$(R)STATUSBITAI")
+    field(FLNK,"$(P)$(R)STATUS:CALC")
 }
-record(ao,"$(P)$(R)STATUSBITAI") {
-    field(OMSL,"closed_loop")
-    field(DOL,"$(P)$(R)STATUS_BITCALC")
-    field(OUT,"$(P)$(R)STATUSBIT PP")
+
+record(calcout,"$(P)$(R)STATUS:CALC") {
+    field(INPA,"$(P)$(R)STATUS:CALC:ERROR")
+    field(INPB,"$(P)$(R)STATUS:CALC:ONOFF")
+    field(CALC,"A=0 ? B : 2")
+    field(OUT, "$(P)$(R)STATUSBITS PP")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
 }
-record(bi,"$(P)$(R)STATUSBIT") {
-    field(ONAM,"Running")
-    field(ZNAM,"Stopped")
+
+record(mbbi,"$(P)$(R)STATUSBITS") {
+    field(ZRST,"Stopped")
+    field(ONST,"Running")
+    field(TWST,"Alarm")
+    field(ZRSV,"MINOR")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"MAJOR")
 }
 
 # Read EGU from different channel and write back to .EGU
@@ -183,6 +191,8 @@ record(mbbi, "$(P)$(R)CIRC_MODE") {
     field(INP,  "@julabo.proto getInt(mode_05) $(PORT)")
     field(ZRST, "Stopped")
     field(ONST, "Circulating")
+    field(ZRSV, "MINOR")
+    field(ONSV, "NO_ALARM")
     field(SCAN, "5 second")
 }
 record(ai, "$(P)$(R)COOL_PWR:MAX") {

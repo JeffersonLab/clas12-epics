@@ -35,7 +35,7 @@ while True:
   try:
     resp = urllib.request.urlopen(URL, timeout=5)
   except Exception as e:
-    print(now+" Failed to get FM WX Webpage: "+e)
+    print(now+" Failed to get FM WX Webpage: "+str(e))
     error=True
 
   # Only parse response if it was OK 

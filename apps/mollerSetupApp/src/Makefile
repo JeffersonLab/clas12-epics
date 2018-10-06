@@ -15,6 +15,7 @@ mollerSetupSupport_DBD += mollerSetupSNC.dbd
 #mollerSetupSupport_SRCS += moller_oplog_remote.c
 #mollerSetupSupport_SRCS += moller_setup.st
 mollerSetupSupport_SRCS += makeLogEntry.c
+mollerSetupSupport_SRCS += quadCurrent.c
 mollerSetupSupport_SRCS += automoller.st
 
 mollerSetupSupport_LIBS += seq pv

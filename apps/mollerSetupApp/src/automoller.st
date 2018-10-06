@@ -15,7 +15,10 @@ option -r;
 option +s;
 
 // whether to use Brian's quad calculation:
-#define USE_BRIANS_QUADS 0
+#define USE_BRIANS_QUADS 1
+
+// whether to turn CVT off (since they changed ON/OFF operations again):
+#define DO_CVT_OFF 0
 
 #include "automoller.h"
 
@@ -131,9 +134,9 @@ float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
 float hv_ctof_off;    assign hv_ctof_off    to "{SIMDET}B_DET_CTOF_HV:OFF";
-int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";            monitor hv_svt_stat;
-int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat";       monitor hv_bmt_stat;
-int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
+int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";      monitor hv_svt_stat;
+int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat"; monitor hv_bmt_stat;
+int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff"; monitor hv_dc_stat;
 
 // Low-level asym DAQ:
 int moller_accumulate; assign moller_accumulate to "moller_accumulate";
@@ -146,29 +149,9 @@ float slmebca;         assign slmebca           to "d_asym_3";
 
 %{
 extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
+extern double calcQuadCurrent(float);
 extern double fabs(double);
 int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
-double calcQuadCurrent(float beamEnergy) {
-      const double a0=-0.703138;
-      const double a1=0.3467019;
-      const double a2=0.1071944;
-      const double a3=-0.00384008;
-      const double a4=7.38246E-05;
-      const double I0=15.20179318;
-      const double I1=74.67546956;
-      const double I2=4.819365945;
-      const double I3=-0.629171841;
-      const double I4=0.028959561;
-      const double I5=3.16195E-06;
-      // beamEnergy (GeV):
-      const double E=beamEnergy;
-      // magnetic field (kG):
-      const double B=a0+a1*E+a2*E*E+a3*E*E*E+a4*E*E*E*E;
-      // current per coil (A):
-      const double I=I0+I1*B+I2*B*B+I3*B*B*B+I4*B*B*B*B+I5*B*B*B*B*B;
-      // power supply current (A):
-      return I*3;
-}
 }%
 
 ss automoller {
@@ -240,20 +223,28 @@ ss automoller {
 
         // alarm on magnet currents:
         when (isMollerConfigured) {
+/*
             if (!equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) ||
-                !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
-                status2 &= _QUAD_ALARM;
-            }
-            else {
-                status2 ^= _QUAD_ALARM;
-            }
-            if (!equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
-                status2 &= HELM_ALARM;
-            }
-            else {
-                status2 ^= HELM_ALARM;
-            }
+                !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) status2 &= (1<<QUAD_ALARM);
+            else                                                status2 ^= (1<<QUAD_ALARM);
+            
+            if (!equals(helm_imon,helm_iset,HELM_TOLERANCE)) status2 &= (1<<HELM_ALARM);
+            else                                             status2 ^= (1<<HELM_ALARM);
 
+            if (!colli_blank) status2 &= (1<<COLLI_ALARM);
+            else              status2 ^= (1<<COLLI_ALARM);
+
+            if (tgt_moving!=0) status2 &= (1<<TGT_ALARM);
+            else               status2 ^= (1<<TGT_ALARM);
+
+            for (itmp=16; itmp=0; itmp++) {
+                if (status2 && (1<<itmp)) {
+                    status=itmp;
+                    pvPut(status);
+                    break;
+                }
+            }
+*/
             if (!equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) ||
                 !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
                 status=QUAD_ALARM;
@@ -278,6 +269,15 @@ ss automoller {
                 pvPut(status);
             }
             else if (status==COLLI_ALARM) {
+                if (isMollerRunning) status=RUN_IN_PROGRESS;
+                else                 status=CONFIGURED;
+                pvPut(status);
+            }
+            if (tgt_moving!=0) {
+                status=TGT_ALARM;
+                pvPut(status);
+            }
+            else if (status==TGT_ALARM) {
                 if (isMollerRunning) status=RUN_IN_PROGRESS;
                 else                 status=CONFIGURED;
                 pvPut(status);
@@ -407,22 +407,24 @@ ss automoller {
         option -t;
 
         entry {
+#if DO_CVT_OFF
             if (hv_svt_stat!=0) {
                 MESSAGE(Turning SVT HV Off ...);
                 hv_svt_off=1;
                 pvPut(hv_svt_off);
                 epicsThreadSleep(1);
             }
-            if (hv_dc_stat!=1) {
-                MESSAGE(Turning DC HV Off ...);
-                hv_dc_off=1;
-                pvPut(hv_dc_off);
-                epicsThreadSleep(1);
-            }
             if (hv_bmt_stat!=0) {
                 MESSAGE(Turning BMT HV Off ...);
                 hv_bmt_off=1;
                 pvPut(hv_bmt_off);
+                epicsThreadSleep(1);
+            }
+#endif
+            if (hv_dc_stat!=1) {
+                MESSAGE(Turning DC HV Off ...);
+                hv_dc_off=1;
+                pvPut(hv_dc_off);
                 epicsThreadSleep(1);
             }
             hv_ftc_off=1;
@@ -437,16 +439,20 @@ ss automoller {
             epicsThreadSleep(5);
         }
 
+#if DO_CVT_OFF
         when (delay(5) &&
 			  hv_dc_stat==1 &&
 			  hv_svt_stat==0 &&
 			  hv_bmt_stat==0) {} state setSlm
-        
+#else
+        when (delay(5) && hv_dc_stat==1) {} state setSlm
+#endif
         when (delay(90)) {
             if (hv_dc_stat!=1) {
 				status=DC_ALARM;
                 MESSAGE(ERROR on DC HV Off.  Aborted Moller Run.);
             }
+#if DO_CVT_OFF
             else if (hv_svt_stat!=0) {
 				status=SVT_ALARM;
                 MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
@@ -455,12 +461,15 @@ ss automoller {
 				status=MVT_ALARM;
                 MESSAGE(ERROR on BMT HV Off.  Aborted Moller Run.);
             }
+#endif
 			pvPut(status);
         } state listen
         
-        when (delay(30) && hv_bmt_stat!=0) {} state hvOff
         when (delay(30) && hv_dc_stat!=1)  {} state hvOff
+#if DO_CVT_OFF
+        when (delay(30) && hv_bmt_stat!=0) {} state hvOff
         when (delay(60) && hv_svt_stat!=0) {} state hvOff
+#endif
     }
 
     state setSlm {

@@ -15,22 +15,28 @@ record(mbbi,"$(P)ctrl:status") {
     field(ONST,"Configuring")
     field(TWST,"Configured")
     field(THST,"Run In Progress")
-    field(FRST,"DC HV OFF Error")
-    field(FVST,"SVT OFF Error")
-    field(SXST,"MVT OFF Error")
-    field(SVST,"Quads Error")
-    field(EIST,"Helmhotz Error")
-    field(NIST,"Target Error")
+    field(FRST,"High Accidentals")
+    field(FVST,"High Charge Asymmetry")
+    field(SXST,"DCHV OFF Error")
+    field(SVST,"SVTHV OFF Error")
+    field(EIST,"MVTHV OFF Error")
+    field(NIST,"Quads Error")
+    field(TEST,"Helmhotz Error")
+    field(ELST,"Target Error")
+    field(TVST,"Collimator Error")
     field(ZRSV,"NO_ALARM")
     field(ONSV,"MINOR")
     field(TWSV,"NO_ALARM")
     field(THSV,"NO_ALARM")
-    field(FRSV,"MAJOR")
+    field(FRSV,"MINOR")
     field(FVSV,"MAJOR")
     field(SXSV,"MAJOR")
     field(SVSV,"MAJOR")
     field(EISV,"MAJOR")
     field(NISV,"MAJOR")
+    field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
+    field(TVSV,"MAJOR")
     field(VAL,0)
     field(PINI,1)
     field(FLNK,"$(P)cfg:disableCalc.PROC")
@@ -161,5 +167,12 @@ record(mbbi,"$(P)cfg:tgt:pos") {
     field(DISV,"1")
     field(SDIS,"$(P)cfg:disable CPP")
     info(autosaveFields_pass0,"VAL")
+}
+
+record(ai,"$(P)cfg:accid:max") {
+    field(VAL,"0.1")
+}
+record(ai,"$(P)cfg:bca:max") {
+    field(VAL,"0.01")
 }
 

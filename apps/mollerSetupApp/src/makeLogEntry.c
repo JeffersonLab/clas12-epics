@@ -61,7 +61,7 @@ void makeLogEntry(
             "User Comments = %s<br><br>"
             "<table border=1>"
             "<tr><td>Polarization (%%) </td><td> %.3f +/- %.3f</td></tr>"
-            "<tr><td>Beam Charge Asymmetry </td><td> %.3f +/- %.3f</td></tr>"
+            "<tr><td>Beam Charge Asymmetry (%%) </td><td> %.3f +/- %.3f</td></tr>"
             "<tr><td>Half Wave Plate </td><td> %s</td></tr>"
             "<tr><td>Target Position </td><td> %s</td></tr>"
             "<tr><td>Beam Energy (MeV) </td><td> %.1f</td></tr>"

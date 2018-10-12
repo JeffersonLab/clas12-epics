@@ -1,0 +1,27 @@
+#
+# plc_longin_renamed.db
+#
+# Generic longinRecord for Torus/Solenoid PLCs.
+# Used when PV name doesn't match tag name.
+#
+# Derived directly from torus_ai_renamed.db
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PV    - record suffix
+#   TAG   - PLC tag
+#   PLCID - PLC ID set in startup
+#   EGU   - (optional)
+#   PREC  - (optional, default 0)
+#   DESC  - (optional)
+#
+
+record(longin, "$(P)$(R)$(PV)") {
+    field(DESC, "$(DESC="")")
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) $(TAG)")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+

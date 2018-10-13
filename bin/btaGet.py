@@ -1,5 +1,11 @@
 #!/usr/bin/env python
-import sys,epics,datetime,subprocess
+import sys,epics,datetime,subprocess,socket
+
+def checkHost():
+  hostname=socket.gethostname()
+  if hostname.find('daq')>=0:
+    hostname=hostname.split('.')[0]
+    sys.exit(hostname+' is not fully capable.  Run btaGet.py on a clonpc##.')
 
 def getMyaTimestamp(tt):
   return '%4d-%.2d-%.2d %.2d:%.2d:%.2d' % \
@@ -39,6 +45,8 @@ if len(sys.argv)>1:
     if hourOffset<=0: raise(ValueError)
   except:
     sys.exit(usage+'\n'+'Error:  hour offset must be a positive integer')
+
+checkHost()
 
 # figure out time range:
 now        = datetime.datetime.now()

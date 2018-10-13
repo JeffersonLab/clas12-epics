@@ -23,7 +23,7 @@ def countBits(table):
   return bitCounts
 
 def getPVs():
-  pcal,ecal,ftof,ctof,htcc,ltcc=[],[],[],[],[],[]
+  pcal,ecal,ftof,ctof,htcc,ltcc,mvt=[],[],[],[],[],[],[]
   fmt='B_DET_PCAL_HV_SEC%d_%s_E%.2d:stat'
   for sector in range(1,7):
     for view in ['U','V','W']:
@@ -55,8 +55,14 @@ def getPVs():
     for side in ['L','R']:
       for chan in range(1,19):
         ltcc.append({'pv':fmt%(sector,side,chan)})
+  fmt='B_DET_BMT_HV_SEC%d_L%d_%s:stat'
+  for sector in range(1,4):
+    for layer in range(1,7):
+      for sd in ['STRIP','DRIFT']:
+        mvt.append({'pv':fmt%(sector,layer,sd)})
+
   return {'PCAL':pcal,'ECAL':ecal,'FTOF':ftof,\
-          'CTOF':ctof,'HTCC':htcc,'LTCC':ltcc}
+          'CTOF':ctof,'HTCC':htcc,'LTCC':ltcc,'MVT ':mvt}
 
 
 if __name__ == '__main__':

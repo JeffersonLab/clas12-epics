@@ -128,15 +128,17 @@ float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; mon
 float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
 float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
 float hv_dc_off;      assign hv_dc_off      to "{SIMDET}B_DET_DC_HV:OFF";
-float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_SEQ:btnOff";
-float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:pwoff";
+//float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_HV:OFF";
+//float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
 float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
 float hv_ctof_off;    assign hv_ctof_off    to "{SIMDET}B_DET_CTOF_HV:OFF";
-int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";      monitor hv_svt_stat;
-int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat"; monitor hv_bmt_stat;
-int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff"; monitor hv_dc_stat;
+float hv_rich_off;    assign hv_rich_off    to "{SIMDET}B_DET_RICH_HV:OFF";
+int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";       monitor hv_svt_stat;
+int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat";  monitor hv_bmt_stat;
+int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";  monitor hv_dc_stat;
+int hv_rich_stat:     assign hv_rich_stat   to "{SIMDET}B_DET_RICH_HV:stat"; monitor hv_rich_stat;
 
 // Low-level asym DAQ:
 int moller_accumulate; assign moller_accumulate to "moller_accumulate";
@@ -431,10 +433,12 @@ ss automoller {
             hv_fth_off=1;
             hv_ftt_off=1;
             hv_ctof_off=1;
+            hv_rich_off=1;
             pvPut(hv_ftc_off);
             pvPut(hv_fth_off);
             pvPut(hv_ftt_off);
             pvPut(hv_ctof_off);
+            pvPut(hv_rich_off);
             MESSAGE(Confirming HV Off ...);
             epicsThreadSleep(5);
         }

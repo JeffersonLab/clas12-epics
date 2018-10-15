@@ -29,8 +29,8 @@ def getMyaBtaHour(start):
     if len(cols)!=4: continue
     daqInUse,beamPresent = float(cols[2]),float(cols[3])
     abu += daqInUse*beamPresent
-    if daqInUse==0 and beamPresent==1: banu += 1
-    if beamPresent==0: bna += 1
+    if beamPresent==0: bna  += 1
+    elif daqInUse==0:  banu += 1
   return [abu/60,banu/60,bna/60]
 
 

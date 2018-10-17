@@ -79,8 +79,10 @@ pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
 
 # No Solenoid -> HV OFF
 
-{ B_DET_BMT_INTLK_ Solenoid B_SOL:FOR:HallSensor2 20000 99999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if low solenoid field" }
-{ B_DET_FMT_INTLK_ Solenoid B_SOL:FOR:HallSensor2 20000 99999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if low solenoid field" }
+{ B_DET_BMT_INTLK_ Solenoid B_SOL:MPS:I_ZFCT 1000 99999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if low solenoid current" }
+{ B_DET_FMT_INTLK_ Solenoid B_SOL:MPS:I_ZFCT 1000 99999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if low solenoid current" }
+#{ B_DET_BMT_INTLK_ Solenoid B_SOL:FOR:HallSensor2 20000 99999999 B_DET_BMT_HV:pwoff 1 2 "Turn BMT HV OFF if low solenoid field" }
+#{ B_DET_FMT_INTLK_ Solenoid B_SOL:FOR:HallSensor2 20000 99999999 B_DET_FMT_HV:pwoff 1 2 "Turn FMT HV OFF if low solenoid field" }
 
 }
 

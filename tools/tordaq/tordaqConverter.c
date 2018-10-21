@@ -7,6 +7,7 @@
 #include <TH1.h>
 
 #include "tordaqReader.hh"
+#include "tordaqUtil.hh"
 
 int main(int argc,char **argv)
 {
@@ -15,17 +16,14 @@ int main(int argc,char **argv)
         "\t  -o output ascii filename\n"
         "\t  -t output ROOT filename with ntuple\n"
         "\t  -H output ROOT filename with histos\n"
-        "\t  -s first epoch second or YYYY-MM-DD_HH:MM:SS\n"
-        "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS\n"
+        "\t  -s first epoch second or YYYY-MM-DD_HH:MM:SS.SSSS\n"
+        "\t  -e last  epoch second or YYYY-MM-DD_HH:MM:SS.SSSS\n"
         "\t  -n max # samples\n"
         "\t  -R (output Ruben's ascii time format)\n"
-        "\t  -S (force Synchronization to VT1)\n"
-        "\t  -J (remove Jitter)\n"
-        "\t  -D (Duplicate timestamp correction)\n"
+        "\t  -S (force synchronization to VT1)\n"
+        "\t  -J (remove jitter)\n"
         "\t  -h (print usage)\n";
    
-    const char* timeFormat="%Y-%m-%d_%H:%M:%S";
-
     tordaqReader tdr;
 
     // converter doesn't need to generate comparators:
@@ -36,7 +34,7 @@ int main(int argc,char **argv)
     std::string sStartTime="";
     std::string sEndTime="";
     
-    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:DRSJh")) != -1 )
+    while ( (itmp=getopt(argc,argv,"i:o:t:s:e:H:n:RSJh")) != -1 )
     {
         switch (itmp)
         {
@@ -72,9 +70,6 @@ int main(int argc,char **argv)
             case 'J':
                 tdr.removeJitter=true;
                 break;
-            case 'D':
-                tdr.stitchGaps=true;
-                break;
             case 'h':
                 std::cout<<usage<<std::endl;
                 exit(0);
@@ -85,6 +80,7 @@ int main(int argc,char **argv)
         }
     }
 
+    /*
     // interpret start time argument:
     if (sStartTime!="")
     {
@@ -92,9 +88,15 @@ int main(int argc,char **argv)
             tdr.startTime=std::stoi(sStartTime.c_str());
         else
         {
+            float subSeconds = 0;
+            if (sStartTime.find('.')!=std::string::npos) {
+                subSeconds = stof(sStartTime.substr(sStartTime.find('.'),std::string::npos));
+                sStartTime = sStartTime.substr(0,sStartTime.find('.'));
+            }
             struct tm tm;
             strptime(sStartTime.c_str(),timeFormat,&tm);
-            tdr.startTime=mktime(&tm);
+            tdr.startTime = mktime(&tm);
+            tdr.startTime += subSeconds;
         }
         std::cout<<"tordaqConverter:  User Start Time:  "<<sStartTime<<" = "<<tdr.startTime<<std::endl;
     }
@@ -106,12 +108,26 @@ int main(int argc,char **argv)
             tdr.endTime=std::stoi(sEndTime.c_str());
         else
         {
+            float subSeconds = 0;
+            if (sEndTime.find('.')!=std::string::npos) {
+                subSeconds = stof(sEndTime.substr(sEndTime.find('.'),std::string::npos));
+                sEndTime = sEndTime.substr(0,sEndTime.find('.'));
+            }
             struct tm tm;
             strptime(sEndTime.c_str(),timeFormat,&tm);
-            tdr.endTime=mktime(&tm);
+            tdr.endTime = mktime(&tm);
+            tdr.endTime += subSeconds;
         }
         std::cout<<"tordaqConverter:  User End Time:    "<<sEndTime<<" = "<<tdr.endTime<<std::endl;
     }
+    */
+
+    /*
+    tdr.startTime = tordaqUtil::getTimeStamp(sStartTime);
+    std::cout<<"tordaqConverter:  User Start Time:  "<<sStartTime<<" = "<<tdr.startTime<<std::endl;
+    
+    tdr.endTime = tordaqUtil::getTimeStamp(sEndTime);
+    std::cout<<"tordaqConverter:  User End Time:    "<<sEndTime<<" = "<<tdr.endTime<<std::endl;
 
     if (tdr.endTime>0 && tdr.startTime>0)
     {
@@ -121,6 +137,9 @@ int main(int argc,char **argv)
             exit(1);
         }
     }
+    */
+    
+    if (!tdr.setTimeRange(sStartTime,sEndTime)) exit(1);
 
     // check filesystem for input file:
     if (gSystem->AccessPathName(tdr.inFilename))

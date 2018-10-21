@@ -1,8 +1,48 @@
 #ifndef __TORDAQUTIL_HH__
 #define __TORDAQUTIL_HH__
+#include "TVirtualFFT.h"
+#include "TH1.h"
 class tordaqUtil
 {
 public:
+
+static Double_t getTimeStamp(std::string ss)
+{
+    Double_t ret=-1;
+
+    const char* timeFormat="%Y-%m-%d_%H:%M:%S";
+    struct tm tm;
+    long lll;
+
+    // call it once to force initialization (otherwise get 1-hr offsets on first call):
+    strptime("2018-01-01_12:00:00",timeFormat,&tm);
+    lll=mktime(&tm);
+    strptime("2018-01-01_12:00:00",timeFormat,&tm);
+    lll=mktime(&tm);
+    
+    if (ss!="")
+    {
+        if (ss.find(":")==std::string::npos)
+            ret = std::stoi(ss.c_str());
+        else
+        {
+            float subSeconds = 0;
+            if (ss.find('.')!=std::string::npos) {
+                subSeconds = std::stof(ss.substr(ss.find('.'),std::string::npos));
+                ss = ss.substr(0,ss.find('.'));
+            }
+            strptime(ss.c_str(),timeFormat,&tm);
+            lll=mktime(&tm);
+            strptime(ss.c_str(),timeFormat,&tm);
+            lll=mktime(&tm);
+            ret = lll;
+            ret += subSeconds;
+        }
+    }
+    printf("%30.6f\n",ret);
+    return ret;
+}
+
 static TH1* zoomHisto(TH1* hin,const char* name,const int firstBin,const int lastBin)
 {
     if (gDirectory->Get(name)) gDirectory->Get(name)->Delete();

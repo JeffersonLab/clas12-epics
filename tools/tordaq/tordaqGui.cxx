@@ -15,15 +15,6 @@ bool removeJitter=false;
 bool stitchGaps=false;
 bool TWOPLOTS=false;
 
-TString getTimeString(const Double_t time)
-{
-    char stime[26];
-    const time_t timet=(int)time;
-    const struct tm* stm=localtime(&timet);
-    strftime(stime,26,"%H:%M:%S",stm);
-    return TString(stime);
-}
-
 tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, h) {
    
     SetStyle();
@@ -263,7 +254,7 @@ tordaqGui::tordaqGui(const TGWindow *p, UInt_t w, UInt_t h) : TGMainFrame(p, w, 
     Resize(GetDefaultSize());
     MapWindow();
 
-    if (filename!="") DoOpen(filename);
+//    if (filename!="") DoOpen(filename);
 }
 tordaqGui::~tordaqGui() {
     Cleanup();
@@ -483,6 +474,7 @@ void tordaqGui::Draw()
         }
     }
     
+    drawLines(min,max);
     legend1->Draw();
     ctmp->Update();
 
@@ -535,10 +527,12 @@ void tordaqGui::Draw()
                 hh->Draw(histos2.size()==1?"":"SAME");
             }
         }
-    
+
+        drawLines(min,max);
         legend2->Draw();
         ctmp->Update();
     }
+
 }
 
 
@@ -552,8 +546,15 @@ int main(int argc, char **argv)
         "\t -S (force Synchronization to VT1)\n"
         "\t -J (remove Jitter)\n"
         "\t -D (Duplicate timestamp correction)\n"
+        "\t -s first epoch second or YYYY-MM-DD_HH:MM:SS.SSSS (note subseconds!) \n"
+        "\t -e last  epoch second or YYYY-MM-DD_HH:MM:SS.SSSS (note subseconds!)\n"
+        "\t -l epoch second or YYYY-MM-DD_HH:MM:SS.SSSS at which to draw Line (note subseconds!)\n"
         "\t -h (print usage)\n";
-    while ( (itmp=getopt(argc,argv,"ASH2JDh")) != -1 )
+    std::string sStartTime="";
+    std::string sEndTime="";
+    std::vector<std::string> sLineTimes;
+    
+    while ( (itmp=getopt(argc,argv,"ASH2JDhl:s:e:")) != -1 )
     {
         switch (itmp)
         {
@@ -575,6 +576,15 @@ int main(int argc, char **argv)
             case 'D':
                 stitchGaps=true;
                 break;
+            case 'l':
+                sLineTimes.push_back(optarg);
+                break;
+            case 's':
+                sStartTime=optarg;
+                break;
+            case 'e':
+                sEndTime=optarg;
+                break;
             case 'h':
                 std::cout<<usage<<std::endl;
                 exit(0);
@@ -584,16 +594,22 @@ int main(int argc, char **argv)
                 exit(0);
         }
     }
-
+    
     // see if last argument is filename:
-    if (argc>1 && strcmp(argv[argc-1],"-A") && 
-                  strcmp(argv[argc-1],"-S") &&
-                  strcmp(argv[argc-1],"-H") &&
-                  strcmp(argv[argc-1],"-2") &&
-                  strcmp(argv[argc-1],"-J") &&
-                  strcmp(argv[argc-1],"-h"))
-        filename=argv[argc-1];
-  
+    if (argc>1) {
+        if ( ( strcmp(argv[argc-1],"-A") && 
+               strcmp(argv[argc-1],"-S") &&
+               strcmp(argv[argc-1],"-H") &&
+               strcmp(argv[argc-1],"-2") &&
+               strcmp(argv[argc-1],"-J") &&
+               strcmp(argv[argc-1],"-h") )
+            &&
+         (argc<2 || (strcmp(argv[argc-2],"-e") &&
+                     strcmp(argv[argc-2],"-s"))) ) {
+            filename=argv[argc-1];
+        }
+    }
+
     if (forceSynchro && doSynchroAna) {
         std::cerr<<"Simultaneously forcing synchro (-S) and doing syncrho analysis (-A) is not supported."<<std::endl;
         return 1;
@@ -605,6 +621,19 @@ int main(int argc, char **argv)
 
     TApplication theApp("App", &argc, argv);
     tordaqGui * mmf=new tordaqGui(gClient->GetRoot(), 2000, 600);
+
+    if (sStartTime!="" || sEndTime!="") {
+        if (!mmf->tdReader.setTimeRange(sStartTime,sEndTime)) {
+            exit(1);
+        }
+    }
+
+    for (unsigned int ii=0; ii<sLineTimes.size(); ii++) {
+        if (!mmf->addLineTime(sLineTimes[ii])) exit(1);
+    }
+   
+    if (filename!="") mmf->DoOpen(filename);
+
     theApp.Run();
     return 0;
 }

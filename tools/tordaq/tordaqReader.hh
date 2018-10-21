@@ -3,6 +3,7 @@
 #define __TORDAQREADER__HH
 
 #include "tordaqData.hh"
+#include "tordaqUtil.hh"
 
 #include <TNtupleD.h>
 #include <TGProgressBar.h>
@@ -21,8 +22,8 @@ public:
     TString outAsciiFilename="";
     TString outRootFilename="";
     Long64_t maxSamples=-1;
-    Long64_t startTime=-1;
-    Long64_t endTime=-1;
+    Double_t startTime=-1;
+    Double_t endTime=-1;
     bool rubenTime=false;
     bool makeHistos=false;
     bool makeNtuple=false;
@@ -39,6 +40,19 @@ public:
     bool isSolenoid=true;
     tordaqData tdData;
     std::vector <TH1*> outHistos;
+
+    bool setTimeRange(std::string start,std::string end) {
+        startTime = (double)tordaqUtil::getTimeStamp(start);
+        endTime = (double)tordaqUtil::getTimeStamp(end);
+        if (endTime>0 && startTime>0 && endTime<=startTime) {
+            printf("tordaqReader:  User Error:  Start Time (%.3f) later then End Time (%.3f)\n",startTime,endTime);
+            return false;
+        }
+        else {
+            printf("tordaqReader:  Set User Time Range:  %.3f --- %.3f\n",startTime,endTime);
+            return true;
+        }
+    }
 
     void ProgressMeter(const double total,const double current,const int starttime=0)
     {
@@ -168,7 +182,8 @@ public:
                 outTree=new TNtupleD("tordaq","",varnames.c_str());
             }
         }
-        
+       
+        // get file start/end times:
         {
             Double_t time0=-1,time1=-1;
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
@@ -232,6 +247,7 @@ public:
         if (makeHistos)
         {
             // choose time limits:
+            //Double_t time0=-1,time1=-1;
             Double_t time0=-1,time1=-1;
             for (unsigned int ii=0; ii<inTrees.size(); ii++)
             {
@@ -256,6 +272,8 @@ public:
             {
               for (unsigned int ii=0; ii<inTrees.size(); ii++)
               {
+                if (startTime>0) time0 = startTime;
+                if (endTime>0)   time1 = endTime;
                 const Double_t t0 = time0 - 0.5/tordaqData::FREQUENCY;
                 const Double_t t1 = time1 + 0.5/tordaqData::FREQUENCY;
                 const int nBins=(t1-t0)*tordaqData::FREQUENCY+1;

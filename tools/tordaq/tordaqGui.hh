@@ -82,10 +82,11 @@ class tordaqGui: public TGMainFrame {
         TTimeStamp starttime;
         std::vector <TH1*> dataHistos1;
         std::vector <TH1*> dataHistos2;
-        tordaqReader tdReader;
-        //tordaqData tdData;
+        std::vector <Double_t> lineTimes;
+        std::vector <TLine*> lineTimess;
 
     public:
+        tordaqReader tdReader;
         tordaqGui(const TGWindow *p, UInt_t w, UInt_t h);
         virtual ~tordaqGui();
         ClassDef(tordaqGui,0);
@@ -110,6 +111,29 @@ class tordaqGui: public TGMainFrame {
         void yZoomIn(TCanvas *,std::vector<TH1*>*);
         void yZoomOut(TCanvas *,std::vector<TH1*>*);
         void doZoomSlider();
+        TString getTimeString(const Double_t);
+        bool addLineTime(std::string s) {
+            const Double_t t=tordaqUtil::getTimeStamp(s);
+            if (t > 0) {
+                lineTimes.push_back(t);
+                lineTimess.push_back(new TLine(t,0,t,1));
+                return true;
+            }
+            else {
+                std::cerr<<"tordaqGui:  time argument error: "<<s<<std::endl;
+                return false;
+            }
+        }
+        void drawLines(const double min,const double max) {
+            if (max<=min) return;
+            for (unsigned int ii=0; ii<lineTimess.size(); ii++) {
+                lineTimess[ii]->SetY1(min);
+                lineTimess[ii]->SetY2(max);
+                lineTimess[ii]->SetLineColor(ii+2);
+                lineTimess[ii]->SetLineWidth(2);
+                lineTimess[ii]->DrawClone();
+            }
+        }
         void SetStyle()
         {
             // Fill color

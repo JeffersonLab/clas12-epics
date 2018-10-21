@@ -1,4 +1,13 @@
 #include "tordaqGui.hh"
+TString tordaqGui::getTimeString(const Double_t time)
+{
+    char stime[26];
+    const time_t timet=(int)time;
+    const struct tm* stm=localtime(&timet);
+    strftime(stime,26,"%H:%M:%S",stm);
+    return TString(stime);
+}
+
 void tordaqGui::Update(
         TCanvas *canvas,std::vector<TH1*> *histos,
         const double xmin=0,const double xmax=-1,

@@ -14,6 +14,7 @@ DB    += caenboard.db
 DB    += caenchassis.db
 DB    += accessControl.db
 DB    += caenhv_genericStat.db
+DB    += caenhv_genericStat-safe.db
 
 BEAST += HValarm.xml HValarmDetBased.xml HValarmBeamline.xml
 

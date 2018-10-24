@@ -1318,6 +1318,20 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV:safe</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>BMT - All HV SAFE</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_BMT_HV:pwon</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Turn BMT ALL HV ON?</confirm_message>
+        <description>BMT - All HV ON</description>
+      </action>
       <action type="OPEN_DISPLAY">
         <path>MVT_HV_details_novice.opi</path>
         <macros>
@@ -1355,13 +1369,6 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>Restore Settings</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:pwon</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message>Really Turn BMT ALL HV ON?</confirm_message>
-        <description>BMT - All HV ON</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>B_DET_BMT_HV:pwoff</pv_name>
@@ -10457,7 +10464,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -10511,7 +10518,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -10565,7 +10572,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -10619,7 +10626,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -10926,6 +10933,99 @@ $(pv_value)</tooltip>
         <description>Temperature Timeline</description>
       </action>
     </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>0</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>1492cc80:166a5bd8368:-55f2</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>##.###</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <show_units>true</show_units>
+    <height>26</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>B_DET_BMT_HV:safe:stat</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>4</format_type>
+    <background_color>
+      <color name="Read_Background" red="77" green="77" blue="77" />
+    </background_color>
+    <width>132</width>
+    <x>360</x>
+    <name>Text Update_6</name>
+    <y>79</y>
+    <foreground_color>
+      <color name="Read_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>1492cc80:166a5bd8368:-55ec</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>HV Safe Status</text>
+    <scripts />
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>142</width>
+    <x>360</x>
+    <name>Label_58</name>
+    <y>58</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

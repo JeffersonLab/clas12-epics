@@ -6,7 +6,6 @@
 // N. Baltzell, 2018
 //
 program automoller ("P=B_MOLLER:,SIMTAG=,SIMQUAD=,SIMHELM=,SIMDET=")
-//program automoller ("P=B_MOLLER:,SIMTAG=SIM:,SIMQUAD=,SIMHELM=,SIMDET=SIM:")
 
 // not reentrant (only one instance allowed):
 option -r;
@@ -18,13 +17,22 @@ option +s;
 #define USE_BRIANS_QUADS 1
 
 // whether to turn CVT off (since they changed ON/OFF operations again):
-#define DO_CVT_OFF 0
+#define DO_CVT_OFF 1
 
 #include "automoller.h"
 
 #define MESSAGE(MSG) \
     sprintf(msg,#MSG);\
     printf("%s\n",msg);\
+    pvPut(msg);
+
+#define TMPMESSAGE(MSG) \
+    sprintf(stmp,msg);\
+    sprintf(msg,#MSG);\
+    printf("%s\n",msg);\
+    pvPut(msg);\
+    epicsThreadSleep(2);\
+    sprintf(msg,stmp);\
     pvPut(msg);
 
 %{epicsTimeStamp timeStamp;}%
@@ -128,22 +136,28 @@ float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; mon
 float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
 float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
 float hv_dc_off;      assign hv_dc_off      to "{SIMDET}B_DET_DC_HV:OFF";
-//float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_HV:OFF";
-//float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
+float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_HV:OFF";
+float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
 float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
 float hv_ctof_off;    assign hv_ctof_off    to "{SIMDET}B_DET_CTOF_HV:OFF";
 float hv_rich_off;    assign hv_rich_off    to "{SIMDET}B_DET_RICH_HV:OFF";
-int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT:status";       monitor hv_svt_stat;
-int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:stat";  monitor hv_bmt_stat;
-int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";  monitor hv_dc_stat;
-int hv_rich_stat:     assign hv_rich_stat   to "{SIMDET}B_DET_RICH_HV:stat"; monitor hv_rich_stat;
+int hv_htcc_off;      assign hv_htcc_off    to "{SIMDET}B_DET_HTCC_HV:OFF";
+int hv_ltcc_off;      assign hv_ltcc_off    to "{SIMDET}B_DET_LTCC_HV:OFF";
+int hv_ecal_off;      assign hv_ecal_off    to "{SIMDET}B_DET_ECAL_HV:OFF";
+int hv_pcal_off;      assign hv_pcal_off    to "{SIMDET}B_DET_PCAL_HV:OFF";
+int hv_ftof_off;      assign hv_ftof_off    to "{SIMDET}B_DET_FTOF_HV:OFF";
+int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT_HV:isOff";          monitor hv_svt_stat;
+int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:safe:stat";  monitor hv_bmt_stat;
+int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
 
 // Low-level asym DAQ:
+float moller_acqtime;  assign moller_acqtime    to "asym_acqg_time";
 int moller_accumulate; assign moller_accumulate to "moller_accumulate";
 int moller_reset;      assign moller_reset      to "moller_reset";
 string filename;       assign filename          to "asym_filename";
+int filedisable;       assign filedisable       to "asym_file_disable";
 float polarization;    assign polarization      to "beam_polarization";
 float epolarization;   assign epolarization     to "beam_polarization_error";
 float slmbca;          assign slmbca            to "q_asym_3";
@@ -181,7 +195,7 @@ ss automoller {
             pvPut(moller_reset);
 			status=NOT_CONFIGURED;
 			pvPut(status);
-            status2=_UNCONFIGURED;
+            //status2=_UNCONFIGURED;
             MESSAGE(Non-Moller Configuration.);
         } state listen
 
@@ -196,6 +210,8 @@ ss automoller {
             sprintf(msg,"Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
             pvPut(msg);
             epicsThreadSleep(1);
+            sprintf(msg,stmp);
+            pvPut(msg);
         } state listen
         
 		when (moller_recfg) {
@@ -290,34 +306,38 @@ ss automoller {
 ///////////////////////////////////////////////////
 
     state logentry {
-        
-        when () {
+
+        entry {
             pvGet(logusers);
-            // require logbook users to be defined:
-            if (strcmp(logusers,"")==0) {
-                sprintf(stmp,msg);
-                sprintf(msg,"Must define Entry Makers for Logbook.");
-                pvPut(msg);
-            }
-            else {
-                MESSAGE(Generating Logbook Entry ...);
-                pvGet(filename);
-                pvGet(beamEnergy);
-                pvGet(halfwaveplate);
-                pvGet(polarization);
-                pvGet(epolarization);
-                pvGet(logcomments);
-                pvGet(runno);
-                pvGet(coda_runno);
-                pvGet(slmbca);
-                pvGet(slmebca);
-                epicsThreadSleep(4);
-                makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
-                epicsThreadSleep(2);
-                MESSAGE(Check Logbook for New Entry!);
-                sprintf(logcomments,"None");
-                pvPut(logcomments);
-            }
+            pvGet(moller_accumulate);
+        }
+
+        when (moller_accumulate!=STOPDAQ) {
+            TMPMESSAGE(Must stop DAQ before Logbook Entry.)
+        } state listen
+        
+        when (strcmp(logusers,"")==0) {
+            TMPMESSAGE(Must define Entry Makers for Logbook.);
+        } state listen
+
+        when () {
+            MESSAGE(Generating Logbook Entry ...);
+            pvGet(filename);
+            pvGet(beamEnergy);
+            pvGet(halfwaveplate);
+            pvGet(polarization);
+            pvGet(epolarization);
+            pvGet(logcomments);
+            pvGet(runno);
+            pvGet(coda_runno);
+            pvGet(slmbca);
+            pvGet(slmebca);
+            epicsThreadSleep(4);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
+            epicsThreadSleep(2);
+            MESSAGE(Check Logbook for New Entry!);
+            sprintf(logcomments,"None");
+            pvPut(logcomments);
         } state listen
     }
 
@@ -366,6 +386,8 @@ ss automoller {
 			status=CONFIGURING;
 			pvPut(status);
             MESSAGE(Entering Moller Configuration ...);
+            filedisable=0;
+            pvPut(filedisable);
             epicsThreadSleep(1);
 		}
         when () {} state checkTagger
@@ -409,15 +431,17 @@ ss automoller {
         option -t;
 
         entry {
+            MESSAGE(Turning HV Off. May Generate Alarms ...);
+            epicsThreadSleep(1);
 #if DO_CVT_OFF
-            if (hv_svt_stat!=0) {
+            if (hv_svt_stat!=1) {
                 MESSAGE(Turning SVT HV Off ...);
                 hv_svt_off=1;
                 pvPut(hv_svt_off);
                 epicsThreadSleep(1);
             }
-            if (hv_bmt_stat!=0) {
-                MESSAGE(Turning BMT HV Off ...);
+            if (hv_bmt_stat!=1) {
+                MESSAGE(Setting BMT HV Safe ...);
                 hv_bmt_off=1;
                 pvPut(hv_bmt_off);
                 epicsThreadSleep(1);
@@ -434,11 +458,21 @@ ss automoller {
             hv_ftt_off=1;
             hv_ctof_off=1;
             hv_rich_off=1;
+            hv_ecal_off=1;
+            hv_pcal_off=1;
+            hv_ftof_off=1;
+            hv_htcc_off=1;
+            hv_ltcc_off=1;
             pvPut(hv_ftc_off);
             pvPut(hv_fth_off);
             pvPut(hv_ftt_off);
             pvPut(hv_ctof_off);
             pvPut(hv_rich_off);
+            pvPut(hv_ecal_off);
+            pvPut(hv_pcal_off);
+            pvPut(hv_ftof_off);
+            pvPut(hv_htcc_off);
+            pvPut(hv_ltcc_off);
             MESSAGE(Confirming HV Off ...);
             epicsThreadSleep(5);
         }
@@ -446,8 +480,8 @@ ss automoller {
 #if DO_CVT_OFF
         when (delay(5) &&
 			  hv_dc_stat==1 &&
-			  hv_svt_stat==0 &&
-			  hv_bmt_stat==0) {} state setSlm
+			  hv_svt_stat==1 &&
+			  hv_bmt_stat==1) {} state setSlm
 #else
         when (delay(5) && hv_dc_stat==1) {} state setSlm
 #endif
@@ -457,13 +491,13 @@ ss automoller {
                 MESSAGE(ERROR on DC HV Off.  Aborted Moller Run.);
             }
 #if DO_CVT_OFF
-            else if (hv_svt_stat!=0) {
+            else if (hv_svt_stat!=1) {
 				status=SVT_ALARM;
                 MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
             }
-            else if (hv_bmt_stat!=0) {
+            else if (hv_bmt_stat!=1) {
 				status=MVT_ALARM;
-                MESSAGE(ERROR on BMT HV Off.  Aborted Moller Run.);
+                MESSAGE(ERROR on BMT HV Safe.  Aborted Moller Run.);
             }
 #endif
 			pvPut(status);
@@ -471,8 +505,8 @@ ss automoller {
         
         when (delay(30) && hv_dc_stat!=1)  {} state hvOff
 #if DO_CVT_OFF
-        when (delay(30) && hv_bmt_stat!=0) {} state hvOff
-        when (delay(60) && hv_svt_stat!=0) {} state hvOff
+        when (delay(30) && hv_bmt_stat!=1) {} state hvOff
+        when (delay(60) && hv_svt_stat!=1) {} state hvOff
 #endif
     }
 
@@ -734,12 +768,19 @@ ss automoller {
             epicsThreadSleep(1);
             isMollerRunning=0;
             isMollerConfigured=0;
-            MESSAGE(Stopping DAQ ...);
-            moller_accumulate=STOPDAQ;
-            pvPut(moller_accumulate);
 			status=CONFIGURED;
 			pvPut(status);
-            epicsThreadSleep(2);
+            MESSAGE(Restoring DAQ ...);
+            moller_accumulate=STOPDAQ;
+            pvPut(moller_accumulate);
+            filedisable=1;
+            pvPut(filedisable);
+            epicsThreadSleep(1);
+            moller_acqtime=60;
+            pvPut(moller_acqtime);
+            moller_accumulate=STARTDAQ;
+            pvPut(moller_accumulate);
+            epicsThreadSleep(1);
             MESSAGE(Restoring non-Moller configuration ...);
 			status=NOT_CONFIGURED;
 			pvPut(status);

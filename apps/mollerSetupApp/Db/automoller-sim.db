@@ -98,20 +98,20 @@ record(seq,"$(S)B_DET_CTOF_HV:OFF") {}
 
 record(seq,"$(S)B_SVT_HV:OFF"){
     field(TPRO,1)
-    field(LNK1,"$(S)B_SVT:status PP")
-    field(DO1,"0")
+    field(LNK1,"$(S)B_SVT_HV:isOff PP")
+    field(DO1,"1")
 }
 record(seq,"$(S)B_DET_BMT_HV:safe"){
     field(TPRO,1)
-    field(LNK1,"$(S)B_DET_BMT_HV:stat PP")
-    field(DO1,"0")
+    field(LNK1,"$(S)B_DET_BMT_HV:safe:stat PP")
+    field(DO1,"1")
 }
 record(seq,"$(S)B_DET_FMT_HV:pwoff"){
     field(TPRO,1)
     field(LNK1,"$(S)B_DET_FMT_HV:stat PP")
     field(DO1,"0")
 }
-record(seq,"$(S)B_DET_RICH_HV:pwoff"){
+record(seq,"$(S)B_DET_RICH_HV:OFF"){
     field(TPRO,1)
     field(LNK1,"$(S)B_DET_RICH_HV:stat PP")
     field(DO1,"0")
@@ -121,14 +121,29 @@ record(seq,"$(S)B_DET_DC_HV:OFF"){
     field(LNK1,"$(S)B_DET_DC_HV:isOff PP")
     field(DO1,"1")
 }
-
-record(ai,"$(S)B_SVT:status"){
+record(seq,"$(S)B_DET_FTOF_HV:OFF"){
     field(TPRO,1)
-    field(VAL,"1")
+    field(LNK1,"$(S)B_DET_FTOF_HV:stat PP")
+    field(DO1,"0")
 }
-record(ai,"$(S)B_DET_BMT_HV:stat"){
+record(seq,"$(S)B_DET_ECAL_HV:OFF"){
     field(TPRO,1)
-    field(VAL,"1")
+    field(LNK1,"$(S)B_DET_ECAL_HV:stat PP")
+    field(DO1,"0")
+}
+record(seq,"$(S)B_DET_PCAL_HV:OFF"){
+    field(TPRO,1)
+    field(LNK1,"$(S)B_DET_PCAL_HV:stat PP")
+    field(DO1,"0")
+}
+
+record(ai,"$(S)B_SVT_HV:isOff"){
+    field(TPRO,1)
+    field(VAL,"0")
+}
+record(ai,"$(S)B_DET_BMT_HV:safe:stat"){
+    field(TPRO,1)
+    field(VAL,"0")
 }
 record(ai,"$(S)B_DET_FMT_HV:stat"){
     field(TPRO,1)
@@ -141,5 +156,17 @@ record(ai,"$(S)B_DET_RICH_HV:stat"){
 record(ai,"$(S)B_DET_DC_HV:isOff"){
     field(TPRO,1)
     field(VAL,"0")
+}
+record(ai,"$(S)B_DET_FTOF_HV:stat"){
+    field(TPRO,1)
+    field(VAL,"1")
+}
+record(ai,"$(S)B_DET_ECAL_HV:stat"){
+    field(TPRO,1)
+    field(VAL,"1")
+}
+record(ai,"$(S)B_DET_PCAL_HV:stat"){
+    field(TPRO,1)
+    field(VAL,"1")
 }
 

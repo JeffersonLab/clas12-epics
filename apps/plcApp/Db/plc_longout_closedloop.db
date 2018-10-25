@@ -1,0 +1,22 @@
+#
+# plc_longout_closedloop.db
+#
+# Wrap an ai/ao into a long.
+#
+# Because Mya archive stores all floats in 32 bits, but integers in 64 bits.
+#
+# Macros:
+#   P     - record prefix
+#   R     - record prefix
+#   PV1   - record suffix (old)
+#   PV2   - record suffix (new)
+#   DESC  - (optional)
+#
+
+record(longout, "$(P)$(R)$(PV2)") {
+    field(OMSL, "closed_loop")
+    field(DESC, "$(DESC="")")
+    field(DOL,  "$(P)$(R)$(PV1) CPP NMS")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+

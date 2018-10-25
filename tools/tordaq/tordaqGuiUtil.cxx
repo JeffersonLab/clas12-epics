@@ -39,6 +39,11 @@ void tordaqGui::Update(
     }
     canvas->Modified();
     canvas->Update();
+    double x1,x2,y1,y2;
+    canvas->GetRangeAxis(x1,y1,x2,y2);
+    drawLines(y1,y2);
+    canvas->Modified();
+    canvas->Update();
 }
 void tordaqGui::Update(const double xmin=0,const double xmax=-1,
                        const double ymin=0,const double ymax=-1)

@@ -131,7 +131,7 @@ class tordaqGui: public TGMainFrame {
                 lineTimess[ii]->SetY2(max);
                 lineTimess[ii]->SetLineColor(ii+2);
                 lineTimess[ii]->SetLineWidth(2);
-                lineTimess[ii]->DrawClone();
+                lineTimess[ii]->Draw();
             }
         }
         void SetStyle()

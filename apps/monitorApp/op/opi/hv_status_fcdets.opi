@@ -2118,17 +2118,16 @@ $(pv_value)</tooltip>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
-        <description>BMT HV SAFE</description>
+        <description>BMT HV ON - Safe Voltage</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/MVT_HV/MVT_ON.snp</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>BMT HV ON - Full Voltage</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:on</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message>Really Turn All BMT HV ON?</confirm_message>
-        <description>BMT HV ON</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:off</pv_name>
+        <pv_name>B_DET_BMT_HV:pwoff</pv_name>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>

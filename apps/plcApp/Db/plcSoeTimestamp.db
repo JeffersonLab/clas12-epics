@@ -1,0 +1,28 @@
+#  
+# Convert upper and lower timestamp registers, 32 bit DINTs from Allen-Bradley PLC
+# and already read into aiRecords, into string formatted for human consumption.
+#
+# UPPER = input aiRecord with upper timestamp
+# LOWER = input aiRecord with lower timestamp
+#
+record(aSub,"$(P)$(R):asub") {
+	field(SCAN,"10 second")
+	field(SNAM,"plcSoeTimestamp")
+	field(INAM,"plcSoeTimestamp")
+	field(INPA,"$(UPPER)")
+	field(INPB,"$(LOWER)")
+	field(FTA,"DOUBLE")
+	field(FTB,"DOUBLE")
+	field(OUTA,"$(P)$(R):string PP")
+	field(FTVA,"STRING")
+	field(OUTB,"$(P)$(R):tstamp PP")
+	field(FTVB,"DOUBLE")
+}
+record(stringin,"$(P)$(R):string") {
+    field(VAL,"N/A")
+}
+record(ai,"$(P)$(R):tstamp") {
+    field(EGU,"s")
+	field(VAL,"0")
+}
+

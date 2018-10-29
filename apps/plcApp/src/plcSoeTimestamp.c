@@ -18,10 +18,10 @@ static long plcSoeTimestamp(aSubRecord *precord) {
 		const unsigned long seconds = timestamp/1e6;
 		const double subseconds = (timestamp-seconds*1e6)/1e6;
 		const int microseconds = subseconds*1e6;
-		char prettydate[80];
+		char prettydate[39];
 		time_t rawtime = seconds;
-		strftime(prettydate,80,"%Y-%m-%d %H:%M:%S",localtime(&rawtime));
-		sprintf((char*)precord->vala,"%s.%d",prettydate,microseconds);
+		strftime(prettydate,39,"%Y-%m-%d %H:%M:%S",localtime(&rawtime));
+		sprintf((char*)precord->vala,"%s.%06d",prettydate,microseconds);
 		*((double*)precord->valb) = (double)seconds+subseconds;
 	}
 	else {

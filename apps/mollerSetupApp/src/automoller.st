@@ -86,6 +86,10 @@ int   beamPasses; assign beamPasses to "MMSHLBPASS";
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 
+// Wien Angles:
+float vwienangle; assign vwienangle to "VWienAngle";
+float hwienangle; assign hwienangle to "HWienAngle";
+
 // CODA run number:
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
 
@@ -332,8 +336,10 @@ ss automoller {
             pvGet(coda_runno);
             pvGet(slmbca);
             pvGet(slmebca);
+            pvGet(vwienangle);
+            pvGet(hwienangle);
             epicsThreadSleep(4);
-            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
             epicsThreadSleep(2);
             MESSAGE(Check Logbook for New Entry!);
             sprintf(logcomments,"None");

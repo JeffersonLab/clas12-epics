@@ -23,7 +23,6 @@ testApp_DBD += caPutLog.dbd
 testApp_SRCS += testApp_registerRecordDeviceDriver.cpp
 testApp_SRCS += seq_test.st 
 testApp_SRCS += seq_test2.st
-testApp_SRCS += soeTimestamp.c
 testApp_SRCS_DEFAULT += testAppMain.cpp
 testApp_SRCS_vxWorks += -nil-
 

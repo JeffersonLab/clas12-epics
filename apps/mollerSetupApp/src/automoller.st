@@ -16,8 +16,8 @@ option +s;
 // whether to use Brian's quad calculation:
 #define USE_BRIANS_QUADS 1
 
-// whether to turn CVT off (since they changed ON/OFF operations again):
-#define DO_CVT_OFF 1
+// special current for upstream quad due to hardware issues:
+#define QUAD_B_ISET 2800
 
 #include "automoller.h"
 
@@ -49,7 +49,6 @@ string stmp;
 string msg; assign msg    to "{P}ctrl:msg";
 int status; assign status to "{P}ctrl:status";
 int runno;  assign runno  to "{P}ctrl:runno";
-int status2;
 
 // Logbook Entry:
 string logcomments; assign logcomments to "{P}ctrl:logcomments";
@@ -88,7 +87,6 @@ int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 
 // Wien Angles:
 float vwienangle; assign vwienangle to "VWienAngle";
-float hwienangle; assign hwienangle to "HWienAngle";
 
 // CODA run number:
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
@@ -168,7 +166,7 @@ float slmbca;          assign slmbca            to "q_asym_3";
 float slmebca;         assign slmebca           to "d_asym_3";
 
 %{
-extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*);
+extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*,float);
 extern double calcQuadCurrent(float);
 extern double fabs(double);
 int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
@@ -199,7 +197,6 @@ ss automoller {
             pvPut(moller_reset);
 			status=NOT_CONFIGURED;
 			pvPut(status);
-            //status2=_UNCONFIGURED;
             MESSAGE(Non-Moller Configuration.);
         } state listen
 
@@ -245,28 +242,6 @@ ss automoller {
 
         // alarm on magnet currents:
         when (isMollerConfigured) {
-/*
-            if (!equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) ||
-                !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) status2 &= (1<<QUAD_ALARM);
-            else                                                status2 ^= (1<<QUAD_ALARM);
-            
-            if (!equals(helm_imon,helm_iset,HELM_TOLERANCE)) status2 &= (1<<HELM_ALARM);
-            else                                             status2 ^= (1<<HELM_ALARM);
-
-            if (!colli_blank) status2 &= (1<<COLLI_ALARM);
-            else              status2 ^= (1<<COLLI_ALARM);
-
-            if (tgt_moving!=0) status2 &= (1<<TGT_ALARM);
-            else               status2 ^= (1<<TGT_ALARM);
-
-            for (itmp=16; itmp=0; itmp++) {
-                if (status2 && (1<<itmp)) {
-                    status=itmp;
-                    pvPut(status);
-                    break;
-                }
-            }
-*/
             if (!equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) ||
                 !equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
                 status=QUAD_ALARM;
@@ -337,9 +312,8 @@ ss automoller {
             pvGet(slmbca);
             pvGet(slmebca);
             pvGet(vwienangle);
-            pvGet(hwienangle);
             epicsThreadSleep(4);
-            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle);
             epicsThreadSleep(2);
             MESSAGE(Check Logbook for New Entry!);
             sprintf(logcomments,"None");
@@ -366,7 +340,11 @@ ss automoller {
                 pvGet(helm_icfg);
                 pvGet(helm_polcfg);
                 pvGet(tgt_cfg);
+#ifdef QUAD_B_ISET
+                quadB_iset = QUAD_B_ISET;
+#else
 				quadB_iset = quad_icfg;
+#endif
 				quadC_iset = quad_icfg;
 				helm_iset = helm_icfg*(2*helm_polcfg-1);
 				hv_slm_vset = hv_slm_vcfg;
@@ -439,7 +417,6 @@ ss automoller {
         entry {
             MESSAGE(Turning HV Off. May Generate Alarms ...);
             epicsThreadSleep(1);
-#if DO_CVT_OFF
             if (hv_svt_stat!=1) {
                 MESSAGE(Turning SVT HV Off ...);
                 hv_svt_off=1;
@@ -452,7 +429,6 @@ ss automoller {
                 pvPut(hv_bmt_off);
                 epicsThreadSleep(1);
             }
-#endif
             if (hv_dc_stat!=1) {
                 MESSAGE(Turning DC HV Off ...);
                 hv_dc_off=1;
@@ -483,20 +459,15 @@ ss automoller {
             epicsThreadSleep(5);
         }
 
-#if DO_CVT_OFF
         when (delay(5) &&
 			  hv_dc_stat==1 &&
 			  hv_svt_stat==1 &&
 			  hv_bmt_stat==1) {} state setSlm
-#else
-        when (delay(5) && hv_dc_stat==1) {} state setSlm
-#endif
         when (delay(90)) {
             if (hv_dc_stat!=1) {
 				status=DC_ALARM;
                 MESSAGE(ERROR on DC HV Off.  Aborted Moller Run.);
             }
-#if DO_CVT_OFF
             else if (hv_svt_stat!=1) {
 				status=SVT_ALARM;
                 MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
@@ -505,15 +476,12 @@ ss automoller {
 				status=MVT_ALARM;
                 MESSAGE(ERROR on BMT HV Safe.  Aborted Moller Run.);
             }
-#endif
 			pvPut(status);
         } state listen
         
         when (delay(30) && hv_dc_stat!=1)  {} state hvOff
-#if DO_CVT_OFF
         when (delay(30) && hv_bmt_stat!=1) {} state hvOff
         when (delay(60) && hv_svt_stat!=1) {} state hvOff
-#endif
     }
 
     state setSlm {
@@ -621,7 +589,11 @@ ss automoller {
             epicsThreadSleep(1);
             pvPut(quadC_reset);
             epicsThreadSleep(1);
+#ifdef QUAD_B_ISET
+            quadB_iset=QUAD_B_ISET;
+#else
             quadB_iset=quad_icfg;
+#endif
             quadC_iset=quad_icfg;
             quadB_on = 1;
             quadC_on = 1;

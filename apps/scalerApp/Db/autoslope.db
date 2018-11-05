@@ -1,0 +1,54 @@
+
+record(calcout,"$(P)") {
+    field(SCAN,"1 second")
+    field(INPA,"B_IPM2C21A:mean")
+    field(INPB,"B_IPM2C21A:rms")
+    field(INPC,"10")  # meanlo
+    field(INPD,"0.1") # rms hi
+    field(INPG,"slm_slope")
+    field(INPH,"scaler_calc2")
+    field(INPI,"0.1")
+    field(INPJ,"scaler_calc2:mean")
+############################################
+# require:
+# minimum reference current mean
+# maximum reference current rms
+# minimum difference between calibrated and reference
+    field(OOPT,"When Non-zero")
+    field(CALC,"A>C && B<D && ABS(J-A)/A>I")
+############################################
+# output calibrated slope:
+    field(DOPT,"Use OCAL")
+    field(OCAL,"H/A*G")
+    field(OUT,"$(P):val PP")
+############################################
+}
+
+record(ai,"$(P):val") {
+    field(FLNK,"$(P):write PP")
+    info(autosaveFields_pass0,"VAL")
+}
+
+record(bi,"$(P):enable") {
+    field(ZNAM,"Disable")
+    field(ONAM,"Enabled")
+    field(VAL,"0")
+}
+record(seq,"$(P):write") {
+    field(DISV,0)
+    field(SDIS,"$(P):enable.VAL")
+    field(DOL1,"$(P):val")
+    field(LNK1,"slm_slope PP")
+    field(DOL2,"1")
+    field(LNK2,"$(P):changed PP")
+}
+
+record(bo,"$(P):changed") {
+    field(ZNAM,"Idle")
+    field(ONAM,"Active")
+    field(VAL,"0")
+    field(PINI,"0")
+    field(HIGH,"0.5")
+}
+
+

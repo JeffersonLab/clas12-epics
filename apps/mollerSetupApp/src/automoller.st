@@ -68,6 +68,7 @@ float helm_icfg;   assign helm_icfg     to "{P}cfg:helm:iset";
 int helm_polcfg;   assign helm_polcfg   to "{P}cfg:helm:pol";
 int tgt_cfg;       assign tgt_cfg       to "{P}cfg:tgt:pos";
 float hv_slm_vcfg; assign hv_slm_vcfg   to "{P}cfg:slm:vset"; monitor hv_slm_vcfg;
+float hv_slm_vdef; assign hv_slm_vdef   to "{P}def:slm:vset";
 int   quad_icfg_auto;  assign quad_icfg_auto  to "{P}cfg:quad:iset:auto";
 float quad_icfg_1pass; assign quad_icfg_1pass to "{P}cfg:quad:iset:1pass";
 float quad_icfg_2pass; assign quad_icfg_2pass to "{P}cfg:quad:iset:2pass";
@@ -491,8 +492,13 @@ ss automoller {
             hv_slm_onoff=1;
             pvPut(hv_slm_onoff);
             pvGet(hv_slm_vsetrbk);
-            pvGet(hv_slm_vcfg);
-            hv_slm_default=hv_slm_vsetrbk;
+            if (hv_slm_vsetrbk < hv_slm_vcfg-10) {
+                hv_slm_default=hv_slm_vsetrbk;
+            }
+            else {
+                pvGet(hv_slm_vdef);
+                hv_slm_default=hv_slm_vdef;
+            }
             hv_slm_vset=hv_slm_vcfg;
             pvPut(hv_slm_vset);
         }

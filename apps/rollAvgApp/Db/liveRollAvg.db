@@ -38,6 +38,23 @@ record(ai,"$(P):mean") {
     field(FLNK,"$(P):rmsCalc.PROC")
 }
 
+#### THE MAX:
+record(compress,"$(P):maxCompress") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(P):circBuff CPP")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,"1")
+    field(N,"$(N)")
+    field(EGU,"$(EGU=)")
+    info(autosaveFields_pass0,"VAL DESC")
+    field(FLNK,"$(P):max.PROC")
+}
+#### THE MAX:
+record(ai,"$(P):max") {
+    field(INP,"$(P):maxCompress")
+}
+
+
 # latest RMS term, (value-mean)^2:
 record(calcout,"$(P):rmsCalc") {
     field(INPA,"$(I)")

@@ -280,6 +280,11 @@ ss automoller {
                 else                 status=CONFIGURED;
                 pvPut(status);
             }
+            epicsThreadSleep(1);
+        } state listen
+
+        when () {
+            epicsThreadSleep(1);
         } state listen
     }
 

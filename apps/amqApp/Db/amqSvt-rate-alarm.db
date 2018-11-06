@@ -1,0 +1,14 @@
+record(compress,"B_SVT_DAQ_STRIPRATE:chip:minmax") {
+    field(INP,"B_SVT_DAQ_STRIPRATE:chip:max:wf CPP")
+    field(ALG,"N to 1 Low Value")
+    field(NSAM,1)
+    field(N,168)
+    field(FLNK,"B_SVT_DAQ_STRIPRATE:chip:minmax:alarm.PROC")
+}
+record(calc,"B_SVT_DAQ_STRIPRATE:chip:minmax:alarm") {
+    field(INPA,"B_SVT_DAQ_STRIPRATE:chip:minmax NMS")
+    field(INPB,"B_DAQ:coda_status_ai")
+    field(CALC,"B=1 ? A : 1")
+    field(LOW,0)
+    field(LSV,"MAJOR")
+}

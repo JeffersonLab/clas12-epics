@@ -23,3 +23,67 @@ record(compress,"$(P):botAvg") {
 }
 
 
+record(subArray,"$(P):top:axial") {
+    field(INP,"$(P) CPP MSS")
+    field(NELM,128)
+    field(MALM,128)
+    field(INDX,0)
+    field(FTVL,"FLOAT")
+    field(EGU,"Hz")
+    field(FLNK,"$(P):top:stereo.PROC")
+}
+record(subArray,"$(P):top:stereo") {
+    field(INP,"$(P) CPP MSS")
+    field(NELM,128)
+    field(MALM,256)
+    field(INDX,128)
+    field(FTVL,"FLOAT")
+    field(EGU,"Hz")
+    field(FLNK,"$(P):bot:axial.PROC")
+}
+record(subArray,"$(P):bot:axial") {
+    field(INP,"$(P) CPP MSS")
+    field(NELM,128)
+    field(MALM,384)
+    field(INDX,256)
+    field(FTVL,"FLOAT")
+    field(EGU,"Hz")
+    field(FLNK,"$(P):bot:stereo.PROC")
+}
+record(subArray,"$(P):bot:stereo") {
+    field(INP,"$(P) CPP MSS")
+    field(NELM,128)
+    field(MALM,512)
+    field(INDX,384)
+    field(FTVL,"FLOAT")
+    field(EGU,"Hz")
+    field(FLNK,"$(P):top:axial:max.PROC")
+}
+record(compress,"$(P):top:axial:max") {
+    field(INP,"$(P):top:axial")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,1)
+    field(N,128)
+    field(FLNK,"$(P):top:stereo:max.PROC")
+}
+record(compress,"$(P):top:stereo:max") {
+    field(INP,"$(P):top:stereo")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,1)
+    field(N,128)
+    field(FLNK,"$(P):bot:axial:max.PROC")
+}
+record(compress,"$(P):bot:axial:max") {
+    field(INP,"$(P):bot:axial")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,1)
+    field(N,128)
+    field(FLNK,"$(P):bot:stereo:max.PROC")
+}
+record(compress,"$(P):bot:stereo:max") {
+    field(INP,"$(P):bot:stereo")
+    field(ALG,"N to 1 High Value")
+    field(NSAM,1)
+    field(N,128)
+}
+

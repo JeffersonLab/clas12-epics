@@ -20,3 +20,19 @@ record(calc,"B_DET_RICH_SSP:comms:alarm") {
     field(LOW,"0")
 }
 
+record(compress,"B_DET_RICH_SCALERS:min") {
+    field(INP,"B_DET_RICH_SCALERS_PMTS:wf CPP NMS")
+    field(ALG,"N to 1 Low Value")
+    field(NSAM,1)
+    field(N,391)
+}
+record(calc,"B_DET_RICH_SCALERS:alarm") {
+    field(SCAN,"2 second")
+    field(INPA,"B_DET_RICH_SCALERS:min")
+    field(INPB,"B_DET_RICH_HV:isOff")
+    field(CALC,"B=1 ? 1 : A")
+    field(LOW,"0")
+    field(LSV,"MAJOR")
+}
+
+

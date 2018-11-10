@@ -1,0 +1,44 @@
+
+record(calc,"B_DET_FTC_FADC_TOP:c") {
+  field(SCAN,".5 second")
+  field(INPA,"B_DET_FTC_FADC_Q1:c CPP")
+  field(INPB,"B_DET_FTC_FADC_Q2:c CPP")
+  field(CALC,"A+B")
+  field(EGU,"Hz")
+  field(FLNK,"B_DET_FTC_FADC_BOTTOM:c.PROC")
+}
+record(calc,"B_DET_FTC_FADC_BOTTOM:c") {
+  field(INPA,"B_DET_FTC_FADC_Q3:c CPP")
+  field(INPB,"B_DET_FTC_FADC_Q4:c CPP")
+  field(CALC,"A+B")
+  field(EGU,"Hz")
+  field(FLNK,"B_DET_FTC_FADC_LEFT:c.PROC")
+}
+record(calc,"B_DET_FTC_FADC_LEFT:c") {
+  field(INPA,"B_DET_FTC_FADC_Q1:c CPP")
+  field(INPB,"B_DET_FTC_FADC_Q4:c CPP")
+  field(CALC,"A+B")
+  field(EGU,"Hz")
+  field(FLNK,"B_DET_FTC_FADC_RIGHT:c.PROC")
+}
+record(calc,"B_DET_FTC_FADC_RIGHT:c") {
+  field(INPA,"B_DET_FTC_FADC_Q2:c CPP")
+  field(INPB,"B_DET_FTC_FADC_Q3:c CPP")
+  field(CALC,"A+B")
+  field(EGU,"Hz")
+  field(FLNK,"B_DET_FTC_FADC:xasy.PROC")
+}
+record(calc,"B_DET_FTC_FADC:xasy") {
+  field(INPA,"B_DET_FTC_FADC_LEFT:c CPP")
+  field(INPB,"B_DET_FTC_FADC_RIGHT:c CPP")
+  field(CALC,"A+B>0 ? 100*(A-B)/(A+B) : 0")
+  field(EGU,"%")
+  field(FLNK,"B_DET_FTC_FADC:yasy.PROC")
+}
+record(calc,"B_DET_FTC_FADC:yasy") {
+  field(INPA,"B_DET_FTC_FADC_TOP:c CPP")
+  field(INPB,"B_DET_FTC_FADC_BOTTOM:c CPP")
+  field(CALC,"A+B>0 ? 100*(A-B)/(A+B) : 0")
+  field(EGU,"%")
+}
+

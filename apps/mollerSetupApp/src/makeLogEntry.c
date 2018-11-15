@@ -25,8 +25,8 @@ void makeLogEntry(
         char* endTime,
         float vwienangle) {
     char *dir="/home/epics/DATA/MOELLER";
-    char cmd[1000];
-    char body[1000];
+    char cmd[3000];
+    char body[2000];
     char stgt[100];
     char shwp[100];
     switch (tgt) {
@@ -74,9 +74,10 @@ void makeLogEntry(
             "<tr><td>Moller Run Number </td><td> %d</td></tr>"
             "<tr><td>Run Start Time </td><td> %s</td></tr>"
             "<tr><td>Run End Time </td><td> %s</td></tr>"
-            "</table>",
+            "</table>"
+            "<tag:hallbmollerrun>",
             logcom,pol,epol,bca,ebca,shwp,vwienangle,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
-    sprintf(cmd,"echo '%s' | logentry --html -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
+    sprintf(cmd,"echo '%s' | logentry --html -g Moller -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);
 	system(cmd);

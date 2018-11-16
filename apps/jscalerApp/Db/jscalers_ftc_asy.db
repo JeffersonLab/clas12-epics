@@ -1,44 +1,92 @@
 
-record(calc,"B_DET_FTC_FADC_TOP:c") {
-  field(SCAN,".5 second")
-  field(INPA,"B_DET_FTC_FADC_Q1:c")
-  field(INPB,"B_DET_FTC_FADC_Q2:c")
-  field(CALC,"A+B")
+record(subArray,"B_DET_FTC_FADC_Q1:wf") {
+  field(INP,"B_DET_FTC_FADC:wf CPP")
+  field(NELM,83)
+  field(MALM,83)
+  field(INDX,0)
+  field(FTVL,"FLOAT")
   field(EGU,"Hz")
-  field(FLNK,"B_DET_FTC_FADC_BOTTOM:c.PROC")
+  field(FLNK,"B_DET_FTC_FADC_Q2:wf.PROC")
 }
-record(calc,"B_DET_FTC_FADC_BOTTOM:c") {
-  field(INPA,"B_DET_FTC_FADC_Q3:c")
-  field(INPB,"B_DET_FTC_FADC_Q4:c")
-  field(CALC,"A+B")
+record(subArray,"B_DET_FTC_FADC_Q2:wf") {
+  field(INP,"B_DET_FTC_FADC:wf")
+  field(NELM,83)
+  field(MALM,166)
+  field(INDX,83)
+  field(FTVL,"FLOAT")
   field(EGU,"Hz")
-  field(FLNK,"B_DET_FTC_FADC_LEFT:c.PROC")
+  field(FLNK,"B_DET_FTC_FADC_Q3:wf.PROC")
 }
-record(calc,"B_DET_FTC_FADC_LEFT:c") {
-  field(INPA,"B_DET_FTC_FADC_Q1:c")
-  field(INPB,"B_DET_FTC_FADC_Q4:c")
-  field(CALC,"A+B")
+record(subArray,"B_DET_FTC_FADC_Q3:wf") {
+  field(INP,"B_DET_FTC_FADC:wf")
+  field(NELM,83)
+  field(MALM,249)
+  field(INDX,166)
+  field(FTVL,"FLOAT")
   field(EGU,"Hz")
-  field(FLNK,"B_DET_FTC_FADC_RIGHT:c.PROC")
+  field(FLNK,"B_DET_FTC_FADC_Q4:wf.PROC")
 }
-record(calc,"B_DET_FTC_FADC_RIGHT:c") {
-  field(INPA,"B_DET_FTC_FADC_Q2:c")
-  field(INPB,"B_DET_FTC_FADC_Q3:c")
-  field(CALC,"A+B")
+record(subArray,"B_DET_FTC_FADC_Q4:wf") {
+  field(INP,"B_DET_FTC_FADC:wf")
+  field(NELM,83)
+  field(MALM,332)
+  field(INDX,249)
+  field(FTVL,"FLOAT")
   field(EGU,"Hz")
+  field(FLNK,"B_DET_FTC_FADC_Q1:avg.PROC")
+}
+record(compress,"B_DET_FTC_FADC_Q1:avg") {
+  field(INP,"B_DET_FTC_FADC_Q1:wf")
+  field(ALG,"N to 1 Average")
+  field(N,83)
+  field(FLNK,"B_DET_FTC_FADC_Q2:avg.PROC")
+}
+record(compress,"B_DET_FTC_FADC_Q2:avg") {
+  field(INP,"B_DET_FTC_FADC_Q2:wf")
+  field(ALG,"N to 1 Average")
+  field(N,83)
+  field(FLNK,"B_DET_FTC_FADC_Q3:avg.PROC")
+}
+record(compress,"B_DET_FTC_FADC_Q3:avg") {
+  field(INP,"B_DET_FTC_FADC_Q3:wf")
+  field(ALG,"N to 1 Average")
+  field(N,83)
+  field(FLNK,"B_DET_FTC_FADC_Q4:avg.PROC")
+}
+record(compress,"B_DET_FTC_FADC_Q4:avg") {
+  field(INP,"B_DET_FTC_FADC_Q4:wf")
+  field(ALG,"N to 1 Average")
+  field(N,83)
   field(FLNK,"B_DET_FTC_FADC:xasy.PROC")
 }
 record(calc,"B_DET_FTC_FADC:xasy") {
-  field(INPA,"B_DET_FTC_FADC_LEFT:c")
-  field(INPB,"B_DET_FTC_FADC_RIGHT:c")
-  field(CALC,"A+B>0 ? 100*(A-B)/(A+B) : 0")
-  field(EGU,"%")
+  field(INPA,"B_DET_FTC_FADC_Q1:avg")
+  field(INPB,"B_DET_FTC_FADC_Q2:avg")
+  field(INPC,"B_DET_FTC_FADC_Q3:avg")
+  field(INPD,"B_DET_FTC_FADC_Q4:avg")
+  field(CALC,"A+B+C+D>0?100*(A+D-B-C)/(A+B+C+D):0")
   field(FLNK,"B_DET_FTC_FADC:yasy.PROC")
 }
 record(calc,"B_DET_FTC_FADC:yasy") {
-  field(INPA,"B_DET_FTC_FADC_TOP:c")
-  field(INPB,"B_DET_FTC_FADC_BOTTOM:c")
-  field(CALC,"A+B>0 ? 100*(A-B)/(A+B) : 0")
-  field(EGU,"%")
+  field(INPA,"B_DET_FTC_FADC_Q1:avg")
+  field(INPB,"B_DET_FTC_FADC_Q2:avg")
+  field(INPC,"B_DET_FTC_FADC_Q3:avg")
+  field(INPD,"B_DET_FTC_FADC_Q4:avg")
+  field(CALC,"A+B+C+D>0?100*(A+D-C-D)/(A+B+C+D):0")
+}
+record(compress,"B_DET_FTC_FADC:max") {
+  field(INP,"B_DET_FTC_FADC:wf CPP")
+  field(ALG,"N to 1 High Value")
+  field(N,332)
+}
+record(compress,"B_DET_FTC_FADC:avg") {
+  field(INP,"B_DET_FTC_FADC:wf CPP")
+  field(ALG,"N to 1 Average")
+  field(N,332)
+  field(FLNK,"B_DET_FTC_FADC:c.PROC")
+}
+record(calc,"B_DET_FTC_FADC:c") {
+  field(INPA,"B_DET_FTC_FADC:avg")
+  field(CALC,"A*332")
 }
 

@@ -33,7 +33,6 @@ dbLoadTemplate("db/jscalers_CND_FADC.substitutions")
 dbLoadRecords("db/jscalers_wfC.db")
 dbLoadRecords("db/jscalers_wf_averagesC.db")
 
-dbLoadTemplate("db/jscalers_ftc_quadrant.substitutions")
 dbLoadRecords("db/jscalers_ftc_asy.db")
 
 dbLoadRecords("db/waveformApp.db","P=B_DET_FTC_,R=FADC:,  NELM=332,FTVL=FLOAT,PERIOD=1, FNAME=ftcfadc.txt")

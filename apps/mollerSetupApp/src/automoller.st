@@ -16,8 +16,8 @@ option +s;
 // whether to use Brian's quad calculation:
 #define USE_BRIANS_QUADS 1
 
-// special current for upstream quad due to hardware issues:
-#define QUAD_B_ISET 2800
+// current limitation for upstream quad due to hardware issues:
+#define QUAD_B_IMAX 2800
 
 #include "automoller.h"
 
@@ -346,11 +346,7 @@ ss automoller {
                 pvGet(helm_icfg);
                 pvGet(helm_polcfg);
                 pvGet(tgt_cfg);
-#ifdef QUAD_B_ISET
-                quadB_iset = QUAD_B_ISET;
-#else
-				quadB_iset = quad_icfg;
-#endif
+                quadB_iset = quad_icfg>QUAD_B_IMAX ? QUAD_B_IMAX : quad_icfg;
 				quadC_iset = quad_icfg;
 				helm_iset = helm_icfg*(2*helm_polcfg-1);
 				hv_slm_vset = hv_slm_vcfg;
@@ -600,11 +596,7 @@ ss automoller {
             epicsThreadSleep(1);
             pvPut(quadC_reset);
             epicsThreadSleep(1);
-#ifdef QUAD_B_ISET
-            quadB_iset=QUAD_B_ISET;
-#else
-            quadB_iset=quad_icfg;
-#endif
+            quadB_iset = quad_icfg>QUAD_B_IMAX ? QUAD_B_IMAX : quad_icfg;
             quadC_iset=quad_icfg;
             quadB_on = 1;
             quadC_on = 1;

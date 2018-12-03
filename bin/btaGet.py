@@ -70,6 +70,7 @@ abuM,banuM,bnaM = getMyaBtaHour(start)
 if abuM+banuM+bnaM!=60:  bnaM=60-abuM-banuM
 
 print
+print '*'
 print '* FOR THE HOUR  '+str(firstHour)+' - '+str(secondHour)
 print '*'
 print '*'
@@ -82,9 +83,9 @@ print '*'
 print '* And this is the corresponding values from the Mya archive.'
 print '*    IF THESE ARE SIGNIFICANTLY DIFFERENT THAN THE ABOVE NUMBERS,'
 print '*    then you should manually adjust the table with these numbers'
-print '*    * If we request NO BEAM, you must manually adjust BANU/ABU'
 print '*'
 print '*    ABU: %.1f   BANU: %.1f   BNA: %.1f'%(abuM,banuM,bnaM)
+print '*'
 print
 
 

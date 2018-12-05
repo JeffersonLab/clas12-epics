@@ -2,21 +2,22 @@
 # TODO List
 #
 
-
 # ALARMS:
   * Description
-  ** This is necessary for useful RDB messaging history!
+  * * This is necessary for useful RDB messaging history!
   * Guidance
-  ** COMMS->cRIO
+  * * COMMS->cRIO
+  * * * e.g. FC/GS/SF is LTCC/DC+MM/HTCC+SVT
+  * * * e.g. readbacks are bogus if no crio hbeat
   * missing xmls (probably added on-the-fly):
-  ** cRio COMMS
-  ** weather
-  ** iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
+  * * cRio COMMS
+  * * weather
+  * * iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
   * Torus/Solenoid
   * FT
-  ** LV
+  * * LV
   * HV
-  ** MINOR vs MAJOR alarms - guidance needed
+  * * MINOR vs MAJOR alarms - guidance needed
   * iocamq alarms
 
 # GUIS:
@@ -28,19 +29,19 @@
   *
   * move classc1/4/6/8 to clas12-epics
   *
-  * asym (classc6->?)
+  * asym
   * * 64 MB struck for asym
   * * separate struck for BCA for independent acq time
   *
   * add SY527 reset
   * * xy240, jlab reset card, etc 
   *
-  * classc1 kernel upgrade
+  * classc1/classcsvt kernel upgrade
   * * more file descriptors
   *
   * tsconnect@clonpc0: resolve classc4/8 port numbering
   *
-  * switch to clonpc0 boot host
+  * switch to clonpc0/clon00 boot host
   *
   * old stuff to new epics
   * * classc3/classc12
@@ -58,31 +59,30 @@
   * rename mollerPS -> mollerHelmholtz
   *
   * move all to clasioc:clas-3 (?)
-  ** ops CA r/w for ioctest/st-ia.cmd
-  ** check permissions (logs, autosave, ...)
+  * * ops CA r/w for ioctest/st-ia.cmd
+  * * check permissions (logs, autosave, ...)
   *
   * merge:
-  ** iocdclv_S#R* -> iocdclv_S#
-  ** iocbomGet -> iocbom
-  ** iocrollAvgGet -> iocrollAvg
+  * * iocdclv_S#R* -> iocdclv_S#
+  * * iocbomGet -> iocbom
+  * * iocrollAvgGet -> iocrollAvg
   *
   * add saclaytgt-alarm.db
-  ** target status (full, empty, partial)
+  * * target status (full, empty, partial)
   *
   * iocareaDetector:
-  ** add devIocStats and autosave
+  * * merge into standard clas12 build (e.g. paths)
+  * * add devIocStats and autosave
   *
-  * iocamq:
-  ** wrap timeout alarm into same PVs, not separate ones as it is now
+  * iocamq:  (done, import in January)
+  * * wrap timeout alarm into same PVs, not separate ones as it is now
 
 # Manual:
  * Alarms:
-  ** stress alarm guidance more
-  ** stress "Open .." in dropdown
+  * * stress alarm guidance more
+  * * stress "Open .." in dropdown
 
-# Annunciator
-  * run cronjob or service for headless Annunciator (e.g. on clonpc17)
-
+# Remote Reset on CAEN HV
 
 #####################################################
 #####################################################
@@ -99,7 +99,7 @@
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics
   * Maybe workspace generator and wrapper scripts too
 
-# ftIntlkApp (baltzell)
+# ftIntlkApp
   * finish FTH interlocks
   * probably should be in ioccaenhv_HVFTAG instead of a separate ioc
 

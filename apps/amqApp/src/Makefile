@@ -56,6 +56,6 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 USR_CXXFLAGS +=  -std=c++11
-USR_CXXFLAGS +=  -fpermissive -Wno-deprecated-declarations -Wno-unused-but-set-variable
+USR_CXXFLAGS +=  -fpermissive -Wno-deprecated-declarations -Wno-unused-but-set-variable -Wno-format-zero-length
 USR_CFLAGS +=  -Wno-deprecated-declarations -Wno-implicit-function-declaration
 

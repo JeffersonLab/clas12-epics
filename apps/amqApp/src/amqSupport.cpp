@@ -38,6 +38,7 @@
 #include <cms/MapMessage.h>
 #include <cms/ExceptionListener.h>
 #include <cms/MessageListener.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -66,6 +67,7 @@ void json_read_value( json_object *jobj, int indx );
 //void json_parse_array( json_object *jobj, char *key);
 void print_json_value(json_object *jobj);
 
+void checkTimeouts();
 
 using namespace activemq;
 using namespace activemq::core;
@@ -79,6 +81,7 @@ using namespace std;
 typedef long (*fptr)(void *precord); //needed to call process(precord)
 
 Thread *consumerThread;        //The main thread
+Thread *producerThread;        //The main thread
 
 #define MAXPV 1000              //Maximum number of PVs
 
@@ -89,9 +92,12 @@ static int   jsonKeyNparts[MAXPV];        //nparts
 static int   jsonKeyIndices[MAXPV][10];   //incices for array parts
 static void *pvstructs[MAXPV];            //pointers to the structs for all the PVs
 static int pvtypes[MAXPV];                //
+static int pvtimeouts[MAXPV];             //timeout in s for all PVs
+static int pvtimers[MAXPV];               //timers in s for all PVs
 static int npv=0;                         //counter
+static int hbindex=-1;                    //index of a heartbeat pv if there is one
 static int startFlag=0;                   //
-//static double rawval;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 class SimpleAsyncConsumer : public ExceptionListener,
@@ -115,7 +121,7 @@ private:
   SimpleAsyncConsumer(const SimpleAsyncConsumer&);
   SimpleAsyncConsumer& operator=(const SimpleAsyncConsumer&);
   StreamMessage *smessage;
-
+  
 public:
   
   SimpleAsyncConsumer(const std::string& brokerURI,
@@ -187,6 +193,7 @@ public:
     }
   }
   
+
   // Called from the consumer since this class is a registered MessageListener.
   virtual void onMessage(const Message* message) {
     
@@ -223,6 +230,11 @@ public:
 	  prset=(rset*)rawmessage->rset;
 	  ((fptr)(prset->process))((dbCommon*)rawmessage);
 	  dbScanUnlock((dbCommon*)rawmessage);
+	}
+	if(hbindex>-1){
+	  if(strstr(text.c_str(),jsonKeyFull[hbindex])){ //If it's a heartbeat message, do the timeouts
+	    checkTimeouts();
+	  }
 	}
 	if(npv){
 	  //text.insert (0, 1, '{');
@@ -309,6 +321,150 @@ private:
 };
 
 SimpleAsyncConsumer *consumer;  //global prt to allow to be started as thread (see below)
+ 
+
+class SimpleAsyncProducer : public Runnable,
+			    public DefaultTransportListener{
+
+private:
+  
+  Connection* connection;
+  Session* session;
+  Destination* destination;
+  MessageProducer* producer;
+  bool useTopic;
+  std::string brokerURI;
+  std::string destURI;
+  bool clientAck;
+  json_object *jobj;
+  
+private:
+  
+  SimpleAsyncProducer(const SimpleAsyncProducer&);
+  SimpleAsyncProducer& operator=(const SimpleAsyncProducer&);
+  StreamMessage *smessage;
+
+public:
+  
+  SimpleAsyncProducer(const std::string& brokerURI,
+		      const std::string& destURI,
+		      bool useTopic = false,
+		      bool clientAck = false) :
+    connection(NULL),
+    session(NULL),
+    destination(NULL),
+    producer(NULL),
+    useTopic(useTopic),
+    brokerURI(brokerURI),
+    destURI(destURI),
+    clientAck(clientAck),
+    jobj(NULL){
+  }
+  
+  virtual ~SimpleAsyncProducer() {
+    this->cleanup();
+  }
+  
+  void close() {
+    this->cleanup();
+  }
+  
+  virtual void run() {
+    
+    try {
+      
+      std::cout << "Running producer" << std::endl;
+      
+      // Create a ConnectionFactory
+      ActiveMQConnectionFactory* connectionFactory = new ActiveMQConnectionFactory(brokerURI);
+      
+      // Create a Connection
+      connection = connectionFactory->createConnection();
+      delete connectionFactory;
+      
+      ActiveMQConnection* amqConnection = dynamic_cast<ActiveMQConnection*>(connection);
+      if (amqConnection != NULL) {
+	amqConnection->addTransportListener(this);
+      }
+      
+      connection->start();
+      
+      //connection->setExceptionListener(this);
+      
+      // Create a Session
+      if (clientAck) {
+	session = connection->createSession(Session::CLIENT_ACKNOWLEDGE);
+      } else {
+	session = connection->createSession(Session::AUTO_ACKNOWLEDGE);
+      }
+      
+      // Create the destination (Topic or Queue)
+      if (useTopic) {
+	destination = session->createTopic(destURI);
+      } else {
+	destination = session->createQueue(destURI);
+      }
+      
+      // Create a MessageProducer from the Session to the Topic or Queue
+      producer = session->createProducer(destination);
+      producer->setDeliveryMode(DeliveryMode::NON_PERSISTENT);
+
+      while(1){
+	if(startFlag){
+	  if(hbindex>-1){
+	    std::auto_ptr<TextMessage> message(session->createTextMessage(jsonKeyFull[hbindex]));
+	    producer->send(message.get());
+	    //std::cout << "writing heartbeat" << std::endl;
+	  }
+	}
+	sleep(1);
+      }
+    } catch (CMSException& e) {
+      e.printStackTrace();
+    }
+  }
+  
+private:
+  
+  void cleanup(){
+    
+    //*************************************************
+    // Always close destination, producers and producers before
+    // you destroy their sessions and connection.
+    //*************************************************
+    
+    // Destroy resources.
+    try{
+      if( destination != NULL ) delete destination;
+    }catch (CMSException& e) {}
+    destination = NULL;
+    
+    try{
+      if( producer != NULL ) delete producer;
+    }catch (CMSException& e) {}
+    producer = NULL;
+    
+    // Close open resources.
+    try{
+      if( session != NULL ) session->close();
+      if( connection != NULL ) connection->close();
+    }catch (CMSException& e) {}
+    
+    // Now Destroy them
+    try{
+      if( session != NULL ) delete session;
+    }catch (CMSException& e) {}
+    session = NULL;
+    
+    try{
+      if( connection != NULL ) delete connection;
+    }catch (CMSException& e) {}
+    connection = NULL;
+  }
+};
+
+SimpleAsyncProducer *producer;  //global prt to allow to be started as thread (see below)
+
 
 // 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,9 +483,11 @@ void initConsumer(const char *broker_host, const char *topic) {
   consumerThread = new Thread(consumer);
   consumerThread->start();
   consumerThread->join();
-  
-  // Wait for the consumer to indicate that its ready to go.
-  //consumer.waitUntilReady();
+
+  // Start a producer in case we need it for a heartbear
+  producer = new SimpleAsyncProducer( brokerURI, destURI, useTopics, clientAck );
+  producerThread = new Thread(producer);
+  producerThread->start();
   
   return;
 }
@@ -344,30 +502,49 @@ void initConsumer(const char *broker_host, const char *topic) {
 //called fron IOC after all records loaded
 void startConsumer(){
   startFlag=1;
+  std::cerr << "started consumer" << endl;
 }
 
 //called from init_record to save addr of record, type and related json key 
 void addPV(void *addr, int type, char* key){
+  char lKey[128];                               //local copy of the key for scanning
   char *lastu;
   char *thisu;
-  std::cerr << "Adding key" << key <<  std::endl;
-
-  if((type==EWaveform)&&strstr(key,"RAWMSG")){  //If waveform with RAWMSG in key, 
-    rawmessage = (waveformRecord*)addr;         //save as special
+  int  lseconds=0;                              //timeout value (s) for the PV - default to 0 = no timeout
+  const char  delimiter=':';                    //delimiter between keyname and timeout
+  char *delpos=NULL;                            //pointer to delimiter
+  
+  sprintf(lKey,"%s",key);                       //copy the original key string
+  delpos=strchr(lKey,delimiter);                //find timeout if these is one
+  if(delpos){
+    sscanf(delpos+1,"%d",&lseconds);  
+    sprintf(delpos,"");                         //chop off the tag with the timeout 
+  }
+  
+  std::cerr << "Adding key" << lKey <<  ", Timeout = " << lseconds << " s" << std::endl;
+  
+  if((type==EWaveform)&&strstr(lKey,"RAWMSG")){  //If waveform with RAWMSG in key, 
+    rawmessage = (waveformRecord*)addr;          //save as special
     std::cerr << "Raw messages will go into " << rawmessage->name << std::endl;
     return;
   }    
-
-  pvstructs[npv] = addr;                           //save address as a void
+  if((type==EAi)&&strstr(lKey,"HEARTBEAT")){     //If Ai  with "HEARTBEAT" in the key
+    std::cerr << "Using " << lKey  << " as a heartbeat for timeouts" << std::endl;
+    hbindex=npv;
+  }    
   
-  jsonKeyFull[npv] = new char[strlen(key)+1];      //save the full name
-  strcpy(jsonKeyFull[npv],key);
+  pvstructs[npv]  = addr;                         //save address as a void
+  pvtimeouts[npv] = lseconds;                     //save the timeout values for the PV
+  pvtimers[npv]   = 0;                            //zero the time counter PV
+  
+  jsonKeyFull[npv] = new char[strlen(lKey)+1];      //save the full name
+  strcpy(jsonKeyFull[npv],lKey);
   
   //The key will be specified like this  AAA_BBB_CCC##3_DDD_THING (hopeully simpler)
   //                                     obj obj arr[3] obj item
 
   jsonKeyNparts[npv]=0;
-  lastu=key;
+  lastu=lKey;
   while((thisu=strchr(lastu,'_'))){                                      //find underscore
     jsonKeyParts[npv][jsonKeyNparts[npv]] = new char[(thisu-lastu)+1];   //make string for it
     strncpy(jsonKeyParts[npv][jsonKeyNparts[npv]],lastu,(thisu-lastu));  //copy to it
@@ -625,10 +802,11 @@ void json_epics(json_object *jtop, int isdeep){
   
   
   for(int n=0;n<npv;n++){                  //check all the keys which are for EPICS PVs
-
+    if(n==hbindex) continue;               //we won't do the heartbeat, if it exists 
     if(isdeep==0){                         //no nesting all at top level in json string
       if(json_object_object_get_ex(jtop,jsonKeyFull[n],&value)){ //So look for full key
 	type = json_object_get_type(value);
+	pvtimers[n]=0;                     //reset the time counter
 	switch (type){
 	case json_type_boolean:
 	case json_type_double:
@@ -673,6 +851,7 @@ void json_epics(json_object *jtop, int isdeep){
 	    value = json_object_array_get_idx(value, jsonKeyIndices[n][p]);
 	    type = json_object_get_type(value);
 	  }
+	  pvtimers[n]=0;                      //reset the time counter 
 	  switch (type){
 	  case json_type_boolean:
 	  case json_type_double:
@@ -693,23 +872,30 @@ void json_epics(json_object *jtop, int isdeep){
   json_object_put(jtop);
 }
   
-// void json_parse_array( json_object *jobj, char *key) {
-//   enum json_type type;
-//   json_object *jarray = jobj; /*Simply get the array*/
+
+void checkTimeouts(){
+  void *prec;
+  rset* prset;
   
-//   int arraylen = json_object_array_length(jarray); /*Getting the length of the array*/
-//   //printf("Array Length: %dn",arraylen);
-//   int i;
-//   json_object * jvalue;
-  
-//   for (i=0; i< arraylen; i++){
-//     jvalue = json_object_array_get_idx(jarray, i); /*Getting the array element at position i*/
-//     type = json_object_get_type(jvalue);
-//     if (type == json_type_array) {
-//       json_parse_array(jvalue,key);
-//     }
-//     if (type == json_type_object) {
-//       json_epics(jvalue);
-//     }
-//   }
-// }
+  for(int n=0;n<npv;n++){
+    pvtimers[n]++;                                     //increment the timer
+    if(pvtimeouts[n]&&(pvtimers[n]>=pvtimeouts[n])){   //if timed out
+      prec = pvstructs[n];
+      dbScanLock((dbCommon*)prec);                     //set the alarm condition
+      ((dbCommon*)prec)->udf = FALSE;
+      ((dbCommon*)(prec))->nsta=TIMEOUT_ALARM;
+      ((dbCommon*)(prec))->nsev=MAJOR_ALARM;
+      prset=(rset*)((dbCommon*)prec)->rset;
+      ((fptr)(prset->process))((dbCommon*)prec);
+      dbScanUnlock((dbCommon*)prec);
+    }
+  }
+  prec = pvstructs[hbindex];                           //now increment the timer
+  dbScanLock((dbCommon*)prec);
+  ((aiRecord*)(prec))->val=!((aiRecord*)(prec))->val;  //toggle the heartbeat 
+  ((dbCommon*)prec)->udf = FALSE;
+  //std::cout << "HEARTBEAT = " << jsonKeyFull[hbindex] << " = " <<((aiRecord*)(prec))->val << std::endl;
+  prset=(rset*)((dbCommon*)prec)->rset;
+  ((fptr)(prset->process))((dbCommon*)prec);
+  dbScanUnlock((dbCommon*)prec);
+}

@@ -55,6 +55,11 @@ blurb[line++]="#The required macros are:"
 blurb[line++]="#P = Prefix"
 blurb[line++]="#K = json key"
 blurb[line++]="#N = No of elements in the array, if required"
+blurb[line++]="#TIMEOUT = Max no of seconds to waiting for message containing this PV before generating TIMEOUT_ALARM" 
+blurb[line++]=""
+blurb[line++]="#This line is required to sent heartbeat messages to the amqserver and check that it responds"
+blurb[line++]="#and counts up to check for individual channel timeouts"
+blurb[line++]="dbLoadRecords(\"db/amqHeartbeat.db\",\"P=$(IOC)\")"
 blurb[line++]=""
 }
 
@@ -81,26 +86,19 @@ blurb[line++]=""
 	key     = $2;
 	type    = $3;
 	elem    = $4;
-	tminor  = $5;
-	tmajor  = $6;
+	timeout  = $5;
 	comment = "";
-	for(n=7;n<=NF;n++) comment = sprintf("%s %s",comment,$n); #we're not using the comment, but you never know.	
-	
-	#in timeouts are zero, disable alarms
-	if(tminor=="0") hsv="NO_ALARM";
-	else hsv="MINOR";
-	if(tmajor=="0") hhsv="NO_ALARM";
-	else hhsv="MAJOR";
+	for(n=6;n<=NF;n++) comment = sprintf("%s %s",comment,$n); #we're not using the comment, but you never know.	
 	
 	if(elem>1){
 	    if(type=="H"){
-		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,NE=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,key,key,elem,elem+1,tminor,tmajor,hsv,hhsv)>outfile;
+		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,NE=%d,TIMEOUT=%d\")\n",wavetype[type],prefix,key,key,elem,elem+1,timeout)>outfile;
 	    }
 	    else{
-		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",wavetype[type],prefix,key,key,elem,tminor,tmajor,hsv,hhsv)>outfile;
+		printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,N=%d,TIMEOUT=%d\")\n",wavetype[type],prefix,key,key,elem,timeout)>outfile;
 	    }
 	}
-	else printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,TH=%d,THH=%s,HSV=%s,HHSV=%s\")\n",aitype[type],prefix,key,key,tminor,tmajor,hsv,hhsv)>outfile;
+	else printf("dbLoadRecords(\"%s\",\"P=%s:%s,K=%s,TIMEOUT=%d\")\n",aitype[type],prefix,key,key,timeout)>outfile;
     }
 
     if($1=="end:"){

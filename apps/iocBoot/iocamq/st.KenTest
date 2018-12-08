@@ -1,0 +1,58 @@
+#!../../bin/linux-x86_64/amq
+#This file was created by using the command "awk -f makeIocs.gk KenTest.dat" on Sun Dec  2 12:15:13 EST 2018
+
+< envPaths
+
+cd ${TOP}
+
+## Register all support components
+dbLoadDatabase "dbd/amq.dbd"
+amq_registerRecordDeviceDriver pdbbase
+
+#
+ConnectMQ("tcp://clon00:61616","KenTest")
+
+## Load record instances
+
+#The RAWMESG key means don't parse for JSON, but writes the whole message into
+#a waveform PV up to NELM characters. TYPE must be CHAR.
+#Eg. dbLoadRecords("db/amqStringArray.db","P=B,K=RAWMSG,N=200")
+
+#Now PVs pulling from json objects
+#There are 4 types:
+#1 Int
+#2 Double
+#3 Array of Ints
+#4 Array of Doubles
+#5 String
+
+#Types 1 and 2 for into aiRecords
+#Types 3,4,5 go into waveformRecords (with FTVL=DBR_LONG, DBR_DOUBLE, DBR_CHAR respectively) 
+
+#The required macros are:
+#P = Prefix
+#K = json key
+#N = No of elements in the array, if required
+#TIMEOUT = Max no of seconds to waiting for message containing this PV before generating TIMEOUT_ALARM
+
+#This line is required to sent heartbeat messages to the amqserver and check that it responds
+#and counts up to check for individual channel timeouts
+dbLoadRecords("db/amqHeartbeat.db","P=$(IOC)")
+
+dbLoadRecords("db/amqStringArray.db","P=KenTest:RAWMSG,K=RAWMSG,N=1000,TIMEOUT=0")
+dbLoadRecords("db/amqInt.db","P=KenTest:LiveTime,K=LiveTime,TIMEOUT=10")
+dbLoadRecords("db/amqDouble.db","P=KenTest:EventRate,K=EventRate,TIMEOUT=10")
+dbLoadRecords("db/amqIntArray.db","P=KenTest:TestScalers,K=TestScalers,N=20,TIMEOUT=10")
+dbLoadRecords("db/amqFloatArray.db","P=KenTest:TestVals,K=TestVals,N=20,TIMEOUT=5")
+dbLoadRecords("db/amqStringArray.db","P=KenTest:NameAddress,K=NameAddress,N=100,TIMEOUT=0")
+dbLoadRecords("db/amqHistogram.db","P=KenTest:TestHist,K=TestHist,N=100,NE=101,TIMEOUT=10")
+
+#dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
+
+cd ${TOP}/iocBoot/${IOC}
+iocInit
+
+#Need this to start responding to messages after all records are defined
+StartMQ()
+
+dbl > pv.list

@@ -27,6 +27,7 @@ void test(int sleep=2000){
   double LiveTime;
   int TestScalers[20];
   double TestVals[20];
+  int count=1;
 
 
   r = new TRandom();  //and a randomizer for them
@@ -40,7 +41,7 @@ void test(int sleep=2000){
   else return;
   
   
-  while(1){
+  while(count){
     
     //fill the variables randomly 
     EventRate = r->Integer(100);
@@ -54,19 +55,21 @@ void test(int sleep=2000){
     make_json_hist_int(hist2,20,TestScalers+20,20,60);
       
     //make the json string from the variable
-    mq->jStart(js);                                   //start the json string
-    mq->jAddInt(js,"EventRate",EventRate);            //Add the data
-    mq->jAddDouble(js,"LiveTime",LiveTime);
-    mq->jAddIntArray(js,"TestScalers",TestScalers,20);
-    mq->jAddDoubleArray(js,"TestVals",TestVals,10);
-    mq->jAddJson(js,"TestHist",hist1);
-    mq->jAddJson(js,"TestHist2",hist2);
+    mq->jStart(js);                                   //start the json string with various times
+    if(count%20<10)mq->jAddInt(js,"EventRate",EventRate);            //Add the data
+    if(count%100<50)mq->jAddDouble(js,"LiveTime",LiveTime);
+    if(count%40<20)mq->jAddIntArray(js,"TestScalers",TestScalers,20);
+    if(count%200<100)mq->jAddDoubleArray(js,"TestVals",TestVals,10);
+    if(count%300<150)mq->jAddJson(js,"TestHist",hist1);
+    if(count%120<60)mq->jAddJson(js,"TestHist2",hist2);
 
     mq->jEnd(js);                                     //end the string
   
     //send the message
-    mq->SendMessage("clasrun.clasprod.daq.HallB_DAQ",js);
+    //mq->SendMessage("clasrun.clasprod.daq.HallB_DAQ",js);
+    mq->SendMessage("KenTest",js);
     gSystem->Sleep(sleep);
+    count++;
   }
 }
 

@@ -31,6 +31,7 @@ LIBRARY_IOC = $(LIBRARY_IOC_$(T_A))
 # amq_registerRecordDeviceDriver.cpp derives from amq.dbd
 amq_SRCS += amq_registerRecordDeviceDriver.cpp
 amq_SRCS += devamqAi.c devamqWaveform.c
+amq_SRCS += stage2bits.st
 
 # Build the main IOC entry point on workstation OSs.
 amq_SRCS_DEFAULT += amqMain.cpp
@@ -49,6 +50,7 @@ amq_LIBS += autosave
 amq_LIBS += devIocStats
 amq_LIBS += waveformApp
 amq_LIBS += calc
+amq_LIBS += seq
 
 #===========================
 

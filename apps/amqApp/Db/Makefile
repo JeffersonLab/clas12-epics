@@ -34,6 +34,7 @@ DB += amqRocsRate.substitutions
 DB += amqRocsRate-sums.db
 DB += amqTrigBit-alarms-set.db
 DB += amqLatency.substitutions
+DB += stage2bits-wf.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

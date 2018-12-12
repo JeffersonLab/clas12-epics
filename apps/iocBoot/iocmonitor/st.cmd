@@ -31,6 +31,8 @@ dbLoadRecords("db/ltccOnOff.db","ONOFF=OFF")
 dbLoadRecords("db/caenhv_DC_onoff.db")
 dbLoadTemplate("db/dcOnOff.substitutions")
 
+dbLoadRecords("db/misc-crate-alive.db","P=B_HW_camac1")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 

@@ -164,8 +164,16 @@ record(calc,"$(P):all:dataRate") {
     field(INPF,"$(P):vtp:dataRate")
     field(CALC,"A+B+C+D+E+F")
     field(EGU,"MB/s")
+    field(FLNK,"$(P):all:dataRate:corr.PROC")
 }
 
+record(calc,"$(P):all:dataRate:corr") {
+    field(INPA,"$(P):all:dataRate")
+    field(INPB,"0.75")
+    field(CALC,"A*B")
+    field(EGU,"MB/s")
+    field(DESC,"Scaled to account for 2nd ROL")
+}
 
 
 

@@ -4,7 +4,7 @@ cd ${TOP}
 
 Init_SCALERS()
 
-Start_SCALERS_CRATE("5","ADCBAND1")
+Start_SCALERS_CRATE("5","TDCBAND1")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")

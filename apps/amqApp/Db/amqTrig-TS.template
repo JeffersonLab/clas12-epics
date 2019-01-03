@@ -1,0 +1,38 @@
+record(subArray,"B_DAQ:TSGTP:TrigBit:a$(N)") {
+    field(DESC,"$(DESC)")
+    field(INP,"B_DAQ:TSGTP:TriggerBits $(INOPT)")
+    field(FTVL,"DOUBLE")
+    field(MALM,32)
+    field(NELM,1)
+    field(INDX,$(N))
+    field(EGU,"Hz")
+    field(FLNK,"B_DAQ:TSGTP:TrigBit:$(N).PROC")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_DAQ:TSGTP:TrigBit:$(N)") {
+    field(INP,"B_DAQ:TSGTP:TrigBit:a$(N)")
+    field(EGU,"Hz")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:TSGTP:TrigBit:a$(M).PROC")
+    info(autosaveFields_pass0,"VAL")
+}
+
+record(subArray,"B_DAQ:TSFP:TrigBit:a$(N)") {
+    field(DESC,"$(DESC)")
+    field(INP,"B_DAQ:TSFP:TriggerBits $(INOPT)")
+    field(FTVL,"DOUBLE")
+    field(MALM,32)
+    field(NELM,1)
+    field(INDX,$(N))
+    field(EGU,"Hz")
+    field(FLNK,"B_DAQ:TSFP:TrigBit:$(N).PROC")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_DAQ:TSFP:TrigBit:$(N)") {
+    field(INP,"B_DAQ:TSFP:TrigBit:a$(N)")
+    field(EGU,"Hz")
+    field(DESC,"$(DESC)")
+    field(FLNK,"B_DAQ:TSFP:TrigBit:a$(M).PROC")
+    info(autosaveFields_pass0,"VAL")
+}
+

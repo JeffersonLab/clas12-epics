@@ -421,12 +421,17 @@ def mkChannelsFTH(firstCrateNumber,spreadsheet='fth.txt'):
 
 def mkChannelsBAND(crateNumber):
   channels=[]
-  fileName='band-disc-fall18.csv'
+  if crateNumber == 5:
+    sys='FADC'
+    fileName='band-fadc-full.csv'
+  else:
+    fileName='band-disc-full.csv'
+    sys='DISC'
   for line in open(fileName,'r').readlines():
     cols=line.strip().split(',')
     if len(cols)!=9 or cols[0]!='S': continue
     cr,sl,ch,ele=cols[2],int(cols[4]),int(cols[5]),cols[8]
-    channel={'Sl':'%.2d'%(sl),'Ch':'%.2d'%(ch),'CrName':cr,'Det':'BAND','Sys':'DISC'}
+    channel={'Sl':'%.2d'%(sl),'Ch':'%.2d'%(ch),'CrName':cr,'Det':'BAND','Sys':sys}
     channel['Element']=ele
     setCodes(crateNumber,channel)
     channels.append(channel)
@@ -493,8 +498,8 @@ def mkSector(sector):
   printStartup(crates,'jscalers_S%d.cmd'%(sector))
 
 # for detectors without a sector (really, where entire detector is in one crate):
-def mkDetector(channels,subFileName,startupFileName):
-  printSubstitutions('DISC',channels,subFileName)
+def mkDetector(sys,channels,subFileName,startupFileName):
+  printSubstitutions(sys,channels,subFileName)
   crate=mkCrates(channels,subFileName)
   printStartup(crate,startupFileName)
 
@@ -502,15 +507,15 @@ def mkDetector(channels,subFileName,startupFileName):
 
 #for sector in range(6): mkSector(sector+1)
 
-#mkDetector(mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
-#mkDetector(mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
+#mkDetector('FADC',mkChannelsCTOF(0),'jscalers_CTOF_FADC.substitutions','jscalers_CTOF.cmd')
+#mkDetector('FADC',mkChannelsHTCC(0),'jscalers_HTCC_FADC.substitutions','jscalers_HTCC.cmd')
 
-#mkDetector(mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
-#mkDetector(mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
+#mkDetector('FADC',mkChannelsFTC(1),'jscalers_FTC_FADC.substitutions','jscalers_FTC.cmd')
+#mkDetector('FADC',mkChannelsFTH(1),'jscalers_FTH_FADC.substitutions','jscalers_FTH.cmd')
 
-#mkDetector(mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
+#mkDetector('FADC',mkChannelsCND(4),'jscalers_CND_FADC.substitutions','jscalers_CND.cmd')
 
-#mkDetector(mkChannelsBAND(5),'jscalers_BAND_FADC.substitutions','jscalers_BAND.cmd')
-mkDetector(mkChannelsBAND(5),'jscalers_BAND_DISC.substitutions','jscalers_BAND.cmd')
+mkDetector('FADC',mkChannelsBAND(5),'jscalers_BAND_FADC.substitutions','jscalers_ADCBAND1.cmd')
+mkDetector('DISC',mkChannelsBAND(6),'jscalers_BAND_DISC.substitutions','jscalers_TDCBAND1.cmd')
 
 

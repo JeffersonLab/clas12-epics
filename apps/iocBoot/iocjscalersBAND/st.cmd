@@ -4,7 +4,8 @@ cd ${TOP}
 
 Init_SCALERS()
 
-Start_SCALERS_CRATE("5","TDCBAND1")
+Start_SCALERS_CRATE("5","ADCBAND1")
+Start_SCALERS_CRATE("6","TDCBAND1")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -17,8 +18,8 @@ dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadTemplate("db/jscalers_BAND_FADC.substitutions")
 dbLoadTemplate("db/jscalers_BAND_DISC.substitutions")
 
-dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=111,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc-rga.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=DISC:, NELM=123,FTVL=FLOAT,PERIOD=1, FNAME=banddisc-rga.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=256,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=DISC:, NELM=256,FTVL=FLOAT,PERIOD=1, FNAME=banddisc.txt")
 
 cd ${TOP}/iocBoot/${IOC}
 

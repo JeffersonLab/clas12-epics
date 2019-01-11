@@ -36,7 +36,14 @@ DB += amqTrigBit-alarms-set.db
 DB += amqLatency.substitutions
 DB += stage2bits-wf.db
 DB += amqTrig-TS.template
-
+DB += amq-adc-CND.substitutions
+DB += amq-adc-CTOF.substitutions
+DB += amq-adc-ECAL.substitutions
+DB += amq-adc-FTOF.substitutions
+DB += amq-adc-LTCC.substitutions
+DB += amq-adc-HTCC.substitutions
+DB += amq-adc-PCAL.substitutions
+DB += array-to-scalar-16.template
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

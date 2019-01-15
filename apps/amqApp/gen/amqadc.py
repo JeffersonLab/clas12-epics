@@ -60,8 +60,8 @@ def writeAmqSubs(fileName,aliases):
       file.write('{ %s %s 16 0 30 NO_ALARM NO_ALARM }\n'%(alias['epics'],alias['amq']))
     file.write('}\n')
     file.write('file "db/array-to-scalar-16.template" {\n')
-    file.write('pattern {P R S INP FTVL SCALE PREC}\n')
-    template='{ B_HW_%s_ Sl%.2d_Ch :q B_HW_%s_Sl%.2d:q DOUBLE 0.000019 2}\n'
+    file.write('pattern {P R S INP FTVL SCALE PREC EGU}\n')
+    template='{ B_HW_%s_ Sl%.2d_Ch :q B_HW_%s_Sl%.2d:q DOUBLE 0.000019 2 nA}\n'
     for alias in aliases:
       file.write(template%(alias['crate'],alias['slot'],alias['crate'],alias['slot']))
     file.write('}\n')

@@ -12,13 +12,12 @@ monitor_registerRecordDeviceDriver pdbbase
 callbackSetQueueSize(10000)
 scanOnceSetQueueSize(10000)
 
-dbLoadRecords("db/camera_crosshair.db","P=B_HW_CAMS_cctv6")
-dbLoadRecords("db/heartbeatCalc.db","P=B_HW_CAMS_cctv6,R=:")
-
-# remove this from iocmonitor after ioctorusForce is restarted:
-dbLoadRecords("db/torus_fieldAverage.db")
-
+# move these to classc1:
 dbLoadRecords("db/collimator_alarm.db")
+dbLoadRecords("db/beamCurrentRatios.db")
+
+# move this to iocsoftsvtIntlk:
+dbLoadRecords("db/svt-sums-global.db")
 
 # cross-IOC hv stuff:
 dbLoadRecords("db/HVDC_VSCAN.db")
@@ -29,9 +28,10 @@ dbLoadTemplate("db/ftofOnOff.substitutions")
 dbLoadTemplate("db/hvOnOff.substitutions")
 dbLoadRecords("db/ltccOnOff.db","ONOFF=ON")
 dbLoadRecords("db/ltccOnOff.db","ONOFF=OFF")
-dbLoadRecords("db/svt-sums-global.db")
+dbLoadRecords("db/caenhv_DC_onoff.db")
+dbLoadTemplate("db/dcOnOff.substitutions")
 
-dbLoadRecords("db/beamCurrentRatios.db")
+dbLoadRecords("db/misc-crate-alive.db","P=B_HW_camac1")
 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

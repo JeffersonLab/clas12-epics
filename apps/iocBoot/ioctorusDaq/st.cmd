@@ -3,6 +3,8 @@
 < envPaths
 epicsEnvSet("EPICS_CA_ADDR_LIST", "129.57.96.36")
 epicsEnvSet("EPICS_CAS_BEACON_ADDR_LIST", "129.57.163.255")
+# for 10K long arrays:
+#epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES","40000")
 ############################################################################
 cd "${TOP}"
 
@@ -15,6 +17,7 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 #
 dbLoadTemplate("iocBoot/${IOC}/wf2root.substitutions")
+#dbLoadTemplate("iocBoot/${IOC}/wf2root-10K.substitutions")
 
 dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_TORUSDAQ_,DLY=60")
 

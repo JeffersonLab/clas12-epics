@@ -20,11 +20,14 @@ dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R2:topAvg:,NELM=42,F
 dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R2:botAvg:,NELM=42,FTVL=FLOAT,PERIOD=5,FNAME=wflist-r2-bot.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R3:topAvg:,NELM=42,FTVL=FLOAT,PERIOD=5,FNAME=wflist-r3-top.txt")
 dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE_R3:botAvg:,NELM=42,FTVL=FLOAT,PERIOD=5,FNAME=wflist-r3-bot.txt")
+dbLoadRecords("db/waveformApp.db","P=B_SVT_DAQ_,R=STRIPRATE:chip:max:,NELM=168,FTVL=FLOAT,PERIOD=5,FNAME=wflist-max.txt")
 
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMERROR")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMERROR")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT1,SUFFIX=SEMSTATE")
 dbLoadRecords("db/amqSvt-calc-slot.db","CRATE=SVT2,SUFFIX=SEMSTATE")
+
+dbLoadRecords("db/amqSvt-rate-alarm.db")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
@@ -48,5 +51,6 @@ seq waveform, "P=B_SVT_DAQ_,R=STRIPRATE_R2:topAvg:"
 seq waveform, "P=B_SVT_DAQ_,R=STRIPRATE_R2:botAvg:"
 seq waveform, "P=B_SVT_DAQ_,R=STRIPRATE_R3:topAvg:"
 seq waveform, "P=B_SVT_DAQ_,R=STRIPRATE_R3:botAvg:"
+seq waveform, "P=B_SVT_DAQ_,R=STRIPRATE:chip:max:"
 
 dbl > pv.list

@@ -41,7 +41,6 @@ file "db/torus_bi_generic.db" {
     { PLC_SOL, B_SOL:, MPS:, FIRE,                Ok, Fault, NO_ALARM, MAJOR, "VESDA Fire Detection" }
     # Warnings
     { PLC_SOL, B_SOL:, MPS:, cRIO_Comm_Error,     Ok, Fault, NO_ALARM, MAJOR, "cRIO LV Chassis Comm" }
-    { PLC_SOL, B_SOL:, MPS:, ESR_INTLCK,          Ok, Fault, NO_ALARM, MAJOR, "ESR Fault" }
     { PLC_SOL, B_SOL:, MPS:, RampDown_Fail,       Ok, Fault, NO_ALARM, MAJOR, "Ramp Down Fail" }
 }
 
@@ -68,4 +67,104 @@ file "db/torus_bo_generic.db" {
     pattern{ PLCID, P, R, TAG, ZNAM, ONAM, DESC }
     # Section 4, Comm Resets
     { PLC_SOL, B_SOL:, MPS:, LampTestReset,       "", Reset, "Reset CryoCon Comm" }
+}
+
+#
+# SOE Timestamps (epoch)
+#
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU }
+    # LOWER
+    { PLC_SOL, B_SOL:, MPS:, TSL_VCL_Lead_T,        Solenoid_EN2T2:7:I.Timestamp[0].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_LHe_LL1,           Solenoid_EN2T2:7:I.Timestamp[1].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_LHe_LL2,           Solenoid_EN2T2:7:I.Timestamp[2].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Splice_T1,         Solenoid_EN2T2:7:I.Timestamp[3].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Splice_T2,         Solenoid_EN2T2:7:I.Timestamp[4].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_MainContact,       Solenoid_EN2T2:7:I.Timestamp[5].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_PLC_Fast_Dump,     Solenoid_EN2T2:7:I.Timestamp[6].OffOn[0],   "epoch" }
+    # 7 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSL_Watchdog,          Solenoid_EN2T2:7:I.Timestamp[8].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_Lead_Water_Flow,   Solenoid_EN2T2:7:I.Timestamp[9].OffOn[0],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_VT_Cable,          Solenoid_EN2T2:7:I.Timestamp[10].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_System_Cable,      Solenoid_EN2T2:7:I.Timestamp[11].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_QD1_Sum,           Solenoid_EN2T2:7:I.Timestamp[12].OffOn[0],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSL_QD2_Sum,           Solenoid_EN2T2:7:I.Timestamp[13].OffOn[0],  "epoch" }
+    # 14 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSL_DumpContact,       Solenoid_EN2T2:7:I.Timestamp[15].OffOn[0],  "epoch" }
+    # UPPER
+    { PLC_SOL, B_SOL:, MPS:, TSU_VCL_Lead_T,        Solenoid_EN2T2:7:I.Timestamp[0].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_LHe_LL1,           Solenoid_EN2T2:7:I.Timestamp[1].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_LHe_LL2,           Solenoid_EN2T2:7:I.Timestamp[2].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Splice_T1,         Solenoid_EN2T2:7:I.Timestamp[3].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Splice_T2,         Solenoid_EN2T2:7:I.Timestamp[4].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_MainContact,       Solenoid_EN2T2:7:I.Timestamp[5].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_PLC_Fast_Dump,     Solenoid_EN2T2:7:I.Timestamp[6].OffOn[1],   "epoch" }
+    # 7 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSU_Watchdog,          Solenoid_EN2T2:7:I.Timestamp[8].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_Lead_Water_Flow,   Solenoid_EN2T2:7:I.Timestamp[9].OffOn[1],   "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_VT_Cable,          Solenoid_EN2T2:7:I.Timestamp[10].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_System_Cable,      Solenoid_EN2T2:7:I.Timestamp[11].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_QD1_Sum,           Solenoid_EN2T2:7:I.Timestamp[12].OffOn[1],  "epoch" }
+    { PLC_SOL, B_SOL:, MPS:, TSU_QD2_Sum,           Solenoid_EN2T2:7:I.Timestamp[13].OffOn[1],  "epoch" }
+    # 14 - Spare
+    { PLC_SOL, B_SOL:, MPS:, TSU_DumpContact,       Solenoid_EN2T2:7:I.Timestamp[15].OffOn[1],  "epoch" }
+}
+
+#
+# SOE Timestamps to longs
+#
+file "db/plc_longout_closedloop.db" {
+    pattern{ P, R, PV1, PV2 }
+    # LOWER
+    { B_SOL:, MPS:, TSL_VCL_Lead_T,      TSL_VCL_Lead_T:long }
+    { B_SOL:, MPS:, TSL_LHe_LL1,         TSL_LHe_LL1:long }
+    { B_SOL:, MPS:, TSL_LHe_LL2,         TSL_LHe_LL2:long }
+    { B_SOL:, MPS:, TSL_Splice_T1,       TSL_Splice_T1:long }
+    { B_SOL:, MPS:, TSL_Splice_T2,       TSL_Splice_T2:long }
+    { B_SOL:, MPS:, TSL_MainContact,     TSL_MainContact:long }
+    { B_SOL:, MPS:, TSL_PLC_Fast_Dump,   TSL_PLC_Fast_Dump:long }
+    # 7 - Spare
+    { B_SOL:, MPS:, TSL_Watchdog,        TSL_Watchdog:long }
+    { B_SOL:, MPS:, TSL_Lead_Water_Flow, TSL_Lead_Water_Flow:long }
+    { B_SOL:, MPS:, TSL_VT_Cable,        TSL_VT_Cable:long }
+    { B_SOL:, MPS:, TSL_System_Cable,    TSL_System_Cable:long }
+    { B_SOL:, MPS:, TSL_QD1_Sum,         TSL_QD1_Sum:long }
+    { B_SOL:, MPS:, TSL_QD2_Sum,         TSL_QD2_Sum:long }
+    # 14 - Spare
+    { B_SOL:, MPS:, TSL_DumpContact,     TSL_DumpContact:long }
+    # UPPER
+    { B_SOL:, MPS:, TSU_VCL_Lead_T,      TSU_VCL_Lead_T:long }
+    { B_SOL:, MPS:, TSU_LHe_LL1,         TSU_LHe_LL1:long }
+    { B_SOL:, MPS:, TSU_LHe_LL2,         TSU_LHe_LL2:long }
+    { B_SOL:, MPS:, TSU_Splice_T1,       TSU_Splice_T1:long }
+    { B_SOL:, MPS:, TSU_Splice_T2,       TSU_Splice_T2:long }
+    { B_SOL:, MPS:, TSU_MainContact,     TSU_MainContact:long }
+    { B_SOL:, MPS:, TSU_PLC_Fast_Dump,   TSU_PLC_Fast_Dump:long }
+    # 7 - Spare
+    { B_SOL:, MPS:, TSU_Watchdog,        TSU_Watchdog:long }
+    { B_SOL:, MPS:, TSU_Lead_Water_Flow, TSU_Lead_Water_Flow:long }
+    { B_SOL:, MPS:, TSU_VT_Cable,        TSU_VT_Cable:long }
+    { B_SOL:, MPS:, TSU_System_Cable,    TSU_System_Cable:long }
+    { B_SOL:, MPS:, TSU_QD1_Sum,         TSU_QD1_Sum:long }
+    { B_SOL:, MPS:, TSU_QD2_Sum,         TSU_QD2_Sum:long }
+    # 14 - Spare
+    { B_SOL:, MPS:, TSU_DumpContact,     TSU_DumpContact:long }
+}
+
+file "db/plc_soe_timestamp.db" {
+    pattern{ P, R, UPPER, LOWER }
+    { B_SOL:MPS:, VCL_Lead_T,      TSU_VCL_Lead_T,      TSL_VCL_Lead_T }
+    { B_SOL:MPS:, LHe_LL1,         TSU_LHe_LL1,         TSL_LHe_LL1 }  
+    { B_SOL:MPS:, LHe_LL2,         TSU_LHe_LL2,         TSL_LHe_LL2 } 
+    { B_SOL:MPS:, Splice_T1,       TSU_Splice_T1,       TSL_Splice_T1 }      
+    { B_SOL:MPS:, Splice_T2,       TSU_Splice_T2,       TSL_Splice_T2 }     
+    { B_SOL:MPS:, MainContact,     TSU_MainContact,     TSL_MainContact }  
+    { B_SOL:MPS:, PLC_Fast_Dump,   TSU_PLC_Fast_Dump,   TSL_PLC_Fast_Dump }
+    { B_SOL:MPS:, Watchdog,        TSU_Watchdog,        TSL_Watchdog }       
+    { B_SOL:MPS:, Lead_Water_Flow, TSU_Lead_Water_Flow, TSL_Lead_Water_Flow }
+    { B_SOL:MPS:, VT_Cable,        TSU_VT_Cable,        TSL_VT_Cable }      
+    { B_SOL:MPS:, System_Cable,    TSU_System_Cable,    TSL_System_Cable } 
+    { B_SOL:MPS:, QD1_Sum,         TSU_QD1_Sum,         TSL_QD1_Sum }     
+    { B_SOL:MPS:, QD2_Sum,         TSU_QD2_Sum,         TSL_QD2_Sum }    
+    { B_SOL:MPS:, DumpContact,     TSU_DumpContact,     TSL_DumpContact } 
 }

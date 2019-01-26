@@ -104,12 +104,30 @@ record(stringin, "$(P)$(R)VOLT_CRNT") {
     field(SCAN, "1 second")
 }
 
-# TODO: fill in states
-# OFF/STB/OPR/CAL
+# TODO: fill in missing states OFF/CAL
+# (STB and OPR work and are most important)
 record(stringin, "$(P)$(R)STATE") {
     field(DTYP, "stream")
     field(INP,  "@SCE410.proto getStr($(ADDR),ST) $(PORT)")
     field(SCAN, "1 second")
+    field(FLNK,"$(P)$(R)STATECALC.PROC")
+}
+record(scalcout, "$(P)$(R)STATECALC") {
+    field(SCAN, "Passive")
+    field(INAA, "$(P)$(R)STATE")
+    field(CALC, "AA=='STB'?0:(AA=='OPR'?1:2)")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R)STATUSAI PP")
+}
+record(ai, "$(P)$(R)STATUSAI") {
+    field(FLNK,"$(P)$(R)STATUS.PROC")
+}
+record(mbbi, "$(P)$(R)STATUS") {
+    field(INP,"$(P)$(R)STATUSAI")
+    field(ZRST,"STANDBY")
+    field(ONST,"ON")
+    field(TWST,"UNKNOWN")
 }
 
 record(ai, "$(P)$(R)REG_SP") {

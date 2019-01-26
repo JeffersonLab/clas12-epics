@@ -1,0 +1,182 @@
+#
+# Records for automoller.st
+#
+# N. Baltzell, 2018
+#
+
+###############################################
+# status stuff:
+
+record(stringin,"$(P)ctrl:msg") {
+    field(VAL,"Uninitialized")
+}
+record(mbbi,"$(P)ctrl:status") {
+    field(ZRST,"Not Configured")
+    field(ONST,"Configuring")
+    field(TWST,"Configured")
+    field(THST,"Run In Progress")
+    field(FRST,"High Accidentals")
+    field(FVST,"High Charge Asymmetry")
+    field(SXST,"DCHV OFF Error")
+    field(SVST,"SVTHV OFF Error")
+    field(EIST,"MVTHV OFF Error")
+    field(NIST,"Quads Error")
+    field(TEST,"Helmhotz Error")
+    field(ELST,"Target Error")
+    field(TVST,"Collimator Error")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MINOR")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"MINOR")
+    field(FVSV,"MAJOR")
+    field(SXSV,"MAJOR")
+    field(SVSV,"MAJOR")
+    field(EISV,"MAJOR")
+    field(NISV,"MAJOR")
+    field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
+    field(TVSV,"MAJOR")
+    field(VAL,0)
+    field(PINI,1)
+    field(FLNK,"$(P)cfg:disableCalc.PROC")
+}
+record(calcout,"$(P)cfg:disableCalc") {
+    field(INPA,"$(P)ctrl:status")
+    field(CALC,"A=3 || A=1")
+    field(OUT,"$(P)cfg:disable PP")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+}
+record(bi,"$(P)cfg:disable") {
+    field(ZNAM,"Enabled")
+    field(ONAM,"Disabled")
+    field(VAL,"1")
+}
+record(ai,"$(P)ctrl:runno") {
+    field(VAL,1000)
+    info(autosaveFields_pass0,"VAL")
+}
+record(stringin,"$(P)ctrl:logcomments") {
+    field(VAL,"None")
+}
+record(stringin,"$(P)ctrl:logusers") {
+    field(VAL,"")
+}
+
+###############################################
+# user controls:
+
+record(bo,"$(P)ctrl:enter") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(bo,"$(P)ctrl:exit") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(bo,"$(P)ctrl:recfg") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(bo,"$(P)ctrl:start") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(bo,"$(P)ctrl:stop") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(bo,"$(P)ctrl:logentry") {
+    field(ZNAM,"N/A")
+    field(ONAM,"Go")
+}
+record(calcout,"$(P)ctrl:toggle") {
+    field(INPA,"moller_accumulate")
+    field(OUT,"moller_accumulate CPP")
+    field(CALC,"A=0?1:0")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+}
+
+###############################################
+# configuration settings:
+record(ai,"$(P)cfg:quad:iset:5pass") {
+     field(VAL,"3050")
+     info(autosaveFields_pass0,"VAL")
+}
+record(ai,"$(P)cfg:quad:iset:4pass") {
+    field(VAL,"2050")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"$(P)cfg:quad:iset:3pass") {
+    field(VAL,"1350")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"$(P)cfg:quad:iset:2pass") {
+    field(VAL,"1350")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ai,"$(P)cfg:quad:iset:1pass") {
+    field(VAL,"1350")
+    info(autosaveFields_pass0,"VAL")
+}
+record(bo,"$(P)cfg:quad:iset:auto") {
+    field(PINI,"1")
+    field(VAL,"1")
+    field(ZNAM,"Manual")
+    field(ONAM,"Automatic")
+    field(DISV,"1")
+    field(SDIS,"$(P)cfg:disable CPP")
+}
+record(ao,"$(P)cfg:quad:iset") {
+    field(VAL,"1000")
+    field(DISV,"1")
+    field(SDIS,"$(P)cfg:disable CPP")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ao,"$(P)cfg:helm:iset") {
+    field(VAL,"3")
+    field(DRVL,"0.0001")
+    field(DRVH,"15")
+    field(DISV,"1")
+    field(SDIS,"$(P)cfg:disable CPP")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ao,"$(P)cfg:slm:vset") {
+    field(VAL,"1400")
+    info(autosaveFields_pass0,"VAL")
+}
+record(ao,"$(P)def:slm:vset") {
+    field(VAL,"1000")
+    info(autosaveFields_pass0,"VAL")
+}
+record(bo,"$(P)cfg:helm:pol") {
+    field(ZNAM,"Negative")
+    field(ONAM,"Positive")
+    field(DISV,"1")
+    field(SDIS,"$(P)cfg:disable CPP")
+    info(autosaveFields_pass0,"VAL")
+}
+record(mbbi,"$(P)cfg:tgt:pos") {
+	field(ELVL,11)
+	field(TVVL,12)
+	field(TTVL,13)
+	field(FTVL,14)
+    field(ELST,"Left")
+    field(TVST,"Empty")
+    field(TTST,"Right")
+    field(FTST,"Aluminum")
+    field(VAL,"11")
+    field(DISV,"1")
+    field(SDIS,"$(P)cfg:disable CPP")
+    info(autosaveFields_pass0,"VAL")
+}
+
+record(ai,"$(P)cfg:accid:max") {
+    field(VAL,"0.1")
+}
+record(ai,"$(P)cfg:bca:max") {
+    field(VAL,"0.01")
+}
+

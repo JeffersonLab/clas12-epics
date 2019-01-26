@@ -1,4 +1,13 @@
 #include "tordaqGui.hh"
+TString tordaqGui::getTimeString(const Double_t time)
+{
+    char stime[26];
+    const time_t timet=(int)time;
+    const struct tm* stm=localtime(&timet);
+    strftime(stime,26,"%H:%M:%S",stm);
+    return TString(stime);
+}
+
 void tordaqGui::Update(
         TCanvas *canvas,std::vector<TH1*> *histos,
         const double xmin=0,const double xmax=-1,
@@ -28,6 +37,11 @@ void tordaqGui::Update(
             //histos->at(ii)->Draw(ii==0?"":"SAME");
         }
     }
+    canvas->Modified();
+    canvas->Update();
+    double x1,x2,y1,y2;
+    canvas->GetRangeAxis(x1,y1,x2,y2);
+    drawLines(y1,y2);
     canvas->Modified();
     canvas->Update();
 }

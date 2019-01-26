@@ -25,7 +25,6 @@ file "db/torus_bi_generic.db" {
     { PLC_TORUS, B_TORUS:, MPS:, FIRE,                Ok, Fault, NO_ALARM, MAJOR, "VESDA Fire Detection" }
     { PLC_TORUS, B_TORUS:, MPS:, Soft_Quench_2nd,     Ok, Fault, NO_ALARM, MAJOR, "SW Quench, 2nd Threshold" }
     { PLC_TORUS, B_TORUS:, MPS:, UPS_Battery_Low,     Ok, Fault, NO_ALARM, MAJOR, "UPS Battery Low" }
-    { PLC_TORUS, B_TORUS:, MPS:, ESR_INTLCK,          Ok, Fault, NO_ALARM, MAJOR, "ESR Fault" }
     # Section 3, PLC Controlled Ramp Down
     { PLC_TORUS, B_TORUS:, MPS:, Axial_Support_Interlock,     Ok, Fault, NO_ALARM, MAJOR, "Axial Support SG" }
     { PLC_TORUS, B_TORUS:, MPS:, DS_HB_SG_Interlock,  Ok, Fault, NO_ALARM, MAJOR, "DS Hex Beam SG" }
@@ -65,4 +64,97 @@ file "db/torus_bo_generic.db" {
     # TODO: multiples of CryoCon_Reset_PB
     { PLC_TORUS, B_TORUS:, MPS:, CryoCon_Reset_PB,    "", Reset, "Reset CryoCon Comm" }
     { PLC_TORUS, B_TORUS:, MPS:, LampTestReset,       "", Reset, "Reset CryoCon Comm" }
+}
+
+#
+# SOE Timestamps (epoch)
+#
+file "db/torus_ai_renamed.db" {
+    pattern{ PLCID, P, R, PV, TAG, EGU }
+    # LOWER
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_VCL_Lead_T,        Torus_EN2T2:7:I.Timestamp[0].OffOn[0],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_LHe_LL1,           Torus_EN2T2:7:I.Timestamp[1].OffOn[0],  "epoch" }
+    # 2 - Spare
+    # 3 - Spare
+    # 4 - Spare
+    # 5 - Spare
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_PLC_Fast_Dump,     Torus_EN2T2:7:I.Timestamp[6].OffOn[0],  "epoch" }
+    # 7 - Spare
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_Watchdog,          Torus_EN2T2:7:I.Timestamp[8].OffOn[0],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_Lead_Water_Flow,   Torus_EN2T2:7:I.Timestamp[9].OffOn[0],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_VT_Cable,          Torus_EN2T2:7:I.Timestamp[10].OffOn[0], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_System_Cable,      Torus_EN2T2:7:I.Timestamp[11].OffOn[0], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_QD1_Sum,           Torus_EN2T2:7:I.Timestamp[12].OffOn[0], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_QD2_Sum,           Torus_EN2T2:7:I.Timestamp[13].OffOn[0], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSL_QD3_Sum,           Torus_EN2T2:7:I.Timestamp[14].OffOn[0], "epoch" }
+    # 15 - Spare
+    # UPPER
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_VCL_Lead_T,        Torus_EN2T2:7:I.Timestamp[0].OffOn[1],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_LHe_LL1,           Torus_EN2T2:7:I.Timestamp[1].OffOn[1],  "epoch" }
+    # 2 - Spare
+    # 3 - Spare
+    # 4 - Spare
+    # 5 - Spare
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_PLC_Fast_Dump,     Torus_EN2T2:7:I.Timestamp[6].OffOn[1],  "epoch" }
+    # 7 - Spare
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_Watchdog,          Torus_EN2T2:7:I.Timestamp[8].OffOn[1],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_Lead_Water_Flow,   Torus_EN2T2:7:I.Timestamp[9].OffOn[1],  "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_VT_Cable,          Torus_EN2T2:7:I.Timestamp[10].OffOn[1], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_System_Cable,      Torus_EN2T2:7:I.Timestamp[11].OffOn[1], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_QD1_Sum,           Torus_EN2T2:7:I.Timestamp[12].OffOn[1], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_QD2_Sum,           Torus_EN2T2:7:I.Timestamp[13].OffOn[1], "epoch" }
+    { PLC_TORUS, B_TORUS:, MPS:, TSU_QD3_Sum,           Torus_EN2T2:7:I.Timestamp[14].OffOn[1], "epoch" }
+    # 15 - Spare
+}
+
+file "db/plc_longout_closedloop.db" {
+    pattern{ P, R, PV1, PV2 }
+    # LOWER
+    { B_TORUS:, MPS:, TSL_VCL_Lead_T,      TSL_VCL_Lead_T:long }
+    { B_TORUS:, MPS:, TSL_LHe_LL1,         TSL_LHe_LL1:long }
+    # 2 - Spare
+    # 3 - Spare
+    # 4 - Spare
+    # 5 - Spare
+    { B_TORUS:, MPS:, TSL_PLC_Fast_Dump,   TSL_PLC_Fast_Dump:long }
+    # 7 - Spare
+    { B_TORUS:, MPS:, TSL_Watchdog,        TSL_Watchdog:long }
+    { B_TORUS:, MPS:, TSL_Lead_Water_Flow, TSL_Lead_Water_Flow:long }
+    { B_TORUS:, MPS:, TSL_VT_Cable,        TSL_VT_Cable:long }
+    { B_TORUS:, MPS:, TSL_System_Cable,    TSL_System_Cable:long }
+    { B_TORUS:, MPS:, TSL_QD1_Sum,         TSL_QD1_Sum:long }
+    { B_TORUS:, MPS:, TSL_QD2_Sum,         TSL_QD2_Sum:long }
+    { B_TORUS:, MPS:, TSL_QD3_Sum,         TSL_QD3_Sum:long }
+    # 15 - Spare
+    # UPPER
+    { B_TORUS:, MPS:, TSU_VCL_Lead_T,      TSU_VCL_Lead_T:long }
+    { B_TORUS:, MPS:, TSU_LHe_LL1,         TSU_LHe_LL1:long }
+    # 2 - Spare
+    # 3 - Spare
+    # 4 - Spare
+    # 5 - Spare
+    { B_TORUS:, MPS:, TSU_PLC_Fast_Dump,   TSU_PLC_Fast_Dump:long }
+    # 7 - Spare
+    { B_TORUS:, MPS:, TSU_Watchdog,        TSU_Watchdog:long }
+    { B_TORUS:, MPS:, TSU_Lead_Water_Flow, TSU_Lead_Water_Flow:long }
+    { B_TORUS:, MPS:, TSU_VT_Cable,        TSU_VT_Cable:long }
+    { B_TORUS:, MPS:, TSU_System_Cable,    TSU_System_Cable:long }
+    { B_TORUS:, MPS:, TSU_QD1_Sum,         TSU_QD1_Sum:long }
+    { B_TORUS:, MPS:, TSU_QD2_Sum,         TSU_QD2_Sum:long }
+    { B_TORUS:, MPS:, TSU_QD3_Sum,         TSU_QD3_Sum:long }
+    # 15 - Spare
+}
+
+file "db/plc_soe_timestamp.db" {
+    pattern{ P, R, UPPER, LOWER }
+    { B_TORUS:MPS:, VCL_Lead_T,      TSU_VCL_Lead_T,      TSL_VCL_Lead_T }
+    { B_TORUS:MPS:, LHe_LL1,         TSU_LHe_LL1,         TSL_LHe_LL1 }
+    { B_TORUS:MPS:, PLC_Fast_Dump,   TSU_PLC_Fast_Dump,   TSL_PLC_Fast_Dump }
+    { B_TORUS:MPS:, Watchdog,        TSU_Watchdog,        TSL_Watchdog }
+    { B_TORUS:MPS:, Lead_Water_Flow, TSU_Lead_Water_Flow, TSL_Lead_Water_Flow }
+    { B_TORUS:MPS:, VT_Cable,        TSU_VT_Cable,        TSL_VT_Cable }
+    { B_TORUS:MPS:, System_Cable,    TSU_System_Cable,    TSL_System_Cable }
+    { B_TORUS:MPS:, QD1_Sum,         TSU_QD1_Sum,         TSL_QD1_Sum }
+    { B_TORUS:MPS:, QD2_Sum,         TSU_QD2_Sum,         TSL_QD2_Sum }
+    { B_TORUS:MPS:, QD3_Sum,         TSU_QD3_Sum,         TSL_QD3_Sum }
 }

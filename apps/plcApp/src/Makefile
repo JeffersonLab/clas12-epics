@@ -29,6 +29,10 @@ plc2epics_SRCS += plc2epics_registerRecordDeviceDriver.cpp
 # Build the main IOC entry point on workstation OSs.
 plc2epics_SRCS_DEFAULT += plc2epicsMain.cpp
 
+# include the timestamp converter
+plc2epics_SRCS += plcSoeTimestamp.c
+plc2epics_DBD += plcSoeTimestamp.dbd
+
 # Link in the code from the support library
 plc2epics_LIBS += ether_ip 
 plc2epics_LIBS += calc

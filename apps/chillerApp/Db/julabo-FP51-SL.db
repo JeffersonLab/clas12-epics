@@ -1,0 +1,290 @@
+
+record(asyn, "$(P)$(R)ASYN") {
+    field(PORT, "$(PORT)")
+    field(OEOS, "\r")
+    field(IEOS, "\r")
+}
+
+record(stringin, "$(P)$(R)VERSION") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getVersion($(P)$(R)VERSION2) $(PORT)")
+    field(VAL,  "")
+    field(PINI, "1")
+}
+record(stringin, "$(P)$(R)VERSION2") {
+}
+
+record(stringin, "$(P)$(R)STATUS") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getStatus $(PORT)")
+    field(VAL,  "")
+    field(SCAN, "5 second")
+    field(FLNK, "$(P)$(R)STATUS:CALC:ERROR")
+}
+# Status is an Error if starts with a '-':
+record(scalcout, "$(P)$(R)STATUS:CALC:ERROR") {
+    field(INAA,"$(P)$(R)STATUS")
+    field(CALC,"AA[1,1]=='-'")
+    field(FLNK,"$(P)$(R)STATUS:CALC:ONOFF")
+}
+# Status is Running if starts with 01 or 03:
+record(scalcout, "$(P)$(R)STATUS:CALC:ONOFF") {
+    field(INAA,"$(P)$(R)STATUS")
+    field(CALC,"AA[0,1]=='01' || AA[0,1]=='03'")
+    field(FLNK,"$(P)$(R)STATUS:CALC")
+}
+
+record(calcout,"$(P)$(R)STATUS:CALC") {
+    field(INPA,"$(P)$(R)STATUS:CALC:ERROR")
+    field(INPB,"$(P)$(R)STATUS:CALC:ONOFF")
+    field(CALC,"A=0 ? B : 2")
+    field(OUT, "$(P)$(R)STATUSBITS PP")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+}
+
+record(mbbi,"$(P)$(R)STATUSBITS") {
+    field(ZRST,"Stopped")
+    field(ONST,"Running")
+    field(TWST,"Alarm")
+    field(ZRSV,"MINOR")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"MAJOR")
+}
+
+# Read EGU from different channel and write back to .EGU
+# - uses :EGU and :CONV_EGU
+record(ai, "$(P)$(R)TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(pv_00) $(PORT)")
+    field(PREC, "2")
+    field(SCAN, "1 second")
+	field(FLNK, "$(P)$(R)TEMP:EGU")
+}
+record(bi, "$(P)$(R)TEMP:EGU") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(sp_06) $(PORT)")
+    field(ZNAM, "C")
+    field(ONAM, "F")
+    field(SCAN, "5 second")
+    field(FLNK, "$(P)$(R)TEMP:CONV_EGU")
+}
+record(stringout, "$(P)$(R)TEMP:CONV_EGU") {
+    field(DOL,  "$(P)$(R)TEMP:EGU")
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)TEMP.EGU")
+}
+
+record(mbbi, "$(P)$(R)PRES_STAGE") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(sp_07) $(PORT)")
+    field(ONST, "1")
+    field(TWST, "2")
+    field(THST, "3")
+    field(FRST, "4")
+    field(SCAN, "5 second")
+}
+
+record(ai, "$(P)$(R)HTR_PWR") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(pv_01) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "%")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)COOL_PWR") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(pv_00) $(PORT)")
+    field(PREC, "1")
+    field(EGU,  "%")
+    field(SCAN, "5 second")
+}
+#record(ai, "$(P)$(R)EXT:TEMP") {
+#    field(DTYP, "stream")
+#    field(INP,  "@julabo.proto getAi(pv_02) $(PORT)")
+#    field(PREC, "1")
+#    field(SCAN, "5 second")
+#}
+record(ai, "$(P)$(R)SAFETY:TEMP") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(pv_03) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)SAFETY:TEMP:RD_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(pv_04) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP1") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_00) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP2") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_01) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)TEMP:RD_SP3") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_02) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+
+record(ai, "$(P)$(R)TEMP:WARN_HI") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_03) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)TEMP:WARN_LO") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_04) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)FLOW") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_08) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)PRES") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getAi(sp_09) $(PORT)")
+    field(PREC, "1")
+    field(SCAN, "5 second")
+}
+
+
+
+record(mbbi, "$(P)$(R)TEMP:MODE:RD_SP") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(mode_01) $(PORT)")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "3")
+    field(SCAN, "5 second")
+    field(FLNK,"$(P)$(R)TEMP:RD_SP")
+}
+record(sel,"$(P)$(R)TEMP:RD_SP") {
+    field(SELM,"Specified")
+    field(INPA,"$(P)$(R)TEMP:RD_SP1")
+    field(INPB,"$(P)$(R)TEMP:RD_SP2")
+    field(INPC,"$(P)$(R)TEMP:RD_SP3")
+    field(NVL,"$(P)$(R)TEMP:MODE:RD_SP PP")
+}
+record(mbbi, "$(P)$(R)CTRL_MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(mode_04) $(PORT)")
+    field(ZRST, "Internal")
+    field(ONST, "External")
+    field(SCAN, "5 second")
+}
+record(mbbi, "$(P)$(R)CIRC_MODE") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(mode_05) $(PORT)")
+    field(ZRST, "Stopped")
+    field(ONST, "Circulating")
+    field(ZRSV, "MINOR")
+    field(ONSV, "NO_ALARM")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)COOL_PWR:MAX") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(hil_00) $(PORT)")
+    field(EGU, "%")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)HTR_PWR:MAX") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(hil_01) $(PORT)")
+    field(EGU, "%")
+    field(SCAN, "5 second")
+}
+record(ai, "$(P)$(R)COOL_PWR:MAX") {
+    field(DTYP, "stream")
+    field(INP,  "@julabo.proto getInt(hil_00) $(PORT)")
+    field(EGU, "%")
+    field(SCAN, "5 second")
+}
+
+########################################
+# Control Commands
+########################################
+record(mbbo, "$(P)$(R)TEMP:MODE:SP") {
+    field(DTYP, "stream")
+    field(ZRST, "1")
+    field(ONST, "2")
+    field(TWST, "3")
+    field(OUT,  "@julabo.proto setInt(mode_01) $(PORT)")
+}
+record(bo, "$(P)$(R)CTRL_MODE:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setInt(mode_02) $(PORT)")
+    field(ZNAM, "Internal")
+    field(ONAM, "External")
+}
+record(bo, "$(P)$(R)START_STOP:CTRL") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setInt(mode_05) $(PORT)")
+    field(ZNAM, "Stop")
+    field(ONAM, "Start")
+}
+record(bo, "$(P)$(R)STOP") {
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)START_STOP:CTRL PP")
+    field(DOL,  "0")
+}
+record(bo, "$(P)$(R)START") {
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R)START_STOP:CTRL PP")
+    field(DOL,  "1")
+}
+
+
+record(ao, "$(P)$(R)TEMP:SP1") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setAoAndInit(sp_00,sp_00) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:SP2") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setAoAndInit(sp_01,sp_01) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:SP3") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setAoAndInit(sp_02,sp_02) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:WARN_HI:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setAoAndInit(sp_03,sp_03) $(PORT)")
+}
+record(ao, "$(P)$(R)TEMP:WARN_LO:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setAoAndInit(sp_04,sp_04) $(PORT)")
+}
+record(mbbo, "$(P)$(R)PRES_STAGE:SP") {
+    field(DTYP, "stream")
+    field(ONST, "1")
+    field(TWST, "2")
+    field(THST, "3")
+    field(FRST, "4")
+    field(OUT,  "@julabo.proto setIntAndInit(sp_07,sp_07) $(PORT)")
+}
+record(ao, "$(P)$(R)HTR_PWR:MAX:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setIntAndInit(hil_01,hil_01) $(PORT)")
+}
+record(ao, "$(P)$(R)COOL_PWR:MAX:SP") {
+    field(DTYP, "stream")
+    field(OUT,  "@julabo.proto setIntAndInit(hil_00,hil_00) $(PORT)")
+# requires a preceeding negative sign
+    field(DRVH, "0")
+    field(DRVL, "-100")
+}
+

@@ -1,5 +1,11 @@
 #!/usr/bin/env python
-import sys,epics,datetime,subprocess
+import sys,epics,datetime,subprocess,socket
+
+def checkHost():
+  hostname=socket.gethostname()
+  if hostname.find('daq')>=0:
+    hostname=hostname.split('.')[0]
+    sys.exit(hostname+' is not fully capable.  Run btaGet.py on a clonpc##.')
 
 def getMyaTimestamp(tt):
   return '%4d-%.2d-%.2d %.2d:%.2d:%.2d' % \
@@ -23,8 +29,8 @@ def getMyaBtaHour(start):
     if len(cols)!=4: continue
     daqInUse,beamPresent = float(cols[2]),float(cols[3])
     abu += daqInUse*beamPresent
-    if daqInUse==0 and beamPresent==1: banu += 1
-    if beamPresent==0: bna += 1
+    if beamPresent==0: bna  += 1
+    elif daqInUse==0:  banu += 1
   return [abu/60,banu/60,bna/60]
 
 
@@ -39,6 +45,8 @@ if len(sys.argv)>1:
     if hourOffset<=0: raise(ValueError)
   except:
     sys.exit(usage+'\n'+'Error:  hour offset must be a positive integer')
+
+checkHost()
 
 # figure out time range:
 now        = datetime.datetime.now()
@@ -62,6 +70,7 @@ abuM,banuM,bnaM = getMyaBtaHour(start)
 if abuM+banuM+bnaM!=60:  bnaM=60-abuM-banuM
 
 print
+print '*'
 print '* FOR THE HOUR  '+str(firstHour)+' - '+str(secondHour)
 print '*'
 print '*'
@@ -74,9 +83,9 @@ print '*'
 print '* And this is the corresponding values from the Mya archive.'
 print '*    IF THESE ARE SIGNIFICANTLY DIFFERENT THAN THE ABOVE NUMBERS,'
 print '*    then you should manually adjust the table with these numbers'
-print '*    * If we request NO BEAM, you must manually adjust BANU/ABU'
 print '*'
 print '*    ABU: %.1f   BANU: %.1f   BNA: %.1f'%(abuM,banuM,bnaM)
+print '*'
 print
 
 

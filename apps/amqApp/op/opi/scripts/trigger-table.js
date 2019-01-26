@@ -11,7 +11,7 @@ for (var chan=0; chan<32; chan++) {
 }
 
 
-var keepers=[1,2,3,4,5,6];
+var keepers=[0,1,2,3,4,5,6];
 //var keepers=[0,1,2,3,4,5,6,10,15,19,20,21,23,25,26,30,31];
 
   for (var chan=0; chan<32; chan++)

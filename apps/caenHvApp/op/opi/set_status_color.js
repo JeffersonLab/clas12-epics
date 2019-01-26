@@ -13,7 +13,12 @@ var type = widget.getMacroValue("TYPE");
 
 if (type == "527")
 {
+	var istatus2=0;
+	try { istatus2 = PVUtil.getDouble(pvs[1]); }
+	catch (ee) {}
 	
+	if (istatus2==0 && istatus>=0) {
+
 	var statuses=["ON","RUP",  "RDN",  "OVC",  "UNV",  "OVV",  "ExTrip","MAXV", "    ", "Kill", "InTrip"];
 	var bgcolors=["On","Minor","Minor","Major","Major","Major","Major", "Major","Major","Off","Major"];
 	
@@ -78,6 +83,13 @@ if (type == "527")
                 widget.setPropertyValue("background_color",bgcolors[theStatus]);
         }
     }
+    }
+     else
+     {
+//       widget.setPropertyValue("text","COMMS");
+       widget.setPropertyValue("background_color","Warning");
+       widget.setPropertyValue("foreground_color","Text_Foreground");   
+     }
 }
 
 

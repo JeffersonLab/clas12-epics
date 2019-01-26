@@ -2,50 +2,46 @@
 # TODO List
 #
 
-
 # ALARMS:
-  * SVT HV/LV meas - increase delay to 45s
+  * Description
+  * * This is necessary for useful RDB messaging history!
   * Guidance
-  ** COMMS->cRIO
+  * * COMMS->cRIO
+  * * * e.g. FC/GS/SF is LTCC/DC+MM/HTCC+SVT
+  * * * e.g. readbacks are bogus if no crio hbeat
   * missing xmls (probably added on-the-fly):
-  ** cRio COMMS
-  ** weather
-  ** iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
+  * * cRio COMMS
+  * * weather
+  * * iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
   * Torus/Solenoid
   * FT
-  ** LV
+  * * LV
   * HV
-  ** MINOR vs MAJOR alarms - guidance needed
+  * * MINOR vs MAJOR alarms - guidance needed
   * iocamq alarms
 
 # GUIS:
-  * FT/FTT Overview
   * FTC: HW->DET PVs
   * more direct access to specific strip charts
   * webopi - torus/solenoid valves missing
 
-# MOVE PVs in temporary screen iocs to permanent
-
 # HARDIOCS
-  * classc1/4
-  * * fix timestamp (1-hr offset) on harp files
   *
-  * asym (classc6->?)
+  * move classc1/4/6/8 to clas12-epics
+  *
+  * asym
   * * 64 MB struck for asym
   * * separate struck for BCA for independent acq time
-  *
-  * mollerSetup - update and commission for CLAS12
   *
   * add SY527 reset
   * * xy240, jlab reset card, etc 
   *
-  * classc1 kernel upgrade
+  * classc1/classcsvt kernel upgrade
+  * * more file descriptors
   *
   * tsconnect@clonpc0: resolve classc4/8 port numbering
   *
-  * switch to clonpc0 boot host
-  *
-  * move classc1/4/6/8 to clas12-epics
+  * switch to clonpc0/clon00 boot host
   *
   * old stuff to new epics
   * * classc3/classc12
@@ -53,12 +49,9 @@
   * * tagger magnet hall probe (classc12)
   * * dvme628, xy240, xy560, gpib
   * * merge into 1 magnet ioc
-  * 
-  * MVME debug port + MOXA
-  * * document wiring
-  * * make cables (red/pink)
-  * * install for classcsvt
   *
+  * SVT V450
+  * * properly organize databases, with full templating
 
 # SOFTIOCS:
   *
@@ -66,59 +59,36 @@
   * rename mollerPS -> mollerHelmholtz
   *
   * move all to clasioc:clas-3 (?)
-  ** ops CA r/w for ioctest/st-ia.cmd
-  ** check permissions (logs, autosave, ...)
-  *
-  * remove from procServ.conf:
-  ** iocftcTemps
-  ** iocprologix
-  ** iocsoftsvtR4
-  ** iocgasSystem86
-  ** ioctorusTest
+  * * ops CA r/w for ioctest/st-ia.cmd
+  * * check permissions (logs, autosave, ...)
   *
   * merge:
-  ** iocbta -> iocmcc
-  ** iocdclv_S#R* -> iocdclv_S#
-  ** iocbomGet -> iocbom
-  ** iocrollAvgGet -> iocrollAvg
-  *
-  * move:
-  ** iocamq
-  ** rollAvg(Get)
-  ** bom(Get)
+  * * iocdclv_S#R* -> iocdclv_S#
+  * * iocbomGet -> iocbom
+  * * iocrollAvgGet -> iocrollAvg
   *
   * add saclaytgt-alarm.db
-  ** target status (full, empty, partial)
-  *** add to overview screen
+  * * target status (full, empty, partial)
   *
   * iocareaDetector:
-  ** add devIocStats and autosave
+  * * merge into standard clas12 build (e.g. paths)
+  * * add devIocStats and autosave
   *
-  * iocamq:
-  ** wrap timeout alarm into same PVs, not separate ones as it is now
+  * iocamq:  (done, import in January)
+  * * wrap timeout alarm into same PVs, not separate ones as it is now
 
 # Manual:
  * Alarms:
-  ** stress alarm guidance more
-  ** stress "Open .." in dropdown
-* Clarify difference between HV MINOR/MAJOR
+  * * stress alarm guidance more
+  * * stress "Open .." in dropdown
 
-# Annunciator
-  * run cronjob for headless Annunciator (e.g. on clonpc17)
-
+# Remote Reset on CAEN HV
 
 #####################################################
 #####################################################
-
-# caenhv generator updates (Ken):
-  * DC,RICH,CTOF,CND,FTC/FTT/FTH,BMT/FMT
 
 # jscalers
-  * DCRB/SVT
-
-# /usr/clas12/DATA/logs:
-  * check rotation - autodelte old empty files?
-  * restarting procServ required to get some ioc logs going again
+  * DCRB
 
 # SVT:
   * hostname=classcsvt, iocname=iocvmesvt -- unify
@@ -129,7 +99,7 @@
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics
   * Maybe workspace generator and wrapper scripts too
 
-# ftIntlkApp (baltzell)
+# ftIntlkApp
   * finish FTH interlocks
   * probably should be in ioccaenhv_HVFTAG instead of a separate ioc
 

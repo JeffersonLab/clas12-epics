@@ -74,6 +74,8 @@ record(calc,"$(P):adcft:dataRate") {
     field(EGU,"MB/s")
 }
 
+
+
 record(calc,"$(P):dc:R1:dataRate") {
     field(SCAN,"1 second")
     field(INPA,"$(P):dc11:dataRate")
@@ -138,7 +140,8 @@ record(calc,"$(P):adc:dataRate") {
     field(INPD,"$(P):adcctof1:dataRate")
     field(INPE,"$(P):adccnd1:dataRate")
     field(INPF,"$(P):adcft:dataRate")
-    field(CALC,"A+B+C+D+E+F")
+    field(INPG,"$(P):adcband1:dataRate")
+    field(CALC,"A+B+C+D+E+F+G")
     field(EGU,"MB/s")
 }
 record(calc,"$(P):tdc:dataRate") {
@@ -158,7 +161,108 @@ record(calc,"$(P):all:dataRate") {
     field(INPC,"$(P):svt:dataRate")
     field(INPD,"$(P):mm:dataRate")
     field(INPE,"$(P):dc:dataRate")
-    field(CALC,"A+B+C+D+E")
+    field(INPF,"$(P):vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+    field(FLNK,"$(P):all:dataRate:corr.PROC")
+}
+
+record(calc,"$(P):all:dataRate:corr") {
+    field(INPA,"$(P):all:dataRate")
+    field(INPB,"0.75")
+    field(CALC,"A*B")
+    field(EGU,"MB/s")
+    field(DESC,"Scaled to account for 2nd ROL")
+}
+
+
+
+record(calc,"$(P):dcvtp:R1:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):dc11vtp:dataRate")
+    field(INPB,"$(P):dc21vtp:dataRate")
+    field(INPC,"$(P):dc31vtp:dataRate")
+    field(INPD,"$(P):dc41vtp:dataRate")
+    field(INPE,"$(P):dc51vtp:dataRate")
+    field(INPF,"$(P):dc61vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):dcvtp:R2:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):dc12vtp:dataRate")
+    field(INPB,"$(P):dc22vtp:dataRate")
+    field(INPC,"$(P):dc32vtp:dataRate")
+    field(INPD,"$(P):dc42vtp:dataRate")
+    field(INPE,"$(P):dc52vtp:dataRate")
+    field(INPF,"$(P):dc62vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):dcvtp:R3:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):dc13vtp:dataRate")
+    field(INPB,"$(P):dc23vtp:dataRate")
+    field(INPC,"$(P):dc33vtp:dataRate")
+    field(INPD,"$(P):dc43vtp:dataRate")
+    field(INPE,"$(P):dc53vtp:dataRate")
+    field(INPF,"$(P):dc63vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):adcecalvtp:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adcecal1vtp:dataRate")
+    field(INPB,"$(P):adcecal2vtp:dataRate")
+    field(INPC,"$(P):adcecal3vtp:dataRate")
+    field(INPD,"$(P):adcecal4vtp:dataRate")
+    field(INPE,"$(P):adcecal5vtp:dataRate")
+    field(INPF,"$(P):adcecal6vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):adcpcalvtp:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adcpcal1vtp:dataRate")
+    field(INPB,"$(P):adcpcal2vtp:dataRate")
+    field(INPC,"$(P):adcpcal3vtp:dataRate")
+    field(INPD,"$(P):adcpcal4vtp:dataRate")
+    field(INPE,"$(P):adcpcal5vtp:dataRate")
+    field(INPF,"$(P):adcpcal6vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):adcftofvtp:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adcftof1vtp:dataRate")
+    field(INPB,"$(P):adcftof2vtp:dataRate")
+    field(INPC,"$(P):adcftof3vtp:dataRate")
+    field(INPD,"$(P):adcftof4vtp:dataRate")
+    field(INPE,"$(P):adcftof5vtp:dataRate")
+    field(INPF,"$(P):adcftof6vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):adcftvtp:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adcft1vtp:dataRate")
+    field(INPB,"$(P):adcft2vtp:dataRate")
+    field(INPC,"$(P):adcft3vtp:dataRate")
+    field(CALC,"A+B+C")
+    field(EGU,"MB/s")
+}
+record(calc,"$(P):vtp:dataRate") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P):adcecalvtp:dataRate")
+    field(INPB,"$(P):adcpcalvtp:dataRate")
+    field(INPC,"$(P):adcftofvtp:dataRate")
+    field(INPD,"$(P):dcvtp:R1:dataRate")
+    field(INPE,"$(P):dcvtp:R2:dataRate")
+    field(INPF,"$(P):dcvtp:R3:dataRate")
+    field(INPG,"$(P):trig2vtp:dataRate")
+    field(INPH,"$(P):adccnd1vtp:dataRate")
+    field(INPI,"$(P):adcctof1vtp:dataRate")
+    field(CALC,"A+B+C+D+E+F+G+H+I")
     field(EGU,"MB/s")
 }
 

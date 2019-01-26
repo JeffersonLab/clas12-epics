@@ -1,0 +1,20 @@
+#!/bin/sh
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+export PATH=$JAVA_HOME/bin:$PATH
+
+EXE_DIR=/usr/clas12/css/4.3.3/linux-x86_64/bin
+INI_DIR=/usr/clas12/release/pro/epics/tools/beast
+XML_DIR=/usr/clas12/release/pro/epics/apps/beast
+
+if [ "$1" != "" ]; then
+    ROOT=$1
+    ROOT_XML=$INI_DIR/$1_root.xml
+    ROOT_INC=$INI_DIR/$1_includes.cfg
+else
+    echo "Usage: $0 <root>"
+    exit
+fi
+
+# Export full generated alarm tree
+$EXE_DIR/AlarmConfigTool -root $ROOT -export -file $INI_DIR/$ROOT\_tree.xml -data /dev/null

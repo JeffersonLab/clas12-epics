@@ -6,6 +6,7 @@
 import urllib.request
 import epics
 import time,datetime
+from socket import timeout
 
 URL = "https://www.jlab.org/fm/wx/VWS/data/data2.csv"
 
@@ -32,9 +33,9 @@ while True:
   now=str(datetime.datetime.now())
 
   try:
-    resp = urllib.request.urlopen(URL)
+    resp = urllib.request.urlopen(URL, timeout=5)
   except Exception as e:
-    print(now+" Failed to get FM WX Webpage")
+    print(now+" Failed to get FM WX Webpage: "+str(e))
     error=True
 
   # Only parse response if it was OK 

@@ -14,6 +14,7 @@ include $(TOP)/configure/CONFIG
 DB += Lauda_ECO.db
 
 DB += svtChiller-anova2eco.db
+DB += svtChiller-julabo2eco.db
 DB += svtChiller-autoSet.db
 
 PROTO += ecoChiller.proto

@@ -122,19 +122,6 @@ void *crateThread(void *ptr) {
     int partype;
 
     while(1){
-        
-        //bool testing=false;
-        //if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) testing=true;
-        //if (testing) fprintf(stderr,"Enter crateThread ADCECAL1\n");
-/*
-        if (!(ptr_c->crateMsgClient->IsValid()) ||
-            !(ptr_c->crateMsgClient->CheckConnection("foo"))) {
-            fprintf(stderr,"jscalers:crateThread Error %s\n",ptr_c->getHostname().c_str());
-            //ptr_c->crateMsgClient=new CrateMsgClient((const char*)ptr_c->getHostname().c_str(),ptr_c->port);
-            sleep(10);
-            continue;
-        }
-*/
 
         sleep(SCALERS_READ_INTERVAL);
         pthread_mutex_lock(&(ptr_c->IOmutex));
@@ -145,19 +132,14 @@ void *crateThread(void *ptr) {
 
         for( map<int, JlabBoard *>::iterator it=ptr_c->crateBoards.begin() ; it!= ptr_c->crateBoards.end();  ++it){
 
-            //if (testing) fprintf(stderr,"%d\n",it->first);
-
             if(!(it->second))continue;
 
             int nchannels = (it->second)->numberOfChannels;
             
-            //if (testing) fprintf(stderr,"%d %d\n",it->first,nchannels);
-
             if((it->second)->boardType==SCALER_TYPE_DSC2){
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersA\n");
 #endif
-                //if (testing) fprintf(stderr,"Read Disc Scalers ...\n");
                 (it->second)->commsStatus = Dsc2ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Dsc2ReadScalersB\n");
@@ -168,7 +150,6 @@ void *crateThread(void *ptr) {
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerA\n");
 #endif
-                //if (testing) fprintf(stderr,"Read Fadc Scalers ...\n");
                 (it->second)->commsStatus=Fadc250ReadScalers(ptr_c, it, nchannels);
 #ifdef JSCALER_DEBUG
                 fprintf(stderr,"ioc:Fadc250ReadScalerB\n");
@@ -199,16 +180,18 @@ void *crateThread(void *ptr) {
                 (*buf)=0;
                 partype = SCALER_PARTYPE_THRESHOLD;
                 ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-                if (ret)
+                if (ret==kTRUE) {
                     for (int i=0; i<len; i++) /// len is number of channels
                         ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
+                }
                 if (*buf) delete *buf;
                 (*buf)=0;
                 partype = SCALER_PARTYPE_THRESHOLD2;
                 ret = ptr_c->crateMsgClient->GetBoardParams(it->first, partype, buf, &len);
-                if (ret)
+                if (ret==kTRUE) {
                     for (int i=0; i<len; i++)
                         ( it->second->scalerThresholds[i] ).push_back((*buf)[i]);
+                }
                 if (*buf) delete *buf;
 #ifdef JSCALER_DEBUG 
                 for (int i=0; i<it->second->numberOfChannels; i++) {  
@@ -276,26 +259,26 @@ int Fadc250ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, i
     // NABO:  THREAD CRASHES HERE IF DGS IS KILLED
     if (ptr_c && ptr_c->crateMsgClient && ptr_c->crateMsgClient->IsValid() && ptr_c->crateMsgClient->CheckConnection("foo"))
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
-    /*
-    if (strcmp(ptr_c->getHostname().c_str(),"ADCECAL1")==0) 
-        fprintf(stderr,"Fadc250ReadScalersB\n");
-    */
-    if (len!=17) {
-        printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
-    }
-    else if ((*buf)[16]<=0) {
-        printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
-    }
-    else {
-        static const double ref1=488281.25f;
-        static const double ref2=1;
-        const double ref=ref1/(*buf)[16]/ref2;
-        for (int ii=0; ii<len-1; ii++)
-        {
-            it->second->scalerCounts[ii].clear();
-            it->second->scalerCounts[ii].push_back((*buf)[ii]);
-            it->second->scalerCountsHz[ii].clear();
-            it->second->scalerCountsHz[ii].push_back((*buf)[ii]*ref);
+
+    if (ret==kTRUE) {
+
+        if (len!=17) {
+            printf("Fadc250ReadScalers:  odd length:  %d.\n",len);
+        }
+        else if ((*buf)[16]<=0) {
+            printf("Fadc250ReadScalers:  odd normalization:  %d\n",(*buf)[16]);
+        }
+        else {
+            static const double ref1=488281.25f;
+            static const double ref2=1;
+            const double ref=ref1/(*buf)[16]/ref2;
+            for (int ii=0; ii<len-1; ii++)
+            {
+                it->second->scalerCounts[ii].clear();
+                it->second->scalerCounts[ii].push_back((*buf)[ii]);
+                it->second->scalerCountsHz[ii].clear();
+                it->second->scalerCountsHz[ii].push_back((*buf)[ii]*ref);
+            }
         }
     }
     if (*buf) delete *buf;
@@ -490,10 +473,10 @@ int Dsc2ReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it, int 
     ret = ptr_c->crateMsgClient->ReadScalers(it->first, buf, &len);
 #ifdef JSCALER_DEBUG
     printf("\n\n**************************AAA BoardType = %d\n",(it->second)->boardType);
-    printf("111  slot=%d  msgclient_addr=%p buf_addr=%p len=%d\n",it->first, ptr_c->crateMsgClient, &buf,len);
+    printf("111  slot=%d  msgclient_addr=%p buf_addr=%p len=%d %d\n",it->first, ptr_c->crateMsgClient, &buf,len,ret);
 #endif
 
-    if (ret <=0 ) printf("error in scaler reading\n");
+    if (ret!=kTRUE ) printf("error in scaler reading\n");
     else{
 
         for(int i10=0;i10 < len; i10++){

@@ -23,6 +23,10 @@ file "db/torus_ai_generic.db" {
     { PLC_SOL, B_SOL:, LHe:, PT8675A,    atma,      2, "LHe RTN Line Pressure" }
     { PLC_SOL, B_SOL:, LHe:, PT8677,     atma,      4, "Inlet to Guard Vacuum" }
     #
+    { PLC_SOL, B_SOL:, LHe:, TC8670L,       K,      2, "Thermocouple - Lower Plate" }
+    { PLC_SOL, B_SOL:, LHe:, TC8670U,       K,      2, "Thermocouple - Upper Plate" }
+    { PLC_SOL, B_SOL:, LHe:, TC8670_Min,    K,      2, "Thermocouple - Upper/Lower Min" }
+    #
     { PLC_SOL, B_SOL:, LHe:, TP8611,        K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8675,        K,      2, "PT100" }
     { PLC_SOL, B_SOL:, LHe:, TP8620A,       K,      2, "PT100" }
@@ -153,6 +157,8 @@ file "db/torus_bi_generic.db" {
 file "db/torus_bi_renamed.db" { pattern
     { PLCID,    P,      R,      PV,             TAG,                ZNAM,       ONAM,       ZSV,    OSV,        DESC }
     { PLC_DBX,  B_SOL:, LHe:,   PV8563_Permit,  PV8563_Permit_Sol,  Disabled,   Enabled,    MAJOR,  NO_ALARM,   "PV8563C/PV8563W Interlock" }
+    { PLC_SOL,  B_SOL:, LHe:,   HTR8670L,       RV8670L_SSR,        Off,        On,         NO_ALARM, NO_ALARM, "RV8670 Heater Lower" }
+    { PLC_SOL,  B_SOL:, LHe:,   HTR8670U,       RV8670U_SSR,        Off,        On,         NO_ALARM, NO_ALARM, "RV8670 Heater Upper" }
 }
 
 file "db/torus_ao_generic.db" { pattern
@@ -191,6 +197,7 @@ file "db/datatype_cpid.db" {
     #
     { PLC_SOL, B_SOL:, LHe:, EV8611CD }
     { PLC_SOL, B_SOL:, LHe:, EV8611CD_Max }
+    { PLC_SOL, B_SOL:, LHe:, EV8611CD_Max_Max }
     { PLC_SOL, B_SOL:, LHe:, EV8611JT }
     { PLC_SOL, B_SOL:, LHe:, EV8611JT_Min }
     { PLC_SOL, B_SOL:, LHe:, EV8612 }

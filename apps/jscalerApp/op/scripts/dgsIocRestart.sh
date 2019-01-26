@@ -109,6 +109,12 @@ then
     sleep 2
     softioc_console -R iocjscalersC
 
+elif [[ $1 == "band" || $1 == "adcband1" ]]
+then
+    dgsReboot adcband1
+    sleep 2
+    softioc_console -R iocjscalersBAND
+
 elif [[ $1 == "T" || $1 == "trigger" || $1 == "scaler1" ]]
 then
     dgsReboot scaler1

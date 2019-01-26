@@ -1,6 +1,7 @@
 #!../../bin/linux-x86_64/mcc
 
 < envPaths
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255 129.57.242.4")
 
 cd ${TOP}
 
@@ -34,6 +35,8 @@ dbLoadTemplate("db/mcc_fsd.substitutions")
 #dbLoadRecords("db/mcc_fsd_bits.template","P=B_FSD_2H001:,R=TRIP,I=ISD2H001HALOTESTr,ZSV=NO_ALARM,OSV=MAJOR")
 #dbLoadRecords("db/mcc_fsd_aliases.db")
 dbLoadRecords("db/mcc_fsdGlobal.db")
+
+dbLoadRecords("db/bta_suppl.db","hall=B,ioc=classc6");
 
 cd ${TOP}/iocBoot/${IOC}
 

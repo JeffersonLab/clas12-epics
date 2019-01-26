@@ -30,7 +30,6 @@ BEAST += solenoid_vacuum.xml
 BEAST += torus_comm.xml
 BEAST += torus_cooldown_interlocks.xml
 BEAST += torus_cooldown.xml
-BEAST += torus_force_loadcells_contacts.xml
 BEAST += torus_force_loadcells.xml
 BEAST += torus_force_straingages.xml
 BEAST += torus_interlocks.xml

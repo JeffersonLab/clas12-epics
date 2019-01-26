@@ -118,7 +118,7 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="255" green="255" blue="255" />
     </background_color>
-    <width>413</width>
+    <width>307</width>
     <x>6</x>
     <name>Label_59</name>
     <y>6</y>
@@ -410,7 +410,7 @@ $(pv_value)</tooltip>
       <rule name="Color" prop_id="background_color" out_exp="false">
         <exp bool_exp="pv0==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="pv0==1">
@@ -509,7 +509,7 @@ $(pv_value)</tooltip>
       <rule name="Color" prop_id="background_color" out_exp="false">
         <exp bool_exp="pv0==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="pv0==1">
@@ -784,7 +784,7 @@ $(pv_value)</tooltip>
       <rule name="Rule" prop_id="off_color" out_exp="false">
         <exp bool_exp="pv0==0 &amp;&amp; pv1==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="1">
@@ -835,7 +835,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -862,7 +862,7 @@ $(pv_value)</tooltip>
       <rule name="Rule" prop_id="off_color" out_exp="false">
         <exp bool_exp="pv0==0 &amp;&amp; pv1==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="1">
@@ -913,7 +913,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -1038,7 +1038,7 @@ $(pv_value)</tooltip>
       <rule name="Rule" prop_id="off_color" out_exp="false">
         <exp bool_exp="pv0==0 &amp;&amp; pv1==0 &amp;&amp; pv2==0 &amp;&amp; pv3==0 &amp;&amp; pv4==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="1">
@@ -1092,7 +1092,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -1119,7 +1119,7 @@ $(pv_value)</tooltip>
       <rule name="Rule" prop_id="off_color" out_exp="false">
         <exp bool_exp="pv0==0 &amp;&amp; pv1==0 &amp;&amp; pv2==0 &amp;&amp; pv3==0 &amp;&amp; pv4==0">
           <value>
-            <color name="Off" red="60" green="100" blue="60" />
+            <color name="Off" red="30" green="50" blue="30" />
           </value>
         </exp>
         <exp bool_exp="1">
@@ -1173,7 +1173,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -1295,7 +1295,7 @@ $(pv_value)</tooltip>
   <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
+    <alarm_pulsing>true</alarm_pulsing>
     <precision>2</precision>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
@@ -1326,7 +1326,7 @@ $(pv_value)</tooltip>
     </border_color>
     <precision_from_pv>false</precision_from_pv>
     <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
     <wrap_words>false</wrap_words>
     <format_type>0</format_type>
     <background_color>
@@ -1339,7 +1339,17 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
-    <actions hook="false" hook_all="false" />
+    <actions hook="false" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>../../alarms/aiaocalc_alarm_set.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <sig>$(pv_name)</sig>
+        </macros>
+        <replace>0</replace>
+        <description>Alarm Settings</description>
+      </action>
+    </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
@@ -1452,7 +1462,7 @@ $(trace_0_y_pv_value)</tooltip>
     <height>200</height>
     <trigger_pv_value />
     <axis_1_grid_color>
-      <color red="66" green="66" blue="66" />
+      <color red="55" green="55" blue="55" />
     </axis_1_grid_color>
     <actions hook="false" hook_all="false" />
     <axis_0_log_scale>false</axis_0_log_scale>
@@ -1487,7 +1497,7 @@ $(trace_0_y_pv_value)</tooltip>
     </title_font>
     <trace_0_y_pv_value />
     <plot_area_background_color>
-      <color red="77" green="77" blue="77" />
+      <color name="OPI_Background" red="50" green="50" blue="50" />
     </plot_area_background_color>
     <axis_1_title_font>
       <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
@@ -1652,7 +1662,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -1788,7 +1798,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>true</keep_wh_ratio>
     </scale_options>
     <off_color>
-      <color name="Off" red="60" green="100" blue="60" />
+      <color name="Off" red="30" green="50" blue="30" />
     </off_color>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
     <background_color>
@@ -2013,6 +2023,57 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description>Alarm Settings</description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-2ddbad12:1675728d38b:-7df6</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>19</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>Recovery</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="191" green="191" blue="191" />
+    </background_color>
+    <width>107</width>
+    <x>285</x>
+    <name>Menu Button_2</name>
+    <y>7</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>xterm -T "RICH Recovery" -bg blue -fg white /usr/clas12/release/pro/epics/bin/rich-lvcycle.sh</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Recover RICH Scalers</description>
       </action>
     </actions>
     <font>

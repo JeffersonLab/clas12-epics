@@ -1,0 +1,145 @@
+
+record(ai,"B_SVT$(T)_$(H0)$(S)raw") {
+	field(DESC,"32 bit raw read")
+	field(SCAN,"1 second")
+	field(DTYP,"V450")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S)v")
+	field(INP,"#C$(N) S0 @")
+	field(PREC,"0")
+	field(EGU,"counts")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S)v") {
+	field(DESC,"V450 voltage out")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S)")
+	field(CALC,"A * 12.5/(2**31)")
+	field(INPA,"B_SVT$(T)_$(H0)$(S)raw.VAL NPP NMS")
+	field(EGU,"V")
+	field(PREC,"3")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S)") {
+	field(DESC,"Humidity Sensor")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S)Alm")
+	field(CALC,"(A - 0.8)/0.031")
+	field(INPA,"B_SVT$(T)_$(H0)$(S)v.VAL NPP NMS")
+	field(EGU,"%")
+	field(PREC,"2")
+	field(HIHI,"70")
+	field(LOLO,"20")
+	field(HIGH,"60")
+	field(LOW,"30")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S)Alm") {
+	field(CALC,"(D>4)?(C*D*(-1)):(C*D)")
+	field(INPC,"B_SVT$(T)_$(H0)$(S).SEVR NPP NMS")
+	field(INPD,"B_SVT$(T)_$(H0)$(S).STAT NPP NMS")
+	field(HIHI,"5")
+	field(LOLO,"-9")
+	field(HIGH,"3")
+	field(LOW,"-5")
+	field(HHSV,"MAJOR")
+	field(LLSV,"MAJOR")
+	field(HSV,"MINOR")
+	field(LSV,"MINOR")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S):Dp") {
+	field(DESC,"Simple Dewpoint RH > 50%")
+	field(SCAN,"1 second")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S):DEW")
+	field(CALC,"B - ((100-A) / 5)")
+	field(INPA,"B_SVT$(T)_$(H0)$(S) NPP MS")
+	field(INPB,"B_SVT$(T)_$(H0)$(S):TEMP PP NMS")
+	field(PREC,"3")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S):HumCalc") {
+	field(DESC,"Humidity calculation per Magnus formula")
+	field(SCAN,"1 second")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S):MagnusDp")
+	field(CALC,"(A>0)?((LOG(A)-2)/D+(F*B)/(E+B)):0")
+	field(INPA,"B_SVT$(T)_$(H0)$(S) PP MS")
+	field(INPB,"B_SVT$(T)_$(H0)$(S):TEMP PP NMS")
+	field(INPD,"0.4343")
+	field(INPE,"243.12")
+	field(INPF,"17.62")
+	field(PREC,"3")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S):MagnusDp") {
+	field(DESC,"Magnus formula Dewpoint calculation")
+	field(CALC,"243.12*A/(17.62-A)")
+	field(INPA,"B_SVT$(T)_$(H0)$(S):HumCalc NPP MS")
+	field(PREC,"3")
+}
+record(calc,"B_SVT$(T)_$(H0)$(S):DEWALARM") {
+	field(DESC,"Dewpoint Alarm calc")
+	field(SCAN,"1 second")
+	field(CALC,"A-B")
+	field(INPA,"B_SVT$(T)_$(H0)$(S):TEMP NPP NMS")
+	field(INPB,"B_SVT$(T)_$(H0)$(S):DEW NPP MS")
+	field(PREC,"3")
+	field(LOLO,"3")
+	field(LOW,"5")
+	field(LLSV,"MAJOR")
+	field(LSV,"MINOR")
+}
+record(mbbo,"B_SVT$(T)_$(H0)$(S):Dn") {
+	field(DESC,"Dewpoint Calculation Selector")
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S):DEW")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(ZRST,"Simple")
+	field(ONST,"Magnus")
+}
+record(mbbo,"B_SVT$(T)_$(H0)$(S):Tn") {
+	field(DTYP,"Soft Channel")
+	field(FLNK,"B_SVT$(T)_$(H0)$(S):TEMP")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(TWVL,"2")
+	field(THVL,"3")
+	field(ZRST,"EX Env Temp B1 T1")
+	field(ONST,"EX Env Temp B1 T2")
+	field(TWST,"EX Env Temp B2 T1")
+	field(THST,"EX Env Temp B2 T2")
+}
+record(sel,"B_SVT$(T)_$(H0)$(S):DEW") {
+	field(NVL,"B_SVT$(T)_$(H0)$(S):Dn NPP NMS")
+	field(INPA,"B_SVT$(T)_$(H0)$(S):Dp NPP MS")
+	field(INPB,"B_SVT$(T)_$(H0)$(S):MagnusDp NPP MS")
+}
+record(sel,"B_SVT$(T)_$(H0)$(S):TEMP") {
+	field(PREC,"3")
+	field(NVL,"B_SVT$(T)_$(H0)$(S):Tn NPP NMS")
+	field(INPA,"B_SVT_EX_ENV_TEMP_SB1_T1_SL11 PP NMS")
+	field(INPB,"B_SVT_EX_ENV_TEMP_SB1_T2_SL11 PP NMS")
+	field(INPC,"B_SVT_EX_ENV_TEMP_SB2_T1_SL11 PP NMS")
+	field(INPD,"B_SVT_EX_ENV_TEMP_SB2_T2_SL11 PP NMS")
+	field(EGU,"C")
+}
+
+record(sel,"B_SVT_V450_Slot$(S)_Dewpoint_Alm_BD1") {
+	field(DESC,"Board Dewpoint")
+	field(SCAN,"1 second")
+	field(PREC,"3")
+	field(NVL,"B_SVT_V450_Slot$(S)_Dewpoint_sel_BD1 NPP NMS")
+	field(INPA,"B_SVT$(T)_$(H0)$(S):DEWALARM NPP NMS")
+	field(INPB,"B_SVT$(T)_$(H1)$(S):DEWALARM NPP NMS")
+	field(LOLO,"3")
+	field(LOW,"5")
+	field(LLSV,"MAJOR")
+	field(LSV,"MINOR")
+    info(autosaveFields_pass0,"HIHI HIGH LOW LOLO HHSV HSV LSV LLSV")
+}
+record(sel,"B_SVT_V450_Slot$(S)_Dewpoint_BD1") {
+	field(DESC,"Board Dewpoint")
+	field(SCAN,"1 second")
+	field(PREC,"3")
+	field(NVL,"B_SVT_V450_Slot$(S)_Dewpoint_sel_BD1 NPP NMS")
+	field(INPA,"B_SVT$(T)_$(H0)$(S):DEW NPP NMS")
+	field(INPB,"B_SVT$(T)_$(H1)$(S):DEW NPP NMS")
+}
+
+

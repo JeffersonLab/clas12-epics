@@ -11,6 +11,10 @@ mcc_registerRecordDeviceDriver pdbbase
 dbLoadRecords("db/scaler-ped.db","OUT=fcup_offset,P=fcup_offset,RAW=scalerS2b, REF=IPM2C21A,REFMAX=0.1,RAWMAX=500,N=5")
 dbLoadRecords("db/scaler-ped.db","OUT=slm_offset, P=slm_offset, RAW=scalerS16b,REF=IPM2C21A,REFMAX=0.1,RAWMAX=500,N=5")
 
+#dbLoadRecords("db/scaler-ped.db","OUT=fcup_offset,P=fcup_offset,RAW=scalerS2b, REF=IPM2C21A,REFMAX=0.1,RAWMAX=600,NPED=5,WINDOW=20,LOOKBACK=10,REF2=scaler.TP,REF2MAX=3")
+#dbLoadRecords("db/scaler-ped.db","OUT=slm_offset, P=slm_offset, RAW=scalerS16b,REF=IPM2C21A,REFMAX=0.1,RAWMAX=600,NPED=5,WINDOW=20,LOOKBACK=10,REF2=scaler.TP,REF2MAX=3")
+
+
 #dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 

@@ -17,7 +17,8 @@ option +s;
 #define USE_BRIANS_QUADS 1
 
 // current limitation for upstream quad due to hardware issues:
-#define QUAD_B_IMAX 2800
+//#define QUAD_B_IMAX 2800
+#define QUAD_B_IMAX 9999
 
 #include "automoller.h"
 

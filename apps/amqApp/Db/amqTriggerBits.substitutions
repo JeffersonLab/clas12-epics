@@ -142,3 +142,15 @@ pattern { IN1 IN2 P N }
 {    adcft1vtp_VTPFT_CLUSTERNHITS_HODO    adcft2vtp_VTPFT_CLUSTERNHITS_HODO    VTPFT_CLUSTERNHITS_HODO 9 } 
 }
 
+file "db/amqDoubleArray.db" {
+pattern { P K N TH THH HSV HHSV }
+{ B_DAQ:trig2vtp_VTPGT_PRESCALES   trig2vtp_VTPGT_PRESCALES   32 0 30 NO_ALARM MAJOR }
+{ B_DAQ:trig1ts_TRIGGERBITS        TRIG1_TSGTPSLOT21          32 0 30 NO_ALARM MAJOR }
+}
+
+file "db/array-to-scalar-32.template" {
+pattern { P R S INP FTVL }
+{ B_DAQ:trig2vtp_VTPGT_PRESCALES:  "" "" B_DAQ:trig2vtp_VTPGT_PRESCALES FLOAT }
+{ B_DAQ:trig1ts_TRIGGERBITS:       "" "" B_DAQ:trig1ts_TRIGGERBITS      FLOAT }
+}
+

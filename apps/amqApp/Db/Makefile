@@ -45,6 +45,8 @@ DB += amq-adc-HTCC.substitutions
 DB += amq-adc-PCAL.substitutions
 DB += array-to-scalar-16.template
 DB += array-to-scalar-32.template
+DB += amqTrigFrac.template
+
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_template = <templatename>

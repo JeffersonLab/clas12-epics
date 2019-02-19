@@ -1,3 +1,20 @@
+
+
+record(compress,"B_DAQ:trig1ts_TRIGGERBITS:avg") {
+    field(INP,"B_DAQ:trig1ts_TRIGGERBITS CPP")
+    field(ALG,"N to 1 Average")
+    field(NSAM,"1")
+    field(N,"32")
+    field(FLNK,"B_DAQ:trig1ts_TRIGGERBITS:sum.PROC")
+}
+record(calc,"B_DAQ:trig1ts_TRIGGERBITS:sum") {
+    field(INPA,"B_DAQ:trig1ts_TRIGGERBITS:avg")
+    field(CALC,"A*32")
+}
+
+
+
+
 record(calc,"B_DAQ_GTTrigBitPrescaled:sumZ") {
     field(SCAN,"1 second")
     field(INPA,"B_DAQ_GTTrigBitPrescaled:0")

@@ -9,8 +9,8 @@ os.putenv('MYSQL_HOST','clondb1')
 os.putenv('EXPID','clasrun')
 os.putenv('SESSION','clasprod')
 
+#'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 CFG={
-'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
 'B_DAQ:run_number':   {'ini':-1,   'cmd':['run_number']},

@@ -21,6 +21,8 @@ dbLoadTemplate("db/jscalers_BAND_DISC.substitutions")
 dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=FADC:, NELM=256,FTVL=FLOAT,PERIOD=1, FNAME=bandfadc.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_BAND_,R=DISC:, NELM=256,FTVL=FLOAT,PERIOD=1, FNAME=banddisc.txt")
 
+dbLoadRecords("db/jscalers_BAND_sums.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

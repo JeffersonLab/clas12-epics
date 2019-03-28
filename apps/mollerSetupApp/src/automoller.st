@@ -43,6 +43,7 @@ string runEndTime;
 int isMollerRunning;
 int isMollerConfigured;
 float hv_slm_default;
+int itmp;
 string stmp;
 
 // Sequencer Status:
@@ -532,66 +533,56 @@ ss automoller {
         option -t;
 
         entry {
-            quad_icfg=-1;
+            pvGet(quad_icfg);
             pvGet(quad_icfg_auto);
+            itmp=0;
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
                 epicsThreadSleep(1);
-                MESSAGE(Retrieving Beam Energy ...);
 #if USE_BRIANS_QUADS
-                pvGet(beamEnergy,ASYNC);
+                pvGet(beamEnergy);
+                quad_icfg = calcQuadCurrent(beamEnergy/1000);
 #else
-                pvGet(beamPasses,ASYNC);
+                pvGet(beamPasses);
+                if (beamPasses==1) {
+                    pvGet(quad_icfg_1pass);
+                    quad_icfg = quad_icfg_1pass;
+                }
+                else if (beamPasses==2) {
+                    pvGet(quad_icfg_2pass);
+                    quad_icfg = quad_icfg_2pass;
+                }
+                else if (beamPasses==3) {
+                    pvGet(quad_icfg_3pass);
+                    quad_icfg = quad_icfg_3pass;
+                }
+                else if (beamPasses==4) {
+                    pvGet(quad_icfg_4pass);
+                    quad_icfg = quad_icfg_4pass;
+                }
+                else if (beamPasses==5) {
+                    pvGet(quad_icfg_5pass);
+                    quad_icfg = quad_icfg_5pass;
+                }
+                else {
+                    itmp=1;
+                }
 #endif
             }
         }
+        
+        when (itmp!=0) {
+            MESSAGE(ERROR on #Passes for Quad Current.);
+        } state listen
 
-#if USE_BRIANS_QUADS
-        when (quad_icfg_auto && pvGetComplete(beamEnergy)) {
-            quad_icfg = calcQuadCurrent(beamEnergy/1000);
-            sprintf(stmp,"Beam Energy Retrieved:  %.0f MeV",beamEnergy)
-            MESSAGE(stmp);
-            epicsThreadSleep(1);
-        }
-#else
-        when (quad_icfg_auto && pvGetComplete(beamPasses)) {
-            if (beamPasses==1) {
-                pvGet(quad_icfg_1pass);
-                quad_icfg = quad_icfg_1pass;
-            }
-            else if (beamPasses==2) {
-                pvGet(quad_icfg_2pass);
-                quad_icfg = quad_icfg_2pass;
-            }
-            else if (beamPasses==3) {
-                pvGet(quad_icfg_3pass);
-                quad_icfg = quad_icfg_3pass;
-            }
-            else if (beamPasses==4) {
-                pvGet(quad_icfg_4pass);
-                quad_icfg = quad_icfg_4pass;
-            }
-            else if (beamPasses==5) {
-                pvGet(quad_icfg_5pass);
-                quad_icfg = quad_icfg_5pass;
-            }
-            sprintf(stmp,"#Passes Retrieved:  %d",beamPasses);
-            MESSAGE(stmp);
-            epicsThreadSleep(1);
-        }
-#endif
+        when (quad_icfg>3300) {
+            MESSAGE(ERROR on Quad Current above 3300 A.);
+        } state listen
 
-        when (quad_icfg>100 && quad_icfg<3300) {
-            sprintf(stmp,"Quad Current Calculated:  %.1f A",quad_icfg);
-            MESSAGE(stmp);
-            epicsThreadSleep(1);
+        when () {
             pvPut(quad_icfg);
             MESSAGE(Turning ON Quadrupoles ...);
         } state quadsOn
-        
-        when (delay(10)) {
-            MESSAGE(ERROR Calculating Quad Current.  Aborted.);
-        } state listen
     }
 
     state quadsOn {

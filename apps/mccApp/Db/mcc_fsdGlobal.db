@@ -32,24 +32,42 @@ record(calc,"B_FSD_2H001:isMasked") {
 
 
 #
-# 1 if:
-# acc's beam stopper is NOT in
-# AND any of our FSDs are masked
-# AND tagger magnet is NOT on
-# AND HallB string dipole is ON
+# whether it's safe to mask FSD
 #
-# else 0
+record(calc,"B_FSD_MASK:safe") {
+    field(SCAN,"1 second")
+    field(INPA,"hallbbst")        # beam stopper (0/1=In/Out)
+    field(INPB,"IDA2C04I")        # dumplette (0/1=Out/In)
+    field(INPC,"MBSY2CM")         # dipole string magnet
+    field(INPD,"TMIRBCK")         # tagger current
+    field(INPE,"collimator_at_b") # collimator in blank position
+    field(CALC,"A=0 || B=1 || C<10 || (ABS(D)>100&&E=1)")
+}
+
+#
+# whether FSD is maksed unsafely
 #
 record(calc,"B_FSD_MASK_ALARM") {
-    field(INPA,"hallbbst")
-    field(INPB,"B_FSD_ISDDEST")
-    field(INPC,"ISD2H001HALOMASKr")
-    field(INPD,"MBSY2CM") # string magnet
-    field(INPE,"TMIRBCK")
-    field(INPF,"B_FSD_2H001:isMasked")
-    field(CALC,"A=1&&(B=0||C#0||F#0)&&D>10&&ABS(E)<50")
+    field(INPA,"B_FSD_MASK:safe")      # whether it's safe to mask
+    field(INPB,"ISD2H001HALOMASKr")    # individual 2H01 bit masks
+    field(INPC,"B_FSD_2H001:isMasked") # global 2H01 mask
+    field(INPD,"B_FSD_ISDDEST")        # another type of global mask
+    field(CALC,"A=0 && (B#0 || C#0 || D=0)")
     field(HIGH,"1")
     field(HSV,"MAJOR")
 }
+
+# had to split this into 2 records, for too long .CALC
+#record(calc,"B_FSD_MASK_ALARM") {
+#    field(INPA,"hallbbst")
+#    field(INPB,"B_FSD_ISDDEST")
+#    field(INPC,"ISD2H001HALOMASKr")
+#    field(INPD,"MBSY2CM") # string magnet
+#    field(INPE,"TMIRBCK")
+#    field(INPF,"B_FSD_2H001:isMasked")
+#    field(CALC,"A=1&&(B=0||C#0||F#0)&&D>10&&ABS(E)<50")
+#    field(HIGH,"1")
+#    field(HSV,"MAJOR")
+#}
 
 

@@ -23,27 +23,30 @@ public class MakeLogEntry
 
   String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","CLAS12ANA","HBDAQ","HBTRIGGER","BBEAM","HBBAND","TLOG"};
 
-//  String RUNDBSESSION=System.getenv("SESSION");
+  final String RUNDBTABLE="daq_"+System.getenv("USER");
+  final String RUNDBUSER=System.getenv("EXPID");
+  final String RUNDBSESSION=System.getenv("SESSION");
+  final String RUNDBHOST=System.getenv("MYSQL_HOST");
+  final String RUNDBPORT="3306";
+  final String RUNDBPASSWD="";
+
 //  String RUNDBEXPID=System.getenv("EXPID");
 //  String RUNDBTABLE="daq_"+RUNDBEXPID;
 //  String RUNDBUSER=RUNDBEXPID;
  
   // kpp settings:
-  String RUNDBSESSION="clasprod";
-  String RUNDBTABLE="daq_clasrun";
+  //String RUNDBSESSION="clasprod";
+  //final String RUNDBTABLE="daq_clasrun";
 
   // hps settings:
   //String RUNDBSESSION="clashps";
   //String RUNDBTABLE="daq_clasrun";
   
-  final String RUNDBHOST=System.getenv("MYSQL_HOST");
-  final String RUNDBPORT="3306";
 
-  final String RUNDBUSER="clasrun"; // $EXPID?
-  final String RUNDBPASSWD="";
+  //final String RUNDBUSER="clasrun"; // $EXPID?
 
   final String SCREENSHOTDIR=System.getenv("HOME")+"/screenshots/";
-  final String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName] [-s runDbSession]";
+  final String USAGE="MakeLogEntry [-w windowId] [-m screenName] [-l logBookName]";// [-s runDbSession]";
   String IMGPATH = null; // Path of image to submit to logbook
 
   JTextArea LOGTEXT = new JTextArea("Enter Comments Here", 20, 40);
@@ -122,7 +125,7 @@ public class MakeLogEntry
                   LOGBOOKNAME="HBLOG";
               }
           }
-          else if (args[ii].equals("-s")) RUNDBSESSION = args[++ii];
+          //else if (args[ii].equals("-s")) RUNDBSESSION = args[++ii];
           else if (args[ii].equals("-t")) DOTABS = Boolean.parseBoolean(args[++ii]);
           else System.err.println("Invalid Argument: >"+args[ii]+"<");
         }

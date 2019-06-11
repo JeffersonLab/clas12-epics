@@ -4,9 +4,9 @@
 
 class TF1;
 class TH1D;
-class TGWindow; 
+class TGWindow;
 class TTimeStamp;
-class TGMainFrame; 
+class TGMainFrame;
 class TRootEmbeddedCanvas;
 class TGTextEntry;
 class TGTextEdit;
@@ -17,10 +17,10 @@ class TGNumberEntry;
 class TGCheckButton;
 class TGLabel;
 
-class Fitter { 
-  RQ_OBJECT("Fitter")
-  private: 
-    TGMainFrame         *fMain;
+class Fitter {
+    RQ_OBJECT("Fitter")
+private:
+    TGMainFrame *fMain;
     const TGWindow *p_wind;
     TRootEmbeddedCanvas *fEcanvas;
     TGTextEntry *par0;
@@ -28,7 +28,7 @@ class Fitter {
     static const int n_counters = 15;
     static const std::string all_harps_dir;
     static const double sqrt2 = 1.41421356237309515;
-    void InitData( std::string );
+    void InitData(std::string);
     TGraph *gr_[n_counters];
     std::string counter_names_[n_counters];
     std::string file_name;
@@ -87,27 +87,28 @@ class Fitter {
 
     double scale_Xaxis;
 
-  public:
-    Fitter(const TGWindow *p,UInt_t w,UInt_t h, std::string );
+public:
+    Fitter(const TGWindow *p, UInt_t w, UInt_t h, std::string);
     virtual ~Fitter();
     //void DoDraw();
     void OpenFile();
     void Draw_All_Counters();
-    void FitData( bool, bool );
+    void FitData(bool, bool);
     void GetComments();
     void popupMSG(std::string);
     void CloseUtilFrame();
     void CloseFitRanges();
     void CloseApp();
     void SubmitToLogbook();
-    bool Fit_2c21(TGraph *, std::string );
-    bool Fit_tagger(TGraph *, std::string );
-    bool Fit_2H02A(TGraph *, std::string );
+    bool Fit_2c21(TGraph *, std::string);
+    bool Fit_tagger(TGraph *, std::string);
+    bool Fit_2H01(TGraph *, std::string);
+    bool Fit_2H02A(TGraph *, std::string);
     //  bool Fit_2H00A(TGraph *, std::string );
     bool Search_2c21_peaks(TGraph *);
     bool Search_three_peaks(TGraph *);
     void Set_Fit_Pars();
-    TH1D *Graph2Hist(TGraph *, double );
+    TH1D *Graph2Hist(TGraph *, double);
     void Load_Fit_Pars();
     void CAPUT();
 

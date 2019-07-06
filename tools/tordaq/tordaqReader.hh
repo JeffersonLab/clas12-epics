@@ -533,10 +533,10 @@ public:
                 const double total=h->GetEntries();
                 const double duplicates=h->Integral(h->FindBin(-0.1),h->FindBin(0.1));
                 const double misses=h->Integral(h->FindBin(0.3),h->GetNbinsX());
-                fprintf(stdout,"*%7s:   Duplicates = (%8d / %.2f%%)    Missed = (%8d / %.2f%%)\n",
+                fprintf(stdout,"*%7s:   Duplicates = (%8ld / %.4f%%)    Missed = (%8ld / %.4f%%)\n",
                         inTrees[ii]->fChain->GetName(),
-                        duplicates,100*duplicates/total,
-                        misses,100*misses/total);
+                        (long)duplicates,100*duplicates/total,
+                        (long)misses,100*misses/total);
             }
             std::cout<<"* "<<std::endl;
             std::cout<<"* "<<std::endl;
@@ -557,7 +557,7 @@ public:
                 {
                     const double fracDuplicates=100*(double)nDuplicates/outHistos[ii]->GetNbinsX();
                     const double fracMissing   =100*(double)nMissing   /outHistos[ii]->GetNbinsX();
-                    fprintf(stdout,"*%7s:   Overlaps = (%.1E / %.2f%%)    Missed = (%.1E / %.2f%%)\n",
+                    fprintf(stdout,"*%7s:   Overlaps = (%.3E / %.4f%%)    Missed = (%.3E / %.4f%%)\n",
                             inTrees[ii]->fChain->GetName(),
                             (float)nDuplicates,fracDuplicates,
                             (float)nMissing,fracMissing);

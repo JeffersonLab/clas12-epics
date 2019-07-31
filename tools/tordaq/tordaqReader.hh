@@ -531,8 +531,10 @@ public:
             {
                 TH1* h=updatePeriod[ii];
                 const double total=h->GetEntries();
-                const double duplicates=h->Integral(h->FindBin(-0.1),h->FindBin(0.1));
-                const double misses=h->Integral(h->FindBin(0.3),h->GetNbinsX());
+                const double readoutPeriod=((double)tordaqData::WFLENGTH)/tordaqData::FREQUENCY;
+                const double duplicates=h->Integral(h->FindBin(-0.5*readoutPeriod),h->FindBin(0.5*readoutPeriod));
+                const double misses=h->Integral(h->FindBin(1.5*readoutPeriod),h->GetNbinsX());
+
                 fprintf(stdout,"*%7s:   Duplicates = (%8ld / %.4f%%)    Missed = (%8ld / %.4f%%)\n",
                         inTrees[ii]->fChain->GetName(),
                         (long)duplicates,100*duplicates/total,

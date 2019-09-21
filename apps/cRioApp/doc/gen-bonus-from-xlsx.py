@@ -125,7 +125,10 @@ for row in ws.iter_rows():
     continue
 
   if deadband is None:
-    pv['deadband'] = 0
+    if prec is None:
+      pv['deadband'] = 0
+    else:
+      pv['deadband'] = float(prec)*10
   else:
     pv['deadband'] = float(deadband)
 

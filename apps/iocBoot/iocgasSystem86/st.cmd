@@ -3,6 +3,7 @@
 < envPaths
 epicsEnvSet("EPICS_CA_ADDR_LIST", "129.57.163.255")
 epicsEnvSet("EPICS_CAS_BEACON_ADDR_LIST", "129.57.163.255")
+epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES","10000000")
 ############################################################################
 cd "${TOP}"
 
@@ -22,6 +23,8 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 #dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_, R=SVT_GAS_")
 
 dbLoadRecords("db/gas_cRIO_BONUS.db")
+
+dbLoadRecords("db/criowf.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 

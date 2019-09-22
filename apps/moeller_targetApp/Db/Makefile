@@ -13,6 +13,7 @@ include $(TOP)/configure/CONFIG
 #DB_INSTALLS += $(ASYN)/db/asynRecord.db
 DB_INSTALLS += $(AUTOSAVE)/asApp/Db/save_restoreStatus.db
 
+DB += moeller_target.db
 DB += moeller_target_cmd.db
 
 #REQ += moeller_target_cmd_settings.req

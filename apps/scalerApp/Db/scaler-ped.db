@@ -16,9 +16,18 @@
 #record(ai,"$(RAW)") {}
 #######################################
 
+# previous 9 seconds of veto readings:
+record(compress,"$(P)$(R=):veto_circbuff") {
+    field(SCAN,"1 second")
+    field(INP,"$(VETO)")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"9")
+    field(N,"9")
+    field(FLNK,"$(P)$(R=):bpm_circbuff.PROC")
+}
+
 # previous 9 seconds of bpm readings:
 record(compress,"$(P)$(R=):bpm_circbuff") {
-    field(SCAN,"1 second")
     field(INP,"$(REF)")
     field(ALG,"Circular Buffer")
     field(NSAM,"9")
@@ -32,6 +41,15 @@ record(compress,"$(P)$(R=):raw_circbuff") {
     field(ALG,"Circular Buffer")
     field(NSAM,"5")
     field(N,"5")
+    field(FLNK,"$(P)$(R=):9veto_min.PROC")
+}
+
+# minimum veto over past 9 seconds:
+record(compress,"$(P)$(R=):9veto_min") {
+    field(INP,"$(P)$(R=):veto_circbuff")
+    field(ALG,"N to 1 Low Value")
+    field(NSAM,"1")
+    field(N,"9")
     field(FLNK,"$(P)$(R=):9bpm_max.PROC")
 }
 
@@ -61,14 +79,15 @@ record(calcout,"$(P)$(R=):calcout") {
     field(INPD,"$(RAWMAX=300)")
     field(INPE,"$(P)$(R=):9bpm_max")
     field(INPF,"$(P)$(R=):raw")
-    field(CALC,"( B<C && E<C && (D<=0 || A<D) ) ? 1 : 0")
+    field(INPG,"$(P)$(R=):9veto_min")
+    field(CALC,"(B<C||C<0)&&E<C&&(D<=0||A<D)&&G>0?1:0")
     field(OOPT,"When Non-zero")
     field(OCAL,"1")
     field(DOPT,"Use OCAL")
     field(OUT,"$(P)$(R=):circbuff.PROC PP")
 }
 
-# the N raw count readings to use for pedestal:
+# previous N raw counts to use for pedestal:
 record(compress,"$(P)$(R=):circbuff") {
     field(INP,"$(P)$(R=):raw")
     field(ALG,"Circular Buffer")
@@ -87,7 +106,7 @@ record(compress,"$(P)$(R=):average") {
     info(autosaveFields_pass0,"VAL")
 }
 
-# pedetsal, just to have a scalar to read if disabled:
+# current pedetsal, just to have a scalar:
 record(ao,"$(P)$(R=):avg") {
     field(OMSL,"closed_loop")
     field(DOL,"$(P)$(R=):average CPP")
@@ -112,7 +131,7 @@ record(bi,"$(P)$(R=):enable") {
     field(OSV,"NO_ALARM")
     field(VAL,"0")
     field(PINI,"1")
-    info(autosaveFields,"VAL")
+#info(autosaveFields,"VAL")
 }
 # just for visual feedback:
 record(bo,"$(P)$(R=):changed") {

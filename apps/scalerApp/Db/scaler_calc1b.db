@@ -1,17 +1,39 @@
 record(ai,"beam_stop_atten") {
-# 5-pass:
-    #field(VAL,"9.8088")
-# 3-pass:
-    field(VAL,"16.283")
+##########################
+# MBSY2C_energy
+# 11.604 GeV:
+#    field(VAL,"9.8088")
+# 10.200 GeV:
+#    field(VAL,"10.6136")
+# 7.546 GeV:
+#    field(VAL,"14.89565")
+# 6.535 GeV:
+#    field(VAL,"16.283")
+# 6.423 GeV:
+#    field(VAL,"16.9726")
+# 4.55 GeV:
+    field(VAL,"29.2594")
+##########################
     field(PINI,"1")
     field(PREC,"5")
     info(autosaveFields_pass0,"VAL")
 }
 record(calc,"scaler_calc1b") {
     field(INPA,"scaler_calc1 CPP")
-    field(INPB,"beam_stop_at_beam CPP")
+    field(INPB,"beam_stop_at_beam CP")
     field(INPC,"beam_stop_atten CPP")
-    field(CALC,"B=1 ? A*C : A")
+    field(CALC,"ABS(B)>0.1 ? A*C : A")
     field(PREC,"3")
+}
+
+record(sel,"beam_stop_atten_hps2019") {
+    field(INPA,"29.25")
+    field(INPB,"27.55")
+    field(INPC,"25.48")
+    field(INPD,"29.25")
+    field(INPE,"26.65")
+    field(INPF,"29.25")
+    field(SELM,"Specified")
+    field(NVL,"hps:target:type CPP")
 }
 

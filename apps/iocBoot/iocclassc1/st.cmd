@@ -91,6 +91,11 @@ iocInit "../resource.def"
 #create_monitor_set("info_positions.req", 5, "P=iocscalerTest:")
 #create_monitor_set("info_settings.req", 30, "P=iocscalerTest:")
 
+## Added these three line. to start counting after restarting IOC
+dbpf "scaler_c.CNT","1"
+dbpf "scaler_c_mode.VAL","1"
+dbpf "display_c_mode.VAL","Hertz"
+
 ##
 ## Start any sequence programs
 ##

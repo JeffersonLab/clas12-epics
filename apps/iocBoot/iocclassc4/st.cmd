@@ -125,11 +125,6 @@ dbpf "display_mode.VAL","Hertz"
 #create_monitor_set("info_positions.req", 5, "P=iocclassc4:")
 #create_monitor_set("info_settings.req", 30, "P=iocclassc4:")
 
-## Added these three line. to start counting after restarting IOC
-dbpf "scaler_c.CNT","1"
-dbpf "scaler_c_mode.VAL","1"
-dbpf "display_c_mode.VAL","Hertz"
-
 
 ## 
 ## Start any sequence programs

@@ -23,6 +23,11 @@ option +d;
 
 /* motor records  */
 
+// NATHAN ADDED ABORT:
+short abortButton;
+assign abortButton to "{motor_name}:ABORT";
+monitor abortButton;
+
 short lls;
 assign lls to "{motor_name}.LLS";
 monitor lls;
@@ -181,7 +186,7 @@ double timeWaited = 0;
 
 /* state code  */
 ss harp_scan_snc {
-   
+
    state init {
      when () {
 
@@ -216,20 +221,16 @@ ss harp_scan_snc {
 
 /* ========================================================= */
 
-
-
-        harp_relative_move = 0.0;
-        pvPut(harp_relative_move);
-       pvGet(motor_name);
-	for (tmp_int = 0;  (get_e_rec(tmp_int,tmp_rec)); tmp_int++) {
-	   tmp_float[tmp_int] = 0.0;
-           pvAssign(tmp_float[tmp_int], tmp_rec);
-           pvGet(tmp_float[tmp_int]);
-           tmp_f = tmp_float[tmp_int];
-        }
-       printf("harp_scan: %s initializing  state code\n", motor_name);
-     } state wait_command
-   }
+    harp_relative_move = 0.0;
+    pvPut(harp_relative_move);
+    pvGet(motor_name);
+    for (tmp_int = 0;  (get_e_rec(tmp_int,tmp_rec)); tmp_int++) {
+        tmp_float[tmp_int] = 0.0;
+        //pvAssign(tmp_float[tmp_int], tmp_rec); // NATHAN DISABLED
+    }
+    printf("harp_scan: %s initializing  state code\n", motor_name);
+  } state wait_command
+}
    state wait_command {
      when (command == SCAN) {
 
@@ -304,13 +305,17 @@ ss harp_scan_snc {
         pvPut(command);
      } state wait_lls
    }
-   state wait_lls {    
+   state wait_lls { 
      when (lls == LIMIT_SWITCH_ON) {
         printf("harp_scan: %s wait_lls state low limit swithc hit\n",motor_name);
      } state start_move_to_a
    }
-   state start_move_to_a {    
+   state start_move_to_a {
      when (delay(0.5)) {
+        // NATHAN ADDED ABORT:
+        abortButton = 0;
+        pvPut(abortButton);
+        
         printf("harp_scan: %s starting move to a position\n",motor_name);
 	pvGet(speed_to_a);
 	harp_speed = speed_to_a;
@@ -322,33 +327,58 @@ ss harp_scan_snc {
      } state write_beam_conf
    }
    state write_beam_conf {
+     // NATHAN ADDED ABORT:
+     when (abortButton) {
+         abortButton = 0;
+         pvPut(abortButton);
+     } state abort_scan
+
      when () {
       /*write magnet settings to the file*/
         printf( "Debigging\n" );
 	for (tmp_int = 0;  (get_e_rec(tmp_int,tmp_rec) && get_e_name(tmp_int,tmp_name)); tmp_int++) {
-	   retStatus = pvAssign(tmp_float[tmp_int], tmp_rec);
-	   printf( "Return from pvAssign is %d for variable number %d \n", retStatus, tmp_int );
+	   
+           /*retStatus = pvAssign(tmp_float[tmp_int], tmp_rec);*/
+	   /*printf( "Return from pvAssign is %d for variable number %d \n", retStatus, tmp_int );*/
 
 	   timeWaited = 0.0;
-	   while( (	!pvAssigned ( tmp_float[tmp_int] ) 
-	            ||  !pvConnected( tmp_float[tmp_int] ) ) 
-	          && (timeWaited < 2) ) {
-		printf( "waiting %f \n", timeWaited );
-		timeWaited = timeWaited + 1.0;
-                epicsThreadSleep( 1.0 );
-	   }
-	printf( "Connected or timed out\n" );
-/*	delayTime = 1 * sysClkRateGet(); */
-/*	taskDelay( delayTime ); */
-/*	printf( "record name is <%s>\n",tmp_rec );  */
-           pvGet(tmp_float[tmp_int]);
-           tmp_f = tmp_float[tmp_int];
+
+           // NATHAN IGNORES PV CONNECTIONS:
+	   //while( (	!pvAssigned ( tmp_float[tmp_int] ) 
+	   //         ||  !pvConnected( tmp_float[tmp_int] ) ) 
+	   //         && (timeWaited < 2) ) {
+           //   printf( "waiting %f \n", timeWaited );
+           //   timeWaited = timeWaited + 1.0;
+           //   epicsThreadSleep( 1.0 );
+           //}
+	   //printf( "Connected or timed out\n" );
+
+/*	   delayTime = 1 * sysClkRateGet(); */
+/*	   taskDelay( delayTime ); */
+/*	   printf( "record name is <%s>\n",tmp_rec );  */
+
+           // NATHAN TURNS OFF PVGETTING, USES DUMMY INSTEAD:
+           //   pvGet(tmp_float[tmp_int]);
+           //   tmp_f = tmp_float[tmp_int];
+           tmp_f=99.999;
+
            printf("# %50s: %24s: %f\n",tmp_name, tmp_rec,tmp_f); 
            fdprintf(fd,"# %50s: %24s: %f\n",tmp_name, tmp_rec,tmp_f); 
         }
+
+        // NATHAN PUTS A DELAY JUST IN CASE AFTER TURNING OFF PVGETTING:
+        epicsThreadSleep(1.0);
+
      } state start_scan
    }
    state start_scan {
+
+     // NATHAN ADDED ABORT:
+     when (abortButton) {
+         abortButton = 0;
+         pvPut(abortButton);
+     } state abort_scan
+
      when (harp_position >= (position_a - DELTA) && movn == DONE) {
 
         printf("harp_scan: %s start scan state moving to %f\n", 
@@ -377,14 +407,27 @@ ss harp_scan_snc {
      } state daq_write
    }
    state daq_write {
+
+     // NATHAN ADDED ABORT:
+     when (abortButton) {
+         abortButton = 0;
+         pvPut(abortButton);
+     } state abort_scan
+
      when (scaler_cnt == DONE && harp_position > position_a && harp_position < position_b) {
 /*       printf( "Count done \n" ); */
        pvGet(rmp);
        fdprintf(fd,"%f ", harp_position);
 
 /* ========================================== */
-
+/*
        if(  ( ! (strcmp(cmotor_name,"harp_2c21"))) ||  ( ! (strcmp(cmotor_name,"harp_tagger"))) )
+*/
+       if(  ( ! (strcmp(cmotor_name,"harp_2c21"))) ||  
+            ( ! (strcmp(cmotor_name,"harp_tagger"))) ||
+            ( ! (strcmp(cmotor_name,"harp_2H00A"))) ||
+            ( ! (strcmp(cmotor_name,"harp_2H01")))
+            )
        {
 	       for (i=0;i<16;i++) {
 	          pvGet(scaler_datasc1[i]);
@@ -423,6 +466,38 @@ ss harp_scan_snc {
        printf("end of harp_{motor_name} scan\n");
      } state end_scan
    }
+
+   // NATHAN ADDED ABORT:
+   state abort_scan {
+       when() {
+
+           printf("ABORTING SCAN ...\n");
+           epicsThreadSleep(0.5);
+
+           spmg = 0;
+           pvPut(spmg);
+
+           pvGet(speed_to_a);
+           harp_speed = speed_to_a;
+           pvPut(harp_speed);
+
+           // NATHAN: This seems to be necessary only for 2c21a:
+           epicsThreadSleep(0.5);
+
+           harp_absolute_move = -100.0;
+           pvPut(harp_absolute_move);
+
+           spmg = 3;
+           pvPut(spmg);
+
+           if ((fd>0) && fd != ioGlobalStdGet(1)) {
+               fdprintf(fd,"\n\nSCAN ABORTED %d.\n",0);
+               close(fd);
+           }
+
+       } state restore_hardware
+   }
+
    state end_scan {
      when () {
        spmg = 0;
@@ -441,7 +516,8 @@ ss harp_scan_snc {
 /*close the file  and scp to mcc*/
       if ((fd > 0) && (fd != ioGlobalStdGet(1)) ) {
          close(fd);
-         scp_clon01(shortname, motor_name, 5);
+// This is proven unreliable and a bad idea.  Changed to a cronjob in 2018.
+         //scp_clon01(shortname, motor_name, 5);
       }
 
      } state restore_hardware
@@ -530,7 +606,7 @@ int open_file(char *fname, char *motor_name, char *shortname)
 
 /* add an hour because of DST and ioc time one hour behind */
 
-/*    lclTimePtr->tm_hour++; */
+    lclTimePtr->tm_hour++;
 
     fileDate[0] = '\0'; 
     thename[0] = '\0';

@@ -5,7 +5,9 @@ record(bo,"beam_stop_on_axis") {
 	field(ONAM,"move started")
 }
 record(ao, "beam_stop_beam") {
-	field(VAL, "68.0")
+#	field(VAL, "68.0")
+# Survey in May 2017, move 11.34 mm toward beam right:
+	field(VAL, "65.732")
 	field(OUT, "beam_stop.VAL")
 	field(FLNK, "beam_stop_proc")
 }
@@ -33,11 +35,24 @@ record(calc, "beam_stop_at_home") {
 record(calc, "beam_stop_at_beam") {
         field(INPA, "beam_stop.RBV")
         field(SCAN, ".2 second")
-        field(CALC, "ABS(A-68.0)<0.1?1:0")
+#        field(CALC, "ABS(A-68.0)<0.1?1:0")
+        field(CALC, "ABS(A-65.7)<0.1?1:0")
 }
-
-
-
+# Alarm record to notify the personnel when 
+# the beam current is high on the FCUP or 
+# the beam current is high on the BPM and stopper is out. 
+record(calc, "beam_stopper_alarm") {
+        field(INPA, "scaler_calc1 NPP MS")
+	field(INPB, "hallb_IPM2C21A_CUR NPP NMS")
+	field(INPC, "beam_stop_at_beam NPP MS")
+	field(INPD, "30")
+	field(INPE, "50")
+	field(INPF, "TMIRBCK NPP MS")
+        field(SCAN, "1 second")
+	field(CALC, "A>D||(B>D&&C#1&&F<E)?1:0")
+	field(HIHI, "0.5")
+	field(HHSV, "MAJOR")
+}
 
 
 

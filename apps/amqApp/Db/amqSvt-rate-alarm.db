@@ -8,7 +8,8 @@ record(compress,"B_SVT_DAQ_STRIPRATE:chip:minmax") {
 record(calc,"B_SVT_DAQ_STRIPRATE:chip:minmax:alarm") {
     field(INPA,"B_SVT_DAQ_STRIPRATE:chip:minmax NMS")
     field(INPB,"B_DAQ:coda_status_ai")
-    field(CALC,"B=1 ? A : 1")
+    field(INPC,"IPM2C21A")
+    field(CALC,"(B=1&&C>2) ? A : 1")
     field(LOW,0)
     field(LSV,"MAJOR")
 }

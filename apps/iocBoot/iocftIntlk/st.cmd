@@ -54,3 +54,5 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 #dbpf("B_DET_FTC_SOFTINTLK_CHILLER:bath_level:bypass",1)
 #dbpf("B_DET_FTC_SOFTINTLK_CHILLER:pressure:bypass",1)
 
+dbl > pv.list
+

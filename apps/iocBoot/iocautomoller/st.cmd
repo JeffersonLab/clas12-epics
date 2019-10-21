@@ -26,3 +26,5 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 seq automoller
 
+dbl > pv.list
+

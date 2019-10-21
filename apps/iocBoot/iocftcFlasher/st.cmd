@@ -30,6 +30,7 @@ dbLoadRecords("db/ftcFlasher.db","P=B_DET_FTC_FLASHER,R=:asyn,PORT=L1,NCHAN=336"
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
 
+dbl > pv.list
 
 ## Run the command to init the ioc
 system ./initFtcFlasher.sh

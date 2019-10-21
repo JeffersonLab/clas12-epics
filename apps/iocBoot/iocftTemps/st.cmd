@@ -24,5 +24,5 @@ dbLoadRecords "db/dbSubExample.db", "user=wmooreHost"
 cd "${TOP}/iocBoot/${IOC}"
 iocInit
 
-## Start any sequence programs
-#seq sncExample, "user=wmooreHost"
+dbl > pv.list
+

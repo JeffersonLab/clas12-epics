@@ -7,6 +7,9 @@ include $(TOP)/configure/CONFIG
 DB += mpod8008l.db
 DB += mpodClearEvents.db
 DB += rebootDivider.db
+DB += iseg-module.db
+DB += iseg-channel.db
+DB += mpod-crate.db
 DB += $(wildcard ../*.substitutions)
 
 # If <anyname>.db template is not named <anyname>*.template add

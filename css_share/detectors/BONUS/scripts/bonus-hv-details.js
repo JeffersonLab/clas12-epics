@@ -22,7 +22,7 @@ for (var slot=0; slot<2; slot++)
   for (var chan=0; chan<nchan; chan++)
   {
         var pvprefix="B_BONUS_HV_Sl"+slot+"_Ch"+chan;
-        java.lang.System.err.println(pvprefix);
+//        java.lang.System.err.println(pvprefix);
         
         
         var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");

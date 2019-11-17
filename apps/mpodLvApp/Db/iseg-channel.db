@@ -520,7 +520,7 @@ record(longin,"$(HV):outswitchRlong") {
 record(longout,"$(HV):outSupervision") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
 	field(DTYP,"Snmp")
-	field(OUT,"@$(HVHOST) guru %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 50 i")
+	field(OUT,"@$(HVHOST) guru %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 80 i")
 }
 record(longout,"$(HV):outputGroup") {
 	field(DTYP,"Soft Channel")
@@ -533,7 +533,8 @@ record(longout,"$(HV):outputTripTimeMaxCurrent") {
 }
 record(longout,"$(HV):outputUserConfig") {
 	field(DESC,"output channel behavior")
-	field(DTYP,"Soft Channel")
+	field(DTYP,"Snmp")
+	field(OUT,"@$(HVHOST) guru %{W}outputUserConfig.$(HVCH) INTEGER: 80 i")
 }
 record(longout,"$(HV):outswitchlong") {
 	field(DESC,"Channel switch 1=ENABLE,0=DISABLE")

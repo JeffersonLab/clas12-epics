@@ -44,7 +44,7 @@ for (var slot=0; slot<2; slot++)
         
   }
 }
-
+/*
 var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
 lc.setPropertyValue("opi_file","/CLAS12_Share/apps/mpodLvApp/mpod-crate.opi");
 lc.setPropertyValue("auto_size",true);
@@ -55,4 +55,4 @@ lc.addMacro("HOST","hbmpod5");
 lc.addMacro("ioc","iocgasSystem86");
 lc.addMacro("TITLE","asdf");
 widget.addChildToBottom(lc);
-
+*/

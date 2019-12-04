@@ -7495,41 +7495,40 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
       <border_style>0</border_style>
-      <tooltip></tooltip>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <precision>0</precision>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
       <horizontal_alignment>1</horizontal_alignment>
       <rules>
-        <rule name="TEXT" prop_id="text" out_exp="false">
-          <exp bool_exp="pv0==1">
-            <value>Full</value>
+        <rule name="COLOR" prop_id="foreground_color" out_exp="false">
+          <exp bool_exp="pv0&lt;5">
+            <value>
+              <color name="Warning" red="255" green="255" blue="0" />
+            </value>
           </exp>
           <exp bool_exp="true">
-            <value>Not Full</value>
-          </exp>
-          <pv trig="true">B_SACLAYTGT:LS_TH</pv>
-        </rule>
-        <rule name="COLOR" prop_id="foreground_color" out_exp="false">
-          <exp bool_exp="pv0==1">
             <value>
               <color name="On" red="0" green="255" blue="0" />
             </value>
           </exp>
-          <exp bool_exp="true">
-            <value>
-              <color name="Major" red="255" green="0" blue="0" />
-            </value>
-          </exp>
-          <pv trig="true">B_SACLAYTGT:LS_TH</pv>
+          <pv trig="true">$(pv_name)</pv>
         </rule>
       </rules>
       <enabled>true</enabled>
-      <wuid>2b4c04a2:165fd8f775c:-7e12</wuid>
+      <wuid>-4957456c:16ed1f444fc:-7e26</wuid>
       <transparent>false</transparent>
+      <pv_value />
       <auto_size>false</auto_size>
-      <text>Target Status</text>
+      <text>##.###</text>
+      <rotation_angle>0.0</rotation_angle>
       <scripts />
-      <height>17</height>
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <show_units>true</show_units>
+      <height>21</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -7537,23 +7536,27 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
+      <pv_name>B_SACLAYTGT:STAT</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
-      <widget_type>Label</widget_type>
+      <precision_from_pv>true</precision_from_pv>
+      <widget_type>Text Update</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
       <wrap_words>false</wrap_words>
+      <format_type>0</format_type>
       <background_color>
-        <color red="111" green="111" blue="111" />
+        <color name="MEDM_COLOR_9" red="120" green="120" blue="120" />
       </background_color>
-      <width>144</width>
-      <x>35</x>
-      <name>Label_5</name>
-      <y>65</y>
+      <width>159</width>
+      <x>25</x>
+      <name>Text Update_141</name>
+      <y>67</y>
       <foreground_color>
-        <color name="Write_Foreground" red="0" green="0" blue="0" />
+        <color name="Read_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
-      <actions hook="true" hook_all="false" />
+      <actions hook="false" hook_all="false" />
       <font>
         <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
       </font>
@@ -10404,7 +10407,7 @@ FSD Channel #3</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>185</height>
+    <height>191</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>

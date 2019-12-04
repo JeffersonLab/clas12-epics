@@ -1,33 +1,51 @@
 
-record(calc,"HALL_B_TARGET:CALC")
+record(calc,"HLB:TARGET:CALC")
 {
   field(PINI,1)
   field(INPA,"moller_target_empty CPP")
   field(INPB,"harp_2H01.RBV CPP")
-  field(INPC,"0") # cryotarget: 0=none, 1=empty, 2=H, 3=D
-  field(CALC,"A#1 ? 5 : (ABS(B)>0.01 ? 4 : C)")
+  field(INPC,"B_SACLAYTGT:STAT CPP")
+  field(CALC,"A#1?0:(B>0.1?1:(C+2))")
   info(autosaveFields_pass0,"VAL")
+  field(FLNK,"HLB:TARGET:STAT.PROC")
 }
 
-record(mbbi,"HALL_B_TARGET:MBBI")
+record(mbbi,"HLB:TARGET:STAT")
 {
   field(PINI,1)
-  field(INP,"HALL_B_TARGET:CALC CPP")
-  field(ZRST,"None")
-  field(ONST,"Empty")
-  field(TWST,"LH2")
-  field(THST,"LD")
-  field(FRST,"Harp-2H01")
-  field(FVST,"Moeller")
+  field(INP,"HLB:TARGET:CALC")
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(FRVL,4)
+    field(FVVL,5)
+    field(SXVL,6)
+    field(SVVL,7)
+    field(EIVL,8)
+    field(NIVL,9)
+    field(TEVL,10)
+  field(ZRST,"Moller")
+  field(ONST,"Harp 2H01")
+  field(TWST,"Empty")
+  field(THST,"Partial LH2")
+  field(FRST,"Partial LD2")
+  field(FVST,"Partial L3He")
+  field(SXST,"Partial L4He")
+  field(SVST,"LH2")
+  field(EIST,"LD2")
+  field(NIST,"L3He")
+  field(TEST,"L4He")
+  alias("clas12:target:type")
 }
 
-record(stringout,"HALL_B_TARGET:STRINGOUT")
-{
-  field(PINI,1)
-  field(OMSL,"closed_loop")
-  field(DOL,"HALL_B_TARGET:MBBI CPP")
-  field(OUT,"HALL_B_TARGET CPP")
-}
+#record(stringout,"HLB:TARGET:STRINGOUT")
+#{
+#  field(PINI,1)
+#  field(OMSL,"closed_loop")
+#  field(DOL,"HALL_B_TARGET:MBBI CPP")
+#  field(OUT,"HALL_B_TARGET CPP")
+#}
 
 ## Proxy for accelerator's record:
 #record(stringin,"HALL_B_TARGET:STRINGIN")

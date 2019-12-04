@@ -1,40 +1,54 @@
 
-record(ai,"B_FSD_ISDDESTai")
+record(ai,"$(P)_ISDDESTai")
 {
     field(PINI,1)
     field(VAL,0)
 }
-record(bo,"B_FSD_ISDDEST")
+record(bo,"$(P)_ISDDEST")
 {
     field(OMSL,"closed_loop")
-    field(DOL,"B_FSD_ISDDESTai CPP")
+    field(DOL,"$(P)_ISDDESTai CPP")
     field(ZNAM,"No HallB")
     field(ONAM,"HallB")
 }
-record(scalcout,"B_FSD_ISDDESTcalc") 
+record(scalcout,"$(P)_ISDDESTcalc") 
 {
   field(SCAN,"1 second")
   field(INAA,"ISDXXXXdest")
   field(CALC,"AA['HallB','HallB']=''")
   field(OOPT,"Every Time")
   field(DOPT,"Use CALC")
-  field(OUT,"B_FSD_ISDDESTai PP")
+  field(OUT,"$(P)_ISDDESTai PP")
 }
 
-record(calc,"B_FSD_2H001:isMasked") {
+#
+# whether the entire 2H001 card is masked:
+#
+record(calc,"$(P)_2H001:isMasked") {
     field(SCAN,"1 second")
     field(INPA,"ISD2H001N")
 # bit 11 is new card
 # bit 10 is old card
     field(CALC,"A & (1<<11)")
-    field(FLNK,"B_FSD_MASK_ALARM.PROC")
+    field(FLNK,"$(P)_MASK_ALARM.PROC")
 }
 
+#
+# whether any of the relevant, individiual bits on the 2H001 card are masked:
+#
+record(calc,"$(P)_2H001:isBitMasked") {
+    field(SCAN,"1 second")
+    field(INPA,"ISD2H001HALOMASKr")
+    field(INPB,"ISD2H001HALOMASKr")
+    field(INPC,"ISD2H001HALOMASKr")
+    field(INPD,"ISD2H001HALOMASKr")
+    field(CALC,"A&(1<<1)||B&(1<<2)||C&(1<<3)||D&(1<<4)")
+}
 
 #
 # whether it's safe to mask FSD
 #
-record(calc,"B_FSD_MASK:safe") {
+record(calc,"$(P)_MASK:safe") {
     field(SCAN,"1 second")
     field(INPA,"hallbbst")        # beam stopper (0/1=In/Out)
     field(INPB,"IDA2C04I")        # dumplette (0/1=Out/In)
@@ -47,27 +61,13 @@ record(calc,"B_FSD_MASK:safe") {
 #
 # whether FSD is maksed unsafely
 #
-record(calc,"B_FSD_MASK_ALARM") {
-    field(INPA,"B_FSD_MASK:safe")      # whether it's safe to mask
-    field(INPB,"ISD2H001HALOMASKr")    # individual 2H01 bit masks
-    field(INPC,"B_FSD_2H001:isMasked") # global 2H01 mask
-    field(INPD,"B_FSD_ISDDEST")        # another type of global mask
+record(calc,"$(P)_MASK_ALARM") {
+    field(INPA,"$(P)_MASK:safe")         # whether it's safe to mask
+    field(INPB,"$(P)_2H001:isBitMasked") # individual 2H01 bit masks
+    field(INPC,"$(P)_2H001:isMasked")    # global 2H01 mask
+    field(INPD,"$(P)_ISDDEST")           # another type of global mask
     field(CALC,"A=0 && (B#0 || C#0 || D=0)")
     field(HIGH,"1")
     field(HSV,"MAJOR")
 }
-
-# had to split this into 2 records, for too long .CALC
-#record(calc,"B_FSD_MASK_ALARM") {
-#    field(INPA,"hallbbst")
-#    field(INPB,"B_FSD_ISDDEST")
-#    field(INPC,"ISD2H001HALOMASKr")
-#    field(INPD,"MBSY2CM") # string magnet
-#    field(INPE,"TMIRBCK")
-#    field(INPF,"B_FSD_2H001:isMasked")
-#    field(CALC,"A=1&&(B=0||C#0||F#0)&&D>10&&ABS(E)<50")
-#    field(HIGH,"1")
-#    field(HSV,"MAJOR")
-#}
-
 

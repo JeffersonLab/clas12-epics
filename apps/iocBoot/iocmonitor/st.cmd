@@ -33,6 +33,8 @@ dbLoadTemplate("db/dcOnOff.substitutions")
 
 dbLoadRecords("db/misc-crate-alive.db","P=B_HW_camac1")
 
+dbLoadTemplate("db/bonner-spheres.substitutions")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 

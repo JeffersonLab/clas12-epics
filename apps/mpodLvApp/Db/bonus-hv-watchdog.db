@@ -1,0 +1,118 @@
+
+record(stringin,"B_BONUS_HV:watchdog:msg") {
+}
+
+record(bi,"B_BONUS_HV_GEM:dv:intlk:enable") {
+    field(VAL,1)
+}
+
+record(ai,"B_BONUS_HV_GEM1CAT:dv:tolerance") {
+  field(VAL,"4000")
+  info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_BONUS_HV_GEM1:dv:tolerance") {
+  field(VAL,"400")
+  info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_BONUS_HV_GEM2:dv:tolerance") {
+  field(VAL,"400")
+  info(autosaveFields_pass0,"VAL")
+}
+record(ai,"B_BONUS_HV_GEM3:dv:tolerance") {
+  field(VAL,"400")
+  info(autosaveFields_pass0,"VAL")
+}
+
+record(calcout,"B_BONUS_HV_GEM1CAT:watchdog:calc") {
+  field(SCAN,".2 second")
+  field(INPA,"B_BONUS_HV_GEM1_IN:$(VMON)")
+  field(INPB,"B_BONUS_HV_CATHODE:$(VMON)")
+  field(INPC,"B_BONUS_HV_GEM1CAT:dv:tolerance")
+  field(CALC,"ABS(A-B)>C")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_BONUS_HV:off PP")
+  field(DISV,"0")
+  field(SDIS,"B_BONUS_HV_GEM:dv:intlk:enable")
+  field(HIGH,"1")
+  field(HSV,"MAJOR")
+}
+record(calcout,"B_BONUS_HV_GEM1:watchdog:calc") {
+  field(SCAN,".2 second")
+  field(INPA,"B_BONUS_HV_GEM1_IN:$(VMON)")
+  field(INPB,"B_BONUS_HV_GEM1_OUT:$(VMON)")
+  field(INPC,"B_BONUS_HV_GEM1:dv:tolerance")
+  field(CALC,"ABS(A-B)>C")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_BONUS_HV:off PP")
+  field(DISV,"0")
+  field(SDIS,"B_BONUS_HV_GEM:dv:intlk:enable")
+  field(HIGH,"1")
+  field(HSV,"MAJOR")
+}
+record(calcout,"B_BONUS_HV_GEM2:watchdog:calc") {
+  field(SCAN,".2 second")
+  field(INPA,"B_BONUS_HV_GEM2_IN:$(VMON)")
+  field(INPB,"B_BONUS_HV_GEM2_OUT:$(VMON)")
+  field(INPC,"B_BONUS_HV_GEM2:dv:tolerance")
+  field(CALC,"ABS(A-B)>C")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_BONUS_HV:off PP")
+  field(DISV,"0")
+  field(SDIS,"B_BONUS_HV_GEM:dv:intlk:enable")
+  field(HIGH,"1")
+  field(HSV,"MAJOR")
+}
+record(calcout,"B_BONUS_HV_GEM3:watchdog:calc") {
+  field(SCAN,".2 second")
+  field(INPA,"B_BONUS_HV_GEM3_IN:$(VMON)")
+  field(INPB,"B_BONUS_HV_GEM3_OUT:$(VMON)")
+  field(INPC,"B_BONUS_HV_GEM3:dv:tolerance")
+  field(CALC,"ABS(A-B)>C")
+  field(OOPT,"When Non-zero")
+  field(OUT,"B_BONUS_HV:off PP")
+  field(DISV,"0")
+  field(SDIS,"B_BONUS_HV_GEM:dv:intlk:enable")
+  field(HIGH,"1")
+  field(HSV,"MAJOR")
+}
+
+record(seq,"B_BONUS_HV:off") {
+  field(LNK1,"B_BONUS_HV_GEM1_IN:outSwitch PP")
+  field(LNK2,"B_BONUS_HV_GEM1_OUT:outSwitch PP")
+  field(LNK3,"B_BONUS_HV_GEM2_IN:outSwitch PP")
+  field(LNK4,"B_BONUS_HV_GEM2_OUT:outSwitch PP")
+  field(LNK5,"B_BONUS_HV_GEM3_IN:outSwitch PP")
+  field(LNK6,"B_BONUS_HV_GEM3_OUT:outSwitch PP")
+  field(DO1,"0")
+  field(DO2,"0")
+  field(DO3,"0")
+  field(DO4,"0")
+  field(DO5,"0")
+  field(DO6,"0")
+  field(DO7,"0")
+}
+
+#record(seq,"B_BONUS_HV:on") {
+#  field(LNK1,"B_BONUS_HV_GEM3_OUT:outSwitch PP")
+#  field(LNK2,"B_BONUS_HV_GEM3_IN:outSwitch PP")
+#  field(LNK3,"B_BONUS_HV_GEM2_OUT:outSwitch PP")
+#  field(LNK4,"B_BONUS_HV_GEM2_IN:outSwitch PP")
+#  field(LNK5,"B_BONUS_HV_GEM1_OUT:outSwitch PP")
+#  field(LNK6,"B_BONUS_HV_GEM1_IN:outSwitch PP")
+#  field(LNK7,"B_BONUS_HV_CATHODE:outSwitch PP")
+#  field(DO1,"1")
+#  field(DO2,"1")
+#  field(DO3,"1")
+#  field(DO4,"1")
+#  field(DO5,"1")
+#  field(DO6,"1")
+#  field(DO7,"1")
+#  field(DLY1,"0")
+#  field(DLY2,"0")
+#  field(DLY3,"5")
+#  field(DLY4,"5")
+#  field(DLY5,"10")
+#  field(DLY6,"10)
+#  field(DLY7,"0")
+#}
+

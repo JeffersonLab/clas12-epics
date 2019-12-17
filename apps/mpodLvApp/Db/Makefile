@@ -10,6 +10,7 @@ DB += rebootDivider.db
 DB += iseg-module.db
 DB += iseg-channel.db
 DB += mpod-crate.db
+DB += bonus-hv-watchdog.db
 DB += $(wildcard ../*.substitutions)
 
 # If <anyname>.db template is not named <anyname>*.template add

@@ -35,21 +35,8 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 dbLoadRecords("db/gas_cRIO_BONUS.db")
 
 ## BONUS HV:
-dbLoadRecords("db/mpod-crate.db","HOST=hbmpod5")
-dbLoadRecords("db/iseg-module.db","HOST=129.57.86.179,HOSTNAME=hbmpod5,MX=1")
-dbLoadRecords("db/iseg-module.db","HOST=129.57.86.179,HOSTNAME=hbmpod5,MX=2")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch0,HVCH=1")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch1,HVCH=2")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch2,HVCH=3")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch3,HVCH=4")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch4,HVCH=5")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch5,HVCH=6")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch6,HVCH=7")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl0_Ch7,HVCH=8")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl1_Ch0,HVCH=101")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl1_Ch1,HVCH=102")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl1_Ch2,HVCH=103")
-dbLoadRecords("db/iseg-channel.db","HVHOST=129.57.86.179,HV=B_BONUS_HV_Sl1_Ch3,HVCH=104")
+dbLoadTemplate("db/bonus-hv.substitutions")
+dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
 
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")

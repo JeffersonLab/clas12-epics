@@ -33,6 +33,8 @@ dbLoadTemplate("db/dcOnOff.substitutions")
 
 dbLoadRecords("db/misc-crate-alive.db","P=B_HW_camac1")
 
+dbLoadTemplate("db/bonner-spheres.substitutions")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
@@ -45,4 +47,6 @@ iocInit();
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list
 

@@ -1,0 +1,22 @@
+#
+# asy-generic.db
+#
+# Required macros:
+# P       = arbitrary prefix
+# INPLUS  = pvname, instantaneous counts
+# INMINUS = pvname, instantaneous counts
+#
+
+record(calc,"$(P):asy") {
+    field(INPA,"$(INPLUS) CPP NMS")
+    field(INPB,"$(INMINUS) CPP NMS")
+    field(CALC,"A+B>0 ? (A-B)/(A+B) : -999")
+    field(FLNK,"$(P):asy:error.PROC")
+}
+record(calc,"$(P):asy:error") {
+    field(INPA,"$(INPLUS) CPP NMS")
+    field(INPB,"$(INMINUS) CPP NMS")
+    field(INPC,"$(P):asy")
+    field(CALC,"A+B>0 ? sqrt((1-C*C)/(A+B)) : -999")
+}
+

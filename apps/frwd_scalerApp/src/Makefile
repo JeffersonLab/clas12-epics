@@ -8,17 +8,31 @@ include $(TOP)/configure/CONFIG
 # Build the IOC support library
 
 LIBRARY_IOC_vxWorks += frwd_scalerSupport
+
+# frwd_scalerSupport.dbd will be created and installed
 DBD += frwd_scalerSupport.dbd
 
+# frwd_scalerSupport.dbd will be made up from these files:
 frwd_scalerSupport_DBD += base.dbd
-#frwd_scalerSupport_DBD += asyn.dbd
+frwd_scalerSupport_DBD += asyn.dbd
 frwd_scalerSupport_DBD += stdSupport.dbd
-#frwd_scalerSupport_DBD += calcSupport.dbd
-#frwd_scalerSupport_DBD += busySupport.dbd 
-#frwd_scalerSupport_DBD += sscanSupport.dbd 
-frwd_scalerSupport_DBD += asSupport.dbd
-#frwd_scalerSupport_DBD += std.dbd
+frwd_scalerSupport_DBD += calcSupport.dbd
+frwd_scalerSupport_DBD += busySupport.dbd 
+frwd_scalerSupport_DBD += sscanSupport.dbd 
+frwd_scalerSupport_DBD += vmeVXSupport.dbd
+frwd_scalerSupport_DBD += frwd_scalerSNC.dbd
 
+frwd_scalerSupport_SRCS += frwd_scaler_restart.st
+
+frwd_scalerSupport_LIBS += calc
+frwd_scalerSupport_LIBS += busy
+frwd_scalerSupport_LIBS += sscan
+frwd_scalerSupport_LIBS += vme
+frwd_scalerSupport_LIBS += std
+frwd_scalerSupport_LIBS += asyn
+frwd_scalerSupport_LIBS += seq pv
+
+# Finally link to the EPICS Base libraries
 frwd_scalerSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #=============================
@@ -40,22 +54,13 @@ frwd_scaler_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from the support library
 frwd_scaler_LIBS += frwd_scalerSupport
-#frwd_scaler_LIBS += mca
-#frwd_scaler_LIBS += calc
-#frwd_scaler_LIBS += busy
-#frwd_scaler_LIBS += sscan
-#frwd_scaler_LIBS += autosave
-#frwd_scaler_LIBS += std
-#frwd_scaler_LIBS += asyn
-
-# NOTE: To build SNL programs, SNCSEQ must be defined
-# in the <top>/configure/RELEASE file
-ifneq ($(SNCSEQ),)
-    frwd_scalerSupport_DBD += frwd_scalerSNC.dbd
-    frwd_scalerSupport_SRCS += frwd_scaler_restart.st
-    frwd_scaler_SRCS += frwd_scaler_restart.st
-    frwd_scalerSupport_LIBS += seq pv
-endif
+frwd_scaler_LIBS += calc
+frwd_scaler_LIBS += busy
+frwd_scaler_LIBS += sscan
+frwd_scaler_LIBS += vme
+frwd_scaler_LIBS += std
+frwd_scaler_LIBS += asyn
+frwd_scaler_LIBS += seq pv 
 
 # Finally link to the EPICS Base libraries
 frwd_scaler_LIBS += $(EPICS_BASE_IOC_LIBS)

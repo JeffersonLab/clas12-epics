@@ -5,15 +5,16 @@
 
 import epics,time,datetime,subprocess,os,re
 
-os.putenv('MYSQL_HOST','clondb1')
-os.putenv('EXPID','clasrun')
-os.putenv('SESSION','clasprod')
+os.environ['MYSQL_HOST']='clondb1'
+os.environ['EXPID']='clasrun'
+os.environ['SESSION']='clasprod'
 
+#'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 CFG={
-'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
-'B_DAQ:run_number':   {'ini':-1,   'cmd':['run_number']},
+'B_DAQ:run_number':   {'ini':0,    'cmd':['run_number'],'max':1e9},
+'B_DAQ:disk_free:clondaq7': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq7','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
 'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
 'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 }
@@ -52,8 +53,10 @@ while True:
         continue
 
       # run the command, collect its output:
-      xx=subprocess.check_output(CFG[pvName]['cmd']).strip()
+      xx=subprocess.check_output(CFG[pvName]['cmd'],env=os.environ).strip()
       yy=xx
+
+      #print pvName,CFG[pvName]['cmd'],yy
 
       # if it's a number, strip all non-numbers:
       if type(CFG[pvName]['ini']) is not str:
@@ -73,7 +76,15 @@ while True:
         if 'scale' in CFG[pvName]:
           yy = float(yy)
           yy *= CFG[pvName]['scale']
-        CFG[pvName]['pv'].put(yy)
+        if 'max' in CFG[pvName]:
+          try:
+            yy = float(yy)
+            if yy<CFG[pvName]['max']:
+              CFG[pvName]['pv'].put(yy)
+          except:
+            print 'Failure on'+pvName
+        else:
+          CFG[pvName]['pv'].put(yy)
 
     except:
       success=False

@@ -1,0 +1,44 @@
+# Record that carries output tree name
+record(stringin,"$(IOC):data:$(SRC_CHAN):tree")
+{
+	field(VAL ,"$(SRC_CHAN)")
+	field(PINI,"1") 
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# aSub record to get the values of the array from PXI CaServer
+record(aSub,"$(IOC):data:$(SRC_CHAN)")
+{
+    field(INAM,"wave2rootDataInit")
+    field(SNAM,"wave2rootDataProcess")
+    field(SCAN,"Passive")
+    field(EFLG,"ALWAYS")
+    field(TSEL,"$(SRC_PREF)$(SRC_CHAN).TIME")
+#
+    field(FTA ,"FLOAT")
+    field(FTVA,"FLOAT")
+    field(NOA ,"$(NELM)")
+    field(NOVA,"$(NELM)")
+    field(INPA,"$(SRC_PREF)$(SRC_CHAN) CPP")
+#
+	field(FTB ,"STRING")
+    field(NOB ,"1")
+	field(INPB,"$(IOC):data:$(SRC_CHAN):tree NPP")
+#
+    field(FTC ,"ENUM")
+    field(NOC ,"1")
+    field(INPC,"$(IOC):ctrl:daq_state NPP")
+#
+	field(FTD ,"STRING")
+	field(FTVD,"STRING")
+	field(NOVD,"1")
+	field(INPD,"")
+	field(OUTD,"$(IOC):ctrl:file_name PP")
+#
+	field(FTE ,"LONG")
+	field(FTVE,"LONG")
+	field(NOVE,"1")
+    field(INPE,"")
+    field(OUTE,"$(IOC):ctrl:file_size PP")
+}

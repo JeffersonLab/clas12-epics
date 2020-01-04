@@ -304,8 +304,8 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
 #
 # This record just picks out the most significant non-zero bit
 # of the :stat hardware status.  This is appropriate since CAEN
-# ordered their status bits such that most significant bit is
-# the most significant status (error).
+# ordered their SYX527 status bits such that most significant bit
+# is the most significant status (error).
 #
 # Note, CAEN leaves bit 12 unused.  If we do the same, we run out
 # of mbbi bits (16).  So, if :stat>=2^12, downshift by one bit.
@@ -357,7 +357,7 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(TVST,"ChUnplug")
     field(TTST,"OVP")
     field(FTST,"PwFail")
-    field(FVST,"TempErr")
+    field(FFST,"TempErr")
     field(ZRSV,"NO_ALARM")
     field(ONSV,"NO_ALARM")
     field(TWSV,"MINOR")
@@ -373,7 +373,7 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(TVSV,"MAJOR")
     field(TTSV,"MAJOR")
     field(FTSV,"MAJOR")
-    field(FVSV,"MAJOR")
+    field(FFSV,"MAJOR")
     alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbit")   
 }
 

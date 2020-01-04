@@ -12,6 +12,7 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 DB += sixty_hz_debug.db
 DB += sixty_hz_macro.db
+DB += sixty_hz_common.db
 
 REQ += sixty_hz_settings.req
 

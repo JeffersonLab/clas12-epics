@@ -32,3 +32,5 @@ dbpf("B_DET_FMT_INTLK_Solenoid:second_check.CALC","(C<=ABS(A)||ABS(A)<B)&(D#1)?1
 #dbpf("B_DET_FTT_INTLK_Solenoid:first_check.CALC", "(C<=ABS(A)||ABS(A)<B)&(D#1)?1:0")
 #dbpf("B_DET_FTT_INTLK_Solenoid:second_check.CALC","(C<=ABS(A)||ABS(A)<B)&(D#1)?1:0")
 
+dbl > pv.list
+

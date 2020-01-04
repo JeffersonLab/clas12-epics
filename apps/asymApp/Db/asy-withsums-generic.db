@@ -1,0 +1,46 @@
+#
+# asymmetry-generic.db
+#
+# N. Baltzell, 2018
+#
+# calculates running sums and resulting asymmetry
+#
+# Required macros:
+# P       = arbitrary prefix
+# INPLUS  = pvname, instantaneous counts
+# INMINUS = pvname, instantaneous counts
+# DISABLE = pvname, whether to accumulate
+# RESET   = pvname, whether to reset accumulated counts to zero
+#
+
+record(calc,"$(P):plus:sum") {
+    field(DISV,"1")
+    field(SDIS,"$(DISABLE) CPP NMS")
+    field(INPA,"$(INPLUS) CPP NMS")
+    field(INPB,"$(P):plus:sum CPP NMS")
+    field(INPD,"$(RESET) CPP NMS")
+    field(CALC,"D ? 0 : A+B")
+    field(FLNK,"$(P):asy.PROC")
+}
+record(calc,"$(P):minus:sum") {
+    field(DISV,"1")
+    field(SDIS,"$(DISABLE) CPP NMS")
+    field(INPA,"$(INMINUS) CPP NMS")
+    field(INPB,"$(P):minus:sum CPP NMS")
+    field(INPD,"$(RESET) CPP NMS")
+    field(CALC,"D ? 0 : A+B")
+    field(FLNK,"$(P):asy.PROC")
+}
+record(calc,"$(P):asy") {
+    field(INPA,"$(P):plus:sum NMS")
+    field(INPB,"$(P):minus:sum NMS")
+    field(CALC,"A+B>0 ? (A-B)/(A+B) : -999")
+    field(FLNK,"$(P):asy:error.PROC")
+}
+record(calc,"$(P):asy:error") {
+    field(INPA,"$(P):plus:sum")
+    field(INPB,"$(P):minus:sum")
+    field(INPC,"$(P):asy")
+    field(CALC,"A+B>0 ? sqrt((1-C*C)/(A+B)) : -999")
+}
+

@@ -1,0 +1,88 @@
+# Record for DAQ control
+record(aSub,"$(IOC):ctrl:daq")
+{
+	field(PINI,"0")
+	field(PHAS,"2")
+	field(INAM,"wave2rootDAQInit")
+	field(SNAM,"wave2rootDAQProcess")
+#
+	field(NOA ,"1")
+	field(FTA ,"ENUM")
+	field(INPA,"$(IOC):ctrl:daq_state CPP")
+#
+	field(NOB ,"1")
+	field(FTB ,"STRING")
+	field(INPB,"$(IOC):ctrl:file_dir NPP") 
+#
+	field(NOC ,"1")
+	field(FTC ,"STRING")	
+	field(FTVC,"STRING")	
+	field(INPC,"")
+	field(OUTC,"$(IOC):ctrl:file_name PP")
+#
+	field(NOD ,"1")
+	field(FTD ,"LONG")
+	field(INPD,"$(IOC):ctrl:file_limit NPP") 	
+}
+
+# Record to enable or disable writing data to the disk
+record(mbbi,"$(IOC):ctrl:daq_state")
+{
+	field(VAL ,"1")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(NOBT,"2")
+	field(ZRVL,"0")
+	field(ONVL,"1")
+	field(ZRST,"WRITE")
+	field(ONST,"STOP")
+	field(SCAN,"Passive")
+}
+
+# Record that carries output file directory
+record(stringin,"$(IOC):ctrl:file_dir")
+{
+	field(VAL ,"/usr/clas12/hps/DATA/waveforms/")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record that carries full output file name
+record(stringin,"$(IOC):ctrl:file_name")
+{
+	field(VAL ,"nofile")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record that carries output filesize
+record(longin,"$(IOC):ctrl:file_size")
+{
+	field(VAL ,"0")
+	field(PINI,"1") 
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record that carries output file size limit
+record(longin,"$(IOC):ctrl:file_limit")
+{
+	field(VAL ,"2000000000")
+	field(PINI,"1")
+	field(DTYP,"Soft Channel")
+	field(SCAN,"Passive")
+}
+
+# Record to kill the IOC
+record(aSub,"$(IOC):ctrl:kill")
+{
+	field(PINI,"1")
+	field(PHAS,"2")
+	field(INAM,"wave2rootKillInit")
+	field(SNAM,"wave2rootKillProcess")
+	field(NOA ,"1")
+	field(FTA ,"ENUM")
+	field(INPA,"$(IOC):wave2root:kill CPP")
+}

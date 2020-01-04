@@ -10,11 +10,13 @@ DB += cRIO_heartbeat_bi.db
 DB += gas_cRIO_DC.db
 DB += gas_cRIO_FTC.db
 DB += gas_cRIO_HTCC.db
-DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db gas_cRIO_LTCC_distill.db
+DB += gas_cRIO_LTCC.db gas_cRIO_LTCC_SEC.db gas_cRIO_LTCC_distill.db gas_cRIO_LTCC_distill2.db
 DB += gas_cRIO_RICH.db
 DB += gas_cRIO_SVT.db
 DB += gas_cRIO_MVT_mixing.db
 DB += gas_cRIO_HTCC-calc.db
+DB += gas_cRIO_BONUS.db
+DB += gas_cRIO_BONUS_intlk.substitutions
 
 DB += gas_cRIO_MFCINIT.db
 

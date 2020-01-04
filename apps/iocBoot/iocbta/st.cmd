@@ -29,4 +29,5 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 #seq &bta, "hall=B,ioc=classc6"
 
+dbl > pv.list
 

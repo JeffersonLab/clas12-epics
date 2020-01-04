@@ -271,6 +271,112 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):type")   
 }
 
+# get rid of the useless bits:
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statmasked") {
+    field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
+    field(CALC, "A & 0xFFB8")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):statmasked")
+}
+
+# :hwstatmaxbitcalc
+#
+# This record just picks out the least significant non-zero bit
+# of the :stat hardware status.  This is appropriate since CAEN
+# ordered their SY527 status bits such that least significant bit
+# is the most significant status (error).
+#
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc")
+{
+    field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statmasked")
+    field(CALC,"A=0 ? 0 : log(A&-A)/log(2)")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit.PROC")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbitcalc")
+}
+
+# :hwstatmaxbit
+#
+# This record just provides a mapping from CAEN status bits to
+# their corresponding string values and severities, using only
+# the least significant bit from statmaxbitcalc.
+#
+record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc")
+
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(FVVL,"5")
+    field(SXVL,"6")
+    field(SVVL,"7")
+    field(EIVL,"8")
+    field(NIVL,"9")
+    field(TEVL,"10")
+    field(ELVL,"11")
+    field(TVVL,"12")
+    field(TTVL,"13")
+    field(FTVL,"14")
+    field(FFVL,"15")
+
+    field(ZRST,"OFF")
+    field(ONST,"UDF")
+    field(TWST,"UDF")
+    field(THST,"UDF")
+    field(FRST,"ExDis")
+    field(FVST,"TRIP")
+    field(SXST,"KILL")
+    field(SVST,"UDF")
+    field(EIST,"VMAX")
+    field(NIST,"ExTrip")
+    field(TEST,"OVV")
+    field(ELST,"UNV")
+    field(TVST,"OVC")
+    field(TTST,"RDN")
+    field(FTST,"RUP")
+    field(FFST,"ON")
+
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"MAJOR")
+    field(FVSV,"MAJOR")
+    field(SXSV,"MAJOR")
+    field(SVSV,"NO_ALARM")
+    field(EISV,"MAJOR")
+    field(NISV,"MAJOR")
+    field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
+    field(TVSV,"MAJOR")
+    field(TTSV,"MINOR")
+    field(FTSV,"MINOR")
+    field(FFSV,"NO_ALARM")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbit")   
+}
+
+# This is the final status summary record.  Precendence order is:
+# 1. Communications error
+# 2. Hardware errors
+# 3. Mismatch between measured/demand on/off 
+# 4. Mismatch measured/demand voltage
+#record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statcalc")
+#{
+#    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms CPP")
+#    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statmaxbit CPP")
+#    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
+#    field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk CPP")
+#    field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
+#    field(INPF,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff CPP")
+#    field(HIHI,9999)
+#    field(HIGH,10)
+#    field(LOW,-10)
+#    field(LOLO,-9999)
+#    alias("B_DET_$(Det)_$(Sys)_$(Element):statcalc")   
+#}
+
 #make a new ALARM channel
 #We want to alarm using the current value of STAT (sorted by bigsub).
 #but also if vmon is dropping below some threshold proportion of vset(INPA).

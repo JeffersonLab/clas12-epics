@@ -34,7 +34,7 @@ ConnectMQ("tcp://clon00:61616","clasrun.clasprod.daq.HallB_DAQ")
 #K = json key
 #N = No of elements in the array, if required
 
-dbLoadRecords("db/amqStringArray.db","P=B_DAQ:RAWMSG,K=RAWMSG,N=1000,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
+#dbLoadRecords("db/amqStringArray.db","P=B_DAQ:RAWMSG,K=RAWMSG,N=1000,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
 dbLoadRecords("db/amqInt.db","P=B_DAQ:LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqDouble.db","P=B_DAQ:EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqIntArray.db","P=B_DAQ:TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
@@ -96,6 +96,10 @@ dbLoadRecords("db/stage2bits-wf.db")
 
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:TSFP:TriggerBits,K=TRIG1_TSFPSLOT21,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=NO_ALARM")
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:TSGTP:TriggerBits,K=TRIG1_TSGTPSLOT21,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=NO_ALARM")
+
+dbLoadRecords("db/daq2epics-alias.db")
+
+dbLoadRecords("db/amqRocBusy-alarm.db","ROC=mmft1,HIHI=50")
 
 cd ${TOP}/iocBoot/${IOC}
 

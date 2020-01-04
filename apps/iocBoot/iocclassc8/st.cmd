@@ -71,14 +71,18 @@ cd startup
 iocInit "../resource.def"
 
 ## Struck
-#HPS:
+
+# HPS:
 #dbpf "struckDwell", "0.000015"
-#CLAS12:
+# CLAS12:
 dbpf "struckDwell", "0.0003"
+
 dbpf "struckReadAll.SCAN","Passive"
 seq &SIS38XX_SNL, "P=struck, R=Daq_, NUM_SIGNALS=5, FIELD=READ"
 
 ## Start any sequence programs
+# This one is 100% cpu usage, turn it off during downtime:
 seq &struckDaq
+
 #testLoop()
 

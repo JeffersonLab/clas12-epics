@@ -493,6 +493,11 @@ record(longin,"$(HV):outputStatuslong") {
 	field(FLNK,"$(HV):outStatusfan1.PROC")
 	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100 sh")
 }
+record(stringin,"$(HV):outputStatusstring") {
+	field(SCAN,"1 second")
+	field(DTYP,"Snmp")
+	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100")
+}
 record(longin,"$(HV):outputTripTimeMaxCurrentR") {
 	field(DESC,"current trip time out")
 	field(SCAN,"10 second")
@@ -585,3 +590,187 @@ record(stringin,"$(HV):outputName") {
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputName.$(HVCH) STRING: 80")
 }
+
+
+###############
+
+
+# iseg requires a different global stat parser than lv modules:
+#
+#record(aSub,"$(HV):parse:stat")
+#{
+#	field( DESC, "HW status string parser")
+#	field( SCAN, "Passive")
+#	field( INAM, "MpodStatusParserInit")
+#	field( SNAM, "MpodStatusParserProcess")
+#	# Input stat_string
+#	field( INPA, "$(HV):outputStatusstring CPP MS")
+#	field(  FTA, "STRING")
+#	field(  NOA, "1")
+#	field(  NEA, "1")
+#	# Input stat_string.STAT to check is the HW channel exists
+#	field( INPB, "$(HV):outputStatuslong.STAT CPP MS")
+#	field(  FTB, "USHORT")
+#	field(  NOB, "1")
+#	field(  NEB, "1")	
+#	# Output into mbbiDirect record which can keep maximum 16bit
+#	field( OUTA, "$(HV):parsed:status.RVAL PP MS")
+#	field( FTVA, "ULONG")
+#	field( NOVA, "1")
+#	field( NEVA, "1")
+#	# Output into bi record which can keep maximum 1bit
+#	field( OUTB, "$(HV):parsed:stat PP MS")
+#	field( FTVB, "USHORT")
+#	field( NOVB, "1")
+#	field( NEVB, "1")
+#	# Output into stringin record which can keep maximum 80 characters
+#	field( OUTC, "$(HV):parsed:stat_string PP MS")
+#	field( FTVC, "STRING")
+#	field( NOVC, "1")
+#	field( NEVC, "1")
+#}
+#record( stringin, "$(HV):parsed:stat_string")
+#{
+#	field( DESC, "HW status parsed string")
+#	field( SCAN, "Passive")
+#}
+#record( mbbiDirect, "$(HV):parsed:status")
+#{
+#	field( DESC, "HW status parsed result")
+#	field( DTYP, "Raw Soft Channel")
+#	field( SCAN, "Passive")
+#}
+#record( mbbi, "$(HV):parsed:status2")
+#{
+#	field( DESC, "HW status parsed result")
+#	field( DTYP, "Soft Channel")
+#    field( INP,  "$(HV):parsed:status CPP")
+#	field( SCAN, "Passive")
+#}
+#record( bi, "$(HV):parsed:stat")
+#{
+#	field( DESC, "HW status parsed result")
+#	field( SCAN, "Passive")
+#	field( ZNAM, "Alarmed")
+#	field( ONAM, "NO_ALARM")
+#	field( ZSV, "MAJOR")
+#	field( OSV, "NO_ALARM")
+#}
+
+###############
+
+# this will alarm any time the channel is turned on/off
+# or if voltage is not at spec
+record(calc,"$(HV):termVoltDelta") {
+    field(SCAN,"1 second")
+    field(INPA,"$(HV):outswitchR")
+    field(INPB,"$(HV):outputVoltageR")
+    field(INPC,"$(HV):outputMeasTermVR")
+    field(CALC,"A=0?ABS(C):ABS(C)-B")
+    field(HSV,"MINOR")
+    field(LSV,"MINOR")
+    field(HIGH,"10")
+    field(LOW,"-10")
+    info(autosaveFields_pass1,"HIGH LOW HSV LSV")
+}
+
+###############
+# instead, pull in the bits in a record:
+
+# select relevant error status bit:
+# (Note that the relevancy of these bits appears to be firmware-dependent,
+# and this selection is for BONuS's iseg modules):
+record(calcout,"$(HV):badstat:calc") {
+    field(SCAN,"1 second")
+    field(INPA,"$(HV):outInhibit")
+    field(INPB,"$(HV):outFailMaxSnsVlt")
+    field(INPC,"$(HV):outFailMaxTemp")
+    field(INPD,"$(HV):outEnableKill")
+    field(INPE,"$(HV):outEmergencyOff")
+    field(INPF,"$(HV):outFailMaxPower")
+    field(INPG,"$(HV):outFailMaxTVolt")
+    field(CALC,"A>0?1:B>0?2:C>0?3:D>0?4:E>0?5:F>0?6:G>0?7:0")
+    field(DOPT,"Use CALC")
+    field(OOPT,"Every Time")
+    field(OUT,"$(HV):badstat:mbbi PP")
+}
+record(mbbi,"$(HV):badstat:mbbi") {
+    field(SCAN,"Passive")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(FVVL,"5")
+    field(SXVL,"6")
+    field(SVVL,"7")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MAJOR")
+    field(TWSV,"MAJOR")
+    field(THSV,"MAJOR")
+    field(FRSV,"MAJOR")
+    field(FVSV,"MAJOR")
+    field(SXSV,"MAJOR")
+    field(SVSV,"MAJOR")
+    field(ZRST,"Ok")
+    field(ONST,"OutInhibit")
+    field(TWST,"MaxSenseV")
+    field(THST,"MaxTemp")
+    field(FRST,"Kill")
+    field(FVST,"EmergOff")
+    field(SXST,"EmergOff")
+    field(SVST,"MaxTermV")
+    field(FLNK,"$(HV):stat:calc PP")
+}
+
+
+# select most significant good status bit:
+record(calcout,"$(HV):stat:calc") {
+    field(SCAN,"1 second")
+    field(INPA,"$(HV):outOn")
+    field(INPB,"$(HV):outRampUp")
+    field(INPC,"$(HV):outRampDown")
+    field(INPD,"$(HV):badstat:mbbi")
+    field(CALC,"D>0?D+3:(B>0?2:(C>0?3:(A>0?1:0)))")
+    field(DOPT,"Use CALC")
+    field(OOPT,"Every Time")
+    field(OUT,"$(HV):stat PP")
+}
+record(mbbi,"$(HV):stat") {
+    field(SCAN,"Passive")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(FVVL,"5")
+    field(SXVL,"6")
+    field(SVVL,"7")
+    field(EIVL,"8")
+    field(NIVL,"9")
+    field(TEVL,"10")
+    field(ELVL,"10")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"MAJOR")
+    field(FVSV,"MAJOR")
+    field(SXSV,"MAJOR")
+    field(SVSV,"MAJOR")
+    field(EISV,"MAJOR")
+    field(NISV,"MAJOR")
+    field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
+    field(ZRST,"Off")
+    field(ONST,"On")
+    field(TWST,"RUp")
+    field(THST,"RDn")
+    field(FRST,"OutInhibit")
+    field(FVST,"MaxSenseV")
+    field(SXST,"MaxTemp")
+    field(SVST,"Kill")
+    field(EIST,"EmergOff")
+    field(ELST,"MaxTermV")
+}
+

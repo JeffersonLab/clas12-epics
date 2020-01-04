@@ -37,6 +37,7 @@ dbLoadRecords("db/gas_cRIO_BONUS.db")
 ## BONUS HV:
 dbLoadTemplate("db/bonus-hv.substitutions")
 dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
+dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
 
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")
@@ -56,3 +57,6 @@ dbl > pv.list
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
+
+seq bonus_hv_watchdog
+

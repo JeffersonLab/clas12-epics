@@ -155,6 +155,8 @@ int hv_ftof_off;      assign hv_ftof_off    to "{SIMDET}B_DET_FTOF_HV:OFF";
 int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT_HV:isOff";          monitor hv_svt_stat;
 int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:safe:stat";  monitor hv_bmt_stat;
 int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
+int hv_left_onoff;    assign hv_left_onoff  to "B_DET_BLINE_HV_MollerLeft:pwonoff";
+int hv_right_onoff;   assign hv_right_onoff to "B_DET_BLINE_HV_MollerRight:pwonoff";
 
 // Low-level asym DAQ:
 float moller_acqtime;  assign moller_acqtime    to "asym_acqg_time";
@@ -505,7 +507,7 @@ ss automoller {
             pvPut(hv_slm_vset);
         }
         
-        when (hv_slm_vsetrbk==hv_slm_vcfg && hv_slm_stat==1) {} state quadsCalc
+        when (hv_slm_vsetrbk==hv_slm_vcfg && hv_slm_stat==1) {} state mollerHvOn
         
         when (delay(90)) {
 			status=NOT_CONFIGURED;
@@ -526,6 +528,20 @@ ss automoller {
         } state setSlm
 
     }
+
+    state mollerHvOn {
+        entry {
+            MESSAGE(Setting Moller L/R HV ON ...);
+            hv_left_onoff=1;
+            hv_right_onoff=1;
+            pvPut(hv_left_onoff);
+            pvPut(hv_right_onoff);
+        }
+
+        when (delay(5)) {
+        } state quadsCalc
+    }
+
 
     state quadsCalc {
 
@@ -844,8 +860,22 @@ ss automoller {
             hv_slm_vset=hv_slm_default;
             pvPut(hv_slm_vset);
         }
-        when (delay(2)) {} state retractTarget
+        when (delay(2)) {} state mollerHvOff
     }
+    
+    state mollerHvOff {
+        entry {
+            MESSAGE(Setting Moller L/R HV OFF ...);
+            hv_left_onoff=0;
+            hv_right_onoff=0;
+            pvPut(hv_left_onoff);
+            pvPut(hv_right_onoff);
+        }
+
+        when (delay(5)) {
+        } state retractTarget
+    }
+
     
     state retractTarget {
         entry {

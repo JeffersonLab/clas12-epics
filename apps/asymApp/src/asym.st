@@ -64,11 +64,17 @@ unsigned int slm_fifo[NFIFO];
 assign slm_fifo to "asym_3";
 
 // provide defaults in case of no channel access:
+
 unsigned int hls_rptg_scheme=4; // 8 windows is HELDELAYd=4
 //unsigned int hls_rptg_scheme=0; // 0 windows is HELDELAYd=0
-double hls_stbl_time=33330;
-double hls_setl_time=500;
-double hls_flip_freq=29.5596;
+
+//double hls_stbl_time=33330;
+//double hls_setl_time=500;
+//double hls_flip_freq=29.5596;
+
+double hls_stbl_time=8243.35;
+double hls_setl_time=90;
+double hls_flip_freq=120;
 
 double slm_offset=595;
 double slm_slope=15968;

@@ -1,0 +1,26 @@
+I would recommend that we start with the outer layer and work inward, with the different in voltage on the inner GEM given by a set value.  This should be relatively  straightforward to program.  Also, we should monitor that the biasing voltage on each GEM never exceeds some set value (say 400V to start) so that we can not overbias them.
+
+- Eric
+
+
+Here are my 2 cents:
+
+Our goal is to ramp up the HV to all 6 GEM layers (2 layers per GEM) AND the cathode together (so, a total of SEVEN channels) such that the HV difference between any 2 GEM layers does not exceed 400 V and the HV difference between the innermost GEM and the cathode does not exceed 4500 V. One way to do this would be if we can set the HV to all 7 channels “instantaneously” and rely on them ramping up with roughly the same rate. For instance, if we can set all 7 channels to ramp up no more than 100 V/s, this may work.
+
+A more elaborate scheme, if this is NOT possible, which would have to be programmed (in EPICS?) would be to increase the HV on each channel by 100 V at a time round robin, and repeat until each channel has reached its final voltage. In detail, this would look like as follows (starting from 0 V on all channels):
+
+1) Raise Cathode HV 100 V
+2) Raise Cathode HV and GEM1 inner layer by 100 V
+3) Raise Cathode HV, GEM1 inner and GEM1 outer layer by 100 V
+4) Raise Cathode HV, GEM1 inner and GEM1 outer as well as GEM2 inner layer by 100 V
+5) +100V on all of the above and GEM2 outer layer
+6) +100V on all of the above and GEM3 inner layer
+7) +100 V on all of the above and GEM3 outer layer.
+At that time, we would have 700 V on the cathode, 600 and 500 V on GEM1, 400 and 300 V on GEM2, and 200 and 100 V on GEM1.
+From that point on, keep adding the smaller of 100 V and whatever voltage is needed to reach the final set voltage to all 7 channels until the cathode has reached its final voltage.
+
+Not sure how hard it would be to program that…
+
+- Sebastian
+
+

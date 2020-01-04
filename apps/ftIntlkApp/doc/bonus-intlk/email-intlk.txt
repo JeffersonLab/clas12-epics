@@ -1,0 +1,86 @@
+Here is Sebastian’s email. Somehow I thought you were on this list. 
+
+Narbe Kalantarians, Ph. D.
+Assistant Professor of Physics
+Virginia Union University, Dept. of Natural Sciences 
++1-804-257-5617 (VUU)
++1-757-269-5566 (JLab)
+
+
+
+
+
+Begin forwarded message:
+
+From: "Kuhn, Sebastian E." <skuhn@odu.edu>
+Subject: [EXTERNAL] Re: Quantities for HV Interlock
+Date: September 10, 2019 at 5:02:09 PM EDT
+To: Narbe Kalantarians <narbe@jlab.org>
+Cc: Carlos Ayerbe Gayoso <gayoso@jlab.org>, "POUDEL, JIWAN" <jpoud001@odu.edu>, "DZBENSKI, NATHAN M." <ndzbe001@odu.edu>, "Bueltmann, Stephen L." <SBueltma@odu.edu>, "Hattawy, Mohammad" <mhattawy@odu.edu>, "christy@jlab.org" <christy@jlab.org>
+
+Dear Narbe,
+
+I am finally looking at your list of variables - sorry it took me so long. Let me see if I am interpreting things correctly -> 
+Comparing with the figures in the most recent gas target manual just sent out by Carlos:
+https://drive.google.com/drive/folders/1wd4DUcYt4BoOj0hIQBhw5CFSZUB56TyI or Gas panel manual
+I count the following sensors that could/should be included in slow control readout and/or operation:
+
+1) Drift and Buffer Gas Variables
+a) MFC308 - presumably that has B_BONUS_GAS_MFC_Flow and B_BONUS_GAS_MFC_Flow_Set as variables (the former just read, the second read and write). Are you sure that that 
+particular devices also has a temperature sensor, B_BONUS_GAS_MFC_Temp? and what exactly does B_BONUS_GAS_MFC_Valve refer to? How can a valve be above/below threshold?
+If I am correct, we really only need to read out the first 2, and have an alarm if set point and actual value differ by too much. Also, there should be an interlock that turns off HV if the actual flow is below threshold, I think.
+b) MKS AA01/PT334 - this corresponds to your B_BONUS_RTPC_Press, I presume. This needs to be monitored against both over- and under-pressure, with alarms and HV shut off.
+c) MKS 226A/PDT332 - this probably corresponds to B_BONUS_GAS_DP. Any pressure differential (regardless of sign + or -) above threshold should create an alarm and HV shut off.
+d) RTPC temperature is not shown in the gas manual, as it is a sensor embedded in the RTPC itself. This would correspond to B_BONUS_RTPC_Temp. Indeed there should be an alarm on too high temperature; I’m not sure that we also need to shut off the HV.
+e) Similarly, the DMS should have its own temperature sensor (“B_BONUS_DMS_Temp”) which again should be read out and monitored, perhaps with an alarm if it is too high or too low but no need to shut down HV.
+f) The buffer volume apparently has now a pressure transducer: MKS AA01/PDT208 = B_BONUS_GAS_He_Buffer_Press. If that is over threshold, the gas supply to the buffer should be shut off (there is a solenoid valve SVBD206) and an alarm should sound, as well as HV shut off.
+
+2) Target Gas variables
+Here I don’t see most of the sensors that you list. In fact, other than the 2 solenoid valves (SVBT112 and SVBT108) that will be used to fill and empty the target and that must be under slow control, there is really only one device, PT110, shown on the schematic. This would correspond to “B_BONUS_TARG_Press” in your list - there should be an alarm on both overpressure and any rapid CHANGE in pressure (unless the target is being filled or emptied), and the beam should be shut off in addition to the HV and all gas supplies in such case.
+There is no MFC at all, and hence your first 4 variables don’t exist any longer.
+I agree that there SHOULD also be a temperature sensor - this could be either added to the gas panel right where PT110 sits, or to the buffer volume. Apparently nobody thought of this so far - an oversight we should rectify. So there would be a second variable B_BONUS_TARG_Temp as listed, again with fast beam shut down, all gas supplies shut down, and HV shut down if it goes too high.
+
+3) HV variables
+I assume you looked at the devices Eric ordered and the types of variables seem fine by me. There is no need to shut down anything if the HV is out of spec, but of course we must have alarms if the difference between set point and actual measured HV is too large (so we may need 1x2 variables for the Cathode - 4080n  - and 6x2 variables for the GEMs - 8030n -, one each for set point and actually measured value). We also want alarms on overcurrent as you indicated. 
+
+4) Finally, we have to include beam parameters into our interlock and alarm system. Off-hand I can think of the following:
+a) Beam current. Shut down beam, gas supplies and HV and sound alarm if over limit.
+b) Beam orbit (BPMs). Alarms if they are out of bounds, and beam off if it is over 10 nA (so we cannot accidentally melt the target straw with an offset beam). In the latter case we again probably want to shut off all gas and HV.
+c) Beam offset monitor: Shut off beam, gas and HV and sound alarm if it is above threshold. (For all variables that can shut off the beam, we probably want a “high threshold” that is far enough away from standard operating values so that this doesn’t happen too often. Alarms, on the other hand, should go off at a lower deviation.)
+
+Hopefully I am making sense - it would help if we can do some of the “legwork” before the Thursday meeting. Let me know what you think! - Sebastian
+
+On Aug 29, 2019, at 1:09 PM, Narbe Kalantarians <narbe@jlab.org> wrote:
+
+Here is a list that I’ve put together so far for the quantities that may be relevant for interlock purposes. I’ve grouped it by DGS, target, and HV. 
+
+Narbe Kalantarians, Ph. D.
+Assistant Professor of Physics
+Virginia Union University, Dept. of Natural Sciences 
++1-804-257-5617 (VUU)
++1-757-269-5566 (JLab)
+
+
+
+
+On Jul 18, 2019, at 11:13 AM, Narbe Kalantarians <narbe@jlab.org> wrote:
+
+Attached is a proposed draft of the (presently existing) variables, and how they relate to a necessary HV shut-down. 
+
+Right now, this is for the DGS. We can add the target gas quantities soon as we know what they are.
+ 
+Narbe Kalantarians, Ph. D.
+Assistant Professor of Physics
+Virginia Union University, Dept. of Natural Sciences 
++1-804-257-5617 (VUU)
++1-757-269-5566 (JLab)
+
+<BONuS12HVInterlock.pdf>
+
+
+
+
+
+
+
+

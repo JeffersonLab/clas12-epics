@@ -76,6 +76,10 @@ ss bonus_hv_watchdog {
         entry { MESSAGE(Waiting for user input ...); }
         when (offbtn) {} state off
         when (onbtn) {} state on
+        when (isError) {
+            MESSAGE(HW ERROR - Offing);
+            epicsThreadSleep(2);
+        } state off
     }
 
     state off {
@@ -100,7 +104,9 @@ ss bonus_hv_watchdog {
             MESSAGE(Clearing All inhibits ...);
             allclear=10;
             pvPut(allclear);
+
             epicsThreadSleep(2);
+            
             MESSAGE(Sorting Delays ...);
             for (ii=0; ii<NCHAN; ii++) {
                 pvGet(dly[ii]);
@@ -128,6 +134,8 @@ ss bonus_hv_watchdog {
             }
             printf("\n");
             iseq=0;
+            
+            epicsThreadSleep(2);
         }
        
         when (offbtn) {} state off
@@ -136,8 +144,8 @@ ss bonus_hv_watchdog {
       
         when (isError) {
             MESSAGE(HW ERROR - Aborting);
-            epicsThreadSleep(2);
-        } state watch
+            epicsThreadSleep(1);
+        } state off
 
         when (iseq>=NCHAN && isOn) {
             MESSAGE(Complete -  All channels ON);
@@ -149,7 +157,7 @@ ss bonus_hv_watchdog {
             pvPut(msg);
         } state on
 
-        when (delay(dly[sequence[iseq]])) {
+        when (delay(dly[sequence[iseq]]+2)) {
             sprintf(msg,"Powering #%d: %s",iseq+1,NAMES[sequence[iseq]]);
             printf("seq: %s\n",msg); pvPut(msg);
             pw[sequence[iseq]]=1;

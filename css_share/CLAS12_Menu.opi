@@ -932,6 +932,14 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>RTPC Interlocks</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/BONUS/bonus-target.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Target Gas</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -1107,12 +1115,6 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>High Voltage</description>
         </action>
-        <action type="EXECUTE_CMD">
-          <command>openAllBeamlineStrips.sh</command>
-          <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>Open All Beamline Strip Charts</description>
-        </action>
         <action type="OPEN_DISPLAY">
           <path>ops/injector.opi</path>
           <macros>
@@ -1160,6 +1162,12 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>Tagger Magnet</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>livePlot -load /usr/clas12/release/pro/epics/tools/stripCharts/BLINE/beam.xml</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Strip Charts</description>
         </action>
       </actions>
       <font>

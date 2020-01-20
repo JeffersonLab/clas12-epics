@@ -1,12 +1,10 @@
 program caen1190seq
 
 #define TDC 195.3125e-12
+#define MAXBINS 0x80000
 
 #define NCHANS 4
 #define MAXHITS 10000
-
-#define HISTOMAX 100
-#define HISTOMAXBINS 1000000
 
 %% extern int caen1190_init();
 %% extern int caen1190_read(unsigned int*,unsigned int*,unsigned int);
@@ -26,15 +24,15 @@ short enable;  assign enable to  "{P}:enable"; monitor enable;
 float timer;   assign timer  to  "{P}:timer";
 float dwell;   assign dwell  to  "{P}:dwell";
 float binsize; assign binsize to "{P}:binsize";
-int prescale;  assign prescale to "{P}:prescale"; monitor prescale;
+int prescale;  assign prescale to "{P}:prescale";
+int ticsperbin;assign ticsperbin to "{P}:ticsperbin";
 
 // output PVs:
-float rates[NCHANS];                assign rates to {};
-float histos[NCHANS][HISTOMAXBINS]; assign histos to {};
-float xaxis[HISTOMAXBINS];          assign xaxis to "{P}:xaxis";
+float rates[NCHANS];           assign rates to {};
+float histos[NCHANS][MAXBINS]; assign histos to {};
+float xaxis[MAXBINS];          assign xaxis to "{P}:xaxis";
 
 // local variables:
-float ftmp;
 int ii,jj,itmp;
 unsigned int tdcs[NCHANS][MAXHITS],len[NCHANS];
 
@@ -102,7 +100,7 @@ ss caen1190seq {
 			status=CLEAR;
 			pvPut(status);
 			for (ii=0; ii<NCHANS; ii++) {
-				for (jj=0; jj<HISTOMAXBINS; jj++) {
+				for (jj=0; jj<MAXBINS; jj++) {
 					histos[ii][jj]=0;
 				}
 				rates[ii]=0;
@@ -123,6 +121,8 @@ ss caen1190seq {
 			pvPut(status);
             pvGet(binsize);
             pvGet(dwell);
+            pvGet(ticsperbin);
+            pvGet(prescale);
             //gettimeofday(&tv_t1,NULL);
 		}
 
@@ -138,9 +138,9 @@ ss caen1190seq {
 				pvPut(histos[ii]);
 			}
             // update bin coordinates:
-            itmp=(int)(HISTOMAX/binsize);
+            itmp=MAXBINS/ticsperbin;
             for (ii=0; ii<itmp; ii++) {
-                xaxis[ii]=ii*binsize;
+                xaxis[ii]=ii*ticsperbin*TDC*1E6;
             }
             pvPut(xaxis);
 		} state clear
@@ -151,11 +151,9 @@ ss caen1190seq {
 			pvPut(errors);
 			for (ii=0; ii<NCHANS; ii++) {
 				for (jj=0; jj<len[ii]; jj++) {
-					// convert to microseconds:
-					ftmp=(double)tdcs[ii][jj]*TDC*1e6;
-					// find histogram bin and increment it:
-					itmp=(int)(ftmp/binsize);
-					if (itmp<HISTOMAXBINS) {
+                    // find the bin and fill it:
+                    itmp=(int)tdcs[ii][jj]/ticsperbin;
+					if (itmp<MAXBINS) {
 						histos[ii][itmp]++;
 					}
                     // count total rate:

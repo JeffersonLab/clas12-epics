@@ -5,6 +5,8 @@
 #define USEDMA 1
 #define ALMOSTFULL 1024
 
+#define RESOLUTION 195.3125e-12
+
 #define MICROSECONDS(tv1,tv2) \
     (1e6*(tv2.tv_sec-tv1.tv_sec)+(tv2.tv_usec-tv1.tv_usec))
 
@@ -84,19 +86,17 @@ int caen1190_init()
 	//tdc1190Mon(SLOT_INDX);
 }
 
-//float microseconds(struct timeval t1,struct timeval t2) {
-//    return 1e6*(t2.tv_sec-t1.tv_sec)+(t2.tv_usec-t1.tv_usec);
-//}
+float microseconds(struct timeval t1,struct timeval t2) {
+    return 1e6*(t2.tv_sec-t1.tv_sec)+(t2.tv_usec-t1.tv_usec);
+}
 
 int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
 
-    float ftmp;
     int dt,jj,ret,itdc;
     unsigned int word,chan,tdc,zeroes,trailing;
     unsigned int tdc_prev[NCHANS];
     struct timeval tv_t0[NCHANS];
     struct timeval tv_start,tv_now;
-
 
     // initialize status counters:
     int errors=0,fulls=0,gaps=0;
@@ -117,14 +117,14 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
         // return if any output array is almost full:
         for (jj=0; jj<NCHANS; jj++) {
             if (len[jj] >= MAXHITSPERCHAN-ALMOSTFULL) {
-                return errors;//+fulls+gaps;
+                return errors+gaps;//+fulls+gaps;
             }
         }
 
         // return if elapsed time is greater than one second:
         gettimeofday(&tv_now,NULL);
-        if (MICROSECONDS(tv_start,tv_now) > 1e6) {
-			return errors;//+fulls+gaps;
+        if (microseconds(tv_start,tv_now) > 1e6) {
+			return errors+gaps;//+fulls+gaps;
 		}
 
         // clear if 1190's buffer is full:
@@ -191,7 +191,7 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
 
                 // if too much time elapsed (2 clock rollovers),
                 // uninitialize previous tdc and ignore this one:
-                else if (MICROSECONDS(tv_t0[itdc],tv_now) > 200) {
+                else if (microseconds(tv_t0[itdc],tv_now) > 200) {
                     tdc_prev[itdc]=-1;
                     tv_t0[itdc]=tv_now;
                     gaps++;

@@ -21,6 +21,11 @@ record(ai,"$(P):timer") {
 	field(VAL,0)
     field(EGU,"s")
 }
+record(ao,"$(P):prescale") {
+    field(DRVL,1)
+    field(DRVH,1000000)
+    field(VAL,"1")
+}
 record(ao,"$(P):ticsperbin") {
     field(VAL,10)
     field(PINI,1)
@@ -32,9 +37,7 @@ record(ao,"$(P):ticsperbin") {
 record(ai,"$(P):resolution") {
     field(VAL,"195.3125")
     field(EGU,"ps")
-}
-record(ai,"$(P):prescale") {
-    field(VAL,"1")
+    field(FLNK,"$(P):binsize.PROC")
 }
 record(calc,"$(P):binsize") {
     field(INPA,"$(P):ticsperbin")
@@ -48,7 +51,6 @@ record(calc,"$(P):binsize:ps") {
     field(INPA,"$(P):binsize")
     field(PREC,4)
     field(EGU,"ps")
-    field(CALC,"A*1000000")
     field(CALC,"A*1000000")
 }
 record(ao,"$(P):tmin") {
@@ -76,7 +78,7 @@ record(mbbi,"$(P):status") {
     field(SXSV,"MAJOR")
 }
 record(waveform,"$(P):xaxis") {
-    field(NELM,1000000)
+    field(NELM,0x80000)
     field(FTVL,"FLOAT")
 }
 record(ai,"$(P):hz:0") {
@@ -92,19 +94,19 @@ record(ai,"$(P):hz:3") {
 	field(EGU,"Hz")
 }
 record(waveform,"$(P):wf:0") {
-	field(NELM,1000000)
+	field(NELM,0x80000)
 	field(FTVL,"FLOAT")
 }
 record(waveform,"$(P):wf:1") {
-	field(NELM,1000000)
+	field(NELM,0x80000)
 	field(FTVL,"FLOAT")
 }
 record(waveform,"$(P):wf:2") {
-	field(NELM,1000000)
+	field(NELM,0x80000)
 	field(FTVL,"FLOAT")
 }
 record(waveform,"$(P):wf:3") {
-	field(NELM,1000000)
+	field(NELM,0x80000)
 	field(FTVL,"FLOAT")
 }
 

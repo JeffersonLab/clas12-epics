@@ -1,0 +1,59 @@
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+
+EPICS_BASE=/usr/clas12/R3.14.12.5/base_RHEL5
+MODULES=$(EPICS_BASE)/../modules_RHEL5
+SYNAPPS=$(EPICS_BASE)/../modules_RHEL5
+EPICS_EXTENSIONS=$(EPICS_BASE)/../extensions_RHEL5
+include $(MODULES)/configure/RELEASE
+include $(SYNAPPS)/configure/RELEASE
+COMMANDLINE_LIBRARY = READLINE_NCURSES
+
+STATIC_BUILD=YES
+
+CC=/usr/bin/g++
+
+PROD += caen1190test
+caen1190test_SRC += caen1190test.c
+caen1190test_OBJS += caen1190test.o
+
+#LOADABLE_LIBRARY += caen1190
+#caen1190_SRCS += caen1190test.c
+
+#PROD += cean1190test.so
+#caen1190test.so_SRC += caen1190test.c
+#caen1190test.so_OBJS += caen1190test.o
+
+PROD_LIBS    += jvme rol
+jvme_DIR     += $(JVME_LIB)
+rol_DIR      += $(ROL_VME_LIB)
+USR_INCLUDES += $(ROL_INCLUDE)
+USR_INCLUDES += $(JVME_INCLUDE)
+
+#PROD_LIBS       += mysql4.1.20
+#mysql4.1.20_DIR += /usr/clas12/release/1.3.2/coda/src/mysql4.1.20/Linux_i686_vme
+
+USR_CPPFLAGS += -DLinux_vme
+USR_CXXFLAGS += -DLinux_vme
+USR_CFLAGS += -DLinux_vme
+
+#USR_CXXFLAGS += $(shell $(ROOT_CONFIG) --cflags)
+#USR_LDFLAGS += $(shell $(ROOT_CONFIG) --libs)
+#PROD_LDFLAGS += $(shell $(ROOT_CONFIG) --libs)
+#USR_INCLUDES += -I$(shell $(ROOT_CONFIG) --incdir)
+#caen1190test_LDFLAGS += $(shell $(ROOT_CONFIG) --libs)
+
+#USR_LDFLAGS += -Wl,-Bdynamic $(shell $(ROOT_CONFIG) --libs) -Wl,-Bstatic
+#PROD_LDLIBS += -Wl,-Bdynamic $(shell $(ROOT_CONFIG) --libs) -Wl,-Bstatic
+USR_INCLUDES += -I$(shell $(ROOT_CONFIG) --incdir)
+#-I/usr/include/c++/4.1.1
+caen1190test_LDFLAGS += -Wl,-Bdynamic $(shell $(ROOT_CONFIG) --libs) -Wl,-Bstatic
+
+$(info $$rol_DIR is [${rol_DIR}])
+$(info $$jvme_DIR is [${jvme_DIR}])
+$(info $$USR_INCLUDES is [${USR_INCLUDES}])
+
+#===========================
+include $(TOP)/configure/RULES
+

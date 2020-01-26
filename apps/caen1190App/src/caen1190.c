@@ -2,12 +2,9 @@
 
 #define SLOT_ADDR 0x11300000
 #define SLOT_INDX 0
-#define USEDMA 1
 #define ALMOSTFULL 1024
 
-#define RESOLUTION 195.3125e-12
-
-#define MICROSECONDS(tv1,tv2) \
+#define MICROSEC(tv1,tv2) \
     (1e6*(tv2.tv_sec-tv1.tv_sec)+(tv2.tv_usec-tv1.tv_usec))
 
 extern struct v1190_struct* c1190p[V1190_MAX_MODULES];
@@ -19,7 +16,7 @@ int caen1190_init()
 	int ntdc,ret;
 	
     vmeOpenDefaultWindows();
-    //vmeCheckMutexHealth(1); // this may kill dgs?
+    //vmeCheckMutexHealth(1); // this may kill DiagGuiServer?
 
     usrVmeDmaSetMemSize(0x200000);
     usrVmeDmaInit();
@@ -62,7 +59,7 @@ int caen1190_init()
         return 1;
     }
 
-    printf("caen1190 Initialization complete.");
+    printf("caen1190 Initialization complete.\n\n");
     return 0;
 
     //ret=tdc1190SetMaxNumberOfHitsPerEvent(SLOT_INDX,128);
@@ -86,11 +83,141 @@ int caen1190_init()
 	//tdc1190Mon(SLOT_INDX);
 }
 
-float microseconds(struct timeval t1,struct timeval t2) {
-    return 1e6*(t2.tv_sec-t1.tv_sec)+(t2.tv_usec-t1.tv_usec);
+int caen1190_readOne(unsigned int *data,unsigned int *len,unsigned int *complete) {
+
+    int jj,ii,ret,itdc;
+    unsigned int word,chan,tdc,tdcbit,zeroes,trailing;
+    unsigned int tdc_prev[NCHANS];
+    unsigned int ready=0;
+    struct timeval tv_start,tv_now;
+
+    // initialize status counters:
+    int errors=0,fulls=0;
+
+    // initialize times and output lengths: 
+    gettimeofday(&tv_start,NULL);
+    for (jj=0; jj<NCHANS; jj++) {
+        tdc_prev[jj]=-1;
+        len[jj]=MAXHITSPERCHAN;
+        for (ii=0; ii<MAXHITSPERCHAN; ii++) {
+            *(data + jj*MAXHITSPERCHAN + ii) = 0;
+        }
+    }
+    *complete=0;
+
+    // start by clearing the 1190's buffer:
+	ret=tdc1190Clear(SLOT_INDX);
+
+    // loop until we get enough data or time elapsed:
+	while (1) {
+
+        // return if all outputs are ready:
+        if (!(*complete^0xF)) {
+            return errors+fulls;
+        }
+
+        // return if elapsed time is too much:
+        gettimeofday(&tv_now,NULL);
+        if (MICROSEC(tv_start,tv_now) > 5e5) {
+			return errors+fulls;
+		}
+
+        // clear if 1190's buffer is full:
+        if (tdc1190StatusFull(SLOT_INDX) > 0) {
+            fulls++;
+            ready=0;
+            *complete=0;
+            for (jj=0; jj<NCHANS; jj++) {
+                tdc_prev[jj]=-1;
+            }
+            ret=tdc1190Clear(SLOT_INDX);
+            continue;
+        }
+        
+        // read data if 1190's buffer is almost full:
+        if (tdc1190StatusAlmostFull(SLOT_INDX) > 0) {
+
+            vmeBusLock();
+            if (usrVme2MemDmaStart(SLOT_ADDR, (unsigned int)&TDCBUF[0], ALMOSTFULL*4) < 0) {
+                errors++;
+                printf("DMA ERROR: %d",ret);
+                continue;
+            }
+            if (tdc1190ReadBoardDmaDone(SLOT_INDX) != ALMOSTFULL) {
+                errors++;
+                printf("DMA READ BYTES ERROR: %d/%d\n",ALMOSTFULL,ret);
+                continue;
+            }
+            vmeBusUnlock();
+
+            for (jj=0; jj<ALMOSTFULL; jj++) {
+                word     = LSWAP(TDCBUF[jj]);
+                chan     = (word>>19) & 0x7F;
+                tdc      = (word)     & 0x7FFFF;
+                zeroes   = (word>>27) & 0x1F;
+                trailing = (word>>26) & 1;
+                if (zeroes!=0) {
+                    // this can be due to filler words
+                    continue;
+                }
+                switch (chan) {
+                    case 32:
+                        itdc=0;
+                        break;
+                    case 33:
+                        itdc=1;
+                        break;
+                    case 34:
+                        itdc=2;
+                        break;
+                    case 35:
+                        itdc=3;
+                        break;
+                    default:
+                        errors++;
+                        printf("Invalid Channel: %d\n",chan);
+                        tdc1190Clear(SLOT_INDX);
+                        continue;
+                }
+
+                tdcbit = 1<<itdc;
+
+                // ignore if this tdc channel is complete:
+                if (*complete & tdcbit) {
+                    continue;
+                }
+
+                // if previous tdc is uninitialized,
+                // initialize it and ignore this one:
+                else if (tdc_prev[itdc]<0) {
+                   tdc_prev[itdc]=tdc;
+                   continue;
+                }
+
+                // check for clock rollover:
+                else if (tdc_prev[itdc]>tdc) {
+                    // mark as complete if already ready:
+                    if (ready & tdcbit) {
+                        *complete |= tdcbit;
+                        continue;
+                    }
+                    // otherwise mark as ready:
+                    else {
+                        ready |= tdcbit;
+                    }
+                }
+
+                // store in output buffer if ready and not complete:
+                if ( (ready & tdcbit) && !(*complete & tdcbit) ) {
+                    *(data + itdc*MAXHITSPERCHAN + tdc) = 1;
+                    tdc_prev[itdc]=tdc;
+                }
+            }
+        }
+	}
 }
 
-int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
+int caen1190_readDeltas(unsigned int *data,unsigned int *len,unsigned int prescale) {
 
     int dt,jj,ret,itdc;
     unsigned int word,chan,tdc,zeroes,trailing;
@@ -117,14 +244,14 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
         // return if any output array is almost full:
         for (jj=0; jj<NCHANS; jj++) {
             if (len[jj] >= MAXHITSPERCHAN-ALMOSTFULL) {
-                return errors+gaps;//+fulls+gaps;
+                return errors+gaps+fulls;
             }
         }
 
-        // return if elapsed time is greater than one second:
+        // return if elapsed time is too much:
         gettimeofday(&tv_now,NULL);
-        if (microseconds(tv_start,tv_now) > 1e6) {
-			return errors+gaps;//+fulls+gaps;
+        if (MICROSEC(tv_start,tv_now) > 5e5) {
+			return errors+gaps+fulls;
 		}
 
         // clear if 1190's buffer is full:
@@ -136,7 +263,7 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
         
         // read data if 1190's buffer is almost full:
         if (tdc1190StatusAlmostFull(SLOT_INDX) > 0) {
-#if USEDMA
+
             vmeBusLock();
             if (usrVme2MemDmaStart(SLOT_ADDR, (unsigned int)&TDCBUF[0], ALMOSTFULL*4) < 0) {
                 errors++;
@@ -191,24 +318,24 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
 
                 // if too much time elapsed (2 clock rollovers),
                 // uninitialize previous tdc and ignore this one:
-                else if (microseconds(tv_t0[itdc],tv_now) > 200) {
+                else if (MICROSEC(tv_t0[itdc],tv_now) > 180) {
                     tdc_prev[itdc]=-1;
                     tv_t0[itdc]=tv_now;
                     gaps++;
-                    //ret=tdc1190Clear(SLOT_INDX);
                 }
 
                 // otherwise it's a keeper:
                 else {
-                   
+
                     // do prescaling:
                     if (prescale>1) {
                         if ((float)rand()/RAND_MAX > (float)1./prescale) {
                             continue;
                         }
                     }
-                    
-                    // calculate tdc-difference, accounting for *one* clock rollover:
+
+                    // calculate tdc-difference,
+                    // assuming at most one clock rollover:
                     dt = (tdc-tdc_prev[itdc]) & 0x7FFFF;
                     
                     // update the output buffers:
@@ -217,36 +344,6 @@ int caen1190_read(unsigned int *data,unsigned int *len,unsigned int prescale) {
                     tdc_prev[itdc]=tdc;
                 }
             }
-#else
-            printf("Reading non-DMA ...\n");
-            for (jj=0; jj<ALMOSTFULL; jj++) {
-                word     = vmeRead32(&(c1190p[SLOT_INDX]->word[0]));
-                chan     = (word>>19)&0x7F;
-                tdc      = word&0x7FFFF;
-                zeroes   = (word>>27)&0x1F;
-                trailing = (word>>26)&1;
-                if (zeroes==0 && trailing==0) {
-                    switch (chan) {
-                        case 32:
-                            itdc=0;
-                            break;
-                        case 33:
-                            itdc=1;
-                            break;
-                        case 34:
-                            itdc=2;
-                            break;
-                        case 35:
-                            itdc=3;
-                            break;
-                        default:
-                            printf("Inalid Channel: %d",chan);
-                            break;
-                    }
-                }
-                else errors++;
-            }
-#endif
         }
 	}
 }

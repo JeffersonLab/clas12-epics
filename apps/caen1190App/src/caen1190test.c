@@ -5,7 +5,7 @@ int main(int argc,char *argv[]) {
     unsigned int data[NCHANS][MAXHITSPERCHAN];
     unsigned int len[NCHANS];
     caen1190_init();
-    caen1190_read((unsigned int*)data,len);
+    caen1190_readDeltas((unsigned int*)data,len);
     for (ii=0; ii<NCHANS; ii++) {
         printf("MAIN: %d\n",len[ii]);
         for (jj=0; jj<len[ii]; jj++) {

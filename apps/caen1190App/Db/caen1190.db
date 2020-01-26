@@ -1,21 +1,57 @@
+
+record(bi,"$(P):enable") {
+	field(VAL,0)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:0") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:1") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:2") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:3") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+
+record(bi,"$(P):pulser:enable") {
+    field(ZNAM,"Disabled")
+    field(ONAM,"Enabled")
+}
+record(ao,"$(P):pulser:freq") {
+    field(EGU,"kHz")
+    field(DRVL,10)
+    field(DRVH,1E6)
+    field(VAL,97.6562)
+    field(PREC,"0")
+}
+
 record(stringin,"$(P):msg") {
 	field(VAL,"Uninitialized")
 }
 record(bi,"$(P):clear") {
 	field(VAL,0)
 }
-record(bi,"$(P):enable") {
-	field(VAL,0)
-	field(ZNAM,"Disabled")
-	field(ONAM,"Enabled")
-}
 record(ai,"$(P):errors") {
 	field(VAL,0)
 }
+
 record(ao,"$(P):dwell") {
 	field(VAL,1)
     field(EGU,"s")
-    field(DRVL,0.0001)
+    field(DRVL,0.1)
+    field(DRVH,600)
 }
 record(ai,"$(P):timer") {
 	field(VAL,0)
@@ -27,7 +63,7 @@ record(ao,"$(P):prescale") {
     field(VAL,"1")
 }
 record(ao,"$(P):ticsperbin") {
-    field(VAL,10)
+    field(VAL,8)
     field(PINI,1)
     field(PREC,0)
     field(DRVL,1)
@@ -55,10 +91,12 @@ record(calc,"$(P):binsize:ps") {
 }
 record(ao,"$(P):tmin") {
     field(EGU,"us")
+    field(PREC,3)
     field(VAL,0)
 }
 record(ao,"$(P):tmax") {
     field(EGU,"us")
+    field(PREC,3)
     field(VAL,100)
 }
 record(mbbi,"$(P):status") {
@@ -69,6 +107,7 @@ record(mbbi,"$(P):status") {
 	field(FRST,"Clearing")
 	field(FVST,"Error")
     field(SXST,"Waiting for PVs")
+    field(SVST,"Transforming")
     field(ZRSV,"MAJOR")
     field(ONSV,"MINOR")
     field(TWSV,"MINOR")
@@ -76,9 +115,18 @@ record(mbbi,"$(P):status") {
     field(FRSV,"NO_ALARM")
     field(FVSV,"MAJOR")
     field(SXSV,"MAJOR")
+    field(SVSV,"NO_ALARM")
 }
+record(longin,"$(P):complete") {
+    field(VAL,0)
+}
+
 record(waveform,"$(P):xaxis") {
     field(NELM,0x80000)
+    field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):faxis") {
+    field(NELM,0x40000)
     field(FTVL,"FLOAT")
 }
 record(ai,"$(P):hz:0") {
@@ -110,3 +158,224 @@ record(waveform,"$(P):wf:3") {
 	field(FTVL,"FLOAT")
 }
 
+#record(waveform,"$(P):power:0") {
+#	field(NELM,0x40000)
+#	field(FTVL,"FLOAT")
+#}
+#record(waveform,"$(P):power:1") {
+#	field(NELM,0x40000)
+#	field(FTVL,"FLOAT")
+#}
+#record(waveform,"$(P):power:2") {
+#	field(NELM,0x40000)
+#	field(FTVL,"FLOAT")
+#}
+#record(waveform,"$(P):power:3") {
+#	field(NELM,0x40000)
+#	field(FTVL,"FLOAT")
+#}
+#record(ai,"$(P):power:max:0") {
+#    field(EGU,"kHz")
+#}
+#record(ai,"$(P):power:max:1") {
+#    field(EGU,"kHz")
+#}
+#record(ai,"$(P):power:max:2") {
+#    field(EGU,"kHz")
+#}
+#record(ai,"$(P):power:max:3") {
+#    field(EGU,"kHz")
+#}
+
+record(waveform,"$(P):dwellpower:0") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:1") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:2") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:3") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(ai,"$(P):dwellpower:max:0") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:1") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:2") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:3") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:0") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:1") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:2") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:3") {
+    field(EGU,"kHz")
+}
+
+record(waveform,"$(P):power:maxes:amp:0") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:0") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+	field(EGU,"Hz")
+}
+record(waveform,"$(P):power:maxes:amp:1") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:1") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+	field(EGU,"Hz")
+}
+record(waveform,"$(P):power:maxes:amp:2") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:2") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+	field(EGU,"Hz")
+}
+record(waveform,"$(P):power:maxes:amp:3") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:3") {
+	field(NELM,5)
+	field(FTVL,"FLOAT")
+	field(EGU,"Hz")
+}
+
+record(ai,"$(P):power:max1:freq:0") {}
+record(ai,"$(P):power:max2:freq:0") {}
+record(ai,"$(P):power:max3:freq:0") {}
+record(ai,"$(P):power:max4:freq:0") {}
+record(ai,"$(P):power:max5:freq:0") {}
+record(ai,"$(P):power:max1:amp:0") {}
+record(ai,"$(P):power:max2:amp:0") {}
+record(ai,"$(P):power:max3:amp:0") {}
+record(ai,"$(P):power:max4:amp:0") {}
+record(ai,"$(P):power:max5:amp:0") {}
+record(ai,"$(P):power:max1:freq:1") {}
+record(ai,"$(P):power:max2:freq:1") {}
+record(ai,"$(P):power:max3:freq:1") {}
+record(ai,"$(P):power:max4:freq:1") {}
+record(ai,"$(P):power:max5:freq:1") {}
+record(ai,"$(P):power:max1:amp:1") {}
+record(ai,"$(P):power:max2:amp:1") {}
+record(ai,"$(P):power:max3:amp:1") {}
+record(ai,"$(P):power:max4:amp:1") {}
+record(ai,"$(P):power:max5:amp:1") {}
+record(ai,"$(P):power:max1:freq:2") {}
+record(ai,"$(P):power:max2:freq:2") {}
+record(ai,"$(P):power:max3:freq:2") {}
+record(ai,"$(P):power:max4:freq:2") {}
+record(ai,"$(P):power:max5:freq:2") {}
+record(ai,"$(P):power:max1:amp:2") {}
+record(ai,"$(P):power:max2:amp:2") {}
+record(ai,"$(P):power:max3:amp:2") {}
+record(ai,"$(P):power:max4:amp:2") {}
+record(ai,"$(P):power:max5:amp:2") {}
+record(ai,"$(P):power:max1:freq:3") {}
+record(ai,"$(P):power:max2:freq:3") {}
+record(ai,"$(P):power:max3:freq:3") {}
+record(ai,"$(P):power:max4:freq:3") {}
+record(ai,"$(P):power:max5:freq:3") {}
+record(ai,"$(P):power:max1:amp:3") {}
+record(ai,"$(P):power:max2:amp:3") {}
+record(ai,"$(P):power:max3:amp:3") {}
+record(ai,"$(P):power:max4:amp:3") {}
+record(ai,"$(P):power:max5:amp:3") {}
+record(ai,"$(P):power:slow:max1:freq:0") {}
+record(ai,"$(P):power:slow:max2:freq:0") {}
+record(ai,"$(P):power:slow:max3:freq:0") {}
+record(ai,"$(P):power:slow:max4:freq:0") {}
+record(ai,"$(P):power:slow:max5:freq:0") {}
+record(ai,"$(P):power:slow:max1:amp:0") {}
+record(ai,"$(P):power:slow:max2:amp:0") {}
+record(ai,"$(P):power:slow:max3:amp:0") {}
+record(ai,"$(P):power:slow:max4:amp:0") {}
+record(ai,"$(P):power:slow:max5:amp:0") {}
+record(ai,"$(P):power:slow:max1:freq:1") {}
+record(ai,"$(P):power:slow:max2:freq:1") {}
+record(ai,"$(P):power:slow:max3:freq:1") {}
+record(ai,"$(P):power:slow:max4:freq:1") {}
+record(ai,"$(P):power:slow:max5:freq:1") {}
+record(ai,"$(P):power:slow:max1:amp:1") {}
+record(ai,"$(P):power:slow:max2:amp:1") {}
+record(ai,"$(P):power:slow:max3:amp:1") {}
+record(ai,"$(P):power:slow:max4:amp:1") {}
+record(ai,"$(P):power:slow:max5:amp:1") {}
+record(ai,"$(P):power:slow:max1:freq:2") {}
+record(ai,"$(P):power:slow:max2:freq:2") {}
+record(ai,"$(P):power:slow:max3:freq:2") {}
+record(ai,"$(P):power:slow:max4:freq:2") {}
+record(ai,"$(P):power:slow:max5:freq:2") {}
+record(ai,"$(P):power:slow:max1:amp:2") {}
+record(ai,"$(P):power:slow:max2:amp:2") {}
+record(ai,"$(P):power:slow:max3:amp:2") {}
+record(ai,"$(P):power:slow:max4:amp:2") {}
+record(ai,"$(P):power:slow:max5:amp:2") {}
+record(ai,"$(P):power:slow:max1:freq:3") {}
+record(ai,"$(P):power:slow:max2:freq:3") {}
+record(ai,"$(P):power:slow:max3:freq:3") {}
+record(ai,"$(P):power:slow:max4:freq:3") {}
+record(ai,"$(P):power:slow:max5:freq:3") {}
+record(ai,"$(P):power:slow:max1:amp:3") {}
+record(ai,"$(P):power:slow:max2:amp:3") {}
+record(ai,"$(P):power:slow:max3:amp:3") {}
+record(ai,"$(P):power:slow:max4:amp:3") {}
+record(ai,"$(P):power:slow:max5:amp:3") {}
+
+record(ai,"$(P):power:120KHz:0") {}
+record(ai,"$(P):power:120KHz:1") {}
+record(ai,"$(P):power:120KHz:2") {}
+record(ai,"$(P):power:120KHz:3") {}
+record(ai,"$(P):power:250MHz:0") {}
+record(ai,"$(P):power:250MHz:1") {}
+record(ai,"$(P):power:250MHz:2") {}
+record(ai,"$(P):power:250MHz:3") {}
+
+record(ai,"$(P):power:120kHz:norm:0") {
+    field(SCAN,"1 second")
+    field(CALC,"A/B")
+    field(INPA,"$(P):power:120KHz:0")
+    field(INPB,"$(P):power:250MHz:0")
+}
+record(ai,"$(P):power:120kHz:norm:1") {
+    field(SCAN,"1 second")
+    field(CALC,"A/B")
+    field(INPA,"$(P):power:120KHz:1")
+    field(INPB,"$(P):power:250MHz:1")
+}
+record(ai,"$(P):power:120kHz:norm:2") {
+    field(SCAN,"1 second")
+    field(CALC,"A/B")
+    field(INPA,"$(P):power:120KHz:2")
+    field(INPB,"$(P):power:250MHz:2")
+}
+record(ai,"$(P):power:120kHz:norm:3") {
+    field(SCAN,"1 second")
+    field(CALC,"A/B")
+    field(INPA,"$(P):power:120KHz:3")
+    field(INPB,"$(P):power:250MHz:3")
+}

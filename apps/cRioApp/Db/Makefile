@@ -16,6 +16,7 @@ DB += gas_cRIO_SVT.db
 DB += gas_cRIO_MVT_mixing.db
 DB += gas_cRIO_HTCC-calc.db
 DB += gas_cRIO_BONUS.db
+DB += gas_cRIO_BONUS_intlk.db
 DB += gas_cRIO_BONUS_intlk.substitutions
 
 DB += gas_cRIO_MFCINIT.db

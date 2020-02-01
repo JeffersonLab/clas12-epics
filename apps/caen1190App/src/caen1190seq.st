@@ -21,7 +21,7 @@ program caen1190seq
 #define NCHANS 4
 
 // number of FFT maxima to calculate:
-#define NMAXES 5
+#define NMAXES 4
 
 #define PI  (3.14159265358979323846)
 
@@ -66,8 +66,6 @@ float xaxis[MAXBINS];                  assign xaxis to    "{P}:xaxis";
 double faxis[HALFMAXBINS];             assign faxis to    "{P}:faxis";
 float rates[NCHANS];                   assign rates to {};
 float histos[NCHANS][MAXBINS];         assign histos to {};
-float power[NCHANS][HALFMAXBINS];      //assign power to {};
-float powermax[NCHANS];                //assign powermax to {};
 float dwellpower[NCHANS][HALFMAXBINS]; assign dwellpower to {};
 float dwellpowermax[NCHANS];           assign dwellpowermax to {};
 float dwellpowerslowmax[NCHANS];       assign dwellpowerslowmax to {};
@@ -78,13 +76,24 @@ float fpowerslowmaxes[NCHANS][NMAXES]; assign fpowerslowmaxes to {};
 float power250MHz[NCHANS];             assign power250MHz to {};
 float power120KHz[NCHANS];             assign power120KHz to {};
 
+float dwellpowersum[HALFMAXBINS]; assign dwellpowersum to "{P}:dwellpower:sum";
+float dwellpowermaxsum; assign dwellpowermaxsum to "{P}:dwellpower:max:sum";
+float dwellpowerslowmaxsum; assign dwellpowerslowmaxsum to "{P}:dwellpower:slow:max:sum";
+float powermaxessum[NMAXES]; assign powermaxessum to "{P}:power:maxes:amp:sum";
+float fpowermaxessum[NMAXES];assign fpowermaxessum to "{P}:power:maxes:freq:sum";
+float powerslowmaxessum[NMAXES];assign powerslowmaxessum to "{P}:power:slow:maxes:amp:sum";
+float fpowerslowmaxessum[NMAXES];assign fpowerslowmaxessum to "{P}:power:slow:maxes:freq:sum";
+float power250MHzsum; assign power250MHzsum to "{P}:power:250MHz:sum";
+float power120KHzsum; assign power120KHzsum to "{P}:power:120KHz:sum";
+
 // local variables:
 string stmp;
+unsigned int completions;
 double ftmp,ftmp2;
 float real[MAXBINS],imag[MAXBINS];
 int ii,jj,kk,ll,itmp,nbins,imax,imax2,ndwellpower[NCHANS];
-int ipowermaxes[NCHANS][NMAXES];
-int ipowerslowmaxes[NCHANS][NMAXES];
+int ipowermaxes[NCHANS][NMAXES],ipowerslowmaxes[NCHANS][NMAXES];
+int ipowermaxessum[NMAXES],ipowerslowmaxessum[NMAXES];
 unsigned int tdcs[NCHANS][MAXBINS],len[NCHANS],null_fifo[MAXBINS];
 evflag ef_timer_stop,ef_timer_start;
 
@@ -101,10 +110,6 @@ ss caen1190seq {
                 pvAssignSubst(histos[ii],stmp);
                 sprintf(stmp,"{P}:hz:%d",ii);
                 pvAssignSubst(rates[ii],stmp);
-                //sprintf(stmp,"{P}:power:%d",ii);
-                //pvAssignSubst(power[ii],stmp);
-                //sprintf(stmp,"{P}:power:max:%d",ii);
-                //pvAssignSubst(powermax[ii],stmp);
                 sprintf(stmp,"{P}:dwellpower:%d",ii);
                 pvAssignSubst(dwellpower[ii],stmp);
                 sprintf(stmp,"{P}:dwellpower:max:%d",ii);
@@ -113,9 +118,9 @@ ss caen1190seq {
                 pvAssignSubst(dwellpowerslowmax[ii],stmp);
                 sprintf(stmp,"{P}:enable:%d",ii);
                 pvAssignSubst(enables[ii],stmp);
-                sprintf(stmp,"$(P):power:120KHz:%d",ii);
+                sprintf(stmp,"{P}:power:120KHz:%d",ii);
                 pvAssignSubst(power120KHz[ii],stmp);
-                sprintf(stmp,"$(P):power:250MHz:%d",ii);
+                sprintf(stmp,"{P}:power:250MHz:%d",ii);
                 pvAssignSubst(power250MHz[ii],stmp);
                 sprintf(stmp,"{P}:power:maxes:amp:%d",ii);
                 pvAssignSubst(powermaxes[ii],stmp);
@@ -147,6 +152,8 @@ ss caen1190seq {
         when (pvConnectCount() < pvChannelCount()) {
 			status=PVS;
 			pvPut(status);
+            sprintf(stmp,"Waiting for PVs (%d/%d)",pvConnectCount(),pvChannelCount());
+            printf("%s\n",stmp);
             epicsThreadSleep(1);
         } state start
 
@@ -186,6 +193,9 @@ ss caen1190seq {
 			status=CLEAR;
 			pvPut(status);
             status=itmp;
+            for (jj=0; jj<HALFMAXBINS; jj++) {
+                dwellpowersum[jj]=0;
+            }
 			for (ii=0; ii<NCHANS; ii++) {
 				for (jj=0; jj<MAXBINS; jj++) {
 					histos[ii][jj]=0;
@@ -206,6 +216,13 @@ ss caen1190seq {
                     fpowerslowmaxes[ii][jj]=0;
                     ipowermaxes[ii][jj]=0;
                     ipowerslowmaxes[ii][jj]=0;
+
+                    powermaxessum[jj]=0;
+                    fpowermaxessum[jj]=0;
+                    ipowermaxessum[jj]=0;
+                    powerslowmaxessum[jj]=0;
+                    fpowerslowmaxessum[jj]=0;
+                    ipowerslowmaxessum[jj]=0;
                 }
 			}
 		}
@@ -234,6 +251,7 @@ ss caen1190seq {
             pvGet(pulser_freq);
             for (ii=0; ii<NCHANS; ii++) pvGet(enables[ii]);
             efSet(ef_timer_start);
+            completions=0;
 		}
 
         // respond to user input and dwell timer:
@@ -289,6 +307,7 @@ ss caen1190seq {
 %%                      tdcs[ii][jj] += 100000000*sin(2*PI/(ftmp/MAXMICRO)*jj/MAXBINS);
 %%                      //+7000*cos(7*2*PI/(ftmp/MAXMICRO)*jj/MAXBINS-0.5);
                     }
+                    complete |= 1;
                 }
                
                 // ignore if not a complete window read for this channel:
@@ -298,32 +317,14 @@ ss caen1190seq {
                 fft_float(MAXBINS,0,&tdcs[ii][0],null_fifo,real,imag);
 
                 // 0Hz/DC component and its running sum:
-%%              power[ii][0] = sqrt(real[0]*real[0]+imag[0]*imag[0]);
-                dwellpower[ii][0] += power[ii][0];
+%%              dwellpower[ii][0] += sqrt(real[0]*real[0]+imag[0]*imag[0]);
 
                 // higher components:
                 ftmp=0;
                 for (jj=1; jj<(MAXBINS-1)/2; jj++) {
-
                     // jj-th frequency and its running sum:
-%%                  power[ii][jj] = sqrt(real[jj]*real[jj]+imag[jj]*imag[jj]);
-                    dwellpower[ii][jj] += power[ii][jj];
-                    
-                    // normalize by the 0Hz component:
-                    power[ii][jj] /= power[ii][0];
-                    
-                    // keep track of maximum component:
-                    if (power[ii][jj] > ftmp) {
-                        ftmp = power[ii][jj];
-                        imax = jj;
-                    }
+%%                  dwellpower[ii][jj] += sqrt(real[jj]*real[jj]+imag[jj]*imag[jj]);
                 }
-
-                // update maximum power:
-                powermax[ii] = imax/(MAXMICRO/1E6)/1000;
-
-                // overwrite the 0Hz/DC component (for display purposes?):
-                power[ii][0] = power[ii][1];
 
                 // keep track of #reads for later averaging:
                 ndwellpower[ii]++;
@@ -331,6 +332,8 @@ ss caen1190seq {
 			
             pvPut(errors);
             pvPut(complete);
+
+            completions |= complete;
 
 		} state read
 
@@ -349,7 +352,7 @@ ss caen1190seq {
 
                 if (enables[ii]==0) continue;
 
-				rates[ii]/=dwell;
+				rates[ii] /= dwell;
                
                 // find maximum frequencies:
                 ftmp  = 0;
@@ -357,7 +360,10 @@ ss caen1190seq {
                 for (jj=1; jj<(MAXBINS-1)/2; jj++) {
 
                     // scale by 0Hz component and average:
-                    dwellpower[ii][jj] /= dwellpower[ii][0] * ndwellpower[ii];
+                    dwellpower[ii][jj] /= dwellpower[ii][0];// * ndwellpower[ii];
+
+                    if (completions & (1<<ii)) 
+                    dwellpowersum[jj] += dwellpower[ii][jj];
 
                     if (dwellpower[ii][jj] > ftmp) {
                         ftmp = dwellpower[ii][jj];
@@ -371,45 +377,45 @@ ss caen1190seq {
                     }
 
                     for (kk=0; kk<NMAXES; kk++) {
-               
                         if (dwellpower[ii][jj] > powermaxes[ii][kk]) {
                             for (ll=NMAXES-1; ll>kk; ll--) {
                                 powermaxes[ii][ll]  = powermaxes[ii][ll-1];
                                 ipowermaxes[ii][ll] = ipowermaxes[ii][ll-1];
                             }
                             powermaxes[ii][kk]  = dwellpower[ii][jj];
-                            ipowermaxes[ii][kk] = ii;
+                            ipowermaxes[ii][kk] = jj;
                             break;
                         }
+                    }
 
+                    for (kk=0; kk<NMAXES; kk++) {
                         if (faxis[jj]>10 && faxis[jj]<1E4) {
                             if (dwellpower[ii][jj] > powerslowmaxes[ii][kk]) {
                                 for (ll=NMAXES-1; ll>kk; ll--) {
-                                    powerslowmaxes[ii][kk]  = powerslowmaxes[ii][ll-1];
-                                    ipowerslowmaxes[ii][kk] = ipowerslowmaxes[ii][ll-1];
+                                    powerslowmaxes[ii][ll]  = powerslowmaxes[ii][ll-1];
+                                    ipowerslowmaxes[ii][ll] = ipowerslowmaxes[ii][ll-1];
                                 }
                                 powerslowmaxes[ii][kk]  = dwellpower[ii][jj];
-                                ipowerslowmaxes[ii][kk] = ii;
+                                ipowerslowmaxes[ii][kk] = jj;
                                 break;
                             }
                         }
-
                     }
-
                 }
                 dwellpower[ii][0]     = 0;//dwellpower[ii][1]/ndwellpower[ii];
+
                 dwellpowermax[ii]     = imax/(MAXMICRO/1E6)/1000;
                 dwellpowerslowmax[ii] = imax2/(MAXMICRO/1E6)/1000;
                 
                 ftmp = 0;
-                itmp = get_freq_bin(249.5E6);//HALFMAXBINS*(249.5E6/MAXHERTZ);
+                itmp = get_freq_bin(249.502E6+1);
                 for (jj=itmp-1; jj<=itmp+1; jj++) {
                     ftmp += dwellpower[ii][jj];
                 }
                 power250MHz[ii] = ftmp;
                 
                 ftmp = 0;
-                itmp = get_freq_bin(126.9E3);//HALFMAXBINS*(126.9E3/MAXHERTZ);
+                itmp = get_freq_bin(126.953E3+1);
                 for (jj=itmp-1; jj<=itmp+1; jj++) {
                     ftmp += dwellpower[ii][jj];
                 }
@@ -424,14 +430,72 @@ ss caen1190seq {
                 }
             }
 
+            ////////////////////////////////////////////////
+            dwellpowersum[0] = 0;
+            ftmp=0;
+            ftmp2=0;
+            for (jj=1; jj<(MAXBINS-1)/2; jj++) {
+                if (dwellpowersum[jj] > ftmp) {
+                    ftmp = dwellpowersum[jj];
+                    imax = jj;
+                }
+                if (faxis[jj]>10 && faxis[jj]<1E4) {
+                    if (dwellpowersum[jj] > ftmp2) {
+                        ftmp2 = dwellpowersum[jj];
+                        imax2 = jj;
+                    }
+                }
+                for (kk=0; kk<NMAXES; kk++) {
+                    if (dwellpowersum[jj] > powermaxessum[kk]) {
+                        for (ll=NMAXES-1; ll>kk; ll--) {
+                            powermaxessum[ll]  = powermaxessum[ll-1];
+                            ipowermaxessum[ll] = ipowermaxessum[ll-1];
+                        }
+                        powermaxessum[kk]  = dwellpowersum[jj];
+                        ipowermaxessum[kk] = jj;
+                        break;
+                    }
+                }
+                for (kk=0; kk<NMAXES; kk++) {
+                    if (faxis[jj]>10 && faxis[jj]<1E4) {
+                        if (dwellpowersum[jj] > powerslowmaxessum[kk]) {
+                            for (ll=NMAXES-1; ll>kk; ll--) {
+                                powerslowmaxessum[ll]  = powerslowmaxessum[ll-1];
+                                ipowerslowmaxessum[ll] = ipowerslowmaxessum[ll-1];
+                            }
+                            powerslowmaxessum[kk]  = dwellpowersum[jj];
+                            ipowerslowmaxessum[kk] = jj;
+                            break;
+                        }
+                    }
+                }
+            }
+            dwellpowermaxsum = imax/(MAXMICRO/1E6)/1000;
+            dwellpowerslowmaxsum = imax2/(MAXMICRO/1E6)/1000;
+            ftmp = 0;
+            itmp = get_freq_bin(249.502E6+1);
+            for (jj=itmp-1; jj<=itmp+1; jj++) {
+                ftmp += dwellpowersum[jj];
+            }
+            power250MHzsum = ftmp;
+
+            ftmp = 0;
+            itmp = get_freq_bin(126.953E3+1);
+            for (jj=itmp-1; jj<=itmp+1; jj++) {
+                ftmp += dwellpowersum[jj];
+            }
+            power120KHzsum = ftmp;
+            for (jj=0; jj<NMAXES; jj++) {
+                fpowermaxessum[jj] = faxis[ipowermaxessum[jj]];
+                fpowerslowmaxessum[jj] = faxis[ipowerslowmaxessum[jj]];
+            }
+
             for (ii=0; ii<NCHANS; ii++) {
                 pvPut(dwellpower[ii]);
                 pvPut(dwellpowermax[ii]);
                 pvPut(dwellpowerslowmax[ii]);
 				pvPut(rates[ii]);
 				pvPut(histos[ii]);
-                //pvPut(powermax[ii]);
-                //pvPut(power[ii]);
                 pvPut(power250MHz[ii]);
                 pvPut(power120KHz[ii]);
                 pvPut(powermaxes[ii]);
@@ -439,6 +503,16 @@ ss caen1190seq {
                 pvPut(fpowermaxes[ii]);
                 pvPut(fpowerslowmaxes[ii]);
 			}
+            pvPut(dwellpowersum);
+            pvPut(dwellpowermaxsum);
+            pvPut(dwellpowerslowmaxsum);
+            pvPut(power250MHzsum);
+            pvPut(power120KHzsum);
+            pvPut(powermaxessum);
+            pvPut(powerslowmaxessum);
+            pvPut(fpowermaxessum);
+            pvPut(fpowerslowmaxessum);
+
             // update bin coordinates:
             for (ii=0; ii<MAXBINS; ii++) {
                 xaxis[ii]=ii*ticsperbin*TDC*1E6;

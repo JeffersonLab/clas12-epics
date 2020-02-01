@@ -14,14 +14,7 @@ dbLoadRecords("db/iocAdminSoft.db","IOC=iocbeamMod")
 
 dbLoadRecords("db/caen1190.db","P=beamMod")
 
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:amp:0, P=beamMod:power:maxes:amp:, R=0:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:amp:0, P=beamMod:power:maxes:amp:, R=1:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:amp:0, P=beamMod:power:maxes:amp:, R=2:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:amp:0, P=beamMod:power:maxes:amp:, R=3:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:freq:0,P=beamMod:power:maxes:freq:,R=0:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:freq:0,P=beamMod:power:maxes:freq:,R=1:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:freq:0,P=beamMod:power:maxes:freq:,R=2:")
-#dbLoadRecords("db/array-to-scalar-4.db","INP=beamMod:power:maxes:freq:0,P=beamMod:power:maxes:freq:,R=3:")
+dbLoadTemplate("db/caen1190.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -38,6 +38,7 @@ dbLoadRecords("db/gas_cRIO_BONUS.db")
 dbLoadTemplate("db/bonus-hv.substitutions")
 dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
 dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
+dbLoadRecords("db/gas_cRIO_BONUS_intlk.db")
 
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")

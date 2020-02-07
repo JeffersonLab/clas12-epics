@@ -46,6 +46,15 @@ record(ai,"B_BONUS_RTPC_Press") {
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
 
+record(calc,"B_BONUS_RTPC_Press:rel:amb") {
+    field(SCAN,"1 second")
+    field(INPA,"B_BONUS_RTPC_Press")
+    field(INPB,"B_SYS_WEATHER_SF_L3_Press:torr")
+    field(CALC,"A-B")
+    field(EGU,"torr")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
 record(ai,"B_BONUS_RTPC_Temp") {
     field(EGU,"deg C")
     field(PREC,"2")
@@ -179,3 +188,21 @@ record(calc,"B_BONUS_GAS_MFC_Used")
   field(HSV,"MINOR")
   info(autosaveFields_pass0, "VAL HIGH HIHI")
 }
+
+record(calc,"B_BONUS_GAS_MFC104_Used")
+{
+  field(SCAN,"1 second")
+  field(INPA,"B_BONUS_GAS_MFC104_Used")
+  field(INPB,"B_BONUS_GAS_MFC104_Flow")
+  field(CALC,"A+B/60")
+  field(EGU, "cc")
+  field(PREC, 1)
+  field(HHSV,"MAJOR")
+  field(HSV,"MINOR")
+  info(autosaveFields_pass0, "VAL HIGH HIHI")
+} 
+
+record(ai,"B_HW_CRIO_BONUS_MFC_INIT") {
+  info(autosaveFields_pass0, "LOLO LO HIGH HIHI HHSV HSV LSV LLSV")
+}
+

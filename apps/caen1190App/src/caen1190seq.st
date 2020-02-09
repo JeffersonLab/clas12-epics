@@ -9,10 +9,10 @@ program caen1190seq
 #define MAXMICRO 102.4000
 
 // number of TDC bins:
-#define MAXBINS 0x80000
+#define FIFO 0x80000
 
 // number of FFT bins:
-#define HALFMAXBINS 0x40000
+#define HALF_FIFO 0x40000
 
 // maximum FFT frequency corresponding to TDC resolution (Hz):
 #define MAXHERTZ 2.56E9
@@ -41,8 +41,8 @@ program caen1190seq
 %%extern void fft_float(unsigned,int,unsigned int*,unsigned int*,float*,float*);
 %%extern void fft_double(unsigned,int,unsigned int*,unsigned int*,double*,double*);
 %%int get_freq_bin(float freq) {
-%%  int bin=(int)((float)HALFMAXBINS*freq/MAXHERTZ);
-%%  if (bin<0 || bin>=HALFMAXBINS) bin=0;
+%%  int bin=(int)((float)HALF_FIFO*freq/MAXHERTZ);
+%%  if (bin<0 || bin>=HALF_FIFO) bin=0;
 %%  return bin;
 %%}
 
@@ -62,11 +62,11 @@ int errors;                            assign errors to   "{P}:errors";
 short status;                          assign status to   "{P}:status";
 float timer;                           assign timer  to   "{P}:timer";
 unsigned int complete;                 assign complete to "{P}:complete";
-float xaxis[MAXBINS];                  assign xaxis to    "{P}:xaxis";
-double faxis[HALFMAXBINS];             assign faxis to    "{P}:faxis";
+float xaxis[FIFO];                     assign xaxis to    "{P}:xaxis";
+double faxis[HALF_FIFO];               assign faxis to    "{P}:faxis";
 float rates[NCHANS];                   assign rates to {};
-float histos[NCHANS][MAXBINS];         assign histos to {};
-float dwellpower[NCHANS][HALFMAXBINS]; assign dwellpower to {};
+float histos[NCHANS][FIFO];            assign histos to {};
+float dwellpower[NCHANS][HALF_FIFO];   assign dwellpower to {};
 float dwellpowermax[NCHANS];           assign dwellpowermax to {};
 float dwellpowerslowmax[NCHANS];       assign dwellpowerslowmax to {};
 float powermaxes[NCHANS][NMAXES];      assign powermaxes to {};
@@ -76,25 +76,31 @@ float fpowerslowmaxes[NCHANS][NMAXES]; assign fpowerslowmaxes to {};
 float power250MHz[NCHANS];             assign power250MHz to {};
 float power120KHz[NCHANS];             assign power120KHz to {};
 
-float dwellpowersum[HALFMAXBINS]; assign dwellpowersum to "{P}:dwellpower:sum";
-float dwellpowermaxsum; assign dwellpowermaxsum to "{P}:dwellpower:max:sum";
-float dwellpowerslowmaxsum; assign dwellpowerslowmaxsum to "{P}:dwellpower:slow:max:sum";
-float powermaxessum[NMAXES]; assign powermaxessum to "{P}:power:maxes:amp:sum";
-float fpowermaxessum[NMAXES];assign fpowermaxessum to "{P}:power:maxes:freq:sum";
-float powerslowmaxessum[NMAXES];assign powerslowmaxessum to "{P}:power:slow:maxes:amp:sum";
-float fpowerslowmaxessum[NMAXES];assign fpowerslowmaxessum to "{P}:power:slow:maxes:freq:sum";
+float dwellpowersum[HALF_FIFO];   assign dwellpowersum        to "{P}:dwellpower:sum";
+float dwellpowermaxsum;           assign dwellpowermaxsum     to "{P}:dwellpower:max:sum";
+float dwellpowerslowmaxsum;       assign dwellpowerslowmaxsum to "{P}:dwellpower:slow:max:sum";
+float powermaxessum[NMAXES];      assign powermaxessum        to "{P}:power:maxes:amp:sum";
+float fpowermaxessum[NMAXES];     assign fpowermaxessum       to "{P}:power:maxes:freq:sum";
+float powerslowmaxessum[NMAXES];  assign powerslowmaxessum    to "{P}:power:slow:maxes:amp:sum";
+float fpowerslowmaxessum[NMAXES]; assign fpowerslowmaxessum   to "{P}:power:slow:maxes:freq:sum";
+
 float power250MHzsum; assign power250MHzsum to "{P}:power:250MHz:sum";
 float power120KHzsum; assign power120KHzsum to "{P}:power:120KHz:sum";
+
+float rmspower[HALF_FIFO];
+float rms;                assign rms           to "{P}:rms";
+float rmscutofffreq;      assign rmscutofffreq to "{P}:rms:cutoff:freq";
+int rmsrebin;             assign rmsrebin      to "{P}:rms:rebin";
 
 // local variables:
 string stmp;
 unsigned int completions;
 double ftmp,ftmp2;
-float real[MAXBINS],imag[MAXBINS];
+float real[FIFO],imag[FIFO];
 int ii,jj,kk,ll,itmp,nbins,imax,imax2,ndwellpower[NCHANS];
 int ipowermaxes[NCHANS][NMAXES],ipowerslowmaxes[NCHANS][NMAXES];
 int ipowermaxessum[NMAXES],ipowerslowmaxessum[NMAXES];
-unsigned int tdcs[NCHANS][MAXBINS],len[NCHANS],null_fifo[MAXBINS];
+unsigned int tdcs[NCHANS][FIFO],len[NCHANS],null_fifo[FIFO];
 evflag ef_timer_stop,ef_timer_start;
 
 
@@ -137,9 +143,9 @@ ss caen1190seq {
 				pvPut(status);
 			}
             // intialize axes at full-scale:
-            for (ii=0; ii<MAXBINS; ii++) {
+            for (ii=0; ii<FIFO; ii++) {
                 xaxis[ii]=ii*TDC*1E6; // ps
-                if (ii < HALFMAXBINS) {
+                if (ii < HALF_FIFO) {
                     faxis[ii]=ii/(MAXMICRO/1E6)/1000; //kHz
                 }
             }
@@ -193,13 +199,14 @@ ss caen1190seq {
 			status=CLEAR;
 			pvPut(status);
             status=itmp;
-            for (jj=0; jj<HALFMAXBINS; jj++) {
+            for (jj=0; jj<HALF_FIFO; jj++) {
                 dwellpowersum[jj]=0;
+                rmspower[jj]=0;
             }
 			for (ii=0; ii<NCHANS; ii++) {
-				for (jj=0; jj<MAXBINS; jj++) {
+				for (jj=0; jj<FIFO; jj++) {
 					histos[ii][jj]=0;
-                    if (jj<HALFMAXBINS) {
+                    if (jj<HALF_FIFO) {
                         dwellpower[ii][jj]=0;
                     }
 				}
@@ -274,14 +281,14 @@ ss caen1190seq {
 				for (jj=0; jj<len[ii]; jj++) {
                     // find the histogram bin and fill it:
                     itmp = (int)tdcs[ii][jj]/ticsperbin;
-					if (itmp<MAXBINS) histos[ii][itmp]++;
+					if (itmp<FIFO) histos[ii][itmp]++;
                     // count total rate:
 					rates[ii]++;
 				}
                 
                 // overlay fake data (1st channel only):
                 if (ii==0 && pulser_enab) {
-                    nbins = MAXBINS/ticsperbin;
+                    nbins = FIFO/ticsperbin;
                     // pulser period (micro-seconds):
                     ftmp = (float)1./pulser_freq/1E3*1E6;
                     // pulser period (bins):
@@ -303,9 +310,9 @@ ss caen1190seq {
                 // overlay fake data (1st channel only):
                 if (pulser_enab && ii==0) {
                     ftmp = (float)1./pulser_freq/1E3*1E6;
-                    for (jj=0; jj<MAXBINS; jj++) {
-%%                      tdcs[ii][jj] += 100000000*sin(2*PI/(ftmp/MAXMICRO)*jj/MAXBINS);
-%%                      //+7000*cos(7*2*PI/(ftmp/MAXMICRO)*jj/MAXBINS-0.5);
+                    for (jj=0; jj<FIFO; jj++) {
+%%                      tdcs[ii][jj] += 100000000*sin(2*PI/(ftmp/MAXMICRO)*jj/FIFO);
+%%                      //+7000*cos(7*2*PI/(ftmp/MAXMICRO)*jj/FIFO-0.5);
                     }
                     complete |= 1;
                 }
@@ -314,14 +321,14 @@ ss caen1190seq {
                 else if ( (complete & (1<<ii)) == 0) continue;
 
                 // do fourier transform:
-                fft_float(MAXBINS,0,&tdcs[ii][0],null_fifo,real,imag);
+                fft_float(FIFO,0,&tdcs[ii][0],null_fifo,real,imag);
 
                 // 0Hz/DC component and its running sum:
 %%              dwellpower[ii][0] += sqrt(real[0]*real[0]+imag[0]*imag[0]);
 
                 // higher components:
                 ftmp=0;
-                for (jj=1; jj<(MAXBINS-1)/2; jj++) {
+                for (jj=1; jj<(FIFO-1)/2; jj++) {
                     // jj-th frequency and its running sum:
 %%                  dwellpower[ii][jj] += sqrt(real[jj]*real[jj]+imag[jj]*imag[jj]);
                 }
@@ -357,7 +364,7 @@ ss caen1190seq {
                 // find maximum frequencies:
                 ftmp  = 0;
                 ftmp2 = 0;
-                for (jj=1; jj<(MAXBINS-1)/2; jj++) {
+                for (jj=1; jj<(FIFO-1)/2; jj++) {
 
                     // scale by 0Hz component and average:
                     dwellpower[ii][jj] /= dwellpower[ii][0];// * ndwellpower[ii];
@@ -434,7 +441,7 @@ ss caen1190seq {
             dwellpowersum[0] = 0;
             ftmp=0;
             ftmp2=0;
-            for (jj=1; jj<(MAXBINS-1)/2; jj++) {
+            for (jj=1; jj<(FIFO-1)/2; jj++) {
                 if (dwellpowersum[jj] > ftmp) {
                     ftmp = dwellpowersum[jj];
                     imax = jj;
@@ -514,15 +521,44 @@ ss caen1190seq {
             pvPut(fpowerslowmaxessum);
 
             // update bin coordinates:
-            for (ii=0; ii<MAXBINS; ii++) {
+            for (ii=0; ii<FIFO; ii++) {
                 xaxis[ii]=ii*ticsperbin*TDC*1E6;
             }
             pvPut(xaxis);
 		}
         
-        when () {} state clear
+        when () {} state rms
     }
 
+    state rms {
+        entry {
+            pvGet(rmscutofffreq);
+            pvGet(rmsrebin);
+            rms = 0;
+            ftmp = 0;
+            itmp = get_freq_bin(rmscutofffreq)/rmsrebin;
+            if (itmp>1 && itmp<HALF_FIFO) {
+                for (jj=0; jj<HALF_FIFO; jj++) {
+                    kk = jj/rmsrebin;
+                    if (kk >= itmp) continue;
+                    rmspower[kk] += dwellpowersum[jj];
+                    ftmp += dwellpowersum[jj];
+                }
+                // the mean:
+                ftmp /= itmp;
+                // the rms:
+                rms=0;
+                for (jj=0; jj<itmp; jj++) {
+%%                  rms += pow(rmspower[jj]-ftmp,2);
+                }
+%%              rms = sqrt(rms/(itmp-1));
+                // poisson-subtracted rms:
+                rms -= sqrt(ftmp);
+            }
+            pvPut(rms);
+        }
+        when () {} state clear
+    }
 }
 
 

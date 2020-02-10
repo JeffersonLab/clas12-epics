@@ -34,6 +34,8 @@ dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
 dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
 dbLoadRecords("db/gas_cRIO_BONUS_intlk.db")
 
+dbLoadRecords("db/timeDerivative2.db","INP=B_BONUS_GAS_PT110,P=B_BONUS_GAS_PT110:deriv,NSEC=1,N=5")
+
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")
 

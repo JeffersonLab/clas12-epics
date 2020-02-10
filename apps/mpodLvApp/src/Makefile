@@ -11,6 +11,8 @@ DBD += mpodLv.dbd
 # mpodLv.dbd will include these files:
 mpodLv_DBD += snmp.dbd
 mpodLv_DBD += devSnmp.dbd
+mpodLv_DBD += calc.dbd
+mpodLv_DBD += aCalcoutRecord.dbd
 mpodLv_DBD += asSupport.dbd
 mpodLv_DBD += devIocStats.dbd
 mpodLv_DBD += mpodLvInclude.dbd
@@ -31,6 +33,7 @@ mpodLv_LIBS += autosave
 mpodLv_LIBS += devIocStats
 mpodLv_LIBS += devSnmp
 mpodLv_LIBS += caPutLog
+mpodLv_LIBS += calc
 mpodLv_LIBS += seq
 
 include $(TOP)/configure/RULES

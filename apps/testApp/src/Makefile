@@ -15,6 +15,9 @@ DBD += testApp.dbd
 
 testApp_DBD += base.dbd
 testApp_DBD += waveformApp.dbd
+testApp_DBD += asyn.dbd
+testApp_DBD += calc.dbd
+testApp_DBD += aCalcoutRecord.dbd
 testApp_DBD += devIocStats.dbd
 testApp_DBD += asSupport.dbd 
 testApp_DBD += caPutLog.dbd
@@ -35,6 +38,8 @@ testApp_LIBS += waveformApp
 testApp_LIBS += devIocStats
 testApp_LIBS += autosave
 testApp_LIBS += caPutLog
+testApp_LIBS += asyn
+testApp_LIBS += calc
 testApp_LIBS += seq pv
 
 #===========================

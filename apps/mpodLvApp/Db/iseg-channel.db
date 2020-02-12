@@ -64,21 +64,13 @@ record(ai,"$(HV):outputMeasCurrentC") {
 }
 record(ai,"$(HV):outputMeasSenseV") {
 	field(DESC,"Measured output voltage")
-	field(SCAN,"1 second")
+#field(SCAN,"Passive")
+    field(SCAN,"10 second")
 	field(DTYP,"Snmp")
 	field(FLNK,"$(HV):outputMeasSenseVAlm.PROC")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementSenseVoltage.$(HVCH) Float: 100")
 	field(PREC,"2")
 	field(EGU,"V")
-#	field(HOPR,"100")
-#	field(HIHI,"95.0")
-#	field(LOLO,"75.0")
-#	field(HIGH,"90.0")
-#	field(LOW,"80.0")
-#	field(HHSV,"MAJOR")
-#	field(LLSV,"MAJOR")
-#	field(HSV,"MINOR")
-#	field(LSV,"MINOR")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
 }
 record(ai,"$(HV):outputMeasTermVR") {
@@ -88,15 +80,6 @@ record(ai,"$(HV):outputMeasTermVR") {
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementTerminalVoltage.$(HVCH) Float: 100")
 	field(PREC,"6")
 	field(EGU,"V")
-#	field(HOPR,"100")
-#	field(HIHI,"95.0")
-#	field(LOLO,"75.0")
-#	field(HIGH,"90.0")
-#	field(LOW,"80.0")
-#	field(HHSV,"MAJOR")
-#	field(LLSV,"MAJOR")
-#	field(HSV,"MINOR")
-#	field(LSV,"MINOR")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
 }
 record(ai,"$(HV):outputVoltageFallRateR") {
@@ -378,7 +361,7 @@ record(calc,"$(HV):LV_RampDelaycalc") {
 }
 record(calc,"$(HV):RAMPING") {
 	field(DESC,"Module Ramping")
-	field(SCAN,".5 second")
+	field(SCAN,"1 second")
 	field(CALC,"A || B")
 	field(INPA,"$(HV):outRampUp NPP NMS")
 	field(INPB,"$(HV):outRampDown NPP NMS")
@@ -466,24 +449,30 @@ record(fanout,"$(HV):outStatusfan1") {
 }
 record(longin,"$(HV):outSupervisionR") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
-	field(SCAN,"10 second")
+	field(SCAN,"Passive")
+#field(SCAN,"10 second")
+    field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 50")
 }
 record(longin,"$(HV):outputGroupR") {
 	field(DESC,"Group num assigned to each channel")
-	field(SCAN,"10 second")
+#	field(SCAN,"10 second")
+	field(SCAN,"Passive")
+    field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputGroup.$(HVCH) INTEGER: 80")
 }
 record(longin,"$(HV):outputIndex") {
 	field(DESC,"Unique number for module")
-	field(SCAN,"10 second")
+    field(PINI,"1")
+#field(SCAN,"10 second")
+	field(SCAN,"Passive")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputIndex.$(HVCH) ( 30")
 }
 record(longin,"$(HV):outputMeasTemp") {
-	field(SCAN,"1 second")
+	field(SCAN,"10 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementTemperature.$(HVCH) INTEGER: 50")
 }
@@ -493,11 +482,11 @@ record(longin,"$(HV):outputStatuslong") {
 	field(FLNK,"$(HV):outStatusfan1.PROC")
 	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100 sh")
 }
-record(stringin,"$(HV):outputStatusstring") {
-	field(SCAN,"1 second")
-	field(DTYP,"Snmp")
-	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100")
-}
+#record(stringin,"$(HV):outputStatusstring") {
+#	field(SCAN,"1 second")
+#	field(DTYP,"Snmp")
+#	field(INP,"@$(HVHOST) public %{W}outputStatus.$(HVCH) BITS: 100")
+#}
 record(longin,"$(HV):outputTripTimeMaxCurrentR") {
 	field(DESC,"current trip time out")
 	field(SCAN,"10 second")
@@ -505,12 +494,12 @@ record(longin,"$(HV):outputTripTimeMaxCurrentR") {
 	field(INP,"@$(HVHOST) public %{W}outputTripTimeMaxCurrent.$(HVCH) INTEGER: 80")
 	field(EGU,"ms")
 }
-record(longin,"$(HV):outputUserConfigR") {
-	field(DESC,"output channel behavior")
-	field(SCAN,"10 second")
-	field(DTYP,"Snmp")
-	field(INP,"@$(HVHOST) public %{W}outputUserConfig.$(HVCH) INTEGER: 80")
-}
+#record(longin,"$(HV):outputUserConfigR") {
+#	field(DESC,"output channel behavior")
+#	field(SCAN,"10 second")
+#	field(DTYP,"Snmp")
+#	field(INP,"@$(HVHOST) public %{W}outputUserConfig.$(HVCH) INTEGER: 80")
+#}
 record(longin,"$(HV):outswitchRlong") {
 	field(DESC,"Channel switch 1=ENABLED,0=DISABLED")
 	field(SCAN,"1 second")
@@ -586,7 +575,8 @@ record(stringin,"$(HV)") {
 	field(DTYP,"Soft Channel")
 }
 record(stringin,"$(HV):outputName") {
-	field(SCAN,"10 second")
+#field(SCAN,"10 second")
+    field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputName.$(HVCH) STRING: 80")
 }

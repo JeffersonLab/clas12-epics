@@ -95,7 +95,7 @@ int rmsrebin;             assign rmsrebin      to "{P}:rms:rebin";
 // local variables:
 string stmp;
 unsigned int completions;
-double ftmp,ftmp2;
+double ftmp,ftmp2,favg;
 float real[FIFO],imag[FIFO];
 int ii,jj,kk,ll,itmp,nbins,imax,imax2,ndwellpower[NCHANS];
 int ipowermaxes[NCHANS][NMAXES],ipowerslowmaxes[NCHANS][NMAXES];
@@ -364,6 +364,8 @@ ss caen1190seq {
                 // find maximum frequencies:
                 ftmp  = 0;
                 ftmp2 = 0;
+                nbins = 0;
+                favg  = 0;
                 for (jj=1; jj<(FIFO-1)/2; jj++) {
 
                     // scale by 0Hz component and average:
@@ -371,6 +373,12 @@ ss caen1190seq {
 
                     if (completions & (1<<ii)) 
                     dwellpowersum[jj] += dwellpower[ii][jj];
+
+%%                  if (abs(jj-get_freq_bin(249.502E6+1)>10 &&
+%%                      abs(jj-get_freq_bin(126.953E3+1)>10))) {
+                        favg += dwellpower[ii][jj];
+                        nbins++;
+%%                    }
 
                     if (dwellpower[ii][jj] > ftmp) {
                         ftmp = dwellpower[ii][jj];
@@ -419,14 +427,14 @@ ss caen1190seq {
                 for (jj=itmp-1; jj<=itmp+1; jj++) {
                     ftmp += dwellpower[ii][jj];
                 }
-                power250MHz[ii] = ftmp;
+                power250MHz[ii] = ftmp-3.0*favg/nbins;
                 
                 ftmp = 0;
                 itmp = get_freq_bin(126.953E3+1);
                 for (jj=itmp-1; jj<=itmp+1; jj++) {
                     ftmp += dwellpower[ii][jj];
                 }
-                power120KHz[ii] = ftmp;
+                power120KHz[ii] = ftmp-3.0*favg/nbins;
             }
 
             for (ii=0; ii<NCHANS; ii++) {
@@ -441,7 +449,15 @@ ss caen1190seq {
             dwellpowersum[0] = 0;
             ftmp=0;
             ftmp2=0;
+            nbins = 0;
+            favg  = 0;
             for (jj=1; jj<(FIFO-1)/2; jj++) {
+%%                  if (abs(jj-get_freq_bin(249.502E6+1)>10 &&
+%%                      abs(jj-get_freq_bin(126.953E3+1)>10))) {
+                        favg += dwellpower[ii][jj];
+                        nbins++;
+%%                    }
+
                 if (dwellpowersum[jj] > ftmp) {
                     ftmp = dwellpowersum[jj];
                     imax = jj;
@@ -484,14 +500,14 @@ ss caen1190seq {
             for (jj=itmp-1; jj<=itmp+1; jj++) {
                 ftmp += dwellpowersum[jj];
             }
-            power250MHzsum = ftmp;
+            power250MHzsum = ftmp-3.0*favg/nbins;
 
             ftmp = 0;
             itmp = get_freq_bin(126.953E3+1);
             for (jj=itmp-1; jj<=itmp+1; jj++) {
                 ftmp += dwellpowersum[jj];
             }
-            power120KHzsum = ftmp;
+            power120KHzsum = ftmp-3.0*favg/nbins;
             for (jj=0; jj<NMAXES; jj++) {
                 fpowermaxessum[jj] = faxis[ipowermaxessum[jj]];
                 fpowerslowmaxessum[jj] = faxis[ipowerslowmaxessum[jj]];
@@ -537,21 +553,23 @@ ss caen1190seq {
             rms = 0;
             ftmp = 0;
             itmp = get_freq_bin(rmscutofffreq)/rmsrebin;
+            nbins = 0;
             if (itmp>1 && itmp<HALF_FIFO) {
                 for (jj=0; jj<HALF_FIFO; jj++) {
                     kk = jj/rmsrebin;
                     if (kk >= itmp) continue;
                     rmspower[kk] += dwellpowersum[jj];
                     ftmp += dwellpowersum[jj];
+                    nbins++;
                 }
                 // the mean:
-                ftmp /= itmp;
+                ftmp /= nbins;
                 // the rms:
                 rms=0;
                 for (jj=0; jj<itmp; jj++) {
 %%                  rms += pow(rmspower[jj]-ftmp,2);
                 }
-%%              rms = sqrt(rms/(itmp-1));
+%%              rms = sqrt(rms/(nbins-1));
                 // poisson-subtracted rms:
                 rms -= sqrt(ftmp);
             }

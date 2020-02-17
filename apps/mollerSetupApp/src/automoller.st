@@ -89,6 +89,7 @@ int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 
 // Wien Angles:
 float vwienangle; assign vwienangle to "VWienAngle";
+float hwienangle; assign hwienangle to "HWienAngle";
 
 // CODA run number:
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
@@ -170,7 +171,7 @@ float slmbca;          assign slmbca            to "q_asym_3";
 float slmebca;         assign slmebca           to "d_asym_3";
 
 %{
-extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*,float);
+extern void makeLogEntry(char*,float,float,float,float,float,float,float,float,float,int,int,char*,char*,int,int,char*,char*,float,float);
 extern double calcQuadCurrent(float);
 extern double fabs(double);
 int equals(float x1,float x2,float tolerance) { return fabs(x1-x2) < tolerance; }
@@ -321,8 +322,9 @@ ss automoller {
             pvGet(slmbca);
             pvGet(slmebca);
             pvGet(vwienangle);
+            pvGet(hwienangle);
             epicsThreadSleep(4);
-            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
             epicsThreadSleep(2);
             MESSAGE(Check Logbook for New Entry!);
             sprintf(logcomments,"None");

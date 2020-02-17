@@ -23,7 +23,8 @@ void makeLogEntry(
         int coda_runno,
         char* startTime,
         char* endTime,
-        float vwienangle) {
+        float vwienangle,
+        float hwienangle) {
     char *dir="/home/epics/DATA/MOELLER";
     char cmd[3000];
     char body[2000];
@@ -64,7 +65,7 @@ void makeLogEntry(
             "<tr><td>Polarization (%%) </td><td> %.3f +/- %.3f</td></tr>"
             "<tr><td>Beam Charge Asymmetry (%%) </td><td> %.3f +/- %.3f</td></tr>"
             "<tr><td>Half Wave Plate </td><td> %s</td></tr>"
-            "<tr><td>V Wien Angle (deg)</td><td> %.1f</td></tr>"
+            "<tr><td>V/H Wien Angles (deg)</td><td> %.1f/%.1f</td></tr>"
             "<tr><td>Target Position </td><td> %s</td></tr>"
             "<tr><td>Beam Energy (MeV) </td><td> %.1f</td></tr>"
             "<tr><td>Quad Current (A) </td><td> %.1f/%.1f</td></tr>"
@@ -76,7 +77,7 @@ void makeLogEntry(
             "<tr><td>Run End Time </td><td> %s</td></tr>"
             "</table>"
             "<tag:hallbmollerrun>",
-            logcom,pol,epol,bca,ebca,shwp,vwienangle,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
+            logcom,pol,epol,bca,ebca,shwp,vwienangle,hwienangle,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
     sprintf(cmd,"echo '%s' | logentry --cert ~clasrun/.elogcert --html -g Moller -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);

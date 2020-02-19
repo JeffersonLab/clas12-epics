@@ -109,6 +109,17 @@ assign scaler_datasc4[13] to "scaler.S14";
 assign scaler_datasc4[14] to "scaler.S15";
 assign scaler_datasc4[15] to "scaler.S16";
 
+#define DOBPM
+#define NBPM 4
+string stmp;
+string bpm_name[NBPM]={"IPM2C21A","IPM2C24A","IPM2H00","IPM2H01"};
+float bpm_x_avg[NBPM];
+float bpm_y_avg[NBPM];
+float bpm_x[NBPM]; assign bpm_x to {};
+float bpm_y[NBPM]; assign bpm_y to {};
+float bpm_i[NBPM]; assign bpm_i to {};
+float bpm_n[NBPM];
+evflag ev_startScan,ev_stopScan,ev_bpmReady;
 
 /* ================================================================ */
 
@@ -164,6 +175,7 @@ char tmp_rec[24];
 char tmp_name[50];
 int  tmp_int;
 float tmp_f;
+string tmp_s;
 
 short display_mode_init;
 short scaler_mode_init;
@@ -183,6 +195,92 @@ double timeWaited = 0;
 %% extern int get_e_name(int, char *);
 %% extern int get_r_name(int, char *);
 %% extern int scp_clon01(char *, char*, int);
+
+#ifdef DOBPM
+ss bpm_averager {
+
+    state start {
+
+        entry {
+            efClear(ev_bpmReady);
+            for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+                sprintf(tmp_s,"%s.XPOS",bpm_name[tmp_int]);
+                pvAssign(bpm_x[tmp_int],tmp_s);
+                sprintf(tmp_s,"%s.YPOS",bpm_name[tmp_int]);
+                pvAssign(bpm_y[tmp_int],tmp_s);
+                pvAssign(bpm_i[tmp_int],bpm_name[tmp_int]);
+            }
+        }
+
+        when (!pvConnected(bpm_x[0]) ||
+              !pvConnected(bpm_x[1]) ||
+              !pvConnected(bpm_x[2]) ||
+              !pvConnected(bpm_x[3]) ||
+              !pvConnected(bpm_y[0]) ||
+              !pvConnected(bpm_y[1]) ||
+              !pvConnected(bpm_y[2]) ||
+              !pvConnected(bpm_y[3]) ||
+              !pvConnected(bpm_i[0]) ||
+              !pvConnected(bpm_i[1]) ||
+              !pvConnected(bpm_i[2]) ||
+              !pvConnected(bpm_i[3])) {
+	        printf("bpm_averager:  Waiting on PVs\n");
+            epicsThreadSleep(1);
+        } state start
+
+        when () {} state idle
+    }
+
+    state idle {
+        entry {
+	        printf("bpm_averager:  idle\n");
+        }
+        when (efTestAndClear(ev_startScan)) {
+            efClear(ev_bpmReady);
+            epicsThreadSleep(1);
+        } state calc
+    }
+
+    state calc {
+
+        option -t;
+
+        entry {
+            for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+                bpm_n[tmp_int]=0;
+                bpm_x_avg[tmp_int]=0;
+                bpm_y_avg[tmp_int]=0;
+            }
+        }
+        
+        when (efTestAndClear(ev_stopScan)) {
+            for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+                bpm_x_avg[tmp_int] /= bpm_n[tmp_int];
+                bpm_y_avg[tmp_int] /= bpm_n[tmp_int];
+	            printf("bpm_averager: %.1f %.1f %.1f\n",bpm_x_avg[tmp_int],bpm_y_avg[tmp_int]);
+            }
+            efSet(ev_bpmReady);
+        } state idle
+
+        when () {
+            for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+                pvGet(bpm_x[tmp_int]);
+                pvGet(bpm_y[tmp_int]);
+                pvGet(bpm_i[tmp_int]);
+            }
+            for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+	            printf("bpm_averager: %.1f %.1f %.1f\n",bpm_i[tmp_int],bpm_x[tmp_int],bpm_y[tmp_int]);
+                if (bpm_i[tmp_int]>2) {
+                    bpm_x_avg[tmp_int] += bpm_x[tmp_int];
+                    bpm_y_avg[tmp_int] += bpm_y[tmp_int];
+                    bpm_n[tmp_int]++;
+                }
+            }
+            epicsThreadSleep(1);
+        } state calc
+    }
+}
+#endif
 
 /* state code  */
 ss harp_scan_snc {
@@ -408,6 +506,9 @@ ss harp_scan_snc {
    }
    state daq_write {
 
+       entry {
+           efSet(ev_startScan);
+       }
      // NATHAN ADDED ABORT:
      when (abortButton) {
          abortButton = 0;
@@ -465,6 +566,10 @@ ss harp_scan_snc {
      when (harp_position >= (position_b -DELTA) && movn == DONE) {
        printf("end of harp_{motor_name} scan\n");
      } state end_scan
+
+     exit {
+         efSet(ev_stopScan);
+     }
    }
 
    // NATHAN ADDED ABORT:
@@ -499,7 +604,11 @@ ss harp_scan_snc {
    }
 
    state end_scan {
+#ifdef DOBPM
+     when (efTestAndClear(ev_bpmReady) || delay(25)) {
+#else
      when () {
+#endif
        spmg = 0;
        pvPut(spmg);
 
@@ -515,12 +624,22 @@ ss harp_scan_snc {
 
 /*close the file  and scp to mcc*/
       if ((fd > 0) && (fd != ioGlobalStdGet(1)) ) {
+          for (tmp_int=0; tmp_int<NBPM; tmp_int++) {
+              printf("# %s_AVG %.2f %.2f\n",bpm_name[tmp_int],bpm_x[tmp_int],bpm_y[tmp_int]);
+              fdprintf(fd,"# %s_AVG %.2f %.2f\n",bpm_name[tmp_int],bpm_x[tmp_int],bpm_y[tmp_int]);
+          }
          close(fd);
 // This is proven unreliable and a bad idea.  Changed to a cronjob in 2018.
          //scp_clon01(shortname, motor_name, 5);
       }
 
      } state restore_hardware
+#ifdef DOBPM
+     when (delay(20)) {
+         printf("# ERROR BPMAVG\n");
+         fdprintf(fd,"# ERROR BPMAVG\n");
+    } state end_scan
+#endif
    }
    state restore_hardware {
      when(lls == LIMIT_SWITCH_ON) {

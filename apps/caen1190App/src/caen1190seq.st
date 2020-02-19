@@ -557,7 +557,7 @@ ss caen1190seq {
             if (itmp>1 && itmp<HALF_FIFO) {
                 for (jj=0; jj<HALF_FIFO; jj++) {
                     kk = jj/rmsrebin;
-                    if (kk >= itmp) continue;
+                    if (kk >= itmp) break;
                     rmspower[kk] += dwellpowersum[jj];
                     ftmp += dwellpowersum[jj];
                     nbins++;

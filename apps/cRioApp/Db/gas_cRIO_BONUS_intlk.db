@@ -6,10 +6,20 @@ record(calc,"B_BONUS_INTLK_A:bypassed") {
     field(INPC,"B_BONUS_INTLK_RTPC_Press:rel:amb:bypass")
     field(INPD,"B_BONUS_INTLK_Diff_Press:bypass")
     field(INPE,"B_BONUS_INTLK_Buffer_Press:bypass")
-    field(INPF,"B_BONUS_HV_GEM:dv:intlk:bypass")
+    field(INPF,"B_BONUS_INTLK_B:bypassed")
     field(INPG,"B_BONUS_INTLK_PT110:bypass")
     field(INPH,"B_BONUS_INTLK_PT110:deriv:bypass")
     field(CALC,"A+B+C+D+E+F+G+H")
+}
+record(calc,"B_BONUS_INTLK_B:bypassed") {
+    field(SCAN,"2 second")
+    field(INPA,"B_BONUS_INTLK_GEM1:dv:bypass")
+    field(INPB,"B_BONUS_INTLK_GEM2:dv:bypass")
+    field(INPC,"B_BONUS_INTLK_GEM3:dv:bypass")
+    field(INPD,"B_BONUS_INTLK_GEM12:dv:bypass")
+    field(INPE,"B_BONUS_INTLK_GEM23:dv:bypass")
+    field(INPF,"B_BONUS_INTLK_GEM1CAT:dv:bypass")
+    field(CALC,"A+B+C+D+E+F")
 }
 record(calc,"B_BONUS_INTLK:bypassed") {
     field(SCAN,"2 second")
@@ -32,13 +42,18 @@ record(calc,"B_BONUS_INTLK_A:tripped") {
     field(INPC,"B_BONUS_INTLK_RTPC_Press:rel:amb:status")
     field(INPD,"B_BONUS_INTLK_Diff_Press:status")
     field(INPE,"B_BONUS_INTLK_Buffer_Press:status")
-    field(INPF,"B_BONUS_HV_GEM1CAT:watchdog:calc")
-    field(INPG,"B_BONUS_HV_GEM1:watchdog:calc")
-    field(INPH,"B_BONUS_HV_GEM2:watchdog:calc")
-    field(INPI,"B_BONUS_HV_GEM3:watchdog:calc")
-    field(INPJ,"B_BONUS_HV_GEM12:watchdog:calc")
-    field(INPK,"B_BONUS_HV_GEM23:watchdog:calc")
-    field(CALC,"A+B+C+D+E+((F+G+H+I+J+K)>0?1:0)")
+    field(INPF,"B_BONUS_INTLK_B:tripped")
+    field(CALC,"A+B+C+D+E+F")
+}
+record(calc,"B_BONUS_INTLK_B:tripped") {
+    field(SCAN,"2 second")
+    field(INPA,"B_BONUS_INTLK_GEM1:dv:status")
+    field(INPB,"B_BONUS_INTLK_GEM2:dv:status")
+    field(INPC,"B_BONUS_INTLK_GEM3:dv:status")
+    field(INPD,"B_BONUS_INTLK_GEM12:dv:status")
+    field(INPE,"B_BONUS_INTLK_GEM23:dv:status")
+    field(INPF,"B_BONUS_INTLK_GEM1CAT:dv:status")
+    field(CALC,"A+B+C+D+E+F")
 }
 record(calc,"B_BONUS_INTLK:tripped") {
     field(SCAN,"2 second")

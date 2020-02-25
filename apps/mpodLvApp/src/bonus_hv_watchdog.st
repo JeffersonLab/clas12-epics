@@ -33,11 +33,15 @@ int isError; assign isError to "B_BONUS_HV:isError"; monitor isError;
 int isOn;    assign isOn    to "B_BONUS_HV:isOn";    monitor isOn;
 //int isOff;   assign isOff   to "B_BONUS_HV:isOff";   monitor isOff;
 
+#define NINTLK 6
+string intlkNames[NINTLK] = {"GEM1CAT","GEM12","GEM23","GEM1","GEM2","GEM3"};
+int intlkReset[NINTLK]; assign intlkReset to {};
+
 int dly[NCHAN];  assign dly to {};
 int pw[NCHAN];   assign pw to {};
 
 string stmp;
-int changed,tmp,iseq,ii;
+int changed,tmp,iseq,ii,jj;
 int sequence[NCHAN]={0,1,2,3,4,5,6};
 
 ss bonus_hv_watchdog {
@@ -51,6 +55,12 @@ ss bonus_hv_watchdog {
                 pvAssign(dly[ii],stmp);
                 sprintf(stmp,"B_BONUS_HV_%s:outSwitch",NAMES[ii]);
                 pvAssign(pw[ii],stmp);
+            }
+            for (jj=0; jj<NINTLK; jj++) {
+                sprintf(stmp,"B_BONUS_INTLK_%s:dv:reset",intlkNames[jj]);
+                printf(stmp);
+                printf("\n");
+                pvAssign(intlkReset[jj],stmp);
             }
         }
 
@@ -74,8 +84,8 @@ ss bonus_hv_watchdog {
 
     state watch {
         entry { MESSAGE(Waiting for user input ...); }
-        when (offbtn) {} state off
         when (onbtn) {} state on
+        when (offbtn) {} state off
         when (isError) {
             MESSAGE(HW ERROR - Offing);
             epicsThreadSleep(2);
@@ -101,16 +111,28 @@ ss bonus_hv_watchdog {
         entry {
             onbtn=0;
             pvPut(onbtn);
+            offbtn=0;
+            pvPut(offbtn);
             MESSAGE(Clearing All inhibits ...);
             allclear=10;
             pvPut(allclear);
 
+            for (jj=0; jj<NINTLK; jj++) {
+                printf("Resetting Interlock:  %s\n",intlkNames[jj]);
+                intlkReset[jj]=0;
+                pvPut(intlkReset[jj]);
+            }
+            offbtn=0;
+            pvPut(offbtn);
             epicsThreadSleep(2);
-            
+            offbtn=0;
+            pvPut(offbtn);
+
             MESSAGE(Sorting Delays ...);
             for (ii=0; ii<NCHAN; ii++) {
                 pvGet(dly[ii]);
             }
+            
             // bubble-sort indices by delay:
             while (1) {
                 changed=0;

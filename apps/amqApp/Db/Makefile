@@ -43,11 +43,14 @@ DB += amq-adc-FTOF.substitutions
 DB += amq-adc-LTCC.substitutions
 DB += amq-adc-HTCC.substitutions
 DB += amq-adc-PCAL.substitutions
+DB += array-to-scalar-4.template
 DB += array-to-scalar-16.template
 DB += array-to-scalar-32.template
 DB += amqTrigFrac.template
 DB += daq2epics-alias.db
 DB += amqRocBusy-alarm.db
+DB += amqDaq.substitutions
+DB += amqDaq-aliases.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

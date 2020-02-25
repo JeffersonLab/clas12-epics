@@ -1,0 +1,60 @@
+record(subArray,"$(P)$(R=)00$(S=):sa") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(INP) CPP")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,0)
+    field(FLNK,"$(P)$(R=)01$(S=):sa.PROC")
+}
+record(subArray,"$(P)$(R=)01$(S=):sa") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(INP)")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,1)
+    field(FLNK,"$(P)$(R=)02$(S=):sa.PROC")
+}
+record(subArray,"$(P)$(R=)02$(S=):sa") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(INP)")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,2)
+    field(FLNK,"$(P)$(R=)03$(S=):sa.PROC")
+}
+record(subArray,"$(P)$(R=)03$(S=):sa") {
+    field(DESC,"$(DESC=)")
+    field(INP,"$(INP)")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,3)
+    field(FLNK,"$(P)$(R=)00$(S=).PROC")
+}
+
+record(ai,"$(P)$(R=)00$(S=)") {
+    field(PREC,"$(PREC=1)")
+    field(EGU,"$(EGU=)")
+    field(INP,"$(P)$(R=)00$(S=):sa")
+    field(FLNK,"$(P)$(R=)01$(S=).PROC")
+}
+record(ai,"$(P)$(R=)01$(S=)") {
+    field(PREC,"$(PREC=1)")
+    field(EGU,"$(EGU=)")
+    field(INP,"$(P)$(R=)01$(S=):sa")
+    field(FLNK,"$(P)$(R=)02$(S=).PROC")
+}
+record(ai,"$(P)$(R=)02$(S=)") {
+    field(PREC,"$(PREC=1)")
+    field(EGU,"$(EGU=)")
+    field(INP,"$(P)$(R=)02$(S=):sa")
+    field(FLNK,"$(P)$(R=)03$(S=).PROC")
+}
+record(ai,"$(P)$(R=)03$(S=)") {
+    field(PREC,"$(PREC=1)")
+    field(EGU,"$(EGU=)")
+    field(INP,"$(P)$(R=)03$(S=):sa")
+}

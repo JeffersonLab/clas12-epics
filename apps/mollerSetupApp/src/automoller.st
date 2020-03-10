@@ -330,6 +330,11 @@ ss automoller {
             sprintf(logcomments,"None");
             pvPut(logcomments);
         } state listen
+
+        exit {
+            strcpy(logusers,"");
+            pvPut(logusers);
+        }
     }
 
 	state reconfigure {

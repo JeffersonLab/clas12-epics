@@ -501,7 +501,22 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_1_title_font>
     <visible>true</visible>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <scripts />
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+var sector=widget.getMacroValue("S");
+
+if (sector=="3" || sector=="5") {
+widget.setPropertyValue("visible",true);
+}
+else {
+widget.setPropertyValue("visible",false);
+}]]></scriptText>
+        <pv trig="true">loc://pv(0)</pv>
+      </path>
+    </scripts>
     <trace_0_point_size>4</trace_0_point_size>
     <trace_0_trace_color>
       <color name="Minor" red="255" green="128" blue="0" />
@@ -621,7 +636,22 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_1_title_font>
     <visible>true</visible>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <scripts />
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+var type=widget.getMacroValue("T");
+
+if (type=="FADC") {
+widget.setPropertyValue("visible",true);
+}
+else {
+widget.setPropertyValue("visible",false);
+}]]></scriptText>
+        <pv trig="true">loc://pv(0)</pv>
+      </path>
+    </scripts>
     <trace_0_point_size>4</trace_0_point_size>
     <trace_0_trace_color>
       <color name="MEDM_COLOR_36" red="214" green="127" blue="226" />

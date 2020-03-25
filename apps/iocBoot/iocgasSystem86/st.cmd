@@ -42,6 +42,8 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 #dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
 #dbLoadRecords("db/gas_cRIO_BONUS_intlk.db")
 
+dbLoadRecords("db/gas_cRIO_RICH_drybox.db")
+
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")
 

@@ -24,6 +24,8 @@ DB += gas_cRIO_MFCINIT.db
 DB += weather_cRIO.db
 DB += labWeather_cRIO.db
 
+DB += gas_cRIO_RICH_drybox.db
+
 BEAST += gas_cRIO_COMM.xml
 BEAST += gas_cRIO_DC.xml
 BEAST += gas_cRIO_HTCC.xml

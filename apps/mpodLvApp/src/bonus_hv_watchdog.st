@@ -28,6 +28,8 @@ int offbtn; assign offbtn to "B_BONUS_HV:offbtn"; monitor offbtn;
 
 int off;      assign off      to "B_BONUS_HV:off";
 int allclear; assign allclear to "hvbonus2:clearEvent";
+int clear1;   assign clear1   to "hvbonus2:moduleDoClear:1";
+int clear2;   assign clear2   to "hvbonus2:moduleDoClear:2";
 
 int isError; assign isError to "B_BONUS_HV:isError"; monitor isError;
 int isOn;    assign isOn    to "B_BONUS_HV:isOn";    monitor isOn;
@@ -116,9 +118,14 @@ ss bonus_hv_watchdog {
             MESSAGE(Clearing All inhibits ...);
             allclear=10;
             pvPut(allclear);
+            clear1=1;
+            pvPut(clear1);
+            clear2=1;
+            pvPut(clear2);
+            epicsThreadSleep(5);
 
+            MESSAGE("Resetting Interlocks ...");
             for (jj=0; jj<NINTLK; jj++) {
-                printf("Resetting Interlock:  %s\n",intlkNames[jj]);
                 intlkReset[jj]=0;
                 pvPut(intlkReset[jj]);
             }

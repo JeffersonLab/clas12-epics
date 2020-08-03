@@ -9,6 +9,10 @@ os.environ['MYSQL_HOST']='clondb1'
 os.environ['EXPID']='clasrun'
 os.environ['SESSION']='clasprod'
 
+# kludge for CODA's new GCC not in .setup (only in clasrun's ~/.cshrc!), which will surely break again:
+os.environ['LD_LIBRARY_PATH']='/apps/gcc/8.3.0/lib:/apps/gcc/8.3.0/lib64:/usr/lib:/usr/local/lib'
+os.environ['PATH']='/usr/clas12/release/1.4.0/coda/Linux_x86_64/bin/:'+os.environ['PATH']
+
 #'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 CFG={
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},

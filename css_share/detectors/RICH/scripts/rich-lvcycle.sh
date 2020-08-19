@@ -114,6 +114,9 @@ echo "####################################################" | $log
 echo "#                                                  #" | $log
 echo "#           rich-lvcycle.sh COMPLETE               #" | $log
 echo "#                                                  #" | $log
+echo "# NOTE: the DAQ will now need to be reinitialized: #" | $log
+echo "#   Cancel->Reset->Configure->Download->Prestart   #" | $log
+echo "#                                                  #" | $log
 echo "####################################################" | $log
 date | $log
 

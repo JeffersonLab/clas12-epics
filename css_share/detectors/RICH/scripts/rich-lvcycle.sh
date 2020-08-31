@@ -80,6 +80,15 @@ function checkssh {
 ############################################################
 
 date | $log
+echo "#####################################################" | $log
+echo "#                                                   #" | $log
+echo "# NOTE: the DAQ will need to be reinitialized after #" | $log
+echo "#  ***AFTER*** this script tis complete:            #" | $log
+echo "#                                                   #" | $log
+echo "#   Cancel->Reset->Configure->Download->Prestart    #" | $log
+echo "#                                                   #" | $log
+echo "#####################################################" | $log
+echo  | $log
 
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
 

@@ -23,13 +23,19 @@ int sockfd_reg = 0;
 // #35 is dynode
 // [i]th element is bom_sc_ai_[i]
 //
-// this is the map that is NEVER changed:
-static const int bom_pmt2fpga_map[] = {31, 33, 27, 37, 23, 41, 19, 45, 15, 49, 11, 53, 7,  57,  3, 61, 35};
-// this is the gains for the 16 channels:
-static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 17, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24}; 
-//atic const int GAIN[] =             { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16};
 
-//#define DEBUG
+// this is the map that is NEVER changed, for the OLD firmware:
+//static const int bom_pmt2fpga_map[] = {31, 33, 27, 37, 23, 41, 19, 45, 15, 49, 11, 53, 7,  57,  3, 61, 35};
+// this is the gains for the 16 channels:
+//static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 17, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24}; 
+
+// this is the map that is NEVER changed, for the NEW firmware:
+static const int bom_pmt2fpga_map[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+//BR 8/9/2020 - disable bom_sc_ai_6 due to noise pickup
+static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 0, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24};
+static const int THRESHOLD =          300; 
+
+#define DEBUG
 
 typedef struct
 {
@@ -332,7 +338,6 @@ void rich_init_regs(MAROC_Regs *regs, int thr)
         if (!(jjj&0x1)) regs->CH[jjj>>1].bits.Gain0 = GAIN[i];
         else            regs->CH[jjj>>1].bits.Gain1 = GAIN[i];
     }
-
 }
 /*****************************************************************/
 /*****************************************************************/
@@ -491,7 +496,6 @@ void rich_dump_scalers()
 	rich_print_scaler("BusyCycles", rich_read32(&pRICH_regs->Sd.Scaler_BusyCycles), ref);
 #endif
 
-    /*
   for(j = 0; j < 64; j++)
 	{
 		printf("CH%2d", j);
@@ -504,12 +508,15 @@ void rich_dump_scalers()
 		}
 		printf("\n");
 	}
-    */
    
     char doggy[100];;
     for (j=0;j<16;j++) {
         int k = bom_pmt2fpga_map[j];
-		val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
+	//	val = rich_read32(&pRICH_regs->MAROC_Proc[2].Scalers[k]);
+
+val = rich_read32(&pRICH_regs->MAROC_Proc[0].Scalers[k]);
+
+
         fval = (float)val / ref;
 #ifdef DEBUG
         printf("bom_sc_ai_%d:  ref=%f raw=%d  hz=%f\n",j,ref,val,fval);
@@ -860,18 +867,28 @@ int main(int argc, char *argv[])
 
 	open_register_socket();
 
-	rich_test_regs(400);
-	rich_set_pulser(10000000.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
+  // disable coax outputs during configuration
+	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_0);
+	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_0); 
+
+	rich_test_regs(300);
+	rich_set_pulser(100.0, 0.5, 0xFFFFFFFF);					// freq, dutycycle, repetition (0= disable,0xffffffff = infinite)
 	rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
 
 	// Setup FPGA version of MAROC OR (note: this OR is formed in the FPGA from the MAROC hits and does not use the MAROC_OR signal)
 	//rich_setmask_fpga_or(0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000);
-	rich_setmask_fpga_or(0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF);
+	
+    //rich_setmask_fpga_or(0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF);
 
+//    rich_setmask_fpga_or(0xFFFFFFFF,0xFFFFFFFF,0x00000000,0x00000000,0xFFFFFFFF,0xFFFFFFFF);
+    rich_setmask_fpga_or(0x0000FFFF,0x00000000,0x00000000,0x00000000,0x00000000, 0x00000000);
+
+
+    
 	//rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_PULSER_DLY0);			// output pulser to TTL outputs for probing/scope trigger
-	rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_MAROC_OR);
+	//rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_MAROC_OR);
 	//rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_PULSER_DLY1);
-	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_MAROC_OR); 
+	//rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_MAROC_OR); 
 	rich_write32(&pRICH_regs->Sd.CTestSrc, 0);//SD_SRC_SEL_PULSER_DLY1_N);	// internal pulser fires test charge injection
 	rich_write32(&pRICH_regs->Sd.PulserDelay, (0<<16) | (0<<8) | (0<<0));
 	
@@ -895,12 +912,16 @@ int main(int argc, char *argv[])
 	rich_enable_all_tdc_channels();
 	
 	/* Set trig source to pulser when ready to take events */
-	rich_write32(&pRICH_regs->Sd.TrigSrc, SD_SRC_SEL_PULSER_DLY0);		// trigger source is pulser (delayed by TrigDelay)
+//	rich_write32(&pRICH_regs->Sd.TrigSrc, SD_SRC_SEL_PULSER_DLY0);		// trigger source is pulser (delayed by TrigDelay)
 
-  int thr = 300;
-  rich_test_regs(thr);
+rich_test_regs(THRESHOLD);
   
-  rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 4095);
+  rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
+	
+  usleep(1000000);
+  // enable coax outputs now that config is done/stable
+  rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_MAROC_OR);
+	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_MAROC_OR); 
 
   while(1)
   {

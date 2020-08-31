@@ -23,7 +23,7 @@ asynOctetSetOutputEos("L0",0,"\n")
 asynOctetSetInputEos("L0",0,"\n")
 
 dbLoadRecords("db/asynRecord.db","P=rasterdriver,R=:ASYN,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
-dbLoadRecords("db/keysight33X00.db","P=rasterdriver,R=:,PORT=L0,SCAN1=2 second,SCAN2=5 second")
+dbLoadRecords("db/keysight33X00.db","P=rasterdriver,R=:,PORT=L0,SCAN1=2 second,SCAN2=2 second")
 
 cd ${TOP}/iocBoot/${IOC}
 

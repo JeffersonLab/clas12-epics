@@ -53,7 +53,7 @@ record(ai,"B_DAQ_VTPGT:TrigBit:$(N):normLimit") {
 }
 
 record(calc,"B_DAQ_VTPGT:TrigBit:$(N):norm") {
-    field(INPA,"scaler_calc1b")
+    field(INPA,"IPM2C21A")
     field(INPB,"B_DAQ_VTPGT:TrigBit:$(N)")
     field(CALC,"A>0 ? B/A : 0")
     field(EGU,"Hz/nA")
@@ -61,7 +61,7 @@ record(calc,"B_DAQ_VTPGT:TrigBit:$(N):norm") {
 }
 
 record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
-    field(INPA,"scaler_calc1b")
+    field(INPA,"IPM2C21A")
     field(INPB,"B_DAQ_VTPGT:TrigBit:$(N):norm")
     field(INPC,"B_DAQ_VTPGT:TrigBit:$(N):normLimit")
     field(INPD,"B_DAQ:TrigBit:alarms:minCurrent")
@@ -74,7 +74,7 @@ record(calc,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm") {
 record(calcout,"B_DAQ_VTPGT:TrigBit:$(N):normAlarm:set") {
     field(SCAN,"Passive")
     field(INPA,"B_DAQ_VTPGT:TrigBit:$(N)")
-    field(INPB,"scaler_calc1b")
+    field(INPB,"IPM2C21A")
     field(INPC,"B_DAQ:TrigBit:alarms:minCurrent")
     field(CALC,"B>C")
 #field(OCAL,"A>SQRT(A)*8?(A-SQRT(A)*8)/B:1")

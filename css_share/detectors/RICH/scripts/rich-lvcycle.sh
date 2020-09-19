@@ -16,8 +16,10 @@ function lvcycle {
   cnt=0
   cnterr=0
   caput $pvGo 1 | $log
+  sleep 7
   while [ 1 ]
   do
+      sleep 1
       echo -n '.'
       stat=`caget -t $pvCheck`
       if [ $stat -eq 1 ]
@@ -48,7 +50,6 @@ function lvcycle {
               exit
           fi
       fi
-      sleep 1
   done
 }
 

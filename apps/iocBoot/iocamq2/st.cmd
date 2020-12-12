@@ -22,6 +22,7 @@ dbLoadTemplate("db/amqLatency.substitutions")
 dbLoadTemplate("db/amqDaq.substitutions")
 dbLoadRecords("db/amqDaq-aliases.db")
 
+dbLoadTemplate("db/amq-adc-HDICE.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 

@@ -662,6 +662,8 @@ public class MakeLogEntry
     }
     catch (Exception e) { 
       System.err.println("\nError Submitting To Logbook:\n"+e.getMessage());
+      System.err.println("\nCertificated may be expired, to check:\n");
+      System.err.println("cat ~/.elogcert | openssl x509 -noout -dates");
       updateStatusPane("Error Submitting To Logbook.",Color.RED);
     }
   }

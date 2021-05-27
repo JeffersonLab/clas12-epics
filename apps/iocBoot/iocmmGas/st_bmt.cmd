@@ -11,15 +11,11 @@ mmGas_registerRecordDeviceDriver(pdbbase)
 
 ## Configure modbus ports
 
-# The original BMT gas PLC:
-#drvAsynIPPortConfigure("TCP505","129.57.160.181:505",0,0,1)
+# The BMT gas PLC:
+drvAsynIPPortConfigure("TCP505","129.57.160.181:505",0,0,1)
 
 # The weather PLC:
 drvAsynIPPortConfigure("TCP508","129.57.160.224:508",0,0,1)
-
-# The FMT gas PLC, not used during BONUS when Saclay swapped PLCs:
-# (But I put it here just to not have 2 IOCs polling the same PLC, see st_fmt.cmd)
-drvAsynIPPortConfigure("TCP505","129.57.160.183:506",0,0,1)
 
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
 modbusInterposeConfig("TCP505",0,5000,0)

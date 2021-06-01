@@ -1,0 +1,401 @@
+#!/usr/bin/env python3
+
+import gi
+import os
+import sys
+import time
+import glob
+import epics
+import signal
+import argparse
+import subprocess
+import concurrent.futures
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GLib
+
+app_title = 'EPICS Burt Save & Restore'
+snapshot_directory = '/usr/clas12/DATA/burt'
+request_directory = os.getenv('EPICS')+'/tools/burtreq'
+executor = None
+
+class BurtApp(Gtk.Window):
+  '''The main window (probably should use Gtk.Application instead?)'''
+
+  def __init__(self):
+
+    Gtk.Window.__init__(self, title=app_title)
+    self.set_size_request(1000,800)
+    self.set_border_width(10)
+
+    '''Use a Gtk header, no window manager decorations:''' 
+    self.add_header(self, app_title, True)
+
+    '''Intialize a scrolling popup for viewing files/logs:'''
+    self.scroll,self.view,self.view_window = BurtApp.init_scrolled_popup(self)
+
+    '''Status bar at the bottom of the window:'''
+    self.spinner = Gtk.Spinner()
+    self.statuslabel = Gtk.Label()
+    self.statuslabel.set_halign(Gtk.Align.START)
+    self.statusbar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    self.statusbar.pack_start(self.spinner, False, False, 0)
+    self.statusbar.pack_start(self.statuslabel, True, True, 0)
+
+    '''Save/restore panels and group selector:'''
+    self.save = Save(self)
+    self.restore = Restore(self)
+    self.group = Group()
+
+    '''Stack to switch modes:'''
+    stack = Gtk.Stack()
+    stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+    stack.set_transition_duration(1000)
+    stack.add_titled(self.save, 'save', 'Save')
+    stack.add_titled(self.restore, 'restore', 'Restore')
+    self.stack_switcher = Gtk.StackSwitcher()
+    self.stack_switcher.set_stack(stack)
+    self.stack_switcher.set_halign(Gtk.Align.CENTER)
+
+    '''Menu at the top of the window:'''
+    global_menu = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    global_menu.pack_start(Gtk.Label(label='Mode Select:'), False, False, 0)
+    global_menu.pack_start(self.stack_switcher, False, False, 0)
+    global_menu.pack_end(self.group, False, False, 0)
+    global_menu.pack_end(Gtk.Label(label='Group Select:'), False, False, 0)
+
+    '''Combine them all together in the main window:'''
+    main_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
+    main_panel.pack_start(global_menu, False, False, 0)
+    main_panel.pack_start(stack, True, True, 0)
+    main_panel.pack_end(self.statusbar, False, False, 0)
+    self.add(main_panel)
+
+    '''Connect some actions:'''
+    self.group.connect('changed', self.update)
+    self.group.connect('changed', self.save.update)
+    stack.connect('notify::visible-child', self.update)
+    self.connect('destroy', Gtk.main_quit)
+
+    self.show_all()
+
+  def enable(self):
+    '''Enable all buttons'''
+    self.stack_switcher.set_sensitive(True)
+    self.save.btn_save.set_sensitive(True)
+    self.group.set_sensitive(True)
+    self.restore.btn_preview.set_sensitive(True)
+    self.restore.btn_confirm.set_sensitive(True)
+
+  def disable(self):
+    '''Disable all buttons'''
+    self.stack_switcher.set_sensitive(False)
+    self.save.btn_save.set_sensitive(False)
+    self.group.set_sensitive(False)
+    self.restore.btn_preview.set_sensitive(False)
+    self.restore.btn_confirm.set_sensitive(False)
+
+  def update(self, parent, args=None):
+    '''Update stuff when switching.  This was to workaround
+    FileChooser doing funny stuff that I never figured out.'''
+    d = snapshot_directory
+    if self.group.get_active() != 0:
+      d += '/' + self.group.get_active_text()
+    self.restore.chooser.set_current_folder(d)
+    self.save.update()
+
+  def dialog(self, question, message, submessage=None):
+    '''Show modal dialog with a question or just info'''
+    if question:
+      dialog = Gtk.MessageDialog(transient_for = self, flags = 0,
+          message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
+          text = message)
+    else:
+      dialog = Gtk.MessageDialog(transient_for = self, flags = 0,
+          message_type = Gtk.MessageType.INFO, buttons = Gtk.ButtonsType.OK,
+          text = message)
+    if submessage is not None:
+      dialog.format_secondary_text(submessage)
+    self.add_header(dialog)
+    ret = dialog.run()
+    dialog.destroy()
+    return ret
+
+  def load_text_view(self, text_view, text):
+    '''Change contents of the text view pane.  The GLib.idle_add
+    seems to workaround a bug in TextView/Tree.'''
+    GLib.idle_add(text_view.get_buffer().set_text, text)
+
+  def load_text_view_from_file(self, text_view, path):
+    '''Load the contents of a file into the text view pane'''
+    with open(path, errors='replace') as f:
+      text = '\n'.join([x.strip() for x in f.readlines()])
+      self.load_text_view(text_view, text)
+
+  def __show_scrolled_popup(self, title, text):
+    '''Show modal dialog with scollable text, not to be called
+    directly but wrapped by GLib.idle_add to avoid a bug in Text/TreeView'''
+    self.view.get_buffer().set_text(text)
+    self.view_window.props.text = title
+    self.view_window.run()
+    self.view_window.hide()
+
+  def show_scrolled_popup(self, title, text):
+    '''Show modal dialog with scrollable text, wrapped in
+    a thread request to avoid a bug in Text/TreeView'''
+    GLib.idle_add(self.__show_scrolled_popup, title, text)
+
+  def show_scrolled_file_popup(self, title, path):
+    '''Show modal dialog with scrollable file contents'''
+    with open(path,'r') as f:
+      text = '\n'.join([x.strip() for x in f.readlines()])
+      self.show_scrolled_popup(title, text)
+
+  @staticmethod
+  def init_scrolled_popup(transient_for, width=800, height=600):
+    '''Initialize a modal dialog with an embedded scrollable text view'''
+    scroll,view = BurtApp.get_new_scroll_view()
+    scroll.set_size_request(width, height)
+    dialog = Gtk.MessageDialog(transient_for = transient_for
+        , flags = 0,
+      message_type = Gtk.MessageType.INFO, buttons = Gtk.ButtonsType.OK, text='')
+    BurtApp.add_header(dialog)
+    content = dialog.get_content_area()
+    content.pack_start(scroll, True, True, 0)
+    content.show_all()
+    return scroll,view,dialog
+
+  @staticmethod
+  def get_new_scroll_view(text=''):
+    '''Generate a scollable text view'''
+    scroll = Gtk.ScrolledWindow()
+    view = Gtk.TextView()
+    view.set_editable(False)
+    view.get_buffer().set_text(text)
+    scroll.add(view)
+    return scroll,view
+
+  @staticmethod
+  def add_header(window, title='', close=False):
+    '''Add header to a window, disabling window manager decorations'''
+    header = Gtk.HeaderBar()
+    header.set_show_close_button(close)
+    header.props.title = title
+    window.set_titlebar(header)
+
+
+class Group(Gtk.ComboBoxText):
+  ''' A combo box to select Burt groups, initialized
+  based on the request files and snapshot directories.'''
+  def __init__(self):
+    Gtk.ComboBox.__init__(self)
+    self.append_text('Select a Group ...')
+    self.set_active(0)
+    for x in sorted(glob.glob(request_directory+'/*.req')):
+      if os.path.isdir(snapshot_directory+'/'+os.path.basename(x)[0:-4]):
+        self.append_text(os.path.basename(x)[0:-4])
+
+
+class Save(Gtk.Box):
+  '''The Burt save panel'''
+
+  def __init__(self, top):
+    Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    self.top = top
+
+    request_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    self.request_label = Gtk.Label(label='Group Request:')
+    self.request_label.set_halign(Gtk.Align.START)
+    self.request_scroll,self.request_view = top.get_new_scroll_view('No Group Selected')
+    request_panel.pack_start(self.request_label, False, False, 0)
+    request_panel.pack_start(self.request_scroll, True, True, 0)
+
+    snapshot_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    self.snapshot_label = Gtk.Label(label='New Snapshot:')
+    self.snapshot_label.set_halign(Gtk.Align.START)
+    self.snapshot_scroll,self.snapshot_view = top.get_new_scroll_view()
+    snapshot_panel.pack_start(self.snapshot_label, False, False, 0)
+    snapshot_panel.pack_start(self.snapshot_scroll, True, True, 0)
+
+    main_panel = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    main_panel.set_homogeneous(True)
+    main_panel.pack_start(request_panel, True, True, 0)
+    main_panel.pack_start(snapshot_panel, True, True, 0)
+
+    self.btn_save = Gtk.Button.new_with_label('Save Snapshot for Selected Group')
+    self.btn_save.connect('clicked', self.save)
+
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    hbox.pack_end(self.btn_save, False, False, 0)
+
+    self.pack_start(main_panel, True, True, 0)
+    self.pack_start(hbox, False, False, 0)
+
+  def update(self, parent=None, args=None):
+    '''A callback for when the selected group changes'''
+    if self.top.group.get_active() == 0:
+      self.request_label.set_text('Group Request:')
+      self.request_view.get_buffer().set_text('No Group Selected')
+    else:
+      self.request_label.set_text('Group Request: '+self.top.group.get_active_text())
+      self.top.load_text_view_from_file(self.request_view,
+          '%s/%s.req'%(request_directory,self.top.group.get_active_text()))
+
+  def save(self, args):
+    '''Initiate the Burt save sequence by requesting a new file name'''
+    self.update(None)
+    if self.top.group.get_active() == 0:
+      self.top.dialog(False, 'No Group Selected','Select one next time.')
+    else:
+      dialog = Gtk.MessageDialog(transient_for = self.top, flags = 0,
+        message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
+        text = 'Enter a filename for the group=%s snapshot:'%self.top.group.get_active_text())
+      self.top.add_header(dialog)
+      entry = Gtk.Entry()
+      group = self.top.group.get_active_text()
+      entry.set_text('%s-%s.snp'%(group,time.strftime('%Y_%m_%d-%H:%M:%S')))
+      content = dialog.get_content_area()
+      content.pack_start(entry, True, True, 0)
+      content.show_all()
+      ret = dialog.run()
+      snapshot = entry.get_text()
+      dialog.destroy()
+      if ret == Gtk.ResponseType.OK:
+        fullpath = '%s/%s/%s'%(snapshot_directory,self.top.group.get_active_text(),snapshot)
+        self.confirm(fullpath)
+
+  def confirm(self, snapshot):
+    '''Confirm the new snapshot file name before creating it'''
+    if os.path.exists(snapshot):
+      self.top.dialog(False, 'Error, file already exists.',snapshot)
+    else:
+      ret = self.top.dialog(True, 'Really save to a snapshot file?',snapshot)
+      if ret == Gtk.ResponseType.OK:
+        self.burt(snapshot)
+
+  def burtrb(self, request, snapshot):
+    '''Generate a new Burt snapshot'''
+    cmd = ['burtrb','-f',request,'-o',snapshot]
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+  def burt(self, snapshot):
+    '''Spawn thread to run Burt after disabling user interface'''
+    self.top.spinner.start()
+    self.snapshot = snapshot
+    self.request = '%s/%s.req'%(request_directory,self.top.group.get_active_text())
+    msg = 'Saving snapshot ... %s ...'%self.snapshot
+    self.top.statuslabel.set_text(msg)
+    self.top.disable()
+    burt_task = executor.submit(self.burtrb, self.request, self.snapshot)
+    burt_task.add_done_callback(self.burt_done)
+#    for x in executor.as_completed(timeout=20):
+#      self.burt_done(x)
+
+  def burt_done(self, task):
+    '''Report on Burt status and reenable user interface'''
+    result = task.result()
+    self.top.enable()
+    self.top.spinner.stop()
+    if result.returncode == 0 and len(result.stderr)==0:
+      self.top.statuslabel.set_text('Saved snapshot %s'%self.snapshot)
+    else:
+      self.top.statuslabel.set_text('Error while saving snapshot %s'%self.snapshot)
+      self.top.show_scrolled_popup('Error while saving:\n'+self.snapshot, result.stderr)
+    if os.path.isfile(self.snapshot):
+      self.snapshot_label.set_text('New Snapshot: '+os.path.basename(self.snapshot))
+      self.top.load_text_view_from_file(self.snapshot_view, self.snapshot)
+    else:
+      self.snapshot_label.set_text('New Snapshot:')
+      self.top.load_text_view(self.snapshot_view, '')
+
+class Restore(Gtk.Box):
+  '''The Burt restore panel'''
+
+  def __init__(self, top):
+    self.top = top
+    Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    self.chooser = Gtk.FileChooserWidget(action=Gtk.FileChooserAction.OPEN)
+    self.chooser.set_local_only(True)
+    self.chooser.set_current_folder(snapshot_directory)
+    self.current_folder = self.chooser.get_current_folder()
+    self.btn_confirm = Gtk.Button.new_with_label('Restore from Selected Snapshot')
+    self.btn_confirm.connect('clicked', self.restore)
+    self.btn_preview = Gtk.Button.new_with_label('Preview Selected Snapshot')
+    self.btn_preview.connect('clicked', self.preview_snapshot)
+    self.pack_start(Gtk.Label(label='Select a Snapshot File:'), False, False, 0)
+    self.pack_start(self.chooser, True, True, 0)
+    hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    hbox.pack_end(self.btn_confirm, False, False, 0)
+    hbox.pack_end(self.btn_preview, False, False, 0)
+    self.pack_start(hbox, False, False, 0)
+
+  def preview_snapshot(self, args):
+    '''Show scrollable modal dialog with contents of selected snapshot'''
+    snapshot = self.chooser.get_filename()
+    if not os.path.isfile(snapshot):
+      self.top.dialog(False, 'No Snapshot File Selected','Select one next time.')
+    else:
+      self.top.show_scrolled_file_popup('Contents of \n%s'%snapshot,snapshot)
+
+  def restore(self, args):
+    '''Initiate the Burt restore sequence by confirming the snapshot file name'''
+    snapshot = self.chooser.get_filename()
+    if not os.path.isfile(snapshot):
+      self.top.dialog(False, 'No Snapshot File Selected','Select one next time.')
+    else:
+      ret = self.top.dialog(True, 'Really restore from snapshot file?',snapshot)
+      if ret == Gtk.ResponseType.OK:
+        self.burt(snapshot)
+
+  def burtwb(self, snapshot):
+    '''Restore a previous Burt snapshot'''
+    cmd = ['burtwb','-f',snapshot]
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+
+  def burt(self, snapshot):
+    '''Spawn thread to run Burt after disabling user interface'''
+    self.top.spinner.start()
+    self.snapshot = snapshot
+    msg = 'Restoring snapshot ... %s ...'%self.snapshot
+    self.top.statuslabel.set_text(msg)
+    self.top.disable()
+    burt_task = executor.submit(self.burtwb, self.snapshot)
+    burt_task.add_done_callback(self.burt_done)
+
+  def burt_done(self, task):
+    '''Report on Burt status and reenable user interface'''
+    result = task.result()
+    self.top.enable()
+    self.top.spinner.stop()
+    if result.returncode == 0 and len(result.stderr)==0:
+      self.top.statuslabel.set_text('Restored snapshot %s'%self.snapshot)
+    else:
+      self.top.statuslabel.set_text('Error while restoring snapshot %s'%self.snapshot)
+      self.top.show_scrolled_popup('Error while restoring shanpshot %s'%self.snapshot,result.stderr)
+
+def CatchSignals(gui):
+  '''Monkey business to make gui exit from signals'''
+  def signal_action(signal):
+    Gtk.main_quit()
+  def idle_handler(*args):
+    GLib.idle_add(signal_action, priority=GLib.PRIORITY_HIGH)
+  def handler(*args):
+    signal_action(args[0])
+  def install_glib_handler(sig):
+    unix_signal_add = None
+    if hasattr(GLib, "unix_signal_add"):
+      GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, handler, sig)
+    elif hasattr(GLib, "unix_signal_add_full"):
+      GLib.unix_signal_add_full(GLib.PRIORITY_HIGH, sig, handler, sig)
+  sigs = [getattr(signal, s, None) for s in "SIGINT SIGTERM SIGHUP".split()]
+  for sig in filter(None, sigs):
+    signal.signal(sig, idle_handler)
+    GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
+
+
+if __name__ == '__main__':
+
+  with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    CatchSignals(BurtApp())
+    Gtk.main()
+

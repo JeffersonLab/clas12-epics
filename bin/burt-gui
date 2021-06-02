@@ -86,6 +86,7 @@ class BurtApp(Gtk.Window):
     self.group.set_sensitive(True)
     self.restore.btn_preview.set_sensitive(True)
     self.restore.btn_confirm.set_sensitive(True)
+    self.restore.chooser.set_sensitive(True)
 
   def disable(self):
     '''Disable all buttons'''
@@ -94,6 +95,7 @@ class BurtApp(Gtk.Window):
     self.group.set_sensitive(False)
     self.restore.btn_preview.set_sensitive(False)
     self.restore.btn_confirm.set_sensitive(False)
+    self.restore.chooser.set_sensitive(False)
 
   def update(self, parent, args=None):
     '''Update stuff when switching.  This was to workaround
@@ -104,52 +106,46 @@ class BurtApp(Gtk.Window):
     self.restore.chooser.set_current_folder(d)
     self.save.update()
 
-  def dialog(self, question, message, submessage=None):
-    '''Show modal dialog with a question or just info'''
-    if question:
-      dialog = Gtk.MessageDialog(transient_for = self, flags = 0,
-          message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
-          text = message)
-    else:
-      dialog = Gtk.MessageDialog(transient_for = self, flags = 0,
-          message_type = Gtk.MessageType.INFO, buttons = Gtk.ButtonsType.OK,
-          text = message)
-    if submessage is not None:
-      dialog.format_secondary_text(submessage)
-    self.add_header(dialog)
-    ret = dialog.run()
-    dialog.destroy()
-    return ret
+  def update_text_view(self, text_view, text):
+    '''Change contents of the text view pane.'''
+    text_view.get_buffer().set_text(text)
 
-  def load_text_view(self, text_view, text):
-    '''Change contents of the text view pane.  The GLib.idle_add
-    seems to workaround a bug in TextView/Tree.'''
-    GLib.idle_add(text_view.get_buffer().set_text, text)
-
-  def load_text_view_from_file(self, text_view, path):
+  def update_text_view_from_file(self, text_view, path):
     '''Load the contents of a file into the text view pane'''
     with open(path, errors='replace') as f:
       text = '\n'.join([x.strip() for x in f.readlines()])
-      self.load_text_view(text_view, text)
+      self.update_text_view(text_view, text)
 
-  def __show_scrolled_popup(self, title, text):
-    '''Show modal dialog with scollable text, not to be called
-    directly but wrapped by GLib.idle_add to avoid a bug in Text/TreeView'''
+  def show_scrolled_popup(self, title, text):
+    '''Show modal dialog with scollable text'''
     self.view.get_buffer().set_text(text)
     self.view_window.props.text = title
     self.view_window.run()
     self.view_window.hide()
 
-  def show_scrolled_popup(self, title, text):
-    '''Show modal dialog with scrollable text, wrapped in
-    a thread request to avoid a bug in Text/TreeView'''
-    GLib.idle_add(self.__show_scrolled_popup, title, text)
-
-  def show_scrolled_file_popup(self, title, path):
+  def show_scrolled_popup_from_file(self, title, path):
     '''Show modal dialog with scrollable file contents'''
     with open(path,'r') as f:
       text = '\n'.join([x.strip() for x in f.readlines()])
       self.show_scrolled_popup(title, text)
+
+  @staticmethod
+  def show_dialog(transient_for, question, message, submessage=None):
+    '''Show modal dialog with a question or just info'''
+    if question:
+      dialog = Gtk.MessageDialog(transient_for = transient_for, flags = 0,
+          message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
+          text = message)
+    else:
+      dialog = Gtk.MessageDialog(transient_for = transient_for, flags = 0,
+          message_type = Gtk.MessageType.INFO, buttons = Gtk.ButtonsType.OK,
+          text = message)
+    if submessage is not None:
+      dialog.format_secondary_text(submessage)
+    BurtApp.add_header(dialog)
+    ret = dialog.run()
+    dialog.destroy()
+    return ret
 
   @staticmethod
   def init_scrolled_popup(transient_for, width=800, height=600):
@@ -238,14 +234,14 @@ class Save(Gtk.Box):
       self.request_view.get_buffer().set_text('No Group Selected')
     else:
       self.request_label.set_text('Group Request: '+self.top.group.get_active_text())
-      self.top.load_text_view_from_file(self.request_view,
+      self.top.update_text_view_from_file(self.request_view,
           '%s/%s.req'%(request_directory,self.top.group.get_active_text()))
 
   def save(self, args):
     '''Initiate the Burt save sequence by requesting a new file name'''
     self.update(None)
     if self.top.group.get_active() == 0:
-      self.top.dialog(False, 'No Group Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Group Selected','Select one next time.')
     else:
       dialog = Gtk.MessageDialog(transient_for = self.top, flags = 0,
         message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
@@ -267,16 +263,16 @@ class Save(Gtk.Box):
   def confirm(self, snapshot):
     '''Confirm the new snapshot file name before creating it'''
     if os.path.exists(snapshot):
-      self.top.dialog(False, 'Error, file already exists.',snapshot)
+      BurtApp.show_dialog(self.top, False, 'Error, file already exists.',snapshot)
     else:
-      ret = self.top.dialog(True, 'Really save to a snapshot file?',snapshot)
+      ret = BurtApp.show_dialog(self.top, True, 'Really save to a snapshot file?',snapshot)
       if ret == Gtk.ResponseType.OK:
         self.burt(snapshot)
 
   def burtrb(self, request, snapshot):
     '''Generate a new Burt snapshot'''
     cmd = ['burtrb','-f',request,'-o',snapshot]
-    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, timeout=15)
 
   def burt(self, snapshot):
     '''Spawn thread to run Burt after disabling user interface'''
@@ -287,26 +283,36 @@ class Save(Gtk.Box):
     self.top.statuslabel.set_text(msg)
     self.top.disable()
     burt_task = executor.submit(self.burtrb, self.request, self.snapshot)
-    burt_task.add_done_callback(self.burt_done)
-#    for x in executor.as_completed(timeout=20):
-#      self.burt_done(x)
+    burt_task.add_done_callback(self.burt_callback)
 
-  def burt_done(self, task):
-    '''Report on Burt status and reenable user interface'''
-    result = task.result()
+  def burt_callback(self, task):
+    '''Get Burt thread status and trigger GUI updates.  The GLib.idle_add
+    is necessary because this is a threaded callback.'''
+    try:
+      result = task.result()
+    except subprocess.TimeoutExpired:
+      result = None
+    GLib.idle_add(self.burt_done, result)
+
+  def burt_done(self, result):
+    '''Update GUI after Burt is done'''
     self.top.enable()
     self.top.spinner.stop()
-    if result.returncode == 0 and len(result.stderr)==0:
-      self.top.statuslabel.set_text('Saved snapshot %s'%self.snapshot)
+    if result is not None and result.returncode == 0 and len(result.stderr)==0:
+      self.top.statuslabel.set_markup('<span foreground="blue">Saved snapshot %s</span>'%self.snapshot)
+    elif result is None:
+      self.top.statuslabel.set_markup('<span foreground="red">Timeout while saving snapshot:  %s</span>'%self.snapshot)
+      BurtApp.show_dialog(self.top, False, 'Timeout while saving.  Snapshot may be partial.', self.snapshot)
     else:
-      self.top.statuslabel.set_text('Error while saving snapshot %s'%self.snapshot)
+      self.top.statuslabel.set_markup('<span foreground="red">Error while saving snapshot %s</span>'%self.snapshot)
       self.top.show_scrolled_popup('Error while saving:\n'+self.snapshot, result.stderr)
     if os.path.isfile(self.snapshot):
       self.snapshot_label.set_text('New Snapshot: '+os.path.basename(self.snapshot))
-      self.top.load_text_view_from_file(self.snapshot_view, self.snapshot)
+      self.top.update_text_view_from_file(self.snapshot_view, self.snapshot)
     else:
       self.snapshot_label.set_text('New Snapshot:')
-      self.top.load_text_view(self.snapshot_view, '')
+      self.top.update_text_view(self.snapshot_view, '')
+
 
 class Restore(Gtk.Box):
   '''The Burt restore panel'''
@@ -333,24 +339,24 @@ class Restore(Gtk.Box):
     '''Show scrollable modal dialog with contents of selected snapshot'''
     snapshot = self.chooser.get_filename()
     if not os.path.isfile(snapshot):
-      self.top.dialog(False, 'No Snapshot File Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time.')
     else:
-      self.top.show_scrolled_file_popup('Contents of \n%s'%snapshot,snapshot)
+      self.top.show_scrolled_popup_from_file('Contents of \n%s'%snapshot,snapshot)
 
   def restore(self, args):
     '''Initiate the Burt restore sequence by confirming the snapshot file name'''
     snapshot = self.chooser.get_filename()
     if not os.path.isfile(snapshot):
-      self.top.dialog(False, 'No Snapshot File Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time.')
     else:
-      ret = self.top.dialog(True, 'Really restore from snapshot file?',snapshot)
+      ret = BurtApp.show_dialog(self.top, True, 'Really restore from snapshot file?',snapshot)
       if ret == Gtk.ResponseType.OK:
         self.burt(snapshot)
 
   def burtwb(self, snapshot):
     '''Restore a previous Burt snapshot'''
     cmd = ['burtwb','-f',snapshot]
-    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, timeout=15)
 
   def burt(self, snapshot):
     '''Spawn thread to run Burt after disabling user interface'''
@@ -360,17 +366,28 @@ class Restore(Gtk.Box):
     self.top.statuslabel.set_text(msg)
     self.top.disable()
     burt_task = executor.submit(self.burtwb, self.snapshot)
-    burt_task.add_done_callback(self.burt_done)
+    burt_task.add_done_callback(self.burt_callback)
 
-  def burt_done(self, task):
-    '''Report on Burt status and reenable user interface'''
-    result = task.result()
+  def burt_callback(self, task):
+    '''Get Burt thread status and reenable user interface.  The GLib.idle_add
+    is necessary because this is a threaded callback.'''
+    try:
+      result = task.result()
+    except subprocess.TimeoutExpired:
+      result = None
+    GLib.idle_add(self.burt_done, result)
+
+  def burt_done(self, result):
+    '''Update GUI after Burt is done'''
     self.top.enable()
     self.top.spinner.stop()
-    if result.returncode == 0 and len(result.stderr)==0:
-      self.top.statuslabel.set_text('Restored snapshot %s'%self.snapshot)
+    if result is not None and result.returncode == 0 and len(result.stderr)==0:
+      self.top.statuslabel.set_markup('<span foreground="blue">Restored snapshot %s</span>'%self.snapshot)
+    elif result is None:
+      self.top.statuslabel.set_markup('<span foreground="red">Timeout while restoring snapshot:  %s</span>'%self.snapshot)
+      BurtApp.show_dialog(self.top, False, 'Timeout while restoring.  Restore may be partial.', self.snapshot)
     else:
-      self.top.statuslabel.set_text('Error while restoring snapshot %s'%self.snapshot)
+      self.top.statuslabel.set_markup('<span foreground="red">Error while restoring snapshot %s</span>'%self.snapshot)
       self.top.show_scrolled_popup('Error while restoring shanpshot %s'%self.snapshot,result.stderr)
 
 def CatchSignals(gui):

@@ -24,7 +24,7 @@ PVFILE='./pvRollAvg.list'
 CMD=['myStats','-b','-DT','-e','^DT','-l','PVNAME']
 
 # thread sleeps this long after an error:
-ERRORSLEEP=120
+ERRORSLEEP=300
 
 # the output PVs:
 OPVS={}
@@ -87,7 +87,7 @@ def myStats(pvNames,dt,t0=None):
     # This happens.  Probably an nfs issue.
     myPrint( 'getMyaStats2:  exception running myStats!')
     # Prevent from trying again immediately:
-    time.sleep(10)
+    time.sleep(60)
   return out,err
 
 # get myStats results:
@@ -232,11 +232,11 @@ def checkLogFile():
 
 def myPrint(text):
   global LOGFILE
-  print text
+  print(text)
   try :
     LOGFILE.write(text)
   except TypeError:
-    print 'Invalid Text'
+    print('Invalid Text')
 
 def main():
 

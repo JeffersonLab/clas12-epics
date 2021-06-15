@@ -22,7 +22,7 @@ dbLoadTemplate("db/amqLatency.substitutions")
 dbLoadTemplate("db/amqDaq.substitutions")
 dbLoadRecords("db/amqDaq-aliases.db")
 
-dbLoadTemplate("db/amq-adc-HDICE.substitutions")
+#dbLoadTemplate("db/amq-adc-HDICE.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -40,5 +40,7 @@ StartMQ()
 dbpf("B_DAQ:EB6:stats:01.EGU","Hz")
 dbpf("B_DAQ:EB6:stats:02.EGU","MB")
 dbpf("B_DAQ:EB6:stats:03.EGU","MB/s")
+
+#dbLoadRecords("amq-adc-HDICE.alias")
 
 dbl > pv.list

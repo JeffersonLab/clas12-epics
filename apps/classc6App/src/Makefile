@@ -52,6 +52,8 @@ classc6_LIBS += bomSupport
 classc6_LIBS += asymSupport
 classc6_LIBS += mollerSetupSupport
 
+classc6_LIBS += brm13
+
 classc6_LIBS += devIocStats
 classc6_LIBS += autosave
 

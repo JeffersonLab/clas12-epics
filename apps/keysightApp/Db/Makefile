@@ -10,10 +10,11 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-DB += $(wildcard ../*.substitutions)
-DB += $(wildcard ../*.db)
+#DB += $(wildcard ../*.substitutions)
+#DB += $(wildcard ../*.db)
 
-PROTO += keysight33X00.proto
+DB += A33500.db
+PROTO += A33500.proto
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

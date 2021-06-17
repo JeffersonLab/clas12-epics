@@ -1,0 +1,358 @@
+
+record(bi,"$(P):enable") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:0") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:1") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:2") {
+	field(VAL,0)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+record(bi,"$(P):enable:3") {
+	field(VAL,1)
+	field(ZNAM,"Disabled")
+	field(ONAM,"Enabled")
+}
+
+record(bi,"$(P):pulser:enable") {
+    field(ZNAM,"Disabled")
+    field(ONAM,"Enabled")
+}
+record(ao,"$(P):pulser:freq") {
+    field(EGU,"kHz")
+    field(DRVL,10)
+    field(DRVH,1E6)
+    field(VAL,97.6562)
+    field(PREC,"0")
+}
+
+record(stringin,"$(P):msg") {
+	field(VAL,"Uninitialized")
+}
+record(bi,"$(P):clear") {
+	field(VAL,0)
+}
+record(ai,"$(P):errors") {
+	field(VAL,0)
+}
+
+record(ao,"$(P):dwell") {
+	field(VAL,60)
+    field(EGU,"s")
+    field(DRVL,0.1)
+    field(DRVH,600)
+}
+record(ai,"$(P):timer") {
+	field(VAL,0)
+    field(EGU,"s")
+}
+record(ao,"$(P):prescale") {
+    field(DRVL,1)
+    field(DRVH,1000000)
+    field(VAL,"1")
+}
+record(ao,"$(P):ticsperbin") {
+    field(VAL,8)
+    field(PINI,1)
+    field(PREC,0)
+    field(DRVL,1)
+    field(DRVH,10000)
+    field(FLNK,"$(P):binsize.PROC")
+}
+record(ai,"$(P):resolution") {
+    field(VAL,"195.3125")
+    field(EGU,"ps")
+    field(FLNK,"$(P):binsize.PROC")
+}
+record(calc,"$(P):binsize") {
+    field(INPA,"$(P):ticsperbin")
+    field(INPB,"$(P):resolution")
+    field(PREC,4)
+    field(EGU,"us")
+    field(CALC,"A<1?B/1000000:A*B/1000000")
+    field(FLNK,"$(P):binsize:ps.PROC")
+}
+record(calc,"$(P):binsize:ps") {
+    field(INPA,"$(P):binsize")
+    field(PREC,4)
+    field(EGU,"ps")
+    field(CALC,"A*1000000")
+}
+record(ao,"$(P):tmin") {
+    field(EGU,"us")
+    field(PREC,3)
+    field(VAL,0)
+}
+record(ao,"$(P):tmax") {
+    field(EGU,"us")
+    field(PREC,3)
+    field(VAL,100)
+}
+record(mbbi,"$(P):status") {
+	field(ZRST,"Uninitialized")
+	field(ONST,"Initializing")
+	field(TWST,"Disabled")
+	field(THST,"Reading")
+	field(FRST,"Clearing")
+	field(FVST,"Error")
+    field(SXST,"Waiting for PVs")
+    field(SVST,"Transforming")
+    field(ZRSV,"MAJOR")
+    field(ONSV,"MINOR")
+    field(TWSV,"MINOR")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"NO_ALARM")
+    field(FVSV,"MAJOR")
+    field(SXSV,"MAJOR")
+    field(SVSV,"NO_ALARM")
+}
+record(longin,"$(P):complete") {
+    field(VAL,0)
+}
+
+record(waveform,"$(P):xaxis") {
+    field(NELM,0x80000)
+    field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):faxis") {
+    field(NELM,0x40000)
+    field(FTVL,"FLOAT")
+}
+record(ai,"$(P):hz:0") {
+	field(EGU,"Hz")
+}
+record(ai,"$(P):hz:1") {
+	field(EGU,"Hz")
+}
+record(ai,"$(P):hz:2") {
+	field(EGU,"Hz")
+}
+record(ai,"$(P):hz:3") {
+	field(EGU,"Hz")
+}
+record(ai,"$(P):hz:sum") {
+    field(EGU,"Hz")
+}
+record(waveform,"$(P):wf:0") {
+	field(NELM,0x80000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):wf:1") {
+	field(NELM,0x80000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):wf:2") {
+	field(NELM,0x80000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):wf:3") {
+	field(NELM,0x80000)
+	field(FTVL,"FLOAT")
+}
+
+record(waveform,"$(P):dwellpower:0") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:1") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:2") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:3") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):dwellpower:sum") {
+	field(NELM,0x40000)
+	field(FTVL,"FLOAT")
+}
+record(ai,"$(P):dwellpower:max:0") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:1") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:2") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:3") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:max:sum") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:0") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:1") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:2") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:3") {
+    field(EGU,"kHz")
+}
+record(ai,"$(P):dwellpower:slow:max:sum") {
+    field(EGU,"kHz")
+}
+
+record(waveform,"$(P):power:maxes:amp:0") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:0") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:maxes:amp:1") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:1") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:maxes:amp:2") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:2") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:maxes:amp:3") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:3") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:maxes:amp:sum") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:maxes:freq:sum") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+
+record(waveform,"$(P):power:slow:maxes:amp:0") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:slow:maxes:freq:0") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:slow:maxes:amp:1") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:slow:maxes:freq:1") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:slow:maxes:amp:2") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:slow:maxes:freq:2") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:slow:maxes:amp:3") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:slow:maxes:freq:3") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+record(waveform,"$(P):power:slow:maxes:amp:sum") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+}
+record(waveform,"$(P):power:slow:maxes:freq:sum") {
+	field(NELM,4)
+	field(FTVL,"FLOAT")
+	field(EGU,"kHz")
+}
+
+record(ai,"$(P):power:120KHz:0") {}
+record(ai,"$(P):power:120KHz:1") {}
+record(ai,"$(P):power:120KHz:2") {}
+record(ai,"$(P):power:120KHz:3") {}
+record(ai,"$(P):power:120KHz:sum") {}
+record(ai,"$(P):power:250MHz:0") {}
+record(ai,"$(P):power:250MHz:1") {}
+record(ai,"$(P):power:250MHz:2") {}
+record(ai,"$(P):power:250MHz:3") {}
+record(ai,"$(P):power:250MHz:sum") {}
+
+record(calc,"$(P):power:120KHz:norm:0") {
+    field(SCAN,"1 second")
+    field(CALC,"B>0 && A>0 ? A/B : 0")
+    field(INPA,"$(P):power:120KHz:0")
+    field(INPB,"$(P):power:250MHz:0")
+}
+record(calc,"$(P):power:120KHz:norm:1") {
+    field(SCAN,"1 second")
+    field(CALC,"B>0 && A>0 ? A/B : 0")
+    field(INPA,"$(P):power:120KHz:1")
+    field(INPB,"$(P):power:250MHz:1")
+}
+record(calc,"$(P):power:120KHz:norm:2") {
+    field(SCAN,"1 second")
+    field(CALC,"B>0 && A>0 ? A/B : 0")
+    field(INPA,"$(P):power:120KHz:2")
+    field(INPB,"$(P):power:250MHz:2")
+}
+record(calc,"$(P):power:120KHz:norm:3") {
+    field(SCAN,"1 second")
+    field(CALC,"B>0 && A>0 ? A/B : 0")
+    field(INPA,"$(P):power:120KHz:3")
+    field(INPB,"$(P):power:250MHz:3")
+}
+record(calc,"$(P):power:120KHz:norm:sum") {
+    field(SCAN,"1 second")
+    field(CALC,"B>0 && A>0 ? A/B : 0")
+    field(INPA,"$(P):power:120KHz:sum")
+    field(INPB,"$(P):power:250MHz:sum")
+}
+record(ai,"$(P):rms:cutoff:freq") {
+    field(VAL,"200E6")
+    field(EGU,"Hz")
+}
+record(ai,"$(P):rms:rebin") {
+    field(VAL,"10")
+    field(EGU,"#bins")
+}
+record(ai,"$(P):rms") {
+}
+

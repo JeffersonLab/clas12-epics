@@ -1,0 +1,24 @@
+
+record(ai, "rgm_target_home_position") {
+    field(VAL, "0")
+}
+record(ai, "rgm_target_beam_position") {
+    field(VAL,"10")
+}
+record(calc, "rgm_target_at_home") {
+	field(INPA, "rgm_target.RBV")
+    field(INPB, "rgm_target_home_position")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-0.0)<0.1?1:0")
+}
+record(calc, "rgm_target_at_beam") {
+	field(INPA, "rgm_target.RBV")
+    field(INPB, "rgm_target_beam_position")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-B)<0.01?1:0")
+}
+record(calc, "rgm_target_at_home") {
+	field(INPA, "rgm_target.RBV")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-B)<0.01?1:0")
+}

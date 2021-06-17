@@ -17,7 +17,8 @@ record(ai,"$(HOSTNAME):moduleAuxMeasVoltage0:$(MX)") {
 }
 record(ai,"$(HOSTNAME):moduleAuxMeasVoltage1:$(MX)") {
 	field(DESC,"Measured module auxiliary voltage")
-	field(SCAN,"10 second")
+#field(SCAN,"10 second")
+	field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}moduleAuxiliaryMeasurementVoltage1.$(MX) Float: 100")
 	field(PREC,"6")
@@ -25,7 +26,8 @@ record(ai,"$(HOSTNAME):moduleAuxMeasVoltage1:$(MX)") {
 }
 record(ai,"$(HOSTNAME):moduleHardwareLimitCurrent:$(MX)") {
 	field(DESC,"Module Hardware Voltage Limit")
-	field(SCAN,"10 second")
+#field(SCAN,"10 second")
+	field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}moduleHardwareLimitCurrent.$(MX) Float: 100")
 	field(PREC,"6")
@@ -186,10 +188,10 @@ record(longin,"$(HOSTNAME):moduleEventChStatus:$(MX)") {
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}moduleEventChannelStatus.$(MX) Hex-STRING: 80")
 }
-record(longin,"$(HOSTNAME):moduleEventChStatuslong:$(MX)") {
-	field(SCAN,"10 second")
-	field(DTYP,"Soft Channel")
-}
+#record(longin,"$(HOSTNAME):moduleEventChStatuslong:$(MX)") {
+#	field(SCAN,"10 second")
+#	field(DTYP,"Soft Channel")
+#}
 record(longin,"$(HOSTNAME):moduleEventStatuslong:$(MX)") {
 	field(SCAN,"10 second")
 	field(DTYP,"Snmp")
@@ -197,7 +199,8 @@ record(longin,"$(HOSTNAME):moduleEventStatuslong:$(MX)") {
 	field(INP,"@$(HOST) public %{W}moduleEventStatus.$(MX) BITS: 100")
 }
 record(longin,"$(HOSTNAME):moduleIndex:$(MX)") {
-	field(SCAN,"10 second")
+#field(SCAN,"10 second")
+	field(SCAN,"Passive")
 	field(PINI,"YES")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}moduleIndex.$(MX) ( 100")
@@ -224,7 +227,7 @@ record(mbbiDirect,"$(HOSTNAME):moduleStatus:$(MX)") {
 }
 record(stringin,"$(HOSTNAME):moduleDesc:$(MX)") {
 	field(DESC,"Module Description")
-	field(SCAN,"10 second")
+#field(SCAN,"10 second")
 	field(PINI,"YES")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}moduleDescription.$(MX) STRING: 80")

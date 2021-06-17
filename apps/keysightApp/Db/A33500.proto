@@ -1,0 +1,414 @@
+# StreamDevice protocal file for Agilent 33500B Waveform generator in UITF
+# raster.
+
+Terminator = "\n";
+
+LockTimeout  = 6000;
+WriteTimeout = 5000;
+ReplyTimeout = 5000;
+ReadTimeout  = 500;
+
+# Get channel 1 output connector state
+# bi
+#   ZNAM: Off
+#   ONAM: On
+getOutOffOnCh1 {
+  out "OUTPut1?";
+  in "%d";
+}
+
+# Get channel 2 output connector state
+# bi
+#   ZNAM: Off
+#   ONAM: On
+getOutOffOnCh2 {
+  out "OUTPut2?";
+  in "%d";
+}
+
+# Enable/Disable channel 1 output connector
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setOutOffOnCh1 {
+  out "%{OUTPut1 OFF|OUTPut1 ON}";
+  @init { getOutOffOnCh1; }
+}
+
+# Enable/Disable channel 2 output connector
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setOutOffOnCh2 {
+  out "%{OUTPut2 OFF|OUTPut2 ON}";
+  @init { getOutOffOnCh2; }
+}
+
+# Get fundamental waveform type on channel 1
+# stringin
+getFuncCh1 {
+  out "SOURce1:FUNCtion?";
+  in "%s";
+}
+
+# Get fundamental waveform type on channel 2
+# stringin
+getFuncCh2 {
+  out "SOURce2:FUNCtion?";
+  in "%s";
+}
+
+# Read fundamental arbitrary waveform period on channel 1
+# ai
+getPerCh1 {
+  out "SOURce1:FUNC:ARB:PER?";
+  in "%f";
+}
+
+# Set fundamental arbitrary waveform period on channel 1
+# ao
+setPerCh1 {
+  out "SOURce1:FUNC:ARB:PER %f";
+  @init { getPerCh1; }
+}
+
+# Read fundamental arbitrary waveform period on channel 2
+# ai
+getPerCh2 {
+  out "SOURce2:FUNC:ARB:PER?";
+  in "%f";
+}
+
+# Set fundamental arbitrary waveform period on channel 2
+# ao
+setPerCh2 {
+  out "SOURce2:FUNC:ARB:PER %f";
+  @init { getPerCh2; }
+}
+
+# Read frequency on channel 1
+# ai
+getFreqCh1 {
+  out "SOURce1:FREQuency?";
+  in "%f";
+}
+
+# Set frequency on channel 1
+# ao
+setFreqCh1 {
+  out "SOURce1:FREQuency %f Hz";
+  @init { getFreqCh1; }
+}
+
+# Read frequency on channel 2
+# ai
+getFreqCh2 {
+  out "SOURce2:FREQuency?";
+  in "%f";
+}
+
+# Set frequency on channel 2
+# ao
+setFreqCh2 {
+  out "SOURce2:FREQuency %f Hz";
+  @init { getFreqCh2; }
+}
+
+# Read amplitude on channel 1
+# ai
+getVoltCh1 {
+  out "SOURce1:VOLTage?";
+  in "%f";
+}
+
+# Set amplitude on channel 1
+# ao
+setVoltCh1 {
+  out "SOURce1:VOLTage %f Vpp";
+  @init { getVoltCh1; }
+}
+
+# Read amplitude on channel 2
+# ai
+getVoltCh2 {
+  out "SOURce2:VOLTage?";
+  in "%f";
+}
+
+# Set amplitude on channel 2
+# ao
+setVoltCh2 {
+  out "SOURce2:VOLTage %f Vpp";
+  @init { getVoltCh2; }
+}
+
+# Read amplitude offset on channel 1
+# ao
+getVoltOffCh1 {
+  out "SOURce1:VOLTage:OFFSet?";
+  in "%f";
+}
+
+# Set amplitude offset on channel 1
+# ao
+setVoltOffCh1 {
+  out "SOURce1:VOLTage:OFFSet %f V";
+  @init { getVoltOffCh1; }
+}
+
+# Read amplitude offset on channel 2
+# ao
+getVoltOffCh2 {
+  out "SOURce2:VOLTage:OFFSet?";
+  in "%f";
+}
+
+# Set amplitude offset on channel 2
+# ao
+setVoltOffCh2 {
+  out "SOURce2:VOLTage:OFFSet %f V";
+  @init { getVoltOffCh2; }
+}
+
+# Set phase on channel 1
+# ao
+setPhaCh1 {
+  out "SOURce1:PHASe %f DEG";
+}
+
+# Set phase on channel 2
+# ao
+setPhaCh2 {
+  out "SOURce2:PHASe %f DEG";
+}
+
+# Read phase on channel 1
+# ao
+getPhaCh1 {
+  out "SOURce1:PHASe?";
+  in "%f";
+}
+
+# Read phase on channel 2
+# ao
+getPhaCh2 {
+  out "SOURce2:PHASe?";
+  in "%f";
+}
+
+# Read AM frequency on channel 1
+# ao
+getAMFreqCh1 {
+  out "SOURce1:AM:INTernal:FREQuency?";
+  in "%f";
+}
+
+# Set AM frequency on channel 1
+# ao
+setAMFreqCh1 {
+  out "SOURce1:AM:INTernal:FREQuency %f HZ";
+}
+
+# Set AM frequency on channel 2
+# ao
+setAMFreqCh2 {
+  out "SOURce2:AM:INTernal:FREQuency %f HZ";
+}
+
+# Read AM frequency on channel 2
+# ao
+getAMFreqCh2 {
+  out "SOURce2:AM:INTernal:FREQuency?";
+  in "%f";
+}
+
+# Set AM depth on channel 1
+# ao
+setAMDepthCh1 {
+  out "SOURce1:AM:DEPTh %f";
+}
+
+# Read AM depth on channel 1
+# ao
+getAMDepthCh1 {
+  out "SOURce1:AM:DEPTh?";
+  in "%f";
+}
+
+# Set AM depth on channel 2
+# ao
+setAMDepthCh2 {
+  out "SOURce2:AM:DEPTh %f";
+}
+
+# Read AM depth on channel 2
+# ao
+getAMDepthCh2 {
+  out "SOURce2:AM:DEPTh?";
+  in "%f";
+}
+
+# Get AM state on/off on channel 1
+# bi
+#   ZNAM: Off
+#   ONAM: On
+getAMOffOnCh1 {
+  out "SOURce1:AM:STATe?";
+  in "%d";
+}
+
+# Get AM state on/off on channel 2
+# bi
+#   ZNAM: Off
+#   ONAM: On
+getAMOffOnCh2 {
+  out "SOURce2:AM:STATe?";
+  in "%d";
+}
+
+# Turn AM on/off on channel 1
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setAMOffOnCh1 {
+  out "%{SOURce1:AM:STATe OFF|SOURce1:AM:STATe ON}";
+  @init { getAMOffOnCh1; }
+}
+
+# Turn AM on/off on channel 2
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setAMOffOnCh2 {
+  out "%{SOURce2:AM:STATe OFF|SOURce2:AM:STATe ON}";
+  @init { getAMOffOnCh2; }
+}
+
+# Get AM function type on channel 1
+# stringin
+getAMFuncCh1 {
+  out "SOURce1:AM:INTernal:FUNCtion?";
+  in "%s";
+}
+
+# Get AM function type on channel 2
+# stringin
+getAMFuncCh2 {
+  out "SOURce2:AM:INTernal:FUNCtion?";
+  in "%s";
+}
+
+# Get arbitrary waveform name on channel 1
+# stringin
+getArbCh1 {
+  out "SOURce1:FUNCtion:ARB?";
+  in "%s";
+}
+
+# Get arbitrary waveform name on channel 2
+# stringin
+getArbCh2 {
+  out "SOURce2:FUNCtion:ARB?";
+  in "%s";
+}
+
+# Save state to internal state file
+# stringout
+storeState {
+  out "MMEMory:STORe:STATe \"%s\"";
+}
+
+# Load state from internal state file
+# stringout
+loadState {
+  out "MMEMory:LOAD:STATe \"%s\"";
+}
+
+# Save arbitrary waveform to channel 1 volatile memory and then to
+# internal file
+# stringout
+storeArbCh1 {
+  separator=",";
+  out "SOURce1:DATA:ARBitrary:DAC myArb,%(\$1)d";
+  out "MMEM:STORe:DATA1 \"%s\"";
+}
+
+# Save arbitrary waveform to channel 2 volatile memory and then to
+# internal file
+# stringout
+storeArbCh2 {
+  separator=",";
+  out "SOURce2:DATA:ARBitrary:DAC myArb,%(\$1)d";
+  out "MMEM:STORe:DATA2 \"%s\"";
+}
+
+# Load arbitrary waveform on channel 1 from internal file
+# stringout
+loadArbCh1 {
+  #out "SOURce1:DATA:VOL:CLEar";
+  out "MMEM:LOAD:DATA1 \"%s\"";
+  out "SOURce1:FUNCtion:ARB \"%s\"";
+}
+
+# Load arbitrary waveform on channel 2 from internal file
+# stringout
+loadArbCh2 {
+  #out "SOURce2:DATA:VOL:CLEar";
+  out "MMEM:LOAD:DATA2 \"%s\"";
+  out "SOURce2:FUNCtion:ARB \"%s\"";
+}
+
+# Send query to device
+# stringout.  Response is received in a seperate stringin.
+sendQuery {
+  out "%s";
+}
+
+# Get response for the query
+# waveform
+getResp {
+  in "%#s";
+}
+
+# Send commands to device
+# stringout.  Response is received in a seperate stringin.
+sendCmd {
+  out "%s";
+}
+
+# Read device error
+# stringin
+getError {
+  ExtraInput=Ignore;
+  out "SYST:ERR?";
+  in "%#s";
+}
+
+# Init state for UITF
+# bo
+initStateUITF {
+  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\XRASTER.STA\"";
+  out "OUTPut1 OFF";
+  out "OUTPut2 OFF";
+}
+
+# Init state for Hall C
+# bo
+initStateHC {
+  out "MMEMory:LOAD:STATe \"INT:\\CIRCULAR_RASTER\\HallC_2.STA\"";
+  out "OUTPut1 OFF";
+  out "OUTPut2 OFF";
+}
+
+# Init state for Hall B
+# bo
+initStateHB {
+  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_100.STA\"";
+  out "OUTPut1 OFF";
+  out "OUTPut2 OFF";
+}
+
+loadSpiral {
+  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_%d00.STA\"";
+}
+

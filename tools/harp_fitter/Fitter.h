@@ -27,7 +27,8 @@ class Fitter {
     TGFileInfo file_info;
     static const int n_counters = 15;
     static const std::string all_harps_dir;
-    static const double sqrt2 = 1.41421356237309515;
+    static const double sqrt2;
+
     void InitData( std::string );
     TGraph *gr_[n_counters];
     std::string counter_names_[n_counters];
@@ -86,6 +87,42 @@ class Fitter {
     double min_3rd_hist, max_3rd_hist;
 
     double scale_Xaxis;
+    
+    // ================================================
+    // ===== Average BPM positions during the scan
+    // ===== Should be assigned values inside the "ParseDataFile" method
+    // ================================================
+
+    double avg_2C21_X;
+    double avg_2C21_Y;
+    double avg_2C24_X;
+    double avg_2C24_Y;
+    double avg_2H00_X;
+    double avg_2H00_Y;
+    double avg_2H01_X;
+    double avg_2H01_Y;
+    
+    
+    // ======================================================
+    // ===== Offsets between the harp and BPMs
+    // ======================================================
+    
+    static const double X_Offset_2C21;
+    static const double Y_Offset_2C21;
+
+    static const double X_Offset_2C24;
+    static const double Y_Offset_2C24;
+    
+    static const double X_Offset_2H00;
+    static const double Y_Offset_2H00;
+    
+    static const double X_Offset_2H01;
+    static const double Y_Offset_2H01;
+    
+    
+    // ================= Private functions ===============
+    void ParseDataFile(std::string);    
+    
 
   public:
     Fitter(const TGWindow *p,UInt_t w,UInt_t h, std::string );

@@ -34,6 +34,246 @@
   </foreground_color>
   <actions hook="false" hook_all="false" />
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>2</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-16ac783c:15b2ab2092f:-6b95</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>Inlet Flow</text>
+    <scripts />
+    <height>16</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>false</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>90</width>
+    <x>17</x>
+    <name>Label_6</name>
+    <y>510</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>1</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules>
+      <rule name="textRule" prop_id="text" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
+          <value>OK</value>
+        </exp>
+        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
+          <value>WARN</value>
+        </exp>
+        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
+          <value>ALARM</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>UNKWN</value>
+        </exp>
+        <pv trig="true">B_SVT_Cool_Inlet_Flow:Alm.SEVR</pv>
+      </rule>
+      <rule name="colorRule" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
+          <value>
+            <color name="OK" red="0" green="255" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
+          <value>
+            <color name="Minor" red="255" green="128" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="true">
+          <value>
+            <color name="Invalid" red="255" green="0" blue="255" />
+          </value>
+        </exp>
+        <pv trig="true">B_SVT_Cool_Inlet_Flow:Alm.SEVR</pv>
+      </rule>
+    </rules>
+    <enabled>true</enabled>
+    <wuid>-16ac783c:15b2ab2092f:-6b39</wuid>
+    <transparent>false</transparent>
+    <auto_size>false</auto_size>
+    <text>OK</text>
+    <scripts />
+    <height>16</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>false</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color name="Text_Foreground" red="0" green="0" blue="0" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>false</wrap_words>
+    <background_color>
+      <color name="LINAC title" red="185" green="198" blue="184" />
+    </background_color>
+    <width>80</width>
+    <x>113</x>
+    <name>EDM Label_18</name>
+    <y>510</y>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>1</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules>
+      <rule name="textRule" prop_id="text" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
+          <value>OK</value>
+        </exp>
+        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
+          <value>WARN</value>
+        </exp>
+        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
+          <value>ALARM</value>
+        </exp>
+        <exp bool_exp="true">
+          <value>UNKWN</value>
+        </exp>
+        <pv trig="true">B_SVT_Cool_Outlet_Flow:Alm.SEVR</pv>
+      </rule>
+      <rule name="colorRule" prop_id="background_color" out_exp="false">
+        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
+          <value>
+            <color name="OK" red="0" green="255" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
+          <value>
+            <color name="Minor" red="255" green="128" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
+          <value>
+            <color name="Major" red="255" green="0" blue="0" />
+          </value>
+        </exp>
+        <exp bool_exp="true">
+          <value>
+            <color name="Invalid" red="255" green="0" blue="255" />
+          </value>
+        </exp>
+        <pv trig="true">B_SVT_Cool_Outlet_Flow:Alm.SEVR</pv>
+      </rule>
+    </rules>
+    <enabled>true</enabled>
+    <wuid>-16ac783c:15b2ab2092f:-6b38</wuid>
+    <transparent>false</transparent>
+    <auto_size>false</auto_size>
+    <text>OK</text>
+    <scripts />
+    <height>16</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>false</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color name="Text_Foreground" red="0" green="0" blue="0" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>false</wrap_words>
+    <background_color>
+      <color name="LINAC title" red="185" green="198" blue="184" />
+    </background_color>
+    <width>80</width>
+    <x>113</x>
+    <name>EDM Label_21</name>
+    <y>528</y>
+    <foreground_color>
+      <color name="black-14" red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>2</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-16ac783c:15b2ab2092f:-6aff</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>Outlet Flow</text>
+    <scripts />
+    <height>16</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>false</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>90</width>
+    <x>17</x>
+    <name>Label_7</name>
+    <y>528</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>14</border_style>
     <tooltip></tooltip>
     <horizontal_alignment>1</horizontal_alignment>
@@ -916,7 +1156,7 @@ $(pv_value)</tooltip>
     <width>80</width>
     <x>113</x>
     <name>EDM Label_16</name>
-    <y>328</y>
+    <y>331</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />
     </foreground_color>
@@ -956,7 +1196,7 @@ $(pv_value)</tooltip>
     <width>90</width>
     <x>17</x>
     <name>Label_3</name>
-    <y>328</y>
+    <y>331</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -997,7 +1237,7 @@ $(pv_value)</tooltip>
     <width>90</width>
     <x>17</x>
     <name>Label_4</name>
-    <y>346</y>
+    <y>354</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -1038,48 +1278,7 @@ $(pv_value)</tooltip>
     <width>90</width>
     <x>17</x>
     <name>Label_5</name>
-    <y>364</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>2</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-16ac783c:15b2ab2092f:-6b95</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>Inlet Flow</text>
-    <scripts />
-    <height>16</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>90</width>
-    <x>17</x>
-    <name>Label_6</name>
-    <y>382</y>
+    <y>377</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -1159,7 +1358,7 @@ $(pv_value)</tooltip>
     <width>80</width>
     <x>113</x>
     <name>EDM Label_1</name>
-    <y>346</y>
+    <y>354</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />
     </foreground_color>
@@ -1238,165 +1437,7 @@ $(pv_value)</tooltip>
     <width>80</width>
     <x>113</x>
     <name>EDM Label_2</name>
-    <y>364</y>
-    <foreground_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>1</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="textRule" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
-          <value>OK</value>
-        </exp>
-        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
-          <value>WARN</value>
-        </exp>
-        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
-          <value>ALARM</value>
-        </exp>
-        <exp bool_exp="true">
-          <value>UNKWN</value>
-        </exp>
-        <pv trig="true">B_SVT_Cool_Inlet_Flow:Alm.SEVR</pv>
-      </rule>
-      <rule name="colorRule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
-          <value>
-            <color name="OK" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
-          <value>
-            <color name="Minor" red="255" green="128" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="true">
-          <value>
-            <color name="Invalid" red="255" green="0" blue="255" />
-          </value>
-        </exp>
-        <pv trig="true">B_SVT_Cool_Inlet_Flow:Alm.SEVR</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>-16ac783c:15b2ab2092f:-6b39</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>OK</text>
-    <scripts />
-    <height>16</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color name="Text_Foreground" red="0" green="0" blue="0" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
-    </background_color>
-    <width>80</width>
-    <x>113</x>
-    <name>EDM Label_18</name>
-    <y>382</y>
-    <foreground_color>
-      <color name="black-14" red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>1</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules>
-      <rule name="textRule" prop_id="text" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
-          <value>OK</value>
-        </exp>
-        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
-          <value>WARN</value>
-        </exp>
-        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
-          <value>ALARM</value>
-        </exp>
-        <exp bool_exp="true">
-          <value>UNKWN</value>
-        </exp>
-        <pv trig="true">B_SVT_Cool_Outlet_Flow:Alm.SEVR</pv>
-      </rule>
-      <rule name="colorRule" prop_id="background_color" out_exp="false">
-        <exp bool_exp="pv0&gt;=0.0&amp;&amp; pv0&lt;1.0">
-          <value>
-            <color name="OK" red="0" green="255" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0&gt;=1.0&amp;&amp; pv0&lt;2.0">
-          <value>
-            <color name="Minor" red="255" green="128" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="pv0&gt;=2.0&amp;&amp; pv0&lt;3.0">
-          <value>
-            <color name="Major" red="255" green="0" blue="0" />
-          </value>
-        </exp>
-        <exp bool_exp="true">
-          <value>
-            <color name="Invalid" red="255" green="0" blue="255" />
-          </value>
-        </exp>
-        <pv trig="true">B_SVT_Cool_Outlet_Flow:Alm.SEVR</pv>
-      </rule>
-    </rules>
-    <enabled>true</enabled>
-    <wuid>-16ac783c:15b2ab2092f:-6b38</wuid>
-    <transparent>false</transparent>
-    <auto_size>false</auto_size>
-    <text>OK</text>
-    <scripts />
-    <height>16</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color name="Text_Foreground" red="0" green="0" blue="0" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>false</wrap_words>
-    <background_color>
-      <color name="LINAC title" red="185" green="198" blue="184" />
-    </background_color>
-    <width>80</width>
-    <x>113</x>
-    <name>EDM Label_21</name>
-    <y>400</y>
+    <y>377</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />
     </foreground_color>
@@ -1475,7 +1516,7 @@ $(pv_value)</tooltip>
     <width>80</width>
     <x>113</x>
     <name>EDM Label_24</name>
-    <y>418</y>
+    <y>399</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />
     </foreground_color>
@@ -1490,51 +1531,10 @@ $(pv_value)</tooltip>
     <horizontal_alignment>2</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
-    <wuid>-16ac783c:15b2ab2092f:-6aff</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>Outlet Flow</text>
-    <scripts />
-    <height>16</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>90</width>
-    <x>17</x>
-    <name>Label_7</name>
-    <y>400</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>2</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
     <wuid>-16ac783c:15b2ab2092f:-6af9</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>Inlet Temp</text>
+    <text>Outlet Temp</text>
     <scripts />
     <height>16</height>
     <border_width>1</border_width>
@@ -1556,7 +1556,7 @@ $(pv_value)</tooltip>
     <width>90</width>
     <x>17</x>
     <name>Label_8</name>
-    <y>418</y>
+    <y>399</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -4588,7 +4588,7 @@ Currents:</text>
     <width>80</width>
     <x>113</x>
     <name>EDM Label_28</name>
-    <y>436</y>
+    <y>422</y>
     <foreground_color>
       <color name="black-14" red="0" green="0" blue="0" />
     </foreground_color>
@@ -4606,7 +4606,7 @@ Currents:</text>
     <wuid>6625ceb4:164e6471559:-7bbb</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>Inlet Pres</text>
+    <text>Outlet Pres</text>
     <scripts />
     <height>16</height>
     <border_width>1</border_width>
@@ -4628,7 +4628,7 @@ Currents:</text>
     <width>90</width>
     <x>17</x>
     <name>Label_94</name>
-    <y>436</y>
+    <y>422</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>

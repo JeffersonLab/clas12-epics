@@ -27,17 +27,24 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 ## cRIO heartbeat alarms:
 dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 
+#dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_,R=CRIO_BONUS_")
+
 ## Gas systems:
 #dbLoadRecords("db/gas_cRIO_HTCC.db",    "P=B_DET_, R=HTCC_GAS_")
 #dbLoadRecords("db/gas_cRIO_SVT.db",     "P=B_DET_, R=SVT_GAS_")
 
 ## BONUS Gas:
-dbLoadRecords("db/gas_cRIO_BONUS.db")
+#dbLoadRecords("db/gas_cRIO_BONUS.db")
 
 ## BONUS HV:
-dbLoadTemplate("db/bonus-hv.substitutions")
-dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
-dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
+#dbLoadTemplate("db/bonus-hv.substitutions")
+#dbLoadRecords("db/bonus-hv-watchdog.db","VMON=outputMeasSenseV")
+#dbLoadTemplate("db/gas_cRIO_BONUS_intlk.substitutions")
+#dbLoadRecords("db/gas_cRIO_BONUS_intlk.db")
+
+dbLoadRecords("db/gas_cRIO_RICH_drybox.db")
+
+dbLoadRecords("db/flow_cRIO_TEDF.db")
 
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")
@@ -58,5 +65,5 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=xxx:")
 create_monitor_set("info_settings.req", 30, "P=xxx:")
 
-seq bonus_hv_watchdog
+#seq bonus_hv_watchdog
 

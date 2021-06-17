@@ -1,7 +1,9 @@
 #!/bin/sh
 
 # force java version
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+#export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+#export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=/usr/clas12/third-party-libs/jdk/1.8.0_31
 export PATH=$JAVA_HOME/bin:$PATH
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

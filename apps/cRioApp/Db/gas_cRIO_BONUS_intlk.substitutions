@@ -1,9 +1,30 @@
 file "db/mmIntlk.template" {
 pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
-{ B_BONUS_INTLK_ Flow         B_BONUS_GAS_MFC_Flow          B_BONUS_GAS_MFC_Flow.LOLO          B_BONUS_GAS_MFC_Flow.HIHI          B_BONUS_HV:off 1 2 "HV Off if Flow LOLO/HIHI" }
-{ B_BONUS_INTLK_ FlowSetDiff  B_BONUS_GAS_MFC_Flow:watchdog B_BONUS_GAS_MFC_Flow:watchdog.LOLO B_BONUS_GAS_MFC_Flow:watchdog.HIHI B_BONUS_HV:off 1 2 "HV Off if Flow-FlowSet LOLO/HIHI" }
-{ B_BONUS_INTLK_ RTPC_Press   B_BONUS_RTPC_Press            B_BONUS_RTPC_Press.LOLO            B_BONUS_RTPC_Press.HIHI            B_BONUS_HV:off 1 2 "HV Off if RTPC Pressure LOLO/HIHI" }
-{ B_BONUS_INTLK_ Diff_Press   B_BONUS_GAS_DP                B_BONUS_GAS_DP.LOLO                B_BONUS_GAS_DP.HIHI                B_BONUS_HV:off 1 2 "HV Off if Diff. Pressure LOLO/HIHI" }
-{ B_BONUS_INTLK_ Buffer_Press B_BONUS_GAS_He_Buffer_Press   B_BONUS_GAS_He_Buffer_Press.LOLO   B_BONUS_GAS_He_Buffer_Press.HIHI   B_BONUS_HV:off 1 2 "HV Off if He Buffer Pressure LOLO/HIHI" }
+{ B_BONUS_INTLK_ Flow         B_BONUS_GAS_MFC_Flow          B_BONUS_GAS_MFC_Flow.LOLO          B_BONUS_GAS_MFC_Flow.HIHI          B_BONUS_HV:offbtn 1 2 "HV Off if Drift Flow LOLO/HIHI" }
+{ B_BONUS_INTLK_ FlowSetDiff  B_BONUS_GAS_MFC_Flow:watchdog B_BONUS_GAS_MFC_Flow:watchdog.LOLO B_BONUS_GAS_MFC_Flow:watchdog.HIHI B_BONUS_HV:offbtn 1 2 "HV Off if Drift Flow-FlowSet LOLO/HIHI" }
+{ B_BONUS_INTLK_ Diff_Press   B_BONUS_GAS_DP                B_BONUS_GAS_DP.LOLO                B_BONUS_GAS_DP.HIHI                B_BONUS_HV:offbtn 1 2 "HV Off if Diff. Pressure LOLO/HIHI" }
+{ B_BONUS_INTLK_ Buffer_Press B_BONUS_GAS_He_Buffer_Press   B_BONUS_GAS_He_Buffer_Press.LOLO   B_BONUS_GAS_He_Buffer_Press.HIHI   B_BONUS_HV:offbtn 1 2 "HV Off if He Buffer Pressure LOLO/HIHI" }
+{ B_BONUS_INTLK_ PT110        B_BONUS_GAS_PT110             B_BONUS_GAS_PT110.LOLO             B_BONUS_GAS_PT110.HIHI             B_BONUS_HV:offbtn 1 2 "HV Off if Target Pressure LOLO/HIHI" }
+{ B_BONUS_INTLK_ RTPC_Press:rel:amb B_BONUS_RTPC_Press:rel:amb B_BONUS_RTPC_Press:rel:amb.LOLO B_BONUS_RTPC_Press:rel:amb.HIHI    B_BONUS_HV:offbtn 1 2 "HV Off if RTPC Diff. Press LOLO/HIHI" }
+{ B_BONUS_INTLK_ PT110:deriv  B_BONUS_GAS_PT110:deriv       B_BONUS_GAS_PT110:deriv.LOLO       B_BONUS_GAS_PT110:deriv.HIHI       B_BONUS_HV:offbtn 1 2 "HV Off if Tgt Pressure Rate LOLO/HIHI" }    
 }
 
+file "db/mmIntlk.template" {
+pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
+{ B_BONUS_INTLK_ LV0 B_DET_MVT_LV_0:i_rd  -99999 B_DET_MVT_LV_0:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+{ B_BONUS_INTLK_ LV1 B_DET_MVT_LV_1:i_rd  -99999 B_DET_MVT_LV_1:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+{ B_BONUS_INTLK_ LV2 B_DET_MVT_LV_2:i_rd  -99999 B_DET_MVT_LV_2:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+{ B_BONUS_INTLK_ LV3 B_DET_MVT_LV_3:i_rd  -99999 B_DET_MVT_LV_3:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+{ B_BONUS_INTLK_ LV4 B_DET_MVT_LV_4:i_rd  -99999 B_DET_MVT_LV_4:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+{ B_BONUS_INTLK_ LV5 B_DET_MVT_LV_5:i_rd  -99999 B_DET_MVT_LV_5:i_rd.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if LV current HIHI"}
+}
+
+file "db/mmIntlk.template" {
+pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
+{ B_BONUS_INTLK_ GEM1:dv    B_BONUS_HV_GEM1:dv    B_BONUS_HV_GEM1:dv.LOLO    B_BONUS_HV_GEM1:dv.HIHI    B_BONUS_HV:offbtn 1 2 "Turn HV OFF if GEM1OUT-GEM1IN dV MAJOR"}
+{ B_BONUS_INTLK_ GEM2:dv    B_BONUS_HV_GEM2:dv    B_BONUS_HV_GEM2:dv.LOLO    B_BONUS_HV_GEM2:dv.HIHI    B_BONUS_HV:offbtn 1 2 "Turn HV OFF if GEM2OUT-GEM2IN dV MAJOR"}
+{ B_BONUS_INTLK_ GEM3:dv    B_BONUS_HV_GEM3:dv    B_BONUS_HV_GEM3:dv.LOLO    B_BONUS_HV_GEM3:dv.HIHI    B_BONUS_HV:offbtn 1 2 "Turn HV OFF if GEM3OUT-GEM3IN dV MAJOR"}
+{ B_BONUS_INTLK_ GEM12:dv   B_BONUS_HV_GEM12:dv   B_BONUS_HV_GEM12:dv.LOLO   B_BONUS_HV_GEM12:dv.HIHI   B_BONUS_HV:offbtn 1 2 "Turn HV OFF if GEM1OUT-GEM2IN dV MAJOR"}
+{ B_BONUS_INTLK_ GEM23:dv   B_BONUS_HV_GEM23:dv   B_BONUS_HV_GEM23:dv.LOLO   B_BONUS_HV_GEM23:dv.HIHI   B_BONUS_HV:offbtn 1 2 "Turn HV OFF if GEM2OUT-GEM3IN dV MAJOR"}
+{ B_BONUS_INTLK_ GEM1CAT:dv B_BONUS_HV_GEM1CAT:dv B_BONUS_HV_GEM1CAT:dv.LOLO B_BONUS_HV_GEM1CAT:dv.HIHI B_BONUS_HV:offbtn 1 2 "Turn HV OFF if CATHODE-GEM1IN dV MAJOR"}
+}

@@ -16,8 +16,10 @@ function lvcycle {
   cnt=0
   cnterr=0
   caput $pvGo 1 | $log
+  sleep 7
   while [ 1 ]
   do
+      sleep 1
       echo -n '.'
       stat=`caget -t $pvCheck`
       if [ $stat -eq 1 ]
@@ -48,7 +50,6 @@ function lvcycle {
               exit
           fi
       fi
-      sleep 1
   done
 }
 
@@ -80,6 +81,15 @@ function checkssh {
 ############################################################
 
 date | $log
+echo "#####################################################" | $log
+echo "#                                                   #" | $log
+echo "# NOTE: the DAQ will need to be reinitialized after #" | $log
+echo "#  ***AFTER*** this script tis complete:            #" | $log
+echo "#                                                   #" | $log
+echo "#   Cancel->Reset->Configure->Download->Prestart    #" | $log
+echo "#                                                   #" | $log
+echo "#####################################################" | $log
+echo  | $log
 
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
 
@@ -113,6 +123,9 @@ echo  | $log
 echo "####################################################" | $log
 echo "#                                                  #" | $log
 echo "#           rich-lvcycle.sh COMPLETE               #" | $log
+echo "#                                                  #" | $log
+echo "# NOTE: the DAQ will now need to be reinitialized: #" | $log
+echo "#   Cancel->Reset->Configure->Download->Prestart   #" | $log
 echo "#                                                  #" | $log
 echo "####################################################" | $log
 date | $log

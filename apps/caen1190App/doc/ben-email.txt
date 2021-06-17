@@ -1,0 +1,22 @@
+Hi Nathan,
+
+CAEN 1190/1290 TDC library used in CODA:
+$CODA/src/rol/code.s/tdc1190.c and .h
+
+I think you have the 1190TDC module in the crate: 128ch 100ps resolution
+
+Here's a few thoughts about how you probably want to configure the module:
+1) What's more important I suppose it to get the largest time span: 104us. This can be done with 200ps resolution mode (100ps gives 52us, 200 gives 104us, 800 also gives 104us).
+2) leading-edge only (this way you don't have to readout as much - the pulse width tells you nothing since the discriminator output pulse width is fixed
+3) use "Continuous Storage Mode" as opposed to triggered...There is a "Long Range Time Measurement" that might be interesting to look at too that can get the measurement range up to 100seconds (but you'd need a lower rate signal to populate statistics as such small periods - I think prescaling in software may be okay?). Anyhow, this long range stuff can be done later as it requires us to hook up some extra signals to the module.
+
+My impression is that you can simply poll this module to check if it has data, if so read it out, otherwise keep polling. Data for a single channel should be in order of time (I'm not if all channels are sorted in time - something you'd have to check). Let's assume you only look at one channel for now. You'll get a 19bit timestamp for each hit - just make sure the channel id matches what your detector is feeding. In the simplest analysis case you could just keep plotting the unsigned time difference (i.e. if variables used are all unsigned int values:
+   unsigned int tdiff = (current_hit_time-last_hit_time) & 0x7FFFF
+   double tdiff_float = tdiff * 200.0E-12;
+
+Then just accumulate for say 1 second, plot and repeat forever. The problem with this is if the signal drops to less than 10kHz...this is where the long range time measurement would be very helpful. One work around/hack may be to get the system time whenever you read a hit from the TDC module for your reference channel and record that time as well. Then you can also check the last system time to current system time to see if it was >100us to abandon time different you plot for that readout.
+
+Hope that helps some - let me know if you need a hand. This isn't a bad way to prototype it - we can put another module to replace the 1190 later that has a much large rollover time. To boost visibility at lower periods I think you can take the detector signal with different prescales as well (could do this in software too).
+
+Ben
+

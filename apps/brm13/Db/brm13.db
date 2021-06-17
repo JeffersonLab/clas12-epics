@@ -1,0 +1,258 @@
+record(longin, "$(P)_XIPEAKLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_IXPEAK")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S0 @dummy")
+}
+
+record(longin, "$(P)_YIPEAKLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_IYPEAK")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S1 @dummy")
+}
+
+record(longout, "$(P)_XIMAXLO") {
+  field(DOL, "$(P)_XIMAX")
+  field(OMSL, "closed_loop")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S3 @dummy")
+}
+
+record(longout, "$(P)_YIMAXLO") {
+  field(DOL, "$(P)_YIMAX")
+  field(OMSL, "closed_loop")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S5 @dummy")
+}
+
+record(longout, "$(P)_XIMINLO") {
+  field(DOL, "$(P)_XIMIN")
+  field(OMSL, "closed_loop")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S2 @dummy")
+}
+
+record(longout, "$(P)_YIMINLO") {
+  field(DOL, "$(P)_YIMIN")
+  field(OMSL, "closed_loop")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S4 @dummy")
+}
+
+record(longin, "$(P)_XIMAXRLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_XIMAXR")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S3 @dummy")
+}
+
+record(longin, "$(P)_YIMAXRLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_YIMAXR")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S5 @dummy")
+}
+
+record(longin, "$(P)_XIMINRLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_XIMINR")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S2 @dummy")
+}
+
+record(longin, "$(P)_YIMINRLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_YIMINR")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S4 @dummy")
+}
+
+record(longin, "$(P)_FSDSTATUSLI") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_FSDSTATUSCALC")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S6 @dummy")
+}
+
+record(calc, "$(P)_FSDSTATUSCALC") {
+  field(FLNK, "$(P)_FSDSTATUS")
+  field(CALC, "A&15")
+  field(INPA, "$(P)_FSDSTATUSLI")
+}
+
+record(mbbiDirect, "$(P)_FSDSTATUS") {
+  field(INP, "$(P)_FSDSTATUSCALC")
+}
+
+record(longout, "$(P)_FSDCONLO") {
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S7 @dummy")
+}
+
+record(longin, "$(P)_BUFFSTAT") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_BUFFBITS")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S18 @dummy")
+}
+
+record(mbbiDirect, "$(P)_BUFFBITS") {
+  field(DTYP, "Soft Channel")
+  field(FLNK, "$(P)_XRAW_WF")
+  field(INP, "$(P)_BUFFSTAT")
+}
+
+record(waveform, "$(P)_XRAW_WF") {
+  field(DISV, "0")
+  field(SDIS, "$(P)_BUFFBITS.B0")
+  field(FLNK, "$(P)_YRAW_WF")
+  field(NELM, "512")
+  field(FTVL, "LONG")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S8 @dummy")
+}
+
+record(waveform, "$(P)_YRAW_WF") {
+  field(FLNK, "$(P)_BUFFCLR")
+  field(NELM, "512")
+  field(FTVL, "LONG")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S9 @dummy")
+}
+
+record(longout, "$(P)_BUFFCLR") {
+  field(PINI, "YES")
+  field(DOL, "0")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S18 @dummy")
+}
+
+record(longout, "$(P)_ALIVEset") {
+  field(SCAN, "1 second")
+  field(FLNK, "$(P)_ALIVEread")
+  field(DOL, "$(P)_ALIVE.C")
+  field(OMSL, "closed_loop")
+  field(DTYP, "VME_BRM13")
+  field(OUT, "#C0 S13 @dummy")
+}
+
+record(longin, "$(P)_ALIVEread") {
+  field(FLNK, "$(P)_ALIVE")
+  field(DTYP, "VME_BRM13")
+  field(INP, "#C0 S13 @dummy")
+}
+
+record(calc, "$(P)_ALIVE") {
+  field(CALC, "C:=B=0?8:0;A=B?0:1")
+  field(INPA, "$(P)_ALIVEset")
+  field(INPB, "$(P)_ALIVEread")
+  field(HIHI, "1")
+  field(HSV, "MAJOR")
+}
+
+record(calc, "$(P)_XIMAX") {
+  field(FLNK, "$(P)_XIMAXLO")
+  field(CALC, "A/B")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_YIMAX") {
+  field(FLNK, "$(P)_YIMAXLO")
+  field(CALC, "A/B")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_XIMIN") {
+  field(FLNK, "$(P)_XIMINLO")
+  field(CALC, "A/B")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_YIMIN") {
+  field(FLNK, "$(P)_YIMINLO")
+  field(CALC, "A/B")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(ao, "$(P)_MagTScale") {
+  field(DOL, "0.0013")
+}
+
+record(calc, "$(P)_XIMAXR") {
+  field(CALC, "A*B")
+  field(INPA, "$(P)_XIMAXRLI")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_YIMAXR") {
+  field(CALC, "A*B")
+  field(INPA, "$(P)_YIMAXRLI")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_XIMINR") {
+  field(CALC, "A*B")
+  field(INPA, "$(P)_XIMINRLI")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(calc, "$(P)_YIMINR") {
+  field(CALC, "A*B")
+  field(INPA, "$(P)_YIMINRLI")
+  field(INPB, "$(P)_MagTScale")
+}
+
+record(ao, "$(P)_MagCScale") {
+  field(DOL, "0.005101")
+}
+
+record(calc, "$(P)_IXPEAK") {
+  field(CALC, "(A>=2048?(-1*((~A+1)&2047)):A)*B")
+  field(INPA, "$(P)_XIPEAKLI")
+  field(INPB, "$(P)_MagCScale")
+}
+
+record(calc, "$(P)_IYPEAK") {
+  field(CALC, "(A>=2048?(-1*((~A+1)&2047)):A)*B")
+  field(INPA, "$(P)_YIPEAKLI")
+  field(INPB, "$(P)_MagCScale")
+}
+
+# end(A)
+
+record(bo, "$(P)_FSDRESET") {
+  field(HIGH, "1")
+}
+
+record(stringout, "$(P)_STATUSW") {
+}
+
+record(bo, "$(P)_WOFF") {
+  field(HIGH, "1")
+}
+
+record(bo, "$(P)_WGO") {
+  field(HIGH, "1")
+}
+
+record(waveform, "$(P)_XSCALEWF") {
+  field(NELM, "512")
+  field(FTVL, "FLOAT")
+}
+
+record(ao, "$(P)_IPEAK") {
+}
+
+record(calc, "$(P)_VOLTAGE") {
+  field(CALC, "D:=B*A;E:=C*A;0")
+  field(INPA, "$(P)_VSCALE")
+  field(INPB, "0.1688")
+  field(INPC, "0.1575")
+}
+
+record(ao, "$(P)_VSCALE") {
+  field(FLNK, "$(P)_VOLTAGE")
+  field(DRVH, "2")
+  field(DRVL, "0.25")
+}

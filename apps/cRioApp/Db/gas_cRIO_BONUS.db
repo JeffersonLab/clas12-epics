@@ -23,13 +23,13 @@ record(ai,"B_BONUS_GAS_MFC_Valve") {
 }
 
 record(ai,"B_BONUS_GAS_He_Buffer_Press") {
-    field(EGU,"Torr")
+    field(EGU,"torr")
     field(PREC,"2")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
 
 record(ai,"B_BONUS_GAS_DP") {
-    field(EGU,"Torr")
+    field(EGU,"torr")
     field(PREC,"4")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
@@ -41,7 +41,17 @@ record(ai,"B_BONUS_DMS_Temp") {
 }
 
 record(ai,"B_BONUS_RTPC_Press") {
-    field(EGU,"Torr")
+    field(EGU,"torr")
+    field(PREC,"2")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
+record(calc,"B_BONUS_RTPC_Press:rel:amb") {
+    field(SCAN,"1 second")
+    field(INPA,"B_BONUS_RTPC_Press")
+    field(INPB,"B_SYS_WEATHER_SF_L3_Press:torr")
+    field(CALC,"A-B")
+    field(EGU,"torr")
     field(PREC,"2")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
@@ -55,9 +65,145 @@ record(ai,"B_BONUS_RTPC_Temp") {
 record(calc,"B_BONUS_DMS_Press") {
     field(INPA,"B_BONUS_RTPC_Press CPP")
     field(INPB,"B_BONUS_GAS_DP CPP")
-    field(EGU,"Torr")
+    field(EGU,"torr")
     field(PREC,"2")
     field(CALC,"A-B")
     info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
+
+#################################################################
+# TARGET:
+
+record(ai,"B_BONUS_GAS_MFC104_Flow") {
+    field(EGU,"sccm")
+    field(PREC,"2")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_MFC104_Flow_Set") {
+    field(EGU,"sccm")
+    field(PREC,"2")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_MFC104_Temp") {
+    field(EGU,"C")
+    field(PREC,"2")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_MFC104_Valve") {
+    field(EGU,"%")
+    field(PREC,"2")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_PT104") {
+    field(EGU,"psid")
+    field(PREC,"2")
+    field(DESC,"Gas Pad Pressure")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_PT110") {
+    field(EGU,"psig")
+    field(PREC,"2")
+    field(DESC,"Gas Panel Pressure")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ai,"B_BONUS_GAS_PT406") {
+    field(EGU,"psig")
+    field(PREC,"2")
+    field(DESC,"N2 Purge Pressure")
+    info(autosaveFields_pass0,"HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(bi,"B_BONUS_GAS_SVBT100") {
+    field(ZNAM,"Closed")
+    field(ONAM,"Open")
+    field(DESC,"Flammable Supply Valve")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(bi,"B_BONUS_GAS_SVBT102") {
+    field(ZNAM,"Closed")
+    field(ONAM,"Open")
+    field(DESC,"Non-Flammable Supply Valve")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(bi,"B_BONUS_GAS_SVBT108") {
+    field(ZNAM,"Closed")
+    field(ONAM,"Open")
+    field(DESC,"Target Straw Supply Valve")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(bi,"B_BONUS_GAS_SVBT112") {
+    field(ZNAM,"Closed")
+    field(ONAM,"Open")
+    field(DESC,"Target Straw Exhaust Valve")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(bi,"B_BONUS_GAS_SVBD206") {
+    field(ZNAM,"Closed")
+    field(ONAM,"Open")
+    field(DESC,"He Buffer Supply Valve")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+
+record(bi,"B_BONUS_GAS_Error") {
+    field(ZNAM,"Ok")
+    field(ONAM,"Fault")
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(bi,"B_BONUS_GAS_FGD") {
+    field(ZNAM,"Ok")
+    field(ONAM,"Detected!")
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+    info(autosaveFields_pass0,"OSV ZSV")
+}
+record(mbbi,"B_BONUS_GAS_MFC104_Gas") {
+    field(ZRST,"H2")
+    field(ONST,"D2")
+    field(TWST,"4He")
+    field(THST,"N2")
+}
+record(mbbi,"B_BONUS_GAS_Mode") {
+    field(ZRST,"Failure")
+    field(ONST,"Auto")
+    field(TWST,"Manual")
+    field(THST,"Purge-Empty")
+    field(FRST,"Purge-Fill")
+    field(ZRSV,"MAJOR")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"NO_ALARM")
+}
+
+record(calc,"B_BONUS_GAS_MFC_Used")
+{
+  field(SCAN,"1 second")
+  field(INPA,"B_BONUS_GAS_MFC_Used")
+  field(INPB,"B_BONUS_GAS_MFC_Flow")
+  field(CALC,"A+B/60")
+  field(EGU, "cc")
+  field(PREC, 1)
+  field(HHSV,"MAJOR")
+  field(HSV,"MINOR")
+  info(autosaveFields_pass0, "VAL HIGH HIHI")
+}
+
+record(calc,"B_BONUS_GAS_MFC104_Used")
+{
+  field(SCAN,"1 second")
+  field(INPA,"B_BONUS_GAS_MFC104_Used")
+  field(INPB,"B_BONUS_GAS_MFC104_Flow")
+  field(CALC,"A+B/60")
+  field(EGU, "cc")
+  field(PREC, 1)
+  field(HHSV,"MAJOR")
+  field(HSV,"MINOR")
+  info(autosaveFields_pass0, "VAL HIGH HIHI")
+} 
+
+record(ai,"B_HW_CRIO_BONUS_MFC_INIT") {
+  info(autosaveFields_pass0, "LOLO LO HIGH HIHI HHSV HSV LSV LLSV")
 }
 

@@ -74,6 +74,12 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminVxWorks.db", "IOC=iocclassc1")
 #dbLoadTemplate("db/moeller_target.substitutions")
 dbLoadRecords("db/moeller_target.db")
 
+dbLoadRecords("db/motor.db", "motor_name=rgm_target, card=1, slot=1, srev=2000, urev=2.54, direction=Pos, velo=0.1, accl=0.1")
+dbLoadRecords("db/rgm_target.db")
+
+# The manual says 1.8 degrees per step, or 200 steps per revolution but maybe the above 2000s are really microsteps, done in the driver box?
+# And if we want the units to be in degrees:
+#dbLoadRecords("db/motor.db", "motor_name=rgm_target, card=1, slot=1, srev=200, urev=360, direction=Pos, velo=0.1, accl=0.1")
 
 # MOLLER QUADS:
 #dbLoadRecords("db/dynabc.db")

@@ -1,0 +1,35 @@
+
+OutTerminator = CR;
+InTerminator = LF CR;
+
+getADC { out "AD \$1"; in "%d"; }
+getDAC { out "DA \$1"; in "\$1 %d"; }
+
+writeDAC { out "DA \$1,%d"; }
+
+getCMDSTATE { out "CMDSTATE"; in "%s"; }
+
+getString { out "\$1"; in "%s"; }
+
+command { out "\$1"; }
+
+N = on
+PO = get polarity ("+" or "-")
+"PO +", "PO -", set polarity
+
+getModel { out "PRINT"; in "%s"; }
+getVersion { out "VER"; in "%s"; }
+
+setRemote { out "REM"; }
+
+# reset interlocks:
+reset { out "RS" ; }
+
+
+readSlew { out "R1"; in "%d"; }
+
+# this is f'd, returns "!...!..!.....!" to represent bits
+getStatus { out "S1"; in "%d"; }
+
+
+

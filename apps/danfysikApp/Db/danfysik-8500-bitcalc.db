@@ -1,0 +1,46 @@
+
+# Danfysik 8500 returns status bits represented by strings
+# of (24) characters, where the ! (.) character means the
+# bit is (not) set.  Here we deal with that mess and parse
+# it out into bi records:
+record(stringin,"$(SINP)") {
+  field(PINI,1)
+  field(VAL,".!!....................!")
+}
+record(scalcout,"$(P)$(R=)sbitscalc:$(BIT)") {
+  field(INAA,"$(SINP) CPP")
+  field(CALC,"AA[$(BIT),$(BIT)]=='.' ? 0 : 1")
+  field(FLNK,"$(P)$(R=)sbitcalc:$(BIT) PP")
+}
+record(calcout,"$(P)$(R=)sbitcalc:$(BIT)") {
+  field(INPA,"$(P)$(R=)sbitscalc:$(BIT)")
+  field(CALC,"A>0.1")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"$(P)$(R=)sbit:$(BIT) PP")
+}
+record(bi,"$(P)$(R=)sbit:$(BIT)") {
+  field(DESC,"$(DESC)")
+  field(ZSV,"NO_ALARM")
+  field(OSV,"$(SEVR)")
+}
+
+# Oh, it also has a hex representation,
+# but their string representation is reversed:
+record(longin,"$(INP)") {
+  field(PINI,1)
+  field(VAL,"6291457")
+}
+record(calcout,"$(P)$(R=)bitcalc:$(BIT)") {
+  field(INPA,"$(INP) CPP")
+  field(CALC,"(A >> (23-$(BIT))) & 1")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"$(P)$(R=)bit:$(BIT) PP")
+}
+record(bi,"$(P)$(R=)bit:$(BIT)") {
+  field(DESC,"$(DESC)")
+  field(ZSV,"NO_ALARM")
+  field(OSV,"$(SEVR)")
+}
+

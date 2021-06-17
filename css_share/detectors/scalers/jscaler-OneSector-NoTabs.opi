@@ -501,7 +501,22 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_1_title_font>
     <visible>true</visible>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <scripts />
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+var sector=widget.getMacroValue("S");
+
+if (sector=="3" || sector=="5") {
+widget.setPropertyValue("visible",true);
+}
+else {
+widget.setPropertyValue("visible",false);
+}]]></scriptText>
+        <pv trig="true">loc://pv(0)</pv>
+      </path>
+    </scripts>
     <trace_0_point_size>4</trace_0_point_size>
     <trace_0_trace_color>
       <color name="Minor" red="255" green="128" blue="0" />
@@ -560,7 +575,7 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_0_axis_color>
     <axis_0_dash_grid_line>false</axis_0_dash_grid_line>
     <trace_0_point_style>0</trace_0_point_style>
-    <trace_0_line_width>22</trace_0_line_width>
+    <trace_0_line_width>12</trace_0_line_width>
     <axis_0_time_format>0</axis_0_time_format>
     <trace_count>1</trace_count>
     <axis_1_show_grid>false</axis_1_show_grid>
@@ -575,7 +590,7 @@ $(trace_0_y_pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <axis_0_maximum>100.0</axis_0_maximum>
+    <axis_0_maximum>7.0</axis_0_maximum>
     <height>161</height>
     <trigger_pv_value />
     <axis_1_grid_color>
@@ -590,7 +605,7 @@ $(trace_0_y_pv_value)</tooltip>
     <trace_0_update_delay>100</trace_0_update_delay>
     <pv_name>B_DET_HTCC_$(T)_SEC$(S):wf</pv_name>
     <name>XY Graph_4</name>
-    <axis_0_auto_scale>true</axis_0_auto_scale>
+    <axis_0_auto_scale>false</axis_0_auto_scale>
     <axis_0_minimum>0.0</axis_0_minimum>
     <axis_1_axis_title>Counts  (Hz)</axis_1_axis_title>
     <axis_1_auto_scale>false</axis_1_auto_scale>
@@ -621,7 +636,22 @@ $(trace_0_y_pv_value)</tooltip>
     </axis_1_title_font>
     <visible>true</visible>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <scripts />
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+var type=widget.getMacroValue("T");
+
+if (type=="FADC") {
+widget.setPropertyValue("visible",true);
+}
+else {
+widget.setPropertyValue("visible",false);
+}]]></scriptText>
+        <pv trig="true">loc://pv(0)</pv>
+      </path>
+    </scripts>
     <trace_0_point_size>4</trace_0_point_size>
     <trace_0_trace_color>
       <color name="MEDM_COLOR_36" red="214" green="127" blue="226" />

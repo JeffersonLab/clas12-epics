@@ -1,0 +1,69 @@
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+
+EPICS_BASE=/usr/clas12/R3.14.12.5/base_RHEL5
+MODULES=$(EPICS_BASE)/../modules_RHEL5
+SYNAPPS=$(EPICS_BASE)/../modules_RHEL5
+EPICS_EXTENSIONS=$(EPICS_BASE)/../externsions_RHEL5
+include $(MODULES)/configure/RELEASE
+include $(SYNAPPS)/configure/RELEASE
+COMMANDLINE_LIBRARY = READLINE_NCURSES
+
+STATIC_BUILD=YES
+
+LIBRARY_IOC_Linux += caen1190Support
+DBD += caen1190Support.dbd
+
+caen1190Support_DBD += caen1190SupportInclude.dbd
+
+caen1190Support_SRCS += fftmisc.c
+caen1190Support_SRCS += fourierf.c
+caen1190Support_SRCS += fourierd.c
+caen1190Support_SRCS += caen1190.c
+caen1190Support_SRCS += caen1190seq.st
+
+caen1190Support_LIBS += jvme rol
+jvme_DIR     += $(JVME_LIB)
+rol_DIR      += $(ROL_VME_LIB)
+USR_INCLUDES += $(ROL_INCLUDE)
+USR_INCLUDES += $(JVME_INCLUDE)
+
+caen1190Support_LIBS += seq pv
+caen1190Support_LIBS += $(EPICS_BASE_IOC_LIBS) 
+
+#caen1190Support_OBJS += caen1190.o
+
+
+PROD_IOC_Linux = caen1190App
+DBD += caen1190App.dbd
+caen1190App_DBD += base.dbd
+caen1190App_DBD += devIocStats.dbd
+caen1190App_DBD += caen1190Support.dbd
+caen1190App_SRCS += caen1190App_registerRecordDeviceDriver.cpp
+caen1190App_SRCS_DEFAULT += caen1190Main.cpp
+caen1190App_LIBS += caen1190Support 
+caen1190App_LIBS += jvme rol
+caen1190App_LIBS += seq pv autosave devIocStats
+caen1190App_LIBS += $(EPICS_BASE_IOC_LIBS)
+
+#PROD += caen1190test
+#caen1190test_SRCS = caen1190test.c
+#caen1190test_SRC += caen1190.c
+#caen1190test_OBJS += caen1190.o
+#caen1190App_LIBS += caen1190Support 
+#PROD_LIBS    += jvme rol
+
+
+
+USR_CPPFLAGS += -DLinux_vme
+USR_CXXFLAGS += -DLinux_vme
+USR_CFLAGS += -DLinux_vme
+
+$(info $$rol_DIR is [${rol_DIR}])
+$(info $$jvme_DIR is [${jvme_DIR}])
+$(info $$USR_INCLUDES is [${USR_INCLUDES}])
+
+#===========================
+include $(TOP)/configure/RULES
+

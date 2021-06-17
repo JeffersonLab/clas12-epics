@@ -1,0 +1,31 @@
+# 
+# Alarm based on comparing $INP's value every $SEC with its value from
+# $SEC seconds earlier.  For more static things like a setpoint and/or
+# for somewhat ignoring spurious readbacks or transients, otherwise
+# could have just triggered on callback.
+#
+
+# just for testing:
+#record(ai,"$(INP)") {}
+
+record(calcout,"$(P)$(R=)delta") {
+    field(SCAN,"$(SEC=5) second")
+    field(INPA,"$(INP)")
+    field(INPB,"$(P)$(R=)prev")
+    field(CALC,"A-B")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use OCAL")
+    field(OCAL,"ABS(A-B) > $(DELTA) ? 1 : 0")
+    field(OUT,"$(P)$(R=)changed CPP")
+    field(FLNK,"$(P)$(R=)prev CPP")
+}
+
+record(ai,"$(P)$(R=)prev") {
+    field(INP,"$(P)$(R=)delta.A")
+}
+
+record(bi,"$(P)$(R=)changed") {
+    field(ZSV,"NO_ALARM")
+    field(OSV,"MAJOR")
+}
+

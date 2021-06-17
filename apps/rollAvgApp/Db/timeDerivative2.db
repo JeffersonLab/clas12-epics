@@ -1,0 +1,35 @@
+
+# simulator:
+#record(calcout,"sim-$(P):go") {
+#    field(SCAN,"1 second")
+#    field(INPA,"$(INP)")
+#    field(CALC,"A+1")
+#    field(OOPT,"Every Time")
+#    field(DOPT,"Use CALC")
+#    field(OUT,"$(INP) PP")
+#}
+#record(ai,"$(INP)") {
+#    field(EGU,"V")
+#}
+
+record(scalcout,"$(P):units") {
+    field(PINI,"1")
+    field(INAA,"$(INP).EGU")
+    field(CALC,"AA+'/s'")
+    field(OUT,"$(P).EGU")
+}
+
+record(compress,"$(P):fifo") {
+    field(SCAN,"$(NSEC) second")
+    field(INP,"$(INP)")
+    field(NSAM,"$(N)")
+    field(ALG,"Circular Buffer")
+}
+
+record(acalcout,"$(P)") {
+    field(NELM,"$(N)")
+    field(INAA,"$(P):fifo CPP")
+    field(CALC,"AVG(DERIV(AA))/$(NSEC)")
+    field(PREC,"$(PREC=0)")
+}
+

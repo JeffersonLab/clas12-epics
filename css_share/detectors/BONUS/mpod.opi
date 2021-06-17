@@ -133,8 +133,8 @@ $(pv_value)</tooltip>
         <description>All HV ON</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>hvbonus2:clearEvent</pv_name>
-        <value>10</value>
+        <pv_name>B_BONUS_HV:clearAllInhibits:master</pv_name>
+        <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description>Clear All Inhibits</description>
@@ -144,22 +144,11 @@ $(pv_value)</tooltip>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <HOST>hvbonus2</HOST>
-          <ioc>iocgasSystem86</ioc>
+          <ioc>iocbonus</ioc>
           <TITLE>BONuS HV Crate</TITLE>
         </macros>
         <replace>0</replace>
         <description>HV Crate Status</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>bonus-intlks.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <HOST>hvbonus2</HOST>
-          <ioc>iocgasSystem86</ioc>
-          <TITLE>BONuS HV Crate</TITLE>
-        </macros>
-        <replace>0</replace>
-        <description>Interlocks</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>mpod-novice.opi</path>
@@ -168,6 +157,18 @@ $(pv_value)</tooltip>
         </macros>
         <replace>1</replace>
         <description>HV Novice</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py save det=BONUS_HV</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Save HV Settings</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>hvbackup.py restore det=BONUS_HV</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Restore HV Settings</description>
       </action>
     </actions>
     <font>

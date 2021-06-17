@@ -10,6 +10,8 @@ dbLoadDatabase("dbd/mmGas.dbd")
 mmGas_registerRecordDeviceDriver(pdbbase)
 
 ## Configure modbus ports
+
+# The FMT gas PLC:
 drvAsynIPPortConfigure("TCP506","129.57.160.183:506",0,0,1)
 
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)

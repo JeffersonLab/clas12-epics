@@ -1,0 +1,120 @@
+record(stringin,"$(P)$(R)ipaddr") {
+    field(DTYP,"stream")
+    field(INP,"@keysight33X00.proto getString(SYST:COMM:LAN:IPAD) $(PORT)")
+}
+
+record(ai,"$(P)$(R)1:volt:rbk") {
+    field(SCAN,"$(SCAN1=1 second)")
+    field(DTYP,"stream")
+    field(EGU,"mV")
+    field(INP,"@keysight33X00.proto getFloat(SOUR1:VOLT) $(PORT)")
+}
+record(ao,"$(P)$(R)1:volt:set") {
+    field(DTYP,"stream")
+    field(EGU,"mV")
+    field(OUT,"@keysight33X00.proto putFloat(SOUR1:VOLT) $(PORT)")
+}
+record(ai,"$(P)$(R)2:volt:rbk") {
+    field(SCAN,"$(SCAN1=1 second)")
+    field(DTYP,"stream")
+    field(EGU,"mV")
+    field(INP,"@keysight33X00.proto getFloat(SOUR2:VOLT) $(PORT)")
+}
+record(ao,"$(P)$(R)2:volt:set") {
+    field(DTYP,"stream")
+    field(EGU,"mV")
+    field(OUT,"@keysight33X00.proto putFloat(SOUR2:VOLT) $(PORT)")
+}
+record(ai,"$(P)$(R)1:offset:rbk") {
+    field(SCAN,"$(SCAN1=1 second)")
+    field(DTYP,"stream")
+    field(EGU,"V")
+    field(INP,"@keysight33X00.proto getFloat(SOUR1:VOLT:OFFS) $(PORT)")
+}
+record(ao,"$(P)$(R)1:offset:set") {
+    field(DTYP,"stream")
+    field(EGU,"V")
+    field(OUT,"@keysight33X00.proto putFloat(SOUR1:VOLT:OFFS) $(PORT)")
+}
+record(ai,"$(P)$(R)2:offset:rbk") {
+    field(SCAN,"$(SCAN1=1 second)")
+    field(DTYP,"stream")
+    field(EGU,"V")
+    field(INP,"@keysight33X00.proto getFloat(SOUR2:VOLT:OFFS) $(PORT)")
+}
+record(ao,"$(P)$(R)2:offset:set") {
+    field(DTYP,"stream")
+    field(EGU,"V")
+    field(OUT,"@keysight33X00.proto putFloat(SOUR2:VOLT:OFFS) $(PORT)")
+}
+record(ai,"$(P)$(R)period:rbk") {
+    field(DTYP,"stream")
+    field(SCAN,"$(SCAN2=2 second)")
+    field(EGU,"s")
+    field(INP,"@keysight33X00.proto getFloat(FUNC:ARB:PER) $(PORT)")
+}
+record(ao,"$(P)$(R)period:set") {
+    field(DTYP,"stream")
+    field(EGU,"s")
+    field(OUT,"@keysight33X00.proto putFloat(FUNC:ARB:PER) $(PORT)")
+}
+record(bi,"$(P)$(R)1:pw:rbk") {
+    field(DTYP,"stream")
+    field(SCAN,"$(SCAN2=2 second)")
+    field(ZNAM,"Off")
+    field(ONAM,"On")
+    field(INP,"@keysight33X00.proto getInt(OUTP1) $(PORT)")
+}
+record(bi,"$(P)$(R)2:pw:rbk") {
+    field(DTYP,"stream")
+    field(SCAN,"$(SCAN2=2 second)")
+    field(ZNAM,"Off")
+    field(ONAM,"On")
+    field(INP,"@keysight33X00.proto getInt(OUTP2) $(PORT)")
+}
+record(bo,"$(P)$(R)1:pw:set") {
+    field(DTYP,"stream")
+    field(ZNAM,"Off")
+    field(ONAM,"On")
+    field(OUT,"@keysight33X00.proto putInt(OUTP1) $(PORT)")
+}
+record(bo,"$(P)$(R)2:pw:set") {
+    field(DTYP,"stream")
+    field(ZNAM,"Off")
+    field(ONAM,"On")
+    field(OUT,"@keysight33X00.proto putInt(OUTP2) $(PORT)")
+}
+
+record(mbbo,"$(P)$(R)state:set") {
+    field(DTYP,"stream")
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(ZRST,"200 um")
+    field(ONST,"100 um")
+    field(TWST,"400 um")
+    field(OUT,"@keysight33X00.proto putInt(*RCL) $(PORT)")
+}
+
+#record(bo,"$(P)$(R)1:load:spiral:100") {
+#    field(DTYP,"stream")
+#    field(OUT,"@keysight33X00.proto loadData1(\RASTER\ SPIRAL_100_X.arb)")
+#}
+#record(bo,"$(P)$(R)1:load:spiral:200") {
+#    field(DTYP,"stream")
+#    field(OUT,"@keysight33X00.proto loadData1(\RASTER\ SPIRAL_200_X.arb)")
+#}
+
+# this doesn't work:
+#record(mbbi,"$(P)$(R)state:rbk") {
+#    field(DTYP,"stream")
+#    field(SCAN,"5 second")
+#    field(ZRVL,0)
+#    field(ONVL,1)
+#    field(TWVL,2)
+#    field(ZRST,"200 um")
+#    field(ONST,"100 um")
+#    field(TWST,"400 um")
+#    field(INP,"@keysight33X00.proto getInt(MEM:STAT:VAL) $(PORT)")
+#}
+

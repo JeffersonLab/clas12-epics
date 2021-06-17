@@ -12,6 +12,15 @@ record(ai, "B_SYS_WEATHER_SF_L3_Press") {
     field(EGU,  "inH2O")
     field(PREC, "2")
     info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+    field(FLNK,"B_SYS_WEATHER_SF_L3_Press:torr.PROC")
+}
+
+record(calc, "B_SYS_WEATHER_SF_L3_Press:torr") {
+    field(INPA, "B_SYS_WEATHER_SF_L3_Press")
+    field(CALC, "A*1.86645")
+    field(EGU,  "torr")
+    field(PREC, "2")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
 }
 
 record(ai, "B_SYS_WEATHER_GS_Temp") {

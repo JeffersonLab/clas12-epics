@@ -25,6 +25,9 @@ dbLoadRecords("db/liveRollAvg.db","I=CLL6763A:dxdt,P=CLL6763A:dxdt,N=150,EGU=g/s
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 
+# for Saclay:
+dbLoadRecords("db/timeDerivative.db","P=B_SOL:MPS:I_ZFCT,DT=5")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

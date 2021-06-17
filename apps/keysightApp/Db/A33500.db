@@ -228,6 +228,22 @@ record(bi, "$(TAG)_WG_XAMSTAT") {
   field(INP, "@A33500.proto getAMOffOnCh1 $(PORT)")
 }
 
+record(bo, "$(TAG)_WG_YAMSTAT:set") {
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+  field(SCAN, "2 second")
+  field(DTYP, "stream")
+  field(OUT, "@A33500.proto setAMOffOnCh2 $(PORT)")
+}
+
+record(bo, "$(TAG)_WG_XAMSTAT:set") {
+  field(SCAN, "2 second")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+  field(DTYP, "stream")
+  field(OUT, "@A33500.proto setAMOffOnCh1 $(PORT)")
+}
+
 record(stringin, "$(TAG)_WG_XAMFUNC") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
@@ -250,6 +266,13 @@ record(stringin, "$(TAG)_WG_YFUNC") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
   field(INP, "@A33500.proto getFuncCh2 $(PORT)")
+}
+
+record(dfanout, "$(TAG)_ALL_ONOFF") {
+  field(OUTA, "$(TAG)_WG_XOUTPUT PP")
+  field(OUTB, "$(TAG)_WG_YOUTPUT PP")
+  field(OUTC, "$(TAG)_WG_XAMSTAT:set PP")
+  field(OUTD, "$(TAG)_WG_YAMSTAT:set PP")
 }
 
 record(bo, "$(TAG)_WG_XOUTPUT") {
@@ -334,4 +357,15 @@ record(ai, "$(TAG)_WG_YPERIOd") {
   field(ASLO, "1000")
   field(DTYP, "stream")
   field(INP, "@A33500.proto getPerCh2 $(PORT)")
+}
+
+record(mbbo,"$(TAG)_FILE_SELECT") {
+    field(DTYP,"stream")
+    field(ZRVL,1)
+    field(ONVL,2)
+    field(TWVL,4)
+    field(ZRST,"100 um")
+    field(ONST,"200 um")
+    field(TWST,"400 um")
+    field(OUT,"@A33500.proto loadSpiral $(PORT)")
 }

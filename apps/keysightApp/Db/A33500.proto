@@ -8,22 +8,6 @@ WriteTimeout = 5000;
 ReplyTimeout = 5000;
 ReadTimeout  = 500;
 
-# Enable/Disable channel 1 output connector
-# bo
-#   ZNAM: Off
-#   ONAM: On
-setOutOffOnCh1 {
-  out "%{OUTPut1 OFF|OUTPut1 ON}";
-}
-
-# Enable/Disable channel 2 output connector
-# bo
-#   ZNAM: Off
-#   ONAM: On
-setOutOffOnCh2 {
-  out "%{OUTPut2 OFF|OUTPut2 ON}";
-}
-
 # Get channel 1 output connector state
 # bi
 #   ZNAM: Off
@@ -42,6 +26,24 @@ getOutOffOnCh2 {
   in "%d";
 }
 
+# Enable/Disable channel 1 output connector
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setOutOffOnCh1 {
+  out "%{OUTPut1 OFF|OUTPut1 ON}";
+  @init { getOutOffOnCh1; }
+}
+
+# Enable/Disable channel 2 output connector
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setOutOffOnCh2 {
+  out "%{OUTPut2 OFF|OUTPut2 ON}";
+  @init { getOutOffOnCh2; }
+}
+
 # Get fundamental waveform type on channel 1
 # stringin
 getFuncCh1 {
@@ -56,12 +58,6 @@ getFuncCh2 {
   in "%s";
 }
 
-# Set fundamental arbitrary waveform period on channel 1
-# ao
-setPerCh1 {
-  out "SOURce1:FUNC:ARB:PER %f";
-}
-
 # Read fundamental arbitrary waveform period on channel 1
 # ai
 getPerCh1 {
@@ -69,10 +65,11 @@ getPerCh1 {
   in "%f";
 }
 
-# Set fundamental arbitrary waveform period on channel 2
+# Set fundamental arbitrary waveform period on channel 1
 # ao
-setPerCh2 {
-  out "SOURce2:FUNC:ARB:PER %f";
+setPerCh1 {
+  out "SOURce1:FUNC:ARB:PER %f";
+  @init { getPerCh1; }
 }
 
 # Read fundamental arbitrary waveform period on channel 2
@@ -82,10 +79,11 @@ getPerCh2 {
   in "%f";
 }
 
-# Set frequency on channel 1
+# Set fundamental arbitrary waveform period on channel 2
 # ao
-setFreqCh1 {
-  out "SOURce1:FREQuency %f Hz";
+setPerCh2 {
+  out "SOURce2:FUNC:ARB:PER %f";
+  @init { getPerCh2; }
 }
 
 # Read frequency on channel 1
@@ -95,10 +93,11 @@ getFreqCh1 {
   in "%f";
 }
 
-# Set frequency on channel 2
+# Set frequency on channel 1
 # ao
-setFreqCh2 {
-  out "SOURce2:FREQuency %f Hz";
+setFreqCh1 {
+  out "SOURce1:FREQuency %f Hz";
+  @init { getFreqCh1; }
 }
 
 # Read frequency on channel 2
@@ -108,10 +107,11 @@ getFreqCh2 {
   in "%f";
 }
 
-# Set amplitude on channel 1
+# Set frequency on channel 2
 # ao
-setVoltCh1 {
-  out "SOURce1:VOLTage %f Vpp";
+setFreqCh2 {
+  out "SOURce2:FREQuency %f Hz";
+  @init { getFreqCh2; }
 }
 
 # Read amplitude on channel 1
@@ -121,10 +121,11 @@ getVoltCh1 {
   in "%f";
 }
 
-# Set amplitude on channel 2
+# Set amplitude on channel 1
 # ao
-setVoltCh2 {
-  out "SOURce2:VOLTage %f Vpp";
+setVoltCh1 {
+  out "SOURce1:VOLTage %f Vpp";
+  @init { getVoltCh1; }
 }
 
 # Read amplitude on channel 2
@@ -134,10 +135,11 @@ getVoltCh2 {
   in "%f";
 }
 
-# Set amplitude offset on channel 1
+# Set amplitude on channel 2
 # ao
-setVoltOffCh1 {
-  out "SOURce1:VOLTage:OFFSet %f V";
+setVoltCh2 {
+  out "SOURce2:VOLTage %f Vpp";
+  @init { getVoltCh2; }
 }
 
 # Read amplitude offset on channel 1
@@ -147,10 +149,11 @@ getVoltOffCh1 {
   in "%f";
 }
 
-# Set amplitude offset on channel 2
+# Set amplitude offset on channel 1
 # ao
-setVoltOffCh2 {
-  out "SOURce2:VOLTage:OFFSet %f V";
+setVoltOffCh1 {
+  out "SOURce1:VOLTage:OFFSet %f V";
+  @init { getVoltOffCh1; }
 }
 
 # Read amplitude offset on channel 2
@@ -160,10 +163,23 @@ getVoltOffCh2 {
   in "%f";
 }
 
+# Set amplitude offset on channel 2
+# ao
+setVoltOffCh2 {
+  out "SOURce2:VOLTage:OFFSet %f V";
+  @init { getVoltOffCh2; }
+}
+
 # Set phase on channel 1
 # ao
 setPhaCh1 {
   out "SOURce1:PHASe %f DEG";
+}
+
+# Set phase on channel 2
+# ao
+setPhaCh2 {
+  out "SOURce2:PHASe %f DEG";
 }
 
 # Read phase on channel 1
@@ -173,12 +189,6 @@ getPhaCh1 {
   in "%f";
 }
 
-# Set phase on channel 2
-# ao
-setPhaCh2 {
-  out "SOURce2:PHASe %f DEG";
-}
-
 # Read phase on channel 2
 # ao
 getPhaCh2 {
@@ -186,17 +196,17 @@ getPhaCh2 {
   in "%f";
 }
 
-# Set AM frequency on channel 1
-# ao
-setAMFreqCh1 {
-  out "SOURce1:AM:INTernal:FREQuency %f HZ";
-}
-
 # Read AM frequency on channel 1
 # ao
 getAMFreqCh1 {
   out "SOURce1:AM:INTernal:FREQuency?";
   in "%f";
+}
+
+# Set AM frequency on channel 1
+# ao
+setAMFreqCh1 {
+  out "SOURce1:AM:INTernal:FREQuency %f HZ";
 }
 
 # Set AM frequency on channel 2
@@ -238,22 +248,6 @@ getAMDepthCh2 {
   in "%f";
 }
 
-# Turn AM on/off on channel 1
-# bo
-#   ZNAM: Off
-#   ONAM: On
-setAMOffOnCh1 {
-  out "%{SOURce1:AM:STATe OFF|SOURce1:AM:STATe ON}";
-}
-
-# Turn AM on/off on channel 2
-# bo
-#   ZNAM: Off
-#   ONAM: On
-setAMOffOnCh2 {
-  out "%{SOURce2:AM:STATe OFF|SOURce2:AM:STATe ON}";
-}
-
 # Get AM state on/off on channel 1
 # bi
 #   ZNAM: Off
@@ -270,6 +264,24 @@ getAMOffOnCh1 {
 getAMOffOnCh2 {
   out "SOURce2:AM:STATe?";
   in "%d";
+}
+
+# Turn AM on/off on channel 1
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setAMOffOnCh1 {
+  out "%{SOURce1:AM:STATe OFF|SOURce1:AM:STATe ON}";
+  @init { getAMOffOnCh1; }
+}
+
+# Turn AM on/off on channel 2
+# bo
+#   ZNAM: Off
+#   ONAM: On
+setAMOffOnCh2 {
+  out "%{SOURce2:AM:STATe OFF|SOURce2:AM:STATe ON}";
+  @init { getAMOffOnCh2; }
 }
 
 # Get AM function type on channel 1
@@ -391,7 +403,12 @@ initStateHC {
 # Init state for Hall B
 # bo
 initStateHB {
-  out "MMEMory:LOAD:STATe \"INT:\\CIRCULAR_RASTER\\HallC_2.STA\"";
+  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_100.STA\"";
   out "OUTPut1 OFF";
   out "OUTPut2 OFF";
 }
+
+loadSpiral {
+  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_%d00.STA\"";
+}
+

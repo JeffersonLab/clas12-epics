@@ -22,9 +22,10 @@ drvAsynIPPortConfigure("L0",129.57.86.49:5025,0,0,0)
 #asynOctetSetOutputEos("L0",0,"\n")
 #asynOctetSetInputEos("L0",0,"\n")
 
-dbLoadRecords("db/asynRecord.db","P=B_RASTDRV,R=:ASYN,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
-dbLoadRecords("db/A33500.db","TAG=B_RASTDRV,PORT=L0,L=HB"))
+dbLoadRecords("db/asynRecord.db","P=B_RASTER:DRV,R=:ASYN,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/A33500.db","TAG=B_RASTER:DRV,PORT=L0,L=HB"))
 
+#dbLoadRecords("db/danfysik-8500.db","P=B_RASTER:PS:")
 dbLoadTemplate("db/danfysik-8500-bitcalc.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}

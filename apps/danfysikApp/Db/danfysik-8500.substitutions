@@ -1,68 +1,136 @@
+file "db/danfysik-8500.db" {
+pattern { P }
+        { B_RASTER:PS:X: }
+        { B_RASTER:PS:Y: }
+}
+
+file "db/danfysik-8500-sums.db" {
+pattern { P }
+        { B_RASTER:PS:X: }
+        { B_RASTER:PS:Y: }
+}
+
 file "db/danfysik-8500-adc.db" {
-pattern { P            C  ASLO      EGU ALIAS  DESC }
-        { B_RASTER:PS: 0  1         A   imon   "Output Current" }
-        { B_RASTER:PS: 1  0.01      T   bmon   "Magenetic Field" }
-        { B_RASTER:PS: 2  0.01      V   vmon   "Output Voltage" }
-        { B_RASTER:PS: 3  0.1       V   v15p   "Internal +15V Supply" } 
-        { B_RASTER:PS: 4  0.1       V   v15m   "Internal -15V Supply" }
-        { B_RASTER:PS: 5  0.1       V   v5p    "Internal +5V Supply" }
-        { B_RASTER:PS: 6  0.1       C   dtemp  "Delta Temperature" }
-        { B_RASTER:PS: 7  1         V   vtrans "Trans. Bank Vce" }
-        { B_RASTER:PS: 8  0.00001   A   iopt16 "Optional Iout (16 bit)" }
-        { B_RASTER:PS: 9  0.008333  A   iaux1  "Auxillary Iout" }
-        { B_RASTER:PS: 10 0.0000833 A   iaux2  "Auxillary Iout" }
-        { B_RASTER:PS: 11 0.01      A   iopt   "Optional Iout" }
-        { B_RASTER:PS: 12 0.01      V   vopt   "Optional Vout" }
-        { B_RASTER:PS: 13 0.1       L/m flow   "Water Flow" }
-        { B_RASTER:PS: 14 0.01      V   p29    "Free Plug P29" }
-        { B_RASTER:PS: 15 0.1       V   p19    "Free Plug P19" }
+pattern { P              C  ASLO      EGU ALIAS  DESC }
+        { B_RASTER:PS:X: 0  1         A   imon   "Output Current" }
+        { B_RASTER:PS:X: 1  0.01      T   bmon   "Magenetic Field" }
+        { B_RASTER:PS:X: 2  0.01      V   vmon   "Output Voltage" }
+        { B_RASTER:PS:X: 3  0.1       V   v15p   "Internal +15V Supply" } 
+        { B_RASTER:PS:X: 4  0.1       V   v15m   "Internal -15V Supply" }
+        { B_RASTER:PS:X: 5  0.1       V   v5p    "Internal +5V Supply" }
+        { B_RASTER:PS:X: 6  0.1       C   dtemp  "Delta Temperature" }
+        { B_RASTER:PS:X: 7  1         V   vtrans "Trans. Bank Vce" }
+        { B_RASTER:PS:X: 8  0.00001   A   iopt16 "Optional Iout (16 bit)" }
+        { B_RASTER:PS:X: 9  0.008333  A   iaux1  "Auxillary Iout" }
+        { B_RASTER:PS:X: 10 0.0000833 A   iaux2  "Auxillary Iout" }
+        { B_RASTER:PS:X: 11 0.01      A   iopt   "Optional Iout" }
+        { B_RASTER:PS:X: 12 0.01      V   vopt   "Optional Vout" }
+        { B_RASTER:PS:X: 13 0.1       L/m flow   "Water Flow" }
+        { B_RASTER:PS:X: 14 0.01      V   p29    "Free Plug P29" }
+        { B_RASTER:PS:X: 15 0.1       V   p19    "Free Plug P19" }
+        { B_RASTER:PS:Y: 0  1         A   imon   "Output Current" }
+        { B_RASTER:PS:Y: 1  0.01      T   bmon   "Magenetic Field" }
+        { B_RASTER:PS:Y: 2  0.01      V   vmon   "Output Voltage" }
+        { B_RASTER:PS:Y: 3  0.1       V   v15p   "Internal +15V Supply" } 
+        { B_RASTER:PS:Y: 4  0.1       V   v15m   "Internal -15V Supply" }
+        { B_RASTER:PS:Y: 5  0.1       V   v5p    "Internal +5V Supply" }
+        { B_RASTER:PS:Y: 6  0.1       C   dtemp  "Delta Temperature" }
+        { B_RASTER:PS:Y: 7  1         V   vtrans "Trans. Bank Vce" }
+        { B_RASTER:PS:Y: 8  0.00001   A   iopt16 "Optional Iout (16 bit)" }
+        { B_RASTER:PS:Y: 9  0.008333  A   iaux1  "Auxillary Iout" }
+        { B_RASTER:PS:Y: 10 0.0000833 A   iaux2  "Auxillary Iout" }
+        { B_RASTER:PS:Y: 11 0.01      A   iopt   "Optional Iout" }
+        { B_RASTER:PS:Y: 12 0.01      V   vopt   "Optional Vout" }
+        { B_RASTER:PS:Y: 13 0.1       L/m flow   "Water Flow" }
+        { B_RASTER:PS:Y: 14 0.01      V   p29    "Free Plug P29" }
+        { B_RASTER:PS:Y: 15 0.1       V   p19    "Free Plug P19" }
 }
 
 file "db/danfysik-8500-bitcalc.db" {
-pattern { P                NBITS BIT SEVR     DESC }
-        { B_RASTER:PS:stat 24    0   NO_ALARM "Main Power Off" }
-        { B_RASTER:PS:stat 24    1   NO_ALARM "Polarity Normal" }
-        { B_RASTER:PS:stat 24    2   NO_ALARM "Polarity Reversed" }
-        { B_RASTER:PS:stat 24    3   NO_ALARM "Regulation Transformer" }
-        { B_RASTER:PS:stat 24    4   NO_ALARM "DAC Stuff #1" }
-        { B_RASTER:PS:stat 24    5   NO_ALARM "DAC Stuff #2" }
-        { B_RASTER:PS:stat 24    6   NO_ALARM "Amps and Volts Stuff" }
-        { B_RASTER:PS:stat 24    7   MAJOR    "Spare Interlock" }
-        { B_RASTER:PS:stat 24    8   MAJOR    "One Transistor Fault" } 
-        { B_RASTER:PS:stat 24    9   MAJOR    "Sum Interlock" }
-        { B_RASTER:PS:stat 24    10  MAJOR    "DC Over Current" }
-        { B_RASTER:PS:stat 24    11  MAJOR    "DC Overload" }
-        { B_RASTER:PS:stat 24    12  MAJOR    "Regulation Module Failure" }
-        { B_RASTER:PS:stat 24    13  MAJOR    "Preregulator Failure" }
-        { B_RASTER:PS:stat 24    14  MAJOR    "Phase Failure" }
-        { B_RASTER:PS:stat 24    15  MAJOR    "MPS Waterflow Failure" }
-        { B_RASTER:PS:stat 24    16  MAJOR    "Earth Leakage Failure" }
-        { B_RASTER:PS:stat 24    17  MAJOR    "Thermal Breaker / Fuses" }
-        { B_RASTER:PS:stat 24    18  MAJOR    "MPS Over Temperature" }
-        { B_RASTER:PS:stat 24    19  MAJOR    "Panic Button / Door Switch" }
-        { B_RASTER:PS:stat 24    20  MAJOR    "Magnet Waterflow Failure" }
-        { B_RASTER:PS:stat 24    21  MAJOR    "Magnet Over Temperature" }
-        { B_RASTER:PS:stat 24    22  MAJOR    "MPS Not Ready" }
-        { B_RASTER:PS:stat 24    23  MAJOR    "Spare" }
+pattern { P                  NBITS BIT SEVR     DESC }
+        { B_RASTER:PS:X:stat 24    0   NO_ALARM "Main Power Off" }
+        { B_RASTER:PS:X:stat 24    1   NO_ALARM "Polarity Normal" }
+        { B_RASTER:PS:X:stat 24    2   NO_ALARM "Polarity Reversed" }
+        { B_RASTER:PS:X:stat 24    3   NO_ALARM "Regulation Transformer" }
+        { B_RASTER:PS:X:stat 24    4   NO_ALARM "DAC Stuff #1" }
+        { B_RASTER:PS:X:stat 24    5   NO_ALARM "DAC Stuff #2" }
+        { B_RASTER:PS:X:stat 24    6   NO_ALARM "Amps and Volts" }
+        { B_RASTER:PS:X:stat 24    7   MAJOR    "Spare Interlock" }
+        { B_RASTER:PS:X:stat 24    8   MAJOR    "One Transistor Fault" } 
+        { B_RASTER:PS:X:stat 24    9   MAJOR    "Sum Interlock" }
+        { B_RASTER:PS:X:stat 24    10  MAJOR    "DC Over Current" }
+        { B_RASTER:PS:X:stat 24    11  MAJOR    "DC Overload" }
+        { B_RASTER:PS:X:stat 24    12  MAJOR    "Regulation Module Failure" }
+        { B_RASTER:PS:X:stat 24    13  MAJOR    "Preregulator Failure" }
+        { B_RASTER:PS:X:stat 24    14  MAJOR    "Phase Failure" }
+        { B_RASTER:PS:X:stat 24    15  MAJOR    "MPS Waterflow Failure" }
+        { B_RASTER:PS:X:stat 24    16  MAJOR    "Earth Leakage Failure" }
+        { B_RASTER:PS:X:stat 24    17  MAJOR    "Thermal Breaker / Fuses" }
+        { B_RASTER:PS:X:stat 24    18  MAJOR    "MPS Over Temperature" }
+        { B_RASTER:PS:X:stat 24    19  MAJOR    "Panic Button / Door Switch" }
+        { B_RASTER:PS:X:stat 24    20  MAJOR    "Magnet Waterflow Failure" }
+        { B_RASTER:PS:X:stat 24    21  MAJOR    "Magnet Over Temperature" }
+        { B_RASTER:PS:X:stat 24    22  MAJOR    "MPS Not Ready" }
+        { B_RASTER:PS:X:stat 24    23  MAJOR    "Spare" }
+        { B_RASTER:PS:Y:stat 24    0   NO_ALARM "Main Power Off" }
+        { B_RASTER:PS:Y:stat 24    1   NO_ALARM "Polarity Normal" }
+        { B_RASTER:PS:Y:stat 24    2   NO_ALARM "Polarity Reversed" }
+        { B_RASTER:PS:Y:stat 24    3   NO_ALARM "Regulation Transformer" }
+        { B_RASTER:PS:Y:stat 24    4   NO_ALARM "DAC Stuff #1" }
+        { B_RASTER:PS:Y:stat 24    5   NO_ALARM "DAC Stuff #2" }
+        { B_RASTER:PS:Y:stat 24    6   NO_ALARM "Amps and Volts" }
+        { B_RASTER:PS:Y:stat 24    7   MAJOR    "Spare Interlock" }
+        { B_RASTER:PS:Y:stat 24    8   MAJOR    "One Transistor Fault" } 
+        { B_RASTER:PS:Y:stat 24    9   MAJOR    "Sum Interlock" }
+        { B_RASTER:PS:Y:stat 24    10  MAJOR    "DC Over Current" }
+        { B_RASTER:PS:Y:stat 24    11  MAJOR    "DC Overload" }
+        { B_RASTER:PS:Y:stat 24    12  MAJOR    "Regulation Module Failure" }
+        { B_RASTER:PS:Y:stat 24    13  MAJOR    "Preregulator Failure" }
+        { B_RASTER:PS:Y:stat 24    14  MAJOR    "Phase Failure" }
+        { B_RASTER:PS:Y:stat 24    15  MAJOR    "MPS Waterflow Failure" }
+        { B_RASTER:PS:Y:stat 24    16  MAJOR    "Earth Leakage Failure" }
+        { B_RASTER:PS:Y:stat 24    17  MAJOR    "Thermal Breaker / Fuses" }
+        { B_RASTER:PS:Y:stat 24    18  MAJOR    "MPS Over Temperature" }
+        { B_RASTER:PS:Y:stat 24    19  MAJOR    "Panic Button / Door Switch" }
+        { B_RASTER:PS:Y:stat 24    20  MAJOR    "Magnet Waterflow Failure" }
+        { B_RASTER:PS:Y:stat 24    21  MAJOR    "Magnet Over Temperature" }
+        { B_RASTER:PS:Y:stat 24    22  MAJOR    "MPS Not Ready" }
+        { B_RASTER:PS:Y:stat 24    23  MAJOR    "Spare" }
 }
 
 file "db/danfysik-8500-bitcalc.db" {
-pattern { P                    NBITS BIT SEVR  DESC }
-        { B_RASTER:PS:stat:ext 16    0   MAJOR "Optional External Input 1 (7,9)" }
-        { B_RASTER:PS:stat:ext 16    1   MAJOR "Optional External Input 2 (24,1)" }
-        { B_RASTER:PS:stat:ext 16    2   MAJOR "Optional External Input 3 (24,3)" }
-        { B_RASTER:PS:stat:ext 16    3   MAJOR "Optional External Input 4 (24,4)" }
-        { B_RASTER:PS:stat:ext 16    4   MAJOR "Spare Input 3 (16,5)" }
-        { B_RASTER:PS:stat:ext 16    5   MAJOR "Spare Input 4 (16,7)" }
-        { B_RASTER:PS:stat:ext 16    6   MAJOR "Spare Input 1 (16,1)" }
-        { B_RASTER:PS:stat:ext 16    7   MAJOR "Spare Input 2 (16,3)" }
-        { B_RASTER:PS:stat:ext 16    8   MAJOR "Battery Low" }
-        { B_RASTER:PS:stat:ext 16    9   MAJOR "Polarity Switch Enable (TP9)" }
-        { B_RASTER:PS:stat:ext 16    10  MAJOR "Satus of TP8" }
-        { B_RASTER:PS:stat:ext 16    11  MAJOR "DC Overload" } 
-        { B_RASTER:PS:stat:ext 16    12  MAJOR "Not Used" }
-        { B_RASTER:PS:stat:ext 16    13  MAJOR "Not Used" }
-        { B_RASTER:PS:stat:ext 16    14  MAJOR "Not Used" }
-        { B_RASTER:PS:stat:ext 16    15  MAJOR "Not Used" }
+pattern { P                      NBITS BIT SEVR  DESC }
+        { B_RASTER:PS:X:stat:ext 16    0   MAJOR "Optional Ext. Input 1 (7,9)" }
+        { B_RASTER:PS:X:stat:ext 16    1   MAJOR "Optional Ext. Input 2 (24,1)" }
+        { B_RASTER:PS:X:stat:ext 16    2   MAJOR "Optional Ext. Input 3 (24,3)" }
+        { B_RASTER:PS:X:stat:ext 16    3   MAJOR "Optional Ext. Input 4 (24,4)" }
+        { B_RASTER:PS:X:stat:ext 16    4   MAJOR "Spare Input 3 (16,5)" }
+        { B_RASTER:PS:X:stat:ext 16    5   MAJOR "Spare Input 4 (16,7)" }
+        { B_RASTER:PS:X:stat:ext 16    6   MAJOR "Spare Input 1 (16,1)" }
+        { B_RASTER:PS:X:stat:ext 16    7   MAJOR "Spare Input 2 (16,3)" }
+        { B_RASTER:PS:X:stat:ext 16    8   MAJOR "Battery Low" }
+        { B_RASTER:PS:X:stat:ext 16    9   MAJOR "Polarity Switch Enable (TP9)" }
+        { B_RASTER:PS:X:stat:ext 16    10  MAJOR "Satus of TP8" }
+        { B_RASTER:PS:X:stat:ext 16    11  MAJOR "DC Overload" } 
+        { B_RASTER:PS:X:stat:ext 16    12  MAJOR "Not Used" }
+        { B_RASTER:PS:X:stat:ext 16    13  MAJOR "Not Used" }
+        { B_RASTER:PS:X:stat:ext 16    14  MAJOR "Not Used" }
+        { B_RASTER:PS:X:stat:ext 16    15  MAJOR "Not Used" }
+        { B_RASTER:PS:Y:stat:ext 16    0   MAJOR "Optional Ext. Input 1 (7,9)" }
+        { B_RASTER:PS:Y:stat:ext 16    1   MAJOR "Optional Ext. Input 2 (24,1)" }
+        { B_RASTER:PS:Y:stat:ext 16    2   MAJOR "Optional Ext. Input 3 (24,3)" }
+        { B_RASTER:PS:Y:stat:ext 16    3   MAJOR "Optional Ext. Input 4 (24,4)" }
+        { B_RASTER:PS:Y:stat:ext 16    4   MAJOR "Spare Input 3 (16,5)" }
+        { B_RASTER:PS:Y:stat:ext 16    5   MAJOR "Spare Input 4 (16,7)" }
+        { B_RASTER:PS:Y:stat:ext 16    6   MAJOR "Spare Input 1 (16,1)" }
+        { B_RASTER:PS:Y:stat:ext 16    7   MAJOR "Spare Input 2 (16,3)" }
+        { B_RASTER:PS:Y:stat:ext 16    8   MAJOR "Battery Low" }
+        { B_RASTER:PS:Y:stat:ext 16    9   MAJOR "Polarity Switch Enable (TP9)" }
+        { B_RASTER:PS:Y:stat:ext 16    10  MAJOR "Satus of TP8" }
+        { B_RASTER:PS:Y:stat:ext 16    11  MAJOR "DC Overload" } 
+        { B_RASTER:PS:Y:stat:ext 16    12  MAJOR "Not Used" }
+        { B_RASTER:PS:Y:stat:ext 16    13  MAJOR "Not Used" }
+        { B_RASTER:PS:Y:stat:ext 16    14  MAJOR "Not Used" }
+        { B_RASTER:PS:Y:stat:ext 16    15  MAJOR "Not Used" }
 }
 

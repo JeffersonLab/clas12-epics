@@ -1,12 +1,12 @@
-#!../../bin/linux-x86_64/keithley2001
+#!../../bin/linux-x86_64/keithley
 
 < envPaths
 
 cd ${TOP}
 
 ## Register all support components
-dbLoadDatabase "dbd/keithley2001.dbd"
-keithley2001_registerRecordDeviceDriver pdbbase
+dbLoadDatabase "dbd/keithley.dbd"
+keithley_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 

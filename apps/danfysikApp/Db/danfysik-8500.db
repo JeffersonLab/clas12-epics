@@ -1,15 +1,162 @@
 
-record(stringin,"B_doggy") {
-  field(VAL,"!!...!..!")
-}
-record(scalcout,"B_kitty") {
-  field(INAA,"B_doggy")
-  field(CALC,"AA[0,3]")
-#  field(OUT,"B_llama")
-#  field(OOPT,"On Change")
-}
-record(stringin,"B_llama") {
-  field(VAL,"UDF")
+record(stringin, "$(P)$(R=)type") {
+    field(SCAN, "5 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto command(N)")
+    field(DESC, "Power Supply Type")
 }
 
+record(stringin, "$(P)$(R=)version") {
+    field(SCAN, "5 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto command(VER)")
+    field(DESC, "Software Version")
+}
+
+record(stringin, "$(P)$(R=)clock") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getString(CLOCK)")
+    field(DESC, "Internal Clock Time")
+}
+
+record(bo, "$(P)$(R=)on") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(N)")
+}
+
+record(bo, "$(P)$(R=)off") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(F)")
+}
+
+record(bo, "$(P)$(R=)aux1:on") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(N1)")
+    field(DESC, "Enable Auxillary Line 1")
+}
+
+record(bo, "$(P)$(R=)aux2:on") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(N2)")
+    field(DESC, "Enable Auxillary Line 2")
+}
+
+record(bo, "$(P)$(R=)aux1:off") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(F1)")
+    field(DESC, "Disable Auxillary Line 1")
+}
+
+record(bo, "$(P)$(R=)aux2:off") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(F2)")
+    field(DESC, "Disable Auxillary Line 2")
+}
+
+record(longin, "$(P)$(R=)status") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getInt(S1H)")
+    field(DESC, "Status")
+}
+
+record(longin, "$(P)$(R=)status:ext") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getInt(S3H)")
+    field(DESC, "Extended Status")
+}
+
+record(longin, "$(P)$(R=)status:first") {
+    field(SCAN, "5 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getInt(S1FIRSTH)")
+    field(DESC, "Status at Time of 1st Interlock")
+}
+
+record(stringin, "$(P)$(R=)clock:first") {
+    field(SCAN, "5 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getString(S1TIME)")
+    field(DESC, "Internal Clock Time of 1st Interlock")
+}
+
+record(bo, "$(P)$(R=)reset") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(RS)")
+    field(DESC, "Reset Interlocks")
+}
+
+record(bo, "$(P)$(R=)pol:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto putString(PO)")
+    field(ZNAM, "+")
+    field(ONAM, "-")
+    field(DESC, "Set Polarity")
+}
+
+record(bo, "$(P)$(R=)pol") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto getString(PO)")
+    field(ZNAM, "+")
+    field(ONAM, "-")
+    field(DESC, "Polarity")
+}
+
+record(mbbi, "$(P)$(R=)mode") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getString(CMDSTATE)")
+    field(ZRST, "REMOTE")
+    field(ONST, "LOCAL")
+    field(TWST, "LOCK")
+    field(DESC, "Line-In Status")
+}
+
+record(bo, "$(P)$(R=)local") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(LOC)")
+    field(DESC, "Switch to Local Mode")
+}
+
+record(bo, "$(P)$(R=)remote") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto command(REM)")
+    field(DESC, "Switch to Remote Mode")
+}
+
+record(longin, "$(P)$(R=)slew") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getInt(DA 3)")
+    field(EGU,  "mA/s")
+    field(DESC, "Ramp Rate")
+}
+
+record(longout, "$(P)$(R=)slew:set") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto putInt(DA 3,)")
+    field(EGU,  "mA/s")
+    field(DESC, "Ramp Rate")
+}
+
+record(ai, "$(P)$(R=)iset:rbk") {
+    field(SCAN, "1 second")
+    field(DTYP, "stream")
+    field(INP,  "@danfysik-8500.proto getFloat(DA 0)")
+    field(ASLO, "0.000240") # ppm, 240 Amp full scale
+    field(EGU,  "A")
+    field(DESC, "Output Current Setpoint")
+}
+
+record(ao, "$(P)$(R=)iset") {
+    field(DTYP, "stream")
+    field(OUT,  "@danfysik-8500.proto putInt(DA 0,)")
+    field(ASLO, "0.000240") # ppm, 240 Amp full scale
+    field(EGU,  "A")
+    field(DESC, "Output Current Setpoint")
+}
 

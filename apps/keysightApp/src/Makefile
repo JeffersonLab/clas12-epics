@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = keysight
+PROD_IOC_Linux = keysight
 
 # keysight.dbd will be created and installed
 DBD += keysight.dbd

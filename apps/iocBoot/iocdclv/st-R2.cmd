@@ -1,4 +1,4 @@
-#!../../bin/linux-x86_64/A6551
+#!../../bin/linux-x86_64/aglient
 
 < envPaths
 
@@ -7,8 +7,8 @@
 cd ${TOP}
 
 ## Register all support components
-dbLoadDatabase "dbd/A6551.dbd"
-A6551_registerRecordDeviceDriver pdbbase
+dbLoadDatabase "dbd/agilent.dbd"
+agilent_registerRecordDeviceDriver pdbbase
 
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 

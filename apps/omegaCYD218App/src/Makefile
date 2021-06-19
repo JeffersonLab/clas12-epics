@@ -22,7 +22,7 @@ OmegaCYD218Support_DBD += drvAsynIPPort.dbd
 #OmegaCYD218Support_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Build the IOC application
-PROD_IOC = OmegaCYD218
+PROD_IOC_Linux = OmegaCYD218
 
 # OmegaCYD218.dbd will be created and installed
 DBD += OmegaCYD218.dbd

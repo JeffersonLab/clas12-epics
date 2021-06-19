@@ -7,7 +7,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC support library
 
-LIBRARY_IOC += tempSensSupport
+LIBRARY_IOC_Linux += tempSensSupport
 
 tempSensSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 

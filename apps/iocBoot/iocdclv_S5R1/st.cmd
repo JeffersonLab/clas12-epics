@@ -1,4 +1,4 @@
-#!../../bin/linux-x86_64/A6551
+#!../../bin/linux-x86_64/agilent
 
 epicsEnvSet("GPIB","hallb-gpib10")
 epicsEnvSet("PORT","S5R1")

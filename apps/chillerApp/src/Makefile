@@ -13,7 +13,7 @@ chillerSupport_DBD += asyn.dbd
 chillerSupport_DBD += drvAsynIPPort.dbd
 
 # Build an IOC support library
-LIBRARY_IOC += chillerSupport
+LIBRARY_IOC_Linux += chillerSupport
 
 # Compile and add the code to the support library
 #chillerSupport_SRCS += xxxRecord.c
@@ -23,7 +23,7 @@ chillerSupport_LIBS += asyn
 chillerSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Build the IOC application
-PROD_IOC = chiller
+PROD_IOC_Linux = chiller
 
 # chiller.dbd will be created and installed
 DBD += chiller.dbd

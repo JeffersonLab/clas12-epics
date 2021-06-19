@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = danfysik
+PROD_IOC_Linux = danfysik
 
 # danfysik.dbd will be created and installed
 DBD += danfysik.dbd

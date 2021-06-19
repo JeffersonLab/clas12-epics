@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = ftcFlasher
+PROD_IOC_Linux = ftcFlasher
 # ftcFlasher.dbd will be created and installed
 DBD += ftcFlasher.dbd
 

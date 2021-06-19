@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = rollAvg
+PROD_IOC_Linux = rollAvg
 
 # rollAvg.dbd will be created and installed
 DBD += rollAvg.dbd

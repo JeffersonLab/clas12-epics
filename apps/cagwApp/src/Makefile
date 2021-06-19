@@ -5,7 +5,7 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Build the IOC application
-PROD_IOC = cagw
+PROD_IOC_Linux = cagw
 
 # cagw.dbd will be created and installed
 DBD += cagw.dbd

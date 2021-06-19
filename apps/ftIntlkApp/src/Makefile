@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = ftIntlk
+PROD_IOC_Linux = ftIntlk
 # ftIntlk.dbd will be created and installed
 DBD += ftIntlk.dbd
 

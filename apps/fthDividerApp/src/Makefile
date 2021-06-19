@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = fthDivider
+PROD_IOC_Linux = fthDivider
 # fthDivider.dbd will be created and installed
 DBD += fthDivider.dbd
 

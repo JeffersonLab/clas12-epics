@@ -10,12 +10,8 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------------------
 # Create and install (or just install) into <top>/db
 # databases, templates, substitutions like this
-#DB += $(wildcard ../*.substitutions)
-#DB += $(wildcard ../*.db)
-
-DB += danfysik-8500.db
-DB += danfysik-stringbit.db
-DB += danfysik-stringbits.substitutions
+DB += $(wildcard ../*.substitutions)
+DB += $(wildcard ../*.db)
 
 PROTO += danfysik-8500.proto
 

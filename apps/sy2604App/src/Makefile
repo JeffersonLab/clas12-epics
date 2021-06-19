@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = sy2604
+PROD_IOC_Linux = sy2604
 
 # sy2604.dbd will be created and installed
 DBD += sy2604.dbd

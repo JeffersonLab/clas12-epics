@@ -23,7 +23,7 @@ SCE410Support_LIBS += asyn
 SCE410Support_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 # Build the IOC application
-PROD_IOC = SCE410
+PROD_IOC_Linux = SCE410
 
 # SCE410.dbd will be created and installed
 DBD += SCE410.dbd

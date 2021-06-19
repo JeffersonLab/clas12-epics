@@ -9,7 +9,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = cRioIntlk
+PROD_IOC_Linux = cRioIntlk
 # cRioIntlk.dbd will be created and installed
 DBD += cRioIntlk.dbd
 

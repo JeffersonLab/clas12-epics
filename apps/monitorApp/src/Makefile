@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = monitor
+PROD_IOC_Linux = monitor
 
 # monitor.dbd will be created and installed
 DBD += monitor.dbd

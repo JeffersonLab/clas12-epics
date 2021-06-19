@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # build an ioc application
 
-PROD_IOC = svtChiller
+PROD_IOC_Linux = svtChiller
 #LIBRARY_IOC = svtChiller
 
 DBD += svtChiller.dbd

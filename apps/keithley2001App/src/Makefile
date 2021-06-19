@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = keithley2001
+PROD_IOC_Linux = keithley2001
 
 # keithley2001.dbd will be created and installed
 DBD += keithley2001.dbd

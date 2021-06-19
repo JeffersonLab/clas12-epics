@@ -3,9 +3,7 @@ TOP=../..
 include $(TOP)/configure/CONFIG
 
 # Build the IOC application
-PROD_IOC = moeller_target
-#PROD_IOC_LINUX = moeller_target
-#PROD_IOC_Linux = moeller_target
+PROD_IOC_Linux = moeller_target
 
 # moeller_target.dbd will be created and installed
 DBD += moeller_target.dbd

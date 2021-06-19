@@ -7,7 +7,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC support library
 
-LIBRARY_IOC += keithley6221Support
+LIBRARY_IOC_Linux += keithley6221Support
 
 keithley6221Support_LIBS += $(EPICS_BASE_IOC_LIBS)
 

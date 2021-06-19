@@ -7,7 +7,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = clasTree
+PROD_IOC_Linux = clasTree
 # clasTree.dbd will be created and installed
 DBD += clasTree.dbd
 

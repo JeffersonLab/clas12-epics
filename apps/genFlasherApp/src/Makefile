@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = genFlasher
+PROD_IOC_Linux = genFlasher
 # genFlasher.dbd will be created and installed
 DBD += genFlasher.dbd
 

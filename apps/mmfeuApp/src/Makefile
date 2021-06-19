@@ -7,7 +7,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = mmfeu
+PROD_IOC_Linux = mmfeu
 # mmfeu.dbd will be created and installed
 DBD += mmfeu.dbd
 

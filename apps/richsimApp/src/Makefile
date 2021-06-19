@@ -4,7 +4,7 @@ include $(TOP)/configure/CONFIG
 #----------------------------------------
 #  ADD MACRO DEFINITIONS BELOW HERE
 #
-PROD_IOC = richsim
+PROD_IOC_Linux = richsim
 
 # richsim.dbd will be created and installed
 DBD += richsim.dbd

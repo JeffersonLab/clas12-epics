@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = A6551
+PROD_IOC_Linux = A6551
 
 # A6551.dbd will be created and installed
 DBD += A6551.dbd

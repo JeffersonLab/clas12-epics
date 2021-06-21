@@ -1,15 +1,15 @@
 
 record(stringin, "$(P)$(R=)type") {
-    field(SCAN, "5 second")
+    field(SCAN, "10 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto command(N)")
+    field(INP,  "@danfysik-8500.proto getString(PRINT)")
     field(DESC, "Power Supply Type")
 }
 
 record(stringin, "$(P)$(R=)version") {
-    field(SCAN, "5 second")
+    field(SCAN, "10 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto command(VER)")
+    field(INP,  "@danfysik-8500.proto getString(VER)")
     field(DESC, "Software Version")
 }
 
@@ -69,14 +69,14 @@ record(longin, "$(P)$(R=)status:ext") {
 }
 
 record(longin, "$(P)$(R=)status:first") {
-    field(SCAN, "5 second")
+    field(SCAN, "10 second")
     field(DTYP, "stream")
     field(INP,  "@danfysik-8500.proto getInt(S1FIRSTH)")
     field(DESC, "Status at Time of 1st Interlock")
 }
 
 record(stringin, "$(P)$(R=)clock:first") {
-    field(SCAN, "5 second")
+    field(SCAN, "10 second")
     field(DTYP, "stream")
     field(INP,  "@danfysik-8500.proto getString(S1TIME)")
     field(DESC, "Internal Clock Time of 1st Interlock")

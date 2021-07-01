@@ -223,6 +223,7 @@ class Save(Gtk.Box):
 
     hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
     hbox.pack_end(self.btn_save, False, False, 0)
+    hbox.set_halign(Gtk.Align.CENTER)
 
     self.pack_start(main_panel, True, True, 0)
     self.pack_start(hbox, False, False, 0)
@@ -245,7 +246,7 @@ class Save(Gtk.Box):
     else:
       dialog = Gtk.MessageDialog(transient_for = self.top, flags = 0,
         message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
-        text = 'Enter a filename for the group=%s snapshot:'%self.top.group.get_active_text())
+        text = 'Enter a filename for the new %s group snapshot:'%self.top.group.get_active_text())
       self.top.add_header(dialog)
       entry = Gtk.Entry()
       group = self.top.group.get_active_text()
@@ -331,6 +332,7 @@ class Restore(Gtk.Box):
     self.pack_start(Gtk.Label(label='Select a Snapshot File:'), False, False, 0)
     self.pack_start(self.chooser, True, True, 0)
     hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+    hbox.set_halign(Gtk.Align.CENTER)
     hbox.pack_end(self.btn_confirm, False, False, 0)
     hbox.pack_end(self.btn_preview, False, False, 0)
     self.pack_start(hbox, False, False, 0)
@@ -341,7 +343,7 @@ class Restore(Gtk.Box):
     if not os.path.isfile(snapshot):
       BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time.')
     else:
-      self.top.show_scrolled_popup_from_file('Contents of \n%s'%snapshot,snapshot)
+      self.top.show_scrolled_popup_from_file('\t\t\tContents of: \n%s'%snapshot,snapshot)
 
   def restore(self, args):
     '''Initiate the Burt restore sequence by confirming the snapshot file name'''

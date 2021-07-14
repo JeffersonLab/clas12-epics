@@ -19,6 +19,9 @@ for line in open(args.f,'r').readlines():
   elif line.strip().find('#')!=0:
     pvs.append(line.strip().split().pop(0))
 
+print('Registered Emails:\n'+'\n'.join(args.e))
+print('Registered PVs:\n'+'\n'.join(pvs))
+
 minTimeDelta=60*30#seconds
 
 notifiers={}

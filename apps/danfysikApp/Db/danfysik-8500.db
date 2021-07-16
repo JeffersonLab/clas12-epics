@@ -130,7 +130,7 @@ record(bo, "$(P)$(R=)remote") {
 record(longin, "$(P)$(R=)slew") {
     field(SCAN, "1 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getInt(DA 3) $(PORT)")
+    field(INP,  "@danfysik-8500.proto getInt2(DA,3) $(PORT)")
     field(EGU,  "mA/s")
     field(DESC, "Ramp Rate")
 }
@@ -138,7 +138,7 @@ record(longin, "$(P)$(R=)slew") {
 record(longout, "$(P)$(R=)slew:set") {
     field(SCAN, "1 second")
     field(DTYP, "stream")
-    field(OUT,  "@danfysik-8500.proto putInt(DA 3,) $(PORT)")
+    field(OUT,  "@danfysik-8500.proto putInt2(DA,3) $(PORT)")
     field(EGU,  "mA/s")
     field(DESC, "Ramp Rate")
 }
@@ -146,7 +146,7 @@ record(longout, "$(P)$(R=)slew:set") {
 record(ai, "$(P)$(R=)iset:rbk") {
     field(SCAN, "1 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getFloat(DA 0) $(PORT)")
+    field(INP,  "@danfysik-8500.proto getFloat2(DA,0) $(PORT)")
     field(ASLO, "0.000240") # ppm, 240 Amp full scale
     field(EGU,  "A")
     field(DESC, "Output Current Setpoint")
@@ -154,7 +154,7 @@ record(ai, "$(P)$(R=)iset:rbk") {
 
 record(ao, "$(P)$(R=)iset") {
     field(DTYP, "stream")
-    field(OUT,  "@danfysik-8500.proto putInt(DA 0,) $(PORT)")
+    field(OUT,  "@danfysik-8500.proto putInt2(DA,0) $(PORT)")
     field(ASLO, "0.000240") # ppm, 240 Amp full scale
     field(EGU,  "A")
     field(DESC, "Output Current Setpoint")

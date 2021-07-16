@@ -280,8 +280,7 @@ class Save(Gtk.Box):
     self.top.spinner.start()
     self.snapshot = snapshot
     self.request = '%s/%s.req'%(request_directory,self.top.group.get_active_text())
-    msg = 'Saving snapshot ... %s ...'%self.snapshot
-    self.top.statuslabel.set_text(msg)
+    self.top.statuslabel.set_text('Saving snapshot ... %s ...'%self.snapshot)
     self.top.disable()
     burt_task = executor.submit(self.burtrb, self.request, self.snapshot)
     burt_task.add_done_callback(self.burt_callback)

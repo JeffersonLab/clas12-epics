@@ -25,8 +25,8 @@ class SvtChannel:
 
   def dump(self):
     for key in self.vals.keys():
-      print '%15s'%(key+'='+str(self.vals[key])),
-    print
+      print('%15s'%(key+'='+str(self.vals[key])),)
+    print()
 
 class SvtChannelCollection:
 
@@ -187,6 +187,8 @@ def main():
 
     gPad.SetEditable(0)
 
+    nfail=0
+
     while True:
 
             iy=0
@@ -197,9 +199,16 @@ def main():
               time2=ch['PVTIMEVAL']
 
               if time2>10:
-                print 'More than 10 seconds since message:  '+ch['PVNAME']
-                for ii in range(512):
+                nfail += 1
+                if nfail>5:
+                  print('More than 10 seconds since message:  '+ch['PVNAME'])
+                  print('If problem persists, contact slow controls on-call or try rebooting iocamqSvt* ...')
+                for ii in range(min(len(data),512)):
                   data[ii]=0
+                time.sleep(1)
+              elif nfail>0:
+                print('Recovered:  '+ch['PVNAME'])
+                nfail=0
 
               if iy<SECTORSPERREGION[0]:
                 region=1
@@ -212,7 +221,7 @@ def main():
                 sector=iy-SECTORSPERREGION[0]-SECTORSPERREGION[1]
 
               if data==None or len(data)!=STRIPSPERSECTOR:
-                print 'Error Reading '+ch['PVNAME']
+                print('Error Reading '+ch['PVNAME'])
                 continue
               for ix in range(STRIPSPERSECTOR):
                   hh.SetBinContent(ix,iy+1,data[ix])

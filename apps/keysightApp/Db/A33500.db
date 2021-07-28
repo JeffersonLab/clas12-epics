@@ -2,70 +2,83 @@
 record(ao, "$(TAG)WG_XVOFF") {
   field(PREC, "2")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(OUT, "@A33500.proto setVoltOffCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_XAMPL") {
   field(PREC, "4")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(OUT, "@A33500.proto setVoltCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_XFREQ") {
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(OUT, "@A33500.proto setFreqCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YFREQ") {
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(OUT, "@A33500.proto setFreqCh2 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YAMPL") {
   field(PREC, "4")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(OUT, "@A33500.proto setVoltCh2 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YVOFF") {
   field(PREC, "2")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(OUT, "@A33500.proto setVoltOffCh2 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YPHA") {
   field(DTYP, "stream")
+  field(EGU, "deg")
   field(OUT, "@A33500.proto setPhaCh2 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_XPHA") {
   field(DTYP, "stream")
+  field(EGU, "deg")
   field(OUT, "@A33500.proto setPhaCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_XAMFREQ") {
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(OUT, "@A33500.proto setAMFreqCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_XAMDEP") {
   field(DTYP, "stream")
+  field(EGU, "%")
   field(OUT, "@A33500.proto setAMDepthCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YAMFREQ") {
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(OUT, "@A33500.proto setAMFreqCh2 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YAMDEP") {
   field(DTYP, "stream")
+  field(EGU, "%")
   field(OUT, "@A33500.proto setAMDepthCh2 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_XFREq") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(INP, "@A33500.proto getFreqCh1 $(PORT)")
 }
 
@@ -73,6 +86,7 @@ record(ai, "$(TAG)WG_XAMPl") {
   field(PREC, "4")
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(INP, "@A33500.proto getVoltCh1 $(PORT)")
 }
 
@@ -80,18 +94,21 @@ record(ai, "$(TAG)WG_XVOFf") {
   field(PREC, "2")
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(INP, "@A33500.proto getVoltOffCh1 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_XPHa") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "deg")
   field(INP, "@A33500.proto getPhaCh1 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_YFREq") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "Hz")
   field(INP, "@A33500.proto getFreqCh2 $(PORT)")
 }
 
@@ -99,6 +116,7 @@ record(ai, "$(TAG)WG_YAMPl") {
   field(PREC, "4")
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(INP, "@A33500.proto getVoltCh2 $(PORT)")
 }
 
@@ -106,18 +124,15 @@ record(ai, "$(TAG)WG_YVOFf") {
   field(PREC, "2")
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "V")
   field(INP, "@A33500.proto getVoltOffCh2 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_YPHa") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "deg")
   field(INP, "@A33500.proto getPhaCh2 $(PORT)")
-}
-
-record(bo, "$(TAG)WG_INIT") {
-  field(DTYP, "stream")
-  field(OUT, "@A33500.proto initState$(L) $(PORT)")
 }
 
 record(stringout, "$(TAG)WG_CMD") {
@@ -128,24 +143,28 @@ record(stringout, "$(TAG)WG_CMD") {
 record(ai, "$(TAG)WG_XAMFREq") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU,  "Hz")
   field(INP, "@A33500.proto getAMFreqCh1 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_XAMDEp") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "%")
   field(INP, "@A33500.proto getAMDepthCh1 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_YAMFREq") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU,  "Hz")
   field(INP, "@A33500.proto getAMFreqCh2 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_YAMDEp") {
   field(SCAN, "2 second")
   field(DTYP, "stream")
+  field(EGU, "%")
   field(INP, "@A33500.proto getAMDepthCh2 $(PORT)")
 }
 
@@ -329,31 +348,27 @@ record(bo, "$(TAG)WG_YAMSET") {
 }
 
 record(ao, "$(TAG)WG_XPERIOD") {
-  field(EGU, "ms")
-  field(ASLO, "1000")
+  field(EGU, "s")
   field(DTYP, "stream")
   field(OUT, "@A33500.proto setPerCh1 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_XPERIOd") {
   field(SCAN, "1 second")
-  field(EGU, "ms")
-  field(ASLO, "1000")
+  field(EGU, "s")
   field(DTYP, "stream")
   field(INP, "@A33500.proto getPerCh1 $(PORT)")
 }
 
 record(ao, "$(TAG)WG_YPERIOD") {
-  field(EGU, "ms")
-  field(ASLO, "1000")
+  field(EGU, "s")
   field(DTYP, "stream")
   field(OUT, "@A33500.proto setPerCh2 $(PORT)")
 }
 
 record(ai, "$(TAG)WG_YPERIOd") {
   field(SCAN, "1 second")
-  field(EGU, "ms")
-  field(ASLO, "1000")
+  field(EGU, "s")
   field(DTYP, "stream")
   field(INP, "@A33500.proto getPerCh2 $(PORT)")
 }
@@ -368,3 +383,58 @@ record(mbbo,"$(TAG)FILE_SELECT") {
     field(TWST,"400 um")
     field(OUT,"@A33500.proto loadSpiral $(PORT)")
 }
+
+record(seq,"$(TAG)INIT_ZERO") {
+    field(LNK1, "$(TAG)WG_XAMDEP PP")
+    field(LNK2, "$(TAG)WG_YAMDEP PP")
+    field(LNK3, "$(TAG)WG_XVOFF PP")
+    field(LNK4, "$(TAG)WG_YVOFF PP")
+    field(LNK5, "$(TAG)WG_XPHA PP")
+    field(LNK6, "$(TAG)WG_YPHA PP")
+    field(LNK7, "$(TAG)WG_XAMPL PP")
+    field(LNK8, "$(TAG)WG_YAMPL PP")
+    field(LNK9, "$(TAG)WG_syncARB PP")
+    field(DOL1, "0")
+    field(DOL2, "0")
+    field(DOL3, "0")
+    field(DOL4, "0")
+    field(DOL5, "0")
+    field(DOL6, "0")
+    field(DOL7, "0")
+    field(DOL8, "0")
+    field(DOL9, "1")
+}
+
+record(seq,"$(TAG)INIT_NOMINAL") {
+    field(LNK1, "$(TAG)INIT_ZERO PP")
+    field(LNK2, "$(TAG)WG_YPHA PP")
+    field(LNK3, "$(TAG)WG_XAMPL PP")
+    field(LNK4, "$(TAG)WG_YAMPL PP")
+    field(LNK5, "$(TAG)WG_XPERIOD PP")
+    field(LNK6, "$(TAG)WG_YPERIOD PP")
+    field(DOL1, "1")
+    field(DOL2, "90")
+    field(DOL3, "$(TAG)WG_VPP_NOMINAL")
+    field(DOL4, "$(TAG)WG_VPP_NOMINAL")
+    field(DOL5, "$(TAG)WG_PERIOD_NOMINAL")
+    field(DOL6, "$(TAG)WG_PERIOD_NOMINAL")
+    field(DLY1, "0")
+    field(DLY2, "1")
+    field(DLY3, "1")
+    field(DLY4, "1")
+    field(DLY5, "1")
+    field(DLY6, "1")
+}
+
+record(ai,"$(TAG)WG_VPP_NOMINAL") {
+    field(EGU,  "V")
+    field(VAL,  "2.5")
+    field(DESC, "Nominal Vpp")
+}
+
+record(ai,"$(TAG)WG_PERIOD_NOMINAL") {
+    field(EGU, "s")
+    field(VAL, "1.0")
+    field(DESC, "Nominal Period")
+}
+

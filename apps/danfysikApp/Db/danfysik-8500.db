@@ -1,16 +1,20 @@
 
+# type/version don't work yet, due to multiline returns
+# (i.e. \r and/or \n in the middle) and some DAs return spaces
+# in between numbers, to be figured out
+
 record(stringin, "$(P)$(R=)type") {
-    field(SCAN, "10 second")
-    field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getString(PRINT) $(PORT)")
-    field(DESC, "Power Supply Type")
+#    field(SCAN, "10 second")
+#    field(DTYP, "stream")
+#    field(INP,  "@danfysik-8500.proto getString(PRINT) $(PORT)")
+#    field(DESC, "Power Supply Type")
 }
 
 record(stringin, "$(P)$(R=)version") {
-    field(SCAN, "10 second")
-    field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getString(VER) $(PORT)")
-    field(DESC, "Software Version")
+#    field(SCAN, "10 second")
+#    field(DTYP, "stream")
+#    field(INP,  "@danfysik-8500.proto getString(VER) $(PORT)")
+#    field(DESC, "Software Version")
 }
 
 record(stringin, "$(P)$(R=)clock") {
@@ -54,24 +58,24 @@ record(bo, "$(P)$(R=)aux2:off") {
     field(DESC, "Disable Auxillary Line 2")
 }
 
-record(longin, "$(P)$(R=)status") {
-    field(SCAN, "1 second")
+record(longin, "$(P)$(R=)stat") {
+    field(SCAN, "5 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getInt(S1H) $(PORT)")
+    field(INP,  "@danfysik-8500.proto getHex(S1H) $(PORT)")
     field(DESC, "Status")
 }
 
-record(longin, "$(P)$(R=)status:ext") {
-    field(SCAN, "1 second")
+record(longin, "$(P)$(R=)stat:ext") {
+    field(SCAN, "5 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getInt(S3H) $(PORT)")
+    field(INP,  "@danfysik-8500.proto getHex(S3H) $(PORT)")
     field(DESC, "Extended Status")
 }
 
-record(longin, "$(P)$(R=)status:first") {
+record(longin, "$(P)$(R=)stat:first") {
     field(SCAN, "10 second")
     field(DTYP, "stream")
-    field(INP,  "@danfysik-8500.proto getInt(S1FIRSTH) $(PORT)")
+    field(INP,  "@danfysik-8500.proto getHex(S1FIRSTH) $(PORT)")
     field(DESC, "Status at Time of 1st Interlock")
 }
 
@@ -106,7 +110,7 @@ record(bo, "$(P)$(R=)pol") {
 }
 
 record(mbbi, "$(P)$(R=)mode") {
-    field(SCAN, "1 second")
+    field(SCAN, "10 second")
     field(DTYP, "stream")
     field(INP,  "@danfysik-8500.proto getString(CMDSTATE) $(PORT)")
     field(ZRST, "REMOTE")
@@ -128,7 +132,7 @@ record(bo, "$(P)$(R=)remote") {
 }
 
 record(longin, "$(P)$(R=)slew") {
-    field(SCAN, "1 second")
+    field(SCAN, "5 second")
     field(DTYP, "stream")
     field(INP,  "@danfysik-8500.proto getInt2(DA,3) $(PORT)")
     field(EGU,  "mA/s")
@@ -136,7 +140,6 @@ record(longin, "$(P)$(R=)slew") {
 }
 
 record(longout, "$(P)$(R=)slew:set") {
-    field(SCAN, "1 second")
     field(DTYP, "stream")
     field(OUT,  "@danfysik-8500.proto putInt2(DA,3) $(PORT)")
     field(EGU,  "mA/s")
@@ -144,7 +147,7 @@ record(longout, "$(P)$(R=)slew:set") {
 }
 
 record(ai, "$(P)$(R=)iset:rbk") {
-    field(SCAN, "1 second")
+    field(SCAN, "2 second")
     field(DTYP, "stream")
     field(INP,  "@danfysik-8500.proto getFloat2(DA,0) $(PORT)")
     field(ASLO, "0.000240") # ppm, 240 Amp full scale

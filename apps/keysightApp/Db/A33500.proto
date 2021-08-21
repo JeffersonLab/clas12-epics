@@ -203,18 +203,6 @@ getAMFreqCh1 {
   in "%f";
 }
 
-# Set AM frequency on channel 1
-# ao
-setAMFreqCh1 {
-  out "SOURce1:AM:INTernal:FREQuency %f HZ";
-}
-
-# Set AM frequency on channel 2
-# ao
-setAMFreqCh2 {
-  out "SOURce2:AM:INTernal:FREQuency %f HZ";
-}
-
 # Read AM frequency on channel 2
 # ao
 getAMFreqCh2 {
@@ -222,10 +210,18 @@ getAMFreqCh2 {
   in "%f";
 }
 
-# Set AM depth on channel 1
+# Set AM frequency on channel 1
 # ao
-setAMDepthCh1 {
-  out "SOURce1:AM:DEPTh %f";
+setAMFreqCh1 {
+  out "SOURce1:AM:INTernal:FREQuency %f HZ";
+  @init { getAMFreqCh1; }
+}
+
+# Set AM frequency on channel 2
+# ao
+setAMFreqCh2 {
+  out "SOURce2:AM:INTernal:FREQuency %f HZ";
+  @init { getAMFreqCh2; }
 }
 
 # Read AM depth on channel 1
@@ -235,17 +231,25 @@ getAMDepthCh1 {
   in "%f";
 }
 
-# Set AM depth on channel 2
-# ao
-setAMDepthCh2 {
-  out "SOURce2:AM:DEPTh %f";
-}
-
 # Read AM depth on channel 2
 # ao
 getAMDepthCh2 {
   out "SOURce2:AM:DEPTh?";
   in "%f";
+}
+
+# Set AM depth on channel 1
+# ao
+setAMDepthCh1 {
+  out "SOURce1:AM:DEPTh %f";
+  @init { getAMDepthCh1; }
+}
+
+# Set AM depth on channel 2
+# ao
+setAMDepthCh2 {
+  out "SOURce2:AM:DEPTh %f";
+  @init { getAMDepthCh2; }
 }
 
 # Get AM state on/off on channel 1
@@ -386,27 +390,27 @@ getError {
 
 # Init state for UITF
 # bo
-initStateUITF {
-  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\XRASTER.STA\"";
-  out "OUTPut1 OFF";
-  out "OUTPut2 OFF";
-}
+#initStateUITF {
+#  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\XRASTER.STA\"";
+#  out "OUTPut1 OFF";
+#  out "OUTPut2 OFF";
+#}
 
 # Init state for Hall C
 # bo
-initStateHC {
-  out "MMEMory:LOAD:STATe \"INT:\\CIRCULAR_RASTER\\HallC_2.STA\"";
-  out "OUTPut1 OFF";
-  out "OUTPut2 OFF";
-}
+#initStateHC {
+#  out "MMEMory:LOAD:STATe \"INT:\\CIRCULAR_RASTER\\HallC_2.STA\"";
+#  out "OUTPut1 OFF";
+#  out "OUTPut2 OFF";
+#}
 
 # Init state for Hall B
 # bo
-initStateHB {
-  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_100.STA\"";
-  out "OUTPut1 OFF";
-  out "OUTPut2 OFF";
-}
+#initStateHB {
+#  out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_100.STA\"";
+#  out "OUTPut1 OFF";
+#  out "OUTPut2 OFF";
+#}
 
 loadSpiral {
   out "MMEMory:LOAD:STATe \"INT:\\RASTER\\SPIRAL_%d00.STA\"";

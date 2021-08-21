@@ -19,12 +19,12 @@ var WSFG = {"S":W_S,"F":W_F,"G":W_G};
 var ichan=0;
 
 for (var isec=1; isec<=NSECTORS; isec++) {
-  if (SECTOR!="0" && SECTOR!=isec) continue;
+  if (SECTOR!="0" && SECTOR!=null && SECTOR!=isec) continue;
   for (var ireg=1; ireg<=NREGIONS; ireg++) {
-    if (REGION!="0" && REGION!=ireg) continue;
+    if (REGION!="0" && REGION!=null && REGION!=ireg) continue;
     for (var islay=0; islay<SLREG[ireg].length; islay++) {
       var slay=SLREG[ireg][islay];
-      if (SLAYER!="0" && SLAYER!=slay) continue;
+      if (SLAYER!="0" && SLAYER!=null && SLAYER!=slay) continue;
       for (var sfg in WSFG) {
         for (var iwire=0; iwire<WSFG[sfg].length; iwire++) {
           var wires=WSFG[sfg][iwire];

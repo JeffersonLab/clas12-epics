@@ -11,16 +11,16 @@ var WSFGL = {"S":"Sense","F":"Field","G":"Guard"}
 
 var label = "                 Turn  ON  HV\n\n    DC, ";
 
-if (SECTOR=="0") label += "All Sectors, ";
+if (SECTOR=="0" || SECTOR==null) label += "All Sectors, ";
 else             label += "Sector "+SECTOR+", ";
 
-if (REGION==0) label += "All Regions, ";
+if (REGION==0 || REGION==null) label += "All Regions, ";
 else           label += "Region "+REGION+", ";
 
-if (SLAYER==0) label += "All Superlayers, ";
+if (SLAYER==0 || SLAYER==null) label += "All Superlayers, ";
 else           label += "Superlayer "+SLAYER+", ";
 
-if (SFG==0)    label += "All Wires";
+if (SFG==0 || SFG==null)    label += "All Wires";
 else           label += WSFGL[SFG]+" Wires"; 
 
 label += "\n\n                     Really??";
@@ -40,12 +40,12 @@ if (response)
   var ichan=0;
 
   for (var isec=1; isec<=NSECTORS; isec++) {
-    if (SECTOR!="0" && SECTOR!=isec) continue;
+    if (SECTOR!="0" && SECTOR!=null && SECTOR!=isec) continue;
     for (var ireg=1; ireg<=NREGIONS; ireg++) {
-      if (REGION!="0" && REGION!=ireg) continue;
+      if (REGION!="0" && REGION!=null && REGION!=ireg) continue;
       for (var islay=0; islay<SLREG[ireg].length; islay++) {
         var slay=SLREG[ireg][islay];
-        if (SLAYER!="0" && SLAYER!=slay) continue;
+        if (SLAYER!="0" && SLAYER!=null && SLAYER!=slay) continue;
         for (var sfg in WSFG) {
           for (var iwire=0; iwire<WSFG[sfg].length; iwire++) {
             var wires=WSFG[sfg][iwire];

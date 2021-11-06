@@ -53,6 +53,7 @@ var R = [
 	"SHLD4K_DT_MAXPCT",
 	"DT_MAX_PCT",
 	"DP8670MAGDP",
+    "DP8620VCLDP",
 	"HTR8620",
 	"HTR8672"
 	];

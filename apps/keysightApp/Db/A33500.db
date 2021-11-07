@@ -382,6 +382,12 @@ record(mbbo,"$(TAG)FILE_SELECT") {
     field(ONST,"200 um")
     field(TWST,"400 um")
     field(OUT,"@A33500.proto loadSpiral $(PORT)")
+    field(FLNK,"$(TAG)FILE_SELECT:post PP")
+}
+
+record(seq,"$(TAG)FILE_SELECT:post") {
+    field(LNK1, "$(TAG)INIT_NOMINAL PP")
+    field(DLY1, "2")
 }
 
 record(seq,"$(TAG)INIT_ZERO") {

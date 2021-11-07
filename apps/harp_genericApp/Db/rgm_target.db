@@ -1,24 +1,123 @@
 
-record(ai, "rgm_target_home_position") {
+record(mbbo,"$(P)config") {
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(ZRST,"Single")
+    field(ONST,"Double")
+    field(VAL,"1")
+}
+
+########################################
+record(ai, "$(P)home_position") {
     field(VAL, "0")
+    field(EGU,"deg")
 }
-record(ai, "rgm_target_beam_position") {
-    field(VAL,"10")
+record(ai, "$(P)foil1_position") {
+    field(VAL,"2.5")
+    field(EGU,"deg")
 }
-record(calc, "rgm_target_at_home") {
+record(sel, "$(P)empty_position") {
+    field(SCAN,".2 second")
+    field(SELM,"Specified")
+    field(NVL,"$(P)config")
+    field(INPA,"57.5")
+    field(INPB,"30.0")
+}
+record(sel, "$(P)foil2_position") {
+    field(SCAN,".2 second")
+    field(SELM,"Specified")
+    field(NVL,"$(P)config")
+    field(INPA,"-999")
+    field(INPB,"57.5")
+}
+
+########################################
+record(calc, "$(P)at_home") {
+    field(SCAN,".2 second")
 	field(INPA, "rgm_target.RBV")
-    field(INPB, "rgm_target_home_position")
+    field(INPB, "$(P)home_position")
 	field(SCAN, ".2 second")
-	field(CALC, "ABS(A-0.0)<0.1?1:0")
+	field(CALC, "ABS(A-B)<0.1?1:0")
 }
-record(calc, "rgm_target_at_beam") {
+record(calc, "$(P)at_foil1") {
+    field(SCAN,".2 second")
 	field(INPA, "rgm_target.RBV")
-    field(INPB, "rgm_target_beam_position")
+    field(INPB, "$(P)foil1_position")
 	field(SCAN, ".2 second")
 	field(CALC, "ABS(A-B)<0.01?1:0")
 }
-record(calc, "rgm_target_at_home") {
+record(calc, "$(P)at_foil2") {
+    field(SCAN,".2 second")
 	field(INPA, "rgm_target.RBV")
+    field(INPB, "$(P)foil2_position")
 	field(SCAN, ".2 second")
 	field(CALC, "ABS(A-B)<0.01?1:0")
+#field(SDIS,"$(P)config")
+#field(DISV,"0")
 }
+record(calc, "$(P)at_empty") {
+    field(SCAN,".2 second")
+	field(INPA, "rgm_target.RBV")
+    field(INPB, "$(P)empty_position")
+	field(SCAN, ".2 second")
+	field(CALC, "ABS(A-B)<0.1?1:0")
+}
+
+########################################
+record(ao,"$(P)go_home") {
+    field(DTYP,"Soft Channel")
+    field(DOL,"-50")
+    field(OMSL,"closed_loop")
+    field(OUT,"rgm_target.VAL PP NMS")
+}
+record(ao,"$(P)go_foil1") {
+    field(DTYP,"Soft Channel")
+    field(DOL,"$(P)foil1_position")
+    field(OMSL,"closed_loop")
+    field(OUT,"rgm_target.VAL PP NMS")
+}
+record(ao,"$(P)go_foil2") {
+    field(DTYP,"Soft Channel")
+    field(DOL,"$(P)foil2_position")
+    field(OMSL,"closed_loop")
+    field(OUT,"rgm_target.VAL PP NMS")
+#field(SDIS,"$(P)config")
+#field(DISV,"0")
+}
+record(ao,"$(P)go_empty") {
+    field(DTYP,"Soft Channel")
+    field(DOL,"$(P)empty_position")
+    field(OMSL,"closed_loop")
+    field(OUT,"rgm_target.VAL PP NMS")
+}
+
+########################################
+record(calcout,"$(P)calc") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)at_empty")
+    field(INPB,"$(P)at_foil1")
+    field(INPC,"$(P)at_foil2")
+    field(INPD,"rgm_target.MOVN")
+    field(CALC,"A=1?0:(B=1?1:(C=1?2:(D=1?3:4)))")
+    field(OUT,"$(P)type PP")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+}
+record(mbbi,"$(P)type") {
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(ZRST,"Empty")
+    field(ONST,"Sn")
+    field(TWST,"C")
+    field(THST,"Moving")
+    field(FRST,"Unknown")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"MINOR")
+    field(FRSV,"MAJOR")
+}
+

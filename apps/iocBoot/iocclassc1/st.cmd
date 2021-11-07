@@ -75,7 +75,7 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminVxWorks.db", "IOC=iocclassc1")
 dbLoadRecords("db/moeller_target.db")
 
 dbLoadRecords("db/motor.db", "motor_name=rgm_target, card=1, slot=1, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
-dbLoadRecords("db/rgm_target.db")
+dbLoadRecords("db/rgm_target.db","P=rgm_target_")
 
 # MOLLER QUADS:
 #dbLoadRecords("db/dynabc.db")

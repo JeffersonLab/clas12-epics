@@ -14,7 +14,7 @@ record(calc,"HLB:TARGET:CALC")
 record(mbbi,"HLB:TARGET:STAT")
 {
   field(PINI,1)
-  field(INP,"HLB:TARGET:CALC")
+#  field(INP,"HLB:TARGET:CALC")
     field(ZRVL,0)
     field(ONVL,1)
     field(TWVL,2)
@@ -26,14 +26,29 @@ record(mbbi,"HLB:TARGET:STAT")
     field(EIVL,8)
     field(NIVL,9)
     field(TEVL,10)
-  field(ZRST,"Moller")
-  field(ONST,"Harp 2H01")
+#
+# RG-M Mess:
+    field(VAL,"9")
+    field(PINI,"YES")
+    field(ZRST,"Liquid Hydrogen Target")
+    field(ONST,"Liquid Deuterium Target")
+    field(TWST,"Liquid 4He target")
+    field(THST,"Liquid Argon")
+    field(FRST,"Carbon target 2 mm (4x)")
+    field(FVST,"Carbon target 2 mm")
+    field(SXST,"300 um Sn")
+    field(SVST,"40Ca")
+    field(EIST,"40Ca")
+    field(NIST,"Empty cell")
+#
+#  field(ZRST,"Moller")
+#  field(ONST,"Harp 2H01")
 ####################
 # BONuS Target:
-  field(TWST,"H2")
-  field(THST,"D2")
-  field(FRST,"4He")
-  field(FVST,"N2")
+#  field(TWST,"H2")
+#  field(THST,"D2")
+#  field(FRST,"4He")
+#  field(FVST,"N2")
 ####################
 # Saclay Target:
 #field(TWST,"Empty")
@@ -41,14 +56,30 @@ record(mbbi,"HLB:TARGET:STAT")
 #field(FRST,"Partial LD2")
 #field(FVST,"Partial L3H3")
 ####################
-  field(SXST,"Partial L4He")
-  field(SVST,"LH2")
-  field(EIST,"LD2")
-  field(NIST,"L3He")
-  field(TEST,"L4He")
-  alias("clas12:target:type")
+#  field(SXST,"Partial L4He")
+#  field(SVST,"LH2")
+#  field(EIST,"LD2")
+#  field(NIST,"L3He")
+#  field(TEST,"L4He")
+#  alias("clas12:target:type")
 #alias("hps:target:type")
 }
+
+record(mbbi,"clas12:target:type") {
+    field(SCAN,"1 second")
+    field(INP,"HLB:TARGET:STAT")
+    field(ZRST,"H")
+    field(ONST,"D")
+    field(TWST,"He")
+    field(THST,"Ar")
+    field(FRST,"C (x4)")
+    field(FVST,"C")
+    field(SXST,"Sn (x4)")
+    field(SVST,"40Ca")
+    field(EIST,"48Ca")
+    field(NIST,"Empty")
+}
+
 
 #record(stringout,"HLB:TARGET:STRINGOUT")
 #{

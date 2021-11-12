@@ -16,6 +16,8 @@ DBD += ioccaen.dbd
 ioccaen_SRCS += ioccaen_registerRecordDeviceDriver.cpp
 ioccaen_SRCS += bigsub.c
 ioccaen_SRCS += devCAEN.c
+ioccaen_SRCS += dchv_waveforms-S126.st
+ioccaen_SRCS += dchv_waveforms-S345.st
 ioccaen_SRCS_DEFAULT += ioccaenMain.cpp
 ioccaen_SRCS_vxWorks += -nil-
 

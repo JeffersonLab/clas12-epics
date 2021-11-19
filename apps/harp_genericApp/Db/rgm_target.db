@@ -20,14 +20,14 @@ record(sel, "$(P)empty_position") {
     field(SCAN,".2 second")
     field(SELM,"Specified")
     field(NVL,"$(P)config")
-    field(INPA,"57.5")
+    field(INPA,"2.5")
     field(INPB,"30.0")
 }
 record(sel, "$(P)foil2_position") {
     field(SCAN,".2 second")
     field(SELM,"Specified")
     field(NVL,"$(P)config")
-    field(INPA,"-999")
+    field(INPA,"57.5")
     field(INPB,"57.5")
 }
 
@@ -89,35 +89,5 @@ record(ao,"$(P)go_empty") {
     field(DOL,"$(P)empty_position")
     field(OMSL,"closed_loop")
     field(OUT,"rgm_target.VAL PP NMS")
-}
-
-########################################
-record(calcout,"$(P)calc") {
-    field(SCAN,"1 second")
-    field(INPA,"$(P)at_empty")
-    field(INPB,"$(P)at_foil1")
-    field(INPC,"$(P)at_foil2")
-    field(INPD,"rgm_target.MOVN")
-    field(CALC,"A=1?0:(B=1?1:(C=1?2:(D=1?3:4)))")
-    field(OUT,"$(P)type PP")
-    field(OOPT,"Every Time")
-    field(DOPT,"Use CALC")
-}
-record(mbbi,"$(P)type") {
-    field(ZRVL,"0")
-    field(ONVL,"1")
-    field(TWVL,"2")
-    field(THVL,"3")
-    field(FRVL,"4")
-    field(ZRST,"Empty")
-    field(ONST,"Sn")
-    field(TWST,"C")
-    field(THST,"Moving")
-    field(FRST,"Unknown")
-    field(ZRSV,"NO_ALARM")
-    field(ONSV,"NO_ALARM")
-    field(TWSV,"NO_ALARM")
-    field(THSV,"MINOR")
-    field(FRSV,"MAJOR")
 }
 

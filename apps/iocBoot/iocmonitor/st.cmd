@@ -35,6 +35,8 @@ dbLoadRecords("db/misc-crate-alive.db","P=B_HW_camac1")
 
 dbLoadTemplate("db/bonner-spheres.substitutions")
 
+dbLoadRecords("db/rgm_target_type.db","P=rgm_target_")
+
 dbLoadRecords("db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 

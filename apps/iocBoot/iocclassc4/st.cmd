@@ -113,6 +113,9 @@ dbpf "fcup_slope","906.2"
 dbpf "slm_offset","-1301.0"
 dbpf "slm_slope","4298"
 
+dbpf "slm_offset:enable","1"
+dbpf "fcup_offset:enable","1"
+
 ## Added these three line. to start counting after restarting IOC
 dbpf "scaler.CNT","1"
 dbpf "scaler_mode.VAL","1"

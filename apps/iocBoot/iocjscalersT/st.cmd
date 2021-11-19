@@ -5,7 +5,7 @@ cd ${TOP}
 Init_SCALERS()
 
 Start_SCALERS_CRATE("3","SCALER1")
-Start_SCALERS_CRATE("4","CLASSCHV1")
+#Start_SCALERS_CRATE("4","CLASSCHV1")
 Start_SCALERS_CRATE("5","CLASSC10")
 
 ## Register all support components
@@ -17,7 +17,7 @@ dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_TRIG.substitutions")
-dbLoadTemplate("db/jscalers_NEUTRON.substitutions")
+#dbLoadTemplate("db/jscalers_NEUTRON.substitutions")
 dbLoadTemplate("db/jscalers_BLINE.substitutions")
 
 dbLoadRecords("db/jscaler_TRIG_alias.db")

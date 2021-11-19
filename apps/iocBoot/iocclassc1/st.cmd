@@ -126,6 +126,8 @@ seq &harp_scan_generic, "name=h_2H01_scan, motor_name=harp_2H01"
 seq &reset_motor, "name=h_collimator_reset, motor_name=collimator"
 #seq &harp_scan_generic, "name=h_collimator_scan, motor_name=collimator"
 
+seq &reset_motor, "name=rgm_target_reset, motor_name=rgm_target"
+
 #seq &moeller_target
 
 # for alarms:

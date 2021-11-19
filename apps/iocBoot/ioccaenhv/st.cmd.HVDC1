@@ -22,6 +22,19 @@ dbLoadRecords("db/caenchassis.db","CrName=HVDC1,CScode=#C12")
 
 dbLoadTemplate("db/HVDC1_DC_4527.substitutions")
 
+dbLoadTemplate("db/HVDCa_sums.substitutions")
+dbLoadRecords("db/caenhv_DC_isAlarm.db","SEC=1")
+dbLoadRecords("db/caenhv_DC_isAlarm.db","SEC=2")
+dbLoadRecords("db/caenhv_DC_isAlarm.db","SEC=6")
+
+dbLoadTemplate("db/caenhv_stat-DC_S126.substitutions")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_DC_HV_SEC1")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_DC_HV_SEC2")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_DC_HV_SEC6")
+
+dbLoadRecords("db/dchvWaveformsGlobal-SX.db","S=126")
+dbLoadTemplate("db/dchvWaveforms-S126.substitutions")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -36,6 +49,8 @@ caPutLogInit("$(IOC_LOG_SERVER_ADDR)")
 makeAutosaveFiles()
 create_monitor_set("info_positions.req","","")
 create_monitor_set("info_settings.req","","")
+
+seq seqDCHVwaveforms126
 
 dbl > HVDC1-pv.list
 

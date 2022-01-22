@@ -25,5 +25,5 @@ dbpf("B_DAQ:livetime:mean.LOW","75")
 dbpf("B_DAQ:livetime:mean.LSV","MINOR")
 
 dbpf("B_IPM2C21A:rms.HIGH","2")
-dbpf("B_IPM2C21A:mean.LOW","5")
+dbpf("B_IPM2C21A:mean.LOW","1")
 

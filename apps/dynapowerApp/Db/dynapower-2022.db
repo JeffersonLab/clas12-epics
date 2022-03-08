@@ -1,0 +1,268 @@
+
+record(longout,"$(P)$(R=)stat:set") {
+    field(OUT,  "@dynpower-XXXX.proto putHex(STAT)")
+    field(DESC, "Status Bits")
+}
+record(longout, "$(P)$(R=)on") {
+    field(OMSL, "closed-loop")
+    field(OUT,  "$(P)$(R=)stat:set PP")
+    # 0x6 is "start" and "dc enable":
+    field(VAL,  "0x6")
+}
+record(longout, "$(P)$(R=)off") {
+    field(OMSL, "closed-loop")
+    field(OUT,  "$(P)$(R=)stat:set PP")
+    # 0x9 is "stop" and "dc disable")
+    # what should this be?
+    #field(VAL,  "0x9")
+}
+
+##########################################################
+##########################################################
+
+record(ai,"$(P)$(R=)v:rbk") {
+    field(INP,  "@dynapower-XXXX.proto getFloat(VOLT)")
+    field(ASLO, "0.1")
+    field(PREC, "1")
+    field(EGU,  "V")
+    field(DESC, "Voltage")
+}
+record(ai,"$(P)$(R=)i:rbk") {
+    field(INP,  "@dynapower-XXXX.proto getFloat(AMPS)")
+    field(ASLO, "0.1")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(DESC, "Current")
+}
+record(ai,"$(P)$(R=)temp") {
+    field(INP,  "@dynapower-XXXX.proto getFloat(TEMP)")
+    field(ASLO, "0.1")
+    field(PREC, "1")
+    field(EGU,  "C")
+    field(DESC, "Coolant Temperature")
+}
+record(ai,"$(P)$(R=)flow") {
+    field(INP,  "@dynapower-XXXX.proto getFloat(FLOW)")
+    field(ASLO, "0.1")
+    field(PREC, "1")
+    field(EGU,  "lpm")
+    field(DESC, "Flow Rate")
+}
+
+##########################################################
+##########################################################
+
+record(ao,"$(P)$(R=)v:set") {
+    field(OUT,  "@dynapower-XXXX.proto putFloat(VOLT)")
+    field(ASLO, "10")
+    field(PREC, "1")
+    field(EGU,  "V")
+    field(DESC, "Voltage")
+}
+record(ao,"$(P)$(R=)i:set") {
+    field(OUT,  "@dynapower-XXXX.proto putFloat(AMPS)")
+    field(ASLO, "10")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(DESC, "Current")
+}
+
+##########################################################
+##########################################################
+
+record(mbbiDirect,"$(P)$(R=)stat:rbk") {
+    field(INP,  "@dynapower-XXXX.proto getHex(STAT)")
+    field(NOBT, "16")
+    field(DESC, "Status Bits")
+}
+record(longin,"$(P)$(R=)fault:1") {
+    field(INP,  "@dynapower-XXXX.proto.getHex(FLT1)")
+    field(NOBT, "16")
+    field(DESC, "Fault Bits")
+}
+record(mbbiDirect,"$(P)$(R=)fault:2") {
+    field(INP,  "@dynapower-XXXX.proto.getHex(FLT2)")
+    field(NOBT, "16")
+    field(DESC, "Fault Bits")
+}
+
+##########################################################
+##########################################################
+
+record(bi,"$(P)$(R=):ac") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)stat:rbk.B0 CPP")
+    field(ZVAL,"OFF")
+    field(OVAL,"ON")
+}
+record(bi,"$(P)$(R=):dc") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)stat:rbk.B1 CPP")
+    field(ZVAL,"OFF")
+    field(OVAL,"ON")
+}
+record(bi,"$(P)$(R=):cool") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)stat:rbk.B2 CPP")
+    field(ZVAL,"OFF")
+    field(OVAL,"ON")
+}
+record(bi,"$(P)$(R=):fault") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)stat:rbk.B3 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):remote") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)stat:rbk.B4 CPP")
+    field(ZVAL,"Local")
+    field(OVAL,"Remote")
+}
+
+##########################################################
+##########################################################
+
+record(bi,"$(P)$(R=):xfmr:temp") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B1 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):scr:temp") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B2 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):scr:fuse") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B3 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):water") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B4 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):coolant:temp") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B5 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):choke:temp") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B6 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):door") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B7 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):ac:overload") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B8 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):phase:loss") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.B9 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):emergency:stop") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.BA CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):firing:circuit") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.BB CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):dc:overcurrent") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.BC CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):dc:overvoltage") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.BD CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):dcct:fault") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault1.BF CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+
+##########################################################
+##########################################################
+
+record(bi,"$(P)$(R=):ground:fault") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.B1 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):diode:temp") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.B2 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):discharge:limit") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.B3 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):external:intlk1") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.B8 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):external:intlk2") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.B9 CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):external:safety") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.BA CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):flow:low") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.BC CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):leak1") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.BD CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+record(bi,"$(P)$(R=):leak2") {
+    field(OMSL,"closed-loop")
+    field(INP,"$(P)$(R=)fault2.BE CPP")
+    field(ZVAL,"Ok")
+    field(OVAL,"Fault")
+}
+

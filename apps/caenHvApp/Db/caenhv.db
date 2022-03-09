@@ -188,9 +188,20 @@ record(bo, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff")
    field(ZNAM,"OFF")
    field(ONAM,"ON")
    field(SCAN,"Passive")
+#field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Cr$(Cr):clear PP")
    alias("B_DET_$(Det)_$(Sys)_$(Element):pwonoff")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):pwonoff")
 }
+
+#record(calcout, "B_HW_$(CrName)_Sl($Sl)_Ch$(Ch):clear") {
+#  field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
+#  field(CALC,"A>3")
+#  field(OCAL, "1")
+#  field(DOPT,"Use OCAL")
+#  field(OOPT,"When Non-zero")
+#  field(OUT,"B_HW_$(CrName):ClearAlarm PP")
+#}
+
 record(bo, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):enable") 
 {
    field(DTYP,"CAEN_HV")

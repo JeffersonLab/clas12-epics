@@ -31,8 +31,12 @@ int sockfd_reg = 0;
 
 // this is the map that is NEVER changed, for the NEW firmware:
 static const int bom_pmt2fpga_map[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-//BR 8/9/2020 - disable bom_sc_ai_6 due to noise pickup
-static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 0, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24};
+//BR Aug 9  2020 - disable bom_sc_ai_6 due to noise pickup
+//BR Jan 31 2022 - disable bom_sc_ai_0 due to noise pickup
+//static const int GAIN[] =             {20, 23, 21, 20, 21, 19, 0, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24};
+//BR Feb 3 2022 - lower gain bom_sc_ai_4 due to excessive counts
+//static const int GAIN[] =             {0, 23, 21, 20, 21, 19, 0, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24};
+static const int GAIN[] =             {0, 23, 21, 20, 13, 19, 0, 17, 20, 15, 15, 20, 23, 19, 19, 18, 24};
 static const int THRESHOLD =          300; 
 
 #define DEBUG
@@ -918,7 +922,7 @@ rich_test_regs(THRESHOLD);
   
   rich_write32(&pRICH_regs->MAROC_Cfg.DACAmplitude, 1000);
 	
-  usleep(1000000);
+  usleep(3000000);
   // enable coax outputs now that config is done/stable
   rich_write32(&pRICH_regs->Sd.OutSrc[0], SD_SRC_SEL_MAROC_OR);
 	rich_write32(&pRICH_regs->Sd.OutSrc[1], SD_SRC_SEL_MAROC_OR); 

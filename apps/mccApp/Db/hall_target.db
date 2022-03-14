@@ -11,6 +11,7 @@ record(calc,"HLB:TARGET:CALC")
   field(FLNK,"HLB:TARGET:STAT.PROC")
 }
 
+# this one goes to MCC:
 record(mbbi,"HLB:TARGET:STAT")
 {
   field(PINI,1)
@@ -65,6 +66,7 @@ record(mbbi,"HLB:TARGET:STAT")
 #alias("hps:target:type")
 }
 
+# this one goes in RCDB:
 record(mbbi,"clas12:target:type") {
     field(SCAN,"1 second")
     field(INP,"HLB:TARGET:STAT")
@@ -78,16 +80,16 @@ record(mbbi,"clas12:target:type") {
     field(SVST,"40Ca")
     field(EIST,"48Ca")
     field(NIST,"Empty")
+    field(FLNK,"HLB:TARGET:STRINGOUT PP")
 }
 
-
-#record(stringout,"HLB:TARGET:STRINGOUT")
-#{
-#  field(PINI,1)
-#  field(OMSL,"closed_loop")
-#  field(DOL,"HALL_B_TARGET:MBBI CPP")
-#  field(OUT,"HALL_B_TARGET CPP")
-#}
+record(stringout,"HLB:TARGET:STRINGOUT")
+{
+  field(SCAN,"10 second")
+  field(OMSL,"closed_loop")
+  field(DOL,"HLB:TARGET:STAT")
+  field(OUT,"HALL_B_TARGET PP")
+}
 
 ## Proxy for accelerator's record:
 #record(stringin,"HALL_B_TARGET:STRINGIN")

@@ -857,7 +857,7 @@ $(pv_value)</tooltip>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>RICH Overview</description>
+          <description>Overview</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/RICH/ssp-tempvolt-colorscale.opi</path>
@@ -867,7 +867,7 @@ $(pv_value)</tooltip>
             <L>FPGA Temperatures (C)</L>
           </macros>
           <replace>2</replace>
-          <description>RICH Temperatures Map</description>
+          <description>Temperatures Map</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/RICH/ssp-scalers-colorscale.opi</path>
@@ -875,7 +875,7 @@ $(pv_value)</tooltip>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>RICH Scalers Map</description>
+          <description>Scalers Map</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/RICH/ssp-boards-tabless.opi</path>
@@ -883,9 +883,21 @@ $(pv_value)</tooltip>
             <include_parent_macros>true</include_parent_macros>
             <SLOT>04</SLOT>
             <NCHAN>32</NCHAN>
+            <CRATE>FEVME1</CRATE>
           </macros>
           <replace>2</replace>
-          <description>RICH SSP Boards (EXPERT-only)</description>
+          <description>SSP Boards (EXPERT-only)</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/RICH/ssp-boards-tabless.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <SLOT>04</SLOT>
+            <NCHAN>32</NCHAN>
+            <CRATE>SVT3</CRATE>
+          </macros>
+          <replace>2</replace>
+          <description>SSP Boards - EEL (EXPERT-only)</description>
         </action>
       </actions>
       <font>
@@ -2469,12 +2481,6 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="EXECUTE_CMD">
-          <command>stripTool.sh</command>
-          <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>StripTool</description>
-        </action>
-        <action type="EXECUTE_CMD">
           <command>livePlot</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
@@ -2491,6 +2497,12 @@ $(pv_value)</tooltip>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
           <description>mya/livePlot User's Guide</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>stripTool.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>StripTool</description>
         </action>
       </actions>
       <font>

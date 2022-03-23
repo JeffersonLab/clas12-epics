@@ -8,6 +8,12 @@ from ROOT import TGHorizontalFrame,TGLayoutHints
 from ROOT import TRootEmbeddedCanvas,TApplication
 import ROOT
 
+def get_rich():
+  if len(sys.argv)>1:
+    if '-2' in sys.argv[1:]:
+      return 'RICH2'
+  return 'RICH'
+
 class RichPmt:
 
   def __init__(self,keyval):
@@ -51,7 +57,8 @@ class RichPmtCollection:
         #print ipmt,ix,iy,vals['X'],vals['Y']
 
         vals['PVVAL']=0
-        vals['PVNAME']='B_DET_RICH_SSP_PMT%.3d:scalers'%ipmt
+        vals['PVNAME']='B_DET_%s_SSP_PMT%.3d:scalers'%(get_rich(),ipmt)
+        print(vals['PVNAME'])
         vals['PV']=pv.PV(vals['PVNAME'])
 
         self.chans.append(RichPmt(vals))
@@ -168,7 +175,7 @@ mf.AddFrame(gvf,TGLayoutHints(ROOT.kLHintsExpandX))
 cc=rec.GetCanvas()
 cc2=rec2.GetCanvas()
 mf.SetEditable(0)
-mf.SetWindowName('RICH SSP Scalers')
+mf.SetWindowName(get_rich()+' SSP Scalers')
 mf.MapSubwindows()
 mf.Resize(801,666)# resize to get proper frame placement
 mf.MapWindow()
@@ -228,7 +235,7 @@ def main():
     tt.DrawText(29.5,10,'kHz')
     tt.SetTextAngle(0)
     tt.SetTextColor(1)
-    tt.DrawTextNDC(0.3,0.92,'RICH SSP Scalers')
+    tt.DrawTextNDC(0.35,0.92,get_rich()+' SSP Scalers')
 
 #    bb=TBox()
 #    bb.SetFillStyle(1001)

@@ -58,7 +58,6 @@ class RichPmtCollection:
 
         vals['PVVAL']=0
         vals['PVNAME']='B_DET_%s_SSP_PMT%.3d:scalers'%(get_rich(),ipmt)
-        print(vals['PVNAME'])
         vals['PV']=pv.PV(vals['PVNAME'])
 
         self.chans.append(RichPmt(vals))

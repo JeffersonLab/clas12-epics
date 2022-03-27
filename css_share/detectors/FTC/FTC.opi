@@ -2330,14 +2330,6 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/FTC/FTC_LV_details_novice.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>0</replace>
-        <description>Controls</description>
-      </action>
       <action type="EXECUTE_JAVASCRIPT">
         <path>/CLAS12_Share/detectors/FTC/scripts/FTC_LV_off.js</path>
         <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
@@ -2351,6 +2343,24 @@ $(pv_value)</tooltip>
 ]]></scriptText>
         <embedded>false</embedded>
         <description>All On</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/detectors/FTC/FTC_LV_details_novice.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>0</replace>
+        <description>Controls</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>/CLAS12_Share/apps/mpodLvApp/mpod-crate.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>lvftag</HOST>
+          <ioc>iocftaglv</ioc>
+        </macros>
+        <replace>0</replace>
+        <description>Crate</description>
       </action>
     </actions>
     <font>

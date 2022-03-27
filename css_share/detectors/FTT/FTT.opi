@@ -698,14 +698,6 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>FTT_HVLV_details.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>HV/LV Channel Controls</description>
-      </action>
       <action type="WRITE_PV">
         <pv_name>B_DET_FTT_LV:pwon</pv_name>
         <value>1</value>
@@ -719,6 +711,24 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description>FTT - All LV OFF</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>FTT_HVLV_details.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>HV/LV Channel Controls</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/mpodLvApp/mpod-crate.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>fttlv</HOST>
+          <ioc>iocftaglv</ioc>
+        </macros>
+        <replace>2</replace>
+        <description>Crate Controls</description>
       </action>
     </actions>
     <font>

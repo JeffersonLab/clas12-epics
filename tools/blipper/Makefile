@@ -7,7 +7,7 @@ build:
 
 install:
 	cp -f network-port-reset ../../bin/
-	cp -f beam-viewer-reboot ../../bin/
+#	cp -f beam-viewer-reboot ../../bin/
 
 clean:
 	rm -f network-port-reset network-port-reset.sh.x.c ../../bin/network-port-reset

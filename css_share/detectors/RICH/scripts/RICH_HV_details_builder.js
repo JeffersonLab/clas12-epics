@@ -4,9 +4,12 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var novice = PVUtil.getDouble(pvs[0]);
 
-var prefix = "B_DET_RICH_HV_TILE";
+var prefixes = ["B_DET_RICH_HV_TILE","B_DET_RICH2_HV_TILE"];
 var nchan = 138;
 
+for (var iprefix=0; iprefix<2; iprefix++)
+{
+  var prefix = prefixes[iprefix];
   for (var chan=1; chan<=nchan; chan++)
   {
     if (chan<10) chan="00"+chan;
@@ -28,4 +31,4 @@ var nchan = 138;
     widget.addChildToBottom(lc);
   }
 
-
+}

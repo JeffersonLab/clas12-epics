@@ -4,9 +4,12 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var novice = PVUtil.getDouble(pvs[0]);
 
-var prefix = "B_DET_RICH_LV_GRP";
+var prefixes = ["B_DET_RICH_LV_GRP","B_DET_RICH2_LV_GRP"];
 var nchan = 40;
 
+for (var iprefix=0; iprefix<2; iprefix++)
+{
+  var prefix = prefixes[iprefix];
   for (var chan=1; chan<=nchan; chan++)
   {
     if (chan==13 || chan==14 || chan==37 || chan==38) continue;
@@ -28,5 +31,5 @@ var nchan = 40;
     lc.addMacro("P",pv);
     widget.addChildToBottom(lc);
   }
-
+  }
 

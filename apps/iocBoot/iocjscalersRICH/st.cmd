@@ -23,6 +23,7 @@ dbLoadTemplate("db/jscalers_RICH2_SSP.substitutions-EEL")
 
 # these are just aliases from HW to DET:
 dbLoadRecords("db/jscaler_RICH_Maps.db")
+dbLoadRecords("db/jscaler_RICH2_Maps.db")
 
 # averaging scalers over 8x8 PMTs:
 dbLoadRecords("db/jscalers_RICH_sums.db")

@@ -35,6 +35,7 @@ function lvcycle {
           then
               echo "Trying Again to Clear Errors ..." | $log
               caput B_HW_HVRICH1:ClearAlarm 1 | $log
+              #caput B_HW_HVRICH2:ClearAlarm 1 | $log
               sleep 5
               caput $pvGo 1 | $log
               sleep 5
@@ -94,10 +95,12 @@ echo  | $log
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
 
 lvcycle B_DET_RICH_LV:OFF B_DET_RICH_LV:isOff
+#lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
 
 echo -e "\nRICH LV OFF succecsfull.\n\nTurning RICH LV ON ...\n" | $log
 
 lvcycle B_DET_RICH_LV:ON B_DET_RICH_LV:isOn
+#lvcycle B_DET_RICH_ALL_LV:ON B_DET_RICH_ALL_LV:isOn
 
 echo -e "\nRICH LV ON succesfull.\n\nRebooting rich4 ...\n" | $log
 

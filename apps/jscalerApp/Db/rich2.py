@@ -21,13 +21,13 @@ with open('fiber.map','r') as f:
     slot,fiber,asic,pmt,tile = [int(x) for x in line.strip().split()]
 
     for scaler in ['scalers','scalersAvg','scalersAvgK']:
-      pv = 'B_HW_SVT3_Sl%.2d_Fi%.2d_PMT%d:%s'%(slot,fiber,asic,scaler)
-      alias = 'B_DET_RICH2_SSP_PMT%.3d:%s'%(pmt,scaler)
-      print('alias("%s","%s")'%(pv,alias))
+      #pv = 'B_HW_SVT3_Sl%.2d_Fi%.2d_PMT%d:%s'%(slot,fiber,asic,scaler)
+      #alias = 'B_DET_RICH2_SSP_PMT%.3d:%s'%(pmt,scaler)
+      #print('alias("%s","%s")'%(pv,alias))
 
-      #pv = 'B_DET_RICH2_SSP_PMT%.3d:%s.DESC'%(pmt,scaler)
-      #desc = 'RICH2 - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d'%(slot,fiber,tile,pmt)
-      #print('caput %s "%s"'%(pv,desc))
+      pv = 'B_DET_RICH2_SSP_PMT%.3d:%s.DESC'%(pmt,scaler)
+      desc = 'RICH2 - Sl%.2d, Fi%.2d, Ti%.3d, Pmt%.3d'%(slot,fiber,tile,pmt)
+      print('caput %s "%s"'%(pv,desc))
 
     continue
 
@@ -37,9 +37,4 @@ with open('fiber.map','r') as f:
         pv = 'B_HW_SVT3_Sl%.2d_Fi%.2d:%s'%(slot,fiber,suffix)
         alias = 'B_DET_RICH2_SSP_TILE%.3d:%s'%(tile,suffix)
         print('alias("%s","%s")'%(pv,alias))
-
-    for scaler in ['scalers','scalersAvg','scalersAvgK']:
-      pv = 'B_HW_SVT3_Sl%.2d_Fi%.2d_PMT%d:%s'%(slot,fiber,asic,scaler)
-      alias = 'B_DET_RICH2_SSP_PMT%.3d:%s'%(pmt,scaler)
-      print('alias("%s","%s")'%(pv,alias))
 

@@ -129,10 +129,10 @@ def pix2xy(pad):
   px=gPad.GetEventX()
   py=gPad.GetEventY()
   # determined empirically (by clicking on canvas):
-  tl=[71,79]
-  tr=[709,44]
-  br=[709,716]
-  bl=[71,716]
+  tl=[71,64]
+  tr=[711,64]
+  br=[711,572]
+  bl=[71,572]
   x=int(float(px-tl[0])/(tr[0]-tl[0])*22)-11
   y=int(float(py-tl[1])/(bl[1]-tl[1])*22)-11
   if x>=0: x+=1
@@ -140,7 +140,7 @@ def pix2xy(pad):
   # swap y because pixel-coordinate inverted:
   y=-y
   # swap x to make it downstream view:
-  x=-x
+  #x=-x
   return [x,y]
 
 def printChannel(ee):
@@ -290,18 +290,18 @@ def main():
 
             if not gPad: sys.exit()
 
-#            if gPad.GetEvent()==11:
-#                xy=pix2xy(gPad)
-#                ee=ECAL.findChannelXY(xy[0],xy[1])
-#                if ee:
-#                    tchan.Clear()
-#                    tchan.AddText(printChannel(ee))
-#                    cc2.Modified()
-#                    cc2.Update()
-#            elif gPad.GetEvent()==12:
-#                tchan.Clear()
-#                cc2.Modified()
-#                cc2.Update()
+            #if gPad.GetEvent()==11:
+            #    xy=pix2xy(gPad)
+            #    ee=ECAL.findChannelXY(xy[0],xy[1])
+            #    if ee:
+            #        tchan.Clear()
+            #        tchan.AddText(printChannel(ee))
+            #        cc2.Modified()
+            #        cc2.Update()
+            #elif gPad.GetEvent()==12:
+            #    tchan.Clear()
+            #    cc2.Modified()
+            #    cc2.Update()
 
 
             cc.Modified()

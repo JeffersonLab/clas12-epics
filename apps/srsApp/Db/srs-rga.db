@@ -1,0 +1,364 @@
+#
+# 
+#
+
+record(seq, "$(P)$(R=):reconnect") {
+    field(DOL1, "$(P)(R=).CNCT PP")
+    field(DO1,  "0")
+    field(DLY1, "0")
+    field(DOL2, "$(P)$(R=):authorize2.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "5")
+}
+
+# this one works reliabily upon IOC bootup:
+# (never got it to work reliably from protocol files, but
+# hardwiring to the asyn PV seems to work reliably)
+record(seq, "$(P)$(R=):authorize2") {
+    field(DOL1, "$(P)$(R=):admin.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "1")
+    field(DOL2, "$(P)$(R=):admin.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "1")
+    field(DOL5, "$(P)$(R=):id.PROC PP")
+    field(DO5,  "1")
+    field(DLY5, "3")
+    field(PINI, "1")
+}
+
+# sometimes it needs another put, not understood:
+record(seq, "$(P)$(R=):authorize3") {
+    field(DOL1, "$(P)$(R=):admin.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "1")
+    field(DOL2, "$(P)$(R=):admin.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "1")
+    field(DOL3, "$(P)$(R=):admin.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "1")
+    field(DOL5, "$(P)$(R=):id.PROC PP")
+    field(DO5,  "1")
+    field(DLY5, "5")
+}
+
+record(stringout, "$(P)$(R=):admin") {
+    field(VAL, "ADMIN")
+    field(OUT, "$(P)$(R=).AOUT PP")
+}
+
+#################################################
+#################################################
+
+record(stringin, "$(P)$(R=):id") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getString(ID) $(PORT)")
+    field(FLNK, "$(P)$(R=):status.PROC PP")
+}
+
+record(mbbiDirect, "$(P)$(R=):status") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(ER) $(PORT)")
+    field(FLNK, "$(P)$(R=):stat:comms PP")
+}
+record(bi, "$(P)$(R=):stat:comms") {
+    field(INP, "$(P)$(R=):status.B0")
+    field(FLNK, "$(P)$(R=):stat:filament PP")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+record(bi, "$(P)$(R=):stat:filament") {
+    field(INP, "$(P)$(R=):status.B1")
+    field(FLNK, "$(P)$(R=):stat:elecmultiplier PP")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+record(bi, "$(P)$(R=):stat:elecmultiplier") {
+    field(INP, "$(P)$(R=):status.B3")
+    field(FLNK, "$(P)$(R=):stat:quadmassfilter PP")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+record(bi, "$(P)$(R=):stat:quadmassfilter") {
+    field(INP, "$(P)$(R=):status.B4")
+    field(FLNK, "$(P)$(R=):stat:electrometer PP")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+record(bi, "$(P)$(R=):stat:electrometer") {
+    field(INP, "$(P)$(R=):status.B5")
+    field(FLNK, "$(P)$(R=):stat:24Vexternal PP")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+record(bi, "$(P)$(R=):stat:24Vexternal") {
+    field(INP, "$(P)$(R=):status.B6")
+    field(ZNAM, "Ok")
+    field(ONAM, "Error")
+    field(OSV,  "MAJOR")
+}
+
+##################################################
+##################################################
+
+record(bo, "$(P)$(R=):calibrate") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(CA) $(PORT)")
+}
+record(bo, "$(P)$(R=):calibrate:iv") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(CL) $(PORT)")
+}
+
+##################################################
+##################################################
+
+record(bo, "$(P)$(R=):clear") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(IN0) $(PORT)")
+    field(FLNK, "$(P)$(R=):status PP")
+}
+record(bo, "$(P)$(R=):factory") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(IN1) $(PORT)")
+    field(FLNK, "$(P)$(R=):status PP")
+}
+record(bo, "$(P)$(R=):standby") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(IN2) $(PORT)")
+    field(FLNK, "$(P)$(R=):status PP")
+}
+
+##################################################
+##################################################
+
+record(ai, "$(P)$(R=):electron:e:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(EE) $(PORT)")
+    field(EGU, "eV")
+}
+record(ao, "$(P)$(R=):electron:e") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(EE) $(PORT)")
+    field(EGU, "eV")
+}
+
+record(ai, "$(P)$(R=):electron:i:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(FL) $(PORT)")
+    field(EGU, "mA")
+}
+record(ao, "$(P)$(R=):electron:i") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(FL) $(PORT)")
+    field(EGU, "mA")
+}
+
+record(ai, "$(P)$(R=):ion:e:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(IE) $(PORT)")
+    field(EGU, "mA")
+}
+record(ao, "$(P)$(R=):ion:e") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(IE) $(PORT)")
+    field(EGU, "mA")
+}
+
+record(ai, "$(P)$(R=):plate:v:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(VF) $(PORT)")
+    field(EGU, "mA")
+}
+record(ao, "$(P)$(R=):plate:v") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(VF) $(PORT)")
+    field(EGU, "mA")
+}
+
+record(ai, "$(P)$(R=):noise:floor:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(NF) $(PORT)")
+}
+record(ao, "$(P)$(R=):noise:floor") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putInt(NF) $(PORT)")
+    field(DRVL, "0")
+    field(DRVH, "7")
+}
+
+##################################################
+##################################################
+
+record(ai, "$(P)$(R=):mass:initial:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(MI) $(PORT)")
+    field(EGU, "amu")
+}
+record(ao, "$(P)$(R=):mass:initial") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(MI) $(PORT)")
+    field(EGU, "amu")
+}
+record(ai, "$(P)$(R=):mass:final:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(MF) $(PORT)")
+    field(EGU, "amu")
+}
+record(ao, "$(P)$(R=):mass:final") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putFloat(MF) $(PORT)")
+    field(EGU, "amu")
+    field(DRVH, "$(MODEL)")
+}
+
+##################################################
+##################################################
+
+record(ai, "$(P)$(R=):pps:factor") {
+
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(SP) $(PORT)")
+    field(EGU, "mA/Torr")
+    field(DESC, "Partial presseure sensitivity factor")
+}
+record(ai, "$(P)$(R=):tps:factor") {
+
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(ST) $(PORT)")
+    field(EGU, "mA/Torr")
+    field(DESC, "Total presseure sensitivity factor")
+}
+
+##################################################
+##################################################
+
+record(ai, "$(P)$(R=):anascan:np:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(AP) $(PORT)")
+    field(DESC, "Number of analog scan points")
+}
+record(ai, "$(P)$(R=):histscan:np:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(HP) $(PORT)")
+    field(DESC, "Number of histogram scan points")
+}
+record(ao, "$(P)$(R=):anascan:np") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putInt(AP) $(PORT)")
+    field(DESC, "Number of analog scan points")
+}
+record(ao, "$(P)$(R=):histscan:np") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto getInt(HP) $(PORT)")
+    field(DESC, "Number of histogram scan points")
+}
+record(ao, "$(P)$(R=):anascan:steps:per:amu") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putInt(SA) $(PORT)")
+}
+record(ai, "$(P)$(R=):anascan:steps:per:amu:rbk") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(SA) $(PORT)")
+}
+
+record(waveform, "$(P)$(R=):anascan:wf") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto onescan(SC) $(PORT)")
+    field(NELM, "$(NANA)")
+    field(FTVL, "LONG")
+}
+record(waveform, "$(P)$(R=):histscan:wf") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto onescan(HS) $(PORT)")
+    field(NELM, "$(NHIST)")
+    field(FTVL, "LONG")
+}
+
+record(waveform, "$(P)$(R=):anascan:amu:wf") {
+    field(NELM, "$(NANA)")
+    field(FTVL, "FLOAT")
+}
+record(waveform, "$(P)$(R=):histscan:amu:wf") {
+    field(NELM, "$(NHIST)")
+    field(FTVL, "FLOAT")
+}
+
+record(ao, "$(P)$(R=):anascan:trigger") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putInt(SC) $(PORT)")
+    field(DRVH, "255")
+}
+record(ao, "$(P)$(R=):histscan:trigger") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto putInt(HS) $(PORT)")
+    field(DRVH, "255")
+}
+
+#record(longin, "$(P)$(R=):mass") {
+#    field(DTYP, "stream")
+#    field(INP, "@srs-rga.proto getInt
+#}
+#record(ao, "$(P)$(R=):mass:single") {
+#    field(DTYP, "stream")
+#    field(OUT, "@srs-rga.proto putFloat(MR) $(PORT)")
+#    field(DESC, "Perform single mass measurement")
+#}
+
+##################################################
+##################################################
+
+record(seq, "$(P)$(R=):anascan") {
+    field(DOL1, "$(P)$(R=):mass:initial:rbk.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(DOL2, "$(P)$(R=):mass:final:rbk.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "1")
+    field(DOL3, "$(P)$(R=):seq:update:axes PP")
+    field(DO3,  "1")
+    field(DLY3, "1")
+    field(DOL4, "$(P)$(R=):anascan:wf.PROC PP")
+    field(DO4,  "1")
+    field(DLY4, "5")
+}
+record(seq, "$(P)$(R=):histscan") {
+    field(DOL1, "$(P)$(R=):mass:initial:rbk.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(DOL2, "$(P)$(R=):mass:final:rbk.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "1")
+    field(DOL3, "$(P)$(R=):seq:update:axes PP")
+    field(DO3,  "1")
+    field(DLY3, "1")
+    field(DOL4, "$(P)$(R=):histscan:wf.PROC PP")
+    field(DO4,  "1")
+    field(DLY4, "5")
+}
+
+##################################################
+##################################################
+
+record(bi, "$(P)$(R=):seq:update:axes") {
+     field(VAL, "0")
+}
+record(stringin, "$(P)$(R=):seq:status") {
+     field(VAL, "Unknown")
+     field(PINI, "1")
+}
+
+##################################################
+##################################################
+
+record(bo, "$(P)$(R=):filament:off") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(FL0) $(PORT)")
+}
+

@@ -22,7 +22,10 @@ float wf2[NHIST]; assign wf2 to "B_HTCC:RGA:histscan:amu:wf";
 float min; assign min to "B_HTCC:RGA:mass:initial:rbk";
 float max; assign max to "B_HTCC:RGA:mass:final:rbk";
 string msg; assign msg to "B_HTCC:RGA:seq:status";
-int go; assign go to "B_HTCC:RGA:seq:update:axes"; monitor go;
+
+int go; assign go to "B_HTCC:RGA:seq:update:axes";
+monitor go; evflag dogo; sync go dogo;
+
 int ii;
 
 ss srs {
@@ -44,9 +47,10 @@ ss srs {
 
 	entry {
 		MESSAGE(Idle)
+		efClear(dogo);
 	}
   
-    when (go==1) {
+    when (efTestAndClear(dogo)) {
       MESSAGE(Filling axis arrays ...)
       go=0;
       pvPut(go);
@@ -61,6 +65,7 @@ ss srs {
       pvPut(wf);
       pvPut(wf2);
 	  MESSAGE(Idle);
+	  epicsThreadSleep(3);
     } state run
 
   }

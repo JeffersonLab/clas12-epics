@@ -25,9 +25,6 @@ epicsThreadSleep(1)
 dbLoadRecords("db/asynRecord.db","P=B_HTCC:,R=RGA,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/srs-rga.db","P=B_HTCC:,R=RGA,NANA=991,NHIST=100,MODEL=100,PORT=L0")
 
-#dbLoadRecords("db/rga_common.db","P=B_HTCC:,R=RGA,PORT=L0,SC=10")
-#dbLoadTemplate("db/rga.substitutions")
-
 cd ${TOP}/iocBoot/${IOC}
 
 #< save_restore.cmd

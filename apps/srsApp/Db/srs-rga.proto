@@ -1,7 +1,13 @@
+#
+# N. Baltzell, 2022
+#
+# EPICS support for Stanford Research Systems RGA-X00
+#
+# Adapted from John Sinclair, sincalairjw@ornl.gov, 2/18/2015
+#
 
 OutTerminator = "\r\n";
 InTerminator = "\n\r";
-
 ExtraInput = Ignore;
 
 command   { out "\$1"; }
@@ -11,7 +17,7 @@ getFloat  { out "\$1?"; in "%f"; }
 putFloat  { out "\$1 %f"; }
 putInt    { out "\$1 %d"; }
 
-onescan {
+scan {
     ReplyTimeout = 30000;
     ReadTimeout = 30000;
     InTerminator =;
@@ -19,126 +25,11 @@ onescan {
     in "%#4r%*r";
 }
 
+mass {
+    ReplyTimeout = 3000;
+    ReadTimeout = 3000;
+    InTerminator = ;
+    out "MR%(\$1.VAL)d";
+    in  "%#4r"; 
+}
 
-
-# protocol file for SRS RGA
-# John Sinclair (sincalairjw@ornl.gov)
-# 2/18/2015
-
-#OutTerminator = CR;
-#InTerminator = LF CR;
-#InTerminator = CR;
-
-#LockTimeout = 3000;
-#ReplyTimeout = 200;
-#ReadTimeout = 200;
-#WriteTimeout = 200;
-
-#authorize {
-#    out "";
-#    in "Name:";
-#    out "ADMIN";
-#    in "Password:";
-#    out "ADMIN";
-#}
-
-## Initialization
-#
-#login {
-#
-#  OutTerminator =;
-#  in "Name:";
-#  out CR;
-#  in "Password:" out CR;
-#  
-#  #@init {out "\r" ; in "Name:"; out "\r"; in "Password:" "\r"; }
-#}
-#
-## Clear the receive buffer
-#clear { "\r\r"; }
-#
-## Reinitialize the buffer
-#reset {
-#    out "\r\r";
-#    in "Name: ";
-#    out "\r";
-#    in "Password:";
-#    out "\r";
-#    out "IN0";
-#    wait 100;
-#    in "%d";
-#}
-#
-## === Ionizer Control ===
-#
-#nf {
-#    out "NF%d";
-#}
-#
-#nf_rdbk {
-#    out "NF?";
-#    wait 10;
-#    in "%d";
-#}
-#
-## Electron Emission Current 
-#
-## Analog Scan Points
-#ap_rdbk {
-#    out "AP?";
-#    in "%d";
-#}
-#
-## Initial and Final Mass
-#mass_i    { out "MI%d"; }
-#mi_rdbk   { out "MI?"; wait 10; in "%d"; }
-#mass_f    { out "MF%d"; }
-#mf_rdbk   { out "MF?"; wait 10; in "%d"; }
-#mass_stp  { out "SA%d"; }
-#ms_rdbk   { out "SA?"; wait 10; in "%d"; }
-#m_meas {
-#  InTerminator = EOT NUL NUL; 
-#  out "MR%(\$1.VAL)d";
-#  in  "%#4r"; 
-#}
-#rfdc_off  { out "MR0"; }
-#
-## Filament on, Electron emission current (mA)
-#fl    	   { out "FL%f"; }
-#fl_rdbk    { out "FL?"; wait 10; in "%f"; }
-#
-## Partial Pressure Sensitivity
-#sp_rdbk { out "SP?"; in  "%f"; }
-#
-## Single mass measurement
-#mass_m { out "MR\$1"; in "%#4r"; }
-#
-## 1 single analog scan
-#ascan_1 {
-#  InTerminator =;
-#  ReplyTimeout = 30000;
-#  ReadTimeout = 30000;
-#  out "MI1";
-#  out "MF200";
-##  out "VF90";
-##  out "FL1";
-#  out "NF4";
-#  out "SA\$1";
-#  out "SC1";
-#  in  "%#4r%*r";
-#}
-#
-## war 5000
-#ascan_data { out "SC1"; wait 500; in "%#4r";}
-#hscan_data { out "HS1"; wait 500; in "%#4r"; }
-#
-## Error status
-#com_err  { InTerminator = LF CR; out "EC?"; wait 100; in "%d"; }
-#det_err  { InTerminator = LF CR; out "ED?"; wait 100; in "%d"; }
-#cem_err  { InTerminator = LF CR; out "EM?"; wait 100; in "%d"; }
-#ps_err   { InTerminator = LF CR; out "EP?"; wait 100; in "%d"; }
-#qmf_err  { InTerminator = LF CR; out "EQ?"; wait 100; in "%d"; }
-#err_stat { InTerminator = LF; out "EC?"; wait 100; in "%d"; }
-#fil_err  { InTerminator = LF; out "EF?"; wait 100; in "%d"; }
-#status   { InTerminator = LF; out "ER?"; wait 100; in "%d"; }
-#

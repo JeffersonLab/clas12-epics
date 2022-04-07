@@ -15,8 +15,10 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 #dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 
 drvAsynIPPortConfigure("L0","htcc-rga:818",0,0,0)
-asynSetTraceMask("L0",-1,0x9)
-asynSetTraceIOMask("L0",-1,0x7)
+
+#asynSetTraceMask("L0",-1,0x9)
+#asynSetTraceIOMask("L0",-1,0x7)
+
 asynOctetSetOutputEos("L0",-1,"\r\n")
 asynOctetSetInputEos("L0",-1,"\n\r")
 
@@ -36,6 +38,4 @@ iocInit
 #create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
-
-seq srs
 

@@ -14,12 +14,9 @@
 # scanning record during measurements.  Probably there's a
 # better way.
 #
-# Currently this requires an additional sequencer to populate
-# the x-axis waveform record.  That should be replaced with
-# an acalcout equivalent.
-#
 
 #################################################
+# Authentication:
 #################################################
 
 # Authenticate by processing this on IOC bootup via PINI:
@@ -67,6 +64,7 @@ record(stringout, "$(P)$(R=):admin") {
 }
 
 #################################################
+# Status:
 #################################################
 
 record(stringin, "$(P)$(R=):id") {
@@ -122,6 +120,7 @@ record(bi, "$(P)$(R=):stat:24Vexternal") {
 }
 
 ##################################################
+# Readback sequences:
 ##################################################
 
 # Get all readbacks in one shot:
@@ -173,9 +172,14 @@ record(seq, "$(P)$(R=):init2") {
     field(LNK5, "$(P)$(R=):status.SCAN PP")
     field(DO5,  "6")
     field(DLY5, "1")
+    field(LNK6, "$(P)$(R):anascan:amu:wf PP")
+    field(DO6,  "1")
+    field(LNK7, "$(P)$(R):histscan:amu:wf PP")
+    field(DO7,  "1")
 }
 
 ##################################################
+# Calibrate/Reset:
 ##################################################
 
 record(bo, "$(P)$(R=):calibrate") {
@@ -203,6 +207,7 @@ record(bo, "$(P)$(R=):standby") {
 }
 
 ##################################################
+# Detector Parameters:
 ##################################################
 
 record(bo, "$(P)$(R=):filament:off") {
@@ -289,6 +294,7 @@ record(ai, "$(P)$(R=):tps:factor") {
 }
 
 ##################################################
+# Scan Parameters:
 ##################################################
 
 record(ai, "$(P)$(R=):mass:initial:rbk") {
@@ -338,6 +344,7 @@ record(ai, "$(P)$(R=):anascan:steps:per:amu:rbk") {
 }
 
 ##################################################
+# Scan Results:
 ##################################################
 
 record(waveform, "$(P)$(R=):anascan:wf") {
@@ -363,6 +370,7 @@ record(acalcout, "$(P)$(R=):anascan:wf:torr") {
     field(DOPT, "Use OCAL")
     field(OCAL, "6")
     field(OUT,  "$(P)$(R=):status.SCAN PP")
+    field(FLNK, "$(P)$(R=):anascan:amu:wf PP")
 }
 record(acalcout, "$(P)$(R=):histscan:wf:torr") {
     field(NELM, "$(NANA)")
@@ -373,59 +381,23 @@ record(acalcout, "$(P)$(R=):histscan:wf:torr") {
     field(DOPT, "Use OCAL")
     field(OCAL, "6")
     field(OUT,  "$(P)$(R=):status.SCAN PP")
+    field(FLNK, "$(P)$(R=):histscan:amu:wf PP")
 }
-record(waveform, "$(P)$(R=):anascan:amu:wf") {
+record(acalcout, "$(P)$(R):anascan:amu:wf") {
     field(NELM, "$(NANA)")
-    field(FTVL, "FLOAT")
+    field(INPA, "$(P)$(R):mass:initial:rbk")
+    field(INPB, "$(P)$(R):mass:final:rbk")
+    field(CALC, "IX / ($(NANA)-1) * (B-A) + A")
 }
-record(waveform, "$(P)$(R=):histscan:amu:wf") {
-    field(NELM, "$(NHIST)")
-    field(FTVL, "FLOAT")
-}
-
-##################################################
-##################################################
-
-record(longin, "$(P)$(R=):mass") {
-    field(DESC, "Mass value for single measurement")
-    field(VAL, "16")
-    field(EGU, "amu")
-}
-record(seq, "$(P)$(R=):mass:trigger") {
-    field(LNK1, "$(P)$(R=):status.SCAN PP")
-    field(DO1,  "0")
-    field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "0")
-    field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):mass:measure.PROC PP")
-    field(DO4,  "0")
-    field(DLY4, "2")
-}
-record(longin, "$(P)$(R=):mass:measure") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto mass($(P)$(R=):mass) $(PORT)")
-    field(EGU, "10^-16 A")
-    field(DESC, "Single mass measurement")
-    field(FLNK, "$(P)$(R=):mass:measure:torr PP")
-}
-record(calcout, "$(P)$(R=):mass:measure:torr") {
-    field(INPA, "$(P)$(R=):mass:measure")
-    field(INPB, "$(P)$(R=):tps:factor")
-    field(CALC, "A*1E-16 / (B*1E-3)")
-    field(EGU, "torr")
-    field(PREC, "5")
-    field(DESC, "Single mass measurement")
-    field(OOPT, "Every Time")
-    field(DOPT, "Use OCAL")
-    field(OCAL, "6")
-    field(OUT,  "$(P)$(R=):status.SCAN PP")
+record(acalcout, "$(P)$(R):histscan:amu:wf") {
+    field(NELM, "$(NANA)")
+    field(INPA, "$(P)$(R):mass:initial:rbk")
+    field(INPB, "$(P)$(R):mass:final:rbk")
+    field(CALC, "IX / ($(NHIST)-1) * (B-A) + A")
 }
 
 ##################################################
+# Scan Triggers:
 ##################################################
 
 record(seq, "$(P)$(R=):anascan") {
@@ -478,14 +450,45 @@ record(seq, "$(P)$(R=):histscan") {
 }
 
 ##################################################
+# Single Mass Measurements:
 ##################################################
 
-record(bo, "$(P)$(R=):seq:update:axes") {
-    field(HIGH, "0")
-    field(VAL, "0")
+record(longin, "$(P)$(R=):mass") {
+    field(DESC, "Mass value for single measurement")
+    field(VAL, "16")
+    field(EGU, "amu")
 }
-record(stringin, "$(P)$(R=):seq:status") {
-    field(VAL, "Unknown")
-    field(PINI, "1")
+record(seq, "$(P)$(R=):mass:trigger") {
+    field(LNK1, "$(P)$(R=):status.SCAN PP")
+    field(DO1,  "0")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "0")
+    field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "1")
+    field(LNK4, "$(P)$(R=):mass:measure.PROC PP")
+    field(DO4,  "0")
+    field(DLY4, "2")
+}
+record(longin, "$(P)$(R=):mass:measure") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto mass($(P)$(R=):mass) $(PORT)")
+    field(EGU, "10^-16 A")
+    field(DESC, "Single mass measurement")
+    field(FLNK, "$(P)$(R=):mass:measure:torr PP")
+}
+record(calcout, "$(P)$(R=):mass:measure:torr") {
+    field(INPA, "$(P)$(R=):mass:measure")
+    field(INPB, "$(P)$(R=):tps:factor")
+    field(CALC, "A*1E-16 / (B*1E-3)")
+    field(EGU, "torr")
+    field(PREC, "5")
+    field(DESC, "Single mass measurement")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "6")
+    field(OUT,  "$(P)$(R=):status.SCAN PP")
 }
 

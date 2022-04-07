@@ -1,11 +1,4 @@
-#
-# These records are workaround the problem of
-#  limited # of characters in the CALC records.
-#
-#
 
-#
-#
 #Record to check if the beam is present for regular 
 #  data taking conditions
 #
@@ -14,29 +7,17 @@ grecord( calc,"HL$(hall):bta_reg_bm")
 	field(SCAN,".5 second")	
 	field(PINI, "1")
 	field(PREC, "4")
-	field(CALC,"a>g&&b<h?1:0")
-#
-#   Actual value records
-#
-#field(INPA,"IPM2C21A NPP NMS")
-        field(INPA,"hallb_IPM2C21A_CUR NPP NMS")
-#	field(INPA,"scaler_calc1  NPP NMS")
-        field(INPB,"scaler_sum NPP NMS")
-        field(INPC,"beam_polarization NPP NMS")
-        field(INPD,"")
-        field(INPE,"")
-#field(INPF,"")
-        field(INPF,"hallb_IPM2C21A_CUR NPP NMS")
-#
-#  Limit settings
-#
-	field(INPG,"HL$(hall):bta_min_crnt  NPP NMS")
-	field(INPH,"600  NPP NMS")
-        field(INPI,"10 NPP NMS")
-        field(INPJ,"")
-        field(INPK,"")
-        field(INPL,"")
-        info(autosaveFields_pass0,"INPA INPB INPC INPD INPE INPF INPG INPH CALC")
+	field(CALC,"A>G & A<L & B<=H & C<I & D<J")
+    field(INPA,"IPM2C21A")
+    field(INPB,"ISD2H001HALORATE03")
+    field(INPB,"ISD2H001HALORATE01")
+    field(INPB,"ISD2H001HALORATE02")
+    field(INPG,"2")
+    field(INPH,"500")
+    field(INPI,"500")
+    field(INPJ,"850000")
+    field(INPL,"300")
+    info(autosaveFields_pass0,"INPA INPB INPC INPD INPE INPF INPG INPH CALC")
 }
 
 #

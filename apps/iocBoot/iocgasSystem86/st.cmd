@@ -45,6 +45,7 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 dbLoadRecords("db/gas_cRIO_RICH_drybox.db")
 
 dbLoadRecords("db/flow_cRIO_TEDF.db")
+dbLoadRecords("db/sbs-dsg.db")
 
 ## waveform test for Brian:
 dbLoadRecords("db/criowf.db")

@@ -10,6 +10,7 @@ epicsEnvSet("MIBS","ALL")
 
 # just to decrease string size in record:
 epicsEnvSet("MIB","WIENER_CRATE-MIB::")
+epicsEnvSet("W","WIENER_CRATE-MIB::")
 epicsEnvSet("WO","WIENER-CRATE-MIB::output")
 
 cd "${TOP}"
@@ -23,6 +24,9 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 devSnmpSetParam(DebugLevel,10)
 
 #MpodStatusParserDebug=1
+
+dbLoadRecords("db/mpod-crate.db","HOST=fttlv")
+dbLoadRecords("db/mpod-crate.db","HOST=lvftag")
 
 dbLoadTemplate("db/ftcallv.substitutions")
 dbLoadTemplate("db/fthodlv.substitutions")

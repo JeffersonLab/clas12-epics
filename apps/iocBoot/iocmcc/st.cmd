@@ -38,6 +38,8 @@ dbLoadRecords("db/mcc_fsdGlobal.db","P=B_FSD")
 
 dbLoadRecords("db/bta_suppl.db","hall=B,ioc=classc6");
 
+dbLoadRecords("db/alarm-on-change.db","INP=IGL1I00OD16_16,P=B_HWP:")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

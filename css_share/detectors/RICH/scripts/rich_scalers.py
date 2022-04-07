@@ -8,6 +8,12 @@ from ROOT import TGHorizontalFrame,TGLayoutHints
 from ROOT import TRootEmbeddedCanvas,TApplication
 import ROOT
 
+def get_rich():
+  if len(sys.argv)>1:
+    if '-2' in sys.argv[1:]:
+      return 'RICH2'
+  return 'RICH'
+
 class RichPmt:
 
   def __init__(self,keyval):
@@ -51,7 +57,7 @@ class RichPmtCollection:
         #print ipmt,ix,iy,vals['X'],vals['Y']
 
         vals['PVVAL']=0
-        vals['PVNAME']='B_DET_RICH_SSP_PMT%.3d:scalers'%ipmt
+        vals['PVNAME']='B_DET_%s_SSP_PMT%.3d:scalers'%(get_rich(),ipmt)
         vals['PV']=pv.PV(vals['PVNAME'])
 
         self.chans.append(RichPmt(vals))
@@ -123,10 +129,10 @@ def pix2xy(pad):
   px=gPad.GetEventX()
   py=gPad.GetEventY()
   # determined empirically (by clicking on canvas):
-  tl=[71,79]
-  tr=[709,44]
-  br=[709,716]
-  bl=[71,716]
+  tl=[71,64]
+  tr=[711,64]
+  br=[711,572]
+  bl=[71,572]
   x=int(float(px-tl[0])/(tr[0]-tl[0])*22)-11
   y=int(float(py-tl[1])/(bl[1]-tl[1])*22)-11
   if x>=0: x+=1
@@ -134,7 +140,7 @@ def pix2xy(pad):
   # swap y because pixel-coordinate inverted:
   y=-y
   # swap x to make it downstream view:
-  x=-x
+  #x=-x
   return [x,y]
 
 def printChannel(ee):
@@ -168,7 +174,7 @@ mf.AddFrame(gvf,TGLayoutHints(ROOT.kLHintsExpandX))
 cc=rec.GetCanvas()
 cc2=rec2.GetCanvas()
 mf.SetEditable(0)
-mf.SetWindowName('RICH SSP Scalers')
+mf.SetWindowName(get_rich()+' SSP Scalers')
 mf.MapSubwindows()
 mf.Resize(801,666)# resize to get proper frame placement
 mf.MapWindow()
@@ -228,7 +234,7 @@ def main():
     tt.DrawText(29.5,10,'kHz')
     tt.SetTextAngle(0)
     tt.SetTextColor(1)
-    tt.DrawTextNDC(0.3,0.92,'RICH SSP Scalers')
+    tt.DrawTextNDC(0.35,0.92,get_rich()+' SSP Scalers')
 
 #    bb=TBox()
 #    bb.SetFillStyle(1001)
@@ -284,18 +290,18 @@ def main():
 
             if not gPad: sys.exit()
 
-#            if gPad.GetEvent()==11:
-#                xy=pix2xy(gPad)
-#                ee=ECAL.findChannelXY(xy[0],xy[1])
-#                if ee:
-#                    tchan.Clear()
-#                    tchan.AddText(printChannel(ee))
-#                    cc2.Modified()
-#                    cc2.Update()
-#            elif gPad.GetEvent()==12:
-#                tchan.Clear()
-#                cc2.Modified()
-#                cc2.Update()
+            #if gPad.GetEvent()==11:
+            #    xy=pix2xy(gPad)
+            #    ee=ECAL.findChannelXY(xy[0],xy[1])
+            #    if ee:
+            #        tchan.Clear()
+            #        tchan.AddText(printChannel(ee))
+            #        cc2.Modified()
+            #        cc2.Update()
+            #elif gPad.GetEvent()==12:
+            #    tchan.Clear()
+            #    cc2.Modified()
+            #    cc2.Update()
 
 
             cc.Modified()

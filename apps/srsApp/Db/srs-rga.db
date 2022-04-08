@@ -67,6 +67,27 @@ record(stringout, "$(P)$(R=):admin") {
 # Status:
 #################################################
 
+record(mbbi, "$(P)$(R=):state") {
+    field(ZRVL, 0)
+    field(ZRST, "Initializing")
+    field(ONVL, 1)
+    field(ONST, "Idle")
+    field(TWVL, 2)
+    field(TWST, "Measuring")
+    field(VAL,0)
+}
+record(seq, "$(P)$(R=):idle") {
+    field(LNK1, "$(P)$(R=):state PP")
+    field(DO1,  "1")
+    field(LNK2, "$(P)$(R=):status.SCAN PP")
+    field(DO2,  "6")
+}
+record(seq, "$(P)$(R=):measure") {
+    field(LNK1, "$(P)$(R=):state PP")
+    field(DO1,  "2")
+    field(LNK2, "$(P)$(R=):status.SCAN PP")
+    field(DO2,  "0")
+}
 record(stringin, "$(P)$(R=):id") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getString(ID) $(PORT)")
@@ -169,12 +190,11 @@ record(seq, "$(P)$(R=):init2") {
     field(LNK4, "$(P)$(R=):id.PROC PP")
     field(DO4,  "1")
     field(DLY4, "1")
-    field(LNK5, "$(P)$(R=):status.SCAN PP")
-    field(DO5,  "6")
-    field(DLY5, "1")
-    field(LNK6, "$(P)$(R):anascan:amu:wf PP")
+    field(LNK5, "$(P)$(R=):anascan:amu:wf PP")
+    field(DO5,  "1")
+    field(LNK6, "$(P)$(R=):histscan:amu:wf PP")
     field(DO6,  "1")
-    field(LNK7, "$(P)$(R):histscan:amu:wf PP")
+    field(LNK7, "$(P)$(R=):idle PP")
     field(DO7,  "1")
 }
 
@@ -368,8 +388,8 @@ record(acalcout, "$(P)$(R=):anascan:wf:torr") {
     field(CALC, "AA*1E-16 / (A*1E-3)")
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
-    field(OCAL, "6")
-    field(OUT,  "$(P)$(R=):status.SCAN PP")
+    field(OCAL, "1")
+    field(OUT,  "$(P)$(R=):idle PP")
     field(FLNK, "$(P)$(R=):anascan:amu:wf PP")
 }
 record(acalcout, "$(P)$(R=):histscan:wf:torr") {
@@ -379,8 +399,8 @@ record(acalcout, "$(P)$(R=):histscan:wf:torr") {
     field(CALC, "AA*1E-16 / (A*1E-3)")
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
-    field(OCAL, "6")
-    field(OUT,  "$(P)$(R=):status.SCAN PP")
+    field(OCAL, "1")
+    field(OUT,  "$(P)$(R=):idle PP")
     field(FLNK, "$(P)$(R=):histscan:amu:wf PP")
 }
 record(acalcout, "$(P)$(R):anascan:amu:wf") {
@@ -388,9 +408,10 @@ record(acalcout, "$(P)$(R):anascan:amu:wf") {
     field(INPA, "$(P)$(R):mass:initial:rbk")
     field(INPB, "$(P)$(R):mass:final:rbk")
     field(CALC, "IX / ($(NANA)-1) * (B-A) + A")
+
 }
 record(acalcout, "$(P)$(R):histscan:amu:wf") {
-    field(NELM, "$(NANA)")
+    field(NELM, "$(NHIST)")
     field(INPA, "$(P)$(R):mass:initial:rbk")
     field(INPB, "$(P)$(R):mass:final:rbk")
     field(CALC, "IX / ($(NHIST)-1) * (B-A) + A")
@@ -401,8 +422,8 @@ record(acalcout, "$(P)$(R):histscan:amu:wf") {
 ##################################################
 
 record(seq, "$(P)$(R=):anascan") {
-    field(LNK1, "$(P)$(R=):status.SCAN PP")
-    field(DO1,  "0")
+    field(LNK1, "$(P)$(R=):measure PP")
+    field(DO1,  "1")
     field(DLY1, "0")
     field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
     field(DO2,  "1")
@@ -416,13 +437,13 @@ record(seq, "$(P)$(R=):anascan") {
     field(LNK5, "$(P)$(R=):mass:final:rbk.PROC PP")
     field(DO5,  "1")
     field(DLY5, "1")
-    field(LNK7, "$(P)$(R=):anascan:wf.PROC PP")
+    field(LNK6, "$(P)$(R=):anascan:wf.PROC PP")
     field(DO6,  "1")
-    field(DLY6, "5")
+    field(DLY6, "2")
 }
 record(seq, "$(P)$(R=):histscan") {
-    field(LNK1, "$(P)$(R=):status.SCAN PP")
-    field(DO1,  "0")
+    field(LNK1, "$(P)$(R=):measure PP")
+    field(DO1,  "1")
     field(DLY1, "0")
     field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
     field(DO2,  "1")
@@ -438,7 +459,7 @@ record(seq, "$(P)$(R=):histscan") {
     field(DLY5, "1")
     field(LNK6, "$(P)$(R=):histscan:wf.PROC PP")
     field(DO6,  "1")
-    field(DLY6, "5")
+    field(DLY6, "2")
 }
 
 ##################################################
@@ -451,8 +472,8 @@ record(longin, "$(P)$(R=):mass") {
     field(EGU, "amu")
 }
 record(seq, "$(P)$(R=):mass:trigger") {
-    field(LNK1, "$(P)$(R=):status.SCAN PP")
-    field(DO1,  "0")
+    field(LNK1, "$(P)$(R=):measure.PROC PP")
+    field(DO1,  "1")
     field(DLY1, "0")
     field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
     field(DO2,  "1")
@@ -460,7 +481,7 @@ record(seq, "$(P)$(R=):mass:trigger") {
     field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
     field(DO3,  "1")
     field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):mass:measure.PROC PP")
+    field(LNK4, "$(P)$(R=):mass:measure PP")
     field(DO4,  "0")
     field(DLY4, "2")
 }
@@ -480,7 +501,7 @@ record(calcout, "$(P)$(R=):mass:measure:torr") {
     field(DESC, "Single mass measurement")
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
-    field(OCAL, "6")
-    field(OUT,  "$(P)$(R=):status.SCAN PP")
+    field(OCAL, "1")
+    field(OUT,  "$(P)$(R=):idle PP")
 }
 

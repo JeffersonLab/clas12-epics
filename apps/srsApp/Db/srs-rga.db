@@ -74,6 +74,8 @@ record(mbbi, "$(P)$(R=):state") {
     field(ONST, "Idle")
     field(TWVL, 2)
     field(TWST, "Measuring")
+    field(THVL, 3)
+    field(THST, "Calibrating")
     field(VAL,0)
 }
 record(seq, "$(P)$(R=):idle") {
@@ -194,8 +196,11 @@ record(seq, "$(P)$(R=):init2") {
     field(DO5,  "1")
     field(LNK6, "$(P)$(R=):histscan:amu:wf PP")
     field(DO6,  "1")
-    field(LNK7, "$(P)$(R=):idle PP")
+    field(LNK7, "$(P)$(R=):total:pressure.PROC PP")
     field(DO7,  "1")
+    field(DLY7, "1")
+    field(LNK8, "$(P)$(R=):idle PP")
+    field(DO8,  "1")
 }
 
 ##################################################
@@ -205,10 +210,26 @@ record(seq, "$(P)$(R=):init2") {
 record(bo, "$(P)$(R=):calibrate") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(CA) $(PORT)")
+    field(FLNK, "$(P)$(R=):calibrate:post.PROC PP")
 }
 record(bo, "$(P)$(R=):calibrate:iv") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(CL) $(PORT)")
+    field(FLNK, "$(P)$(R=):calibrate:post.PROC PP")
+}
+record(seq, "$(P)$(R=):calibrate:post") {
+    field(LNK1, "$(P)$(R=):state PP")
+    field(DO1,  "3")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):tps:factor.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "20")
+    field(LNK3, "$(P)$(R=):pps:factor.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "1")
+    field(LNK4, "$(P)$(R=):state PP")
+    field(DO4,  "1")
+    field(DLY4, "0")
 }
 record(bo, "$(P)$(R=):clear") {
     field(DTYP, "stream")
@@ -224,6 +245,11 @@ record(bo, "$(P)$(R=):standby") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(IN2) $(PORT)")
     field(FLNK, "$(P)$(R=):status PP")
+}
+record(bo, "$(P)$(R=):abort") {
+    field(DTYP, "stream")
+    field(OUT, "@srs-rga.proto command(SC0) $(PORT)")
+    field(FLNK, "$(P)$(R=):idle.PROC PP")
 }
 
 ##################################################
@@ -268,34 +294,64 @@ record(ao, "$(P)$(R=):electron:i") {
 record(ai, "$(P)$(R=):ion:e:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getFloat(IE) $(PORT)")
-    field(EGU, "mA")
+    field(EGU, "eV")
 }
 record(ao, "$(P)$(R=):ion:e") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putFloat(IE) $(PORT)")
-    field(EGU, "mA")
+    field(EGU, "eV")
     field(FLNK, "$(P)$(R=):ion:e:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):plate:v:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getFloat(VF) $(PORT)")
-    field(EGU, "mA")
+    field(EGU, "V")
 }
 record(ao, "$(P)$(R=):plate:v") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putFloat(VF) $(PORT)")
-    field(EGU, "mA")
+    field(EGU, "V")
     field(FLNK, "$(P)$(R=):plate:v:rbk.PROC PP")
 }
-record(ai, "$(P)$(R=):noise:floor:rbk") {
+record(mbbi, "$(P)$(R=):noise:floor:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(NF) $(PORT)")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(SXVL, "6")
+    field(SVVL, "7")
+    field(ZRST, "0")
+    field(ONST, "1")
+    field(TWST, "2")
+    field(THST, "3")
+    field(FRST, "4")
+    field(FVST, "5")
+    field(SXST, "6")
+    field(SVST, "7")
 }
-record(ao, "$(P)$(R=):noise:floor") {
+record(mbbo, "$(P)$(R=):noise:floor") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putInt(NF) $(PORT)")
-    field(DRVL, "0")
-    field(DRVH, "7")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(SXVL, "6")
+    field(SVVL, "7")
+    field(ZRST, "0")
+    field(ONST, "1")
+    field(TWST, "2")
+    field(THST, "3")
+    field(FRST, "4")
+    field(FVST, "5")
+    field(SXST, "6")
+    field(SVST, "7")
     field(FLNK, "$(P)$(R=):noise:floor:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):pps:factor") {
@@ -311,6 +367,20 @@ record(ai, "$(P)$(R=):tps:factor") {
     field(EGU, "mA/Torr")
     field(PREC, "5")
     field(DESC, "Total presseure sensitivity factor")
+}
+record(longin, "$(P)$(R=):total:pressure") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto pressure() $(PORT)")
+    field(EGU, "E-16 A")
+    field(FLNK, "$(P)$(R=):total:pressure:torr PP")
+}
+record(calc, "$(P)$(R=):total:pressure:torr") {
+    field(INPA, "$(P)$(R=):total:pressure")
+    field(INPB, "$(P)$(R=):tps:factor")
+    field(CALC, "A*1E-16 / (B*1E-3)")
+    field(EGU, "Torr")
+    field(PREC, "5")
+    field(DESC, "Total Pressure")
 }
 
 ##################################################
@@ -372,48 +442,80 @@ record(waveform, "$(P)$(R=):anascan:wf") {
     field(INP, "@srs-rga.proto scan(SC) $(PORT)")
     field(NELM, "$(NANA)")
     field(FTVL, "LONG")
-    field(FLNK, "$(P)$(R=):anascan:wf:torr PP")
+    field(FLNK, "$(P)$(R=):anascan:post.PROC PP")
 }
+record(seq, "$(P)$(R=):anascan:post") {
+    field(LNK1, "$(P)$(R=):total:pressure.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):anascan:wf:torr.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "2")
+}
+record(acalcout, "$(P)$(R=):anascan:wf:torr") {
+    field(NELM, "$(NANA)")
+    field(INAA, "$(P)$(R=):anascan:wf")
+    field(INPA, "$(P)$(R=):pps:factor")
+    field(CALC, "AA*1E-16 / (A*1E-3)")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "1")
+    field(OUT,  "$(P)$(R=):idle PP")
+    field(FLNK, "$(P)$(R=):anascan:wf:pct.PROC PP")
+}
+record(acalcout, "$(P)$(R=):anascan:wf:pct") {
+    field(NELM, "$(NANA)")
+    field(INAA, "$(P)$(R=):anascan:wf")
+    field(INPA, "$(P)$(R=):pps:factor")
+    field(INPB, "$(P)$(R=):total:pressure:torr")
+    field(CALC, "(AA*1E-16 / (A*1E-3)) / B * 100")
+    field(FLNK, "$(P)$(R=):anascan:amu:wf.PROC PP")
+}
+record(acalcout, "$(P)$(R=):anascan:amu:wf") {
+    field(NELM, "$(NANA)")
+    field(INPA, "$(P)$(R=):mass:initial:rbk")
+    field(INPB, "$(P)$(R=):mass:final:rbk")
+    field(CALC, "IX / ($(NANA)-1) * (B-A) + A")
+}
+
 record(waveform, "$(P)$(R=):histscan:wf") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto scan(HS) $(PORT)")
     field(NELM, "$(NHIST)")
     field(FTVL, "LONG")
-    field(FLNK, "$(P)$(R=):histscan:wf:torr PP")
+    field(FLNK, "$(P)$(R=):histscan:post.PROC PP")
 }
-record(acalcout, "$(P)$(R=):anascan:wf:torr") {
-    field(NELM, "$(NANA)")
-    field(INAA, "$(P)$(R=):anascan:wf")
-    field(INPA, "$(P)$(R=):tps:factor")
-    field(CALC, "AA*1E-16 / (A*1E-3)")
-    field(OOPT, "Every Time")
-    field(DOPT, "Use OCAL")
-    field(OCAL, "1")
-    field(OUT,  "$(P)$(R=):idle PP")
-    field(FLNK, "$(P)$(R=):anascan:amu:wf PP")
+record(seq, "$(P)$(R=):histscan:post") {
+    field(LNK1, "$(P)$(R=):total:pressure.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):histscan:wf:torr.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "2")
 }
 record(acalcout, "$(P)$(R=):histscan:wf:torr") {
     field(NELM, "$(NANA)")
-    field(INAA, "$(P)$(R=):histscan:wf")
-    field(INPA, "$(P)$(R=):tps:factor")
+    field(INAA, "$(P)$(R=):histscan:wf.AVAL")
+    field(INPA, "$(P)$(R=):pps:factor")
     field(CALC, "AA*1E-16 / (A*1E-3)")
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
     field(OCAL, "1")
     field(OUT,  "$(P)$(R=):idle PP")
+    field(FLNK, "$(P)$(R=):histscan:wf:pct.PROC PP")
+}
+record(acalcout, "$(P)$(R=):histscan:wf:pct") {
+    field(NELM, "$(NANA)")
+    field(INAA, "$(P)$(R=):histscan:wf")
+    field(INPA, "$(P)$(R=):pps:factor")
+    field(INPB, "$(P)$(R=):total:pressure:torr")
+    field(CALC, "(AA*1E-16 / (A*1E-3)) / B * 100")
     field(FLNK, "$(P)$(R=):histscan:amu:wf PP")
 }
-record(acalcout, "$(P)$(R):anascan:amu:wf") {
-    field(NELM, "$(NANA)")
-    field(INPA, "$(P)$(R):mass:initial:rbk")
-    field(INPB, "$(P)$(R):mass:final:rbk")
-    field(CALC, "IX / ($(NANA)-1) * (B-A) + A")
-
-}
-record(acalcout, "$(P)$(R):histscan:amu:wf") {
+record(acalcout, "$(P)$(R=):histscan:amu:wf") {
     field(NELM, "$(NHIST)")
-    field(INPA, "$(P)$(R):mass:initial:rbk")
-    field(INPB, "$(P)$(R):mass:final:rbk")
+    field(INPA, "$(P)$(R=):mass:initial:rbk")
+    field(INPB, "$(P)$(R=):mass:final:rbk")
     field(CALC, "IX / ($(NHIST)-1) * (B-A) + A")
 }
 
@@ -437,9 +539,12 @@ record(seq, "$(P)$(R=):anascan") {
     field(LNK5, "$(P)$(R=):mass:final:rbk.PROC PP")
     field(DO5,  "1")
     field(DLY5, "1")
-    field(LNK6, "$(P)$(R=):anascan:wf.PROC PP")
+    field(LNK6, "$(P)$(R=):anascan:wf.RARM PP")
     field(DO6,  "1")
-    field(DLY6, "2")
+    field(DLY6, "0")
+    field(LNK7, "$(P)$(R=):anascan:wf.PROC PP")
+    field(DO7,  "1")
+    field(DLY7, "2")
 }
 record(seq, "$(P)$(R=):histscan") {
     field(LNK1, "$(P)$(R=):measure PP")
@@ -457,9 +562,12 @@ record(seq, "$(P)$(R=):histscan") {
     field(LNK5, "$(P)$(R=):mass:final:rbk.PROC PP")
     field(DO5,  "1")
     field(DLY5, "1")
-    field(LNK6, "$(P)$(R=):histscan:wf.PROC PP")
+    field(LNK6, "$(P)$(R=):histscan:wf.RARM PP")
     field(DO6,  "1")
-    field(DLY6, "2")
+    field(DLY6, "0")
+    field(LNK7, "$(P)$(R=):histscan:wf.PROC PP")
+    field(DO7,  "1")
+    field(DLY7, "2")
 }
 
 ##################################################
@@ -488,20 +596,50 @@ record(seq, "$(P)$(R=):mass:trigger") {
 record(longin, "$(P)$(R=):mass:measure") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto mass($(P)$(R=):mass) $(PORT)")
-    field(EGU, "10^-16 A")
+    field(EGU, "E-16 A")
     field(DESC, "Single mass measurement")
-    field(FLNK, "$(P)$(R=):mass:measure:torr PP")
+    field(FLNK, "$(P)$(R=):mass:measure:post.PROC PP")
 }
-record(calcout, "$(P)$(R=):mass:measure:torr") {
+record(seq, "$(P)$(R=):mass:measure:post") {
+    field(LNK1, "$(P)$(R=):total:pressure.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):mass:measure:torr.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "5")
+}
+record(calc, "$(P)$(R=):mass:measure:torr") {
     field(INPA, "$(P)$(R=):mass:measure")
-    field(INPB, "$(P)$(R=):tps:factor")
+    field(INPB, "$(P)$(R=):pps:factor")
     field(CALC, "A*1E-16 / (B*1E-3)")
     field(EGU, "torr")
     field(PREC, "5")
+    field(DESC, "Single mass measurement")
+    field(FLNK, "$(P)$(R=):mass:measure:pct PP")
+}
+record(calcout, "$(P)$(R=):mass:measure:pct") {
+    field(INPA, "$(P)$(R=):mass:measure:torr")
+    field(INPB, "$(P)$(R=):total:pressure:torr")
+    field(CALC, "A / B * 100")
+    field(EGU, "%")
+    field(PREC, "3")
     field(DESC, "Single mass measurement")
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
     field(OCAL, "1")
     field(OUT,  "$(P)$(R=):idle PP")
+}
+
+##################################################
+# GUI stuff:
+##################################################
+record(mbbi, "$(P)$(R=):graph:units") {
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(ZRST, "Amps")
+    field(ONST, "Torr")
+    field(TWST, "%")
+    field(VAL,  "2")
 }
 

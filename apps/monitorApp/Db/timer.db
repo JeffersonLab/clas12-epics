@@ -1,0 +1,23 @@
+
+record(longin, "$(P)$(R=):timer") {
+    field(VAL, "0")
+    field(EGU, "seconds")
+    field(PINI, "1")
+}
+record(calcout, "$(P)$(R=):timer:calc") {
+    field(INPA, "$(P)$(R=):timer")
+    field(CALC, "A>0 ? 1 : 0")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "A-1")
+    field(OUT,  "$(P)$(R=):timer PP")
+}
+record(seq, "$(P)$(R=):timer:start") {
+    field(LNK1, "$(P)$(R=):timer:calc.SCAN PP")
+    field(DO1 , "6")
+}
+record(seq, "$(P)$(R=):timer:stop") {
+    field(LNK1, "$(P)$(R=):timer:calc.SCAN PP")
+    field(DO1, "0")
+}
+

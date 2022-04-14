@@ -6,13 +6,9 @@
 # This device seems to terminate the connection if it's idle
 # for one minute, and the docs claim it will terminate any
 # ongoing measurement if it's sent any command.  So, we can't
-# blindly scan readbacks, and instead setters are FLNK'd to
-# their corresponding readbacks.  Meanwhile something should
-# be done to keep the connection alive when measurements aren't
-# ongoing, so the main status readback PV is kept scanning and
-# there's some seq records to disable/enable that single
-# scanning record during measurements.  Probably there's a
-# better way.
+# just let all readbacks poll.  Instead we have a single
+# sequence record to poll all readbacks, and its SCAN field
+# is set to Passive during measurements.
 #
 
 #################################################
@@ -30,15 +26,14 @@ record(seq, "$(P)$(R=):authorize") {
     field(LNK2, "$(P)$(R=):admin.PROC PP")
     field(DO2,  "1")
     field(DLY2, "1")
-    field(LNK3, "$(P)$(R=):init.PROC PP")
+    field(LNK3, "$(P)$(R=):state:idle.PROC PP")
     field(DO3,  "1")
     field(DLY3, "1")
     field(PINI, "1")
 }
 
-# This tries to reconnect if the connection is terminated,
-# where 3 authentication entries seem necessary in this case,
-# but probably not:
+# This tries to reconnect if the connection is terminated, three
+# authentication entries *usually* seem necessary in this case:
 record(seq, "$(P)$(R=):reconnect") {
     field(LNK1, "$(P)(R=).CNCT PP")
     field(DO1,  "0")
@@ -52,7 +47,7 @@ record(seq, "$(P)$(R=):reconnect") {
     field(LNK4, "$(P)$(R=):admin.PROC PP")
     field(DO4,  "1")
     field(DLY4, "1")
-    field(LNK5, "$(P)$(R=):init PP")
+    field(LNK5, "$(P)$(R=):state:idle.PROC PP")
     field(DO5,  "1")
     field(DLY5, "5")
 }
@@ -64,7 +59,7 @@ record(stringout, "$(P)$(R=):admin") {
 }
 
 #################################################
-# Status:
+# States:
 #################################################
 
 record(mbbi, "$(P)$(R=):state") {
@@ -78,158 +73,166 @@ record(mbbi, "$(P)$(R=):state") {
     field(THST, "Calibrating")
     field(VAL,0)
 }
-record(seq, "$(P)$(R=):idle") {
-    field(LNK1, "$(P)$(R=):state PP")
+record(seq, "$(P)$(R=):state:idle") {
+    field(LNK1, "$(P)$(R=):filament:off PP")
     field(DO1,  "1")
-    field(LNK2, "$(P)$(R=):status.SCAN PP")
-    field(DO2,  "6")
+    field(DLY1, "1")
+    field(LNK2, "$(P)$(R=):scan.SCAN PP")
+    field(DO2,  "4")
+    field(DLY2, "3")
+    field(LNK3, "$(P)$(R=):state PP")
+    field(DO3,  "1")
+    field(DLY3, "0")
+    field(LNK4, "$(P)$(R=):clock:stop PP")
+    field(DO4,  "1")
 }
-record(seq, "$(P)$(R=):measure") {
+record(seq, "$(P)$(R=):state:measure") {
     field(LNK1, "$(P)$(R=):state PP")
     field(DO1,  "2")
-    field(LNK2, "$(P)$(R=):status.SCAN PP")
+    field(LNK2, "$(P)$(R=):scan.SCAN PP")
     field(DO2,  "0")
+}
+record(seq, "$(P)$(R=):state:calibrate") {
+    field(LNK1, "$(P)$(R=):state PP")
+    field(DO1,  "3")
+    field(LNK2, "$(P)$(R=):scan.SCAN PP")
+    field(DO2,  "0")
+}
+
+#################################################
+# Status:
+#################################################
+
+record(mbbiDirect, "$(P)$(R=):status") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getInt(ER) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:comms") {
+    field(INP, "@srs-rga.proto getInt(EC) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:filament") {
+    field(INP, "@srs-rga.proto getInt(EF) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:elecmultiplier") {
+    field(INP, "@srs-rga.proto getInt(EM) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:quadmassfilter") {
+    field(INP, "@srs-rga.proto getInt(EQ) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:electrometer") {
+    field(INP, "@srs-rga.proto getInt(ED) $(PORT)")
+}
+record(longin, "$(P)$(R=):stat:24Vexternal") {
+    field(INP, "@srs-rga.proto getInt(EP) $(PORT)")
+}
+record(seq, "$(P)$(R=):stat:clear") {
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
 }
 record(stringin, "$(P)$(R=):id") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getString(ID) $(PORT)")
 }
-record(mbbiDirect, "$(P)$(R=):status") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto getInt(ER) $(PORT)")
-    field(FLNK, "$(P)$(R=):stat:comms PP")
-}
-record(bi, "$(P)$(R=):stat:comms") {
-    field(INP, "$(P)$(R=):status.B0")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):stat:filament PP")
-}
-record(bi, "$(P)$(R=):stat:filament") {
-    field(INP, "$(P)$(R=):status.B1")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):stat:elecmultiplier PP")
-}
-record(bi, "$(P)$(R=):stat:elecmultiplier") {
-    field(INP, "$(P)$(R=):status.B3")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):stat:quadmassfilter PP")
-}
-record(bi, "$(P)$(R=):stat:quadmassfilter") {
-    field(INP, "$(P)$(R=):status.B4")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):stat:electrometer PP")
-}
-record(bi, "$(P)$(R=):stat:electrometer") {
-    field(INP, "$(P)$(R=):status.B5")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):stat:24Vexternal PP")
-}
-record(bi, "$(P)$(R=):stat:24Vexternal") {
-    field(INP, "$(P)$(R=):status.B6")
-    field(ZNAM, "Ok")
-    field(ONAM, "Error")
-    field(OSV,  "MAJOR")
-    field(FLNK, "$(P)$(R=):electron:i:rbk PP")
-}
 
 ##################################################
-# Readback sequences:
+# Get readbacks of everything:
 ##################################################
 
-# Get all readbacks in one shot:
-record(seq, "$(P)$(R=):init") {
+record(seq, "$(P)$(R=):scan") {
     field(LNK1, "$(P)$(R=):electron:e:rbk.PROC PP")
     field(DO1,  "1")
     field(DLY1, "0")
     field(LNK2, "$(P)$(R=):electron:i:rbk.PROC PP")
     field(DO2,  "1")
-    field(DLY2, "1")
+    field(DLY2, "0.2")
     field(LNK3, "$(P)$(R=):ion:e:rbk.PROC PP")
     field(DO3,  "1")
-    field(DLY3, "1")
+    field(DLY3, "0.2")
     field(LNK4, "$(P)$(R=):plate:v:rbk.PROC PP")
     field(DO4,  "1")
-    field(DLY4, "1")
+    field(DLY4, "0.2")
     field(LNK5, "$(P)$(R=):mass:initial:rbk.PROC PP")
     field(DO5,  "1")
-    field(DLY5, "1")
+    field(DLY5, "0.2")
     field(LNK6, "$(P)$(R=):mass:final:rbk.PROC PP")
     field(DO6,  "1")
-    field(DLY6, "1")
+    field(DLY6, "0.2")
     field(LNK7, "$(P)$(R=):pps:factor.PROC PP")
     field(DO7,  "1")
-    field(DLY7, "1")
+    field(DLY7, "0.2")
     field(LNK8, "$(P)$(R=):tps:factor.PROC PP")
     field(DO8,  "1")
-    field(DLY8, "1")
+    field(DLY8, "0.2")
     field(LNK9, "$(P)$(R=):noise:floor:rbk.PROC PP")
     field(DO9,  "1")
-    field(DLY9, "1")
-    field(LNKA, "$(P)$(R=):init2.PROC PP")
+    field(DLY9, "0.2")
+    field(LNKA, "$(P)$(R=):scan2.PROC PP")
     field(DOA,  "1")
-    field(DLYA, "1")
+    field(DLYA, "0.2")
 }
-record(seq, "$(P)$(R=):init2") {
+record(seq, "$(P)$(R=):scan2") {
     field(LNK1, "$(P)$(R=):anascan:np:rbk.PROC PP")
     field(DO1,  "1")
     field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):histscan:np:rbk.PROC PP")
+# not using histogram scan, so disable this:
+#    field(LNK2, "$(P)$(R=):histscan:np:rbk.PROC PP")
+#    field(DO2,  "1")
+#    field(DLY2, "0.2")
+    field(LNK2, "$(P)$(R=):anascan:steps:per:amu:rbk.PROC PP")
     field(DO2,  "1")
-    field(DLY2, "1")
-    field(LNK3, "$(P)$(R=):anascan:steps:per:amu:rbk.PROC PP")
+    field(DLY2, "0.2")
+    field(LNK3, "$(P)$(R=):id.PROC PP")
     field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):id.PROC PP")
+    field(DLY3, "0.2")
+    field(LNK4, "$(P)$(R=):total:pressure.PROC PP")
     field(DO4,  "1")
-    field(DLY4, "1")
-    field(LNK5, "$(P)$(R=):anascan:amu:wf PP")
+    field(DLY4, "0.2")
+    field(LNK5, "$(P)$(R=):status.PROC PP")
     field(DO5,  "1")
-    field(LNK6, "$(P)$(R=):histscan:amu:wf PP")
-    field(DO6,  "1")
-    field(LNK7, "$(P)$(R=):total:pressure.PROC PP")
-    field(DO7,  "1")
-    field(DLY7, "1")
-    field(LNK8, "$(P)$(R=):idle PP")
-    field(DO8,  "1")
+    field(DLY5, "0.2")
 }
-
 ##################################################
 # Calibrate/Reset:
 ##################################################
 
-record(bo, "$(P)$(R=):calibrate") {
+record(seq, "$(P)$(R=):calibrate:seq") {
+    field(LNK1, "$(P)$(R=):state:calibrate.PROC PP")
+    field(DO1,  "1")
+    field(LNK2, "$(P)$(R=):calibrate.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "2")
+}
+record(seq, "$(P)$(R=):calibrate:iv:seq") {
+    field(LNK1, "$(P)$(R=):state:calibrate.PROC PP")
+    field(DO1,  "1")
+    field(LNK2, "$(P)$(R=):calibrate:iv.PROC PP")
+    field(DO2,  "1")
+}
+record(longin, "$(P)$(R=):calibrate") {
     field(DTYP, "stream")
-    field(OUT, "@srs-rga.proto command(CA) $(PORT)")
+    field(INP, "@srs-rga.proto getInt(CA) $(PORT)")
     field(FLNK, "$(P)$(R=):calibrate:post.PROC PP")
 }
-record(bo, "$(P)$(R=):calibrate:iv") {
+record(longin, "$(P)$(R=):calibrate:iv") {
     field(DTYP, "stream")
-    field(OUT, "@srs-rga.proto command(CL) $(PORT)")
+    field(INP, "@srs-rga.proto getInt(CL) $(PORT)")
     field(FLNK, "$(P)$(R=):calibrate:post.PROC PP")
 }
 record(seq, "$(P)$(R=):calibrate:post") {
-    field(LNK1, "$(P)$(R=):state PP")
-    field(DO1,  "3")
+    field(LNK1, "$(P)$(R=):tps:factor.PROC PP")
+    field(DO1,  "1")
     field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):tps:factor.PROC PP")
+    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
     field(DO2,  "1")
-    field(DLY2, "20")
-    field(LNK3, "$(P)$(R=):pps:factor.PROC PP")
+    field(DLY2, "1")
+    field(LNK3, "$(P)$(R=):state:idle.PROC PP")
     field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):state PP")
-    field(DO4,  "1")
-    field(DLY4, "0")
+    field(DLY3, "0")
 }
 record(bo, "$(P)$(R=):clear") {
     field(DTYP, "stream")
@@ -249,7 +252,7 @@ record(bo, "$(P)$(R=):standby") {
 record(bo, "$(P)$(R=):abort") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(SC0) $(PORT)")
-    field(FLNK, "$(P)$(R=):idle.PROC PP")
+    field(FLNK, "$(P)$(R=):state:idle.PROC PP")
 }
 
 ##################################################
@@ -275,7 +278,6 @@ record(ao, "$(P)$(R=):electron:e") {
     field(EGU, "eV")
     field(DRVL, "25")
     field(DRVH, "105")
-    field(FLNK, "$(P)$(R=):electron:e:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):electron:i:rbk") {
     field(DTYP, "stream")
@@ -289,7 +291,6 @@ record(ao, "$(P)$(R=):electron:i") {
     field(DRVH, "3.50")
     field(PREC, "2")
     field(EGU, "mA")
-    field(FLNK, "$(P)$(R=):electron:i:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):ion:e:rbk") {
     field(DTYP, "stream")
@@ -300,7 +301,6 @@ record(ao, "$(P)$(R=):ion:e") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putFloat(IE) $(PORT)")
     field(EGU, "eV")
-    field(FLNK, "$(P)$(R=):ion:e:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):plate:v:rbk") {
     field(DTYP, "stream")
@@ -311,7 +311,6 @@ record(ao, "$(P)$(R=):plate:v") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putFloat(VF) $(PORT)")
     field(EGU, "V")
-    field(FLNK, "$(P)$(R=):plate:v:rbk.PROC PP")
 }
 record(mbbi, "$(P)$(R=):noise:floor:rbk") {
     field(DTYP, "stream")
@@ -352,7 +351,6 @@ record(mbbo, "$(P)$(R=):noise:floor") {
     field(FVST, "5")
     field(SXST, "6")
     field(SVST, "7")
-    field(FLNK, "$(P)$(R=):noise:floor:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):pps:factor") {
     field(DTYP, "stream")
@@ -396,7 +394,6 @@ record(ao, "$(P)$(R=):mass:initial") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putFloat(MI) $(PORT)")
     field(EGU, "amu")
-    field(FLNK, "$(P)$(R=):mass:initial:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):mass:final:rbk") {
     field(DTYP, "stream")
@@ -408,14 +405,14 @@ record(ao, "$(P)$(R=):mass:final") {
     field(OUT, "@srs-rga.proto putFloat(MF) $(PORT)")
     field(EGU, "amu")
     field(DRVH, "$(MODEL)")
-    field(FLNK, "$(P)$(R=):mass:final:rbk.PROC PP")
 }
-record(ai, "$(P)$(R=):anascan:np:rbk") {
+record(longin, "$(P)$(R=):anascan:np:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(AP) $(PORT)")
     field(DESC, "Number of analog scan points")
+    field(FLNK, "$(P)$(R=):anascan:duration PP")
 }
-record(ai, "$(P)$(R=):histscan:np:rbk") {
+record(longin, "$(P)$(R=):histscan:np:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(HP) $(PORT)")
     field(DESC, "Number of histogram scan points")
@@ -424,13 +421,27 @@ record(ao, "$(P)$(R=):anascan:steps:per:amu") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putInt(SA) $(PORT)")
     field(EGU, "amu^-1")
-    field(FLNK, "$(P)$(R=):anascap:steps:per:amu:rbk.PROC PP")
 }
 record(ai, "$(P)$(R=):anascan:steps:per:amu:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(SA) $(PORT)")
     field(EGU, "amu^-1")
-    field(FLNK, "$(P)$(R=):anascan:np:rbk.PROC PP")
+}
+record(calc, "$(P)$(R=):anascan:duration") {
+    field(INPA, "$(P)$(R=):anascan:np:rbk")
+    field(INPB, "$(P)$(R=):noise:floor:rbk")
+    field(CALC, "A/991*(B=0?240:(B=1?140:(B=2?75:60)))")
+    field(EGU,  "s")
+}
+record(seq, "$(P)$(R=):anascan:start:clocks") {
+    field(LNK1, "$(P)$(R=):anascan:duration.PROC PP")
+    field(DO1,  "1")
+    field(LNK2, "$(P)$(R=):timer:go PP")
+    field(DOL2, "$(P)$(R=):anascan:duration")
+    field(DLY2, "2")
+    field(LNK3, "$(P)$(R=):clock:go PP")
+    field(DO3,  "1")
+    field(DLY3, "0")
 }
 
 ##################################################
@@ -460,7 +471,7 @@ record(acalcout, "$(P)$(R=):anascan:wf:torr") {
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
     field(OCAL, "1")
-    field(OUT,  "$(P)$(R=):idle PP")
+    field(OUT,  "$(P)$(R=):state:idle PP")
     field(FLNK, "$(P)$(R=):anascan:wf:pct.PROC PP")
 }
 record(acalcout, "$(P)$(R=):anascan:wf:pct") {
@@ -501,7 +512,7 @@ record(acalcout, "$(P)$(R=):histscan:wf:torr") {
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
     field(OCAL, "1")
-    field(OUT,  "$(P)$(R=):idle PP")
+    field(OUT,  "$(P)$(R=):state:idle PP")
     field(FLNK, "$(P)$(R=):histscan:wf:pct.PROC PP")
 }
 record(acalcout, "$(P)$(R=):histscan:wf:pct") {
@@ -524,50 +535,26 @@ record(acalcout, "$(P)$(R=):histscan:amu:wf") {
 ##################################################
 
 record(seq, "$(P)$(R=):anascan") {
-    field(LNK1, "$(P)$(R=):measure PP")
+    field(LNK1, "$(P)$(R=):state:measure PP")
     field(DO1,  "1")
     field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
+    field(LNK2, "$(P)$(R=):anascan:start:clocks.PROC PP")
     field(DO2,  "1")
-    field(DLY2, "0")
-    field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
+    field(DLY2, "10")
+    field(LNK3, "$(P)$(R=):anascan:wf.PROC PP")
     field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):mass:initial:rbk.PROC PP")
-    field(DO4,  "1")
-    field(DLY4, "0")
-    field(LNK5, "$(P)$(R=):mass:final:rbk.PROC PP")
-    field(DO5,  "1")
-    field(DLY5, "1")
-    field(LNK6, "$(P)$(R=):anascan:wf.RARM PP")
-    field(DO6,  "1")
-    field(DLY6, "0")
-    field(LNK7, "$(P)$(R=):anascan:wf.PROC PP")
-    field(DO7,  "1")
-    field(DLY7, "2")
+    field(DLY3, "0")
 }
 record(seq, "$(P)$(R=):histscan") {
-    field(LNK1, "$(P)$(R=):measure PP")
+    field(LNK1, "$(P)$(R=):state:measure PP")
     field(DO1,  "1")
     field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
+    field(LNK2, "$(P)$(R=):anascan:start:clocks.PROC PP")
     field(DO2,  "1")
-    field(DLY2, "0")
-    field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
+    field(DLY2, "5")
+    field(LNK3, "$(P)$(R=):histscan:wf.PROC PP")
     field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):mass:initial:rbk.PROC PP")
-    field(DO4,  "1")
-    field(DLY4, "0")
-    field(LNK5, "$(P)$(R=):mass:final:rbk.PROC PP")
-    field(DO5,  "1")
-    field(DLY5, "1")
-    field(LNK6, "$(P)$(R=):histscan:wf.RARM PP")
-    field(DO6,  "1")
-    field(DLY6, "0")
-    field(LNK7, "$(P)$(R=):histscan:wf.PROC PP")
-    field(DO7,  "1")
-    field(DLY7, "2")
+    field(DLY3, "0")
 }
 
 ##################################################
@@ -580,7 +567,7 @@ record(longin, "$(P)$(R=):mass") {
     field(EGU, "amu")
 }
 record(seq, "$(P)$(R=):mass:trigger") {
-    field(LNK1, "$(P)$(R=):measure.PROC PP")
+    field(LNK1, "$(P)$(R=):state:measure.PROC PP")
     field(DO1,  "1")
     field(DLY1, "0")
     field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
@@ -627,19 +614,19 @@ record(calcout, "$(P)$(R=):mass:measure:pct") {
     field(OOPT, "Every Time")
     field(DOPT, "Use OCAL")
     field(OCAL, "1")
-    field(OUT,  "$(P)$(R=):idle PP")
+    field(OUT,  "$(P)$(R=):state:idle PP")
 }
 
 ##################################################
 # GUI stuff:
 ##################################################
-record(mbbi, "$(P)$(R=):graph:units") {
-    field(ZRVL, "0")
-    field(ONVL, "1")
-    field(TWVL, "2")
-    field(ZRST, "Amps")
-    field(ONST, "Torr")
-    field(TWST, "%")
-    field(VAL,  "2")
-}
+#record(mbbi, "$(P)$(R=):graph:units") {
+#    field(ZRVL, "0")
+#    field(ONVL, "1")
+#    field(TWVL, "2")
+#    field(ZRST, "Amps")
+#    field(ONST, "Torr")
+#    field(TWST, "%")
+#    field(VAL,  "2")
+#}
 

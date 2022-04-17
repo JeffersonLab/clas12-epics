@@ -16,8 +16,8 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 
 drvAsynIPPortConfigure("L0","htcc-rga:818",0,0,0)
 
-asynSetTraceMask("L0",-1,0x9)
-asynSetTraceIOMask("L0",-1,0x4)
+#asynSetTraceMask("L0",-1,0x9)
+#asynSetTraceIOMask("L0",-1,0x4)
 
 asynOctetSetOutputEos("L0",-1,"\r\n")
 asynOctetSetInputEos("L0",-1,"\n\r")

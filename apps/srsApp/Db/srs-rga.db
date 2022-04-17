@@ -71,7 +71,9 @@ record(mbbi, "$(P)$(R=):state") {
     field(TWST, "Measuring")
     field(THVL, 3)
     field(THST, "Calibrating")
-    field(VAL,0)
+    field(FRVL, 4)
+    field(FRST, "Resetting")
+    field(VAL,  0)
 }
 record(seq, "$(P)$(R=):state:idle") {
     field(LNK1, "$(P)$(R=):filament:off PP")
@@ -98,11 +100,21 @@ record(seq, "$(P)$(R=):state:calibrate") {
     field(LNK2, "$(P)$(R=):scan.SCAN PP")
     field(DO2,  "0")
 }
+record(seq, "$(P)$(R=):state:reset") {
+    field(LNK1, "$(P)$(R=):state PP")
+    field(DO1,  "4")
+    field(LNK2, "$(P)$(R=):scan.SCAN PP")
+    field(DO2,  "0")
+}
 
 #################################################
 # Status:
 #################################################
 
+record(stringin, "$(P)$(R=):id") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getString(ID) $(PORT)")
+}
 record(mbbiDirect, "$(P)$(R=):status") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(ER) $(PORT)")
@@ -113,7 +125,7 @@ record(longin, "$(P)$(R=):stat:comms") {
 record(longin, "$(P)$(R=):stat:filament") {
     field(INP, "@srs-rga.proto getInt(EF) $(PORT)")
 }
-record(longin, "$(P)$(R=):stat:elecmultiplier") {
+record(longin, "$(P)$(R=):stat:multiplier") {
     field(INP, "@srs-rga.proto getInt(EM) $(PORT)")
 }
 record(longin, "$(P)$(R=):stat:quadmassfilter") {
@@ -125,79 +137,33 @@ record(longin, "$(P)$(R=):stat:electrometer") {
 record(longin, "$(P)$(R=):stat:24Vexternal") {
     field(INP, "@srs-rga.proto getInt(EP) $(PORT)")
 }
+# Error bits are latching, and clearing them requires
+# querying each one individually:
 record(seq, "$(P)$(R=):stat:clear") {
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-    field(LNK1, "$(P)$(R=):stat:comms.PROC PP")
-}
-record(stringin, "$(P)$(R=):id") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto getString(ID) $(PORT)")
+    field(LNK1, "$(P)$(R=):state:reset.PROC PP")
+    field(LNK2, "$(P)$(R=):stat:comms.PROC PP")
+    field(DLY2, "5")
+    field(LNK3, "$(P)$(R=):stat:filament.PROC PP")
+    field(LNK4, "$(P)$(R=):stat:multiplier.PROC PP")
+    field(LNK5, "$(P)$(R=):stat:quadmassfilter.PROC PP")
+    field(LNK6, "$(P)$(R=):stat:electrometer.PROC PP")
+    field(LNK7, "$(P)$(R=):stat:24Vexternal.PROC PP")
+    field(LNK8, "$(P)$(R=):stat:comms.PROC PP")
+    field(LNK9, "$(P)$(R=):state:idle.PROC PP")
+    field(DLY9, "2")
+    field(DO1, "1")
+    field(DO2, "1")
+    field(DO3, "1")
+    field(DO4, "1")
+    field(DO5, "1")
+    field(DO6, "1")
+    field(DO7, "1")
+    field(DO8, "1")
+    field(DO9, "1")
 }
 
 ##################################################
-# Get readbacks of everything:
-##################################################
-
-record(seq, "$(P)$(R=):scan") {
-    field(LNK1, "$(P)$(R=):electron:e:rbk.PROC PP")
-    field(DO1,  "1")
-    field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):electron:i:rbk.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "0.2")
-    field(LNK3, "$(P)$(R=):ion:e:rbk.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "0.2")
-    field(LNK4, "$(P)$(R=):plate:v:rbk.PROC PP")
-    field(DO4,  "1")
-    field(DLY4, "0.2")
-    field(LNK5, "$(P)$(R=):mass:initial:rbk.PROC PP")
-    field(DO5,  "1")
-    field(DLY5, "0.2")
-    field(LNK6, "$(P)$(R=):mass:final:rbk.PROC PP")
-    field(DO6,  "1")
-    field(DLY6, "0.2")
-    field(LNK7, "$(P)$(R=):pps:factor.PROC PP")
-    field(DO7,  "1")
-    field(DLY7, "0.2")
-    field(LNK8, "$(P)$(R=):tps:factor.PROC PP")
-    field(DO8,  "1")
-    field(DLY8, "0.2")
-    field(LNK9, "$(P)$(R=):noise:floor:rbk.PROC PP")
-    field(DO9,  "1")
-    field(DLY9, "0.2")
-    field(LNKA, "$(P)$(R=):scan2.PROC PP")
-    field(DOA,  "1")
-    field(DLYA, "0.2")
-}
-record(seq, "$(P)$(R=):scan2") {
-    field(LNK1, "$(P)$(R=):anascan:np:rbk.PROC PP")
-    field(DO1,  "1")
-    field(DLY1, "0")
-# not using histogram scan, so disable this:
-#    field(LNK2, "$(P)$(R=):histscan:np:rbk.PROC PP")
-#    field(DO2,  "1")
-#    field(DLY2, "0.2")
-    field(LNK2, "$(P)$(R=):anascan:steps:per:amu:rbk.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "0.2")
-    field(LNK3, "$(P)$(R=):id.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "0.2")
-    field(LNK4, "$(P)$(R=):total:pressure.PROC PP")
-    field(DO4,  "1")
-    field(DLY4, "0.2")
-    field(LNK5, "$(P)$(R=):status.PROC PP")
-    field(DO5,  "1")
-    field(DLY5, "0.2")
-}
-##################################################
-# Calibrate/Reset:
+# Calibrate:
 ##################################################
 
 record(seq, "$(P)$(R=):calibrate:seq") {
@@ -234,6 +200,11 @@ record(seq, "$(P)$(R=):calibrate:post") {
     field(DO3,  "1")
     field(DLY3, "0")
 }
+
+##################################################
+# Reset:
+##################################################
+
 record(bo, "$(P)$(R=):clear") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(IN0) $(PORT)")
@@ -253,6 +224,60 @@ record(bo, "$(P)$(R=):abort") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto command(SC0) $(PORT)")
     field(FLNK, "$(P)$(R=):state:idle.PROC PP")
+}
+
+##################################################
+# Trigger readbacks of everything:
+##################################################
+
+record(seq, "$(P)$(R=):scan") {
+    field(LNK1, "$(P)$(R=):electron:e:rbk.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):electron:i:rbk.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "0.2")
+    field(LNK3, "$(P)$(R=):ion:e:rbk.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "0.2")
+    field(LNK4, "$(P)$(R=):plate:v:rbk.PROC PP")
+    field(DO4,  "1")
+    field(DLY4, "0.2")
+    field(LNK5, "$(P)$(R=):mass:initial:rbk.PROC PP")
+    field(DO5,  "1")
+    field(DLY5, "0.2")
+    field(LNK6, "$(P)$(R=):mass:final:rbk.PROC PP")
+    field(DO6,  "1")
+    field(DLY6, "0.2")
+    field(LNK7, "$(P)$(R=):scan2.PROC PP")
+    field(DO7,  "1")
+    field(DLY7, "0.2")
+}
+record(seq, "$(P)$(R=):scan2") {
+    field(LNK1, "$(P)$(R=):anascan:np:rbk.PROC PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):anascan:steps:per:amu:rbk.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "0.2")
+    field(LNK3, "$(P)$(R=):total:pressure.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "0.2")
+    field(LNK4, "$(P)$(R=):pps:factor.PROC PP")
+    field(DO4,  "1")
+    field(DLY4, "0.2")
+    field(LNK5, "$(P)$(R=):tps:factor.PROC PP")
+    field(DO5,  "1")
+    field(DLY5, "0.2")
+    field(LNK6, "$(P)$(R=):noise:floor:rbk.PROC PP")
+    field(DO6,  "1")
+    field(DLY6, "0.2")
+    field(LNK7, "$(P)$(R=):status.PROC PP")
+    field(DO7,  "1")
+    field(DLY7, "0.2")
+    field(LNK8, "$(P)$(R=):id.PROC PP")
+    field(DO8,  "1")
+    field(DLY8, "0.2")
 }
 
 ##################################################
@@ -312,6 +337,34 @@ record(ao, "$(P)$(R=):plate:v") {
     field(OUT, "@srs-rga.proto putFloat(VF) $(PORT)")
     field(EGU, "V")
 }
+record(ai, "$(P)$(R=):pps:factor") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(SP) $(PORT)")
+    field(EGU, "mA/Torr")
+    field(PREC, "5")
+    field(DESC, "Partial presseure sensitivity factor")
+}
+record(ai, "$(P)$(R=):tps:factor") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto getFloat(ST) $(PORT)")
+    field(EGU, "mA/Torr")
+    field(PREC, "5")
+    field(DESC, "Total presseure sensitivity factor")
+}
+record(longin, "$(P)$(R=):total:pressure") {
+    field(DTYP, "stream")
+    field(INP, "@srs-rga.proto pressure() $(PORT)")
+    field(EGU, "E-16 A")
+    field(FLNK, "$(P)$(R=):total:pressure:torr PP")
+}
+record(calc, "$(P)$(R=):total:pressure:torr") {
+    field(INPA, "$(P)$(R=):total:pressure")
+    field(INPB, "$(P)$(R=):tps:factor")
+    field(CALC, "A*1E-16 / (B*1E-3)")
+    field(EGU, "Torr")
+    field(PREC, "5")
+    field(DESC, "Total Pressure")
+}
 record(mbbi, "$(P)$(R=):noise:floor:rbk") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto getInt(NF) $(PORT)")
@@ -352,34 +405,6 @@ record(mbbo, "$(P)$(R=):noise:floor") {
     field(SXST, "6")
     field(SVST, "7")
 }
-record(ai, "$(P)$(R=):pps:factor") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto getFloat(SP) $(PORT)")
-    field(EGU, "mA/Torr")
-    field(PREC, "5")
-    field(DESC, "Partial presseure sensitivity factor")
-}
-record(ai, "$(P)$(R=):tps:factor") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto getFloat(ST) $(PORT)")
-    field(EGU, "mA/Torr")
-    field(PREC, "5")
-    field(DESC, "Total presseure sensitivity factor")
-}
-record(longin, "$(P)$(R=):total:pressure") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto pressure() $(PORT)")
-    field(EGU, "E-16 A")
-    field(FLNK, "$(P)$(R=):total:pressure:torr PP")
-}
-record(calc, "$(P)$(R=):total:pressure:torr") {
-    field(INPA, "$(P)$(R=):total:pressure")
-    field(INPB, "$(P)$(R=):tps:factor")
-    field(CALC, "A*1E-16 / (B*1E-3)")
-    field(EGU, "Torr")
-    field(PREC, "5")
-    field(DESC, "Total Pressure")
-}
 
 ##################################################
 # Scan Parameters:
@@ -412,11 +437,6 @@ record(longin, "$(P)$(R=):anascan:np:rbk") {
     field(DESC, "Number of analog scan points")
     field(FLNK, "$(P)$(R=):anascan:duration PP")
 }
-record(longin, "$(P)$(R=):histscan:np:rbk") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto getInt(HP) $(PORT)")
-    field(DESC, "Number of histogram scan points")
-}
 record(ao, "$(P)$(R=):anascan:steps:per:amu") {
     field(DTYP, "stream")
     field(OUT, "@srs-rga.proto putInt(SA) $(PORT)")
@@ -430,7 +450,7 @@ record(ai, "$(P)$(R=):anascan:steps:per:amu:rbk") {
 record(calc, "$(P)$(R=):anascan:duration") {
     field(INPA, "$(P)$(R=):anascan:np:rbk")
     field(INPB, "$(P)$(R=):noise:floor:rbk")
-    field(CALC, "A/991*(B=0?240:(B=1?140:(B=2?75:60)))")
+    field(CALC, "A/991*(B=0?236:(B=1?136:(B=2?71:56)))")
     field(EGU,  "s")
 }
 record(seq, "$(P)$(R=):anascan:start:clocks") {
@@ -445,15 +465,27 @@ record(seq, "$(P)$(R=):anascan:start:clocks") {
 }
 
 ##################################################
-# Scan Results:
+# Scan Measurement:
 ##################################################
 
+record(seq, "$(P)$(R=):anascan") {
+    field(LNK1, "$(P)$(R=):state:measure PP")
+    field(DO1,  "1")
+    field(DLY1, "0")
+    field(LNK2, "$(P)$(R=):anascan:start:clocks.PROC PP")
+    field(DO2,  "1")
+    field(DLY2, "10")
+    field(LNK3, "$(P)$(R=):anascan:wf.PROC PP")
+    field(DO3,  "1")
+    field(DLY3, "0")
+}
 record(waveform, "$(P)$(R=):anascan:wf") {
     field(DTYP, "stream")
     field(INP, "@srs-rga.proto scan(SC) $(PORT)")
     field(NELM, "$(NANA)")
     field(FTVL, "LONG")
     field(FLNK, "$(P)$(R=):anascan:post.PROC PP")
+    info(autosaveFields_pass0, "VAL")
 }
 record(seq, "$(P)$(R=):anascan:post") {
     field(LNK1, "$(P)$(R=):total:pressure.PROC PP")
@@ -473,6 +505,7 @@ record(acalcout, "$(P)$(R=):anascan:wf:torr") {
     field(OCAL, "1")
     field(OUT,  "$(P)$(R=):state:idle PP")
     field(FLNK, "$(P)$(R=):anascan:wf:pct.PROC PP")
+    info(autosaveFields_pass0, "AVAL")
 }
 record(acalcout, "$(P)$(R=):anascan:wf:pct") {
     field(NELM, "$(NANA)")
@@ -481,84 +514,18 @@ record(acalcout, "$(P)$(R=):anascan:wf:pct") {
     field(INPB, "$(P)$(R=):total:pressure:torr")
     field(CALC, "(AA*1E-16 / (A*1E-3)) / B * 100")
     field(FLNK, "$(P)$(R=):anascan:amu:wf.PROC PP")
+    info(autosaveFields_pass0, "AVAL")
 }
 record(acalcout, "$(P)$(R=):anascan:amu:wf") {
     field(NELM, "$(NANA)")
     field(INPA, "$(P)$(R=):mass:initial:rbk")
     field(INPB, "$(P)$(R=):mass:final:rbk")
     field(CALC, "IX / ($(NANA)-1) * (B-A) + A")
-}
-
-record(waveform, "$(P)$(R=):histscan:wf") {
-    field(DTYP, "stream")
-    field(INP, "@srs-rga.proto scan(HS) $(PORT)")
-    field(NELM, "$(NHIST)")
-    field(FTVL, "LONG")
-    field(FLNK, "$(P)$(R=):histscan:post.PROC PP")
-}
-record(seq, "$(P)$(R=):histscan:post") {
-    field(LNK1, "$(P)$(R=):total:pressure.PROC PP")
-    field(DO1,  "1")
-    field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):histscan:wf:torr.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "2")
-}
-record(acalcout, "$(P)$(R=):histscan:wf:torr") {
-    field(NELM, "$(NANA)")
-    field(INAA, "$(P)$(R=):histscan:wf.AVAL")
-    field(INPA, "$(P)$(R=):pps:factor")
-    field(CALC, "AA*1E-16 / (A*1E-3)")
-    field(OOPT, "Every Time")
-    field(DOPT, "Use OCAL")
-    field(OCAL, "1")
-    field(OUT,  "$(P)$(R=):state:idle PP")
-    field(FLNK, "$(P)$(R=):histscan:wf:pct.PROC PP")
-}
-record(acalcout, "$(P)$(R=):histscan:wf:pct") {
-    field(NELM, "$(NANA)")
-    field(INAA, "$(P)$(R=):histscan:wf")
-    field(INPA, "$(P)$(R=):pps:factor")
-    field(INPB, "$(P)$(R=):total:pressure:torr")
-    field(CALC, "(AA*1E-16 / (A*1E-3)) / B * 100")
-    field(FLNK, "$(P)$(R=):histscan:amu:wf PP")
-}
-record(acalcout, "$(P)$(R=):histscan:amu:wf") {
-    field(NELM, "$(NHIST)")
-    field(INPA, "$(P)$(R=):mass:initial:rbk")
-    field(INPB, "$(P)$(R=):mass:final:rbk")
-    field(CALC, "IX / ($(NHIST)-1) * (B-A) + A")
+    info(autosaveFields_pass0, "AVAL")
 }
 
 ##################################################
-# Scan Triggers:
-##################################################
-
-record(seq, "$(P)$(R=):anascan") {
-    field(LNK1, "$(P)$(R=):state:measure PP")
-    field(DO1,  "1")
-    field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):anascan:start:clocks.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "10")
-    field(LNK3, "$(P)$(R=):anascan:wf.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "0")
-}
-record(seq, "$(P)$(R=):histscan") {
-    field(LNK1, "$(P)$(R=):state:measure PP")
-    field(DO1,  "1")
-    field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):anascan:start:clocks.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "5")
-    field(LNK3, "$(P)$(R=):histscan:wf.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "0")
-}
-
-##################################################
-# Single Mass Measurements:
+# Single Mass Measurement:
 ##################################################
 
 record(longin, "$(P)$(R=):mass") {
@@ -570,15 +537,9 @@ record(seq, "$(P)$(R=):mass:trigger") {
     field(LNK1, "$(P)$(R=):state:measure.PROC PP")
     field(DO1,  "1")
     field(DLY1, "0")
-    field(LNK2, "$(P)$(R=):pps:factor.PROC PP")
-    field(DO2,  "1")
-    field(DLY2, "0")
-    field(LNK3, "$(P)$(R=):tps:factor.PROC PP")
-    field(DO3,  "1")
-    field(DLY3, "1")
-    field(LNK4, "$(P)$(R=):mass:measure PP")
-    field(DO4,  "0")
-    field(DLY4, "2")
+    field(LNK2, "$(P)$(R=):mass:measure PP")
+    field(DO2,  "0")
+    field(DLY2, "5")
 }
 record(longin, "$(P)$(R=):mass:measure") {
     field(DTYP, "stream")
@@ -616,17 +577,4 @@ record(calcout, "$(P)$(R=):mass:measure:pct") {
     field(OCAL, "1")
     field(OUT,  "$(P)$(R=):state:idle PP")
 }
-
-##################################################
-# GUI stuff:
-##################################################
-#record(mbbi, "$(P)$(R=):graph:units") {
-#    field(ZRVL, "0")
-#    field(ONVL, "1")
-#    field(TWVL, "2")
-#    field(ZRST, "Amps")
-#    field(ONST, "Torr")
-#    field(TWST, "%")
-#    field(VAL,  "2")
-#}
 

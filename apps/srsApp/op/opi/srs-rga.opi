@@ -232,47 +232,6 @@ $(pv_value)</tooltip>
       <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>2</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-4f4970d8:17ff6504a71:-7a8f</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>Error Bits:</text>
-    <scripts />
-    <height>42</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>103</width>
-    <x>538</x>
-    <name>Label_2</name>
-    <y>78</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
     <border_style>6</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -336,6 +295,13 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description>Calibrate I/V</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(P)stat:clear</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Clear Errors</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>$(P)clear</pv_name>
@@ -579,7 +545,7 @@ $(pv_value)</tooltip>
       <macros>
         <include_parent_macros>true</include_parent_macros>
       </macros>
-      <visible>false</visible>
+      <visible>true</visible>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -1109,7 +1075,7 @@ $(pv_value)</tooltip>
           <enabled>true</enabled>
           <wuid>21ab205d:18019316e58:-5f85</wuid>
           <pv_value />
-          <text>Toggle Log Scale</text>
+          <text>Zoom</text>
           <scripts />
           <border_alarm_sensitive>false</border_alarm_sensitive>
           <height>24</height>
@@ -1120,7 +1086,7 @@ $(pv_value)</tooltip>
             <keep_wh_ratio>false</keep_wh_ratio>
           </scale_options>
           <image></image>
-          <visible>false</visible>
+          <visible>true</visible>
           <pv_name></pv_name>
           <border_color>
             <color red="0" green="128" blue="255" />
@@ -1130,10 +1096,10 @@ $(pv_value)</tooltip>
           <background_color>
             <color name="Button" red="240" green="240" blue="240" />
           </background_color>
-          <width>120</width>
-          <x>466</x>
+          <width>100</width>
+          <x>383</x>
           <name>Action Button_1</name>
-          <y>4</y>
+          <y>3</y>
           <style>0</style>
           <foreground_color>
             <color red="0" green="0" blue="0" />
@@ -1143,35 +1109,19 @@ $(pv_value)</tooltip>
               <path></path>
               <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
-g = display.getWidget("ScanGraph");
-l = g.getPropertyValue("axis_1_log_scale");
+g1 = display.getWidget("ScanGraphLog");
+g2 = display.getWidget("ScanGraphLin");
 
-/*
-y = g.getYBuffer(0);
-var min=1e20;
-var max=-1e10;
-for (int i=0; i<y.length; i++) {
- if (y[i]<min) min=y[i];
- if (y[i]>max) max=y[i];
+if (g1.getPropertyValue("axis_0_maximum") == 100) {
+g1.setPropertyValue("axis_0_maximum",50);
+g2.setPropertyValue("axis_0_maximum",50);
 }
-java.lang.System.out.println(min);
-java.lang.System.out.println(max);
-*/
-
-if (l == false) {
-
-g.setPropertyValue("axis_1_auto_scale","true");
-g.setPropertyValue("axis_1_log_scale","true");
-
-g.setPropertyValue("axis_1_auto_scale","false");
-g.setPropertyValue("axis_1_minimum",5E-11);
-g.setPropertyValue("axis_1_maximum",5E-8);
+else{
+g1.setPropertyValue("axis_0_maximum",100);
+g2.setPropertyValue("axis_0_maximum",100);
 }
-else {
-g.setPropertyValue("axis_1_log_scale","false");
-g.setPropertyValue("axis_1_auto_scale","false");
-g.setPropertyValue("axis_1_auto_scale","true");
-}]]></scriptText>
+
+]]></scriptText>
               <embedded>true</embedded>
               <description></description>
             </action>
@@ -1257,9 +1207,9 @@ $(trace_0_y_pv_value)</tooltip>
           <axis_1_visible>true</axis_1_visible>
           <trace_0_update_delay>100</trace_0_update_delay>
           <pv_name>$(GRAPH_PV)</pv_name>
-          <name>ScanGraph_1</name>
-          <axis_0_auto_scale>true</axis_0_auto_scale>
-          <axis_0_minimum>0.0</axis_0_minimum>
+          <name>ScanGraphLog</name>
+          <axis_0_auto_scale>false</axis_0_auto_scale>
+          <axis_0_minimum>1.0</axis_0_minimum>
           <axis_1_axis_title>$(YAXIS)</axis_1_axis_title>
           <axis_1_auto_scale>false</axis_1_auto_scale>
           <border_color>
@@ -1388,9 +1338,9 @@ $(trace_0_y_pv_value)</tooltip>
           <axis_1_visible>true</axis_1_visible>
           <trace_0_update_delay>100</trace_0_update_delay>
           <pv_name>$(GRAPH_PV)</pv_name>
-          <name>ScanGraph</name>
-          <axis_0_auto_scale>true</axis_0_auto_scale>
-          <axis_0_minimum>0.0</axis_0_minimum>
+          <name>ScanGraphLin</name>
+          <axis_0_auto_scale>false</axis_0_auto_scale>
+          <axis_0_minimum>1.0</axis_0_minimum>
           <axis_1_axis_title>$(YAXIS)</axis_1_axis_title>
           <axis_1_auto_scale>true</axis_1_auto_scale>
           <border_color>
@@ -1496,6 +1446,89 @@ $(pv_value)</tooltip>
             <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
           </font>
         </widget>
+        <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+          <toggle_button>false</toggle_button>
+          <border_style>0</border_style>
+          <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+          <alarm_pulsing>false</alarm_pulsing>
+          <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+          <push_action_index>0</push_action_index>
+          <rules />
+          <enabled>true</enabled>
+          <wuid>-7365a546:1801f245020:17de</wuid>
+          <pv_value />
+          <text>Toggle Log Scale</text>
+          <scripts />
+          <border_alarm_sensitive>false</border_alarm_sensitive>
+          <height>24</height>
+          <border_width>1</border_width>
+          <scale_options>
+            <width_scalable>true</width_scalable>
+            <height_scalable>true</height_scalable>
+            <keep_wh_ratio>false</keep_wh_ratio>
+          </scale_options>
+          <image></image>
+          <visible>false</visible>
+          <pv_name></pv_name>
+          <border_color>
+            <color red="0" green="128" blue="255" />
+          </border_color>
+          <widget_type>Action Button</widget_type>
+          <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+          <background_color>
+            <color name="Button" red="240" green="240" blue="240" />
+          </background_color>
+          <width>120</width>
+          <x>596</x>
+          <name>Action Button_3</name>
+          <y>6</y>
+          <style>0</style>
+          <foreground_color>
+            <color red="0" green="0" blue="0" />
+          </foreground_color>
+          <actions hook="false" hook_all="true">
+            <action type="EXECUTE_JAVASCRIPT">
+              <path></path>
+              <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+g = display.getWidget("ScanGraph");
+l = g.getPropertyValue("axis_1_log_scale");
+
+/*
+y = g.getYBuffer(0);
+var min=1e20;
+var max=-1e10;
+for (int i=0; i<y.length; i++) {
+ if (y[i]<min) min=y[i];
+ if (y[i]>max) max=y[i];
+}
+java.lang.System.out.println(min);
+java.lang.System.out.println(max);
+*/
+
+if (l == false) {
+
+g.setPropertyValue("axis_1_auto_scale","true");
+g.setPropertyValue("axis_1_log_scale","true");
+
+g.setPropertyValue("axis_1_auto_scale","false");
+g.setPropertyValue("axis_1_minimum",5E-11);
+g.setPropertyValue("axis_1_maximum",5E-8);
+}
+else {
+g.setPropertyValue("axis_1_log_scale","false");
+g.setPropertyValue("axis_1_auto_scale","false");
+g.setPropertyValue("axis_1_auto_scale","true");
+}]]></scriptText>
+              <embedded>true</embedded>
+              <description></description>
+            </action>
+          </actions>
+          <font>
+            <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+          </font>
+        </widget>
       </widget>
     </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
@@ -1517,7 +1550,7 @@ $(pv_value)</tooltip>
       <macros>
         <include_parent_macros>true</include_parent_macros>
       </macros>
-      <visible>true</visible>
+      <visible>false</visible>
       <border_color>
         <color red="0" green="128" blue="255" />
       </border_color>
@@ -3123,6 +3156,47 @@ $(pv_value)</tooltip>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>2</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-7365a546:1801f245020:2194</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>Error Bits:</text>
+    <scripts />
+    <height>19</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>95</width>
+    <x>545</x>
+    <name>Label_7</name>
+    <y>81</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

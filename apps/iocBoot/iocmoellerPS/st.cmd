@@ -10,13 +10,17 @@ dbLoadDatabase("dbd/SCE410.dbd")
 SCE410_registerRecordDeviceDriver(pdbbase)
 
 drvAsynIPPortConfigure("SER1", "hallb-moxa6:4001")
-#drvAsynIPPortConfigure("SER2", "hallb-moxa6:4009")
+drvAsynIPPortConfigure("SER2", "hallb-moxa6:4009")
 
 ## debugging...
 #asynSetTraceMask("SER1",-1,0x09)
 #asynSetTraceIOMask("SER1",-1,0x02)
-#asynSetTraceMask("SER2",-1,0x09)
-#asynSetTraceIOMask("SER2",-1,0x02)
+
+asynSetTraceMask("SER2",-1,0x9)
+asynSetTraceIOMask("SER2",-1,0x4)
+
+asynOctetSetOutputEos("SER2",0,"\r")
+asynOctetSetInputEos("SER2",0,"\n\r")
 
 ## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
@@ -25,7 +29,9 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 #dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOELLER1_,PORT=SER1,ADDR=1")
 dbLoadRecords("db/SCE410.db", "P=B_MOLLER_,R=HELMHOLTZ_,PORT=SER1,ADDR=1")
 
-#dbLoadRecords("db/dynapower-2022.db","P=B_MOLLER_QUADS:,PORT=SER2")
+dbLoadRecords("db/asynRecord.db","P=B_MOLLER_QUADS,R=:ASYN,PORT=SER2,ADDR=1,IMAX=2000,OMAX=2000")
+
+dbLoadRecords("db/dynapower-2022-iointr.db","P=B_MOLLER_QUADS:,PORT=SER2")
 
 cd "${TOP}/iocBoot/${IOC}"
 

@@ -1,19 +1,46 @@
 
 OutTerminator = CR;
-InTerminator = LF CR;
+#InTerminator = LF CR;
+InTerminator = ;
 
-putHex    { out "SET\$1%x"; }
+putHex    { out "SET\$1%.2x"; }
 putFloat  { out "SET\$1%.0f"; }
 putString { out "SET\$1%s"; }
 
-getHex    { out "GET \$1"; in "%x"; }
-getFloat  { out "GET \$1"; in "%f"; }
+#getHex    { out "GET \$1"; in "%x"; }
+#getFloat  { out "GET \$1"; in "%f"; }
 
-getVolt { in "%d %*d %*d %*d %*x %*x %*x"; }
-getAmps { in "%*d %d %*d %*d %*x %*x %*x"; }
-getTemp { in "%*d %*d %d %*d %*x %*x %*x"; }
-getFlow { in "%*d %*d %*d %d %*x %*x %*x"; }
-getStat { in "%*d %*d %*d %*d %x %*x %*x"; }
-getFlt1 { in "%*d %*d %*d %*d %*x %x %*x"; }
-getFlt2 { in "%*d %*d %*d %*d %*x %*x %x"; }
+# seen it do this:
+#getVolt { in " \r\n %d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getAmps { in " \r\n %*d \r\n %d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getTemp { in " \r\n %*d \r\n %*d \r\n %d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlow { in " \r\n %*d \r\n %*d \r\n %*d \r\n %d \r\n %*x \r\n %*x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getStat { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %x \r\n %*x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlt1 { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %x \r\n %*x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlt2 { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %x\r\n07\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+
+# others times it do this:
+#getVolt { in " \r\n %d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getAmps { in " \r\n %*d \r\n %d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getTemp { in " \r\n %*d \r\n %*d \r\n %d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlow { in " \r\n %*d \r\n %*d \r\n %*d \r\n %d \r\n %*x \r\n %*x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getStat { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %x \r\n %*x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlt1 { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %x \r\n %*x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+#getFlt2 { in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %x\r\n\n\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000"; }
+
+# the only difference there is \n07 versus \n\r, could depend on whether it is in local or remote mode?
+
+# one way to deal with that is to allow extra input (but what else will it send next time?):
+getVolt { extrainput=ignore; in " \r\n %d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+getAmps { extrainput=ignore; in " \r\n %*d \r\n %d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+getTemp { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+getFlow { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+getStat { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %x \r\n %*x \r\n %*x\r\n"; }
+getFlt1 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %x \r\n %*x\r\n"; }
+getFlt2 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %x\r\n"; }
+
+# Two big problems to be addressed
+# 1. the stat setters work, but the float setters do not
+# 2. the periodic status reports appears to timeout, probably after 6 minutes
+
 

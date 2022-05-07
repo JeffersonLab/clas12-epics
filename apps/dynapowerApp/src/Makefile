@@ -16,6 +16,8 @@ dynapower_DBD += base.dbd
 dynapower_DBD += stream.dbd
 dynapower_DBD += drvAsynIPPort.dbd
 dynapower_DBD += asyn.dbd
+dynapower_DBD += calc.dbd
+dynapower_DBD += sCalcoutRecord.dbd
 dynapower_DBD += asSupport.dbd
 dynapower_DBD += devIocStats.dbd
 
@@ -29,6 +31,7 @@ dynapower_SRCS_vxWorks += -nil-
 dynapower_LIBS += seq pv
 dynapower_LIBS += stream
 dynapower_LIBS += asyn
+dynapower_LIBS += calc
 dynapower_LIBS += autosave
 dynapower_LIBS += devIocStats
 dynapower_LIBS += $(EPICS_BASE_IOC_LIBS)

@@ -1,86 +1,104 @@
 #!/usr/bin/env python3
+import re,sys,socket,logging,argparse,datetime,epics
 
-import re
-import sys
-import atexit
-import socket
-import logging
-import argparse
-import datetime
-import epics
+# There appears to be a bug in the EPICS asyn module, even the latest 4-42, where
+# I/O Intr records can cause deadlock.  Here we workaround that by manually parsing
+# the periodic, unsolicited messages from the Dynapower and just write to soft PVs.
 
-# 
-# There appears to be a bug in ASYN, even the latest, 4-42,
-# where I/O Intr records cause deadlock.  Here we workaround
-# that by parsing the periodic, unsolicited data from the
-# Dynapower and just write to PVs.
-#
+sys.path.insert(0,' /usr/clas12/third-party-libs/pyepics3.5.0-RHEL7/lib/python3.6/site-packages')
 
-class Dynapower():
-  pvs = {}
-  pvs['volt'] = epics.PV('DYNAB:v:rbk')
-  pvs['amps'] = epics.PV('DYNAB:i:rbk')
-  pvs['temp'] = epics.PV('DYNAB:temp')
-  pvs['flow'] = epics.PV('DYNAB:flow')
-  pvs['stat'] = epics.PV('DYNAB:stat:rbk')
-  pvs['flt1'] = epics.PV('DYNAB:fault:1')
-  pvs['flt2'] = epics.PV('DYNAB:fault:2')
-  def __init__(self, match):
-    self.data = {}
-    self.data['raw'] = match.group(0)
-    self.data['volt'] = float(match.group(1))/10
-    self.data['amps'] = float(match.group(2))/10
-    self.data['temp'] = float(match.group(3))/10
-    self.data['flow'] = float(match.group(4))/10
-    self.data['stat'] = int(match.group(5),16)
-    self.data['flt1'] = int(match.group(6),16)
-    self.data['flt2'] = int(match.group(7),16)
-  def update(self):
-    for k,v in Dynapower.pvs.items():
-      v.put(self.data[k])
-  def __str__(self):
-    return str(self.data['raw'])
+class DynapowerPV():
 
-cli=argparse.ArgumentParser(description='asdf')
-cli.add_argument('-debug', help='enable debugging verbosity', default=False, action='store_true')
-cli.add_argument('host',  help='host name', type=str)
-cli.add_argument('port',  help='port number', type=int)
-args = cli.parse_args(sys.argv[1:])
+  def __init__(self, name, message_group, is_hex):
+    self.pv = epics.PV(name)
+    self.group = message_group
+    self.is_hex = is_hex
 
-if args.debug:
-  logging.basicConfig(level=logging.DEBUG, format='%(levelname)-9s %(message)s')
-else:
-  logging.basicConfig(level=logging.INFO, format='%(levelname)-9s %(message)s')
+class DynapowerMessage():
 
-logger = logging.getLogger(__name__)
+    terminator = r'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d\d\d\d) \r\n (\d\d\d\d) \r\n (\d\d\d\d)\r\n'
+    re.compile(regex)
+    pvs = {}
+    pvs['volt'] = DynapowerPV('DYNAB:v:rbk',    1, False )
+    pvs['amps'] = DynapowerPV('DYNAB:i:rbk',    2, False )
+    pvs['temp'] = DynapowerPV('DYNAB:temp',     3, False )
+    pvs['flow'] = DynapowerPV('DYNAB:flow',     4, False )
+    pvs['stat'] = DynapowerPV('DYNAB:stat:rbk', 5, True )
+    pvs['flt1'] = DynapowerPV('DYNAB:fault:1',  6, True )
+    pvs['flt2'] = DynapowerPV('DYNAB:fault:2',  7, True )
 
-regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d\d\d\d) \r\n (\d\d\d\d) \r\n (\d\d\d\d)\r\n'
-terminator = r'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-re.compile(regex)
+    def __init__(self):
+        self.data = {}
+        self.raw_data = None
+        self.timestamp = None
+        self.previous_timestamp = None
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    @staticmethod
+    def is_terminated(byte_string):
+        return str(byte_string).find(DynapowerMessage.terminator) >= 0
 
-sock.connect((args.host,args.port))
-logger.info('Connected to %s:%d'%(args.host,args.port))
+    @staticmethod
+    def parse(byte_string):
+        m = re.match(DynapowerMessage.regex, byte_string)
+        if m is None:
+            logging.getLogger(__name__).warning('Invalid format:  '+str(byte_string))
+        else:
+            logging.getLogger(__name__).debug('Debug data:  '+str(byte_string))
+        return m
 
-last_update = None
-n = 0
-data = b''
+    def update(self, match):
+        self.previous_timestamp = self.timestamp
+        self.timestamp = datetime.datetime.now()
+        self.raw_data = match.group(0)
+        for k,v in DynapowerMessage.pvs.items():
+            if v.is_hex is True:
+                self.data[k] = int(match.group(v.group),16)
+            else:
+                self.data[k] = float(match.group(v.group))/10
 
-while True:
+    def publish(self, match=None):
+        if match is not None:
+            self.update(match)
+        for k,v in DynapowerMessage.pvs.items():
+            v.pv.put(self.data[k])
 
-    data += sock.recv(1)
-    logger.debug('%d >%s<'%(n,str(data)))
+    def parse_and_publish(self, byte_string):
+        m = DynapowerMessage.parse(byte_string)
+        if m is None:
+            return False
+        else:
+            self.publish(m)
+            return True
 
-    if str(data).find(terminator) >= 0:
-        m = re.match(regex, data)
-        if m is not None:
-            x = Dynapower(m)
-            logger.info(str(x))
-            last_update = datetime.datetime.now()
-            logger.info(str(last_update))
-            x.update()
-        data = b''
+if __name__ == '__main__':
 
-    n += 1
+    cli = argparse.ArgumentParser(description='asdf')
+    cli.add_argument('-debug', help='enable debugging verbosity', default=False, action='store_true')
+    cli.add_argument('host',  help='host name', type=str)
+    cli.add_argument('port',  help='port number', type=int)
+    args = cli.parse_args(sys.argv[1:])
+
+    if args.debug: logging_level = logging.DEBUG
+    else:          logging_level = logging.INFO
+    logging.basicConfig(level=logging_level, format='%(message)s')
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((args.host,args.port))
+    logging.getLogger(__name__).info('Connected to %s:%d'%(args.host,args.port))
+
+    data = b''
+    dyna = DynapowerMessage()
+
+    while True:
+        data += sock.recv(1)
+        logging.getLogger(__name__).debug('DATA: >%s<'%(str(data)))
+        if dyna.is_terminated(data):
+            if dyna.parse_and_publish(data):
+                if dyna.timestamp is not None:
+                    msg = 'Update: ' + str(dyna.timestamp)
+                    if dyna.previous_timestamp is not None:
+                        msg += ' ==> Period: ' + str(dyna.timestamp-dyna.previous_timestamp)
+                    logging.getLogger(__name__).info(msg)
+            data = b''
 

@@ -1,0 +1,38 @@
+
+record(waveform,"$(P)TriggerName:$(BIT)") {
+  field(DTYP, "AMQR")
+  field(INP,  "trig2vtp_VTPGT_TRIGGERBIT$(BIT)_NAME")
+  field(NELM, "128")
+  field(FTVL, "CHAR")
+  field(DESC, "Trigger Names")
+  field(FLNK, "$(P)TriggerName:$(BIT):out PP")
+}
+
+record(waveform, "$(P)TriggerDesc:$(BIT)") {
+  field(DTYP, "AMQR")
+  field(INP,  "trig2vtp_VTPGT_TRIGGERBIT$(BIT)_DESC")
+  field(NELM, "256")
+  field(FTVL, "CHAR")
+  field(FLNK, "$(P)TriggerDesc:$(BIT):out PP")
+  field(DESC, "Trigger Descriptions")
+}
+
+
+# copy to partner .DESC field for display convenience:
+record(scalcout, "$(P)TriggerDesc:$(BIT):out") {
+  field(INAA, "$(P)TriggerDesc:$(BIT)")
+  field(CALC, "AA")
+  field(OUT,  "$(P)TriggerName:$(BIT).DESC PP")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+}
+
+# copy to partner .DESC field for display convenience:
+record(scalcout, "$(P)TriggerName:$(BIT):out") {
+  field(INAA, "$(P)TriggerName:$(BIT)")
+  field(CALC, "AA")
+  field(OUT,  "$(P)TriggerDesc:$(BIT).DESC PP")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+}
+

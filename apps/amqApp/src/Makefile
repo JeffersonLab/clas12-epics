@@ -20,6 +20,7 @@ amq_DBD += amqdev.dbd
 
 amq_DBD += calc.dbd
 amq_DBD += aCalcoutRecord.dbd
+amq_DBD += sCalcoutRecord.dbd
 amq_DBD += devIocStats.dbd
 amq_DBD += asSupport.dbd
 amq_DBD += waveformApp.dbd

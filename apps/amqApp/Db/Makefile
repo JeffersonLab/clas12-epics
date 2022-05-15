@@ -51,6 +51,8 @@ DB += daq2epics-alias.db
 DB += amqRocBusy-alarm.db
 DB += amqDaq.substitutions
 DB += amqDaq-aliases.db
+DB += amqTriggerNames.template
+DB += amqTriggerNames.substitutions
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

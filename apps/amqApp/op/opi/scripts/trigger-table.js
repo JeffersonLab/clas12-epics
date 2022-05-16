@@ -63,5 +63,7 @@ var keepers=[0,1,2,3,4,5,6];
     lc.setPropertyValue("background_color","Header_Background");
     lc.addMacro("P",prefix);
     lc.addMacro("BIT",chan);
+    if (chan<10) chan="0"+chan;
+    lc.addMacro("BIT2",chan);
     widget.addChildToBottom(lc);
   }

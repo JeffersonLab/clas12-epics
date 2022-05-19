@@ -17,8 +17,9 @@ class DynapowerPV():
 class DynapowerMessage():
 
     terminator = r'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d\d\d\d) \r\n (\d\d\d\d) \r\n (\d\d\d\d)\r\n'
+    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d\d\d\d) \r\n (\d\d\d\d) \r\n (\d\d\d\d)\r'
     re.compile(regex)
+
     pvs = {}
     pvs['volt'] = DynapowerPV('DYNAB:v:rbk',    1, False )
     pvs['amps'] = DynapowerPV('DYNAB:i:rbk',    2, False )
@@ -47,7 +48,7 @@ class DynapowerMessage():
             logging.getLogger(__name__).debug('Debug data:  '+str(byte_string))
         return m
 
-    def update(self, match):
+    def _update(self, match):
         self.previous_timestamp = self.timestamp
         self.timestamp = datetime.datetime.now()
         self.raw_data = match.group(0)
@@ -57,9 +58,9 @@ class DynapowerMessage():
             else:
                 self.data[k] = float(match.group(v.group))/10
 
-    def publish(self, match=None):
+    def _publish(self, match=None):
         if match is not None:
-            self.update(match)
+            self._update(match)
         for k,v in DynapowerMessage.pvs.items():
             v.pv.put(self.data[k])
 
@@ -68,15 +69,15 @@ class DynapowerMessage():
         if m is None:
             return False
         else:
-            self.publish(m)
+            self._publish(m)
             return True
 
 if __name__ == '__main__':
 
     cli = argparse.ArgumentParser(description='asdf')
     cli.add_argument('-debug', help='enable debugging verbosity', default=False, action='store_true')
-    cli.add_argument('host',  help='host name', type=str)
-    cli.add_argument('port',  help='port number', type=int)
+    cli.add_argument('host', help='host name', type=str)
+    cli.add_argument('port', help='port number', type=int)
     args = cli.parse_args(sys.argv[1:])
 
     if args.debug: logging_level = logging.DEBUG
@@ -91,14 +92,19 @@ if __name__ == '__main__':
     dyna = DynapowerMessage()
 
     while True:
+
         data += sock.recv(1)
         logging.getLogger(__name__).debug('DATA: >%s<'%(str(data)))
+
         if dyna.is_terminated(data):
+
             if dyna.parse_and_publish(data):
+
                 if dyna.timestamp is not None:
                     msg = 'Update: ' + str(dyna.timestamp)
                     if dyna.previous_timestamp is not None:
                         msg += ' ==> Period: ' + str(dyna.timestamp-dyna.previous_timestamp)
                     logging.getLogger(__name__).info(msg)
+
             data = b''
 

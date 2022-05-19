@@ -19,7 +19,7 @@ dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
-dbLoadTemplate("db/jscalers_RICH2_SSP.substitutions-EEL")
+dbLoadTemplate("db/jscalers_RICH2_SSP.substitutions-EEL2")
 
 # these are just aliases from HW to DET:
 dbLoadRecords("db/jscaler_RICH_Maps.db")

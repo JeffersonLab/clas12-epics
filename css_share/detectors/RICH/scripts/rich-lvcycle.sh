@@ -94,13 +94,11 @@ echo  | $log
 
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
 
-lvcycle B_DET_RICH_LV:OFF B_DET_RICH_LV:isOff
-#lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
+lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
 
 echo -e "\nRICH LV OFF succecsfull.\n\nTurning RICH LV ON ...\n" | $log
 
-lvcycle B_DET_RICH_LV:ON B_DET_RICH_LV:isOn
-#lvcycle B_DET_RICH_ALL_LV:ON B_DET_RICH_ALL_LV:isOn
+lvcycle B_DET_RICH_ALL_LV:ON B_DET_RICH_ALL_LV:isOn
 
 echo -e "\nRICH LV ON succesfull.\n\nRebooting rich4 ...\n" | $log
 
@@ -126,6 +124,8 @@ echo  | $log
 echo "####################################################" | $log
 echo "#                                                  #" | $log
 echo "#           rich-lvcycle.sh COMPLETE               #" | $log
+echo "#                                                  #" | $log
+echo "# !!!!!!!!!!!   WARNING, SEE BELOW   !!!!!!!!!!!!! #" | $log
 echo "#                                                  #" | $log
 echo "# NOTE: the DAQ will now need to be reinitialized: #" | $log
 echo "#   Cancel->Reset->Configure->Download->Prestart   #" | $log

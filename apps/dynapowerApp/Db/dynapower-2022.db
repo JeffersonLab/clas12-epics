@@ -1,3 +1,14 @@
+#
+# N. Baltzell, 2022
+#
+# Dynapower power supply for a Hall B Moller quadrupole magnet delivered in 2022.
+#
+# The manufacturer's documentation provides getter commands for readbacks,
+# implemented in this database, but they are ignored by the power supply.
+# Instead it sends unsolicited status information every ~2 seconds, see
+# the corresponding dynapower-2022-iointr.db.
+#
+
 record(longout,"$(P)$(R=)stat:set") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto putHex(STAT) $(PORT)")

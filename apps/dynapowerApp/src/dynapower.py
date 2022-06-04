@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 import re,sys,socket,logging,argparse,datetime,epics
 
+#
+# N. Baltzell, 2022
+#
 # There appears to be a bug in the EPICS asyn module, even the latest 4-42, where
 # I/O Intr records can cause deadlock.  Here we workaround that by manually parsing
 # the periodic, unsolicited messages from the Dynapower and just write to soft PVs.
+#
 
 sys.path.insert(0,' /usr/clas12/third-party-libs/pyepics3.5.0-RHEL7/lib/python3.6/site-packages')
 
@@ -16,8 +20,10 @@ class DynapowerPV():
 
 class DynapowerMessage():
 
-    terminator = r'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d\d\d\d) \r\n (\d\d\d\d) \r\n (\d\d\d\d)\r'
+    terminator = r'\x00' * 14
+
+    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+)'
+
     re.compile(regex)
 
     pvs = {}

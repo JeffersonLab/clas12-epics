@@ -1,48 +1,43 @@
-#!../../bin/linux-x86_64/SCE410
+#!../../bin/linux-x86_64/dynapower
 ############################################################################
 < envPaths
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 ############################################################################
 cd "${TOP}"
 
-## Register all support components
-dbLoadDatabase("dbd/SCE410.dbd")
-SCE410_registerRecordDeviceDriver(pdbbase)
+dbLoadDatabase("dbd/dynapower.dbd")
+dynapower_registerRecordDeviceDriver(pdbbase)
 
 drvAsynIPPortConfigure("SER1", "hallb-moxa6:4001")
-drvAsynIPPortConfigure("SER2", "hallb-moxa6:4009")
+drvAsynIPPortConfigure("SER2", "hallb-moxa8:4009")
 
-## debugging...
 #asynSetTraceMask("SER1",-1,0x09)
-#asynSetTraceIOMask("SER1",-1,0x02)
+#asynSetTraceIOMask("SER1",-1,0x03)
 
-asynSetTraceMask("SER2",-1,0x9)
-asynSetTraceIOMask("SER2",-1,0x4)
+#asynSetTraceMask("SER2",-1,0x9)
+#asynSetTraceIOMask("SER2",-1,0x3)
 
 asynOctetSetOutputEos("SER2",0,"\r")
 asynOctetSetInputEos("SER2",0,"\n\r")
 
-## Load record instances
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 
-#dbLoadRecords("db/SCE410.db", "P=B_DET_,R=MOELLER1_,PORT=SER1,ADDR=1")
 dbLoadRecords("db/SCE410.db", "P=B_MOLLER_,R=HELMHOLTZ_,PORT=SER1,ADDR=1")
 
-dbLoadRecords("db/asynRecord.db","P=B_MOLLER_QUADS,R=:ASYN,PORT=SER2,ADDR=1,IMAX=2000,OMAX=2000")
-
-dbLoadRecords("db/dynapower-2022-iointr.db","P=B_MOLLER_QUADS:,PORT=SER2")
+dbLoadRecords("db/asynRecord.db","P=DYNAB,R=:ASYN,PORT=SER2,ADDR=1,IMAX=2000,OMAX=2000")
+dbLoadRecords("db/dynapower-2022-soft.db","P=DYNAB:,PORT=SER2")
 
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup
 < save_restore.cmd
 
-dbl > pv.list
 iocInit
 
-## Handle autosave 'commands' contained in loaded databases.
 makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list
 

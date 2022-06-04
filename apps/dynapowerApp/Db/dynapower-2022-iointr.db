@@ -1,3 +1,29 @@
+#
+# N. Baltzell, 2022
+#
+# Dynapower power supply for a Hall B Moller quadrupole magnet delivered in 2022.
+#
+# The manufacturer's documentation provides getter commands for readbacks,
+# but they are ignored by the power supply.  Instead it sends unsolicited
+# status information every ~2 seconds, supported by the I/O Intr records in
+# this database.
+#
+# However, I believe we hit a deadlock bug in ASYN, usually within a few
+# minutes of IOC startup, but sometimes hours.  Symptoms include the asyn
+# trace logging info stopping without any error message while the terminal
+# server still shows active send/recive, devIocStats's SysReset PV is then
+# unresponsive, but only when the ASYN I/O Intr records below are enabled.
+#
+# Release notes suggest there have been at least a couple I/O Intr bugs in
+# ASYN over the years, some specifically mentioning deadlock, and at least
+# one outstanding deadlock one (although it's requirements are not met here).
+# Tried the lastest ASYN version at the time, 4-42, but the problem remained.
+#
+# As a workaround, in lieu of writing a dedicated device driver, we can
+# instead use soft records for readbacks and parse the serial characters
+# with a standalone script and write to the PVs, see dynapower-2022-soft.db
+# and the corresponding dynapower.py script.
+#
 
 record(longout,"$(P)$(R=)stat:set") {
     field(DTYP, "stream")

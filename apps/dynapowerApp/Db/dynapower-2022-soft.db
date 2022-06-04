@@ -1,3 +1,27 @@
+#
+# N. Baltzell, 2022
+#
+# Dynapower power supply for a Hall B Moller quadrupole magnet delivered in 2022.
+#
+# Here all the readback PVs are soft channels, and a separate dynapower.py
+# script parses the unsolicited serial readbacks and writes the PVs.  See the
+# other dynapower*.db databases for how we got to this point ...
+#
+# But it seems we now hit a new issue with MOXA terminal servers, maybe specific
+# to this unique case of usually one-way traffic with no periodic polling.  The
+# symptoms are that eventually, few to many hours, data from the power supply
+# stops being transmitted to the host connected to the MOXA, the receive counter
+# on the MOXA ceases to increment, but rebooting the MOXA or sending a periodic
+# dummy message reliably "fixes" it.  The keepalive record below does just that.
+# It's possible more recent MOXA firmware versions may fix it, but no evidence
+# of that in their release notes.
+#
+
+record(longout, "$(P)$(R=)keepalive") {
+    field(SCAN, "10 second")
+    field(DTYP, "stream")
+    field(OUT,  "@dynapower-2022.proto keepalive() $(PORT)")
+}
 
 record(longout,"$(P)$(R=)stat:set") {
     field(DTYP, "stream")

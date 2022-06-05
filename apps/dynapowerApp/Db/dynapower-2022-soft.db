@@ -12,26 +12,19 @@
 # symptoms are that eventually, few to many hours, data from the power supply
 # stops being transmitted to the host connected to the MOXA, the receive counter
 # on the MOXA ceases to increment, but rebooting the MOXA or sending a periodic
-# dummy message reliably "fixes" it.  The keepalive record below does just that.
+# dummy message reliably "fixes" it.  The alarm/keepalive records below do that.
 # It's possible more recent MOXA firmware versions may fix it, but no evidence
 # of that in their release notes.
 #
 
-record(longout, "$(P)$(R=)keepalive") {
-    field(SCAN, "10 second")
-    field(DTYP, "stream")
-    field(OUT,  "@dynapower-2022.proto keepalive() $(PORT)")
-}
+##########################################################
+##########################################################
 
 record(longout,"$(P)$(R=)stat:set") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto putHex(STAT) $(PORT)")
     field(DESC, "Status Bits")
 }
-
-##########################################################
-##########################################################
-
 record(longout, "$(P)$(R=)start") {
     field(OMSL, "closed_loop")
     field(OUT,  "$(P)$(R=)stat:set PP")
@@ -70,6 +63,26 @@ record(seq, "$(P)$(R=)off") {
     field(LNK2, "$(P)$(R=)stop.PROC PP")
     field(DO2, "1")
     field(DLY2, "3")
+}
+
+#########################################################
+#########################################################
+
+record(ao,"$(P)$(R=)v:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@dynapower-2022.proto putFloat(VOLT) $(PORT)")
+    field(ASLO, "10")
+    field(PREC, "1")
+    field(EGU,  "V")
+    field(DESC, "Voltage")
+}
+record(ao,"$(P)$(R=)i:set") {
+    field(DTYP, "stream")
+    field(OUT,  "@dynapower-2022.proto putFloat(AMPS) $(PORT)")
+    field(ASLO, "10")
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(DESC, "Current")
 }
 
 #########################################################
@@ -123,26 +136,6 @@ record(ai,"$(P)$(R=)flow") {
 #########################################################
 #########################################################
 
-record(ao,"$(P)$(R=)v:set") {
-    field(DTYP, "stream")
-    field(OUT,  "@dynapower-2022.proto putFloat(VOLT) $(PORT)")
-    field(ASLO, "10")
-    field(PREC, "1")
-    field(EGU,  "V")
-    field(DESC, "Voltage")
-}
-record(ao,"$(P)$(R=)i:set") {
-    field(DTYP, "stream")
-    field(OUT,  "@dynapower-2022.proto putFloat(AMPS) $(PORT)")
-    field(ASLO, "10")
-    field(PREC, "1")
-    field(EGU,  "A")
-    field(DESC, "Current")
-}
-
-#########################################################
-#########################################################
-
 record(mbbiDirect,"$(P)$(R=)stat:rbk") {
     field(NOBT, "16")
     field(DESC, "Status Bits")
@@ -157,59 +150,6 @@ record(mbbiDirect,"$(P)$(R=)fault:2") {
     field(DESC, "Fault Bits")
     field(FLNK, "$(P)$(R=)heartbeat:update PP")
 }
-
-#########################################################
-#########################################################
-
-record(calcout,"$(P)$(R=)heartbeat:update") {
-    field(INPA, "$(P)$(R=)heartbeat")
-    field(CALC, "A=0 ? 1 : 0")
-    field(OOPT, "Every Time")
-    field(DOPT, "Use CALC")
-    field(OUT,  "$(P)$(R=)heartbeat PP")
-}
-record(bo,"$(P)$(R=)heartbeat") {
-    field(VAL, "0")
-}
-record(compress,"$(P)$(R=)heartbeat:wf") {
-    field(ALG,  "Circular Buffer")
-    field(NSAM, "20")
-    field(SCAN, "1 second")
-    field(INP,  "$(P)$(R=)heartbeat")
-    field(FLNK, "$(P)$(R=)heartbeat:lo PP")
-}
-record(compress,"$(P)$(R=)heartbeat:lo") {
-    field(ALG,  "N to 1 Low Value")
-    field(NSAM, "1")
-    field(N,    "20")
-    field(INP,  "$(P)$(R=)heartbeat:wf")
-    field(FLNK, "$(P)$(R=)heartbeat:hi PP")
-}
-record(compress,"$(P)$(R=)heartbeat:hi") {
-    field(ALG,  "N to 1 High Value")
-    field(NSAM, "1")
-    field(N,    "20")
-    field(INP,  "$(P)$(R=)heartbeat:wf")
-    field(FLNK, "$(P)$(R=)heartbeat:alarm:calc PP")
-}
-record(calcout,"$(P)$(R=)heartbeat:alarm:calc") {
-    field(INPA, "$(P)$(R=)heartbeat:lo.VAL")
-    field(INPB, "$(P)$(R=)heartbeat:hi.VAL")
-    field(CALC, "A=B ? 1 : 0")
-    field(OOPT, "Every Time")
-    field(DOPT, "Use CALC")
-    field(OUT,  "$(P)$(R=)heartbeat:alarm PP")
-}
-record(bi,"$(P)$(R=)heartbeat:alarm") {
-    field(ZNAM, "Ok")
-    field(ONAM, "Timeout")
-    field(ZSV,  "NO_ALARM")
-    field(OSV,  "MAJOR")
-}
-
-########################################################
-########################################################
-
 record(bi,"$(P)$(R=)ac") {
     field(INP,"$(P)$(R=)stat:rbk.B0")
     field(ZNAM,"OFF")
@@ -254,5 +194,80 @@ record(bi, "$(P)$(R=)stat:on") {
     field(INP, "$(P)$(R=)stat:calc")
     field(ZNAM, "Off")
     field(ONAM, "On")
+}
+
+#########################################################
+#########################################################
+
+# This heartbeat is periodically updated by a readback PV above.
+record(calcout,"$(P)$(R=)heartbeat:update") {
+    field(INPA, "$(P)$(R=)heartbeat")
+    field(CALC, "A=0 ? 1 : 0")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R=)heartbeat PP")
+}
+record(bo,"$(P)$(R=)heartbeat") {
+    field(VAL, "0")
+}
+# Here we store a LIFO of recent heartbeat values and calculate
+# minimum and maximum values.
+record(compress,"$(P)$(R=)heartbeat:wf") {
+    field(ALG,  "Circular Buffer")
+    field(NSAM, "20")
+    field(SCAN, "1 second")
+    field(INP,  "$(P)$(R=)heartbeat")
+    field(FLNK, "$(P)$(R=)heartbeat:lo PP")
+}
+record(compress,"$(P)$(R=)heartbeat:lo") {
+    field(ALG,  "N to 1 Low Value")
+    field(NSAM, "1")
+    field(N,    "20")
+    field(INP,  "$(P)$(R=)heartbeat:wf")
+    field(FLNK, "$(P)$(R=)heartbeat:hi PP")
+}
+record(compress,"$(P)$(R=)heartbeat:hi") {
+    field(ALG,  "N to 1 High Value")
+    field(NSAM, "1")
+    field(N,    "20")
+    field(INP,  "$(P)$(R=)heartbeat:wf")
+    field(FLNK, "$(P)$(R=)keepalive:calc PP")
+}
+# Here we (1) test whether the heartbeat is dead, and, if so,
+# (2) send the keepalive message. (3) Then, a few seconds
+# later, check again for a dead heartbeat, regardless whether
+# the keepalive was sent), and set the heartbeat alarm status.
+record(calcout,"$(P)$(R=)keepalive:calc") {
+    field(INPA, "$(P)$(R=)heartbeat:lo.VAL")
+    field(INPB, "$(P)$(R=)heartbeat:hi.VAL")
+    field(CALC, "A=B ? 1 : 0")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R=)keepalive.PROC PP")
+    field(FLNK, "$(P)$(R=)keepalive:check PP")
+}
+record(longout, "$(P)$(R=)keepalive") {
+    field(DTYP, "stream")
+    field(OUT,  "@dynapower-2022.proto keepalive() $(PORT)")
+    field(TPRO, "1")
+}
+record(seq, "$(P)$(R=)keepalive:check") {
+    field(LNK1, "$(P)$(R=)heartbeat:alarm:calc.PROC")
+    field(DO1,  "1")
+    field(DLY1, "5")
+}
+record(calcout,"$(P)$(R=)heartbeat:alarm:calc") {
+    field(INPA, "$(P)$(R=)heartbeat:lo.VAL")
+    field(INPB, "$(P)$(R=)heartbeat:hi.VAL")
+    field(CALC, "A=B ? 1 : 0")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R=)heartbeat:alarm PP")
+}
+record(bi,"$(P)$(R=)heartbeat:alarm") {
+    field(ZNAM, "Ok")
+    field(ONAM, "Timeout")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
 }
 

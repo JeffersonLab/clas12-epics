@@ -81,14 +81,19 @@ class DynapowerMessage():
 if __name__ == '__main__':
 
     cli = argparse.ArgumentParser(description='asdf')
-    cli.add_argument('-debug', help='enable debugging verbosity', default=False, action='store_true')
+    cli.add_argument('-logging', help='logging level', type=str, default='CRITICAL', choices=['DEBUG','INFO','WARNING','CRITICAL'])
     cli.add_argument('host', help='host name', type=str)
     cli.add_argument('port', help='port number', type=int)
     args = cli.parse_args(sys.argv[1:])
 
-    if args.debug: logging_level = logging.DEBUG
-    else:          logging_level = logging.INFO
-    logging.basicConfig(level=logging_level, format='%(message)s')
+    if args.logging == 'CRITICAL':
+        logging.basicConfig(level=logging.CRITICAL, format='%(message)s')
+    elif args.logging == 'WARNING':
+        logging.basicConfig(level=logging.WARNING, format='%(message)s')
+    elif args.logging == 'INFO':
+        logging.basicConfig(level=logging.INFO, format='%(message)s')
+    elif args.logging == 'DEBUG':
+        logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((args.host,args.port))

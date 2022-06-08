@@ -128,13 +128,6 @@ then
     sleep 30
     softioc_console -R iocjscalersRICH
 
-elif [[ $1 == "svt3" ]]
-then
-    dgsReboot svt3
-    echo Sleeping 30 seconds before rebooting IOC ...
-    sleep 30
-    softioc_console -R iocjscalersRICH
-
 elif [[ $1 == 1 || $1 == 2 || $1 == 3 || $1 == 4 || $1 == 5 || $1 == 6 ]]
 then
     sectorReboot $1

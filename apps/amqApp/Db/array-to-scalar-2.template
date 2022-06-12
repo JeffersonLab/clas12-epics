@@ -1,0 +1,24 @@
+
+record(subArray,"$(P)$(R=)$(NAM0=0)$(S=):sa") {
+    field(INP,"$(INP) CPP")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,0)
+    field(FLNK,"$(P)$(R=)$(NAM1=01)$(S=):sa.PROC")
+}
+record(subArray,"$(P)$(R=)$(NAM1=1)$(S=):sa") {
+    field(INP,"$(INP)")
+    field(FTVL,"$(FTVL=DOUBLE)")
+    field(MALM,4)
+    field(NELM,1)
+    field(INDX,1)
+    field(FLNK,"$(P)$(R=)$(NAM0=0)$(S=).PROC")
+}
+record(longin,"$(P)$(R=)$(NAM0=0)$(S=)") {
+    field(INP,"$(P)$(R=)$(NAM0=0)$(S=):sa")
+    field(FLNK,"$(P)$(R=)$(NAM1=1)$(S=).PROC")
+}
+record(longin,"$(P)$(R=)$(NAM1=1)$(S=)") {
+    field(INP,"$(P)$(R=)$(NAM1=1)$(S=):sa")
+}

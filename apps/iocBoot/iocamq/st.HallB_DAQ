@@ -102,6 +102,7 @@ dbLoadRecords("db/daq2epics-alias.db")
 dbLoadRecords("db/amqRocBusy-alarm.db","ROC=mmft1,HIHI=50")
 
 dbLoadTemplate("db/amqTriggerNames.substitutions")
+dbLoadTemplate("db/amqTriggerFlags.substitutions")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -119,5 +120,6 @@ StartMQ()
 seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
 
 seq stage2bits
+seq sums
 
 dbl > pv.list

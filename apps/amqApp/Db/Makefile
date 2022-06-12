@@ -53,6 +53,9 @@ DB += amqDaq.substitutions
 DB += amqDaq-aliases.db
 DB += amqTriggerNames.template
 DB += amqTriggerNames.substitutions
+DB += array-to-scalar-4.template
+DB += amqTriggerFlags.substitutions
+
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

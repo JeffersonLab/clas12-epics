@@ -5,17 +5,26 @@ var novice=widget.getMacroValue("NOVICE");
 var prefix="B_DAQ_GTTrigBit";
 
 var enpvs=[];
+var enpvs2=[];
 for (var chan=0; chan<32; chan++) {
     pvname=prefix+":"+chan+":enable"
     enpvs[chan]=PVUtil.createPV(pvname,widget);
+    
+    c=chan;
+    if (c<10) c = "0"+c;
+    pvname2 = "B_DAQ:TriggerFlag:"+c+":display";
+    //java.lang.System.out.println(pvname2);
+    enpvs2[chan]=PVUtil.createPV(pvname2,widget);
 }
 
 
+    //java.lang.System.out.println("A");
 var keepers=[0,1,2,3,4,5,6];
 //var keepers=[0,1,2,3,4,5,6,10,15,19,20,21,23,25,26,30,31];
 
   for (var chan=0; chan<32; chan++)
   {
+    //java.lang.System.out.println("B"+chan);
 
     if (novice==1) {
         var enabled=0;
@@ -23,17 +32,18 @@ var keepers=[0,1,2,3,4,5,6];
             try {
                 // pv is created in different threadh,
                 // wait to get a value
-                enabled=PVUtil.getLong(enpvs[chan]);
+    //java.lang.System.out.println("C"+chan);
+                enabled=PVUtil.getLong(enpvs2[chan]);
                 break;
             }
             catch (ss) { }
         }
-        for (var ii=0; ii<keepers.length; ii++) {
-            if (chan==keepers[ii]) {
-                enabled=1;
-                break;
-            }
-        }
+        //for (var ii=0; ii<keepers.length; ii++) {
+        //    if (chan==keepers[ii]) {
+        //        enabled=1;
+        //        break;
+        //    }
+        //}
         if (enabled==0) continue;
     }
 

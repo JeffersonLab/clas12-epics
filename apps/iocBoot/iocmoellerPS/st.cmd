@@ -9,7 +9,7 @@ dbLoadDatabase("dbd/dynapower.dbd")
 dynapower_registerRecordDeviceDriver(pdbbase)
 
 drvAsynIPPortConfigure("SER1", "hallb-moxa6:4001")
-drvAsynIPPortConfigure("SER2", "hallb-moxa8:4009")
+drvAsynIPPortConfigure("SER2", "hallb-moxa6:4009")
 
 #asynSetTraceMask("SER1",-1,0x09)
 #asynSetTraceIOMask("SER1",-1,0x03)

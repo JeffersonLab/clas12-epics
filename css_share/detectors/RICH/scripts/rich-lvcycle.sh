@@ -35,7 +35,7 @@ function lvcycle {
           then
               echo "Trying Again to Clear Errors ..." | $log
               caput B_HW_HVRICH1:ClearAlarm 1 | $log
-              #caput B_HW_HVRICH2:ClearAlarm 1 | $log
+              caput B_HW_HVRICH2:ClearAlarm 1 | $log
               sleep 5
               caput $pvGo 1 | $log
               sleep 5

@@ -1318,12 +1318,24 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/MVT_HV/MVT_ON.snp</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>BMT - All HV ON - Full Voltage</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/MVT_HV/MVT_ON_SAFE.snp</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>BMT - All HV ON - Safe Voltages</description>
+      </action>
       <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:safe</pv_name>
+        <pv_name>B_DET_BMT_HV:pwoff</pv_name>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
-        <description>BMT - All HV SAFE</description>
+        <description>BMT - All HV OFF</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>B_DET_BMT_HV:pwon</pv_name>
@@ -1363,13 +1375,6 @@ $(pv_value)</tooltip>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>Save/Restore HV Settings</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:pwoff</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>BMT - All HV OFF</description>
       </action>
     </actions>
     <font>

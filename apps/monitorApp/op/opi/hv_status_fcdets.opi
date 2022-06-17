@@ -621,7 +621,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
       <DET>LTCC</DET>
-      <OPI>/CLAS12_Share/detectors/LTCC/ltcc_hv.opi</OPI>
+      <OPI>/CLAS12_Share/detectors/LTCC/ltcc_hv-2356.opi</OPI>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -1869,18 +1869,17 @@ $(pv_value)</tooltip>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="true" hook_all="false">
-      <action type="WRITE_PV">
-        <pv_name>B_DET_BMT_HV:safe</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>BMT HV ON - Safe Voltage</description>
-      </action>
       <action type="EXECUTE_CMD">
         <command>burtwb -f /usr/clas12/DATA/burt/MVT_HV/MVT_ON.snp</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>BMT HV ON - Full Voltage</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burtwb -f /usr/clas12/DATA/burt/MVT_HV/MVT_ON_SAFE.snp</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>BMT HV ON - Safe Voltage</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>B_DET_BMT_HV:pwoff</pv_name>

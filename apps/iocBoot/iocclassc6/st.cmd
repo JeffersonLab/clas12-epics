@@ -32,8 +32,8 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocclassc6")
 # This is a reasonable test value: 32768
 
 #drvSIS3820Config("STRKHEL", 0x08000000, 220, 6, 16, 32, 0, 0)
-#drvSIS3801Config("STRKHEL", 0x09000000, 220, 6, 32768, 32)
-drvSIS3801Config("STRKHEL", 0x0A000000, 220, 6, 32768, 32)
+drvSIS3801Config("STRKHEL", 0x09000000, 220, 6, 32768, 32)
+#drvSIS3801Config("STRKHEL", 0x0A000000, 220, 6, 32768, 32)
 
 dbLoadRecords("$(STD)/stdApp/Db/scaler32.db", "P=asym_, S=sc, DTYP=Asyn Scaler, OUT=@asyn(STRKHEL), FREQ=25000000")
 dbLoadRecords("$(MCA)/db/SIS38XX.template", "P=asym_, SCALER=asym_sc, PORT=STRKHEL")

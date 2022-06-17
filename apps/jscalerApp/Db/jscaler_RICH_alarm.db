@@ -43,3 +43,43 @@ record(calc,"B_DET_RICH_SCALERS:alarm") {
 }
 
 
+record(calc,"B_DET_RICH2_SSP:data:nFibers:alarm") {
+    field(SCAN,"2 second")
+    field(INPA,"B_HW_SVT3:data:nFibers MSS")
+    field(INPB,"B_DET_RICH2_LV:stat")
+    field(INPC,"138")
+    field(CALC,"B=1 && A<C ? 1 : 0")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+
+record(calc,"B_DET_RICH2_SSP:comms:alarm") {
+    field(SCAN,"2 second")
+    field(INPA,"B_HW_SVT3_Sl13:comms")
+    field(INPB,"B_HW_SVT3_Sl14:comms")
+    field(INPC,"B_HW_SVT3_Sl15:comms")
+    field(INPD,"B_HW_SVT3_Sl16:comms")
+    field(INPE,"B_HW_SVT3_Sl17:comms")
+    field(CALC,"(A=0||B=0||C=0||D=0||E=0)?0:1")
+#field(CALC,"(A+N+C+D+E+F+G+H+I+J)=10?1:0")
+    field(LSV,"MAJOR")
+    field(LOW,"0")
+}
+
+record(compress,"B_DET_RICH2_SCALERS:min") {
+    field(INP,"B_DET_RICH2_SCALERS_PMTS:wf CPP NMS")
+    field(ALG,"N to 1 Low Value")
+    field(NSAM,1)
+    field(N,391)
+}
+record(calc,"B_DET_RICH2_SCALERS:alarm") {
+    field(SCAN,"2 second")
+    field(INPA,"B_DET_RICH2_SCALERS:min")
+    field(INPB,"B_DET_RICH2_HV:isOff")
+    field(INPC,"B_DAQ:coda_status_ai")
+    field(CALC,"B=1 ? 1 : (C=0 ? 1 : A)")
+    field(LOW,"0")
+    field(LSV,"MAJOR")
+}
+
+

@@ -99,6 +99,10 @@ dbpf "q_asym_3.HIGH","0.2"
 dbpf "q_asym_3.HIHI","0.4"
 dbpf "q_asym_3.HSV","MINOR"
 dbpf "q_asym_3.HHSV","MAJOR"
+dbpf "q_asym_3.LOW","-0.2"
+dbpf "q_asym_3.LOLO","-0.4"
+dbpf "q_asym_3.LSV","MINOR"
+dbpf "q_asym_3.LLSV","MAJOR"
 
 # Struck setup for asym,
 # * with external channel advance and user inputs (Mode 0)

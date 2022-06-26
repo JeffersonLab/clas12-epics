@@ -5,7 +5,6 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS BELOW HERE
 
 # Build an IOC support library
-LIBRARY_IOC_vxWorks += mollerSetupSupport
 LIBRARY_IOC_Linux += mollerSetupSupport
 DBD += mollerSetupSupport.dbd
 
@@ -18,9 +17,6 @@ mollerSetupSupport_SRCS += automoller.st
 
 mollerSetupSupport_LIBS += seq pv
 mollerSetupSupport_LIBS += $(EPICS_BASE_IOC_LIBS)
-
-# Build the IOC application
-PROD_IOC_vxWorks = mollerSetup
 
 PROD_IOC_Linux = mollerSetup
 
@@ -39,10 +35,6 @@ mollerSetup_SRCS += mollerSetup_registerRecordDeviceDriver.cpp
 
 # Build the main IOC entry point where needed
 mollerSetup_SRCS_DEFAULT += mollerSetupMain.cpp
-mollerSetup_SRCS_vxWorks += -nil-
-
-# Add support from base/src/vxWorks if needed
-#mollerSetup_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
 
 # Link in the code from our support library
 mollerSetup_LIBS += mollerSetupSupport

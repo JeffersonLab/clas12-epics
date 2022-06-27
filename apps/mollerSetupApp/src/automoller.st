@@ -88,8 +88,8 @@ int   beamPasses; assign beamPasses to "MMSHLBPASS";
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 
 // Wien Angles:
-float vwienangle; assign vwienangle to "VWienAngle";
-float hwienangle; assign hwienangle to "HWienAngle";
+float vwienangle; assign vwienangle to "PWF1I04:spinCalc";
+float hwienangle; assign hwienangle to "PWF1I06:spinCalc";
 
 // CODA run number:
 int coda_runno; assign coda_runno to "B_DAQ:run_number";

@@ -94,7 +94,7 @@ dbLoadRecords("db/moeller_coincaccid_ratio.db")
 cd startup
 iocInit
 
-# alarm limits on SLM beam charge asymmetry:
+# alarm limits on SLM/FCUP beam charge asymmetry:
 dbpf "q_asym_3.HIGH","0.2"
 dbpf "q_asym_3.HIHI","0.4"
 dbpf "q_asym_3.HSV","MINOR"
@@ -103,6 +103,14 @@ dbpf "q_asym_3.LOW","-0.2"
 dbpf "q_asym_3.LOLO","-0.4"
 dbpf "q_asym_3.LSV","MINOR"
 dbpf "q_asym_3.LLSV","MAJOR"
+dbpf "q_asym_7.HIGH","0.2"
+dbpf "q_asym_7.HIHI","0.4"
+dbpf "q_asym_7.HSV","MINOR"
+dbpf "q_asym_7.HHSV","MAJOR"
+dbpf "q_asym_7.LOW","-0.2"
+dbpf "q_asym_7.LOLO","-0.4"
+dbpf "q_asym_7.LSV","MINOR"
+dbpf "q_asym_7.LLSV","MAJOR"
 
 # Struck setup for asym,
 # * with external channel advance and user inputs (Mode 0)
@@ -118,6 +126,7 @@ seq &asym
 
 epicsThreadSleep(1)
 dbpf "moller_accumulate","0"
+dbpf "asym_file_disable","0"
 
 ## update these after 2017 engineering run:
 #seq &kepco_seq

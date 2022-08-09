@@ -3,7 +3,7 @@
 #define COLLIMATOR_POSITION 7.0837
 
 // tolerances for magent currents:
-#define QUAD_TOLERANCE 100
+#define QUAD_TOLERANCE 200
 #define HELM_TOLERANCE 0.1
 #define TAGGER_TOLERANCE 200
 

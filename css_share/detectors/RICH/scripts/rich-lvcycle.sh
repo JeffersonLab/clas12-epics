@@ -48,6 +48,8 @@ function lvcycle {
               echo "#            !!  Contact RICH Expert !!            #" | $log
               echo "#                                                  #" | $log
               echo "####################################################" | $log
+              echo "press Return to continue"
+              read
               exit
           fi
       fi
@@ -72,7 +74,9 @@ function checkssh {
     fi
     if [ $tries -gt $maxtries ]
     then
-        echo "ERROR:  FAILED TO SSH.  Terminated." | $log
+        echo "ERROR:  FAILED TO SSH to $hostname.  Terminated." | $log
+        echo "press Return to continue"
+        read
         exit
     fi
     sleep 1

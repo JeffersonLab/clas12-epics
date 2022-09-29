@@ -8,8 +8,8 @@ CLASSPATH :=.:lib/jlog-4.0.1.jar:lib/mysql-connector-java-5.1.32-bin.jar:src/mai
 
 all:
 #	javac -Xlint:unchecked -cp $(CLASSPATH) src/main/java/org/jlab/hallb/AutoLogEntry/MakeLogEntry.java src/main/java/org/jlab/hallb/AutoLogEntry/CheckComboBox.java
-	javac -Xlint:none -cp $(CLASSPATH) src/main/java/org/jlab/hallb/AutoLogEntry/MakeLogEntry.java src/main/java/org/jlab/hallb/AutoLogEntry/CheckComboBox.java
+	javac -Xlint:none -cp $(CLASSPATH) src-NEW/main/java/org/jlab/hallb/AutoLogEntry/MakeLogEntry.java src/main/java/org/jlab/hallb/AutoLogEntry/CheckComboBox.java
 
-clean:
-	rm -f src/main/java/org/jlab/hallb/AutoLogEntry/*.class
+#clean:
+#	rm -f src/main/java/org/jlab/hallb/AutoLogEntry/*.class
 

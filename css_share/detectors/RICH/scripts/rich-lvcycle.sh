@@ -20,6 +20,9 @@ function start_msg {
     date_msg
     echo "#####################################################" | $log
     echo "#                                                   #" | $log
+    echo "# NOTE: this will trigger some RICH alarms, which   #" | $log
+    echo "#   can be ignored until this recovery exits.       #" | $log
+    echo "#                                                   #" | $log
     echo "# NOTE: the DAQ will need to be reinitialized after #" | $log
     echo "#  ***AFTER*** this script is complete:             #" | $log
     echo "#                                                   #" | $log
@@ -49,9 +52,9 @@ function success_msg {
     echo  | $log
     echo "#####################################################" | $log
     echo "#                                                   #" | $log
-    echo "#           rich-lvcycle.sh COMPLETE                #" | $log
+    echo "#           RICH RECOVERY SUCCESFUL!!!              #" | $log
     echo "#                                                   #" | $log
-    echo "# !!!!!!!!!!!   WARNING, SEE BELOW   !!!!!!!!!!!!!  #" | $log
+    echo "# -----------   WARNING, SEE BELOW   -------------  #" | $log
     echo "#                                                   #" | $log
     echo "# NOTE1: RICH temperatures and scalers can take up  #" | $log
     echo "#     to one minute to update after this recovery.  #" | $log
@@ -64,6 +67,31 @@ function success_msg {
     echo "press Return to continue, which will close this window!"
     read
     exit 0
+}
+
+function iocreboot {
+    comms=`caget -t B_DET_RICH_ALL_LV:isComm`
+    [ $? -eq 0 ] && [ $comms -eq 1 ] && return
+    echo -e "\nRebooting RICH HVCAEN IOC ...\n" | $log
+    pv=ioccaenhv_HVRICH:SysReset
+    caput $pv 1
+    sleep 5
+    count=0
+    while [ 1 ]
+    do
+        if [ $count -gt 20 ]
+        then
+            failure_msg ERROR on $pv reboot
+        fi
+        stat=`caget -w 0.1 -t $pv`
+        if [ $? -eq 0 ]
+        then
+            sleep 1
+            break
+        fi
+        let count=$count+1
+        sleep 1
+    done
 }
 
 function lvcycle {
@@ -117,7 +145,7 @@ function checkssh {
   while [ 1 ]
   do
     let tries=$tries+1
-    echo && echo -n -e "Attempting ssh ... " | $log
+    echo && echo -n -e "\nAttempting ssh ... " | $log
     ssh -q $1 exit
     if [ $? -eq 0 ]
     then
@@ -135,18 +163,28 @@ function checkssh {
 }
 
 ############################################################
+############################################################
+############################################################
+############################################################
+############################################################
 
 start_msg
 
 maxattempts=4
 nattempts=0
 
+echo -e "\n!!!!   RICH RECOVERY   !!!!\n\n" | $log
+
+iocreboot
+
 while [ 1 ]
 do
 
     let nattempts=$nattempts+1
 
-    echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
+    echo -e "\n!!!!   RICH RECOVERY #$nattempts  !!!!\n\n" | $log
+    
+    echo -e "\nTurning RICH LV OFF ...\n" | $log
 
     lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
 

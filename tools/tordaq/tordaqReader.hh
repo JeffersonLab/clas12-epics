@@ -666,27 +666,29 @@ old:
                Sol_QD6 : (VT3_DAQ+VT2_DAQ+VT1_DAQ)
 */
             std::string sComparators=
-               "Sol_QD1 : -(VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) + (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)\n"
+               "Sol_QD1 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) - (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)\n"
                "Sol_QD2 : (VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ ) - (VT9_DAQ+VT10_DAQ+VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ)\n"
                "Sol_QD3 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ)\n"
-               "Sol_QD4 : VT19\n"
+               "Sol_QD4 : (VT17_DAQ+VT18_DAQ+VT19_DAQ)\n"
                "Sol_QD5 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ+VT1_DAQ)\n"
-               "Sol_QD6 : VT1\n"
+               "Sol_QD6 : (VT3_DAQ+VT2_DAQ+VT1_DAQ)\n"
                "Sol_QD7 : (VT5_DAQ+VT4_DAQ+VT3_DAQ+VT2_DAQ)\n"
-               "Sol_QD8 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ)\n";
+               "Sol_QD8 : (VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ)\n"
+               "Sol_QD9 : (VT6_DAQ) - (VT14_DAQ)\n"
+               "Sol_QD10 : (VT8_DAQ) - (VT12_DAQ)\n";
 
             if (isSolenoid) {
                 std::cout<<" QD1"<<std::flush;
-                TH1* hQD1=(TH1*)hh[11]->Clone("hQD1");
-                hQD1->Add(hh[12]);
-                hQD1->Add(hh[13]);
-                hQD1->Add(hh[14]);
-                hQD1->Add(hh[5],-1);
-                hQD1->Add(hh[6],-1);
-                hQD1->Add(hh[7],-1);
-                hQD1->Add(hh[8],-1);
-                hQD1->Add(hh[9],-1);
-                hQD1->Add(hh[10],-1);
+                TH1* hQD1=(TH1*)hh[5]->Clone("hQD1");
+                hQD1->Add(hh[6]);
+                hQD1->Add(hh[7]);
+                hQD1->Add(hh[8]);
+                hQD1->Add(hh[9]);
+                hQD1->Add(hh[10]);
+                hQD1->Add(hh[11],-1);
+                hQD1->Add(hh[12],-1);
+                hQD1->Add(hh[13],-1);
+                hQD1->Add(hh[14],-1);
                 std::cout<<",QD2"<<std::flush;
                 TH1* hQD2=(TH1*)hh[5]->Clone("hQD2");
                 hQD2->Add(hh[6]);
@@ -705,10 +707,10 @@ old:
                 hQD3->Add(hh[18]);
                 hQD3->Add(hh[19]);
                 std::cout<<",QD4"<<std::flush;
-                //TH1* hQD4=(TH1*)hh[17]->Clone("hQD4");
-                //hQD4->Add(hh[18]);
-                //hQD4->Add(hh[19]);
-                TH1* hQD4=(TH1*)hh[19]->Clone("hQD4");
+                TH1* hQD4=(TH1*)hh[17]->Clone("hQD4");
+                hQD4->Add(hh[18]);
+                hQD4->Add(hh[19]);
+                //TH1* hQD4=(TH1*)hh[19]->Clone("hQD4");
                 std::cout<<",QD5"<<std::flush;
                 TH1* hQD5=(TH1*)hh[1]->Clone("hQD5");
                 hQD5->Add(hh[2]);
@@ -716,10 +718,10 @@ old:
                 hQD5->Add(hh[4]);
                 hQD5->Add(hh[5]);
                 std::cout<<",QD6"<<std::flush;
-                //TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
-                //hQD6->Add(hh[2]);
-                //hQD6->Add(hh[3]);
                 TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
+                hQD6->Add(hh[2]);
+                hQD6->Add(hh[3]);
+                //TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
                 std::cout<<",QD7";
                 TH1* hQD7=(TH1*)hh[2]->Clone("hQD7");
                 hQD7->Add(hh[3]);
@@ -730,6 +732,12 @@ old:
                 hQD8->Add(hh[16]);
                 hQD8->Add(hh[17]);
                 hQD8->Add(hh[18]);
+                std::cout<<",QD9"<<std::flush;
+                TH1* hQD9=(TH1*)hh[6]->Clone("hQD9");
+                hQD9->Add(hh[14], -1);
+                std::cout<<",QD10"<<std::flush;
+                TH1* hQD10=(TH1*)hh[8]->Clone("hQD10");
+                hQD10->Add(hh[12], -1);
 
                 tdData.varnames.push_back("QD1");  outHistos.push_back(hQD1);
                 tdData.varnames.push_back("QD2");  outHistos.push_back(hQD2);
@@ -739,6 +747,8 @@ old:
                 tdData.varnames.push_back("QD6");  outHistos.push_back(hQD6);
                 tdData.varnames.push_back("QD7");  outHistos.push_back(hQD7);
                 tdData.varnames.push_back("QD8");  outHistos.push_back(hQD8);
+                tdData.varnames.push_back("QD9");  outHistos.push_back(hQD9);
+                tdData.varnames.push_back("QD10");  outHistos.push_back(hQD10);
 
                 std::cout<<std::endl<<sComparators<<std::endl;
             }

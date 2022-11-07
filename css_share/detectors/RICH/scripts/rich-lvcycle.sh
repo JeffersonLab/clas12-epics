@@ -18,17 +18,17 @@ function date_msg {
 
 function start_msg {
     date_msg
-    echo "#####################################################" | $log
-    echo "#                                                   #" | $log
-    echo "# NOTE: this will trigger some RICH alarms, which   #" | $log
-    echo "#   can be ignored until this recovery exits.       #" | $log
-    echo "#                                                   #" | $log
-    echo "# NOTE: the DAQ will need to be reinitialized after #" | $log
-    echo "#  ***AFTER*** this script is complete:             #" | $log
-    echo "#                                                   #" | $log
-    echo "#   Cancel->Reset->Configure->Download->Prestart    #" | $log
-    echo "#                                                   #" | $log
-    echo "#####################################################" | $log
+    echo "-----------------------------------------------------" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE: this will trigger some RICH alarms, which   |" | $log
+    echo "|   can be ignored until this recovery exits.       |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE: the DAQ will need to be reinitialized after |" | $log
+    echo "|  ***AFTER*** this script is complete:             |" | $log
+    echo "|                                                   |" | $log
+    echo "|   Cancel->Reset->Configure->Download->Prestart    |" | $log
+    echo "|                                                   |" | $log
+    echo "-----------------------------------------------------" | $log
     echo  | $log
 }
 
@@ -50,24 +50,44 @@ function failure_msg {
 
 function success_msg {
     echo  | $log
-    echo "#####################################################" | $log
-    echo "#                                                   #" | $log
-    echo "#           RICH RECOVERY SUCCESFUL!!!              #" | $log
-    echo "#                                                   #" | $log
-    echo "# -----------   WARNING, SEE BELOW   -------------  #" | $log
-    echo "#                                                   #" | $log
-    echo "# NOTE1: RICH temperatures and scalers can take up  #" | $log
-    echo "#     to one minute to update after this recovery.  #" | $log
-    echo "#                                                   #" | $log
-    echo "# NOTE2: the DAQ will now need to be reinitialized: #" | $log
-    echo "#   Cancel->Reset->Configure->Download->Prestar t   #" | $log
-    echo "#                                                   #" | $log
-    echo "#####################################################" | $log
+    echo "-----------------------------------------------------" | $log
+    echo "|                                                   |" | $log
+    echo "|    RICH RECOVERY SUCCESFUL!!!   ($@)   |" | $log
+    echo "|                                                   |" | $log
+    echo "| -----------   WARNING, SEE BELOW   -------------  |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE1: RICH temperatures and scalers can take up  |" | $log
+    echo "|     to one minute to update after this recovery.  |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE2: the DAQ will now need to be reinitialized: |" | $log
+    echo "|   Cancel->Reset->Configure->Download->Prestart    |" | $log
+    echo "|                                                   |" | $log
+    echo "-----------------------------------------------------" | $log
     date_msg
     echo "press Return to continue, which will close this window!"
     read
     exit 0
 }
+
+#function checkscalers {
+  #maxattempts=$1
+  #waits=$2
+  #nattempts=0
+  #while [ $nattempts -lt $maxattempts ]
+  #do
+#    stat=`caget -t B_DET_RICH_SCALERS_PMTS:max`
+#    if [ $stat -le 0 ]
+#    then
+#        return 1
+#    fi
+#    stat=`caget -t B_DET_RICH2_SCALERS_PMTS:max`
+#    if [ $stat -le 0 ]
+#    then
+#        return 1
+#    fi
+  #done
+#  return 0
+#}
 
 function iocreboot {
     comms=`caget -t B_DET_RICH_ALL_LV:isComm`
@@ -173,6 +193,15 @@ start_msg
 maxattempts=4
 nattempts=0
 
+# if scalers are all zero, skip the 1st iteration to make 
+# roc_reboot happen first: 
+#checkscalers
+#if [ $? -ne 0 ]
+#then
+#    let nattempts=$nattempts+1
+#    let maxattempts=$maxattempts+1
+#fi
+
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\n" | $log
 
 iocreboot
@@ -211,10 +240,13 @@ do
     ssh rich4 rich_init | $log
     ntiles=`tail -100 $logfile | grep 'Total Tiles' | awk '{print$4}'`
     echo $ntiles
-    
+  
+    #sleep 10
+    #check_scalers
+    #if [ $? -eq 0 ] &&
     if [ $ntiles -eq 276 ]
     then
-        success_msg
+        success_msg "on attempt #$nattempts"
         break
     elif [ $nattempts -gt $maxattempts ]
     then

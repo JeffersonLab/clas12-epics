@@ -897,18 +897,6 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>SSP Boards (EXPERT-only)</description>
         </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/RICH/ssp-boards-tabless.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SLOT>04</SLOT>
-            <NCHAN>32</NCHAN>
-            <CRATE>SVT3</CRATE>
-            <DET>RICH2</DET>
-          </macros>
-          <replace>2</replace>
-          <description>SSP Boards - EEL (EXPERT-only)</description>
-        </action>
         <action type="EXECUTE_CMD">
           <command>xterm -T "RICH Recovery" -bg blue -fg white /usr/clas12/release/pro/epics/bin/rich-lvcycle.sh</command>
           <command_directory>$(user.home)</command_directory>
@@ -1442,6 +1430,14 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>DC Crates</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/amqApp/helicity-scalers.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Helicity-Latched Triggers</description>
         </action>
       </actions>
       <font>
@@ -2433,7 +2429,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>110</height>
+    <height>133</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2577,6 +2573,59 @@ $(pv_value)</tooltip>
       <actions hook="false" hook_all="true">
         <action type="EXECUTE_CMD">
           <command>logbookEntry.sh &gt;&amp; /dev/null</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description></description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+      <toggle_button>false</toggle_button>
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <push_action_index>0</push_action_index>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>136c1d91:183d2a0b61f:-7e9f</wuid>
+      <pv_value />
+      <text>Save/Restore</text>
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>30</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <image></image>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Action Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>7</x>
+      <name>Action Button_1</name>
+      <y>71</y>
+      <style>0</style>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="true">
+        <action type="EXECUTE_CMD">
+          <command>burt-gui</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
           <description></description>

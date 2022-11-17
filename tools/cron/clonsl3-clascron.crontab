@@ -6,8 +6,8 @@ MAILTO=baltzell@jlab.org
 # HEADER: not be deleted, as doing so could cause duplicate cron jobs.
 # Puppet Name: torus_data_mover
 PATH=/bin:/usr/bin:/site/bin
-15,45  * * * * flock -n /home/clascron/.torus_rsync.lock jmirror /logs/torus /logs/torus /mss/hallb/torus/data-2023 --jvm:-DJMirror.minFileModificationAgeSeconds=1800
+20,50  * * * * flock -n /home/clascron/.torus_rsync.lock jmirror -jvm:-DJMirror.minFileModificationAgeSeconds=1800 /logs/torus /logs/torus /mss/hallb/torus/data-2023
 # Puppet Name: solenoid_data_mover
 PATH=/bin:/usr/bin:/site/bin
-15,45 * * * * flock -n /home/clascron/.solenoid_rsync.lock jmirror /logs/solenoid /logs/solenoid /mss/hallb/solenoid/data-2023 --jvm:-DJMirror.minFileModificationAgeSeconds=1800
+20,50 * * * * flock -n /home/clascron/.solenoid_rsync.lock jmirror -jvm:-DJMirror.minFileModificationAgeSeconds=1800 /logs/solenoid /logs/solenoid /mss/hallb/solenoid/data-2023
 #

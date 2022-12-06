@@ -672,7 +672,8 @@ sy1527GetMap(unsigned int id)
             !strcmp(Measure[id].board[i].modelname,"A1535SN") ||
             !strcmp(Measure[id].board[i].modelname,"A7435N") ||
             !strcmp(Measure[id].board[i].modelname,"A7435P") ||
-            !strcmp(Measure[id].board[i].modelname,"A1821H"))
+            !strcmp(Measure[id].board[i].modelname,"A1821H") ||
+            !strcmp(Measure[id].board[i].modelname,"A1821"))
         {
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1535param;

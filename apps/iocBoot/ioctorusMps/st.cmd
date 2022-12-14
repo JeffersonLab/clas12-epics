@@ -19,6 +19,11 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/torus_mps.db","P=B_TORUS:,R=MPS:,PLCID=PLC_TORUS")
 dbLoadTemplate("db/torus_interlocks.substitutions")
 
+## CA Security
+dbLoadRecords("db/cas.db", "P=B_TORUS:,R=MPS:,ASG=DEFAULT")
+asSetFilename("${TOP}/iocBoot/acf/torsol_mps.acf")
+asSetSubstitutions("P=B_TORUS:,R=MPS:")
+
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup

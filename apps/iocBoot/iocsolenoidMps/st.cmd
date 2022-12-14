@@ -20,6 +20,11 @@ dbLoadRecords("db/solenoid_mps.db","P=B_SOL:,R=MPS:,PLCID=PLC_SOL")
 dbLoadRecords("db/solenoid_lcw.db","PLCID=PLC_SOL")
 dbLoadTemplate("db/solenoid_interlocks.substitutions")
 
+## CA Security
+dbLoadRecords("db/cas.db", "P=B_SOL:,R=MPS:,ASG=DEFAULT")
+asSetFilename("${TOP}/iocBoot/acf/torsol_mps.acf")
+asSetSubstitutions("P=B_SOL:,R=MPS:")
+
 cd ${TOP}/iocBoot/${IOC}
 
 ## autosave setup

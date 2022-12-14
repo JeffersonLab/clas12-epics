@@ -1,0 +1,32 @@
+# 
+# Pt = X * A
+# For NH3, X = 30.2
+# For ND3, X = 38.2
+#
+#
+# HLB:TARGET:STAT
+# 1 = NH3
+# 2 = ND3
+
+record(calc,"$(P)$(R=)pol") {
+    field(SCAN,"10 second")
+    field(INPA,"$(P)$(R=)asycorr")
+    field(INPB,"HLB:TARGET:STAT")
+    field(INPC,"30.2") # Harut's scale factor for NH3
+    field(INPD,"38.2") # Harut's scale factor for ND3
+    field(INPE,"1.15") # Trigger 29 dilution for NH3
+    field(INPF,"1.15") # Trigger 29 dilution for ND3
+    field(CALC,"A * ( B=1 ? (C*E) : (B=2 ? D*F : 0 ) )")
+    field(FLNK,"$(P)$(R=)epol.PROC")
+}
+
+record(calc,"$(P)$(R=)epol") {
+    field(INPA,"$(P)$(R=)easycorr")
+    field(INPB,"HLB:TARGET:STAT")
+    field(INPC,"30.2") # Harut's scale factor for NH3
+    field(INPD,"38.2") # Harut's scale factor for ND3
+    field(INPE,"1.15") # Trigger 29 dilution for NH3
+    field(INPF,"1.15") # Trigger 29 dilution for ND3
+    field(CALC,"A * ( B=1 ? (C*E) : (B=2 ? D*F : 0 ) )")
+}
+

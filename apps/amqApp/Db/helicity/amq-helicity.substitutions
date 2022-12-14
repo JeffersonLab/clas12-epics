@@ -1,4 +1,4 @@
-file "helicity-scalers.template" {
+file "db/helicity-scalers.template" {
 pattern { N  P              R         INP          OFFSET      S }
         { 2  B_DAQ:HEL:2m:  fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
         { 10 B_DAQ:HEL:10m: fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
@@ -26,7 +26,7 @@ pattern { N  P              R         INP          OFFSET      S }
         { 60 B_DAQ:HEL:60m: 29:neg:   B_DAQ:HEL:62 ""          29: }
 }
 
-file "asymmetry.template" {
+file "db/asymmetry.template" {
 pattern { P              R     PLUS                       MINUS                      PLUS2 MINUS2 }
         { B_DAQ:HEL:2m:  fcup: B_DAQ:HEL:2m:fcup:pos:sum  B_DAQ:HEL:2m:fcup:neg:sum  ""    ""     }
         { B_DAQ:HEL:10m: fcup: B_DAQ:HEL:10m:fcup:pos:sum B_DAQ:HEL:10m:fcup:neg:sum ""    ""     }
@@ -40,5 +40,13 @@ pattern { P              R     PLUS                       MINUS                 
         { B_DAQ:HEL:10m: 29:   B_DAQ:HEL:10m:29:pos:sum   B_DAQ:HEL:10m:29:neg:sum   B_DAQ:HEL:10m:fcup:pos:sum B_DAQ:HEL:10m:fcup:neg:sum } 
         { B_DAQ:HEL:30m: 29:   B_DAQ:HEL:30m:29:pos:sum   B_DAQ:HEL:30m:29:neg:sum   B_DAQ:HEL:30m:fcup:pos:sum B_DAQ:HEL:30m:fcup:neg:sum } 
         { B_DAQ:HEL:60m: 29:   B_DAQ:HEL:60m:29:pos:sum   B_DAQ:HEL:60m:29:neg:sum   B_DAQ:HEL:60m:fcup:pos:sum B_DAQ:HEL:60m:fcup:neg:sum } 
+}
+
+file "db/helicity-poltar.template" {
+pattern { P    R }
+        { B_DAQ:HEL:2m:  29: }
+        { B_DAQ:HEL:10m: 29: }
+        { B_DAQ:HEL:30m: 29: }
+        { B_DAQ:HEL:60m: 29: }
 }
 

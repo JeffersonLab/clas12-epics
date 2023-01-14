@@ -27,7 +27,6 @@ iocscalers_SRCS_vxWorks += -nil-
 
 iocscalers_SRCS += jscalersF.st
 iocscalers_SRCS += jscalersC.st
-iocscalers_SRCS += richRecovery.st
 iocscalers_LIBS += seq pv
 
 iocscalers_LIBS += jscalers

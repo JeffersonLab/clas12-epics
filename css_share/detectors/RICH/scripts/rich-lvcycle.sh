@@ -4,6 +4,9 @@
 logfile="/usr/clas12/DATA/logs/rich-lvcycle.logtmp"
 log="tee -a $logfile"
 
+n_tiles_1=138
+n_tiles_2=137
+
 # this was probably because ssh keys are required:
 me=`whoami`
 if ! [ $me == "clasrun" ]
@@ -69,24 +72,27 @@ function success_msg {
     exit 0
 }
 
-#function checkscalers {
-  #maxattempts=$1
-  #waits=$2
-  #nattempts=0
-  #while [ $nattempts -lt $maxattempts ]
-  #do
-#    stat=`caget -t B_DET_RICH_SCALERS_PMTS:max`
-#    if [ $stat -le 0 ]
-#    then
-#        return 1
-#    fi
-#    stat=`caget -t B_DET_RICH2_SCALERS_PMTS:max`
-#    if [ $stat -le 0 ]
-#    then
-#        return 1
-#    fi
-  #done
-#  return 0
+function checkscalers {
+  stat=`caget -t B_DET_RICH_SCALERS_PMTS:max`
+  echo ">$stat<"
+  if [ ${stat%%.*} -le 0 ]
+  then
+      return 1
+  fi
+  stat=`caget -t B_DET_RICH2_SCALERS_PMTS:max`
+  echo ">$stat<"
+  if [ ${stat%%.*} -le 0 ]
+  then
+      return 1
+  fi
+  return 0
+}
+
+#function countscalers {
+#   n1=`caget -t B_HW_FEVME1:scalers:nFibers`
+#   n2=`caget -t B_HW_SVT3:scalers:nFibers`
+#   let n=$n1+$n2
+#   return $n
 #}
 
 function iocreboot {
@@ -107,6 +113,10 @@ function iocreboot {
         if [ $? -eq 0 ]
         then
             sleep 1
+            caput B_DET_RICH2_SSP:data:nFibers:alarm.INPC 137
+            caput B_DET_RICH2_SSP:data:nFibers:alarm.C 137
+            caput B_DET_RICH2_SCALERS:alarm.LSV NO_ALARM
+            caput B_HW_SVT3:scalers:nFibers.LOLO 136
             break
         fi
         let count=$count+1
@@ -195,12 +205,13 @@ nattempts=0
 
 # if scalers are all zero, skip the 1st iteration to make 
 # roc_reboot happen first: 
-#checkscalers
-#if [ $? -ne 0 ]
-#then
-#    let nattempts=$nattempts+1
-#    let maxattempts=$maxattempts+1
-#fi
+checkscalers
+stat=$?
+if [ $stat -ne 0 ]
+then
+    let nattempts=$nattempts+1
+    let maxattempts=$maxattempts+1
+fi
 
 echo -e "\n!!!!   RICH RECOVERY   !!!!\n\n" | $log
 
@@ -239,12 +250,8 @@ do
     echo -e "\nrunning rich_init ..." | $log
     ssh rich4 rich_init | $log
     ntiles=`tail -100 $logfile | grep 'Total Tiles' | awk '{print$4}'`
-    echo $ntiles
-  
-    #sleep 10
-    #check_scalers
-    #if [ $? -eq 0 ] &&
-    if [ $ntiles -eq 276 ]
+ 
+    if [ $ntiles -ge 275 ]
     then
         success_msg "on attempt #$nattempts"
         break

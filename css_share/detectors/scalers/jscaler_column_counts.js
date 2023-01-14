@@ -19,11 +19,7 @@ for (var cc=1; cc<=NCHAN; cc++) {
     lc.setPropertyValue("horizontal_alignment",1);
     lc.setPropertyValue("font","Fine Print");
     lc.setPropertyValue("precision_from_pv",true);
-    //lc.setPropertyValue("precision",2);
-//    lc.setPropertyValue("pv_name",PREFIX+chan+":c"+SCALER);
     lc.setPropertyValue("pv_name",PREFIX+chan+":"+SCALER);
-    
-    //java.lang.System.err.println(PREFIX+chan+":c"+SCALER);
 
     widget.addChildToBottom(lc);      
 }

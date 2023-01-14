@@ -21,8 +21,6 @@ for (var cc=1; cc<=NCHAN; cc++) {
     lc.setPropertyValue("precision",0);
     lc.setPropertyValue("border_alarm_sensitive",0);
     lc.setPropertyValue("pv_name",PREFIX+chan+".NAME");
-    
-    //java.lang.System.err.println(PREFIX+chan+".NAME");
 
     widget.addChildToBottom(lc);      
 

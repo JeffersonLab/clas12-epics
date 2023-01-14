@@ -11,6 +11,7 @@ Start_SCALERS_CRATE("3","ADCFT3")
 Start_SCALERS_CRATE("4","ADCCND1")
 
 #Start_SCALERS_CRATE("5","ADCBAND")
+Start_SCALERS_CRATE("6","TDCCTOF1")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -21,6 +22,7 @@ dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_CTOF_FADC.substitutions")
+dbLoadTemplate("db/jscalers_CTOF_DISC.substitutions")
 dbLoadTemplate("db/jscalers_HTCC_FADC.substitutions")
 
 dbLoadTemplate("db/jscalers_FTC_FADC.substitutions")

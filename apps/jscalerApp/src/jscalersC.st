@@ -26,6 +26,9 @@ string msg; assign msg to "B_SYS_FADC_CENTRAL:wfmsg";
 float wfoC[96]; assign wfoC to "B_DET_CTOF_FADC:wf";
 float wfiC[96]; assign wfiC to {};
 
+float wfoCd[96]; assign wfoCd to "B_DET_CTOF_DISC:wf";
+float wfiCd[96]; assign wfiCd to {};
+
 float wfoH[48]; assign wfoH to "B_DET_HTCC_FADC:wf";
 float wfiH[48]; assign wfiH to {};
 
@@ -52,7 +55,9 @@ ss seqJscalersC {
         for (ichan=1; ichan<=nchanC; ichan++)
         {
             sprintf(stmp,"B_DET_CTOF_FADC_%s%.2d:%s",sidesC[iside],ichan,suffix);
-            pvAssignSubst(wfiC[wfLengthC++],stmp);
+            pvAssignSubst(wfiC[wfLengthC],stmp);
+            sprintf(stmp,"B_DET_CTOF_DISC_%s%.2d:cTdc",sidesC[iside],ichan);
+            pvAssignSubst(wfiCd[wfLengthC++],stmp);
         }
       }
       for (isec=1; isec<=6; isec++)
@@ -102,7 +107,9 @@ ss seqJscalersC {
       for (ii=0; ii<wfLengthC; ii++)
       {
         pvGet(wfiC[ii]);
+        pvGet(wfiCd[ii]);
         wfoC[ii]=wfiC[ii];
+        wfoCd[ii]=wfiCd[ii];
       }
       for (ii=0; ii<wfLengthH; ii++)
       {
@@ -110,6 +117,7 @@ ss seqJscalersC {
         wfoH[ii]=wfiH[ii];
       }
       pvPut(wfoC);
+      pvPut(wfoCd);
       pvPut(wfoH);
       epicsThreadSleep(delay);
     } state run

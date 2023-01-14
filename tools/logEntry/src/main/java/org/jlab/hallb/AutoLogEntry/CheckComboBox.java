@@ -309,7 +309,7 @@ class CheckComboBox extends JComboBox {
             Object[] objs = getSelectedItems();
             Vector<String> strs = new Vector();
             if (objs==null) {
-                str = "Please select one or more ID types";
+                str = "---";
             } else {
                 for (Object obj : objs) {
                     strs.add(obj.toString());

@@ -17,7 +17,7 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 drvAsynIPPortConfigure("L0","htcc-rga:818",0,0,0)
 
 #asynSetTraceMask("L0",-1,0x9)
-#asynSetTraceIOMask("L0",-1,0x7)
+#asynSetTraceIOMask("L0",-1,0x4)
 
 asynOctetSetOutputEos("L0",-1,"\r\n")
 asynOctetSetInputEos("L0",-1,"\n\r")
@@ -26,6 +26,7 @@ epicsThreadSleep(1)
 
 dbLoadRecords("db/asynRecord.db","P=B_HTCC:,R=RGA,PORT=L0,ADDR=1,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/srs-rga.db","P=B_HTCC:,R=RGA,NANA=991,NHIST=100,MODEL=100,PORT=L0")
+dbLoadRecords("db/timer.db","P=B_HTCC:,R=RGA")
 
 cd ${TOP}/iocBoot/${IOC}
 

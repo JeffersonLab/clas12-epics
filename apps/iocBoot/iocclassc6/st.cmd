@@ -32,8 +32,8 @@ dbLoadRecords("${DEVIOCSTATS}/db/iocAdminVxWorks.db","IOC=iocclassc6")
 # This is a reasonable test value: 32768
 
 #drvSIS3820Config("STRKHEL", 0x08000000, 220, 6, 16, 32, 0, 0)
-#drvSIS3801Config("STRKHEL", 0x09000000, 220, 6, 32768, 32)
-drvSIS3801Config("STRKHEL", 0x0A000000, 220, 6, 32768, 32)
+drvSIS3801Config("STRKHEL", 0x09000000, 220, 6, 32768, 32)
+#drvSIS3801Config("STRKHEL", 0x0A000000, 220, 6, 32768, 32)
 
 dbLoadRecords("$(STD)/stdApp/Db/scaler32.db", "P=asym_, S=sc, DTYP=Asyn Scaler, OUT=@asyn(STRKHEL), FREQ=25000000")
 dbLoadRecords("$(MCA)/db/SIS38XX.template", "P=asym_, SCALER=asym_sc, PORT=STRKHEL")
@@ -94,11 +94,23 @@ dbLoadRecords("db/moeller_coincaccid_ratio.db")
 cd startup
 iocInit
 
-# alarm limits on SLM beam charge asymmetry:
+# alarm limits on SLM/FCUP beam charge asymmetry:
 dbpf "q_asym_3.HIGH","0.2"
 dbpf "q_asym_3.HIHI","0.4"
 dbpf "q_asym_3.HSV","MINOR"
 dbpf "q_asym_3.HHSV","MAJOR"
+dbpf "q_asym_3.LOW","-0.2"
+dbpf "q_asym_3.LOLO","-0.4"
+dbpf "q_asym_3.LSV","MINOR"
+dbpf "q_asym_3.LLSV","MAJOR"
+dbpf "q_asym_7.HIGH","0.2"
+dbpf "q_asym_7.HIHI","0.4"
+dbpf "q_asym_7.HSV","MINOR"
+dbpf "q_asym_7.HHSV","MAJOR"
+dbpf "q_asym_7.LOW","-0.2"
+dbpf "q_asym_7.LOLO","-0.4"
+dbpf "q_asym_7.LSV","MINOR"
+dbpf "q_asym_7.LLSV","MAJOR"
 
 # Struck setup for asym,
 # * with external channel advance and user inputs (Mode 0)
@@ -114,6 +126,7 @@ seq &asym
 
 epicsThreadSleep(1)
 dbpf "moller_accumulate","0"
+dbpf "asym_file_disable","0"
 
 ## update these after 2017 engineering run:
 #seq &kepco_seq

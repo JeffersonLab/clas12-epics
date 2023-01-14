@@ -1,0 +1,99 @@
+################################################################3
+#
+# This is for an alarm based on a string message from an external source.
+# If the string's value is anything other than $(OK), that will cause the
+# $(P):stat record below to go into alarm state.
+#
+# There are 2 modes for leaving alarm state:
+#
+# 1.  Automatic:  If $(N) is a positive number, it will leave alarm state
+# automatically after $(N) seconds unless another non-$(OK) string is
+# received in the interim.
+#
+# 2.  Manual:  If $(N) is non-positive, clearing the alarm requires
+# someone writing $(OK) to the status string.
+
+# Mode 1 is appropriate for cases where the sender only detects errors
+# and is responsible for sending error messages repeatedly until the
+# error condition clears.  Mode 2 is appropriate for cases where the
+# sender can also detect "all good" and is responsible for reporting it.
+#
+################################################################3
+
+# This works with a generic timer from a separate database, and when this
+# timer reaches zero, it forces $(P):clear to process:
+#dbLoadRecords("timer.db","P=status,OUT=status:clear.PROC")
+
+# our amq support only supports strings as waveforms, so we:
+record(scalcout,"$(P)$(R=):fwd") {
+    field(INAA,"$(P)$(R=):wf")
+    field(CALC,"AA")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+    field(OUT,"$(P)$(R=) PP")
+}
+
+# the input status string, ultimately written externally:
+record(stringin,"$(P)$(R=)") {
+    field(VAL,"$(OK)")
+    field(PINI,"1")
+    field(FLNK,"$(P)$(R=):calc")
+}
+
+# the good status string (anything else will be an alarm):
+record(stringin,"$(P)$(R=):ok") {
+    field(VAL,"$(OK)")
+    field(PINI,"1")
+}
+
+# update the previous error string and then clear the current one:
+record(seq,"$(P)$(R=):storeclear") {
+    field(LNK1,"$(P)$(R=):store.PROC PP")
+    field(DOL1,"1")
+    field(DLY1,"0")
+    field(LNK2,"$(P)$(R=):clear.PROC PP")
+    field(DOL2,"1")
+    field(DLY2,"2")
+}
+
+# make the status string ok, to clear the alarm state below:
+record(stringout,"$(P)$(R=):clear") {
+    field(OMSL, "closed_loop")
+    field(OUT,"$(P)$(R=) PP")
+    field(DOL,"$(P)$(R=):ok")
+}
+
+# if string value is not ok, restart the timer:
+record(scalcout,"$(P)$(R=):calc") {
+    field(INAA,"$(P)$(R=)")
+    field(INBB,"$(P)$(R=):ok")
+    field(CALC,"AA#BB")
+    field(OOPT,"When Non-zero")
+    field(DOPT,"Use OCAL")
+    field(OCAL,"$(N)")
+    field(OUT,"$(P)$(R=):timer:go PP")
+}
+
+# whether the string is ok or not, for alarming:
+record(scalcout,"$(P)$(R=):stat") {
+    field(SCAN,"1 second")
+    field(INAA,"$(P)$(R=)")
+    field(INBB,"$(P)$(R=):ok")
+    field(CALC,"AA#BB")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+}
+
+# update the previous non-ok status string:
+record(stringout,"$(P)$(R=):store") {
+    field(OMSL, "closed_loop")
+    field(OUT, "$(P)$(R=):previous PP")
+    field(DOL, "$(P)$(R=)")
+}
+
+# the previous non-ok status string:
+record(stringin,"$(P)$(R=):previous") {
+    field(VAL,"$(OK)")
+    field(PINI,"1")
+}
+

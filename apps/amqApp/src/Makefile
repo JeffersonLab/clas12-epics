@@ -20,6 +20,7 @@ amq_DBD += amqdev.dbd
 
 amq_DBD += calc.dbd
 amq_DBD += aCalcoutRecord.dbd
+amq_DBD += sCalcoutRecord.dbd
 amq_DBD += devIocStats.dbd
 amq_DBD += asSupport.dbd
 amq_DBD += waveformApp.dbd
@@ -32,6 +33,7 @@ LIBRARY_IOC = $(LIBRARY_IOC_$(T_A))
 amq_SRCS += amq_registerRecordDeviceDriver.cpp
 amq_SRCS += devamqAi.c devamqWaveform.c
 amq_SRCS += stage2bits.st
+amq_SRCS += sums.st
 
 # Build the main IOC entry point on workstation OSs.
 amq_SRCS_DEFAULT += amqMain.cpp

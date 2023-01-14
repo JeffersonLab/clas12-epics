@@ -1,0 +1,46 @@
+
+record(calc,"$(P)$(R=)asy") {
+    field(INPA,"$(PLUS)")
+    field(INPB,"$(MINUS)")
+    field(CALC,"(A+B)>0?(A-B)/(A+B):0")
+    field(FLNK,"$(P)$(R=)easy.PROC")
+}
+record(calc,"$(P)$(R=)easy") {
+    field(INPA,"$(PLUS)")
+    field(INPB,"$(MINUS)")
+    field(INPC,"$(P)$(R=)asy")
+    field(CALC,"(A+B)>0?SQR((1-C*C)/(A+B)):0")
+    field(FLNK,"$(P)$(R=)asycorr.PROC")
+}
+record(calc,"$(P)$(R=)asycorr") {
+    field(INPA,"$(PLUS)")
+    field(INPB,"$(MINUS)")
+    field(INPC,"$(PLUS2=0)")
+    field(INPD,"$(MINUS2=0)")
+    field(CALC,"(A*D+B*C)>0?(A*D-B*C)/(A*D+B*C):0")
+    field(FLNK,"$(P)$(R=)easycorr1.PROC")
+}
+record(calc,"$(P)$(R=)easycorr1") {
+    field(INPA,"$(P)$(R=)asycorr")
+    field(INPB,"$(PLUS)")
+    field(INPC,"$(MINUS2=0)")
+    field(CALC,"C*(1-A)*(1-A)*(B*B+C*B)")
+    field(FLNK,"$(P)$(R=)easycorr2.PROC")
+}
+record(calc,"$(P)$(R=)easycorr2") {
+    field(INPA,"$(P)$(R=)asycorr")
+    field(INPB,"$(MINUS)")
+    field(INPC,"$(PLUS2=0)")
+    field(CALC,"C*(1-A)*(1-A)*(B*B+C*B)")
+    field(FLNK,"$(P)$(R=)easycorr.PROC")
+}
+record(calc,"$(P)$(R=)easycorr") {
+    field(INPA,"$(PLUS)")
+    field(INPB,"$(MINUS)")
+    field(INPC,"$(PLUS2=0)")
+    field(INPD,"$(MINUS2=0)")
+    field(INPE,"$(P)$(R=)easycorr1")
+    field(INPF,"$(P)$(R=)easycorr2")
+    field(CALC,"SQR(E+F)/(A*D+B*C)")
+}
+

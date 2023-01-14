@@ -69,7 +69,6 @@ float helm_icfg;   assign helm_icfg     to "{P}cfg:helm:iset";
 int helm_polcfg;   assign helm_polcfg   to "{P}cfg:helm:pol";
 int tgt_cfg;       assign tgt_cfg       to "{P}cfg:tgt:pos";
 float hv_slm_vcfg; assign hv_slm_vcfg   to "{P}cfg:slm:vset"; monitor hv_slm_vcfg;
-float hv_slm_vdef; assign hv_slm_vdef   to "{P}def:slm:vset";
 int   quad_icfg_auto;  assign quad_icfg_auto  to "{P}cfg:quad:iset:auto";
 float quad_icfg_1pass; assign quad_icfg_1pass to "{P}cfg:quad:iset:1pass";
 float quad_icfg_2pass; assign quad_icfg_2pass to "{P}cfg:quad:iset:2pass";
@@ -88,8 +87,8 @@ int   beamPasses; assign beamPasses to "MMSHLBPASS";
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
 
 // Wien Angles:
-float vwienangle; assign vwienangle to "VWienAngle";
-float hwienangle; assign hwienangle to "HWienAngle";
+float vwienangle; assign vwienangle to "PWF1I04:spinCalc";
+float hwienangle; assign hwienangle to "PWF1I06:spinCalc";
 
 // CODA run number:
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
@@ -146,8 +145,10 @@ float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
 float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
+float hv_band_off;    assign hv_band_off    to "{SIMDET}B_DET_BAND_HV:OFF";
 float hv_ctof_off;    assign hv_ctof_off    to "{SIMDET}B_DET_CTOF_HV:OFF";
-float hv_rich_off;    assign hv_rich_off    to "{SIMDET}B_DET_RICH_HV:OFF";
+float hv_cnd_off;     assign hv_cnd_off     to "{SIMDET}B_DET_CND_HV:OFF";
+float hv_rich_off;    assign hv_rich_off    to "{SIMDET}B_DET_RICH_ALL_HV:OFF";
 int hv_htcc_off;      assign hv_htcc_off    to "{SIMDET}B_DET_HTCC_HV:OFF";
 int hv_ltcc_off;      assign hv_ltcc_off    to "{SIMDET}B_DET_LTCC_HV:OFF";
 int hv_ecal_off;      assign hv_ecal_off    to "{SIMDET}B_DET_ECAL_HV:OFF";
@@ -450,7 +451,9 @@ ss automoller {
             hv_ftc_off=1;
             hv_fth_off=1;
             hv_ftt_off=1;
+            hv_band_off=1;
             hv_ctof_off=1;
+            hv_cnd_off=1;
             hv_rich_off=1;
             hv_ecal_off=1;
             hv_pcal_off=1;
@@ -460,7 +463,9 @@ ss automoller {
             pvPut(hv_ftc_off);
             pvPut(hv_fth_off);
             pvPut(hv_ftt_off);
+            pvPut(hv_band_off);
             pvPut(hv_ctof_off);
+            pvPut(hv_cnd_off);
             pvPut(hv_rich_off);
             pvPut(hv_ecal_off);
             pvPut(hv_pcal_off);
@@ -503,13 +508,7 @@ ss automoller {
             hv_slm_onoff=1;
             pvPut(hv_slm_onoff);
             pvGet(hv_slm_vsetrbk);
-            if (hv_slm_vsetrbk < hv_slm_vcfg-10) {
-                hv_slm_default=hv_slm_vsetrbk;
-            }
-            else {
-                pvGet(hv_slm_vdef);
-                hv_slm_default=hv_slm_vdef;
-            }
+            hv_slm_default=hv_slm_vsetrbk;
             hv_slm_vset=hv_slm_vcfg;
             pvPut(hv_slm_vset);
         }

@@ -1,98 +1,123 @@
+#
+# MCC needs a PV for human consumption to check against the maximum
+# beam current limitations in operating procedures documentation.
+# For that, we have these:
+#
+# HLB:TARGET:STAT has been used by MCC in the past
+# HALL_B_TARGET is owned by MCC and what they wanted to start using in 2022
+#
+# Meanwhile, Hall B needs something appropriate for RCDB and sometimes
+# (much) shorter than the MCC name above.  That's what this is for:
+#
+# clas12:target:type
+#
+# They have a 1:1 mapping below, either via aliasing or linked mbbis to
+# support 2 naming schemes.
+#
 
-record(calc,"HLB:TARGET:CALC")
-{
-  field(PINI,1)
-  field(INPA,"moller_target_empty CPP")
-  field(INPB,"harp_2H01.RBV CPP")
-  field(INPC,"B_BONUS_GAS_MFC104_Gas CPP")
-#field(INPC,"B_SACLAYTGT:STAT CPP")
-  field(CALC,"A#1?0:(B>0.1?1:(C+2))")
-  info(autosaveFields_pass0,"VAL")
-  field(FLNK,"HLB:TARGET:STAT.PROC")
-}
+#record(calc,"HLB:TARGET:CALC")
+#{
+#  field(PINI,1)
+#  field(INPA,"moller_target_empty CPP")
+#  field(INPB,"harp_2H01.RBV CPP")
+#  field(INPC,"B_BONUS_GAS_MFC104_Gas CPP")
+##field(INPC,"B_SACLAYTGT:STAT CPP")
+#  field(CALC,"A#1?0:(B>0.1?1:(C+2))")
+#  info(autosaveFields_pass0,"VAL")
+#  field(FLNK,"HLB:TARGET:STAT.PROC")
+#}
 
-# this one goes to MCC:
 record(mbbi,"HLB:TARGET:STAT")
 {
-  field(PINI,1)
-#  field(INP,"HLB:TARGET:CALC")
+    alias("clas12:target:type")
+    #alias("hps:target:type")
+    field(PINI,1)
     field(ZRVL,0)
     field(ONVL,1)
     field(TWVL,2)
     field(THVL,3)
     field(FRVL,4)
     field(FVVL,5)
-    field(SXVL,6)
-    field(SVVL,7)
-    field(EIVL,8)
-    field(NIVL,9)
-    field(TEVL,10)
+#    field(THVL,3)
+#    field(FRVL,4)
+#    field(FVVL,5)
+#    field(SXVL,6)
+#    field(SVVL,7)
+#    field(EIVL,8)
+#    field(NIVL,9)
+#    field(TEVL,10)
 #
-# RG-M Mess:
-    field(VAL,"9")
-    field(PINI,"YES")
-    field(ZRST,"Liquid Hydrogen Target")
-    field(ONST,"Liquid Deuterium Target")
-    field(TWST,"Liquid 4He target")
-    field(THST,"Liquid Argon")
-    field(FRST,"Carbon target 2 mm (4x)")
-    field(FVST,"Carbon target 2 mm")
-    field(SXST,"300 um Sn")
-    field(SVST,"40Ca")
-    field(EIST,"48Ca")
-    field(NIST,"Empty cell")
+####################
+# RGC:
+     field(ZRST, "Empty")
+     field(ONST, "NH3")
+     field(TWST, "ND3")
+     field(THST, "CH2")
+     field(FRST, "CD2")
+     field(FVST, "C")
 #
+####################
+# OLD:
 #  field(ZRST,"Moller")
 #  field(ONST,"Harp 2H01")
+#
+####################
+# RG-M Mess:
+#    field(VAL,"9")
+#    field(PINI,"YES")
+#    field(ZRST,"Liquid Hydrogen Target")
+#    field(ONST,"Liquid Deuterium Target")
+#    field(TWST,"Liquid 4He target")
+#    field(THST,"Liquid Argon")
+#    field(FRST,"Carbon target 2 mm (4x)")
+#    field(FVST,"Carbon target 2 mm")
+#    field(SXST,"300 um Sn")
+#    field(SVST,"40Ca")
+#    field(EIST,"48Ca")
+#    field(NIST,"Empty cell")
+#
 ####################
 # BONuS Target:
 #  field(TWST,"H2")
 #  field(THST,"D2")
 #  field(FRST,"4He")
 #  field(FVST,"N2")
+#
 ####################
 # Saclay Target:
-#field(TWST,"Empty")
-#field(THST,"Partial LH2")
-#field(FRST,"Partial LD2")
-#field(FVST,"Partial L3H3")
-####################
+#  field(TWST,"Empty")
+#  field(THST,"Partial LH2")
+#  field(FRST,"Partial LD2")
+#  field(FVST,"Partial L3H3")
 #  field(SXST,"Partial L4He")
 #  field(SVST,"LH2")
 #  field(EIST,"LD2")
 #  field(NIST,"L3He")
 #  field(TEST,"L4He")
-#  alias("clas12:target:type")
-#alias("hps:target:type")
+#
 }
 
-# this one goes in RCDB:
-record(mbbi,"clas12:target:type") {
-    field(SCAN,"1 second")
-    field(INP,"HLB:TARGET:STAT")
-    field(ZRST,"LH2")
-    field(ONST,"LD2")
-    field(TWST,"L4He")
-    field(THST,"LAr")
-    field(FRST,"C (x4)")
-    field(FVST,"C")
-    field(SXST,"Sn (x4)")
-    field(SVST,"40Ca")
-    field(EIST,"48Ca")
-    field(NIST,"Empty")
-    field(FLNK,"HLB:TARGET:STRINGOUT PP")
-}
+#record(mbbi,"clas12:target:type") {
+#    field(SCAN,"1 second")
+#    field(INP,"HLB:TARGET:STAT")
+#    field(ZRST,"LH2")
+#    field(ONST,"LD2")
+#    field(TWST,"L4He")
+#    field(THST,"LAr")
+#    field(FRST,"C (x4)")
+#    field(FVST,"C")
+#    field(SXST,"Sn (x4)")
+#    field(SVST,"40Ca")
+#    field(EIST,"48Ca")
+#    field(NIST,"Empty")
+#    field(FLNK,"HLB:TARGET:STRINGOUT PP")
+#}
 
 record(stringout,"HLB:TARGET:STRINGOUT")
 {
-  field(SCAN,"10 second")
+  field(SCAN,"1 second")
   field(OMSL,"closed_loop")
   field(DOL,"HLB:TARGET:STAT")
   field(OUT,"HALL_B_TARGET PP")
 }
-
-## Proxy for accelerator's record:
-#record(stringin,"HALL_B_TARGET:STRINGIN")
-#{
-#}
 

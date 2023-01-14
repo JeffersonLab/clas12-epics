@@ -1,0 +1,31 @@
+
+record(ai,"TGT:PT12:NMR_Time:1") {
+    field(INP,"TGT:PT12:NMR_Time:2")
+    field(FLNK,"TGT:PT12:NMR_Time:2 PP")
+}
+record(ai,"TGT:PT12:NMR_Time:2") {
+    field(INP,"TGT:PT12:NMR_Time")
+    field(FLNK,"TGT:PT12:NMR_Time:calc PP")
+}
+record(calcout,"TGT:PT12:NMR_Time:calc") {
+    field(INPA, "TGT:PT12:NMR_Time:1")
+    field(INPB, "TGT:PT12:NMR_Time:2")
+    field(INPC, "TGT:PT12:NMR_Time:reset")
+    field(CALC, "C>0 && A==B")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "TGT:PT12:NMR_Time:alarm PP")
+}
+record(bi, "TGT:PT12:NMR_Time:alarm") {
+    field(ZNAM, "Ok")
+    field(ONAM, "Timeout")
+    field(ZSV, "NO_ALARM")
+    field(OSV, "MAJOR")
+    field(FLNK,"TGT:PT12:NMR_Time:reset PP")
+}
+record(longout, "TGT:PT12:NMR_Time:reset") {
+    field(OUT, "TGT:PT12:NMR:timer:go PP")
+    field(VAL, "10")
+    field(EGU, "seconds")
+}
+

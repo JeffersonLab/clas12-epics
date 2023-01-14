@@ -6,7 +6,7 @@
   <show_grid>true</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>850</height>
+  <height>870</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
     <N>48</N>
@@ -22,7 +22,7 @@
   <background_color>
     <color name="OPI_Background" red="50" green="50" blue="50" />
   </background_color>
-  <width>750</width>
+  <width>770</width>
   <x>-1</x>
   <name>CTOF FADC SCALERS</name>
   <grid_space>1</grid_space>
@@ -50,7 +50,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_U</P>
+      <P>B_DET_CTOF_$(TYPE)_U</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -91,7 +91,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_U</P>
+      <P>B_DET_CTOF_$(TYPE)_U</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -132,7 +132,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_U</P>
+      <P>B_DET_CTOF_$(TYPE)_U</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -173,7 +173,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_D</P>
+      <P>B_DET_CTOF_$(TYPE)_D</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -214,7 +214,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_D</P>
+      <P>B_DET_CTOF_$(TYPE)_D</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -255,7 +255,7 @@
     </scale_options>
     <macros>
       <include_parent_macros>true</include_parent_macros>
-      <P>B_DET_CTOF_FADC_D</P>
+      <P>B_DET_CTOF_$(TYPE)_D</P>
     </macros>
     <resize_behaviour>2</resize_behaviour>
     <visible>true</visible>
@@ -277,192 +277,6 @@
     <actions hook="false" hook_all="false" />
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>2</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-117a9944:157578710f2:-6371</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>D AVG:</text>
-    <scripts />
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>86</width>
-    <x>504</x>
-    <name>Label_1</name>
-    <y>12</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-    <border_style>0</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <precision>0</precision>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-117a9944:157578710f2:-6370</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <auto_size>false</auto_size>
-    <text>##.###</text>
-    <rotation_angle>0.0</rotation_angle>
-    <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>true</show_units>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name>B_DET_CTOF_FADC_D:avg</pv_name>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <precision_from_pv>true</precision_from_pv>
-    <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <wrap_words>false</wrap_words>
-    <format_type>0</format_type>
-    <background_color>
-      <color name="Read_Background" red="77" green="77" blue="77" />
-    </background_color>
-    <width>169</width>
-    <x>595</x>
-    <name>Text Update_1</name>
-    <y>12</y>
-    <foreground_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="14" style="1">Header 2</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>2</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-48ee6d3a:1575958cf00:-788d</wuid>
-    <transparent>true</transparent>
-    <auto_size>false</auto_size>
-    <text>U AVG:</text>
-    <scripts />
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
-    <background_color>
-      <color red="255" green="255" blue="255" />
-    </background_color>
-    <width>89</width>
-    <x>107</x>
-    <name>Label_1</name>
-    <y>12</y>
-    <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
-    <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-    <border_style>0</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
-    <precision>0</precision>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-48ee6d3a:1575958cf00:-788c</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <auto_size>false</auto_size>
-    <text>##.###</text>
-    <rotation_angle>0.0</rotation_angle>
-    <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
-    <show_units>true</show_units>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name>B_DET_CTOF_FADC_U:avg</pv_name>
-    <vertical_alignment>1</vertical_alignment>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <precision_from_pv>true</precision_from_pv>
-    <widget_type>Text Update</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <wrap_words>false</wrap_words>
-    <format_type>0</format_type>
-    <background_color>
-      <color name="Read_Background" red="77" green="77" blue="77" />
-    </background_color>
-    <width>160</width>
-    <x>201</x>
-    <name>Text Update_1</name>
-    <y>12</y>
-    <foreground_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
-    </foreground_color>
-    <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="14" style="1">Header 2</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
@@ -510,20 +324,44 @@ $(pv_value)</tooltip>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <S>c</S>
-          <TYPE>SCALERS</TYPE>
+          <TYPE>FADC</TYPE>
+          <NAME>Counts</NAME>
         </macros>
         <replace>1</replace>
-        <description>Counts</description>
+        <description>FADC - Counts</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>jscaler_ctof.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
           <S>q</S>
-          <TYPE>CHARGE</TYPE>
+          <TYPE>FADC</TYPE>
+          <NAME>Charge</NAME>
         </macros>
         <replace>1</replace>
-        <description>Charge</description>
+        <description>FADC - Charge</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ctof.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <S>cTrg</S>
+          <TYPE>DISC</TYPE>
+          <NAME>TRG</NAME>
+        </macros>
+        <replace>1</replace>
+        <description>DISC - TRG</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>jscaler_ctof.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <S>cTdc</S>
+          <TYPE>DISC</TYPE>
+          <NAME>TDC</NAME>
+        </macros>
+        <replace>1</replace>
+        <description>DISC - TDC</description>
       </action>
     </actions>
     <font>
@@ -533,15 +371,15 @@ $(pv_value)</tooltip>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
     <border_style>0</border_style>
     <tooltip></tooltip>
-    <horizontal_alignment>1</horizontal_alignment>
+    <horizontal_alignment>0</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
-    <wuid>74f93b70:1684e5016ef:-6e2f</wuid>
+    <wuid>70a2705a:185ac7a38e9:-b6a</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>$(TYPE)</text>
+    <text>CTOF Scalers - $(TYPE) - $(NAME)</text>
     <scripts />
-    <height>25</height>
+    <height>41</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -558,17 +396,17 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="255" green="255" blue="255" />
     </background_color>
-    <width>127</width>
-    <x>378</x>
-    <name>Label_2</name>
-    <y>12</y>
+    <width>549</width>
+    <x>156</x>
+    <name>Label</name>
+    <y>3</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <show_scrollbar>false</show_scrollbar>
     <font>
-      <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
+      <opifont.name fontName="Sans" height="18" style="1">Header 1</opifont.name>
     </font>
   </widget>
 </display>

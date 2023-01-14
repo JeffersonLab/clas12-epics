@@ -1,8 +1,13 @@
 #!/bin/bash
 # quick hack to cycle RICH LV and reinitialize FPGAs, and output to log file
 
-log="tee -a /usr/clas12/DATA/logs/rich-lvcycle.logtmp"
+logfile="/usr/clas12/DATA/logs/rich-lvcycle.logtmp"
+log="tee -a $logfile"
 
+n_tiles_1=138
+n_tiles_2=137
+
+# this was probably because ssh keys are required:
 me=`whoami`
 if ! [ $me == "clasrun" ]
 then
@@ -10,13 +15,122 @@ then
     exit
 fi
 
+function date_msg {
+    date | $log
+}
+
+function start_msg {
+    date_msg
+    echo "-----------------------------------------------------" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE: this will trigger some RICH alarms, which   |" | $log
+    echo "|   can be ignored until this recovery exits.       |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE: the DAQ will need to be reinitialized after |" | $log
+    echo "|  ***AFTER*** this script is complete:             |" | $log
+    echo "|                                                   |" | $log
+    echo "|   Cancel->Reset->Configure->Download->Prestart    |" | $log
+    echo "|                                                   |" | $log
+    echo "-----------------------------------------------------" | $log
+    echo  | $log
+}
+
+function failure_msg {
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+    echo "!                                                  !" | $log
+    echo "!  $@" | $log
+    echo "!                                                  !" | $log
+    echo "!            !!  Contact RICH Expert !!            !" | $log
+    echo "!                                                  !" | $log
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+    date_msg
+    echo "press Return to continue, which will close this window!"
+    read
+    exit 1
+}
+
+function success_msg {
+    echo  | $log
+    echo "-----------------------------------------------------" | $log
+    echo "|                                                   |" | $log
+    echo "|    RICH RECOVERY SUCCESFUL!!!   ($@)   |" | $log
+    echo "|                                                   |" | $log
+    echo "| -----------   WARNING, SEE BELOW   -------------  |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE1: RICH temperatures and scalers can take up  |" | $log
+    echo "|     to one minute to update after this recovery.  |" | $log
+    echo "|                                                   |" | $log
+    echo "| NOTE2: the DAQ will now need to be reinitialized: |" | $log
+    echo "|   Cancel->Reset->Configure->Download->Prestart    |" | $log
+    echo "|                                                   |" | $log
+    echo "-----------------------------------------------------" | $log
+    date_msg
+    echo "press Return to continue, which will close this window!"
+    read
+    exit 0
+}
+
+function checkscalers {
+  stat=`caget -t B_DET_RICH_SCALERS_PMTS:max`
+  echo ">$stat<"
+  if [ ${stat%%.*} -le 0 ]
+  then
+      return 1
+  fi
+  stat=`caget -t B_DET_RICH2_SCALERS_PMTS:max`
+  echo ">$stat<"
+  if [ ${stat%%.*} -le 0 ]
+  then
+      return 1
+  fi
+  return 0
+}
+
+#function countscalers {
+#   n1=`caget -t B_HW_FEVME1:scalers:nFibers`
+#   n2=`caget -t B_HW_SVT3:scalers:nFibers`
+#   let n=$n1+$n2
+#   return $n
+#}
+
+function iocreboot {
+    comms=`caget -t B_DET_RICH_ALL_LV:isComm`
+    [ $? -eq 0 ] && [ $comms -eq 1 ] && return
+    echo -e "\nRebooting RICH HVCAEN IOC ...\n" | $log
+    pv=ioccaenhv_HVRICH:SysReset
+    caput $pv 1
+    sleep 5
+    count=0
+    while [ 1 ]
+    do
+        if [ $count -gt 20 ]
+        then
+            failure_msg ERROR on $pv reboot
+        fi
+        stat=`caget -w 0.1 -t $pv`
+        if [ $? -eq 0 ]
+        then
+            sleep 1
+            caput B_DET_RICH2_SSP:data:nFibers:alarm.INPC 137
+            caput B_DET_RICH2_SSP:data:nFibers:alarm.C 137
+            caput B_DET_RICH2_SCALERS:alarm.LSV NO_ALARM
+            caput B_HW_SVT3:scalers:nFibers.LOLO 136
+            break
+        fi
+        let count=$count+1
+        sleep 1
+    done
+}
+
 function lvcycle {
   pvGo=$1
   pvCheck=$2
   cnt=0
   cnterr=0
   caput $pvGo 1 | $log
-  sleep 7
+  sleep 5
   while [ 1 ]
   do
       sleep 1
@@ -24,7 +138,7 @@ function lvcycle {
       stat=`caget -t $pvCheck`
       if [ $stat -eq 1 ]
       then
-          sleep 4
+          sleep 1
           break
       fi
       let cnt=$cnt+1
@@ -35,20 +149,13 @@ function lvcycle {
           then
               echo "Trying Again to Clear Errors ..." | $log
               caput B_HW_HVRICH1:ClearAlarm 1 | $log
-              #caput B_HW_HVRICH2:ClearAlarm 1 | $log
+              caput B_HW_HVRICH2:ClearAlarm 1 | $log
               sleep 5
               caput $pvGo 1 | $log
               sleep 5
               let cnt=$cnt-15
           else
-              echo "####################################################" | $log
-              echo "#                                                  #" | $log
-              echo "#  ERROR ON $pvCheck or **ClearAlarm**  #" | $log
-              echo "#                                                  #" | $log
-              echo "#            !!  Contact RICH Expert !!            #" | $log
-              echo "#                                                  #" | $log
-              echo "####################################################" | $log
-              exit
+              failure_msg ERROR on $pvCheck or ClearAlarm
           fi
       fi
   done
@@ -57,11 +164,18 @@ function lvcycle {
 function checkssh {
   hostname=$1
   maxtries=$2
+  delay=$3
   tries=0
+  echo -e "\nWaiting $delay seconds before trying to connect to rich4 ..." | $log
+  for xx in `seq $delay`
+  do
+      echo -n '.' | $log
+      sleep 1
+  done
   while [ 1 ]
   do
     let tries=$tries+1
-    echo -n -e "Attempting ssh ... " | $log
+    echo && echo -n -e "\nAttempting ssh ... " | $log
     ssh -q $1 exit
     if [ $? -eq 0 ]
     then
@@ -72,67 +186,86 @@ function checkssh {
     fi
     if [ $tries -gt $maxtries ]
     then
-        echo "ERROR:  FAILED TO SSH.  Terminated." | $log
-        exit
+        failure_msg ERROR on SSH to $hostname
     fi
     sleep 1
   done
 }
 
 ############################################################
+############################################################
+############################################################
+############################################################
+############################################################
 
-date | $log
-echo "#####################################################" | $log
-echo "#                                                   #" | $log
-echo "# NOTE: the DAQ will need to be reinitialized after #" | $log
-echo "#  ***AFTER*** this script tis complete:            #" | $log
-echo "#                                                   #" | $log
-echo "#   Cancel->Reset->Configure->Download->Prestart    #" | $log
-echo "#                                                   #" | $log
-echo "#####################################################" | $log
-echo  | $log
+start_msg
 
-echo -e "\n!!!!   RICH RECOVERY   !!!!\n\nTurning RICH LV OFF ...\n" | $log
+maxattempts=4
+nattempts=0
 
-lvcycle B_DET_RICH_LV:OFF B_DET_RICH_LV:isOff
-#lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
+# if scalers are all zero, skip the 1st iteration to make 
+# roc_reboot happen first: 
+checkscalers
+stat=$?
+if [ $stat -ne 0 ]
+then
+    let nattempts=$nattempts+1
+    let maxattempts=$maxattempts+1
+fi
 
-echo -e "\nRICH LV OFF succecsfull.\n\nTurning RICH LV ON ...\n" | $log
+echo -e "\n!!!!   RICH RECOVERY   !!!!\n\n" | $log
 
-lvcycle B_DET_RICH_LV:ON B_DET_RICH_LV:isOn
-#lvcycle B_DET_RICH_ALL_LV:ON B_DET_RICH_ALL_LV:isOn
+iocreboot
 
-echo -e "\nRICH LV ON succesfull.\n\nRebooting rich4 ...\n" | $log
-
-roc_reboot rich4 | $log
-
-echo -e "\nWaiting 55 seconds before trying to connect to rich4 ..." | $log
-for xx in `seq 55`
+while [ 1 ]
 do
-    echo -n '.' | $log
-    sleep 1
+
+    let nattempts=$nattempts+1
+
+    echo -e "\n!!!!   RICH RECOVERY #$nattempts  !!!!\n\n" | $log
+    
+    echo -e "\nTurning RICH LV OFF ...\n" | $log
+
+    lvcycle B_DET_RICH_ALL_LV:OFF B_DET_RICH_ALL_LV:isOff
+
+    echo -e "\nRICH LV OFF succecsfull.\n\nTurning RICH LV ON ...\n" | $log
+
+    lvcycle B_DET_RICH_ALL_LV:ON B_DET_RICH_ALL_LV:isOn
+
+    echo -e "\nRICH LV ON succesfull.\n" | $log
+
+    let odd=$nattempts%2
+
+    if [ $odd -eq 0 ]
+    then
+        # need to change the BIOS for this to do what Ben wants:
+        #ssh rich4 'vme_sysreset && tiinit && rich_init' | $log
+        # meanwhile, stick to this:
+        echo -e "\nRebooting rich4 ...\n" | $log
+        roc_reboot rich4 | $log
+        checkssh rich4 60 70
+        sleep 10
+    fi
+
+    echo -e "\nrunning rich_init ..." | $log
+    ssh rich4 rich_init | $log
+    ntiles=`tail -100 $logfile | grep 'Total Tiles' | awk '{print$4}'`
+ 
+    if [ $ntiles -ge 275 ]
+    then
+        success_msg "on attempt #$nattempts"
+        break
+    elif [ $nattempts -gt $maxattempts ]
+    then
+        failure_msg TERMINAL FAILURE, $maxattempts TIMES, CANNOT SUCCEED
+        break
+    else
+        echo -e "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+        echo -e "FAILURE on attempt #$nattempts !!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+        echo -e "RETRYING ...           !!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+        date_msg
+        echo -e "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
+    fi
 done
 
-checkssh rich4 60
-sleep 5
-
-echo -e "\nrunning rich_init" | $log
-ssh rich4 rich_init | $log
-
-sleep 5
-softioc_console -R iocjscalersRICH | $log
-
-echo  | $log
-echo "####################################################" | $log
-echo "#                                                  #" | $log
-echo "#           rich-lvcycle.sh COMPLETE               #" | $log
-echo "#                                                  #" | $log
-echo "# NOTE: the DAQ will now need to be reinitialized: #" | $log
-echo "#   Cancel->Reset->Configure->Download->Prestart   #" | $log
-echo "#                                                  #" | $log
-echo "####################################################" | $log
-date | $log
-
-echo "press Return to continue"
-read
 

@@ -49,3 +49,13 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
 
+dbpf("B_RASTER:DRV:WG_XAMPL.DRVL","-4.5")
+dbpf("B_RASTER:DRV:WG_XAMPL.DRVH", "4.5")
+dbpf("B_RASTER:DRV:WG_YAMPL.DRVL","-4.5")
+dbpf("B_RASTER:DRV:WG_YAMPL.DRVH", "4.5")
+
+dbpf("B_RASTER:DRV:WG_XVOFF.DRVL","-1.0")
+dbpf("B_RASTER:DRV:WG_XVOFF.DRVH", "1.0")
+dbpf("B_RASTER:DRV:WG_YVOFF.DRVL","-1.0")
+dbpf("B_RASTER:DRV:WG_YVOFF.DRVH", "1.0")
+

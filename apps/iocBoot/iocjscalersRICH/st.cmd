@@ -5,8 +5,8 @@ cd ${TOP}
 Init_SCALERS()
 
 Start_SCALERS_CRATE("0","rich4")
-Start_SCALERS_CRATE("1","svt3")
 
+#Start_SCALERS_CRATE("1","svt3")
 
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
@@ -19,7 +19,7 @@ dbLoadRecords("db/iocAdminSoft.db", "IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/jscalers_RICH_SSP.substitutions")
-dbLoadTemplate("db/jscalers_RICH2_SSP.substitutions-EEL")
+dbLoadTemplate("db/jscalers_RICH2_SSP.substitutions")
 
 # these are just aliases from HW to DET:
 dbLoadRecords("db/jscaler_RICH_Maps.db")
@@ -67,5 +67,10 @@ seq waveform, "P=B_DET_RICH2_SCALERS_,R=PMTS:"
 
 # load them once, then autosaving these to reduce ioc startup noise:
 ##< rich-setDesc.cmd
+
+# disable one LV channel:
+#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","134")
+#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","134")
+#dbpf("B_DET_RICH_SCALERS:alarm.LSV","NO_ALARM")
 
 dbl > pv.list

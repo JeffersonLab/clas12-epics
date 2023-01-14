@@ -1,0 +1,114 @@
+#
+# To set it and start it immediately, write the number of desired seconds to "timer:go".
+# To set it but start it later, write seconds to "timer", and then process "timer:start".
+# Then "timer" can be monitored to display the remaining seconds, and it will be in
+# MINOR alarm state until reaching zero or manually stopped via "timer:stop".  The optional
+# macros OUT and VAL will write the value to an output link when the timer reaches zero
+# during countdown.  There's also a simpler "clock" just for counting seconds upwards.
+#
+
+record(longout, "$(P)$(R=):timer:go") {
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R=):timer PP")
+    field(FLNK, "$(P)$(R=):timer:start PP")
+    field(EGU,  "s")
+}
+record(longin, "$(P)$(R=):timer") {
+    field(VAL, "0")
+    field(EGU, "s")
+    field(PINI, "1")
+    field(LOW,  "43200")
+    field(LOLO, "0")
+}
+record(calcout, "$(P)$(R=):timer:update") {
+    field(INPA, "$(P)$(R=):timer")
+    field(CALC, "A>0 ? 1 : 0")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "A-1")
+    field(OUT,  "$(P)$(R=):timer PP")
+}
+record(seq, "$(P)$(R=):timer:start") {
+    field(LNK1, "$(P)$(R=):timer:update.SCAN PP")
+    field(DO1 , "6")
+    field(LNK2, "$(P)$(R=):timer.LSV PP")
+    field(DO2,  "1")
+    field(LNK3, "$(P)$(R=):timer.LLSV PP")
+    field(DO3,  "2")
+}
+record(seq, "$(P)$(R=):timer:stop") {
+    field(LNK1, "$(P)$(R=):timer:update.SCAN PP")
+    field(DO1, "0")
+    field(LNK2, "$(P)$(R=):timer.LSV PP")
+    field(DO2,  "0")
+    field(LNK3, "$(P)$(R=):timer.LLSV PP")
+    field(DO3,  "0")
+    field(FLNK, "$(P)$(R=):timer:action:check PP")
+}
+record(calcout, "$(P)$(R=):timer:autostop") {
+    field(SCAN, "1 second")
+    field(INPA, "$(P)$(R=):timer")
+    field(INPB, "$(P)$(R=):timer:update.SCAN")
+    field(CALC, "(A<1 && B#0) ? 1 : 0")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "1")
+    field(OUT,  "$(P)$(R=):timer:stop PP")
+}
+record(calcout, "$(P)$(R=):timer:action:check") {
+    field(INPA, "$(P)$(R=):timer")
+    field(CALC, "A=0?1:0")
+    field(OOPT, "When Non-zero")
+    field(DOPT, "Use OCAL")
+    field(OCAL, "$(VAL=1)")
+    field(OUT,  "$(OUT=$(P)$(R=):timer:test) PP")
+}
+record(ai, "$(P)$(R=):timer:test") {
+    field(VAL, "0")
+    field(PINI, "1")
+}
+
+####################################
+
+record(longin, "$(P)$(R=):clock") {
+    field(VAL, "0")
+    field(EGU, "s")
+    field(PINI, "1")
+}
+record(seq, "$(P)$(R=):clock:go") {
+    field(LNK1, "$(P)$(R=):clock PP")
+    field(DO1,  "0")
+    field(LNK2, "$(P)$(R=):clock:start.PROC PP")
+    field(DO2,  "1")
+}
+record(calcout, "$(P)$(R=):clock:update") {
+    field(INPA, "$(P)$(R=):clock")
+    field(CALC, "A+1")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R=):clock PP")
+}
+record(seq, "$(P)$(R=):clock:start") {
+    field(LNK1, "$(P)$(R=):clock:update.SCAN PP")
+    field(DO1 , "6")
+    field(LNK2, "$(P)$(R=):clock:active PP")
+    field(DO2,  "1")
+}
+record(seq, "$(P)$(R=):clock:stop") {
+    field(LNK1, "$(P)$(R=):clock:update.SCAN PP")
+    field(DO1 , "0")
+    field(LNK2, "$(P)$(R=):clock:active PP")
+    field(DO2,  "0")
+}
+record(longout, "$(P)$(R=):clock:reset") {
+    field(OMSL, "closed_loop")
+    field(OUT,  "$(P)$(R=):clock PP")
+    field(VAL,  "0")
+}
+record(bi, "$(P)$(R=):clock:active") {
+    field(ZNAM, "Inactive")
+    field(ONAM, "Active")
+    field(VAL, "0")
+    field(PINI, "1")
+}
+

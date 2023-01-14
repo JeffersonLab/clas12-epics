@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.HashSet;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
-  String[] LOGBOOKS = {"HBLOG","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","CLAS12ANA","HBDAQ","HBTRIGGER","BBEAM","HBBAND","HBRTPC","TLOG"};
+  String[] LOGBOOKS = {"HBLOG","HBRUN","HBCND","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","HBDAQ","HBTRIGGER","BBEAM","HBBAND","HBRTPC","TARGETLOG","ELOG","TLOG"};
 
   final String RUNDBTABLE="daq_"+System.getenv("USER");
   final String RUNDBUSER=System.getenv("EXPID");
@@ -57,9 +58,9 @@ public class MakeLogEntry
   JPanel IMPANEL=new JPanel();
   JFrame FRAME;
     
-  JComboBox<String> LOGBOOKCHOICE=new JComboBox<>(LOGBOOKS);
+  //JComboBox<String> LOGBOOKCHOICE=new JComboBox<>(LOGBOOKS);
 
-  //CheckComboBox LOGBOOKCHOICE;
+  CheckComboBox LOGBOOKCHOICE;
 
   final boolean DEBUG=false;
 
@@ -74,11 +75,17 @@ public class MakeLogEntry
   int IMGHEIGHT = 200;
   int IMGWIDTH = 300;
 
-  public void MakeLogEntry() {
+  public MakeLogEntry() {
 
-      //Set dog=new LinkedHashSet();
-      //for (String ss : LOGBOOKS) dog.add(ss);
-      //LOGBOOKCHOICE=new CheckComboBox(dog);
+      Set dog=new LinkedHashSet();
+      Set cat=new LinkedHashSet();
+      for (String ss : LOGBOOKS) dog.add(ss);
+	  cat.add("HBRUN");
+      LOGBOOKCHOICE=new CheckComboBox(dog,cat);
+      LOGBOOKCHOICE.setSize(new Dimension(200,42));
+      LOGBOOKCHOICE.setMaximumSize(new Dimension(200,42));
+      LOGBOOKCHOICE.setPreferredSize(new Dimension(200,42));
+      LOGBOOKCHOICE.setPrototypeDisplayValue("aaaaaaaaaaaaaaaaaaaaaaaaa");
   }
 
 
@@ -446,7 +453,7 @@ public class MakeLogEntry
     titlePanel.setPreferredSize(new Dimension(200, 42));
     titlePanel.add(LOGTITLE);
     titlePanel.add(LOGBOOKCHOICE);
-
+    
     JPanel emailPanel = new JPanel();
     emailPanel.setOpaque(false);
     emailPanel.setBorder(BorderFactory.createTitledBorder(lbd,"Email Notify"));
@@ -619,9 +626,12 @@ public class MakeLogEntry
       updateStatusPane("ERROR:  Update Log Title Before Submitting.",Color.RED);
       return;
     }
-    //LogEntry entry = new LogEntry("", LOGBOOKNAME);
-    LogEntry entry = new LogEntry("", (String)LOGBOOKCHOICE.getSelectedObjects()[0]);
-    //entry.setEmailNotify("rafopar@jlab.org");
+	String logbooks = "";
+	for (Object o : LOGBOOKCHOICE.getSelectedItems()) {
+		logbooks += o+",";
+	}
+    //LogEntry entry = new LogEntry("", (String)LOGBOOKCHOICE.getSelectedObjects()[0]);
+    LogEntry entry = new LogEntry("",logbooks);
     try {
       if (DOTABS)
       {

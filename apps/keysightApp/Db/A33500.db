@@ -289,8 +289,8 @@ record(stringin, "$(TAG)WG_YFUNC") {
 record(dfanout, "$(TAG)ALL_ONOFF") {
   field(OUTA, "$(TAG)WG_XOUTPUT PP")
   field(OUTB, "$(TAG)WG_YOUTPUT PP")
-  field(OUTC, "$(TAG)WG_XAMSTAT:set PP")
-  field(OUTD, "$(TAG)WG_YAMSTAT:set PP")
+#field(OUTC, "$(TAG)WG_XAMSTAT:set PP")
+#field(OUTD, "$(TAG)WG_YAMSTAT:set PP")
 }
 
 record(bo, "$(TAG)WG_XOUTPUT") {
@@ -330,6 +330,10 @@ record(stringout, "$(TAG)WG_syncARB") {
 
 record(stringout, "$(TAG)WG_syncPhase") {
   field(VAL, "SOURCE2:PHASE:SYNC")
+  field(OUT, "$(TAG)WG_CMD PP")
+}
+record(stringout, "$(TAG)WG_freqCoup") {
+  field(VAL, "FREQ:COUP 1")
   field(OUT, "$(TAG)WG_CMD PP")
 }
 
@@ -382,7 +386,7 @@ record(mbbo,"$(TAG)FILE_SELECT") {
     field(ONST,"200 um")
     field(TWST,"400 um")
     field(OUT,"@A33500.proto loadSpiral $(PORT)")
-    field(FLNK,"$(TAG)FILE_SELECT:post PP")
+#field(FLNK,"$(TAG)FILE_SELECT:post PP")
 }
 
 record(seq,"$(TAG)FILE_SELECT:post") {
@@ -399,7 +403,7 @@ record(seq,"$(TAG)INIT_ZERO") {
     field(LNK6, "$(TAG)WG_YPHA PP")
     field(LNK7, "$(TAG)WG_XAMPL PP")
     field(LNK8, "$(TAG)WG_YAMPL PP")
-    field(LNK9, "$(TAG)WG_syncARB PP")
+    field(LNK9, "$(TAG)WG_syncARB.PROC PP")
     field(DOL1, "0")
     field(DOL2, "0")
     field(DOL3, "0")
@@ -412,14 +416,14 @@ record(seq,"$(TAG)INIT_ZERO") {
 }
 
 record(seq,"$(TAG)INIT_NOMINAL") {
-    field(LNK1, "$(TAG)INIT_ZERO PP")
+    field(LNK1, "$(TAG)WG_XPHA PP")
     field(LNK2, "$(TAG)WG_YPHA PP")
     field(LNK3, "$(TAG)WG_XAMPL PP")
     field(LNK4, "$(TAG)WG_YAMPL PP")
     field(LNK5, "$(TAG)WG_XPERIOD PP")
     field(LNK6, "$(TAG)WG_YPERIOD PP")
-    field(DOL1, "1")
-    field(DOL2, "90")
+    field(DOL1, "0")
+    field(DOL2, "00")
     field(DOL3, "$(TAG)WG_VPP_NOMINAL")
     field(DOL4, "$(TAG)WG_VPP_NOMINAL")
     field(DOL5, "$(TAG)WG_PERIOD_NOMINAL")
@@ -434,7 +438,7 @@ record(seq,"$(TAG)INIT_NOMINAL") {
 
 record(ai,"$(TAG)WG_VPP_NOMINAL") {
     field(EGU,  "V")
-    field(VAL,  "2.5")
+    field(VAL,  "1.0")
     field(DESC, "Nominal Vpp")
 }
 
@@ -444,3 +448,32 @@ record(ai,"$(TAG)WG_PERIOD_NOMINAL") {
     field(DESC, "Nominal Period")
 }
 
+record(bo, "$(TAG)SET_MODE_DC") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode(DC) $(PORT)")
+}
+record(bo, "$(TAG)SET_MODE_ARB") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode(ARB) $(PORT)")
+}
+record(bo, "$(TAG)XSET_MODE_DC") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode1(DC) $(PORT)")
+}
+record(bo, "$(TAG)XSET_MODE_ARB") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode1(ARB) $(PORT)")
+}
+record(bo, "$(TAG)YSET_MODE_DC") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode2(DC) $(PORT)")
+}
+record(bo, "$(TAG)YSET_MODE_ARB") {
+  field(DTYP, "stream")
+    field(OUT, "@A33500.proto setMode2(ARB) $(PORT)")
+}
+record(stringin, "$(TAG)MODE") {
+  field(DTYP, "stream")
+    field(SCAN, "1 second")
+    field(INP, "@A33500.proto getMode() $(PORT)")
+}

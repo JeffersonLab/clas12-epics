@@ -1,8 +1,9 @@
 
 record(calc,"$(P):frac:$(BIT)") {
     field(INPA,"$(P):$(BIT)")
-    field(INPB,"$(P):sum CPP")
-    field(CALC,"A/B*100")
+    fleld(INPB,"B_DAQ_GTTrigBitPrescaled:sum CPP")
+    field(INPC,"B_DAQ:TriggerFlag:$(BIT2):sum")
+    field(CALC,"(B>0 && C#0) ?  A/B*100 : 0")
     field(EGU,"%")
 }
 

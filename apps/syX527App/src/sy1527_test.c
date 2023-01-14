@@ -12,24 +12,43 @@
 int main(int argc,char** argv)
 {
   int i, id = 0, board = 0, channel = 2;
-  char ip_address[100]="129.57.86.43";
+  char ip_address[100]="129.57.86.139";
   float u, uset, uget;
   unsigned int l, lget, active, onoff, alarm, itmp;
 
-  if (argc>1)
-    strcpy(ip_address,argv[1]);
+  float fpars[MAX_CHAN];
+  unsigned short chanlist[MAX_CHAN];
+  char parname[MAX_CAEN_NAME];
+  strcpy(parname, "IMon(0)");
+
+//  if (argc>1)
+//    strcpy(ip_address,argv[1]);
+
+  if (argc>2) {
+      board = atoi(argv[1]);
+      channel = atoi(argv[2]);
+      chanlist[0] = channel;
+  }
 
   printf("\n\n=============== CAEN mainframe SY1527/SY4527 test ===============\n");
   printf("===== ip_address= %s =====\n\n\n",ip_address);
 
   sy1527Start(id, ip_address);
 
+//  while (1) {
+    //itmp = CAENHVGetChParam("B_HV000", board, parname, 1, chanlist, fpars);
+    //printf("%d\n",itmp);
+//    uget = sy1527GetChannelMeasuredCurrent(id, board, channel);
+//    printf("slot=%d chan=%d   %f uA\n",board,channel,uget);
+//    usleep(1e5);
+//  }
+
   //sy1527GetMap(id);
   
   printf("\n\n======= sy1527PrintParams =======\n");
   sy1527PrintParams(id);
 
-  //sy1527PrintMap(id);
+  sy1527PrintMap(id);
 
   printf("\n\n======= sy1527PrintSysProps =======\n");
   sy1527PrintSysProps(id);
@@ -55,14 +74,15 @@ int main(int argc,char** argv)
   sy1527PrintBoardProps(id,14);
   sy1527PrintBoardProps(id,15);
 
+
+  return(0);
+
+
   sy1527BoardClearAlarm(id,0);
 
   printf("\n\n======= sy1527ExecComm(ClearAlarm) =======\n");
   sy1527ExecComm(id,"ClearAlarm");
   
-  return(0);
-
-
 
   sy1527GetBoard(id, board);
 
@@ -90,7 +110,6 @@ sleep(5);
 
 itmp=sy1527GetChannelEnableDisable(id, board, channel);
 printf("1: itmp=%d\n",itmp);
-
 
 
 

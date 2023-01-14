@@ -62,7 +62,7 @@
     <width>161</width>
     <x>8</x>
     <name>Detectors</name>
-    <y>181</y>
+    <y>154</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -239,7 +239,9 @@ $(pv_value)</tooltip>
           <macros>
             <include_parent_macros>true</include_parent_macros>
             <S>c</S>
-            <TYPE>SCALERS</TYPE>
+            <TYPE>Counts</TYPE>
+            <DTYPE>cTdc</DTYPE>
+            <DDTYPE>TDC</DDTYPE>
           </macros>
           <replace>2</replace>
           <description>CTOF Scalers - Geographic</description>
@@ -249,7 +251,8 @@ $(pv_value)</tooltip>
           <macros>
             <include_parent_macros>true</include_parent_macros>
             <S>c</S>
-            <TYPE>SCALERS</TYPE>
+            <TYPE>FADC</TYPE>
+            <NAME>Counts</NAME>
           </macros>
           <replace>2</replace>
           <description>CTOF Scalers - Expert</description>
@@ -570,6 +573,12 @@ $(pv_value)</tooltip>
           <wait_time>10</wait_time>
           <description>FTC FADC Scalers</description>
         </action>
+        <action type="EXECUTE_CMD">
+          <command>xterm -bg blue -fg white -T "FTT Recovery" /usr/clas12/release/pro/epics/css_share/detectors/FTT/scripts/ftt-cycle.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Run FTT Recovery</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -724,9 +733,22 @@ $(pv_value)</tooltip>
           <path>apps/srsApp/srs-rga.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
+            <GRAPH_PV>$(P)anascan:wf:pct.AVAL</GRAPH_PV>
+            <YAXIS>%</YAXIS>
           </macros>
           <replace>2</replace>
           <description>Residual Gas Analyzer</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/mpodLvApp/mpod-crate.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <HOST>hvhtcc1</HOST>
+            <ioc>iochtcchv</ioc>
+            <TITLE>HTCC HV Crate</TITLE>
+          </macros>
+          <replace>2</replace>
+          <description>2023 HV Crate</description>
         </action>
       </actions>
       <font>
@@ -774,7 +796,7 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>detectors/LTCC/ltcc_hv.opi</path>
+          <path>detectors/LTCC/ltcc_hv-2356.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
@@ -791,20 +813,12 @@ $(pv_value)</tooltip>
           <description>LTCC Scalers - Expert</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>detectors/LTCC/ltcc_gas.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>LTCC Gas (Old)</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>detectors/LTCC/ltcc_gas-supply.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>LTCC Gas (New)</description>
+          <description>LTCC Gas</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/LTCC/ltcc_gas-purifier.opi</path>
@@ -897,17 +911,11 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>SSP Boards (EXPERT-only)</description>
         </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/RICH/ssp-boards-tabless.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <SLOT>04</SLOT>
-            <NCHAN>32</NCHAN>
-            <CRATE>SVT3</CRATE>
-            <DET>RICH2</DET>
-          </macros>
-          <replace>2</replace>
-          <description>SSP Boards - EEL (EXPERT-only)</description>
+        <action type="EXECUTE_CMD">
+          <command>xterm -T "RICH Recovery" -bg blue -fg white /usr/clas12/release/pro/epics/bin/rich-lvcycle.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Run RICH Recovery</description>
         </action>
       </actions>
       <font>
@@ -1103,7 +1111,7 @@ $(pv_value)</tooltip>
     <width>160</width>
     <x>9</x>
     <name>Subsystems</name>
-    <y>527</y>
+    <y>500</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -1147,7 +1155,7 @@ $(pv_value)</tooltip>
       </background_color>
       <width>115</width>
       <x>0</x>
-      <name>Asym</name>
+      <name>Beamline</name>
       <y>5</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
@@ -1210,6 +1218,14 @@ $(pv_value)</tooltip>
           <description>Saclay Cryotarget</description>
         </action>
         <action type="OPEN_DISPLAY">
+          <path>ops/poltar/PT12Graphic.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>RG-C Polarized Target</description>
+        </action>
+        <action type="OPEN_DISPLAY">
           <path>ops/tagger.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
@@ -1222,7 +1238,7 @@ $(pv_value)</tooltip>
           <macros>
             <include_parent_macros>true</include_parent_macros>
             <P>beamMod</P>
-            <C>sum</C>
+            <C>1</C>
           </macros>
           <replace>2</replace>
           <description>Time Structure</description>
@@ -1428,6 +1444,14 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>DC Crates</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/amqApp/helicity-scalers.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Helicity-Latched Triggers</description>
         </action>
       </actions>
       <font>
@@ -1764,16 +1788,6 @@ $(pv_value)</tooltip>
           <description>Quadrupoles - OLD</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>apps/dynapowerApp/dynapower-2022.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_MOLLER_QUADS:</P>
-            <TITLE>Moller Quadrupoles</TITLE>
-          </macros>
-          <replace>2</replace>
-          <description>Quadrupoles - NEW</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>apps/SCE410App/SCE410.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
@@ -2032,7 +2046,7 @@ $(pv_value)</tooltip>
           <path>apps/synApps/mca/SIS38XX.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
-            <P>a</P>
+            <P>struck</P>
           </macros>
           <replace>2</replace>
           <description>Struck DAQ Board</description>
@@ -2429,7 +2443,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>110</height>
+    <height>133</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2450,7 +2464,7 @@ $(pv_value)</tooltip>
     <width>160</width>
     <x>9</x>
     <name>Tools</name>
-    <y>872</y>
+    <y>845</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -2582,6 +2596,59 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+      <toggle_button>false</toggle_button>
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <push_action_index>0</push_action_index>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>136c1d91:183d2a0b61f:-7e9f</wuid>
+      <pv_value />
+      <text>Save/Restore</text>
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>30</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <image></image>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <widget_type>Action Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>7</x>
+      <name>Action Button_1</name>
+      <y>71</y>
+      <style>0</style>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="true">
+        <action type="EXECUTE_CMD">
+          <command>burt-gui</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description></description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.gridLayout" version="1.0.0">
       <fill_grids>false</fill_grids>
       <number_of_columns>1</number_of_columns>
@@ -2612,7 +2679,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -2624,9 +2691,9 @@ $(pv_value)</tooltip>
       <color red="240" green="240" blue="240" />
     </background_color>
     <width>110</width>
-    <x>29</x>
+    <x>8</x>
     <name>Menu Button</name>
-    <y>88</y>
+    <y>30</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -2761,7 +2828,7 @@ $(pv_value)</tooltip>
     <width>110</width>
     <x>29</x>
     <name>DC</name>
-    <y>149</y>
+    <y>122</y>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
@@ -2817,7 +2884,7 @@ $(pv_value)</tooltip>
     <width>110</width>
     <x>29</x>
     <name>Action Button</name>
-    <y>118</y>
+    <y>91</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />

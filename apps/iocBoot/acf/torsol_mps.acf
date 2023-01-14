@@ -1,0 +1,20 @@
+UAG(torsol_mps) { 
+    bruhwel,
+    dinsley,
+    ghoshal,
+    kashy,
+    beng,
+    pasyuk,
+    wmoore
+}
+
+ASG(DEFAULT) {
+    INPA($(P)$(R)CAS_READWRITE)
+    RULE(1,READ)
+    RULE(1,WRITE,TRAPWRITE) {
+        UAG(torsol_mps)
+    }
+    RULE(1,WRITE,TRAPWRITE) {
+        CALC("A=1")
+    }
+}

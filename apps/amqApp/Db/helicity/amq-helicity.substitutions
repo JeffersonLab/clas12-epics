@@ -1,0 +1,52 @@
+file "db/helicity-scalers.template" {
+pattern { N  P              R         INP          OFFSET      S }
+        { 2  B_DAQ:HEL:2m:  fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
+        { 10 B_DAQ:HEL:10m: fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
+        { 30 B_DAQ:HEL:30m: fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
+        { 60 B_DAQ:HEL:60m: fcup:pos: B_DAQ:HEL:32 fcup_offset "" }
+        { 2  B_DAQ:HEL:2m:  fcup:neg: B_DAQ:HEL:65 fcup_offset fcup: }
+        { 10 B_DAQ:HEL:10m: fcup:neg: B_DAQ:HEL:65 fcup_offset fcup: }
+        { 30 B_DAQ:HEL:30m: fcup:neg: B_DAQ:HEL:65 fcup_offset fcup: }
+        { 60 B_DAQ:HEL:60m: fcup:neg: B_DAQ:HEL:65 fcup_offset fcup: }
+        { 2  B_DAQ:HEL:2m:  0:pos:    B_DAQ:HEL:00 ""          "" }
+        { 10 B_DAQ:HEL:10m: 0:pos:    B_DAQ:HEL:00 ""          "" }
+        { 30 B_DAQ:HEL:30m: 0:pos:    B_DAQ:HEL:00 ""          "" } 
+        { 60 B_DAQ:HEL:60m: 0:pos:    B_DAQ:HEL:00 ""          "" }
+        { 2  B_DAQ:HEL:2m:  0:neg:    B_DAQ:HEL:33 ""          0: }
+        { 10 B_DAQ:HEL:10m: 0:neg:    B_DAQ:HEL:33 ""          0: }
+        { 30 B_DAQ:HEL:30m: 0:neg:    B_DAQ:HEL:33 ""          0: } 
+        { 60 B_DAQ:HEL:60m: 0:neg:    B_DAQ:HEL:33 ""          0: }
+        { 2  B_DAQ:HEL:2m:  29:pos:   B_DAQ:HEL:29 ""          "" }
+        { 10 B_DAQ:HEL:10m: 29:pos:   B_DAQ:HEL:29 ""          "" }
+        { 30 B_DAQ:HEL:30m: 29:pos:   B_DAQ:HEL:29 ""          "" } 
+        { 60 B_DAQ:HEL:60m: 29:pos:   B_DAQ:HEL:29 ""          "" }
+        { 2  B_DAQ:HEL:2m:  29:neg:   B_DAQ:HEL:62 ""          29: }
+        { 10 B_DAQ:HEL:10m: 29:neg:   B_DAQ:HEL:62 ""          29: }
+        { 30 B_DAQ:HEL:30m: 29:neg:   B_DAQ:HEL:62 ""          29: } 
+        { 60 B_DAQ:HEL:60m: 29:neg:   B_DAQ:HEL:62 ""          29: }
+}
+
+file "db/asymmetry.template" {
+pattern { P              R     PLUS                       MINUS                      PLUS2 MINUS2 }
+        { B_DAQ:HEL:2m:  fcup: B_DAQ:HEL:2m:fcup:pos:sum  B_DAQ:HEL:2m:fcup:neg:sum  ""    ""     }
+        { B_DAQ:HEL:10m: fcup: B_DAQ:HEL:10m:fcup:pos:sum B_DAQ:HEL:10m:fcup:neg:sum ""    ""     }
+        { B_DAQ:HEL:30m: fcup: B_DAQ:HEL:30m:fcup:pos:sum B_DAQ:HEL:30m:fcup:neg:sum ""    ""     }
+        { B_DAQ:HEL:60m: fcup: B_DAQ:HEL:60m:fcup:pos:sum B_DAQ:HEL:60m:fcup:neg:sum ""    ""     }
+        { B_DAQ:HEL:2m:  0:    B_DAQ:HEL:2m:0:pos:sum     B_DAQ:HEL:2m:0:neg:sum     B_DAQ:HEL:2m:fcup:pos:sum  B_DAQ:HEL:2m:fcup:neg:sum } 
+        { B_DAQ:HEL:10m: 0:    B_DAQ:HEL:10m:0:pos:sum    B_DAQ:HEL:10m:0:neg:sum    B_DAQ:HEL:10m:fcup:pos:sum B_DAQ:HEL:10m:fcup:neg:sum } 
+        { B_DAQ:HEL:30m: 0:    B_DAQ:HEL:30m:0:pos:sum    B_DAQ:HEL:30m:0:neg:sum    B_DAQ:HEL:30m:fcup:pos:sum B_DAQ:HEL:30m:fcup:neg:sum } 
+        { B_DAQ:HEL:60m: 0:    B_DAQ:HEL:60m:0:pos:sum    B_DAQ:HEL:60m:0:neg:sum    B_DAQ:HEL:60m:fcup:pos:sum B_DAQ:HEL:60m:fcup:neg:sum } 
+        { B_DAQ:HEL:2m:  29:   B_DAQ:HEL:2m:29:pos:sum    B_DAQ:HEL:2m:29:neg:sum    B_DAQ:HEL:2m:fcup:pos:sum  B_DAQ:HEL:2m:fcup:neg:sum } 
+        { B_DAQ:HEL:10m: 29:   B_DAQ:HEL:10m:29:pos:sum   B_DAQ:HEL:10m:29:neg:sum   B_DAQ:HEL:10m:fcup:pos:sum B_DAQ:HEL:10m:fcup:neg:sum } 
+        { B_DAQ:HEL:30m: 29:   B_DAQ:HEL:30m:29:pos:sum   B_DAQ:HEL:30m:29:neg:sum   B_DAQ:HEL:30m:fcup:pos:sum B_DAQ:HEL:30m:fcup:neg:sum } 
+        { B_DAQ:HEL:60m: 29:   B_DAQ:HEL:60m:29:pos:sum   B_DAQ:HEL:60m:29:neg:sum   B_DAQ:HEL:60m:fcup:pos:sum B_DAQ:HEL:60m:fcup:neg:sum } 
+}
+
+file "db/helicity-poltar.template" {
+pattern { P    R }
+        { B_DAQ:HEL:2m:  29: }
+        { B_DAQ:HEL:10m: 29: }
+        { B_DAQ:HEL:30m: 29: }
+        { B_DAQ:HEL:60m: 29: }
+}
+

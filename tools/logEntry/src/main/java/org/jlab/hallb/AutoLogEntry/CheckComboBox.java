@@ -191,13 +191,13 @@ class CheckComboBox extends JComboBox {
                 cbs.add(cb);
             }
 
-            //cb = new ObjCheckBox("Select all");
-            //cb.setSelected(selectedAll);
-            //cbs.add(cb);
+            cb = new ObjCheckBox("Select all");
+            cb.setSelected(selectedAll);
+            cbs.add(cb);
 
-            //cb = new ObjCheckBox("Select none");
-            //cb.setSelected(selectedNone);
-            //cbs.add(cb);
+            cb = new ObjCheckBox("Select none");
+            cb.setSelected(selectedNone);
+            cbs.add(cb);
     }
 
     private void checkBoxSelectionChanged(int index) {

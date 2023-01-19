@@ -1125,75 +1125,6 @@ $(pv_value)</tooltip>
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
     <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <push_action_index>0</push_action_index>
-    <rules />
-    <effect_3d>true</effect_3d>
-    <bit>-1</bit>
-    <enabled>true</enabled>
-    <wuid>-4b759146:152f9e60eab:-1857</wuid>
-    <on_color>
-      <color red="0" green="255" blue="0" />
-    </on_color>
-    <show_confirm_dialog>1</show_confirm_dialog>
-    <password></password>
-    <pv_value />
-    <released_action_index>0</released_action_index>
-    <square_button>true</square_button>
-    <show_led>false</show_led>
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>30</height>
-    <on_label>Fast Dump Triggered...</on_label>
-    <border_width>2</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>false</visible>
-    <pv_name>$(P)FastDump</pv_name>
-    <border_color>
-      <color red="120" green="120" blue="120" />
-    </border_color>
-    <widget_type>Boolean Button</widget_type>
-    <off_color>
-      <color red="0" green="100" blue="0" />
-    </off_color>
-    <confirm_message>Are your sure you want to do this?</confirm_message>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="Button" red="240" green="240" blue="240" />
-    </background_color>
-    <width>208</width>
-    <x>228</x>
-    <name>Choice Button_1</name>
-    <data_type>0</data_type>
-    <y>334</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="true">
-      <action type="WRITE_PV">
-        <pv_name>$(pv_name)</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description></description>
-      </action>
-    </actions>
-    <show_boolean_label>true</show_boolean_label>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-    <off_label>Fast Dump...</off_label>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.BoolButton" version="1.0.0">
-    <toggle_button>false</toggle_button>
-    <border_style>14</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <alarm_pulsing>false</alarm_pulsing>
     <tooltip>Requires REMOTE Mode
 $(pv_name)
 $(pv_value)</tooltip>
@@ -1415,6 +1346,20 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message>Are you sure you want to trigger a Fast Dump?</confirm_message>
         <description>Trigger Fast Dump</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(P)CAS_READWRITE</pv_name>
+        <value>OPEN</value>
+        <timeout>10</timeout>
+        <confirm_message>Are you sure you want to open access controls to everyone?</confirm_message>
+        <description>Open Access Controls</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>$(P)CAS_READWRITE</pv_name>
+        <value>CLOSED</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Close Access Controls</description>
       </action>
     </actions>
     <font>
@@ -2957,7 +2902,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name>$(P)CAS_READWRITE</pv_name>
     <border_color>
       <color red="120" green="120" blue="120" />
@@ -2975,6 +2920,57 @@ $(pv_value)</tooltip>
     <foreground_color>
       <color red="0" green="0" blue="0" />
     </foreground_color>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>14</border_style>
+    <forecolor_alarm_sensitive>true</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>4</precision>
+    <tooltip>$(pv_name)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>1295fddb:185c5697a1a:-7eb6</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>####</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <show_units>false</show_units>
+    <height>25</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P)CAS_READWRITE</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="120" green="120" blue="120" />
+    </border_color>
+    <precision_from_pv>false</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="Read_Background" red="77" green="77" blue="77" />
+    </background_color>
+    <width>80</width>
+    <x>400</x>
+    <name>_5</name>
+    <y>460</y>
+    <foreground_color>
+      <color name="Read_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="true" hook_all="true" />
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>

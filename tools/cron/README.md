@@ -7,8 +7,11 @@ name                | purpose                       | puppet | user     | host  
 `harp2pos.crontab`  | copy harp scan data for MCC   | no     | n/a      | n/a       | unused since 2020
 
 (1) - `/usr/clas12/DATA/logs`, `/usr/clas12/DATA/autosave`, and `$EPICS/apps/iocBoot/ioc*/pv.list`
+
 (2) - `/group/hallb/www/hallbopi/html/opis`
+
 (3) - shared with the the Hall B DAQ
+
 (4) - `/usr/clas12/DATA/logs`
 
 Note, there's also a log rotator running on `/usr/clas12/DATA/logs`, probably via a systemd service.

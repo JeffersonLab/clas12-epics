@@ -17,7 +17,6 @@ drvEtherIP_define_PLC("PLC_SOL", "129.57.96.30", 0)
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadRecords("db/solenoid_mps.db","P=B_SOL:,R=MPS:,PLCID=PLC_SOL")
-dbLoadRecords("db/solenoid_lcw.db","PLCID=PLC_SOL")
 dbLoadTemplate("db/solenoid_interlocks.substitutions")
 
 ## CA Security

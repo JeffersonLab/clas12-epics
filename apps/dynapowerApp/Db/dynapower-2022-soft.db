@@ -18,6 +18,7 @@
 #
 
 ##########################################################
+# Status setters:
 ##########################################################
 
 record(longout,"$(P)$(R=)stat:set") {
@@ -25,30 +26,37 @@ record(longout,"$(P)$(R=)stat:set") {
     field(OUT,  "@dynapower-2022.proto putHex(STAT) $(PORT)")
     field(DESC, "Status Bits")
 }
-record(longout, "$(P)$(R=)start") {
-    field(OMSL, "closed_loop")
-    field(OUT,  "$(P)$(R=)stat:set PP")
-    field(VAL,  "0x2")
+record(bo, "$(P)$(R=)start") {
+    field(OMSL, "stream")
+    field(OUT,  "@dynapower-2022.proto command(SETSTAT02) $(PORT)")
+    #field(OMSL, "closed_loop")
+    #field(OUT,  "$(P)$(R=)stat:set PP")
+    #field(VAL,  "0x2")
 }
-record(longout, "$(P)$(R=)stop") {
-    field(OMSL, "closed_loop")
-    field(OUT,  "$(P)$(R=)stat:set PP")
-    field(VAL,  "0x1")
+record(bo, "$(P)$(R=)stop") {
+    field(OMSL, "stream")
+    field(OUT,  "@dynapower-2022.proto command(SETSTAT01) $(PORT)")
+    #field(OMSL, "closed_loop")
+    #field(OUT,  "$(P)$(R=)stat:set PP")
+    #field(VAL,  "0x1")
 }
-record(longout, "$(P)$(R=)dc:enable") {
-    field(OMSL, "closed_loop")
-    field(OUT,  "$(P)$(R=)stat:set PP")
-    field(VAL,  "0x4")
+record(bo, "$(P)$(R=)dc:enable") {
+    field(OMSL, "stream")
+    field(OUT,  "@dynapower-2022.proto command(SETSTAT04) $(PORT)")
+    #field(OMSL, "closed_loop")
+    #field(OUT,  "$(P)$(R=)stat:set PP")
+    #field(VAL,  "0x4")
 }
-record(longout, "$(P)$(R=)dc:disable") {
-    field(OMSL, "closed_loop")
-    field(OUT,  "$(P)$(R=)stat:set PP")
-    field(VAL,  "0x8")
+record(bo, "$(P)$(R=)dc:disable") {
+    field(OMSL, "stream")
+    field(OUT,  "@dynapower-2022.proto command(SETSTAT08) $(PORT)")
+    #field(OMSL, "closed_loop")
+    #field(OUT,  "$(P)$(R=)stat:set PP")
+    #field(VAL,  "0x8")
 }
-record(longout, "$(P)$(R=)reset") {
-    field(OMSL, "closed_loop")
-    field(OUT,  "$(P)$(R=)stat:set PP")
-    field(VAL,  "0x10")
+record(bo, "$(P)$(R=)reset") {
+    field(OMSL, "stream")
+    field(OUT,  "@dynapower-2022.proto command(SETSTAT10) $(PORT)")
 }
 record(seq, "$(P)$(R=)on") {
     field(LNK1, "$(P)$(R=)start.PROC PP")
@@ -66,6 +74,7 @@ record(seq, "$(P)$(R=)off") {
 }
 
 #########################################################
+# Parameter setters:
 #########################################################
 
 record(ao,"$(P)$(R=)v:set") {
@@ -86,6 +95,7 @@ record(ao,"$(P)$(R=)i:set") {
 }
 
 #########################################################
+# Parameter readbacks:
 #########################################################
 
 record(ai,"$(P)$(R=)v:rbk") {
@@ -134,6 +144,7 @@ record(ai,"$(P)$(R=)flow") {
 }
 
 #########################################################
+# Status readbacks:
 #########################################################
 
 record(mbbiDirect,"$(P)$(R=)stat:rbk") {
@@ -144,12 +155,18 @@ record(mbbiDirect,"$(P)$(R=)stat:rbk") {
 record(mbbiDirect,"$(P)$(R=)fault:1") {
     field(NOBT, "16")
     field(DESC, "Fault Bits")
+    field(FLNK, "$(P)$(R=)heartbeat:update PP")
 }
 record(mbbiDirect,"$(P)$(R=)fault:2") {
     field(NOBT, "16")
     field(DESC, "Fault Bits")
-    field(FLNK, "$(P)$(R=)heartbeat:update PP")
+#field(FLNK, "$(P)$(R=)heartbeat:update PP")
 }
+
+#########################################################
+# Breakout status words:
+#########################################################
+
 record(bi,"$(P)$(R=)ac") {
     field(INP,"$(P)$(R=)stat:rbk.B0")
     field(ZNAM,"OFF")
@@ -197,6 +214,7 @@ record(bi, "$(P)$(R=)stat:on") {
 }
 
 #########################################################
+# Heartbeat for alarming and MOXA keepalive:
 #########################################################
 
 # This heartbeat is periodically updated by a readback PV above.
@@ -210,7 +228,7 @@ record(calcout,"$(P)$(R=)heartbeat:update") {
 record(bo,"$(P)$(R=)heartbeat") {
     field(VAL, "0")
 }
-# Here we store a LIFO of recent heartbeat values and calculate
+# Here we store a FIFO of recent heartbeat values and calculate
 # minimum and maximum values.
 record(compress,"$(P)$(R=)heartbeat:wf") {
     field(ALG,  "Circular Buffer")
@@ -269,5 +287,10 @@ record(bi,"$(P)$(R=)heartbeat:alarm") {
     field(ONAM, "Timeout")
     field(ZSV,  "NO_ALARM")
     field(OSV,  "MAJOR")
+    field(VAL,  "1")
+    field(PINI, "1")
 }
+
+########################################################
+########################################################
 

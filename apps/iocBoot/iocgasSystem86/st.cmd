@@ -44,6 +44,7 @@ dbLoadRecords("db/cRIO_heartbeat.db",   "P=B_HW_, R=CRIO_DEV_,  DLY=60")
 
 dbLoadRecords("db/gas_cRIO_RICH_drybox.db")
 dbLoadRecords("db/freezer_cRIO_HPS_SVT.db")
+dbLoadRecords("db/cRIO_heartbeat.db","P=B_HPS_,R=FREEZER_")
 
 dbLoadRecords("db/flow_cRIO_TEDF.db")
 dbLoadRecords("db/sbs-dsg.db")

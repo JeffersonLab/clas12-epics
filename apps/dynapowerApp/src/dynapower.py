@@ -7,7 +7,7 @@ import re,sys,socket,logging,argparse,datetime,epics
 # There appears to be a bug in the EPICS asyn module, even the latest 4-42, where
 # I/O Intr records can cause deadlock.  Here we workaround that by manually parsing
 # the periodic, unsolicited messages from the Dynapower and just write to soft PVs.
-#
+# This requires an additional heartbeat PV for alarming on loss of comms.
 
 sys.path.insert(0,' /usr/clas12/third-party-libs/pyepics3.5.0-RHEL7/lib/python3.6/site-packages')
 
@@ -20,9 +20,10 @@ class DynapowerPV():
 
 class DynapowerMessage():
 
-    terminator = r'\x00' * 14
+    terminator = r'\x00' * 12
 
     regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+)'
+    regex_bak = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+)'
 
     re.compile(regex)
 
@@ -49,9 +50,10 @@ class DynapowerMessage():
     def parse(byte_string):
         m = re.match(DynapowerMessage.regex, byte_string)
         if m is None:
-            logging.getLogger(__name__).warning('Invalid format:  '+str(byte_string))
+            m = re.match(DynapowerMessage.regex_bak, byte_string)
+            logging.getLogger(__name__).warning('Invalid  format:  '+str(byte_string))
         else:
-            logging.getLogger(__name__).debug('Debug data:  '+str(byte_string))
+            logging.getLogger(__name__).info('Expected format:  '+str(byte_string))
         return m
 
     def _update(self, match):
@@ -59,16 +61,22 @@ class DynapowerMessage():
         self.timestamp = datetime.datetime.now()
         self.raw_data = match.group(0)
         for k,v in DynapowerMessage.pvs.items():
-            if v.is_hex is True:
-                self.data[k] = int(match.group(v.group),16)
-            else:
-                self.data[k] = float(match.group(v.group))/10
+            try:
+                if v.is_hex is True:
+                    self.data[k] = int(match.group(v.group),16)
+                else:
+                    self.data[k] = float(match.group(v.group))/10
+            except:
+                pass
 
     def _publish(self, match=None):
         if match is not None:
             self._update(match)
         for k,v in DynapowerMessage.pvs.items():
-            v.pv.put(self.data[k])
+            try:
+                v.pv.put(self.data[k])
+            except:
+                pass
 
     def parse_and_publish(self, byte_string):
         m = DynapowerMessage.parse(byte_string)
@@ -81,9 +89,9 @@ class DynapowerMessage():
 if __name__ == '__main__':
 
     cli = argparse.ArgumentParser(description='asdf')
-    cli.add_argument('-logging', help='logging level', type=str, default='CRITICAL', choices=['DEBUG','INFO','WARNING','CRITICAL'])
-    cli.add_argument('host', help='host name', type=str)
-    cli.add_argument('port', help='port number', type=int)
+    cli.add_argument('-logging', help='logging level', type=str, default='INFO', choices=['DEBUG','INFO','WARNING','CRITICAL'])
+    cli.add_argument('host', help='host name', type=str, default='hallb-moxa6')
+    cli.add_argument('port', help='port number', type=int, default=4009)
     args = cli.parse_args(sys.argv[1:])
 
     if args.logging == 'CRITICAL':

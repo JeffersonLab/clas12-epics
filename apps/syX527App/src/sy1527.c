@@ -210,9 +210,11 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     if(ret != CAENHV_OK)
     {
       printf("sy1527GetBoard:CAENHVGetChParam error: %s (#%d) threadId=%d, brd=%d, (%s) \n\n", CAENHVGetError(name), ret, id, board, ParName);
+
+      // mark as a communication problem:
       mainframes_disconnect[i10]=1;
 
-      // restart the connection:
+      // This failure mode is terminal until reconnecting:
       if (ret==5)
       {
         if (++NCFEDOWNERR[id] > MAXCFEDOWNERR)
@@ -246,6 +248,9 @@ sy1527GetBoard(unsigned int id, unsigned int board)
     }
     else
     {
+      //clear communication problem:
+      mainframes_disconnect[i10]=0;
+
       if(tipo == PARAM_TYPE_NUMERIC)
       {
         for(i=0; i<ChNum; i++)

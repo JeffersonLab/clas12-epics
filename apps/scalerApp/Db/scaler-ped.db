@@ -1,6 +1,8 @@
 
 # OUT    = pedestal PV to write
-# N      = number of samples to average for pedestal
+# WINDOW = number of samples to veto on
+# HALFWINDOW = which sample to pick in the window
+# NPED   = number of samples to average for pedestal
 # RAW    = raw scaler counts PV for which to calculate pedestal
 # RAWMAX = maximum counts for including in pedestal calculation
 # REF    = reference PV
@@ -21,8 +23,8 @@ record(compress,"$(P)$(R=):veto_circbuff") {
     field(SCAN,"1 second")
     field(INP,"$(VETO)")
     field(ALG,"Circular Buffer")
-    field(NSAM,"9")
-    field(N,"9")
+    field(NSAM,"$(WINDOW)")
+    field(N,"$(WINDOW)")
     field(FLNK,"$(P)$(R=):bpm_circbuff.PROC")
 }
 
@@ -30,8 +32,8 @@ record(compress,"$(P)$(R=):veto_circbuff") {
 record(compress,"$(P)$(R=):bpm_circbuff") {
     field(INP,"$(REF)")
     field(ALG,"Circular Buffer")
-    field(NSAM,"9")
-    field(N,"9")
+    field(NSAM,"$(WINDOW)")
+    field(N,"$(WINDOW)")
     field(FLNK,"$(P)$(R=):raw_circbuff.PROC")
 }
 
@@ -39,8 +41,8 @@ record(compress,"$(P)$(R=):bpm_circbuff") {
 record(compress,"$(P)$(R=):raw_circbuff") {
     field(INP,"$(RAW)")
     field(ALG,"Circular Buffer")
-    field(NSAM,"5")
-    field(N,"5")
+    field(NSAM,"$(HALFWINDOW)")
+    field(N,"$(HALFWINDOW)")
     field(FLNK,"$(P)$(R=):9veto_min.PROC")
 }
 
@@ -49,7 +51,7 @@ record(compress,"$(P)$(R=):9veto_min") {
     field(INP,"$(P)$(R=):veto_circbuff")
     field(ALG,"N to 1 Low Value")
     field(NSAM,"1")
-    field(N,"9")
+    field(N,"$(WINDOW)")
     field(FLNK,"$(P)$(R=):9bpm_max.PROC")
 }
 
@@ -58,7 +60,7 @@ record(compress,"$(P)$(R=):9bpm_max") {
     field(INP,"$(P)$(R=):bpm_circbuff")
     field(ALG,"N to 1 High Value")
     field(NSAM,"1")
-    field(N,"9")
+    field(N,"$(WINDOW)")
     field(FLNK,"$(P)$(R=):raw.PROC")
 }
 
@@ -91,8 +93,8 @@ record(calcout,"$(P)$(R=):calcout") {
 record(compress,"$(P)$(R=):circbuff") {
     field(INP,"$(P)$(R=):raw")
     field(ALG,"Circular Buffer")
-    field(NSAM,"$(N)")
-    field(N,"$(N)")
+    field(NSAM,"$(NPED)")
+    field(N,"$(NPED)")
     field(FLNK,"$(P)$(R=):average.PROC PP")
 }
 
@@ -101,7 +103,7 @@ record(compress,"$(P)$(R=):average") {
     field(INP,"$(P)$(R=):circbuff")
     field(ALG,"N to 1 Average")
     field(NSAM,"1")
-    field(N,"$(N)")
+    field(N,"$(NPED)")
     field(FLNK,"$(P)$(R=):write PP")
     info(autosaveFields_pass0,"VAL")
 }

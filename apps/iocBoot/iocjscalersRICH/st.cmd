@@ -69,8 +69,8 @@ seq waveform, "P=B_DET_RICH2_SCALERS_,R=PMTS:"
 ##< rich-setDesc.cmd
 
 # disable one LV channel:
-#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","134")
-#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","134")
-#dbpf("B_DET_RICH_SCALERS:alarm.LSV","NO_ALARM")
+dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","137")
+dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","137")
+dbpf("B_DET_RICH2_SCALERS:alarm.LSV","NO_ALARM")
 
 dbl > pv.list

@@ -5,6 +5,7 @@ import xml.dom.minidom as minidom
 
 cli = argparse.ArgumentParser(description='CS-Studio BOB to OPI converter')
 cli.add_argument('input',help='path to .bob file')
+cli.add_argument('-d',help='delete unknown widget types',default=False,action='store_true')
 args = cli.parse_args(sys.argv[1:])
 
 root = ET.parse(args.input).getroot()
@@ -29,9 +30,14 @@ widget_types = {
     #'combo':'org.csstudio.opibuilder.widgets.Combo',
 }
 
-for widget in root.iter('widget'):
+removals = set()
+
+for widget in root.findall('widget'):
   if widget.get('type') in widget_types:
     widget.set('typeId',widget_types[widget.get('type')])
+  elif args.d:
+    removals.add(widget.get('type'))
+    root.remove(widget)
   else:
     sys.exit('Unknown widget type:  '+widget.get('type'))
 
@@ -39,4 +45,7 @@ for widget in root.iter('widget'):
 for line in minidom.parseString(ET.tostring(root)).toprettyxml(indent='  ',encoding='utf-8').decode('utf-8').split('\n'):
   if len(line.strip()) != 0:
     print(line)
+
+if args.d:
+  print('\n\n<!--\nREMOVALS:\n'+'\n'.join(removals)+'\n-->')
 

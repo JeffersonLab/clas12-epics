@@ -1,0 +1,15 @@
+
+OutTerminator = LF;
+InTerminator = LF;
+
+cmd { out "\$1"; }
+beep { out ":SYST:BEEP 500,1"; }
+
+putInt    { out "\$1 %d"; @init { wait 100; out "\$1?"; in "%d"; } }
+putFloat  { out "\$1 %f"; @init { wait 100; out "\$1?"; in "%f"; } }
+putString { out "\$1 %s"; @init { wait 100; out "\$1?"; in "%s"; } }
+
+getInt    { out "\$1?"; in "%d"; }
+getFloat  { out "\$1?"; in "%E"; }
+getString { out "\$1?"; in "%#s"; }
+

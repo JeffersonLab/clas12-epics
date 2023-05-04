@@ -20,10 +20,9 @@ class DynapowerPV():
 
 class DynapowerMessage():
 
-    terminator = r'\x00' * 12
+    terminator = r'\x00' * 15
 
-    regex = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+)'
-    regex_bak = b'^ \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+) \r\n (\d+)'
+    regex = b'^\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)'
 
     re.compile(regex)
 
@@ -50,7 +49,6 @@ class DynapowerMessage():
     def parse(byte_string):
         m = re.match(DynapowerMessage.regex, byte_string)
         if m is None:
-            m = re.match(DynapowerMessage.regex_bak, byte_string)
             logging.getLogger(__name__).warning('Invalid  format:  '+str(byte_string))
         else:
             logging.getLogger(__name__).info('Expected format:  '+str(byte_string))
@@ -89,9 +87,9 @@ class DynapowerMessage():
 if __name__ == '__main__':
 
     cli = argparse.ArgumentParser(description='asdf')
-    cli.add_argument('-logging', help='logging level', type=str, default='INFO', choices=['DEBUG','INFO','WARNING','CRITICAL'])
-    cli.add_argument('host', help='host name', type=str, default='hallb-moxa6')
-    cli.add_argument('port', help='port number', type=int, default=4009)
+    cli.add_argument('-logging', help='logging level', type=str, default='WARNING', choices=['DEBUG','INFO','WARNING','CRITICAL'])
+    cli.add_argument('-host', help='host name', type=str, default='hallb-moxa6')
+    cli.add_argument('-port', help='port number', type=int, default=4009)
     args = cli.parse_args(sys.argv[1:])
 
     if args.logging == 'CRITICAL':

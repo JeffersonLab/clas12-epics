@@ -27,35 +27,35 @@ record(longout,"$(P)$(R=)stat:set") {
     field(DESC, "Status Bits")
 }
 record(bo, "$(P)$(R=)start") {
-    field(OMSL, "stream")
+    field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT02) $(PORT)")
     #field(OMSL, "closed_loop")
     #field(OUT,  "$(P)$(R=)stat:set PP")
     #field(VAL,  "0x2")
 }
 record(bo, "$(P)$(R=)stop") {
-    field(OMSL, "stream")
+    field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT01) $(PORT)")
     #field(OMSL, "closed_loop")
     #field(OUT,  "$(P)$(R=)stat:set PP")
     #field(VAL,  "0x1")
 }
 record(bo, "$(P)$(R=)dc:enable") {
-    field(OMSL, "stream")
+    field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT04) $(PORT)")
     #field(OMSL, "closed_loop")
     #field(OUT,  "$(P)$(R=)stat:set PP")
     #field(VAL,  "0x4")
 }
 record(bo, "$(P)$(R=)dc:disable") {
-    field(OMSL, "stream")
+    field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT08) $(PORT)")
     #field(OMSL, "closed_loop")
     #field(OUT,  "$(P)$(R=)stat:set PP")
     #field(VAL,  "0x8")
 }
 record(bo, "$(P)$(R=)reset") {
-    field(OMSL, "stream")
+    field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT10) $(PORT)")
 }
 record(seq, "$(P)$(R=)on") {
@@ -80,7 +80,7 @@ record(seq, "$(P)$(R=)off") {
 record(ao,"$(P)$(R=)v:set") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto putFloat(VOLT) $(PORT)")
-    field(ASLO, "10")
+    field(ASLO, "0.1")
     field(PREC, "1")
     field(EGU,  "V")
     field(DESC, "Voltage")
@@ -88,7 +88,7 @@ record(ao,"$(P)$(R=)v:set") {
 record(ao,"$(P)$(R=)i:set") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto putFloat(AMPS) $(PORT)")
-    field(ASLO, "10")
+    field(ASLO, "0.1")
     field(PREC, "1")
     field(EGU,  "A")
     field(DESC, "Current")

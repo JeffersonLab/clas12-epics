@@ -122,7 +122,7 @@ class JlabSSPBoard : public JlabBoard {
         static const int PMTSPERFIBER=3;
         static const int SCALERSPERPMT=64;
         static const int SCALERSPERFIBER=PMTSPERFIBER*SCALERSPERPMT;//192
-        static const int DATAPERFIBER=9;
+        static const int DATAPERFIBER=11;
         static const int SCALERHEADEROFFSET=3;
         static const int DATAHEADEROFFSET=2;
         static const double CLOCKFREQ=125E6;

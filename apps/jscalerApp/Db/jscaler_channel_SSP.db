@@ -184,6 +184,24 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):volt:mgt1_2") {
     field(LLSV,"MAJOR")
     info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO DESC")
 }
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):uptime") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(Uptime)")
+    field(SCAN,"5 second")
+    field(EGU,"s")
+    field(PREC,0)
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Fi$(Ch):seucnt") {
+    field(DTYP,"JLAB_SCALERS")
+    field(INP,"#C$(CScode) S$(SEUCount)")
+    field(SCAN,"5 second")
+    field(EGU,"s")
+    field(HSV,"MAJOR")
+    field(HIGH,1.0)
+    field(PREC,0)
+    info(autosaveFields_pass0,"HHSV HSV LSV LLSV HIHI HIGH LOW LOLO")
+}
 
 ########################################################################
 # single-PMT scalers:

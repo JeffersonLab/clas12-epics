@@ -166,7 +166,9 @@ static long read_ai(struct aiRecord *pai)
            command==SSPVOLT3 || 
            command==SSPVOLT4 || 
            command==SSPVOLT5 || 
-           command==SSPVOLT6) {
+           command==SSPVOLT6 ||
+           command==SSPUPTIME ||
+           command==SSPSEUCNT) {
       ret=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
       if (len > (command & 0xF) - 5) {
           values = (double*) malloc(sizeof(double)*len);

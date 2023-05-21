@@ -43,3 +43,6 @@
 #define SSPVOLT5 0x2C
 #define SSPVOLT6 0x2D
 
+#define SSPUPTIME 0x2E
+#define SSPSEUCNT 0x2F
+

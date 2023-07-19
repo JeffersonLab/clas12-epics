@@ -113,10 +113,6 @@ function iocreboot {
         if [ $? -eq 0 ]
         then
             sleep 1
-            caput B_DET_RICH2_SSP:data:nFibers:alarm.INPC 137
-            caput B_DET_RICH2_SSP:data:nFibers:alarm.C 137
-            caput B_DET_RICH2_SCALERS:alarm.LSV NO_ALARM
-            caput B_HW_SVT3:scalers:nFibers.LOLO 136
             break
         fi
         let count=$count+1

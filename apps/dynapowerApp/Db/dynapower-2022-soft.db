@@ -29,30 +29,18 @@ record(longout,"$(P)$(R=)stat:set") {
 record(bo, "$(P)$(R=)start") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT02) $(PORT)")
-    #field(OMSL, "closed_loop")
-    #field(OUT,  "$(P)$(R=)stat:set PP")
-    #field(VAL,  "0x2")
 }
 record(bo, "$(P)$(R=)stop") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT01) $(PORT)")
-    #field(OMSL, "closed_loop")
-    #field(OUT,  "$(P)$(R=)stat:set PP")
-    #field(VAL,  "0x1")
 }
 record(bo, "$(P)$(R=)dc:enable") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT04) $(PORT)")
-    #field(OMSL, "closed_loop")
-    #field(OUT,  "$(P)$(R=)stat:set PP")
-    #field(VAL,  "0x4")
 }
 record(bo, "$(P)$(R=)dc:disable") {
     field(DTYP, "stream")
     field(OUT,  "@dynapower-2022.proto command(SETSTAT08) $(PORT)")
-    #field(OMSL, "closed_loop")
-    #field(OUT,  "$(P)$(R=)stat:set PP")
-    #field(VAL,  "0x8")
 }
 record(bo, "$(P)$(R=)reset") {
     field(DTYP, "stream")
@@ -83,6 +71,7 @@ record(ao,"$(P)$(R=)v:set") {
     field(ASLO, "0.1")
     field(PREC, "1")
     field(EGU,  "V")
+    field(DRVH, "60")
     field(DESC, "Voltage")
 }
 record(ao,"$(P)$(R=)i:set") {
@@ -91,7 +80,17 @@ record(ao,"$(P)$(R=)i:set") {
     field(ASLO, "0.1")
     field(PREC, "1")
     field(EGU,  "A")
+    field(DRVH, "3100")
     field(DESC, "Current")
+}
+record(ao,"$(P)$(R=)i:ramp") {
+    field(PREC, "1")
+    field(EGU,  "A")
+    field(DRVH, "3100")
+    field(DESC, "Current")
+}
+record(stringin, "$(P)$(R=)i:ramp:msg"){
+    field(VAL, "UDF")
 }
 
 #########################################################

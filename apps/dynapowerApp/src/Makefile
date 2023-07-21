@@ -20,9 +20,11 @@ dynapower_DBD += calc.dbd
 dynapower_DBD += sCalcoutRecord.dbd
 dynapower_DBD += asSupport.dbd
 dynapower_DBD += devIocStats.dbd
+dynapower_DBD += dynapowerInclude.dbd
 
 # dynapower_registerRecordDeviceDriver.cpp derives from dynapower.dbd
 dynapower_SRCS += dynapower_registerRecordDeviceDriver.cpp
+dynapower_SRCS += ramp.st
 
 # Build the main IOC entry point on workstation OSs.
 dynapower_SRCS_DEFAULT += dynapowerMain.cpp

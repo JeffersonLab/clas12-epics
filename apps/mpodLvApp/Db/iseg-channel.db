@@ -81,6 +81,7 @@ record(ai,"$(HV):outputMeasTermVR") {
 	field(PREC,"6")
 	field(EGU,"V")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
+    alias("$(HV):vmon")
 }
 record(ai,"$(HV):outputVoltageFallRateR") {
 	field(DESC,"output voltage decreasing slew rate")
@@ -96,6 +97,7 @@ record(ai,"$(HV):outputVoltageR") {
 	field(INP,"@$(HVHOST) public %{W}outputVoltage.$(HVCH) Float: 100")
 	field(PREC,"2")
 	field(EGU,"V")
+    alias("$(HV):vsetrbk")
 }
 record(ai,"$(HV):outputVoltageRiseRateR") {
 	field(DESC,"output voltage increasing slew rate")
@@ -133,6 +135,7 @@ record(ao,"$(HV):outputCurrent") {
 	field(PREC,"5")
 	field(EGU,"uA")
 	field(HOPR,"5")
+    alias("$(HV):iset")
 }
 record(ao,"$(HV):outputCurrentC") {
 	field(DTYP,"Snmp")
@@ -166,6 +169,7 @@ record(ao,"$(HV):outputVoltage") {
 	field(PREC,"2")
 	field(EGU,"V")
 	field(HOPR,"100")
+    alias("$(HV):vset")
 }
 record(ao,"$(HV):outputVoltageFallRate") {
 	field(DESC,"output voltage decreasing slew rate")
@@ -381,6 +385,7 @@ record(calc,"$(HV):outputCurrentR") {
 	field(INPA,"$(HV):outputCurrentRC NPP NMS")
 	field(EGU,"uA")
 	field(PREC,"5")
+    alias("$(HV):isetrbk")
 }
 record(calc,"$(HV):outputCurrent_calc") {
 	field(FLNK,"$(HV):outputCurrentC.PROC")
@@ -403,6 +408,7 @@ record(calc,"$(HV):outputMeasCurrent") {
 #	field(HSV,"MINOR")
 #	field(LSV,"MINOR")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
+    alias("$(HV):imon")
 }
 record(calc,"$(HV):outputMeasCurrentAlm") {
 	field(DESC,"Interlock alarm current")

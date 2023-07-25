@@ -1,3 +1,4 @@
+
 record(bi,"$(HOST):fantrayFail") {
 	field(DESC,"1=fantray failure")
 	field(DTYP,"Soft Channel")
@@ -95,6 +96,21 @@ record(longin,"$(HOST):groupsNumber") {
 	field(DTYP,"Snmp")
 	field(INP,"@$(HOST) public %{W}groupsNumber.0 INTEGER: 100")
 }
+record(longout, "$(HOST):group:0:switch")
+{
+  field(DESC, "Turn ON and OFF switch")
+  field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(OUT,  "@$(HOST) guru %(W)groupSwitch.u0 ( 100 i")
+}
+record(longout, "$(HOST):group:1:switch")
+{
+  field(DESC, "Turn ON and OFF switch")
+  field(DTYP, "Snmp")
+  field(SCAN, "Passive")
+  field(OUT,  "@$(HOST) guru %(W)groupSwitch.u1 ( 100 i")
+}
+    
 record(longin,"$(HOST):outputNumber") {
 	field(DESC,"Number of output channels in crate")
 	field(PINI,"YES")

@@ -25,6 +25,10 @@ devSnmpSetParam(DebugLevel,10)
 
 #MpodStatusParserDebug=1
 
+# EEL125:
+dbLoadRecords("db/mpod-crate.db","HOST=mmtblv")
+dbLoadTemplate("db/mmtblv.substitutions")
+
 dbLoadRecords("db/mpod-crate.db","HOST=mvtlv")
 dbLoadTemplate("db/mvtlv.substitutions")
 

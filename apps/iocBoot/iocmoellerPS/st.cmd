@@ -41,3 +41,5 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
 
+seq ramp, "P=DYNAB:"
+

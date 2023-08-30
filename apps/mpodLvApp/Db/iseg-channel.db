@@ -178,6 +178,7 @@ record(ao,"$(HV):outputVoltageFallRate") {
 	field(PREC,"6")
 	field(EGU,"V/s")
 	field(HOPR,"8")
+    alias("$(HV):rdn")
 }
 record(ao,"$(HV):outputVoltageRiseRate") {
 	field(DESC,"output voltage increasing slew rate")
@@ -186,6 +187,7 @@ record(ao,"$(HV):outputVoltageRiseRate") {
 	field(PREC,"6")
 	field(EGU,"V/s")
 	field(HOPR,"8")
+    alias("$(HV):rup")
 }
 record(bi,"$(HV):outAdjusting") {
 	field(DESC,"Fine adjustment is working")
@@ -530,6 +532,7 @@ record(longout,"$(HV):outputTripTimeMaxCurrent") {
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HVHOST) guru %{W}outputTripTimeMaxCurrent.$(HVCH) INTEGER: 8 i")
 	field(EGU,"ms")
+    alias("$(HV):trip")
 }
 record(longout,"$(HV):outputUserConfig") {
 	field(DESC,"output channel behavior")
@@ -576,6 +579,7 @@ record(mbbo,"$(HV):outSwitch") {
 	field(TWST,"EMER_RESET")
 	field(THST,"EMER_OFF")
 	field(TEST,"CLEAR")
+    alias("$(HV):pwonoff")
 }
 record(stringin,"$(HV)") {
 	field(DTYP,"Soft Channel")

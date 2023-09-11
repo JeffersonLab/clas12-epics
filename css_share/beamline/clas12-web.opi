@@ -1813,7 +1813,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>tempSensorV</pv_name>
+    <pv_name>tempSensorX</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -1865,7 +1865,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>tempSensorU</pv_name>
+    <pv_name>tempSensorW</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -6005,7 +6005,7 @@ $(pv_value)</tooltip>
     <text>######</text>
     <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
     <show_units>false</show_units>
     <height>18</height>
     <border_width>1</border_width>
@@ -6015,7 +6015,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>hallb_sf_xy560_0_18</pv_name>
+    <pv_name>DYNAB:i:rbk</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -7278,7 +7278,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>48982660:15e28c270ec:-7a25</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>127</height>
     <border_width>1</border_width>
@@ -7290,7 +7290,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
     </macros>
-    <visible>false</visible>
+    <visible>true</visible>
     <border_color>
       <color red="191" green="191" blue="191" />
     </border_color>
@@ -7299,9 +7299,9 @@ $(pv_value)</tooltip>
       <color red="111" green="111" blue="111" />
     </background_color>
     <width>229</width>
-    <x>860</x>
+    <x>781</x>
     <name>Cryotarget</name>
-    <y>600</y>
+    <y>467</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
@@ -7338,7 +7338,7 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_SACLAYTGT:TT_ET</pv_name>
+      <pv_name>TGT:BTARG:Bath_Top_T</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
@@ -7390,7 +7390,7 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_SACLAYTGT:PT_T</pv_name>
+      <pv_name>TGT:BTARG:Target_Supply_PI</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
@@ -7545,7 +7545,7 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_SACLAYTGT:STAT</pv_name>
+      <pv_name>clas12:target:type</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
@@ -7568,69 +7568,6 @@ $(pv_value)</tooltip>
       <actions hook="false" hook_all="false" />
       <font>
         <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>1</horizontal_alignment>
-      <rules>
-        <rule name="TEXT" prop_id="text" out_exp="false">
-          <exp bool_exp="pv0==1">
-            <value>Full</value>
-          </exp>
-          <exp bool_exp="true">
-            <value>Not Full</value>
-          </exp>
-          <pv trig="true">B_SACLAYTGT:LS_TH</pv>
-        </rule>
-        <rule name="COLOR" prop_id="foreground_color" out_exp="false">
-          <exp bool_exp="pv0==1">
-            <value>
-              <color name="On" red="0" green="255" blue="0" />
-            </value>
-          </exp>
-          <exp bool_exp="true">
-            <value>
-              <color name="Major" red="255" green="0" blue="0" />
-            </value>
-          </exp>
-          <pv trig="true">B_SACLAYTGT:LS_TH</pv>
-        </rule>
-      </rules>
-      <enabled>true</enabled>
-      <wuid>2b4c04a2:165fd8f775c:-7e12</wuid>
-      <transparent>false</transparent>
-      <auto_size>false</auto_size>
-      <text>Target Status</text>
-      <scripts />
-      <height>16</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>false</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>false</wrap_words>
-      <background_color>
-        <color red="111" green="111" blue="111" />
-      </background_color>
-      <width>144</width>
-      <x>23</x>
-      <name>Label_5</name>
-      <y>88</y>
-      <foreground_color>
-        <color name="Write_Foreground" red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="true" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
       </font>
     </widget>
   </widget>
@@ -12139,7 +12076,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
     </macros>
-    <visible>false</visible>
+    <visible>true</visible>
     <border_color>
       <color red="191" green="191" blue="191" />
     </border_color>
@@ -15976,7 +15913,7 @@ $(pv_value)</tooltip>
         <height_scalable>true</height_scalable>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
-      <visible>true</visible>
+      <visible>false</visible>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color red="0" green="128" blue="255" />
@@ -16034,7 +15971,7 @@ $(pv_value)</tooltip>
         <height_scalable>true</height_scalable>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
-      <visible>true</visible>
+      <visible>false</visible>
       <pv_name>B_DET_FTC_FADC:avg</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
@@ -16086,7 +16023,7 @@ $(pv_value)</tooltip>
         <height_scalable>true</height_scalable>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
-      <visible>true</visible>
+      <visible>false</visible>
       <pv_name>B_DET_FTH_FADC:avg</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
@@ -18918,7 +18855,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>20ba7599:18143a85915:-7c4c</wuid>
     <transparent>true</transparent>
-    <lock_children>false</lock_children>
+    <lock_children>true</lock_children>
     <scripts />
     <height>145</height>
     <border_width>1</border_width>
@@ -18930,7 +18867,7 @@ $(pv_value)</tooltip>
     <macros>
       <include_parent_macros>true</include_parent_macros>
     </macros>
-    <visible>true</visible>
+    <visible>false</visible>
     <border_color>
       <color red="191" green="191" blue="191" />
     </border_color>
@@ -18939,9 +18876,9 @@ $(pv_value)</tooltip>
       <color red="111" green="111" blue="111" />
     </background_color>
     <width>229</width>
-    <x>765</x>
+    <x>973</x>
     <name>RG-C Polarized Target</name>
-    <y>471</y>
+    <y>610</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>

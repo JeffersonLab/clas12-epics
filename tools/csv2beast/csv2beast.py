@@ -5,8 +5,8 @@
 # Usage:
 #   csv2beast.py [FILE...] [DIR...]
 #
-#   Excepts combinations of files and directories (default: ./).  Output file(s) will be the
-#   same as the input, only with xml extension.
+#   Accepts combinations of files and directories (default: ./).  Output filename(s) will
+#   be the same as the input, but with xml extension.
 #
 # Input format:
 #   Line 1: <config name>, <component 0>, <component 1>, <component N>, ...

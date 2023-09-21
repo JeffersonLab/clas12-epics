@@ -75,7 +75,7 @@
     <actions hook="false" hook_all="false" />
     <show_scrollbar>false</show_scrollbar>
     <font>
-      <opifont.name fontName="Cantarell" height="15" style="1">Header 2</opifont.name>
+      <opifont.name fontName="Sans" height="14" style="1">Header 2</opifont.name>
     </font>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
@@ -127,7 +127,7 @@ $(pv_value)</tooltip>
           <TITLE>HTCC Mpod Crate</TITLE>
         </macros>
         <replace>0</replace>
-        <description>HV Crate Status</description>
+        <description>Crate Status</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>burt-gui</command>
@@ -135,9 +135,23 @@ $(pv_value)</tooltip>
         <wait_time>10</wait_time>
         <description>Save/Restore HV</description>
       </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV:OFF</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>All Off</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV:ON</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn all HTCC HV on?</confirm_message>
+        <description>All On</description>
+      </action>
     </actions>
     <font>
-      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

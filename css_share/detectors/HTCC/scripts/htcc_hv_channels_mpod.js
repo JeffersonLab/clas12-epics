@@ -15,7 +15,7 @@ widget.addChildToBottom(lc);
 
 var index = 0;
 
-for (var sector=1; sector<9; sector++) {
+for (var sector=1; sector<7; sector++) {
     for (var ring=1; ring<5; ring++) {
         for (var ilr=0; ilr<2; ilr++) {
             var pv = prefix + "SEC" + sector + "_" + lr[ilr] + ring;

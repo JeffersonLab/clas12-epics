@@ -94,22 +94,24 @@ float hwienangle; assign hwienangle to "PWF1I06:spinCalc";
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
 
 // Quadrupole Controls:
-int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNABPSON"; monitor quadB_isOn;
+int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNAB:stat:on"; monitor quadB_isOn;
+//int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNABPSON"; monitor quadB_isOn;
 int quadC_isOn;    assign quadC_isOn    to "{SIMQUAD}DYNACPSON"; monitor quadC_isOn;
-int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
+int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNAB:on";
+//int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
 int quadC_on;      assign quadC_on      to "{SIMQUAD}DYNACON";
-int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
+int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNAB:off";
+//int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
 int quadC_off;     assign quadC_off     to "{SIMQUAD}DYNACOFF";
-int quadB_reverse; assign quadB_reverse to "{SIMQUAD}DYNABREVERSE";
-int quadB_forward; assign quadB_forward to "{SIMQUAD}DYNABFORWARD";
-float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNABSETI";
+float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNAB:i:ramp";
+//float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNABSETI";
 float quadC_iset;  assign quadC_iset    to "{SIMQUAD}DYNACSETI";
-float quadB_imon;  assign quadB_imon    to "{SIMQUAD}hallb_sf_xy560_0_14"; monitor quadB_imon;
+float quadB_imon;  assign quadB_imon    to "{SIMQUAD}DYNAB:i:rbk"; monitor quadB_imon;
+//float quadB_imon;  assign quadB_imon    to "{SIMQUAD}hallb_sf_xy560_0_14"; monitor quadB_imon;
 float quadC_imon;  assign quadC_imon    to "{SIMQUAD}hallb_sf_xy560_0_18"; monitor quadC_imon;
-int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNABRESET";
+int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNAB:reset";
+//int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNABRESET";
 int quadC_reset;   assign quadC_reset   to "{SIMQUAD}DYNACRESET";
-int quadB_revmon;  assign quadB_revmon  to "{SIMQUAD}DYNABRC";
-int quadB_fwdmon;  assign quadB_fwdmon  to "{SIMQUAD}DYNABFC";
 
 // Helmholtz Controls:
 float helm_iset;    assign helm_iset    to "{SIMHELM}B_MOLLER_HELMHOLTZ_CURRENT_SET";
@@ -397,8 +399,8 @@ ss automoller {
         }
         when (tagger_irbk < TAGGER_TOLERANCE) {
             MESSAGE(ERROR:  Tagger is Off.  Aborted Moller Run.);
-			status=NOT_CONFIGURED;
-			pvPut(status);
+            status=NOT_CONFIGURED;
+	        pvPut(status);
         } state listen
         when () {} state insertCollimator
     }
@@ -901,4 +903,5 @@ ss automoller {
         } state listen
     }
 }
+
 

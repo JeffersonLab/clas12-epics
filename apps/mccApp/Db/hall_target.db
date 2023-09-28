@@ -15,46 +15,94 @@
 # support 2 naming schemes.
 #
 
-#record(calc,"HLB:TARGET:CALC")
-#{
-#  field(PINI,1)
-#  field(INPA,"moller_target_empty CPP")
-#  field(INPB,"harp_2H01.RBV CPP")
-#  field(INPC,"B_BONUS_GAS_MFC104_Gas CPP")
-##field(INPC,"B_SACLAYTGT:STAT CPP")
-#  field(CALC,"A#1?0:(B>0.1?1:(C+2))")
-#  info(autosaveFields_pass0,"VAL")
-#  field(FLNK,"HLB:TARGET:STAT.PROC")
-#}
+# Flag locations
+# 0 Empty
+# 1 Cu-Sn
+# 2 Carbon
+#
+# species
+# 0 H2
+# 1 D2
+# 2 4He
+# 3 3He
+#
+# production
+# 0 Empty
+# 1 Full
+# 2 Solid
+# 3 Full+Solid
+# 4 Not Ready
+#
+
+record(calc,"HLB:TARGET:CALC:rgd") {
+    field(PINI,1)
+    field(INPA, "TGT:BTARG:production CPP")
+    field(INPB, "TGT:BTARG:species CPP")
+    field(INPC, "TGT:BTARG:Flag_locations CPP")
+    field(CALC, "A=1?B+1:(A=2?C+5:(A=0?0:10))")
+}
+
+record(calcout,"HLB:TARGET:CALC")
+{
+  field(PINI,1)
+  field(INPA,"moller_target_empty CPP")
+  field(INPB,"harp_2H01.RBV CPP")
+  field(INPC,"harp_tagger.RBV CPP")
+  field(INPD,"harp_2c21.RBV CPP")
+  field(INPE,"HLB:TARGET:CALC:rgd CPP")
+  field(CALC,"A#1?9:((B>0.1||C>0.1||D>0.1)?8:E)")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"HLB:TARGET:STAT PP")
+  info(autosaveFields_pass0,"VAL")
+}
+
+record(stringout,"HLB:TARGET:STRINGOUT")
+{
+  field(SCAN,"1 second")
+  field(OMSL,"closed_loop")
+  field(DOL,"HLB:TARGET:STAT")
+  field(OUT,"HALL_B_TARGET PP")
+}
 
 record(mbbi,"HLB:TARGET:STAT")
 {
     alias("clas12:target:type")
     #alias("hps:target:type")
-    field(PINI,1)
+#
+####################
+# RGD:
     field(ZRVL,0)
     field(ONVL,1)
     field(TWVL,2)
     field(THVL,3)
     field(FRVL,4)
     field(FVVL,5)
-#    field(THVL,3)
-#    field(FRVL,4)
-#    field(FVVL,5)
-#    field(SXVL,6)
-#    field(SVVL,7)
-#    field(EIVL,8)
-#    field(NIVL,9)
-#    field(TEVL,10)
-#
+    field(SXVL,6)
+    field(SVVL,7)
+    field(EIVL,8)
+    field(NIVL,9)
+    field(TEVL,10)
+    field(TESV,"MAJOR")
+    field(ZRST, "Empty")
+    field(ONST, "LH2")
+    field(TWST, "LD2")
+    field(THST, "L4He")
+    field(FRST, "L3He")
+    field(FVST, "Empty")
+    field(SXST, "CuSn")
+    field(SVST, "CxC")
+    field(EIST, "Harp Wire")
+    field(NIST, "Moller")
+    field(TEST, "Unknown")
 ####################
 # RGC:
-     field(ZRST, "Empty")
-     field(ONST, "NH3")
-     field(TWST, "ND3")
-     field(THST, "CH2")
-     field(FRST, "CD2")
-     field(FVST, "C")
+#     field(ZRST, "Empty")
+#     field(ONST, "NH3")
+#     field(TWST, "ND3")
+#     field(THST, "CH2")
+#     field(FRST, "CD2")
+#     field(FVST, "C")
 #
 ####################
 # OLD:
@@ -95,29 +143,5 @@ record(mbbi,"HLB:TARGET:STAT")
 #  field(NIST,"L3He")
 #  field(TEST,"L4He")
 #
-}
-
-#record(mbbi,"clas12:target:type") {
-#    field(SCAN,"1 second")
-#    field(INP,"HLB:TARGET:STAT")
-#    field(ZRST,"LH2")
-#    field(ONST,"LD2")
-#    field(TWST,"L4He")
-#    field(THST,"LAr")
-#    field(FRST,"C (x4)")
-#    field(FVST,"C")
-#    field(SXST,"Sn (x4)")
-#    field(SVST,"40Ca")
-#    field(EIST,"48Ca")
-#    field(NIST,"Empty")
-#    field(FLNK,"HLB:TARGET:STRINGOUT PP")
-#}
-
-record(stringout,"HLB:TARGET:STRINGOUT")
-{
-  field(SCAN,"1 second")
-  field(OMSL,"closed_loop")
-  field(DOL,"HLB:TARGET:STAT")
-  field(OUT,"HALL_B_TARGET PP")
 }
 

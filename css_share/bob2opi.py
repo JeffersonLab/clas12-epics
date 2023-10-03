@@ -21,6 +21,7 @@ widget_types = {
     'spinner':'org.csstudio.opibuilder.widgets.spinner',
     'tank':'org.csstudio.opibuilder.widgets.tank',
     'scrollbar':'org.csstudio.opibuilder.widgets.ScrollBar',
+    #'choice':'org.csstudio.opibuilder.widgets.ChoiceButton',
     'choice':'org.csstudio.opibuilder.widgets.MenuButton',
     'led':'org.csstudio.opibuilder.widgets.LED',
     'rectangle':'org.csstudio.opibuilder.widgets.Rectangle',
@@ -28,7 +29,8 @@ widget_types = {
     'combo':'org.csstudio.opibuilder.widgets.combo',
     'polyline':'org.csstudio.opibuilder.widgets.polyline',
     'picture':'org.csstudio.opibuilder.widgets.Image',
-    'slide_button':'org.csstudio.opibuilder.widgets.scaledslider'
+    'slide_button':'org.csstudio.opibuilder.widgets.BoolButton'
+    #'slide_button':'org.csstudio.opibuilder.widgets.scaledslider'
     # don't work or untested: 
     #'stripchart':'org.csstudio.opibuilder.widgets.StripChart',
     #'byte_monitor':'org.csstudio.opibuilder.widgets.ByteMonitor',

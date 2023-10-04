@@ -631,7 +631,7 @@ ss automoller {
               equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
         } state helmholtzOn
 
-        when (delay(60)) {
+        when (delay(120)) {
 			status=QUAD_ALARM;
 			pvPut(status);
             MESSAGE(ERROR energizing Quads.  Aborted Moller Run.);

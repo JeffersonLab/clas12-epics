@@ -30,7 +30,7 @@ function insertRoc(rocName,rocNumber) {
 var lines=FileUtil.readTextFile(fileName,widget).split("\n");
 
 for (var ii=i1; ii<=i2; ii++) {
-    if (ii==55 || ii==63) continue;
+    if (ii==55) continue;
     var columns = lines[ii].split(" ");
     var rocName = columns[columns.length-1];
     //if (!rocName.includes("-") && !rocName.includes("svt3"))

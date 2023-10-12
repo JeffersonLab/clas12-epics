@@ -84,7 +84,7 @@ class DynapowerMessage():
 if __name__ == '__main__':
 
     cli = argparse.ArgumentParser(description='asdf')
-    cli.add_argument('-logging', help='logging level', type=str, default='INFO', choices=['DEBUG','INFO','WARNING','CRITICAL'])
+    cli.add_argument('-logging', help='logging level', type=str, default='WARNING', choices=['DEBUG','INFO','WARNING','CRITICAL'])
     cli.add_argument('-host', help='host name', type=str, default='hallb-moxa6')
     cli.add_argument('-port', help='port number', type=int, default=4009)
     args = cli.parse_args(sys.argv[1:])

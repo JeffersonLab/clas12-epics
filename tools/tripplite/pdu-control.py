@@ -13,7 +13,9 @@ devices = {
     'ecal-chiller' : { 'host':'hallb-pdu-1', 'outlet':1 },
     'svt-camera'   : { 'host':'hallb-pdu-1', 'outlet':2 },
     'test'         : { 'host':'hallb-pdu-1', 'outlet':3 },
-    'fcup-camera'  : { 'host':'hallb-pdu-1', 'outlet':1 }
+    'fcup-camera'  : { 'host':'hallb-pdu-1', 'outlet':1 },
+    'fcup-camera1'  : { 'host':'hallb-pdu-1', 'outlet':2 },
+    'fcup-camera2'  : { 'host':'hallb-pdu-1', 'outlet':3 }
 }
 
 cli=argparse.ArgumentParser(description='Control outlets on a Tripp-Lite power distribution unit')
@@ -49,8 +51,8 @@ if args.command == 'off' or args.command == 'cycle':
 
 if args.command == 'on' or args.command == 'cycle':
   if args.command == 'cycle':
-    print('Waiting 30 seconds to repower ...')
-    time.sleep(30)
+    print('Waiting 10 seconds to repower ...')
+    time.sleep(10)
   print(subprocess.check_output(cmd+['2'],env=os.environ))
 
 

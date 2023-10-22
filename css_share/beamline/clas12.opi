@@ -1812,7 +1812,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name>tempSensorX</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
@@ -1864,7 +1864,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name>tempSensorW</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
@@ -4722,7 +4722,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <gradient>false</gradient>
     <border_color>
@@ -4790,7 +4790,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <gradient>false</gradient>
     <border_color>
@@ -4932,7 +4932,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -4973,7 +4973,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -5880,7 +5880,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
-    <pv_name>hallb_sf_xy560_0_14</pv_name>
+    <pv_name>hallb_sf_xy560_0_18</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -11757,7 +11757,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>true</visible>
+    <visible>false</visible>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -13468,6 +13468,14 @@ else
     <vertial_profile_x_pv_value />
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
+        <path>../test/fcup2023.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>New Faraday Cup</description>
+      </action>
+      <action type="OPEN_DISPLAY">
         <path>../cameras/fcupViewer-crosshairControl.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
@@ -13507,16 +13515,6 @@ widget.setPropertyValue("color_map","GrayScale");
 widget.setPropertyValue("show_ramp","false");]]></scriptText>
         <embedded>true</embedded>
         <description>Switch to Greyscale, Background Subtracted</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>../test/hallbcam04test.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <P>hallbcam07:</P>
-          <R>cam1:</R>
-        </macros>
-        <replace>2</replace>
-        <description>Open Area Detector Expert</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>hallbcam07:Over1:3:Use</pv_name>
@@ -20442,7 +20440,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>134</height>
+    <height>169</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -20460,9 +20458,9 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="111" green="111" blue="111" />
     </background_color>
-    <width>229</width>
-    <x>763</x>
-    <name>Cryotarget</name>
+    <width>268</width>
+    <x>750</x>
+    <name>RG-D Target</name>
     <y>470</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
@@ -20476,219 +20474,12 @@ $(pv_value)</tooltip>
     <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
       <border_style>0</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <alarm_pulsing>false</alarm_pulsing>
-      <precision>0</precision>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-68717c39:18a862f30c5:-6e2a</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <auto_size>false</auto_size>
-      <text>##.###</text>
-      <rotation_angle>0.0</rotation_angle>
-      <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
-      <show_units>true</show_units>
-      <height>22</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name>TGT:BTARG:Cell_TI</pv_name>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <precision_from_pv>true</precision_from_pv>
-      <widget_type>Text Update</widget_type>
-      <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
-      <wrap_words>false</wrap_words>
-      <format_type>0</format_type>
-      <background_color>
-        <color name="Read_Background" red="77" green="77" blue="77" />
-      </background_color>
-      <width>93</width>
-      <x>106</x>
-      <name>Text Update_145</name>
-      <y>7</y>
-      <foreground_color>
-        <color name="Read_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-      <border_style>0</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <alarm_pulsing>false</alarm_pulsing>
-      <precision>0</precision>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <horizontal_alignment>0</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-68717c39:18a862f30c5:-6e29</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <auto_size>false</auto_size>
-      <text>##.###</text>
-      <rotation_angle>0.0</rotation_angle>
-      <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
-      <show_units>true</show_units>
-      <height>22</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name>TGT:BTARG:Target_Supply_PI</pv_name>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <precision_from_pv>true</precision_from_pv>
-      <widget_type>Text Update</widget_type>
-      <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
-      <wrap_words>false</wrap_words>
-      <format_type>0</format_type>
-      <background_color>
-        <color name="Read_Background" red="77" green="77" blue="77" />
-      </background_color>
-      <width>93</width>
-      <x>106</x>
-      <name>Text Update_146</name>
-      <y>36</y>
-      <foreground_color>
-        <color name="Read_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>2</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-68717c39:18a862f30c5:-6e28</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text>Temperature </text>
-      <scripts />
-      <height>22</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>false</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>101</width>
-      <x>0</x>
-      <name>Label_250</name>
-      <y>6</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-      <border_style>0</border_style>
-      <tooltip></tooltip>
-      <horizontal_alignment>2</horizontal_alignment>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-68717c39:18a862f30c5:-6e27</wuid>
-      <transparent>true</transparent>
-      <auto_size>false</auto_size>
-      <text>Pressure </text>
-      <scripts />
-      <height>22</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <vertical_alignment>1</vertical_alignment>
-      <border_color>
-        <color red="0" green="128" blue="255" />
-      </border_color>
-      <widget_type>Label</widget_type>
-      <wrap_words>false</wrap_words>
-      <background_color>
-        <color red="255" green="255" blue="255" />
-      </background_color>
-      <width>101</width>
-      <x>0</x>
-      <name>Label_251</name>
-      <y>34</y>
-      <foreground_color>
-        <color name="Header_Foreground" red="255" green="255" blue="255" />
-      </foreground_color>
-      <actions hook="false" hook_all="false" />
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
-      <border_style>0</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <alarm_pulsing>false</alarm_pulsing>
+      <alarm_pulsing>true</alarm_pulsing>
       <precision>0</precision>
       <tooltip>$(pv_name)
 $(pv_value)</tooltip>
       <horizontal_alignment>1</horizontal_alignment>
-      <rules>
-        <rule name="Color" prop_id="foreground_color" out_exp="false">
-          <exp bool_exp="pv0&lt;5">
-            <value>
-              <color name="Warning" red="255" green="255" blue="0" />
-            </value>
-          </exp>
-          <exp bool_exp="true">
-            <value>
-              <color name="On" red="0" green="255" blue="0" />
-            </value>
-          </exp>
-          <pv trig="true">$(pv_name)</pv>
-        </rule>
-        <rule name="Visibility" prop_id="visible" out_exp="false">
-          <exp bool_exp="pv0!=3">
-            <value>true</value>
-          </exp>
-          <exp bool_exp="true">
-            <value>false</value>
-          </exp>
-          <pv trig="true">clas12:target:type</pv>
-        </rule>
-      </rules>
+      <rules />
       <enabled>true</enabled>
       <wuid>-68717c39:18a862f30c5:-6e26</wuid>
       <transparent>false</transparent>
@@ -20697,7 +20488,7 @@ $(pv_value)</tooltip>
       <text>##.###</text>
       <rotation_angle>0.0</rotation_angle>
       <scripts />
-      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
       <show_units>true</show_units>
       <height>21</height>
       <border_width>1</border_width>
@@ -20714,16 +20505,16 @@ $(pv_value)</tooltip>
       </border_color>
       <precision_from_pv>true</precision_from_pv>
       <widget_type>Text Update</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
       <wrap_words>false</wrap_words>
       <format_type>0</format_type>
       <background_color>
         <color name="MEDM_COLOR_9" red="120" green="120" blue="120" />
       </background_color>
-      <width>159</width>
-      <x>16</x>
+      <width>195</width>
+      <x>17</x>
       <name>Text Update_141</name>
-      <y>67</y>
+      <y>10</y>
       <foreground_color>
         <color name="Read_Foreground" red="255" green="255" blue="255" />
       </foreground_color>
@@ -20732,5 +20523,280 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
+      <border_style>13</border_style>
+      <tooltip></tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>182d3f54:18af1c74004:-7e32</wuid>
+      <transparent>true</transparent>
+      <lock_children>true</lock_children>
+      <scripts />
+      <height>98</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <macros>
+        <include_parent_macros>true</include_parent_macros>
+      </macros>
+      <visible>true</visible>
+      <border_color>
+        <color red="191" green="191" blue="191" />
+      </border_color>
+      <widget_type>Grouping Container</widget_type>
+      <background_color>
+        <color red="111" green="111" blue="111" />
+      </background_color>
+      <width>229</width>
+      <x>0</x>
+      <name>Cryo</name>
+      <y>38</y>
+      <foreground_color>
+        <color red="192" green="192" blue="192" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <fc>false</fc>
+      <show_scrollbar>false</show_scrollbar>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      </font>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+        <border_style>0</border_style>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <alarm_pulsing>false</alarm_pulsing>
+        <precision>0</precision>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <horizontal_alignment>0</horizontal_alignment>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-68717c39:18a862f30c5:-6e2a</wuid>
+        <transparent>false</transparent>
+        <pv_value />
+        <auto_size>false</auto_size>
+        <text>##.###</text>
+        <rotation_angle>0.0</rotation_angle>
+        <scripts />
+        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <show_units>true</show_units>
+        <height>25</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <visible>true</visible>
+        <pv_name>TGT:BTARG:Cell_Top_TI</pv_name>
+        <vertical_alignment>1</vertical_alignment>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <precision_from_pv>true</precision_from_pv>
+        <widget_type>Text Update</widget_type>
+        <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+        <wrap_words>false</wrap_words>
+        <format_type>0</format_type>
+        <background_color>
+          <color name="Read_Background" red="77" green="77" blue="77" />
+        </background_color>
+        <width>93</width>
+        <x>106</x>
+        <name>Text Update_145</name>
+        <y>1</y>
+        <foreground_color>
+          <color name="Read_Foreground" red="255" green="255" blue="255" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <font>
+          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+        </font>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+        <border_style>0</border_style>
+        <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+        <alarm_pulsing>false</alarm_pulsing>
+        <precision>0</precision>
+        <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+        <horizontal_alignment>0</horizontal_alignment>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-68717c39:18a862f30c5:-6e29</wuid>
+        <transparent>false</transparent>
+        <pv_value />
+        <auto_size>false</auto_size>
+        <text>##.###</text>
+        <rotation_angle>0.0</rotation_angle>
+        <scripts />
+        <border_alarm_sensitive>true</border_alarm_sensitive>
+        <show_units>true</show_units>
+        <height>25</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <visible>true</visible>
+        <pv_name>TGT:BTARG:Target_Supply_PI</pv_name>
+        <vertical_alignment>1</vertical_alignment>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <precision_from_pv>true</precision_from_pv>
+        <widget_type>Text Update</widget_type>
+        <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+        <wrap_words>false</wrap_words>
+        <format_type>0</format_type>
+        <background_color>
+          <color name="Read_Background" red="77" green="77" blue="77" />
+        </background_color>
+        <width>93</width>
+        <x>106</x>
+        <name>Text Update_146</name>
+        <y>35</y>
+        <foreground_color>
+          <color name="Read_Foreground" red="255" green="255" blue="255" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <font>
+          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+        </font>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+        <border_style>0</border_style>
+        <tooltip></tooltip>
+        <horizontal_alignment>2</horizontal_alignment>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-68717c39:18a862f30c5:-6e28</wuid>
+        <transparent>true</transparent>
+        <auto_size>false</auto_size>
+        <text>Temperature </text>
+        <scripts />
+        <height>25</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <visible>true</visible>
+        <vertical_alignment>1</vertical_alignment>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <widget_type>Label</widget_type>
+        <wrap_words>false</wrap_words>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <width>101</width>
+        <x>0</x>
+        <name>Label_250</name>
+        <y>0</y>
+        <foreground_color>
+          <color name="Header_Foreground" red="255" green="255" blue="255" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <font>
+          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+        </font>
+      </widget>
+      <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+        <border_style>0</border_style>
+        <tooltip></tooltip>
+        <horizontal_alignment>2</horizontal_alignment>
+        <rules />
+        <enabled>true</enabled>
+        <wuid>-68717c39:18a862f30c5:-6e27</wuid>
+        <transparent>true</transparent>
+        <auto_size>false</auto_size>
+        <text>Pressure </text>
+        <scripts />
+        <height>25</height>
+        <border_width>1</border_width>
+        <scale_options>
+          <width_scalable>true</width_scalable>
+          <height_scalable>true</height_scalable>
+          <keep_wh_ratio>false</keep_wh_ratio>
+        </scale_options>
+        <visible>true</visible>
+        <vertical_alignment>1</vertical_alignment>
+        <border_color>
+          <color red="0" green="128" blue="255" />
+        </border_color>
+        <widget_type>Label</widget_type>
+        <wrap_words>false</wrap_words>
+        <background_color>
+          <color red="255" green="255" blue="255" />
+        </background_color>
+        <width>101</width>
+        <x>0</x>
+        <name>Label_251</name>
+        <y>33</y>
+        <foreground_color>
+          <color name="Header_Foreground" red="255" green="255" blue="255" />
+        </foreground_color>
+        <actions hook="false" hook_all="false" />
+        <font>
+          <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+        </font>
+      </widget>
+    </widget>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-600135ce:18a8a07639a:-579b</wuid>
+    <transparent>true</transparent>
+    <auto_size>true</auto_size>
+    <text>Downstream Viewer</text>
+    <scripts />
+    <height>17</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>132</width>
+    <x>1514</x>
+    <name>Label_274</name>
+    <y>713</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="true" hook_all="false">
+      <action type="OPEN_DISPLAY">
+        <path>../apps/beam_stopperApp/stopper.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Open Stopper Controls</description>
+      </action>
+    </actions>
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
   </widget>
 </display>

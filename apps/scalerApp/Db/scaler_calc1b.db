@@ -20,7 +20,9 @@ record(ai,"beam_stop_atten") {
 # RGM 4H:
 #    field(VAL,"14.8788")
 # RGC:
-    field(VAL,"9.1508")
+#    field(VAL,"9.1508")
+# RGD:
+    field(VAL,"5.79985")
 ##########################
     field(PINI,"1")
     field(PREC,"5")
@@ -29,19 +31,36 @@ record(ai,"beam_stop_atten") {
 record(calc,"scaler_calc1b") {
     field(INPA,"scaler_calc1 CPP")
     field(INPB,"beam_stop_at_beam CP")
-    field(INPC,"beam_stop_atten CPP")
+    field(INPC,"beam_stop_atten_rgd")
     field(CALC,"ABS(B)>0.1 ? A*C : A")
     field(PREC,"3")
 }
 
-record(sel,"beam_stop_atten_hps") {
-    field(INPA,"36.5568")
-    field(INPB,"32.8605")
-    field(INPC,"27.3308")
-    field(INPD,"32.8605")
-    field(INPE,"32.8605")
-    field(INPF,"32.8605")
+record(sel,"beam_stop_atten_rgd") {
+    field(SCAN,"2 second")
     field(SELM,"Specified")
-    field(NVL,"hps:target:type CPP")
+    field(NVL,"clas12:target:type")
+    field(INPA,"8.0421")  #Empty
+    field(INPB,"0")       #LH2
+    field(INPC,"0")       #LD2
+    field(INPD,"0")       #L4He
+    field(INPE,"0")       #L3He
+    field(INPF,"8.0421")  #Empty
+    field(INPG,"5.77985") #CuSn
+    field(INPH,"5.77985") #CxC
+    field(INPI,"1.0")
+    field(INPJ,"1.0")
+    field(INPK,"1.0")
 }
+
+#record(sel,"beam_stop_atten_hps") {
+#    field(INPA,"36.5568")
+#    field(INPB,"32.8605")
+#    field(INPC,"27.3308")
+#    field(INPD,"32.8605")
+#    field(INPE,"32.8605")
+#    field(INPF,"32.8605")
+#    field(SELM,"Specified")
+#    field(NVL,"hps:target:type CPP")
+#}
 

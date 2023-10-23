@@ -1,17 +1,17 @@
 ################################################################3
 #
 # This is for an alarm based on a string message from an external source.
-# If the string's value is anything other than $(OK), that will cause the
-# $(P):stat record below to go into alarm state.
+# If the string's value is anything other than $OK, that will cause the
+# $P:stat record below to go into alarm state.
 #
 # There are 2 modes for leaving alarm state:
 #
-# 1.  Automatic:  If $(N) is a positive number, it will leave alarm state
-# automatically after $(N) seconds unless another non-$(OK) string is
+# 1.  Automatic:  If $N is a positive number, it will leave alarm state
+# automatically after $N seconds unless another non-$OK string is
 # received in the interim.
 #
-# 2.  Manual:  If $(N) is non-positive, clearing the alarm requires
-# someone writing $(OK) to the status string.
+# 2.  Manual:  If $N is non-positive, clearing the alarm requires
+# someone writing $OK to the status string.
 
 # Mode 1 is appropriate for cases where the sender only detects errors
 # and is responsible for sending error messages repeatedly until the
@@ -21,10 +21,20 @@
 ################################################################3
 
 # This works with a generic timer from a separate database, and when this
-# timer reaches zero, it forces $(P):clear to process:
+# timer reaches zero, it forces $P:clear to process:
 #dbLoadRecords("timer.db","P=status,OUT=status:clear.PROC")
 
-# our amq support only supports strings as waveforms, so we:
+# the raw amq string:
+record(waveform,"$(P)$(R=):wf") {
+    field(DTYP,"AMQR")
+    field(INP,"$(K)")
+    field(NELM,"$(NELM)")
+    field(FTVL,"CHAR")
+    field(DESC,"$(DESC=)")
+    field(FLNK,"$(P)$(R=):fwd.PROC")
+}
+
+# we only support amq straings as waveforms, so we:
 record(scalcout,"$(P)$(R=):fwd") {
     field(INAA,"$(P)$(R=):wf")
     field(CALC,"AA")
@@ -33,16 +43,17 @@ record(scalcout,"$(P)$(R=):fwd") {
     field(OUT,"$(P)$(R=) PP")
 }
 
-# the input status string, ultimately written externally:
+# the status string:
 record(stringin,"$(P)$(R=)") {
-    field(VAL,"$(OK)")
+    field(VAL,"$(OK=Ok)")
     field(PINI,"1")
+    field(DESC,"$(DESC=)")
     field(FLNK,"$(P)$(R=):calc")
 }
 
 # the good status string (anything else will be an alarm):
 record(stringin,"$(P)$(R=):ok") {
-    field(VAL,"$(OK)")
+    field(VAL,"$(OK=Ok)")
     field(PINI,"1")
 }
 
@@ -93,7 +104,7 @@ record(stringout,"$(P)$(R=):store") {
 
 # the previous non-ok status string:
 record(stringin,"$(P)$(R=):previous") {
-    field(VAL,"$(OK)")
+    field(VAL,"$(OK=Ok)")
     field(PINI,"1")
 }
 

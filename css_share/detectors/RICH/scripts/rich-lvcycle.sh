@@ -46,9 +46,9 @@ function failure_msg {
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" | $log
     date_msg
-    echo "press Return to continue, which will close this window!"
-    read
-    exit 1
+#    echo "press Return to continue, which will close this window!"
+#    read
+#    exit 1
 }
 
 function success_msg {

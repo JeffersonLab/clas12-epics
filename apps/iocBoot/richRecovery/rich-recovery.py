@@ -55,7 +55,8 @@ def clear_alarms():
     return True
 
 def lv_all_off(timeout=20):
-    off = 'B_DET_RICH_ALL_LV:OFF'
+    #off = 'B_DET_RICH_ALL_LV:OFF'
+    off = 'B_DET_RICH_ALL_LV:stagger:OFF'
     isoff = 'B_DET_RICH_ALL_LV:isOff'
     if epics.caput(off, 1, timeout=2) is None:
         return False

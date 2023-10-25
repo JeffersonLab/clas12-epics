@@ -47,46 +47,6 @@ def get_bad_tiles(rich):
         if t is None or t < 1.0:
             yield tile
 
-def clear_alarms():
-    if epics.caput('B_HW_HVRICH1:ClearAlarm', 1, timeout=2) is None:
-        return False
-    if epics.caput('B_HW_HVRICH2:ClearAlarm', 1, timeout=2) is None:
-        return False
-    return True
-
-def lv_all_off(timeout=20):
-    #off = 'B_DET_RICH_ALL_LV:OFF'
-    off = 'B_DET_RICH_ALL_LV:stagger:OFF'
-    isoff = 'B_DET_RICH_ALL_LV:isOff'
-    if epics.caput(off, 1, timeout=2) is None:
-        return False
-    clear_alarms()
-    for i in range(timeout):
-        stat = epics.caget(isoff, timeout=2)
-        if stat == 1:
-            return True
-        time.sleep(1)
-    return False
-
-def lv_all_on(timeout=20):
-    on = 'B_DET_RICH_ALL_LV:ON'
-    ison = 'B_DET_RICH_ALL_LV:isOn'
-    if epics.caput(on, 1, timeout=2) is None:
-        return False
-    for i in range(timeout):
-        stat = epics.caget(ison, timeout=2)
-        if stat == 1:
-            return True
-        time.sleep(1)
-    return False
-
-def lv_cycle_all_tiles(max_attempts=3):
-    for i in range(max_attempts):
-        if lv_all_off():
-            if lv_all_on():
-                return True
-    return False
-
 def cycle(pvonoff, pvstat, timeout=10):
     n_attempts = 0
     max_attempts = 10
@@ -119,12 +79,48 @@ def lv_cycle(rich, channels):
 def caen_ioc_reboot():
     comms = epics.caget('B_DET_RICH_ALL_LV:isComm',timeout=2)
     if comms != 1:
-        if epics.caput('ioccaenhv_HVRICH:SysReset',1,timeout=2) is None:
-            return False
-        time.sleep(5)
+        set_status(1,'Reestablishing CAEN comms ...')
+        stdout = subprocess.check_output(['softioc_console','-R','ioccaenhv_HVRICH'],stderr=subprocess.STDOUT)
+        print(stdout)
+        time.sleep(10)
         if epics.caget('ioccaenhv_HVRICH:SysReset',timeout=10) is None:
             return False
     return True
+
+def lv_all_off(timeout=20):
+    #off = 'B_DET_RICH_ALL_LV:OFF'
+    off = 'B_DET_RICH_ALL_LV:stagger:OFF'
+    isoff = 'B_DET_RICH_ALL_LV:isOff'
+    if epics.caput(off, 1, timeout=2) is None:
+        return False
+    if not clear_alarms():
+        if not caen_ioc_reboot():
+            return False
+    for i in range(timeout):
+        stat = epics.caget(isoff, timeout=2)
+        if stat == 1:
+            return True
+        time.sleep(1)
+    return False
+
+def lv_all_on(timeout=20):
+    on = 'B_DET_RICH_ALL_LV:ON'
+    ison = 'B_DET_RICH_ALL_LV:isOn'
+    if epics.caput(on, 1, timeout=2) is None:
+        return False
+    for i in range(timeout):
+        stat = epics.caget(ison, timeout=2)
+        if stat == 1:
+            return True
+        time.sleep(1)
+    return False
+
+def lv_cycle_all_tiles(max_attempts=3):
+    for i in range(max_attempts):
+        if lv_all_off():
+            if lv_all_on():
+                return True
+    return False
 
 def lv_cycle_bad_tiles(max_attempts=3):
     n_attempts = 0
@@ -141,6 +137,15 @@ def lv_cycle_bad_tiles(max_attempts=3):
         elif n_attempts > max_attempts:
             return False
         n_attempts += 1
+
+def clear_alarms():
+    if epics.caput('B_HW_HVRICH1:ClearAlarm', 1, timeout=2) is None:
+        if epics.caput('B_HW_HVRICH1:ClearAlarm', 1, timeout=2) is None:
+            return False
+    if epics.caput('B_HW_HVRICH2:ClearAlarm', 1, timeout=2) is None:
+        if epics.caput('B_HW_HVRICH2:ClearAlarm', 1, timeout=2) is None:
+            return False
+    return True
 
 def wait_for_ssh(hostname='rich4'):
     n_attempts = 0
@@ -188,7 +193,10 @@ def set_status(state, message):
 
 def recover(alllv=False):
     PV_STATUS.put(1)
-    set_status(1,'Starting Recovery ...')
+    if alllv:
+        set_status(1,'Starting Full Recovery ...')
+    else:
+        set_status(1,'Starting Fast Recovery ...')
     time.sleep(1)
     status = False
     n_attempts = 0

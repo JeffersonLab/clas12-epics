@@ -88,7 +88,6 @@ def caen_ioc_reboot():
     return True
 
 def lv_all_off(timeout=20):
-    #off = 'B_DET_RICH_ALL_LV:OFF'
     off = 'B_DET_RICH_ALL_LV:stagger:OFF'
     isoff = 'B_DET_RICH_ALL_LV:isOff'
     if epics.caput(off, 1, timeout=2) is None:
@@ -97,27 +96,29 @@ def lv_all_off(timeout=20):
         if not caen_ioc_reboot():
             return False
     for i in range(timeout):
+        time.sleep(2)
         stat = epics.caget(isoff, timeout=2)
         if stat == 1:
             return True
-        time.sleep(1)
     return False
 
 def lv_all_on(timeout=20):
-    on = 'B_DET_RICH_ALL_LV:ON'
+    on = 'B_DET_RICH_ALL_LV:stagger:ON'
     ison = 'B_DET_RICH_ALL_LV:isOn'
     if epics.caput(on, 1, timeout=2) is None:
         return False
     for i in range(timeout):
+        time.sleep(2)
         stat = epics.caget(ison, timeout=2)
         if stat == 1:
             return True
-        time.sleep(1)
     return False
 
 def lv_cycle_all_tiles(max_attempts=3):
     for i in range(max_attempts):
+        set_status(1,'Turning LV off')
         if lv_all_off():
+            set_status(1,'Turning LV on')
             if lv_all_on():
                 return True
     return False
@@ -163,7 +164,7 @@ def roc_reboot_and_wait_for_ssh(hostname='rich4'):
     delay_seconds = 70
     stdout = subprocess.check_output(['roc_reboot',hostname],stderr=subprocess.STDOUT)
     print(stdout)
-    set_status(1,'Waiting for ssh ...')
+    set_status(1,'Waiting for ssh rich4 ...')
     for i in range(delay_seconds):
         print(i),
         time.sleep(1)
@@ -221,6 +222,7 @@ def recover(alllv=False):
                 lvstat = lv_cycle_bad_tiles()
             if not lvstat:
                 set_status(3,'Bad Cycle')
+                time.sleep(1)
             else:
                 # reboot ROC every other attempt:
                 if n_attempts%2 == 1 or alllv:

@@ -53,13 +53,13 @@ def cycle(pvonoff, pvstat, timeout=10):
     if epics.caput(pvonoff, 0, timeout=2) is None:
         return False
     for i in range(timeout):
-        stat = epics.caget(pvstat, timeout=10)
+        stat = epics.caget(pvstat, timeout=2)
         if stat is None or stat != 0:
             time.sleep(1)
             continue
         if epics.caput(pvonoff, 1, timeout=2) is None:
             while i in range(timeout):
-                stat = epics.caget(pvstat, timeout=10)
+                stat = epics.caget(pvstat, timeout=2)
                 if stat is None or stat != 0:
                     time.sleep(1)
                     continue
@@ -135,7 +135,7 @@ def lv_cycle_bad_tiles(max_attempts=3):
                     success = False
         if success:
             return True
-        elif n_attempts > max_attempts:
+        elif n_attempts >= max_attempts:
             return False
         n_attempts += 1
 
@@ -193,6 +193,7 @@ def set_status(state, message):
     PV_MSG.put(message)
 
 def recover(alllv=False):
+    start = datetime.datetime.now()
     PV_STATUS.put(1)
     if alllv:
         set_status(1,'Starting Full Recovery ...')
@@ -203,18 +204,18 @@ def recover(alllv=False):
     n_attempts = 0
     max_attempts = MAX_ATTEMPTS
     # decide whether to roc_reboot on the first attempt:
+    roc_reboot = False
     set_status(1,'Checking Scalers ...')
     if not check_scaler_max():
         set_status(1,'Bad Scalers')
-        n_attempts += 1
-        max_attempts += 1
+        roc_reboot = True
     # reboot the CAEN HV/LV IOC once (why?):
     if not caen_ioc_reboot():
         set_status(2,'Bad IOC Reboot')
     else:
         # try power cycling and reinitialization:
         while n_attempts < max_attempts:
-            set_status(1,'Attempt #%d, checking LV ...'%n_attempts)
+            set_status(1,'Attempt #%d, checking LV ...'%(n_attempts+1))
             # cycle bad tiles:
             if alllv:
                 lvstat = lv_cycle_all_tiles()
@@ -225,7 +226,7 @@ def recover(alllv=False):
                 time.sleep(1)
             else:
                 # reboot ROC every other attempt:
-                if n_attempts%2 == 1 or alllv:
+                if roc_reboot or alllv:
                     set_status(1,'Running roc_reboot rich4 ...')
                     if not roc_reboot_and_wait_for_ssh():
                         set_status(4,'Failure on roc_reboot rich4')
@@ -236,7 +237,7 @@ def recover(alllv=False):
                 r = rich_init()
                 if r is not None and int(r) >= MIN_TILES:
                     status = True
-                    set_status(1,'Last RICH Recovery Successful')
+                    set_status(1,'Last Recovery Successful on Attempt #%d'%(n_attempts+1))
                     if alllv:
                         PV_CLOCK.put(0)
                     break
@@ -246,6 +247,9 @@ def recover(alllv=False):
         set_status(1,'Last RICH Recovery Failed')
     PV_STATUS.put(0)
     PV_GO.put(0)
+    finish = datetime.datetime.now()
+    duration = finish - start #datetime.datetime.strftime(finish-start,'%H:%M:%S')
+    print('%s %s'%(date(),'Recovery Duration:  %s'%duration))
     return status
 
 def listen():

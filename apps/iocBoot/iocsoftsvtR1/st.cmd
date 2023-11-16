@@ -23,7 +23,7 @@ dbLoadRecords("db/svtWienerCrate.db","HOST=vmetlsvt1")
 dbLoadRecords("db/svtCrateAlarm.db")
 dbLoadRecords("db/svtWatchdog.db")
 
-dbLoadRecords("db/svtWienerCrate2.db","HOST=svtvme1")
+dbLoadRecords("db/svtWienerCrate2.db","HOST=classcsvt-crate")
 
 dbLoadRecords("db/seq_svtOnOff-1R.db","R=1")
 dbLoadRecords("db/seq_svtOnOff-All.db")

@@ -22,8 +22,9 @@ dbLoadRecords("db/hall_target.db")
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
 # these to be run as user=clasioc:
-#dbLoadTemplate("db/hallb_ia.substitutions")
-#dbLoadRecords("db/hallb_ia.db")
+dbLoadTemplate("db/hallb_ia.substitutions")
+dbLoadRecords("db/hallb_ia.db")
+
 # string parse
 #dbLoadRecords("db/mcc_locks.db")
 

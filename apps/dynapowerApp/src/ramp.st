@@ -81,7 +81,7 @@ ss ramp {
             pvPut(msg);
         } state idle
 
-        when(delay(4) && istep < nsteps && equals(imon, iset, tolerance)) {
+        when(delay(2) && istep < nsteps && equals(imon, iset, tolerance)) {
             if (istep+1 == nsteps) iset = itarget;
             else iset = istart + (istep+1)*(itarget>istart?1:-1)*rampstep;
             sprintf(msg,"Ramp step: %d/%d,  %.1f -> %.1f -> %.1f",istep+1,nsteps,istart,iset,itarget);

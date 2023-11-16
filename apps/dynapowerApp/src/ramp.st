@@ -6,6 +6,7 @@ float iset;  assign iset  to "{P}i:set";  monitor iset;
 float imon;  assign imon  to "{P}i:rbk";  monitor imon;
 float iramp; assign iramp to "{P}i:ramp"; monitor iramp;
 int fault;   assign fault to "{P}fault";  monitor fault;
+int enable; assign enable to "{P}i:ramp:enable"; monitor enable;
 
 evflag ev_ramp; sync iramp ev_ramp;
 
@@ -34,7 +35,21 @@ ss ramp {
 
     state idle {
 
-        when (efTestAndClear(ev_ramp) && fault==0) {
+        when (enable==0 && efTestAndClear(ev_ramp)) {
+            sprintf(msg,"Ramp ignored due to disabled");
+            printf("%s\n",msg);
+            pvPut(msg);
+            epicsThreadSleep(1);
+        } state idle
+
+        when (fault!=0 && efTestAndClear(ev_ramp)) {
+            sprintf(msg,"Ramp ignored due to fault");
+            printf("%s\n",msg);
+            pvPut(msg);
+            epicsThreadSleep(1);
+        } state idle
+    
+        when (efTestAndClear(ev_ramp)) {
             sprintf(msg,"Ramp triggered");
             printf("%s\n",msg);
             pvPut(msg);
@@ -59,6 +74,12 @@ ss ramp {
 
         when (fault != 0) {
             sprintf(msg,"Ramp aborted due to hardware fault.");
+            printf("%s\n",msg);
+            pvPut(msg);
+        } state idle
+
+        when (enable == 0) {
+            sprintf(msg,"Ramp aborted due to disabling.");
             printf("%s\n",msg);
             pvPut(msg);
         } state idle

@@ -17,6 +17,7 @@ PV_CLOCK = epics.pv.PV('B_RICH:recovery:clock:go')
 PV_GO = epics.pv.PV('B_RICH:recovery:go')
 PV_STATUS = epics.pv.PV('B_RICH:recovery:stat')
 PV_MSG = epics.pv.PV('B_RICH:recovery:msg')
+PV_DURATION = epics.pv.PV('B_RICH:recovery:duration')
 
 with open('/usr/clas12/release/pro/epics/apps/jscalerApp/Db/rich-lv-tile.txt') as f:
     for line in f.readlines():
@@ -245,10 +246,10 @@ def recover(alllv=False):
             time.sleep(1)
     if not status:
         set_status(1,'Last RICH Recovery Failed')
+    duration = datetime.datetime.now() - start
     PV_STATUS.put(0)
     PV_GO.put(0)
-    finish = datetime.datetime.now()
-    duration = finish - start #datetime.datetime.strftime(finish-start,'%H:%M:%S')
+    PV_DURATION.put(str(duration))
     print('%s %s'%(date(),'Recovery Duration:  %s'%duration))
     return status
 

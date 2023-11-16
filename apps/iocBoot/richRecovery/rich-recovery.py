@@ -242,6 +242,8 @@ def recover(alllv=False):
                     if alllv:
                         PV_CLOCK.put(0)
                     break
+                else:
+                    set_status(3,'Missing fibers, retry ...')
             n_attempts += 1
             time.sleep(1)
     if not status:

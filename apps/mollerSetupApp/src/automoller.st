@@ -627,12 +627,6 @@ ss automoller {
         when (delay(5) && quadB_isOn==1 && quadC_isOn==1) {
         } state quadsRampUp
 
-        when (delay(5)) {
-            if (quadB_isOn==0)  pvPut(quadB_on);
-            if (quadC_isOn==0)  pvPut(quadC_on);
-            epicsThreadSleep(2);
-        } state quadsOn
-
         when (delay(30)) {
 			status=QUAD_ALARM;
 			pvPut(status);
@@ -640,6 +634,12 @@ ss automoller {
             pvPut(msg);
         } state listen
         
+        when (delay(5)) {
+            if (quadB_isOn==0)  pvPut(quadB_on);
+            if (quadC_isOn==0)  pvPut(quadC_on);
+            epicsThreadSleep(2);
+        } state quadsOn
+
     }
 
     state quadsRampUp {
@@ -657,18 +657,18 @@ ss automoller {
               equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
         } state helmholtzOn
 
-        when (delay(5)) {
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-        } state quadsRampUp
-        
-        when (delay(30)) {
+        when (delay(40)) {
 			status=QUAD_ALARM;
 			pvPut(status);
             MESSAGE(ERROR energizing Quads.  Aborted Moller Run.);
             pvPut(msg);
         } state listen
+        
+        when (delay(5)) {
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(2);
+        } state quadsRampUp
         
     }
 
@@ -828,19 +828,19 @@ ss automoller {
         when (delay(5) && quadB_imon < 50 && quadC_imon < 50) {
         } state quadsOff
 
-        when (delay(5)) {
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-        } state quadsRampDown
-        
         when (delay(30)) {
 			status=QUAD_ALARM;
 			pvPut(status);
             MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
             pvPut(msg);
         } state listen
-        
+
+        when (delay(5)) {
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(2);
+        } state quadsRampDown
+
     }
 
     state quadsOff {
@@ -859,12 +859,6 @@ ss automoller {
         when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
         } state helmholtzOff
 
-        when (delay(5)) {
-            if (quadB_isOn!=0)  pvPut(quadB_off);
-            if (quadC_isOn!=0)  pvPut(quadC_off);
-            epicsThreadSleep(2);
-        } state quadsOff
-
         when (delay(30)) {
 			status=QUAD_ALARM;
 			pvPut(status);
@@ -872,49 +866,14 @@ ss automoller {
             pvPut(msg);
         } state listen
         
-    }
-/*
-    state quadsOff {
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            MESSAGE(De-energizing Quadrupoles ...);
-            quadB_iset = 0;
-            quadC_iset = 0;
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-            quadB_off = 1;
-            quadC_off = 1;
-        }
-        
-        when (quadB_isOn==0 &&
-              quadC_isOn==0 &&
-              quadB_imon<100 &&
-              quadC_imon<100) {
-        } state helmholtzOff
-
-        when (delay(40)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR de-energizing Quads.);
-        } state helmholtzOff
-        
-        when (delay(10)) {
-            if (quadB_imon>100) pvPut(quadB_iset);
-            if (quadC_imon>100) pvPut(quadC_iset);
-            epicsThreadSleep(1);
-        } state quadsOff
-
         when (delay(5)) {
-            if (quadB_isOn==1) pvPut(quadB_off);
-            if (quadC_isOn==1) pvPut(quadC_off);
-            epicsThreadSleep(1);
+            if (quadB_isOn!=0)  pvPut(quadB_off);
+            if (quadC_isOn!=0)  pvPut(quadC_off);
+            epicsThreadSleep(2);
         } state quadsOff
 
     }
-*/
+
     state helmholtzOff {
         entry {
             MESSAGE(De-energizing Helmholtz ...);

@@ -204,12 +204,6 @@ def recover(alllv=False):
     status = False
     n_attempts = 0
     max_attempts = MAX_ATTEMPTS
-    # decide whether to roc_reboot on the first attempt:
-    roc_reboot = False
-    set_status(1,'Checking Scalers ...')
-    if not check_scaler_max():
-        set_status(1,'Bad Scalers')
-        roc_reboot = True
     # reboot the CAEN HV/LV IOC once (why?):
     if not caen_ioc_reboot():
         set_status(2,'Bad IOC Reboot')
@@ -226,8 +220,8 @@ def recover(alllv=False):
                 set_status(3,'Bad Cycle')
                 time.sleep(1)
             else:
-                # reboot ROC every other attempt:
-                if roc_reboot or alllv or n_attempts>0:
+                # reboot rich4 ROC:
+                if alllv or n_attempts>0:
                     set_status(1,'Running roc_reboot rich4 ...')
                     if not roc_reboot_and_wait_for_ssh():
                         set_status(4,'Failure on roc_reboot rich4')

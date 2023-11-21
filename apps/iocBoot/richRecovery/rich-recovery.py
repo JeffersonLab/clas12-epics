@@ -227,7 +227,7 @@ def recover(alllv=False):
                 time.sleep(1)
             else:
                 # reboot ROC every other attempt:
-                if roc_reboot or alllv:
+                if roc_reboot or alllv or n_attempts>0:
                     set_status(1,'Running roc_reboot rich4 ...')
                     if not roc_reboot_and_wait_for_ssh():
                         set_status(4,'Failure on roc_reboot rich4')

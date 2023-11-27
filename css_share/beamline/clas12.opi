@@ -13349,7 +13349,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>84</height>
+    <height>68</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -13411,7 +13411,7 @@ else
       </scripts>
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <show_units>true</show_units>
-      <height>37</height>
+      <height>28</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>
@@ -13435,7 +13435,7 @@ else
       <width>127</width>
       <x>0</x>
       <name>Text Update_141</name>
-      <y>9</y>
+      <y>1</y>
       <foreground_color>
         <color name="Write_Foreground" red="0" green="0" blue="0" />
       </foreground_color>
@@ -17641,9 +17641,9 @@ Status:</text>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>74</width>
-    <x>1408</x>
+    <x>1409</x>
     <name>Label_272</name>
-    <y>43</y>
+    <y>36</y>
     <foreground_color>
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -18750,9 +18750,9 @@ $(pv_value)</tooltip>
       <color red="111" green="111" blue="111" />
     </background_color>
     <width>127</width>
-    <x>221</x>
+    <x>53</x>
     <name>Text Update_141</name>
-    <y>79</y>
+    <y>9</y>
     <foreground_color>
       <color name="Write_Foreground" red="0" green="0" blue="0" />
     </foreground_color>
@@ -20797,6 +20797,110 @@ $(pv_value)</tooltip>
     <show_scrollbar>false</show_scrollbar>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>14</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-1db9c898:18c116269a2:-6dea</wuid>
+    <transparent>false</transparent>
+    <auto_size>false</auto_size>
+    <text>Label</text>
+    <scripts>
+      <path pathString="EmbeddedJs" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>EmbeddedScript</scriptName>
+        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
+
+var pv1 = PVUtil.getDouble(pvs[0]);
+var pv2 = PVUtil.getDouble(pvs[1]);
+var pv3 = PVUtil.getDouble(pvs[2]);
+
+if (pv1==0 && pv2==0 && pv3==0) {
+  widget.setPropertyValue("text","Off");
+  widget.setPropertyValue("background_color","Read_Background");
+}
+else {
+  widget.setPropertyValue("text","On");
+  widget.setPropertyValue("background_color","MEDM_COLOR_37");
+}
+]]></scriptText>
+        <pv trig="true">rad603_p1_alah</pv>
+        <pv trig="true">rad603_p2_alah</pv>
+        <pv trig="true">rad603_p3_alah</pv>
+      </path>
+    </scripts>
+    <height>21</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color name="Write_Foreground" red="0" green="0" blue="0" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color name="Read_Background" red="77" green="77" blue="77" />
+    </background_color>
+    <width>129</width>
+    <x>1516</x>
+    <name>Label_275</name>
+    <y>78</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-1db9c898:18c116269a2:-6de9</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>Radiation Beacon:</text>
+    <scripts />
+    <height>33</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>true</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>145</width>
+    <x>1405</x>
+    <name>Label_280</name>
+    <y>72</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <show_scrollbar>false</show_scrollbar>
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
     </font>
   </widget>
 </display>

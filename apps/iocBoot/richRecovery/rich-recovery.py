@@ -161,35 +161,38 @@ def wait_for_ssh(hostname='rich4'):
         time.sleep(1)
 
 def roc_reboot_and_wait_for_ssh(hostname='rich4'):
-    max_attempts = 60
+    max_attempts = 30
     delay_seconds = 70
-    stdout = subprocess.check_output(['roc_reboot',hostname],stderr=subprocess.STDOUT)
-    print(stdout)
-    set_status(1,'Waiting for ssh rich4 ...')
-    for i in range(delay_seconds):
-        print(i),
+    print(subprocess.check_output(['roc_reboot',hostname],stderr=subprocess.STDOUT))
+    for i in reversed(range(delay_seconds)):
         time.sleep(1)
+        set_status(1, 'Waiting for ssh rich4 ... %ds'%i, log=False)
+        print(i),
+        sys.stdout.flush()
     for i in range(max_attempts):
+        set_status(1, 'Trying ssh rich4 ... %ds'%i, log=False)
         if 0 == os.system('ssh -q %s exit'%hostname):
             return True
-        if i > max_attempts:
-            return False
         time.sleep(1)
+    return False
 
-def rich_init(hostname='rich4'):
-    stdout = subprocess.check_output(['ssh',hostname,'rich_init'],stderr=subprocess.STDOUT)
+def rich_init(hostname='rich4',command='ssprich_getnumtiles'):
+    stdout = subprocess.check_output(['ssh',hostname,command],stderr=subprocess.STDOUT)
     print(stdout)
-    for line in stdout.strip().split('\n')[-100:]:
-        if line.find('Total Tiles connected') >= 0:
-            return line.split()[3]
-    return None
+    try:
+        for line in stdout.strip().split('\n')[-100:]:
+            if line.find('Total Tiles connected') >= 0:
+                return int(line.split().pop())
+    except Exception as e:
+        return None
 
 def date():
     return datetime.datetime.strftime(datetime.datetime.now(),
         '%m/%d/%y %H:%M:%S')
 
-def set_status(state, message):
-    print('%s %s'%(date(),message))
+def set_status(state, message, log=True):
+    if log:
+        print('%s %s'%(date(),message))
     PV_STATUS.put(state)
     PV_MSG.put(message)
 
@@ -230,14 +233,17 @@ def recover(alllv=False):
                 time.sleep(10)
                 set_status(1,'Running rich_init ...')
                 r = rich_init()
-                if r is not None and int(r) >= MIN_TILES:
+                if r is None:
+                    set_status(4,'Error running rich_init')
+                elif r < MIN_TILES:
+                    set_status(4,'Missing fibers from rich_init')
+                else:
                     status = True
                     set_status(1,'Last Recovery Successful on Attempt #%d'%(n_attempts+1))
                     if alllv:
                         PV_CLOCK.put(0)
                     break
-                else:
-                    set_status(4,'Missing fibers, retry ...')
+            alllv = True
             n_attempts += 1
             time.sleep(1)
     if not status:

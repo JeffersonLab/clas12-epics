@@ -53,7 +53,7 @@ dbLoadRecords("db/jscalers_RICH_ColorScale.db")
 
 dbLoadRecords("db/rich-recovery.db")
 dbLoadRecords("db/timer.db","P=B_RICH,R=:recovery")
-#dbLoadRecords("db/clock-human.db","P=B_RICH,R=:recovery:,CLOCK=B_RICH:recovery:clock")
+dbLoadRecords("db/clock-human.db","P=B_RICH,R=:recovery:,CLOCK=B_RICH:recovery:clock")
 
 cd ${TOP}/iocBoot/${IOC}
 

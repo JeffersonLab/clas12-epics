@@ -249,9 +249,11 @@ def recover(alllv=False):
     if not status:
         set_status(1,'Last RICH Recovery Failed')
     duration = datetime.datetime.now() - start
+    duration = str(duration)
+    duration = duration[:duration.find('.')]
     PV_STATUS.put(0)
     PV_GO.put(0)
-    PV_DURATION.put(str(duration))
+    PV_DURATION.put(duration)
     print('%s %s'%(date(),'Recovery Duration:  %s'%duration))
     return status
 

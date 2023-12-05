@@ -644,6 +644,9 @@ ss automoller {
 
     state quadsRampUp {
 
+        // only reset timer if previous state was different:
+        option -t;
+
         entry {
             quadB_iset = quad_icfg;
             quadC_iset = quad_icfg;
@@ -817,6 +820,9 @@ ss automoller {
 
     state quadsRampDown {
 
+        // only reset timer if previous state was different:
+        option -t;
+
         entry {
             quadB_iset = 0;
             quadC_iset = 0;
@@ -875,6 +881,10 @@ ss automoller {
     }
 
     state helmholtzOff {
+
+        // only reset timer if previous state was different:
+        option -t;
+
         entry {
             MESSAGE(De-energizing Helmholtz ...);
             helm_iset=0;

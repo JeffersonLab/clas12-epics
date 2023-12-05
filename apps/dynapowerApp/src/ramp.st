@@ -10,7 +10,7 @@ int enable; assign enable to "{P}i:ramp:enable"; monitor enable;
 
 evflag ev_ramp; sync iramp ev_ramp;
 
-float rampstep=555; float tolerance=10; int timeout=30;
+float rampstep=555; float tolerance=20; int timeout=30;
 
 int nsteps; int istep; float itarget; float istart;
 

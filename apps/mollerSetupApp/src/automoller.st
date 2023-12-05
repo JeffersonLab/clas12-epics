@@ -624,9 +624,6 @@ ss automoller {
             epicsThreadSleep(1);
         }
 
-        when (delay(5) && quadB_isOn==1 && quadC_isOn==1) {
-        } state quadsRampUp
-
         when (delay(30)) {
 			status=QUAD_ALARM;
 			pvPut(status);
@@ -634,6 +631,9 @@ ss automoller {
             pvPut(msg);
         } state listen
         
+        when (delay(5) && quadB_isOn==1 && quadC_isOn==1) {
+        } state quadsRampUp
+
         when (delay(5)) {
             if (quadB_isOn==0)  pvPut(quadB_on);
             if (quadC_isOn==0)  pvPut(quadC_on);
@@ -655,11 +655,6 @@ ss automoller {
             epicsThreadSleep(1);
         }
 
-        when (delay(5) &&
-              equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
-              equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
-        } state helmholtzOn
-
         when (delay(40)) {
 			status=QUAD_ALARM;
 			pvPut(status);
@@ -667,6 +662,11 @@ ss automoller {
             pvPut(msg);
         } state listen
         
+        when (delay(5) &&
+              equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
+              equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
+        } state helmholtzOn
+
         when (delay(5)) {
             pvPut(quadB_iset);
             pvPut(quadC_iset);

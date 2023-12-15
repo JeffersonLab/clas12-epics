@@ -725,17 +725,25 @@ record(mbbi,"$(HV):badstat:mbbi") {
 
 
 # select most significant good status bit:
-record(calcout,"$(HV):stat:calc") {
+record(calc,"$(HV):stat:calc") {
     field(SCAN,"1 second")
     field(INPA,"$(HV):outOn")
     field(INPB,"$(HV):outRampUp")
     field(INPC,"$(HV):outRampDown")
     field(INPD,"$(HV):badstat:mbbi")
     field(CALC,"D>0?D+3:(B>0?2:(C>0?3:(A>0?1:0)))")
+    field(FLNK,"$(HV):stat:calc2.PROC")
+}
+record(calcout,"$(HV):stat:calc2") {
+    field(SCAN,"Passive")
+    field(INPA,"$(HV):stat:calc")
+    field(INPB,"$(HV):outputMeasCurrentC.SEVR")
+    field(CALC,"B>0?11:A")
     field(DOPT,"Use CALC")
     field(OOPT,"Every Time")
     field(OUT,"$(HV):stat PP")
 }
+
 record(mbbi,"$(HV):stat") {
     field(SCAN,"Passive")
     field(ZRVL,"0")
@@ -760,6 +768,7 @@ record(mbbi,"$(HV):stat") {
     field(EISV,"MAJOR")
     field(NISV,"MAJOR")
     field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
     field(ZRST,"Off")
     field(ONST,"On")
     field(TWST,"RUp")
@@ -771,6 +780,7 @@ record(mbbi,"$(HV):stat") {
     field(EIST,"EmergOff")
     field(NIST,"MaxPower")
     field(TEST,"MaxTermV")
+    field(ELST,"Comms")
     alias("$(HV)")
 }
 

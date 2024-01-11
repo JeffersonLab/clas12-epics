@@ -19,6 +19,7 @@
 
 #define FADCTET 0x01
 #define FADCCNT 0x03
+#define FADCCNTRAW 0x23
 
 #define TDCTET  0x11
 #define TRGTET  0x12
@@ -26,6 +27,10 @@
 #define GTDCCNT 0x14
 #define TRGCNT  0x15
 #define TDCCNT  0x16
+#define GTRGCNTRAW 0x23
+#define GTDCCNTRAW 0x24
+#define TRGCNTRAW  0x25
+#define TDCCNTRAW  0x26
 
 #define SSPSCAL 0x21
 #define SSPDATA 0x22
@@ -45,4 +50,3 @@
 
 #define SSPUPTIME 0x2E
 #define SSPSEUCNT 0x2F
-

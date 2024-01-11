@@ -148,6 +148,22 @@ static long read_ai(struct aiRecord *pai)
     }
     else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
   }
+  // raw counts:
+  else if (command==FADCCNTRAW ||
+           command==GTDCCNTRAW || command==GTRGCNTRAW ||
+           command==TDCCNTRAW  || command==TRGCNTRAW) {
+    ret=IocGetWaveformLength(chassis, slot, channel, &len);
+    if (ret==0) {
+        if (len > (command & 0xF)-3) {
+            values = (double *) malloc(sizeof(double)*len);
+            IocReadWaveformRaw(chassis, slot, channel, len, values);
+            pai->rval = values[(command & 0xF)-3];
+            free(values);
+        }
+        else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM);
+    }
+    else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM);
+  }
   // SSP # fibers:
   else if (command==SSPNSFIB || command==SSPNDFIB) {
       values = (double*) malloc(sizeof(double)*2);

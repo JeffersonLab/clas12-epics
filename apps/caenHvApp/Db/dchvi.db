@@ -1,3 +1,10 @@
+#
+# This leverages the "overwrite" feature of EPICS database
+# files, where successive declarations of a PV of the same
+# name override previous ones.  Here this file gets loaded
+# once per superlayer, and the per-region sums get overriden
+# multiple times, just to simplify the database file(s).
+#
 record(compress,"B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L):imon:max") {
     field(ALG, "N to 1 High Value")
     field(INP,"B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L):imonwf CPP")
@@ -5,61 +12,26 @@ record(compress,"B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L):imon:max") {
     field(N, "18")
 }
 record(calc,"B_DET_DC_HV_SEC$(S)_R1:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC$(S)_R1_SL1:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC$(S)_R1_SL2:imon:max CPP")
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R1_SL1:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R1_SL2:imon:max")
     field(INPC,"IPM2C21A")
     field(CALC,"C>0.1 ? 0 : MAX(A,B)")
     info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
 }
 record(calc,"B_DET_DC_HV_SEC$(S)_R2:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC$(S)_R2_SL3:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC$(S)_R2_SL4:imon:max CPP")
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R2_SL3:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R2_SL4:imon:max")
     field(INPC,"IPM2C21A")
     field(CALC,"C>0.1 ? 0 : MAX(A,B)")
     info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
 }
 record(calc,"B_DET_DC_HV_SEC$(S)_R3:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC$(S)_R3_SL5:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC$(S)_R3_SL6:imon:max CPP")
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R3_SL5:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R3_SL6:imon:max")
     field(INPC,"IPM2C21A")
     field(CALC,"C>0.1 ? 0 : MAX(A,B)")
     info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
 }
-record(calc,"B_DET_DC_HV_R1:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC1_R1:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC2_R1:imon:max CPP")
-    field(INPC,"B_DET_DC_HV_SEC3_R1:imon:max CPP")
-    field(INPD,"B_DET_DC_HV_SEC4_R1:imon:max CPP")
-    field(INPE,"B_DET_DC_HV_SEC5_R1:imon:max CPP")
-    field(INPF,"B_DET_DC_HV_SEC6_R1:imon:max CPP")
-    field(CALC,"MAX(A,MAX(B,MAX(C,MAX(D,MAX(E,F)))))")
-    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
-}
-record(calc,"B_DET_DC_HV_R2:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC1_R2:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC2_R2:imon:max CPP")
-    field(INPC,"B_DET_DC_HV_SEC3_R2:imon:max CPP")
-    field(INPD,"B_DET_DC_HV_SEC4_R2:imon:max CPP")
-    field(INPE,"B_DET_DC_HV_SEC5_R2:imon:max CPP")
-    field(INPF,"B_DET_DC_HV_SEC6_R2:imon:max CPP")
-    field(CALC,"MAX(A,MAX(B,MAX(C,MAX(D,MAX(E,F)))))")
-    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
-}
-record(calc,"B_DET_DC_HV_R3:imon:max") {
-    field(INPA,"B_DET_DC_HV_SEC1_R3:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_SEC2_R3:imon:max CPP")
-    field(INPC,"B_DET_DC_HV_SEC3_R3:imon:max CPP")
-    field(INPD,"B_DET_DC_HV_SEC4_R3:imon:max CPP")
-    field(INPE,"B_DET_DC_HV_SEC5_R3:imon:max CPP")
-    field(INPF,"B_DET_DC_HV_SEC6_R3:imon:max CPP")
-    field(CALC,"MAX(A,MAX(B,MAX(C,MAX(D,MAX(E,F)))))")
-    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
-}
-record(calc,"B_DET_DC_HV:imon:max") {
-    field(INPA,"B_DET_DC_HV_R1:imon:max CPP")
-    field(INPB,"B_DET_DC_HV_R2:imon:max CPP")
-    field(INPC,"B_DET_DC_HV_R3:imon:max CPP")
-    field(CALC,"MAX(A,MAX(B,C))")
-    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
-}
-

@@ -32,21 +32,22 @@
 #define TRGCNTRAW  0x25
 #define TDCCNTRAW  0x26
 
-#define SSPSCAL 0x21
-#define SSPDATA 0x22
+#define SSPSCAL 0x31
+#define SSPDATA 0x32
 
-#define SSPNSFIB 0x23
-#define SSPNDFIB 0x24
+#define SSPNSFIB 0x33
+#define SSPNDFIB 0x34
 
-#define SSPTEMP1 0x25
-#define SSPTEMP2 0x26
-#define SSPTEMP3 0x27
-#define SSPVOLT1 0x28
-#define SSPVOLT2 0x29
-#define SSPVOLT3 0x2A
-#define SSPVOLT4 0x2B
-#define SSPVOLT5 0x2C
-#define SSPVOLT6 0x2D
+#define SSPTEMP1 0x35
+#define SSPTEMP2 0x36
+#define SSPTEMP3 0x37
+#define SSPVOLT1 0x38
+#define SSPVOLT2 0x39
+#define SSPVOLT3 0x3A
+#define SSPVOLT4 0x3B
+#define SSPVOLT5 0x3C
+#define SSPVOLT6 0x3D
 
-#define SSPUPTIME 0x2E
-#define SSPSEUCNT 0x2F
+#define SSPUPTIME 0x3E
+#define SSPSEUCNT 0x3F
+#define SSPSTAT   0x40

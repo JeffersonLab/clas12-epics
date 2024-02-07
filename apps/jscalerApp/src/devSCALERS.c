@@ -184,12 +184,18 @@ static long read_ai(struct aiRecord *pai)
            command==SSPVOLT5 || 
            command==SSPVOLT6 ||
            command==SSPUPTIME ||
-           command==SSPSEUCNT) {
+           command==SSPSEUCNT ||
+           command==SSPSTAT) {
       ret=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
-      if (len > (command & 0xF) - 5) {
+      //printf("read_ai:  aGOT:  %u %u/%u/%u/%x\n",len,chassis,slot,channel,command);
+      if (len > (command & 0xF) - 5 || (command==0x40 && len>=12)) {
           values = (double*) malloc(sizeof(double)*len);
           IocReadWaveformSSPData(chassis,slot,channel,len,values);
-          pai->rval = values[(command & 0xF) - 5];
+          if ( command == SSPSTAT )
+              pai->rval = values[11];
+          else
+              pai->rval = values[(command & 0xF) - 5];
+          //printf("%x %d %d %d\n",command,command&0xf,(command&0xf)-5,pai->rval);
           free(values);
       }
       else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 

@@ -627,37 +627,101 @@ public:
               // !!!!we need to be able to delete this upon opening new file!!!!!!
 
             if (isTorus) {
+                // Formulas from hardware QDs
+                std::string tComparators=
+                    "Tor_QD1 : (VT5_DAQ+VT6_DAQ) - (VT7_DAQ+VT8_DAQ)\n"
+                    "Tor_QD2 : (VT7_DAQ+VT8_DAQ) - (VT9_DAQ+VT10_DAQ)\n"
+                    "Tor_QD3 : (VT9_DAQ+VT10_DAQ) - (VT11_DAQ+VT12_DAQ)\n"
+                    "Tor_QD4 : (VT11_DAQ+VT12_DAQ) - (VT13_DAQ+VT14_DAQ)\n"
+                    "Tor_QD5 : (VT13_DAQ+VT14_DAQ) - (VT15_DAQ+VT16_DAQ)\n"
+                    "Tor_QD6 : (VT1_DAQ+VT2_DAQ+VT3_DAQ+VT4_DAQ+VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) - \n"
+                    "          (VT11_DAQ+VT12_DAQ+VT13_DAQ+VT14_DAQ+VT15_DAQ+VT16_DAQ+VT17_DAQ+VT18_DAQ+VT19_DAQ+VT20_DAQ+VT21_DAQ)\n"
+                    "Tor_QD7 : (VT17_DAQ+VT18_DAQ+VT19_DAQ+VT20_DAQ+VT21_DAQ)\n"
+                    "Tor_QD8 : (VT1_DAQ+VT2_DAQ+VT3_DAQ+VT4_DAQ)\n"
+                    "Tor_QD9 : (VT1_DAQ+VT2_DAQ+VT3_DAQ+VT4_DAQ+VT5_DAQ+VT6_DAQ+VT7_DAQ+VT8_DAQ+VT9_DAQ+VT10_DAQ) - VT22_DAQ\n";
 
-                std::cout<<" C4"<<std::flush;
-
-                TH1* hV1 =(TH1*)hh[5] ->Clone("hV1"); hV1->Add(hh[6]);  hV1->Add(hh[7]);
-                TH1* hV2 =(TH1*)hh[7] ->Clone("hV2"); hV2->Add(hh[8]);  hV2->Add(hh[9]);
-                TH1* hV3 =(TH1*)hh[9] ->Clone("hV3"); hV3->Add(hh[10]); hV3->Add(hh[11]);
-                TH1* hV4 =(TH1*)hh[11]->Clone("hV4"); hV4->Add(hh[12]); hV4->Add(hh[13]);
-
-                //TH1* hV5 =(TH1*)hh[13]->Clone("hV5"); hV4->Add(hh[14]); hV4->Add(hh[15]);
-                //TH1* hV6 =(TH1*)hh[15]->Clone("hV6"); hV4->Add(hh[16]); hV4->Add(hh[17]);
-                //TH1* hV7 =(TH1*)hh[3] ->Clone("hV7"); hV7->Add(hh[4]);  hV7->Add(hh[5]);
-                //TH1* hV15=(TH1*)hh[17]->Clone("hV15");hV15->Add(hh[18]);hV15->Add(hh[19]);
-
-                TH1* hV12 =(TH1*)hV1->Clone("hV12"); hV12->Add(hV2);
-                TH1* hV34 =(TH1*)hV3->Clone("hV34"); hV34->Add(hV4);
-                //TH1* hV56 =(TH1*)hV5->Clone("hV56"); hV56->Add(hV6);
-
-                //TH1* hC1 =(TH1*)hV1->Clone("hC1");  hC1->Add(hV2,-1);
-                //TH1* hC2 =(TH1*)hV3->Clone("hC2");  hC2->Add(hV4,-1);
-                //TH1* hC3 =(TH1*)hV5->Clone("hC3");  hC3->Add(hV6,-1);
-                TH1* hC4 =(TH1*)hV12->Clone("hC4"); hC4->Add(hV34,-1);
-                //TH1* hC5 =(TH1*)hV34->Clone("hC5"); hC5->Add(hV56,-1);
-                //TH1* hC6 =(TH1*)hV56->Clone("hC6"); hC6->Add(hV12,-1);
-                //TH1* hC7 =(TH1*)hV7->Clone("hC7");  hC7->Add(hV15,-1);
-
-                //TH1* hC8  =(TH1*)hh[3]->Clone("hC8");  hC8->Add(hh[19],-1);
-                //TH1* hC9  =(TH1*)hh[2]->Clone("hC9");  hC9->Add(hh[20],-1);
-                //TH1* hC10 =(TH1*)hh[1]->Clone("hC10"); hC10->Add(hh[21],-1);
-
-                tdData.varnames.push_back("C4");
-                outHistos.push_back(hC4);
+                std::cout<<"QD1"<<std::flush;
+                TH1* hQD1=(TH1*)hh[5]->Clone("hQD1");
+                hQD1->Add(hh[6]);
+                hQD1->Add(hh[7],-1);
+                hQD1->Add(hh[8],-1);
+                std::cout<<"QD2"<<std::flush;
+                TH1* hQD2=(TH1*)hh[7]->Clone("hQD2");
+                hQD2->Add(hh[8]);
+                hQD2->Add(hh[9],-1);
+                hQD2->Add(hh[10],-1);
+                std::cout<<"QD3"<<std::flush;
+                TH1* hQD3=(TH1*)hh[9]->Clone("hQD3");
+                hQD3->Add(hh[10]);
+                hQD3->Add(hh[11],-1);
+                hQD3->Add(hh[12],-1);
+                std::cout<<"QD4"<<std::flush;
+                TH1* hQD4=(TH1*)hh[11]->Clone("hQD4");
+                hQD4->Add(hh[12]);
+                hQD4->Add(hh[13],-1);
+                hQD4->Add(hh[14],-1);
+                std::cout<<"QD5"<<std::flush;
+                TH1* hQD5=(TH1*)hh[13]->Clone("hQD5");
+                hQD5->Add(hh[14]);
+                hQD5->Add(hh[15],-1);
+                hQD5->Add(hh[16],-1);
+                std::cout<<"QD6"<<std::flush;
+                TH1* hQD6=(TH1*)hh[1]->Clone("hQD6");
+                hQD6->Add(hh[2]);
+                hQD6->Add(hh[3]);
+                hQD6->Add(hh[4]);
+                hQD6->Add(hh[5]);
+                hQD6->Add(hh[6]);
+                hQD6->Add(hh[7]);
+                hQD6->Add(hh[8]);
+                hQD6->Add(hh[9]);
+                hQD6->Add(hh[10]);
+                hQD6->Add(hh[11],-1);
+                hQD6->Add(hh[12],-1);
+                hQD6->Add(hh[13],-1);
+                hQD6->Add(hh[14],-1);
+                hQD6->Add(hh[15],-1);
+                hQD6->Add(hh[16],-1);
+                hQD6->Add(hh[17],-1);
+                hQD6->Add(hh[18],-1);
+                hQD6->Add(hh[19],-1);
+                hQD6->Add(hh[20],-1);
+                hQD6->Add(hh[21],-1);
+                std::cout<<"QD7"<<std::flush;
+                TH1* hQD7=(TH1*)hh[17]->Clone("hQD7");
+                hQD7->Add(hh[18]);
+                hQD7->Add(hh[19]);
+                hQD7->Add(hh[20]);
+                hQD7->Add(hh[21]);
+                std::cout<<"QD8"<<std::flush;
+                TH1* hQD8=(TH1*)hh[1]->Clone("hQD8");
+                hQD8->Add(hh[2]);
+                hQD8->Add(hh[3]);
+                hQD8->Add(hh[4]);
+                std::cout<<"QD9"<<std::flush;
+                TH1* hQD9=(TH1*)hh[1]->Clone("hQD9");
+                hQD9->Add(hh[2]);
+                hQD9->Add(hh[3]);
+                hQD9->Add(hh[4]);
+                hQD9->Add(hh[5]);
+                hQD9->Add(hh[6]);
+                hQD9->Add(hh[7]);
+                hQD9->Add(hh[8]);
+                hQD9->Add(hh[9]);
+                hQD9->Add(hh[10]);
+                hQD9->Add(hh[22],-1);
+                
+                tdData.varnames.push_back("QD1_CH1");  outHistos.push_back(hQD1);
+                tdData.varnames.push_back("QD1_CH2");  outHistos.push_back(hQD2);
+                tdData.varnames.push_back("QD1_CH3");  outHistos.push_back(hQD3);
+                tdData.varnames.push_back("QD1_CH4");  outHistos.push_back(hQD4);
+                tdData.varnames.push_back("QD2_CH1");  outHistos.push_back(hQD5);
+                tdData.varnames.push_back("QD2_CH2");  outHistos.push_back(hQD6);
+                tdData.varnames.push_back("QD2_CH3");  outHistos.push_back(hQD7);
+                tdData.varnames.push_back("QD2_CH4");  outHistos.push_back(hQD8);
+                tdData.varnames.push_back("QD3_CH1");  outHistos.push_back(hQD9);
+                
+                std::cout<<std::endl<<tComparators<<std::endl;
             }
 
 /*

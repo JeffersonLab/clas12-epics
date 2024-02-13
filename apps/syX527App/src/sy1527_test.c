@@ -15,19 +15,12 @@ int main(int argc,char** argv)
   char ip_address[100]="129.57.86.139";
   float u, uset, uget;
   unsigned int l, lget, active, onoff, alarm, itmp;
-
-  float fpars[MAX_CHAN];
-  unsigned short chanlist[MAX_CHAN];
   char parname[MAX_CAEN_NAME];
   strcpy(parname, "IMon(0)");
-
-//  if (argc>1)
-//    strcpy(ip_address,argv[1]);
 
   if (argc>2) {
       board = atoi(argv[1]);
       channel = atoi(argv[2]);
-      chanlist[0] = channel;
   }
 
   printf("\n\n=============== CAEN mainframe SY1527/SY4527 test ===============\n");
@@ -35,16 +28,6 @@ int main(int argc,char** argv)
 
   sy1527Start(id, ip_address);
 
-//  while (1) {
-    //itmp = CAENHVGetChParam("B_HV000", board, parname, 1, chanlist, fpars);
-    //printf("%d\n",itmp);
-//    uget = sy1527GetChannelMeasuredCurrent(id, board, channel);
-//    printf("slot=%d chan=%d   %f uA\n",board,channel,uget);
-//    usleep(1e5);
-//  }
-
-  //sy1527GetMap(id);
-  
   printf("\n\n======= sy1527PrintParams =======\n");
   sy1527PrintParams(id);
 
@@ -74,22 +57,18 @@ int main(int argc,char** argv)
   sy1527PrintBoardProps(id,14);
   sy1527PrintBoardProps(id,15);
 
-
   return(0);
-
 
   sy1527BoardClearAlarm(id,0);
 
   printf("\n\n======= sy1527ExecComm(ClearAlarm) =======\n");
   sy1527ExecComm(id,"ClearAlarm");
-  
 
   sy1527GetBoard(id, board);
 
   sy1527Measure2Demand(id, board);
 
   sy1527SetBoard(id, board);
-
   
   printf("sleep1 ..\n");fflush(stdout);
   sleep(3);
@@ -99,41 +78,28 @@ int main(int argc,char** argv)
   u = 9.8;
   l = 1;
 
+  printf("--> id=%d board=%d channel=%d\n",id,board,channel);
 
+  sy1527SetChannelEnableDisable(id, board, channel, 1);
+  sleep(5);
 
-printf("--> id=%d board=%d channel=%d\n",id,board,channel);
+  itmp=sy1527GetChannelEnableDisable(id, board, channel);
+  printf("1: itmp=%d\n",itmp);
 
+  sleep(5);
+  exit(0);
 
-sy1527SetChannelEnableDisable(id, board, channel, 1);
-sleep(5);
+  sy1527SetChannelEnableDisable(id, board, channel, 1);
+  itmp=sy1527GetChannelEnableDisable(id, board, channel);
+  printf("1: itmp=%d\n",itmp);
 
+  sy1527SetChannelEnableDisable(id, board, channel, 0);
+  itmp=sy1527GetChannelEnableDisable(id, board, channel);
+  printf("2: itmp=%d\n",itmp);
 
-itmp=sy1527GetChannelEnableDisable(id, board, channel);
-printf("1: itmp=%d\n",itmp);
-
-
-
-sleep(5);
-exit(0);
-
-
-
-
-sy1527SetChannelEnableDisable(id, board, channel, 1);
-itmp=sy1527GetChannelEnableDisable(id, board, channel);
-printf("1: itmp=%d\n",itmp);
-
-sy1527SetChannelEnableDisable(id, board, channel, 0);
-itmp=sy1527GetChannelEnableDisable(id, board, channel);
-printf("2: itmp=%d\n",itmp);
-
-sy1527SetChannelEnableDisable(id, board, channel, 1);
-itmp=sy1527GetChannelEnableDisable(id, board, channel);
-printf("3: itmp=%d\n",itmp);
-
-
-
-
+  sy1527SetChannelEnableDisable(id, board, channel, 1);
+  itmp=sy1527GetChannelEnableDisable(id, board, channel);
+  printf("3: itmp=%d\n",itmp);
 
   sy1527SetChannelDemandVoltage(id, board, channel, u);
   sy1527SetChannelOnOff(id, board, channel, l);
@@ -147,7 +113,6 @@ printf("3: itmp=%d\n",itmp);
   sleep(1);
   printf("==> 0x%08x\n",sy1527GetChannelStatus(id, board, channel));
   sleep(3);
-
   
   for(i=0; i<10; i++)
   {
@@ -160,13 +125,6 @@ printf("3: itmp=%d\n",itmp);
   }
   sleep(3);
   
-
-  /*  
-  printf(".. done1\n");fflush(stdout);
-  sy1527SetMainframeOnOff(id, 1);
-  printf("done !\n");fflush(stdout);
-  sleep(3);
-  */
   sy1527GetMainframeStatus((unsigned int) id,  (int *) &(active), (int *) &(onoff), (int *) &alarm);
   printf("3status: %d %d %d\n",active, onoff, alarm);
   sleep(1);

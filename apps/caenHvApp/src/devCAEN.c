@@ -169,11 +169,11 @@ static long init_bo(struct boRecord  *pbo)
   char tmp[81]; /// temporal
   int first_channel=channel, chs_number=command;
   if (strstr(pbo->desc,"smi")) {
-    strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
-    tmp[strlen(pbo->name)-strlen("_BO")]=0;
-    //retv=sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
-    sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
-    pbo->rval = 0; /// means nothing
+    //strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
+    //tmp[strlen(pbo->name)-strlen("_BO")]=0;
+    ////retv=sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
+    //sy1527BoardSmiMonitor(tmp, chassis, slot, first_channel, chs_number);
+    //pbo->rval = 0; /// means nothing
   }
   else {
    if (command == S_CE) {
@@ -246,14 +246,13 @@ static long write_bo(struct boRecord *pbo)
   // identify the type of Bo and issue a command to the desired chassis.
   int first_channel=channel, chs_number=command;
   if (strstr(pbo->desc,"smi")) {
-    //retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
-    sy1527BoardSmiControl(pbo->name, chassis, slot,  
-    first_channel, chs_number, (unsigned char)pbo->rval);
+  //  //retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
+  //  sy1527BoardSmiControl(pbo->name, chassis, slot,  
+  //  first_channel, chs_number, (unsigned char)pbo->rval);
   }
   else if (strstr(pbo->desc,"crate_fsm_init")) { /// for any order of launch of ioc and fsm
-    //retv=sy1527CrateSmiInit(pbo->name, chassis);
-    sy1527CrateSmiInit(pbo->name, chassis);
-
+  //  //retv=sy1527CrateSmiInit(pbo->name, chassis);
+  //  sy1527CrateSmiInit(pbo->name, chassis);
   }
   else{
     if (command == S_CE)
@@ -324,8 +323,8 @@ static long read_bi(struct biRecord *pbi)
   int onoff;
   int retv;
   if (strstr(pbi->desc,"smi")) {
-    retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
-    pbi->rval = retv; /// means nothing
+    //retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
+    //pbi->rval = retv; /// means nothing
   }
   else {
     if      (command == G_Valid) result = CAEN_GetValidity(chassis);

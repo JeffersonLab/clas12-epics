@@ -159,9 +159,6 @@ sy1527Measure2Demand(unsigned int id, unsigned int board)
 int
 sy1527GetBoard(unsigned int id, unsigned int board)
 {
-
-  int b_status=0;/// b_status_res=0;
-
   int nXXXXXparam;
   char *XXXXparam[MAX_PARAM];
 
@@ -305,7 +302,7 @@ sy1527SetBoard(unsigned int id, unsigned int board)
     {
       if(Demand[id].board[board].channel[Ch].setflag[ipar] == 1)
       {
-        if(PARAM_TYPE_NUMERIC = Demand[id].board[board].partypes[ipar])
+        if(PARAM_TYPE_NUMERIC == Demand[id].board[board].partypes[ipar])
         {
           fParVal = Demand[id].board[board].channel[Ch].fval[ipar];
           ret = CAENHVSetChParam(name, Slot, ParName, 1, &Ch, &fParVal);
@@ -1232,6 +1229,49 @@ sy1527GetHeartBeat(unsigned int id, unsigned int board,
   }
 
   return absent_error;
+}
+
+
+int
+sy1527GetMainframeStatus(unsigned int id, int *active, int *onoff, int *alarm)
+{
+  int i, board, chan;
+  unsigned int u;
+  int retv=-1;
+
+  pthread_mutex_lock(&global_mutex);
+
+  *active = *onoff = *alarm = 0;
+
+  // check if it is active
+  for(i=0; i<nmainframes; i++)
+  {
+    if(mainframes[i] == id)
+    {
+      *active = 1;
+
+      // check if it is ON: loop over all boards and channels
+      // and if at least one channel is ON, report mainframe
+      // status as ON, overwise report it as OFF
+      for(board=0; board<Measure[id].nslots; board++)
+      {
+        for(chan=0; chan<Measure[id].board[board].nchannels; chan++)
+        {
+          // check on/off status
+          GET_LVALUE(Measure[id].board[board].Pw, u);
+          if(u) *onoff = 1;
+
+          // check I-tripped bit
+          GET_LVALUE(Measure[id].board[board].Status, u);
+          if(u & 0x200) *alarm = 1;
+        }
+      }
+      retv=CAENHV_OK;
+    }
+  }
+  pthread_mutex_unlock(&global_mutex);
+
+  return retv;
 }
 
 ///=======================================================================================

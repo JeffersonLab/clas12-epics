@@ -166,8 +166,9 @@ static long init_bo(struct boRecord  *pbo)
 
   block_until_fraimworks_read();
 
-  char tmp[81]; /// temporal
-  int first_channel=channel, chs_number=command;
+  //char tmp[81]; /// temporal
+  //int first_channel=channel;
+  //int chs_number=command;
   if (strstr(pbo->desc,"smi")) {
     //strncpy(tmp, pbo->name, strlen(pbo->name)-strlen("_BO"));
     //tmp[strlen(pbo->name)-strlen("_BO")]=0;
@@ -244,7 +245,7 @@ static long write_bo(struct boRecord *pbo)
   printf("WRITE_BO ======================================== name=%s %d %d\n",pbo->name, pbo->val, pbo->rval);
 
   // identify the type of Bo and issue a command to the desired chassis.
-  int first_channel=channel, chs_number=command;
+  //int first_channel=channel, chs_number=command;
   if (strstr(pbo->desc,"smi")) {
   //  //retv=sy1527BoardSmiControl(pbo->name, chassis, slot,  
   //  sy1527BoardSmiControl(pbo->name, chassis, slot,  
@@ -315,13 +316,13 @@ static long read_bi(struct biRecord *pbi)
   unsigned chassis = (*card) - ((slot)<<8) ;
 
   unsigned command = (*signal)>>8;
-  unsigned channel = (*signal) - ((command)<<8);
+  //unsigned channel = (*signal) - ((command)<<8);
 
   /* Access the requested chassis's database, depending on which of the two
    * bi commands was sent.  Show an error if the request is not recognized.
    */
   int onoff;
-  int retv;
+  //int retv;
   if (strstr(pbi->desc,"smi")) {
     //retv=sy1527BoardSmiMonitor(pbi->name, chassis, slot, channel, command);
     //pbi->rval = retv; /// means nothing

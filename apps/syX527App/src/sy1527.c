@@ -89,6 +89,7 @@ static int  nA2518Aparam = 18;
 static int  nA2518AparamV2 = 17;
 static int  nA1536HDparam = 17;
 static int  nA1536HDMparam = 18;
+static int  nA2551param = 14;
 
 static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
@@ -106,10 +107,9 @@ static char A2518Aparam[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","RUpTime","RDwTime","UNVThr","OVVThr","VMon",
                 "VCon","IMon","Temp","Status","Pw","TripInt","TripExt",
                 "ChToGroup","OnGrDel","OffGrDel","Intck"};
-//static char A2518AparamV2[MAX_PARAM][MAX_CAEN_NAME] = {
-//                "V0Set","I0Set","RUpTime","RDwTime","UNVThr","OVVThr","VMon",
-//                "VCon","IMon","Temp","Status","Pw","TripInt","TripExt",
-//                "ChToGroup","OnGrDel","OffGrDel"};
+static char A2551param[MAX_PARAM][MAX_CAEN_NAME] = {
+                "V0Set","I0Set","RUp","RDWn","UNVThr","OVVThr","VMon",
+                "VCon","IMon","Temp","Status","Pw","TripInt","TripExt"};
 
 ///---------------------------------------------------------------
 // some useful macros
@@ -766,9 +766,37 @@ sy1527GetMap(unsigned int id)
             }
           }
         }
-        else if(!strcmp(Measure[id].board[i].modelname,"A2518A") ||
                 // CAEN is really putting spaces in model names now:
-                !strcmp(Measure[id].board[i].modelname,"A2551  ") ||
+        else if( !strcmp(Measure[id].board[i].modelname,"A2551  ") ||
+                 !strcmp(Measure[id].board[i].modelname,"A2551 ")
+                ) 
+        {
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
+          Measure[id].board[i].nparams = nA2551param;
+          Demand[id].board[i].nparams = nA2551param;
+          for(j=0; j<Measure[id].board[i].nparams; j++)
+          {
+            strcpy(Measure[id].board[i].parnames[j],A2551param[j]);
+            strcpy(Demand[id].board[i].parnames[j],A2551param[j]);
+
+            strcpy(ParName,Measure[id].board[i].parnames[j]);
+            ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
+            if(ret != CAENHV_OK)
+            {
+              printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
+                  CAENHVGetError(name),ret,ParName);
+              Measure[id].board[i].nchannels = 0;
+              Demand[id].board[i].nchannels = 0;
+              return(CAENHV_SYSERR);
+            }
+            else
+            {
+              Measure[id].board[i].partypes[j] = tipo;
+              Demand[id].board[i].partypes[j] = tipo;
+            }
+          }
+        }
+        else if(!strcmp(Measure[id].board[i].modelname,"A2518A") ||
                 !strcmp(Measure[id].board[i].modelname,"A2518") )
         {
 

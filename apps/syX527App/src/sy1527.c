@@ -767,6 +767,8 @@ sy1527GetMap(unsigned int id)
           }
         }
         else if(!strcmp(Measure[id].board[i].modelname,"A2518A") ||
+                // CAEN is really putting spaces in model names now:
+                !strcmp(Measure[id].board[i].modelname,"A2551  ") ||
                 !strcmp(Measure[id].board[i].modelname,"A2518") )
         {
 
@@ -807,7 +809,7 @@ sy1527GetMap(unsigned int id)
         }
         else
         {
-          printf("\nERROR: sy1527GetMap:  UNKNOWN BOARD = %s\n\n",Measure[id].board[i].modelname);
+          printf("\nERROR: sy1527GetMap:  UNKNOWN BOARD = >%s<\n\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nchannels = 0;
           Demand[id].board[i].nchannels = 0;
         }

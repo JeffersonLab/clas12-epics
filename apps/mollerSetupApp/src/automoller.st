@@ -13,8 +13,11 @@ option -r;
 // safe mode:
 option +s;
 
-// whether to use Brian's quad calculation:
-#define USE_BRIANS_QUADS 1
+// use Brian Raue's quadrupole current calculation:
+#define USE_BRIANS_QUADS
+
+// use 2020 Dynapower quadrupole power supply: 
+//#define DYNAB2020
 
 #include "automoller.h"
 
@@ -90,24 +93,30 @@ float hwienangle; assign hwienangle to "PWF1I06:spinCalc";
 int coda_runno; assign coda_runno to "B_DAQ:run_number";
 
 // Quadrupole Controls:
-int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNAB:stat:on"; monitor quadB_isOn;
-//int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNABPSON"; monitor quadB_isOn;
 int quadC_isOn;    assign quadC_isOn    to "{SIMQUAD}DYNACPSON"; monitor quadC_isOn;
-int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNAB:on";
-//int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
 int quadC_on;      assign quadC_on      to "{SIMQUAD}DYNACON";
-int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNAB:off";
-//int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
 int quadC_off;     assign quadC_off     to "{SIMQUAD}DYNACOFF";
-float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNAB:i:ramp";
-//float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNABSETI";
 float quadC_iset;  assign quadC_iset    to "{SIMQUAD}DYNACSETI";
-float quadB_imon;  assign quadB_imon    to "{SIMQUAD}DYNAB:i:rbk"; monitor quadB_imon;
-//float quadB_imon;  assign quadB_imon    to "{SIMQUAD}hallb_sf_xy560_0_14"; monitor quadB_imon;
 float quadC_imon;  assign quadC_imon    to "{SIMQUAD}hallb_sf_xy560_0_18"; monitor quadC_imon;
-int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNAB:reset";
-//int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNABRESET";
 int quadC_reset;   assign quadC_reset   to "{SIMQUAD}DYNACRESET";
+
+#ifdef DYNAB2020
+// New, 2020 Dynapower:
+int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNAB:stat:on"; monitor quadB_isOn;
+int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNAB:reset";
+int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNAB:on";
+int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNAB:off";
+float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNAB:i:ramp";
+float quadB_imon;  assign quadB_imon    to "{SIMQUAD}DYNAB:i:rbk"; monitor quadB_imon;
+#else
+// Old, 2000 Dynapower:
+int quadB_isOn;    assign quadB_isOn    to "{SIMQUAD}DYNABPSON"; monitor quadB_isOn;
+int quadB_reset;   assign quadB_reset   to "{SIMQUAD}DYNABRESET";
+int quadB_on;      assign quadB_on      to "{SIMQUAD}DYNABON";
+int quadB_off;     assign quadB_off     to "{SIMQUAD}DYNABOFF";
+float quadB_iset;  assign quadB_iset    to "{SIMQUAD}DYNABSETI";
+float quadB_imon;  assign quadB_imon    to "{SIMQUAD}hallb_sf_xy560_0_14"; monitor quadB_imon;
+#endif
 
 // Helmholtz Controls:
 float helm_iset;    assign helm_iset    to "{SIMHELM}B_MOLLER_HELMHOLTZ_CURRENT_SET";
@@ -558,7 +567,7 @@ ss automoller {
             itmp=0;
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
-#if USE_BRIANS_QUADS
+#ifdef USE_BRIANS_QUADS
                 pvGet(beamEnergy);
                 quad_icfg = calcQuadCurrent(beamEnergy/1000);
 #else

@@ -79,8 +79,8 @@ dbpf("B_DET_RICH2_SCALERS:alarm.LSV","NO_ALARM")
 dbpf("B_HW_SVT3:scalers:nFibers.LOLO","137")
 
 dbpf("B_RICH:recovery:clock.HIGH","86400")
-dbpf("B_RICH:recovery:clock.HSV","MINOR")
-dbpf("B_RICH:recovery:clock:go.PROC","1")
+dbpf("B_RICH:recovery:clock.HSV","NO_ALARM")
 dbpf("B_RICH:recovery:clock.DESC","Seconds since last full recovery")
+dbpf("B_RICH:recovery:clock:go.PROC","1")
 
 dbl > pv.list

@@ -38,8 +38,27 @@ grecord(ao,"q_asym_$(CHAN)")
 grecord(ao,"d_asym_$(CHAN)")
 {
    field(PREC, "6")
+   field(FLNK,"dq_asym_$(CHAN)")
 }
-
+grecord(calc,"dq_asym_$(CHAN)")
+{
+   field(PREC, "6")
+   field(INPA, "q_asym_$(CHAN)")
+   field(INPB, "d_asym_$(CHAN)")
+   field(CALC, "B=0 ? 0 : A/B")
+   field(FLNK,"q_asym_alarm_$(CHAN)")
+}
+grecord(calc,"q_asym_alarm_$(CHAN)")
+{
+    field(INPA, "q_asym_$(CHAN).SEVR")
+    field(INPB, "d_asym_$(CHAN).SEVR")
+    field(INPC, "dq_asym_$(CHAN).SEVR")
+    field(CALC, "A+C")
+    field(HIGH, "1")
+    field(HIHI, "2")
+    field(HSV,  "MINOR")
+    field(HHSV, "MAJOR")
+}
 record(bi,"asym_calc_enable_$(CHAN)") {
 	field(DESC,"multibit binary input record")
 	field(SCAN,"Passive")

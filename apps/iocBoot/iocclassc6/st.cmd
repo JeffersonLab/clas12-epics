@@ -3,14 +3,11 @@
 cd "$IOC_root_classc6"
 
 < cdCommands
-#< ../nfsCommands
 < ../network
-#< ../users
 
 cd topbin
 
 ld 0,0, "classc6.munch"
-#ld < classc6.munch
 
 cd top
 
@@ -149,9 +146,4 @@ seq &asym
 epicsThreadSleep(1)
 dbpf "moller_accumulate","0"
 dbpf "asym_file_disable","0"
-
-## update these after 2017 engineering run:
-#seq &kepco_seq
-#seq &quad_current
-#seq &moller_setup
 

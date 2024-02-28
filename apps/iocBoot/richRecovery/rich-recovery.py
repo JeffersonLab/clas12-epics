@@ -18,6 +18,7 @@ PV_GO = epics.pv.PV('B_RICH:recovery:go')
 PV_STATUS = epics.pv.PV('B_RICH:recovery:stat')
 PV_MSG = epics.pv.PV('B_RICH:recovery:msg')
 PV_DURATION = epics.pv.PV('B_RICH:recovery:duration')
+#PV_ABORT = epics.pv.PV('B_RICH:recovery:abort')
 
 with open('/usr/clas12/release/pro/epics/apps/jscalerApp/Db/rich-lv-tile.txt') as f:
     for line in f.readlines():

@@ -44,6 +44,4 @@ for c in iter(lambda: process.stdout.read(1), b''):
         message_body = ''
     else:
         message_body += c.decode('utf-8')
-        if len(message_body) > 1e5:
-            print('ERROR:  very long message')
 

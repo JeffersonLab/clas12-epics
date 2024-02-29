@@ -78,7 +78,7 @@ void makeLogEntry(
             "</table>"
             "<tag:hallbmollerrun>",
             logcom,pol,epol,bca,ebca,shwp,vwienangle,hwienangle,stgt,energy,quadB,quadC,helm,slmhv,coda_runno,runno,startTime,endTime);
-    sprintf(cmd,"echo '%s' | logentry --html -g Moller -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
+    sprintf(cmd,"echo '%s' | logentry --html -g Moller -g Autolog -l HBLOG -t 'Moller Run #%d' -a %s/%s -e '%s' -b -",
             body,runno,dir,filename,logusr);
     fprintf(stderr,cmd);
 	system(cmd);

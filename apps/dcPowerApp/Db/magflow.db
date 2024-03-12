@@ -1,0 +1,21 @@
+record(ai,"$(P)$(R=)flow") {
+    field(SCAN,"1 second")
+    field(DTYP,"stream")
+    field(INP,"@magflow.proto get(F$(CH)) $(PORT)")
+    field(EGU,"$(EGU=GPM)")
+    field(ASLO,"$(ASLO=0.01)")
+    field(LLSV,"MAJOR")
+    field(LSV,"MINOR")
+    field(PREC,"2")
+    field(DESC,"Measured flow rate")
+    info(autosaveFields_pass0, "LLSV LSV LOLO LOW")
+}
+record(ai,"$(P)$(R=)trip") {
+    field(SCAN,"1 second")
+    field(DTYP,"stream")
+    field(INP,"@magflow.proto get(T$(CH)) $(PORT)")
+    field(EGU,"$(EGU=GPM)")
+    field(ASLO,"$(ASLO=0.01)")
+    field(PREC,"2")
+    field(DESC,"Flow trip level")
+}

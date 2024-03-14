@@ -4,6 +4,8 @@
 ## automatically cd to the directory containing its startup script
 cd "$IOC_root_classc8"
 
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 ############################################################################
 < cdCommands
 ############################################################################

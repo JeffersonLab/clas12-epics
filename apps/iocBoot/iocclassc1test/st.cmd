@@ -4,6 +4,12 @@
 ##
 cd "$IOC_root_classc1"
 
+# 2023 NAB: When booting from clon00, vxWorks system time does not get initialized.
+# The default is supposed to be from the ntp server on the boot host.  When I start
+# clon00's ntpd daemon via systemctl and reboot, there's no effect.  Meanwhile, this
+# makes it work via JLab's ntp server:
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 ############################################################################
 < cdCommands
 ############################################################################
@@ -26,17 +32,3 @@ cd startup
 
 iocInit "../resource.def"
 
-
-#dbLoadRecords("db/raster2021.db")
-
-#seq &uitfraster
-#seq &frxscale,"R=ITFRA"
-
-#dbpf "ITFRA_WOFF.ASG","ITFRASTER"
-#dbpf "ITFRA_WGO.ASG","ITFRASTER"
-#dbpf "ITFRA_FSDRESET.ASG","ITFRASTER"
-#dbpf "ITFRA_VSCALE.ASG","ITFRASTER"
-#dbpf "ITFRA_XIMIN.ASG","ITFRASTER"
-#dbpf "ITFRA_YIMIN.ASG","ITFRASTER"
-#dbpf "ITFRA_XIMAX.ASG","ITFRASTER"
-#dbpf "ITFRA_YIMAX.ASG","ITFRASTER"

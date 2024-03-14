@@ -16,6 +16,7 @@ export EXPID=clasrun
 CLASSPATH="${D}/../tools/logEntry/src/main/java"
 CLASSPATH="${CLASSPATH}:${D}/../tools/logEntry/lib/jlog-4.0.1.jar"
 CLASSPATH="${CLASSPATH}:${D}/../tools/logEntry/lib/mysql-connector-java-5.1.32-bin.jar"
+CLASSPATH="${CLASSPATH}:${D}/../tools/logEntry/lib/jca-2.4.8.jar"
 export CLASSPATH
 
 exec java org/jlab/hallb/AutoLogEntry/MakeLogEntry $@ &

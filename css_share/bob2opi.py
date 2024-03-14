@@ -6,6 +6,7 @@ import xml.dom.minidom as minidom
 cli = argparse.ArgumentParser(description='CS-Studio BOB to OPI converter')
 cli.add_argument('input',help='path to .bob file')
 cli.add_argument('-d',help='delete unknown widget types',default=False,action='store_true')
+cli.add_argument('-c',help='just check',default=False,action='store_true')
 args = cli.parse_args(sys.argv[1:])
 
 widget_types = {
@@ -65,8 +66,9 @@ munge(root, removals)
 
 # put the necessary encoding line back at the top and print:
 xml = minidom.parseString(ET.tostring(root))
-print(xml.toprettyxml(indent='  ',newl='\r',encoding='utf-8').decode('utf-8'))
+if not args.c:
+    print(xml.toprettyxml(indent='  ',newl='\r',encoding='utf-8').decode('utf-8'))
 
 if args.d:
-  print('\n\n<!--\nREMOVALS:\n'+'\n'.join(removals)+'\n-->')
+    print('\n\n<!--\nREMOVALS:\n'+'\n'.join(removals)+'\n-->')
 

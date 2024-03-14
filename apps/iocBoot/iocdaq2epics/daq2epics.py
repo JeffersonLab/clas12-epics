@@ -23,6 +23,7 @@ CFG={
 'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
 'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 }
+#'B_DAQ:disk_free:logs    ': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
 
 # These are proven unreliable, so useless:
 #'B_DAQ:run_nfiles':   {'ini':-1,   'cmd':['run_nfiles']},
@@ -58,10 +59,14 @@ while True:
         continue
 
       # run the command, collect its output:
-      xx=subprocess.check_output(CFG[pvName]['cmd'],env=os.environ).strip()
+      try:
+        xx=subprocess.check_output(CFG[pvName]['cmd'],env=os.environ).strip()
+      except TimeoutExpired:
+        print(now+' : Timeout on '+pvName)
+        continue
       yy=xx
 
-      #print pvName,CFG[pvName]['cmd'],yy
+      #print(pvName,CFG[pvName]['cmd'],yy)
 
       # if it's a number, strip all non-numbers:
       if type(CFG[pvName]['ini']) is not str:
@@ -79,6 +84,8 @@ while True:
       # strip trigger file name:
       elif pvName=='B_DAQ:trigger_file':
         yy=yy.split('/').pop()
+        if yy.endswith('.cnf'):
+          yy=yy[:-4]
         CFG[pvName]['pv'].put(yy)
 
       # treat everything else uniformly:
@@ -92,13 +99,13 @@ while True:
             if yy<CFG[pvName]['max']:
               CFG[pvName]['pv'].put(yy)
           except:
-            print 'Failure on'+pvName
+            print(now + ' : Conversion failure on'+pvName)
         else:
           CFG[pvName]['pv'].put(yy)
 
     except:
       success=False
-      print now+' :  Error on '+pvName
+      print(now+' :  Error on '+pvName)
 
   if success:
     NPOLLS+=1
@@ -110,7 +117,7 @@ while True:
   if NPOLLS>1e8: NPOLLS=0
 
   if NCONSECERR>20:
-    print now+' : # Consecutive Errors: '+str(NCONSECERR)
+    print(now+' : # Consecutive Errors: '+str(NCONSECERR))
     time.sleep(5)
 
   time.sleep(2)

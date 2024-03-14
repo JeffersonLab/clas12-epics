@@ -2,6 +2,8 @@
 
 cd "$IOC_root_classc6"
 
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 < cdCommands
 < ../network
 
@@ -91,45 +93,15 @@ dbLoadRecords("db/moeller_coincaccid_ratio.db")
 cd startup
 iocInit
 
-# alarm limits on SLM/FCUP beam charge asymmetry:
-dbpf "q_asym_3.HIGH","0.2"
-dbpf "q_asym_3.HIHI","0.4"
+# enable alarms for SLM and FCUP beam charge asymmetry:
 dbpf "q_asym_3.HSV","MINOR"
 dbpf "q_asym_3.HHSV","MAJOR"
-dbpf "q_asym_3.LOW","-0.2"
-dbpf "q_asym_3.LOLO","-0.4"
 dbpf "q_asym_3.LSV","MINOR"
 dbpf "q_asym_3.LLSV","MAJOR"
-dbpf "q_asym_7.HIGH","0.2"
-dbpf "q_asym_7.HIHI","0.4"
 dbpf "q_asym_7.HSV","MINOR"
 dbpf "q_asym_7.HHSV","MAJOR"
-dbpf "q_asym_7.LOW","-0.2"
-dbpf "q_asym_7.LOLO","-0.4"
 dbpf "q_asym_7.LSV","MINOR"
 dbpf "q_asym_7.LLSV","MAJOR"
-
-dbpf "dq_asym_3.LLSV","MAJOR"
-dbpf "dq_asym_3.HHSV","MAJOR"
-dbpf "dq_asym_3.LSV","MINOR"
-dbpf "dq_asym_3.HSV","MINOR"
-dbpf "dq_asym_7.LLSV","MAJOR"
-dbpf "dq_asym_7.HHSV","MAJOR"
-dbpf "dq_asym_7.LSV","MINOR"
-dbpf "dq_asym_7.HSV","MINOR"
-dbpf "dq_asym_3.LOLO","-10"
-dbpf "dq_asym_3.HIHI","10"
-dbpf "dq_asym_3.LOW","-5"
-dbpf "dq_asym_3.HIGH","5"
-dbpf "dq_asym_7.LOLO","-5"
-dbpf "dq_asym_7.HIHI","5"
-dbpf "dq_asym_7.LOW","-3"
-dbpf "dq_asym_7.HIGH","3"
-
-dbpf "q_asym_alarm_3.HIGH","2"
-dbpf "q_asym_alarm_3.HIHI","3"
-dbpf "q_asym_alarm_7.HIGH","2"
-dbpf "q_asym_alarm_7.HIHI","3"
 
 # Struck setup for asym,
 # * with external channel advance and user inputs (Mode 0)

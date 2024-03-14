@@ -1,5 +1,7 @@
 cd "$IOC_root_vmesvt"
 
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 < cdCommands
 < ../network-NAB
 #< ../network-86

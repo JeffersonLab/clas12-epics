@@ -1,7 +1,10 @@
 #!../../bin/linux-x86_64/mcc
 
 < envPaths
-epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255 129.57.242.4")
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255")
+
+# why did we add iochlb?
+#epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255 129.57.242.4")
 
 cd ${TOP}
 
@@ -17,14 +20,15 @@ dbLoadRecords("db/mcc_bpm.db")
 dbLoadRecords("db/mcc_cryo.db")
 dbLoadRecords("db/mcc_tagger.db")
 dbLoadRecords("db/mcc_fsd.db")
+dbLoadRecords("db/mcc_fsd_alarm.db")
 
-dbLoadRecords("db/hall_target.db")
+dbLoadRecords("db/hall_target.db","P=HLB:TARGET:")
+#dbLoadRecords("db/hall_target.db-bak")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
-# these to be run as user=clasioc:
+# these must be run as user=clasioc:
 dbLoadTemplate("db/hallb_ia.substitutions")
-dbLoadRecords("db/hallb_ia.db")
 
 dbLoadRecords("db/mcc_fsdGlobal.db","P=B_FSD")
 

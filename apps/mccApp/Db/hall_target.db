@@ -35,8 +35,10 @@ record(calc,"$(P)$(R=)CALC:cryo") {
     field(SCAN, "2 second")
     field(INPA, "TGT:BTARG:production")
     field(INPB, "TGT:BTARG:species")
-#field(CALC, "0")
-    field(CALC, "A=2 ? 0 : ( A=4 ? B+1 : 15)")
+# Normally, "Not Ready" should propagate with priority:
+#    field(CALC, "A=2 ? 0 : ( A=4 ? B+1 : 15)")
+# Here, we instead let "Not Ready" be equivalent to "Empty":
+    field(CALC, "(A=2||A=0) ? 0 : ( A=4 ? B+1 : 15)")
     field(FLNK, "$(P)$(R=)MBBI:cryo.PROC")
 }
 record(mbbi,"$(P)$(R=)MBBI:cryo") {

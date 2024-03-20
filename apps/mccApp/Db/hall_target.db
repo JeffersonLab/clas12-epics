@@ -36,9 +36,9 @@ record(calc,"$(P)$(R=)CALC:cryo") {
     field(INPA, "TGT:BTARG:production")
     field(INPB, "TGT:BTARG:species")
 # Normally, "Not Ready" should propagate with priority:
-#    field(CALC, "A=2 ? 0 : ( A=4 ? B+1 : 15)")
+    field(CALC, "A=2 ? 0 : ( A=4 ? B+1 : 15)")
 # Here, we instead let "Not Ready" be equivalent to "Empty":
-    field(CALC, "(A=2||A=0) ? 0 : ( A=4 ? B+1 : 15)")
+#    field(CALC, "(A=2||A=0) ? 0 : ( A=4 ? B+1 : 15)")
     field(FLNK, "$(P)$(R=)MBBI:cryo.PROC")
 }
 record(mbbi,"$(P)$(R=)MBBI:cryo") {
@@ -115,14 +115,12 @@ record(scalcout,"$(P)$(R=)CALC") {
     field(CALC, "A<4?AA:(B=0?CC:(C=6?BB:(BB+' + '+CC)))")
     field(FLNK, "$(P)$(R=)STAT.PROC")
 }
-
 record(stringin,"$(P)$(R=)STAT") {
     alias("clas12:target:type")
     field(INP,  "$(P)$(R=)CALC.SVAL")
     field(FLNK, "$(P)$(R=)STRINGOUT.PROC")
 }
-
-# Write to ops's PV:
+# Finally, write to ops's PV:
 record(stringout,"$(P)$(R=)STRINGOUT")
 {
   field(OMSL,"closed_loop")

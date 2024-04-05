@@ -102,8 +102,8 @@ dbpf "q_asym_7.HSV","MINOR"
 dbpf "q_asym_7.HHSV","MAJOR"
 dbpf "q_asym_7.LSV","MINOR"
 dbpf "q_asym_7.LLSV","MAJOR"
-dbpf "q_asym_alarm_3.E","20000"
-dbpf "q_asym_alarm_7.E","100000"
+dbpf "q_asym_alarm_3.E","200000"
+dbpf "q_asym_alarm_7.E","60000"
 
 # Struck setup for asym,
 # * with external channel advance and user inputs (Mode 0)

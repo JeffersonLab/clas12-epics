@@ -87,10 +87,6 @@ dbLoadRecords("db/amqSplitFT.db")
 dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:ROCS_BUSY,K=ROCS_BUSY,N=72,TH=30,THH=60,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqRocsBusy.db")
 
-#dbLoadTemplate("db/amqRocsRate.substitutions")
-#dbLoadRecords("db/amqRocsRate-sums.db","P=B_DAQ:STA")
-#dbLoadRecords("db/waveformApp.db","P=B_DAQ:STA:dataRate:wf,NELM=72,FTVL=FLOAT,PERIOD=1,FNAME=portnames-rates.txt")
-
 dbLoadRecords("db/stage2bits-wf.db")
 
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:TSFP:TriggerBits,K=TRIG1_TSFPSLOT21,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=NO_ALARM")
@@ -117,7 +113,6 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 StartMQ()
 
 seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
-#seq waveform, "P=B_DAQ:,R=STA:dataRate:wf"
 seq stage2bits
 seq sums
 

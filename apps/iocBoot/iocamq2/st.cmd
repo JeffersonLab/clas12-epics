@@ -14,6 +14,7 @@ dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 
 dbLoadTemplate("db/amqRocsRate.substitutions")
 dbLoadRecords("db/amqRocsRate-sums.db","P=B_DAQ:STA")
+dbLoadRecords("db/waveformApp.db","P=B_DAQ:STA:dataRate:wf,R=,NELM=72,FTVL=FLOAT,PERIOD=1,FNAME=portnames-rates.txt")
 
 dbLoadTemplate("db/amqLatency.substitutions")
 
@@ -35,5 +36,7 @@ StartMQ()
 dbpf("B_DAQ:EB6:stats:01.EGU","Hz")
 dbpf("B_DAQ:EB6:stats:02.EGU","MB")
 dbpf("B_DAQ:EB6:stats:03.EGU","MB/s")
+
+seq waveform, "P=B_DAQ:,R=STA:dataRate:wf"
 
 dbl > pv.list

@@ -539,7 +539,7 @@ $(pv_value)</tooltip>
     </widget>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
-    <border_style>14</border_style>
+    <border_style>0</border_style>
     <tooltip></tooltip>
     <horizontal_alignment>1</horizontal_alignment>
     <rules />
@@ -722,7 +722,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <image></image>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -1365,7 +1365,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <image></image>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -2790,7 +2790,7 @@ $(pv_value)</tooltip>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <image></image>
-    <visible>true</visible>
+    <visible>false</visible>
     <pv_name></pv_name>
     <border_color>
       <color red="0" green="128" blue="255" />
@@ -2816,6 +2816,81 @@ $(pv_value)</tooltip>
         </macros>
         <replace>2</replace>
         <description></description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-15ed7da4:18f77193378:-6ab0</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>25</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>Menu</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>85</width>
+    <x>30</x>
+    <name>Menu Button</name>
+    <y>13</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="EXECUTE_CMD">
+        <command>daqvnc.py connect</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Connect to DAQ VNC</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>rocRate-all.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>ROC Data Rates</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>rocBusy-all.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>ROC Busies</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>rocError-all.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>ROC Errors</description>
       </action>
     </actions>
     <font>

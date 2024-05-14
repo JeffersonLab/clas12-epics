@@ -89,6 +89,7 @@ dbLoadRecords("db/amqRocsBusy.db")
 
 #dbLoadTemplate("db/amqRocsRate.substitutions")
 #dbLoadRecords("db/amqRocsRate-sums.db","P=B_DAQ:STA")
+#dbLoadRecords("db/waveformApp.db","P=B_DAQ:STA:dataRate:wf,NELM=72,FTVL=FLOAT,PERIOD=1,FNAME=portnames-rates.txt")
 
 dbLoadRecords("db/stage2bits-wf.db")
 
@@ -101,11 +102,6 @@ dbLoadRecords("db/amqRocBusy-alarm.db","ROC=mmft1,HIHI=50")
 
 dbLoadTemplate("db/amqTriggerNames.substitutions")
 dbLoadTemplate("db/amqTriggerFlags.substitutions")
-
-# string alarm:
-dbLoadRecords("db/amqStringArray.db","P=B_DAQ:msg:wf,K=err:,N=128,TH=0,THH=30,HSV=NO_ALARM,HHSV=NO_ALARM,FLNK=B_DAQ:msg:fwd.PROC")
-dbLoadRecords("db/amqStringAlarm.db","P=B_DAQ:msg,OK=Ok,N=10")
-dbLoadRecords("db/timer.db","P=B_DAQ:msg,OUT=B_DAQ:msg:storeclear.PROC,VAL=1")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -121,7 +117,7 @@ create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 StartMQ()
 
 seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
-
+#seq waveform, "P=B_DAQ:,R=STA:dataRate:wf"
 seq stage2bits
 seq sums
 

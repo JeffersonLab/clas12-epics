@@ -202,8 +202,8 @@ public class MakeLogEntry
       if (stub==null)
       {
         stub=System.getenv("HOST");
-        if (stub.indexOf('.')>0)
-          stub=stub.substring(0,stub.indexOf('.'));
+        if (stub==null) stub=System.getenv("HOSTNAME");
+        if (stub.indexOf('.')>0) stub=stub.substring(0,stub.indexOf('.'));
       }
       imgPath = SCREENSHOTDIR+stub+"_"+timeStamp+".gif";
       if (DEBUG) System.out.println(imgPath);

@@ -248,7 +248,7 @@ class Save(Gtk.Box):
     '''Initiate the Burt save sequence by requesting a new file name'''
     self.update(None)
     if self.top.group.get_active() == 0:
-      BurtApp.show_dialog(self.top, False, 'No Group Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Group Selected','Select one next time!')
     else:
       dialog = Gtk.MessageDialog(transient_for = self.top, flags = 0,
         message_type = Gtk.MessageType.QUESTION, buttons = Gtk.ButtonsType.OK_CANCEL,
@@ -335,7 +335,7 @@ class Restore(Gtk.Box):
     self.btn_preview = Gtk.Button.new_with_label('Preview Selected Snapshot')
     self.btn_preview.connect('clicked', self.preview_snapshot)
     l = Gtk.Label()
-    l.set_markup('<b>Select a Snapshot File:</b>')
+    l.set_markup('<b>Snapshot Select:</b>')
     self.pack_start(l, False, False, 0)
     self.pack_start(self.chooser, True, True, 0)
     hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
@@ -348,7 +348,7 @@ class Restore(Gtk.Box):
     '''Show scrollable modal dialog with contents of selected snapshot'''
     snapshot = self.chooser.get_filename()
     if not os.path.isfile(snapshot):
-      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time!')
     else:
       self.top.show_scrolled_popup_from_file('\t\t\tContents of: \n%s'%snapshot,snapshot)
 
@@ -356,7 +356,7 @@ class Restore(Gtk.Box):
     '''Initiate the Burt restore sequence by confirming the snapshot file name'''
     snapshot = self.chooser.get_filename()
     if not os.path.isfile(snapshot):
-      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time.')
+      BurtApp.show_dialog(self.top, False, 'No Snapshot File Selected','Select one next time!')
     else:
       ret = BurtApp.show_dialog(self.top, True, 'Really restore from snapshot file?',snapshot)
       if ret == Gtk.ResponseType.OK:

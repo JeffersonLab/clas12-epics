@@ -84,7 +84,6 @@ extern "C" {
     void IocReadWaveform(int crate, int slot, int channel, int len, double values[]){
         pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
         if (scalersslowcontrol->vmecrates.count(crate)<=0) {
-            //|| channel>=((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->numberOfChannels)  {
             for (int i=0; i<len; i++) values[i]=NOT_PRESENT_VALUE;
         } else {
             for(int i=0;i<(len);i++) {
@@ -101,6 +100,28 @@ extern "C" {
 }
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    void IocReadWaveformRaw(int crate, int slot, int channel, int len, double values[]){
+        pthread_mutex_lock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+        if (scalersslowcontrol->vmecrates.count(crate)<=0) {
+            for (int i=0; i<len; i++) values[i]=NOT_PRESENT_VALUE;
+        } else {
+            for(int i=0;i<(len);i++) {
+                if (i>= (int)(((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCountsHz[channel]).size()) 
+                    values[i]=NOT_PRESENT_VALUE;
+                else
+                    values[i]=(((scalersslowcontrol->vmecrates[crate])->crateBoards[slot])->scalerCounts[channel])[i];
+            }
+        }
+        pthread_mutex_unlock(&((scalersslowcontrol->vmecrates[crate])->IOmutex));
+    }
+
+#ifdef __cplusplus
+}
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif

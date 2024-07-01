@@ -21,6 +21,7 @@ dbLoadTemplate("db/jscalers_TRIG.substitutions")
 dbLoadTemplate("db/jscalers_BLINE.substitutions")
 
 dbLoadRecords("db/jscaler_TRIG_alias.db")
+dbLoadRecords("db/jscaler_RUN_alias.db")
 
 cd ${TOP}/iocBoot/${IOC}
 

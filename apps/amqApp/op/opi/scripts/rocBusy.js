@@ -8,8 +8,10 @@ var type=widget.getMacroValue("TYPE");
 var pvPrefix="B_DAQ:ROCS_BUSY:";
 
 if (type==2) pvPrefix="B_DAQ:STA:";
+if (type==3) pvPrefix="B_DAQ:err:";
 
 var opiFile="rocBusy.opi";
+if (type==3) opiFile="rocError.opi";
 
 function insertRoc(rocName,rocNumber) {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
@@ -19,7 +21,9 @@ function insertRoc(rocName,rocNumber) {
     lc.setPropertyValue("border_style",0);
     lc.setPropertyValue("background_color","Header_Background");
     if (type==2)
-    lc.addMacro("P",pvPrefix+rocName+":dataRate");
+        lc.addMacro("P",pvPrefix+rocName+":dataRate");
+    else if (type==3)
+        lc.addMacro("P",pvPrefix+rocName);
     else
         lc.addMacro("P",pvPrefix+rocName);
     
@@ -30,7 +34,7 @@ function insertRoc(rocName,rocNumber) {
 var lines=FileUtil.readTextFile(fileName,widget).split("\n");
 
 for (var ii=i1; ii<=i2; ii++) {
-    if (ii==55 || ii==63) continue;
+    if (ii==55) continue;
     var columns = lines[ii].split(" ");
     var rocName = columns[columns.length-1];
     //if (!rocName.includes("-") && !rocName.includes("svt3"))

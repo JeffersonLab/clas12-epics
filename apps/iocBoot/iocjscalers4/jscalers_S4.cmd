@@ -11,7 +11,6 @@ Start_SCALERS_CRATE("3","TDCECAL4")
 Start_SCALERS_CRATE("4","TDCPCAL4")
 Start_SCALERS_CRATE("5","TDCFTOF4")
 
-
 ## Register all support components
 dbLoadDatabase("dbd/iocscalers.dbd")
 iocscalers_registerRecordDeviceDriver(pdbbase)

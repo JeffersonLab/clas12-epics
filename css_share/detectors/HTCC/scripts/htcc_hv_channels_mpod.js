@@ -13,6 +13,8 @@ lc.setPropertyValue("border_style",0);
 lc.setPropertyValue("background_color","Header_Background");
 widget.addChildToBottom(lc);
 
+var index = 0;
+
 for (var sector=1; sector<7; sector++) {
     for (var ring=1; ring<5; ring++) {
         for (var ilr=0; ilr<2; ilr++) {
@@ -26,9 +28,11 @@ for (var sector=1; sector<7; sector++) {
             lc.setPropertyValue("background_color","Header_Background");
             lc.addMacro("C","S"+sector+" "+lr[ilr]+ring);
             lc.addMacro("P",pv);
-            lc.addMacro("M",":"+(0+1));
-            lc.addMacro("N",0+1);
+            var module = Math.floor(index/16) + 1;
+            lc.addMacro("M",":"+module);
+            lc.addMacro("N",module);
             widget.addChildToBottom(lc);
+            index++;
         }
     }
 }

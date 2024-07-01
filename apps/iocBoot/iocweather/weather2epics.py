@@ -22,6 +22,7 @@ CFG = {
 
 CONSECERR=0
 LASTUPDATE='Never'
+DEFAULT=-99
 
 # Initalize PVs
 for pvName in CFG.keys():
@@ -39,18 +40,20 @@ while True:
     error=True
 
   # Only parse response if it was OK 
-  if resp.getcode() != 200:
+  if error or resp.getcode() != 200:
     print(now+" Error from server")
     error=True
+    for pvName in CFG.keys():
+      CFG[pvName]['pv'].put(DEFAULT)
 
   else:
     data = resp.read().decode('utf-8').split(',')
 
     for pvName in CFG.keys():
+      val = DEFAULT
       # Make sure conversion to float is okay
       try:
         val = float(data[CFG[pvName]['col']])
-        CFG[pvName]['pv'].put(val)
       except ValueError as e:
         print(now+' ValueError on ',pvName)
         error=True
@@ -59,6 +62,7 @@ while True:
         print(now+' IndexError on ',pvName)
         error=True
         pass
+      CFG[pvName]['pv'].put(val)
 
   if error:
     CONSECERR += 1
@@ -68,8 +72,7 @@ while True:
 
   if CONSECERR>30:
     print ('ERROR:  Last Update: '+LASTUPDATE)
-    time.sleep(20)
+    time.sleep(30)
 
-
-  time.sleep(10)
+  time.sleep(5)
 

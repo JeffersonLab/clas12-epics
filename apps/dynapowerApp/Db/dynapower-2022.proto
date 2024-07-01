@@ -1,12 +1,11 @@
 
 OutTerminator = CR;
-#InTerminator = LF CR;
 InTerminator = ;
 
 keepalive { out ""; }
+command   { out "\$1"; }
 putHex    { out "SET\$1%.2x"; }
 putFloat  { out "SET\$1%.0f"; }
-putString { out "SET\$1%s"; }
 
 # The documentation came with getters but they do not work,
 # instead the strings below are sent every 2 seconds.
@@ -22,11 +21,15 @@ putString { out "SET\$1%s"; }
 # \r\n 1 \r\n 7 \r\n 1356 \r\n 500 \r\n 0010 \r\n 0000 \r\n 0000\r\036\r\000\000\000\000\000\000\000\000\000\000\000\000
 
 # Catch the first three, ignore the other one:
-getVolt { extrainput=ignore; in " \r\n %d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
-getAmps { extrainput=ignore; in " \r\n %*d \r\n %d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
-getTemp { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
-getFlow { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
-getStat { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %x \r\n %*x \r\n %*x\r\n"; }
-getFlt1 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %x \r\n %*x\r\n"; }
-getFlt2 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %x\r\n"; }
+#getVolt { extrainput=ignore; in " \r\n %d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+#getAmps { extrainput=ignore; in " \r\n %*d \r\n %d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+#getTemp { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %d \r\n %*d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+#getFlow { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %d \r\n %*x \r\n %*x \r\n %*x\r\n"; }
+#getStat { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %x \r\n %*x \r\n %*x\r\n"; }
+#getFlt1 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %x \r\n %*x\r\n"; }
+#getFlt2 { extrainput=ignore; in " \r\n %*d \r\n %*d \r\n %*d \r\n %*d \r\n %*x \r\n %*x \r\n %x\r\n"; }
+
+# Encountered a deadlock bug in asyn with I/O Intr device type, so currently
+# we are not currently using these getter protocols and instead manually
+# parsing the messages in a separate script.
 

@@ -1,0 +1,21 @@
+record(compress,"B_DET_FMT_HV:vmon:max") {
+    field(SCAN,"5 second")
+    field(INP,"B_DET_FMT_HV:vmon:wf")
+    field(ALG,"N to 1 High Value")
+    field(N,"18")
+    field(NSAM,"1")
+    field(FLNK,"B_DET_FMT_HV:safe:calc.PROC")
+}
+record(calcout,"B_DET_FMT_HV:safe:calc") {
+    field(INPA,"B_DET_FMT_HV:vmon:max")
+    field(INPB,"300")
+    field(CALC,"A<B")
+    field(OUT,"B_DET_FMT_HV:safe:stat PP")
+}
+record(bi,"B_DET_FMT_HV:safe:stat") {
+    field(ZNAM,"Not Safe")
+    field(ONAM,"Safe")
+    field(ZSV,"MAJOR")
+    field(OSV,"NO_ALARM")
+}
+

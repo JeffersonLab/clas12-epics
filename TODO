@@ -2,46 +2,12 @@
 # TODO List
 #
 
-# ALARMS:
-  * Description
-  * * This is necessary for useful RDB messaging history!
-  * Guidance
-  * * COMMS->cRIO
-  * * * e.g. FC/GS/SF is LTCC/DC+MM/HTCC+SVT
-  * * * e.g. readbacks are bogus if no crio hbeat
-  * missing xmls (probably added on-the-fly):
-  * * cRio COMMS
-  * * weather
-  * * iocjscalerRICH:CPULOAD (contact RICH expert, disconnect is serious)
-  * Torus/Solenoid
-  * FT
-  * * LV
-  * HV
-  * * MINOR vs MAJOR alarms - guidance needed
-  * iocamq alarms
-
-# GUIS:
-  * FTC: HW->DET PVs
-  * more direct access to specific strip charts
-  * webopi - torus/solenoid valves missing
-
 # HARDIOCS
-  *
-  * move classc1/4/6/8 to clas12-epics
   *
   * asym
   * * 64 MB struck for asym
   * * separate struck for BCA for independent acq time
-  *
-  * add SY527 reset
-  * * xy240, jlab reset card, etc 
-  *
-  * classc1/classcsvt kernel upgrade
-  * * more file descriptors
-  *
-  * tsconnect@clonpc0: resolve classc4/8 port numbering
-  *
-  * switch to clonpc0/clon00 boot host
+  * * new helicity board??
   *
   * old stuff to new epics
   * * classc3/classc12
@@ -55,34 +21,21 @@
 
 # SOFTIOCS:
   *
-  * ioc health: new tab with all moller iocs / or moller subsection
-  * rename mollerPS -> mollerHelmholtz
-  *
   * move all to clasioc:clas-3 (?)
   * * ops CA r/w for ioctest/st-ia.cmd
   * * check permissions (logs, autosave, ...)
+  *
+  * iocareaDetector:
+  * * merge into standard clas12 build (e.g. paths)
+  * * add devIocStats and autosave
   *
   * merge:
   * * iocdclv_S#R* -> iocdclv_S#
   * * iocbomGet -> iocbom
   * * iocrollAvgGet -> iocrollAvg
   *
-  * add saclaytgt-alarm.db
-  * * target status (full, empty, partial)
-  *
-  * iocareaDetector:
-  * * merge into standard clas12 build (e.g. paths)
-  * * add devIocStats and autosave
-  *
-  * iocamq:  (done, import in January)
+  * iocamq:  (done, import in January) ((where is it?))
   * * wrap timeout alarm into same PVs, not separate ones as it is now
-
-# Manual:
- * Alarms:
-  * * stress alarm guidance more
-  * * stress "Open .." in dropdown
-
-# Remote Reset on CAEN HV
 
 #####################################################
 #####################################################
@@ -93,30 +46,13 @@
 # SVT:
   * hostname=classcsvt, iocname=iocvmesvt -- unify
   * restructure access to hv/lv channels so don't need to know what crate
-  * initialize chiller pump level ao properly
 
-# firefox/chrome
+# firefox/chrome/clascss
   * Move default workspaces to puppet (e.g. /etc) and out of clas12-epics
   * Maybe workspace generator and wrapper scripts too
-
-# ftIntlkApp
-  * finish FTH interlocks
-  * probably should be in ioccaenhv_HVFTAG instead of a separate ioc
 
 # get apps/scripts out of clasrun's PATH
 
 #####################################################
 #####################################################
-
-#
-# Long-term
-#
-# 1. CS-Studio
-#    get it compiling again
-#    version 4.5.0 (testing)
-#    Slimmed-down build (e.g. no logbook feature)
-#    JLab Logbook integration in CS-Studio
-#    GUI revamp (single-window style)
-# 2 EPICS 3.15
-# 3 ChannelFinder
 

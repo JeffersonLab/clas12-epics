@@ -202,21 +202,30 @@ record(bo, "$(P)$(R)ModeSet") {
     field(ONAM, "Local")
 }
 
-record(bi, "$(P)$(R)Polarity") {
-    field(DTYP, "EtherIP")
+# Soft records after removal of polarity switch:
+record(calcout, "$(P)$(R)Polarity:calc") {
     field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Solenoid_MPS.Polarity")
-    field(ZNAM, "NEGATIVE")
-    field(ONAM, "POSITIVE")
+    field(INPA, "B_SOL:FOR:HallSensor2")
+    field(CALC, "A<-100 ? 0 : ( A>100 ? 1 : 2 )")
+    field(OOPT, "Every Time")
+    field(DOPT, "Use CALC")
+    field(OUT,  "$(P)$(R)Polarity PP")
+# leave disabled for now ...
+    field(DISA, "1")
 }
-
-record(bi, "$(P)$(R)Direction") {
+record(mbbi, "$(P)$(R)Polarity") {
+    field(ZRST, "NEGATIVE")
+    field(ONST, "POSITIVE")
+    field(TWST, "Unknown")
+    info(autosaveFields_pass0, "VAL")
+}
+record(mbbi, "$(P)$(R)Direction") {
+    field(INP, "$(P)$(R)Polarity CPP")
+    field(ZRST, "U/S")
+    field(ONST, "D/S")
+    field(TWST, "Unknown")
     field(DESC, "Field Direction")
-    field(DTYP, "EtherIP")
-    field(SCAN, "1 second")
-    field(INP,  "@$(PLCID) Solenoid_MPS.Polarity")
-    field(ZNAM, "U/S")
-    field(ONAM, "D/S")
+    info(autosaveFields_pass0, "VAL")
 }
 
 record(bo, "$(P)$(R)OnOffSet") {

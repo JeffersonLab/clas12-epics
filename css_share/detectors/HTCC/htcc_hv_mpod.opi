@@ -10,7 +10,7 @@
       <pv trig="true">loc://novice(0)</pv>
     </path>
   </scripts>
-  <height>340</height>
+  <height>800</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
     <HOST>hvhtcc1</HOST>
@@ -28,7 +28,7 @@
   </background_color>
   <width>740</width>
   <x>-1</x>
-  <name>BONuS High Voltage</name>
+  <name>HTCC High Voltage</name>
   <grid_space>6</grid_space>
   <show_ruler>true</show_ruler>
   <y>-1</y>
@@ -67,7 +67,7 @@
     </background_color>
     <width>730</width>
     <x>0</x>
-    <name>BONUS High Voltage</name>
+    <name>HTCC High Voltage</name>
     <y>6</y>
     <foreground_color>
       <color name="Write_Foreground" red="0" green="0" blue="0" />
@@ -118,51 +118,36 @@ $(pv_value)</tooltip>
       <color red="0" green="0" blue="0" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="WRITE_PV">
-        <pv_name>B_BONUS_HV:offbtn</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>All HV OFF</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_BONUS_HV:onbtn</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message>Really turn all BONuS High Voltage ON?</confirm_message>
-        <description>All HV ON</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>B_BONUS_HV:clearAllInhibits:master</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message></confirm_message>
-        <description>Clear All Inhibits</description>
-      </action>
       <action type="OPEN_DISPLAY">
         <path>../../apps/mpodLvApp/mpod-crate.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
-          <HOST>hvbonus2</HOST>
-          <ioc>iocbonus</ioc>
-          <TITLE>BONuS HV Crate</TITLE>
+          <HOST>hvhtcc1</HOST>
+          <ioc>iochtcchv</ioc>
+          <TITLE>HTCC Mpod Crate</TITLE>
         </macros>
         <replace>0</replace>
-        <description>HV Crate Status</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>mpod-novice.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>1</replace>
-        <description>HV Novice</description>
+        <description>Crate Status</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>burt-gui</command>
         <command_directory>$(user.home)</command_directory>
         <wait_time>10</wait_time>
         <description>Save/Restore HV</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV:OFF</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>All Off</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV:ON</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn all HTCC HV on?</confirm_message>
+        <description>All On</description>
       </action>
     </actions>
     <font>

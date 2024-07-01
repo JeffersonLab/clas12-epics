@@ -1,43 +1,173 @@
 #
-# MCC needs a PV for human consumption to check against the maximum
-# beam current limitations in operating procedures documentation.
-# For that, we have these:
+# Hall B Cryotarget:::::::::::::::::::::::::::
 #
-# HLB:TARGET:STAT has been used by MCC in the past
-# HALL_B_TARGET is owned by MCC and what they wanted to start using in 2022
+# Flag locations:
+# 0 Empty
+# 1 Cu-Sn
+# 2 Carbon
 #
-# Meanwhile, Hall B needs something appropriate for RCDB and sometimes
-# (much) shorter than the MCC name above.  That's what this is for:
+# species:
+# 0 H2
+# 1 D2
+# 2 4He
+# 3 3He
 #
-# clas12:target:type
+# production:
+# 0 Not Ready
+# 1 Emptying
+# 2 Empty
+# 3 Filling
+# 4 Full
 #
-# They have a 1:1 mapping below, either via aliasing or linked mbbis to
-# support 2 naming schemes.
+# Chilean RG-E target:::::::::::::::::::::::::
 #
+# CCTVAL_DT_PMD301:CENTERED.ZRST Wire
+# CCTVAL_DT_PMD301:CENTERED.ONST C
+# CCTVAL_DT_PMD301:CENTERED.TWST Al
+# CCTVAL_DT_PMD301:CENTERED.THST Cu
+# CCTVAL_DT_PMD301:CENTERED.FRST Sn
+# CCTVAL_DT_PMD301:CENTERED.FVST Pb
+# CCTVAL_DT_PMD301:CENTERED.SXST Empty
+# CCTVAL_DT_PMD301:CENTERED.SVST Unknown
+#
+#
+record(calc,"$(P)$(R=)CALC:cryo") {
+    field(SCAN, "2 second")
+    field(INPA, "TGT:BTARG:production")
+    field(INPB, "TGT:BTARG:species")
+# Normally, "Not Ready" should propagate with priority:
+    field(CALC, "A=2 ? 0 : ( A=4 ? B+1 : 5)")
+# Here, we instead let "Not Ready" be equivalent to "Empty":
+#    field(CALC, "(A=2||A=0) ? 0 : ( A=4 ? B+1 : 5)")
+    field(FLNK, "$(P)$(R=)MBBI:cryo.PROC")
+}
+record(mbbi,"$(P)$(R=)MBBI:cryo") {
+    field(INP,  "$(P)$(R=)CALC:cryo")
+    field(ZRST, "Empty")
+    field(ONST, "LH2")
+    field(TWST, "LD2")
+    field(THST, "L4He")
+    field(FRST, "L3He")
+    field(FVST, "Not Ready")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(FLNK, "$(P)$(R=)CALC:udf.PROC")
+}
+record(calc,"$(P)$(R=)CALC:udf") {
+    field(INPA, "$(P)$(R=)MBBI:cryo")
+    field(INPB, "$(TGT=CCTVAL_DT_PMD301:CENTERED)")
+    field(CALC, "A=5 || B=7")
+    field(FLNK, "$(P)$(R=)CALC:empty.PROC")
+}
+record(calc,"$(P)$(R=)CALC:empty") {
+    field(INPA, "$(P)$(R=)MBBI:cryo")
+    field(INPB, "$(TGT=CCTVAL_DT_PMD301:CENTERED)")
+    field(CALC, "A=0 && B=6")
+    field(FLNK, "$(P)$(R=)CALC:harp.PROC")
+}
+record(calc,"$(P)$(R=)CALC:harp")
+{
+  field(INPA,"harp_2H01.RBV")
+  field(INPB,"harp_tagger.RBV")
+  field(INPC,"harp_2c21.RBV")
+  field(CALC,"A>0.1 || B>0.1 || C>0.1")
+  field(FLNK, "$(P)$(R=)CALC:moller.PROC")
+}
+record(calc,"$(P)$(R=)CALC:moller")
+{
+  field(INPA,"moller_target_empty")
+  field(CALC,"A#1")
+  field(FLNK, "$(P)$(R=)CALC:priority.PROC")
+}
+record(calc,"$(P)$(R=)CALC:priority") {
+    field(INPA,"$(P)$(R=)CALC:udf")
+    field(INPB,"$(P)$(R=)CALC:harp")
+    field(INPC,"$(P)$(R=)CALC:moller")
+    field(INPD,"$(P)$(R=)CALC:empty")
+    field(CALC,"A?0:(B?1:(C?2:(D?3:4)))")
+    field(FLNK, "$(P)$(R=)MBBI:priority.PROC")
+}
+record(mbbi,"$(P)$(R=)MBBI:priority") {
+    field(INP,  "$(P)$(R=)CALC:priority")
+    field(ZRST, "Not Ready")
+    field(ONST, "Harp Wire")
+    field(TWST, "Moller")
+    field(THST, "Empty")
+    field(FRST, "Dummy")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FLNK, "$(P)$(R=)CALC.PROC")
+}
+record(scalcout,"$(P)$(R=)CALC") {
+    field(INPA, "$(P)$(R=)MBBI:priority")
+    field(INPB, "$(P)$(R=)MBBI:cryo")
+    field(INPC, "$(TGT=CCTVAL_DT_PMD301:CENTERED)")
+    field(INAA, "$(P)$(R=)MBBI:priority")
+    field(INBB, "$(P)$(R=)MBBI:cryo")
+    field(INCC, "$(TGT=CCTVAL_DT_PMD301:CENTERED)")
+    field(CALC, "A<4?AA:(B=0?CC:(C=6?BB:(BB+' + '+CC)))")
+    field(FLNK, "$(P)$(R=)STAT.PROC")
+}
+record(stringin,"$(P)$(R=)STAT") {
+    alias("clas12:target:type")
+    field(INP,  "$(P)$(R=)CALC.SVAL")
+    field(FLNK, "$(P)$(R=)STRINGOUT.PROC")
+}
+# Finally, write to ops's PV:
+record(stringout,"$(P)$(R=)STRINGOUT")
+{
+  field(OMSL,"closed_loop")
+  field(DOL,"$(P)$(R=)STAT")
+  field(OUT,"HALL_B_TARGET PP")
+}
 
-#record(calc,"HLB:TARGET:CALC")
+
+
+
+
+
+# mbbi-based, prior to RG-E::::::::::::::::::::
+
+#record(calcout,"$(P)$(R=)CALC")
 #{
 #  field(PINI,1)
 #  field(INPA,"moller_target_empty CPP")
 #  field(INPB,"harp_2H01.RBV CPP")
-#  field(INPC,"B_BONUS_GAS_MFC104_Gas CPP")
-##field(INPC,"B_SACLAYTGT:STAT CPP")
-#  field(CALC,"A#1?0:(B>0.1?1:(C+2))")
+#  field(INPC,"harp_tagger.RBV CPP")
+#  field(INPD,"harp_2c21.RBV CPP")
+#  field(INPE,"$(P)$(R=)CALC:rgd CPP")
+#  field(CALC,"A#1?9:((B>0.1||C>0.1||D>0.1)?8:E)")
+#  field(OOPT,"Every Time")
+#  field(DOPT,"Use CALC")
+#  field(OUT,"$(P)$(R=)STAT PP")
 #  info(autosaveFields_pass0,"VAL")
-#  field(FLNK,"HLB:TARGET:STAT.PROC")
 #}
 
-record(mbbi,"HLB:TARGET:STAT")
-{
-    alias("clas12:target:type")
-    #alias("hps:target:type")
-    field(PINI,1)
-    field(ZRVL,0)
-    field(ONVL,1)
-    field(TWVL,2)
-    field(THVL,3)
-    field(FRVL,4)
-    field(FVVL,5)
+
+#record(calc,"$(P)$(R=)CALC:rgd") {
+#    field(PINI,1)
+#    field(INPA, "TGT:BTARG:production CPP")
+#    field(INPB, "TGT:BTARG:species CPP")
+#    field(INPC, "TGT:BTARG:Flag_state CPP")
+#    field(CALC, "A=4?(C=0?B+1:10):(A=2?C+5:10)")
+#}
+
+#record(mbbi,"HLB:TARGET:STAT")
+#{
+#    alias("clas12:target:type")
+#    #alias("hps:target:type")
+##
+#####################
+#    field(ZRVL,0)
+#    field(ONVL,1)
+#    field(TWVL,2)
 #    field(THVL,3)
 #    field(FRVL,4)
 #    field(FVVL,5)
@@ -46,78 +176,95 @@ record(mbbi,"HLB:TARGET:STAT")
 #    field(EIVL,8)
 #    field(NIVL,9)
 #    field(TEVL,10)
-#
-####################
-# RGC:
-     field(ZRST, "Empty")
-     field(ONST, "NH3")
-     field(TWST, "ND3")
-     field(THST, "CH2")
-     field(FRST, "CD2")
-     field(FVST, "C")
-#
-####################
-# OLD:
-#  field(ZRST,"Moller")
-#  field(ONST,"Harp 2H01")
-#
-####################
-# RG-M Mess:
-#    field(VAL,"9")
-#    field(PINI,"YES")
-#    field(ZRST,"Liquid Hydrogen Target")
-#    field(ONST,"Liquid Deuterium Target")
-#    field(TWST,"Liquid 4He target")
-#    field(THST,"Liquid Argon")
-#    field(FRST,"Carbon target 2 mm (4x)")
-#    field(FVST,"Carbon target 2 mm")
-#    field(SXST,"300 um Sn")
-#    field(SVST,"40Ca")
-#    field(EIST,"48Ca")
-#    field(NIST,"Empty cell")
-#
-####################
-# BONuS Target:
-#  field(TWST,"H2")
-#  field(THST,"D2")
-#  field(FRST,"4He")
-#  field(FVST,"N2")
-#
-####################
-# Saclay Target:
-#  field(TWST,"Empty")
-#  field(THST,"Partial LH2")
-#  field(FRST,"Partial LD2")
-#  field(FVST,"Partial L3H3")
-#  field(SXST,"Partial L4He")
-#  field(SVST,"LH2")
-#  field(EIST,"LD2")
-#  field(NIST,"L3He")
-#  field(TEST,"L4He")
-#
-}
-
-#record(mbbi,"clas12:target:type") {
-#    field(SCAN,"1 second")
-#    field(INP,"HLB:TARGET:STAT")
-#    field(ZRST,"LH2")
-#    field(ONST,"LD2")
-#    field(TWST,"L4He")
-#    field(THST,"LAr")
-#    field(FRST,"C (x4)")
-#    field(FVST,"C")
-#    field(SXST,"Sn (x4)")
-#    field(SVST,"40Ca")
-#    field(EIST,"48Ca")
-#    field(NIST,"Empty")
-#    field(FLNK,"HLB:TARGET:STRINGOUT PP")
+#    field(TESV,"MAJOR")
+#    field(ZRST, "Empty")
+#    field(ONST, "LH2")
+#    field(ONST, "LD2")
+#    field(ONST, "LD2 + 12C")
+#    field(TWST, "LD2 + 27Al")
+#    field(THST, "LD2 + 63Cu")
+#    field(FRST, "LD2 + 120Sn")
+#    field(FVST, "LD2 + 208Pb")
+#    field(SXST, "LH2 + 208Pb")
+#    field(ONST, "12C")
+#    field(TWST, "27Al")
+#    field(THST, "63Cu")
+#    field(FRST, "120Sn")
+#    field(FVST, "208Pb")
+#    field(EIST, "Harp Wire")
+#    field(NIST, "Moller")
+#    field(TEST, "Not Ready")
+#####################
+## RGD:
+##    field(ZRVL,0)
+##    field(ONVL,1)
+##    field(TWVL,2)
+##    field(THVL,3)
+##    field(FRVL,4)
+##    field(FVVL,5)
+##    field(SXVL,6)
+##    field(SVVL,7)
+##    field(EIVL,8)
+##    field(NIVL,9)
+##    field(TEVL,10)
+##    field(TESV,"MAJOR")
+##    field(ZRST, "Empty")
+##    field(ONST, "LH2")
+##    field(TWST, "LD2")
+##    field(THST, "L4He")
+##    field(FRST, "L3He")
+##    field(FVST, "Empty")
+##    field(SXST, "CuSn")
+##    field(SVST, "CxC")
+##    field(EIST, "Harp Wire")
+##    field(NIST, "Moller")
+##    field(TEST, "Not Ready")
+#####################
+## RGC:
+##     field(ZRST, "Empty")
+##     field(ONST, "NH3")
+##     field(TWST, "ND3")
+##     field(THST, "CH2")
+##     field(FRST, "CD2")
+##     field(FVST, "C")
+##
+#####################
+## OLD:
+##  field(ZRST,"Moller")
+##  field(ONST,"Harp 2H01")
+##
+#####################
+## RG-M Mess:
+##    field(VAL,"9")
+##    field(PINI,"YES")
+##    field(ZRST,"Liquid Hydrogen Target")
+##    field(ONST,"Liquid Deuterium Target")
+##    field(TWST,"Liquid 4He target")
+##    field(THST,"Liquid Argon")
+##    field(FRST,"Carbon target 2 mm (4x)")
+##    field(FVST,"Carbon target 2 mm")
+##    field(SXST,"300 um Sn")
+##    field(SVST,"40Ca")
+##    field(EIST,"48Ca")
+##    field(NIST,"Empty cell")
+##
+#####################
+## BONuS Target:
+##  field(TWST,"H2")
+##  field(THST,"D2")
+##  field(FRST,"4He")
+##  field(FVST,"N2")
+##
+#####################
+## Saclay Target:
+##  field(TWST,"Empty")
+##  field(THST,"Partial LH2")
+##  field(FRST,"Partial LD2")
+##  field(FVST,"Partial L3H3")
+##  field(SXST,"Partial L4He")
+##  field(SVST,"LH2")
+##  field(EIST,"LD2")
+##  field(NIST,"L3He")
+##  field(TEST,"L4He")
+##
 #}
-
-record(stringout,"HLB:TARGET:STRINGOUT")
-{
-  field(SCAN,"1 second")
-  field(OMSL,"closed_loop")
-  field(DOL,"HLB:TARGET:STAT")
-  field(OUT,"HALL_B_TARGET PP")
-}
-

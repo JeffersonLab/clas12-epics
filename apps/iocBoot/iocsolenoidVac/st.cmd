@@ -16,6 +16,7 @@ drvEtherIP_define_PLC("PLC_SOL", "129.57.96.30", 0)
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 dbLoadTemplate("db/solenoid_vacuum.substitutions")
+dbLoadRecords("db/solenoid_lcw.db","PLCID=PLC_SOL")
 
 cd ${TOP}/iocBoot/${IOC}
 

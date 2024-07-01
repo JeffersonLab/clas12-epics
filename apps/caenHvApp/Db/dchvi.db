@@ -1,0 +1,37 @@
+#
+# This leverages the "overwrite" feature of EPICS database
+# files, where successive declarations of a PV of the same
+# name override previous ones.  Here this file gets loaded
+# once per superlayer, and the per-region sums get overriden
+# multiple times, just to simplify the database file(s).
+#
+record(compress,"B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L):imon:max") {
+    field(ALG, "N to 1 High Value")
+    field(INP,"B_DET_DC_HV_SEC$(S)_R$(R)_SL$(L):imonwf CPP")
+    field(NSAM, "1")
+    field(N, "18")
+}
+record(calc,"B_DET_DC_HV_SEC$(S)_R1:imon:max") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R1_SL1:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R1_SL2:imon:max")
+    field(INPC,"IPM2C21A")
+    field(CALC,"C>0.1 ? 0 : MAX(A,B)")
+    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
+}
+record(calc,"B_DET_DC_HV_SEC$(S)_R2:imon:max") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R2_SL3:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R2_SL4:imon:max")
+    field(INPC,"IPM2C21A")
+    field(CALC,"C>0.1 ? 0 : MAX(A,B)")
+    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
+}
+record(calc,"B_DET_DC_HV_SEC$(S)_R3:imon:max") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_DC_HV_SEC$(S)_R3_SL5:imon:max")
+    field(INPB,"B_DET_DC_HV_SEC$(S)_R3_SL6:imon:max")
+    field(INPC,"IPM2C21A")
+    field(CALC,"C>0.1 ? 0 : MAX(A,B)")
+    info(autosaveFields_pass0, "HHSV HSV HIHI HIGH")
+}

@@ -1,5 +1,7 @@
 cd "$IOC_root_vmesvt"
 
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 < cdCommands
 < ../network-NAB
 #< ../network-86
@@ -10,7 +12,7 @@ ld < svt.munch
 cd top
 
 putenv("EPICS_CA_AUTO_ADDR_LIST = NO")
-putenv("EPICS_CA_ADDR_LIST = 129.57.163.255")
+putenv("EPICS_CA_ADDR_LIST = 129.57.160.255")
 
 ## Register all support components
 dbLoadDatabase("dbd/svt.dbd")
@@ -36,8 +38,8 @@ cd startup
 ## autosave setup
 < save_restore.cmd
 
-asSetFilename("./svt.acf")
-asSetSubstitutions("P=B_,R=SVT_")
+#asSetFilename("./svt.acf")
+#asSetSubstitutions("P=B_,R=SVT_")
 
 #iocInit "../resource.def"
 iocInit

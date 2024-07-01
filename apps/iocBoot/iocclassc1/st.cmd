@@ -4,6 +4,8 @@
 ##
 cd "$IOC_root_classc1"
 
+putenv "EPICS_TS_NTP_INET=129.57.90.1"
+
 ############################################################################
 < cdCommands
 ############################################################################
@@ -97,6 +99,7 @@ iocInit "../resource.def"
 dbpf "scaler_c.CNT","1"
 dbpf "scaler_c_mode.VAL","1"
 dbpf "display_c_mode.VAL","Hertz"
+dbpf "display_d_mode.VAL","Hertz"
 
 ##
 ## Start any sequence programs

@@ -14,8 +14,8 @@ drvAsynIPPortConfigure("SER2", "hallb-moxa6:4009")
 #asynSetTraceMask("SER1",-1,0x09)
 #asynSetTraceIOMask("SER1",-1,0x03)
 
-#asynSetTraceMask("SER2",-1,0x9)
-#asynSetTraceIOMask("SER2",-1,0x3)
+asynSetTraceMask("SER2",-1,0x9)
+asynSetTraceIOMask("SER2",-1,0x3)
 
 asynOctetSetOutputEos("SER2",0,"\r")
 asynOctetSetInputEos("SER2",0,"\n\r")
@@ -40,4 +40,6 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
+
+seq ramp, "P=DYNAB:"
 

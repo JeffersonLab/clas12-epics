@@ -1,0 +1,8 @@
+MAILTO=baltzell@jlab.org
+#
+PATH=/bin:/usr/bin:/site/bin
+10,40  * * * * flock -n /home/clascron/.torus_rsync.lock jmirror -noconsole -jvm:-DJMirror.minFileModificationAgeSeconds=1800 /logs/torus /logs/torus /mss/hallb/torus/data-2023 || echo jmirror torus fail
+#
+PATH=/bin:/usr/bin:/site/bin
+20,50 * * * * flock -n /home/clascron/.solenoid_rsync.lock jmirror -noconsole -jvm:-DJMirror.minFileModificationAgeSeconds=1800 /logs/solenoid /logs/solenoid /mss/hallb/solenoid/data-2023 || echo jmirror solenoid fail
+#

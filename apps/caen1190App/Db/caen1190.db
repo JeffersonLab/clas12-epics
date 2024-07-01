@@ -8,11 +8,13 @@ record(bi,"$(P):enable:0") {
 	field(VAL,1)
 	field(ZNAM,"Disabled")
 	field(ONAM,"Enabled")
+    field(DESC,"Tunnel PMT")
 }
 record(bi,"$(P):enable:1") {
 	field(VAL,1)
 	field(ZNAM,"Disabled")
 	field(ONAM,"Enabled")
+    field(DESC,"SLM")
 }
 record(bi,"$(P):enable:2") {
 	field(VAL,0)
@@ -20,7 +22,7 @@ record(bi,"$(P):enable:2") {
 	field(ONAM,"Enabled")
 }
 record(bi,"$(P):enable:3") {
-	field(VAL,1)
+	field(VAL,0)
 	field(ZNAM,"Disabled")
 	field(ONAM,"Enabled")
 }
@@ -48,7 +50,7 @@ record(ai,"$(P):errors") {
 }
 
 record(ao,"$(P):dwell") {
-	field(VAL,60)
+	field(VAL,10)
     field(EGU,"s")
     field(DRVL,0.1)
     field(DRVH,600)
@@ -63,7 +65,7 @@ record(ao,"$(P):prescale") {
     field(VAL,"1")
 }
 record(ao,"$(P):ticsperbin") {
-    field(VAL,8)
+    field(VAL,1)
     field(PINI,1)
     field(PREC,0)
     field(DRVL,1)
@@ -354,5 +356,9 @@ record(ai,"$(P):rms:rebin") {
     field(EGU,"#bins")
 }
 record(ai,"$(P):rms") {
+}
+record(ai,"$(P):rf:freq") {
+    field(VAL,"500000")
+    field(EGU,"kHz")
 }
 

@@ -43,7 +43,7 @@
     <wuid>1e502e32:16264560e12:-7668</wuid>
     <transparent>true</transparent>
     <auto_size>false</auto_size>
-    <text>ROC Busies (%)</text>
+    <text>ROC Busies (%)            </text>
     <scripts />
     <height>37</height>
     <border_width>1</border_width>
@@ -55,7 +55,7 @@
     <visible>true</visible>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
-      <color name="Read_Foreground" red="255" green="255" blue="255" />
+      <color name="MEDM_COLOR_7" red="145" green="145" blue="145" />
     </border_color>
     <widget_type>Label</widget_type>
     <wrap_words>true</wrap_words>
@@ -67,7 +67,7 @@
     <name>Label</name>
     <y>6</y>
     <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color name="MEDM_COLOR_3" red="200" green="200" blue="200" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <show_scrollbar>false</show_scrollbar>
@@ -232,28 +232,36 @@
     <width>493</width>
     <x>15</x>
     <name>Label_1</name>
-    <y>690</y>
+    <y>634</y>
     <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color name="MEDM_COLOR_3" red="200" green="200" blue="200" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <show_scrollbar>false</show_scrollbar>
     <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      <opifont.name fontName="Default" height="9" style="2">Comment</opifont.name>
     </font>
   </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
     <border_style>0</border_style>
-    <tooltip></tooltip>
-    <horizontal_alignment>0</horizontal_alignment>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>true</alarm_pulsing>
+    <precision>1</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
     <rules />
     <enabled>true</enabled>
-    <wuid>45d203a3:182506b6156:-7f99</wuid>
-    <transparent>true</transparent>
+    <wuid>e0c9d36:18bd37a0860:-6f05</wuid>
+    <transparent>false</transparent>
+    <pv_value />
     <auto_size>false</auto_size>
-    <text>* Note, if rich4 requires rebooting, do not do it manually.  Instead, use the automated recovery procedure from the RICH menu</text>
+    <text>##.###</text>
+    <rotation_angle>0.0</rotation_angle>
     <scripts />
-    <height>31</height>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <show_units>true</show_units>
+    <height>20</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -261,26 +269,29 @@
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <visible>true</visible>
+    <pv_name>iocamq2:TOD</pv_name>
     <vertical_alignment>1</vertical_alignment>
     <border_color>
       <color red="0" green="128" blue="255" />
     </border_color>
-    <widget_type>Label</widget_type>
-    <wrap_words>true</wrap_words>
+    <precision_from_pv>false</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>true</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
     <background_color>
-      <color red="255" green="255" blue="255" />
+      <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>493</width>
-    <x>15</x>
-    <name>Label_2</name>
-    <y>654</y>
+    <width>148</width>
+    <x>360</x>
+    <name>Text Update_3</name>
+    <y>15</y>
     <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color name="MEDM_COLOR_3" red="200" green="200" blue="200" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
-    <show_scrollbar>false</show_scrollbar>
     <font>
-      <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

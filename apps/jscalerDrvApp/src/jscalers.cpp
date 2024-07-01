@@ -436,7 +436,7 @@ int SSPReadScalers(VmeChassis *ptr_c, map<int, JlabBoard *>::iterator &it){
                 ssp->SSPData[thisFiber].clear();
                 for (int jj=ii+ssp->DATAHEADEROFFSET; jj<ii+thisLen; jj++) {
                     ssp->SSPData[thisFiber].push_back((float)(*buf)[jj]);
-//                    printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,(float)(*buf)[jj]);
+                    //printf("%d %d %d %d %f\n",len,thisLen,thisFiber,jj,(float)(*buf)[jj]);
                 }
             }
         }

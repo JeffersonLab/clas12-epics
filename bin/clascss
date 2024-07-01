@@ -1,39 +1,51 @@
-#!/bin/sh
-
+#!/bin/bash
+#
+# N. Baltzell
+#
 # run css with an on-the-fly generated workspace
 #   - to avoid duplicate conflicting workspaces
 #   - to guarantee standard startup user interface
 #   - to avoid users modifying the configuration
+#
 
+# we don't want users running java ever on these machines:
+disallowedHosts=( clondb1 clondb2 clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 clonioc5 clonioc6 clonioc7 clonioc8 clonioc9 clondaq1 clondaq2 clondaq3 clondaq4 clondaq5 clondaq6 clondaq7)
 host=`hostname`
-
-disallowedHosts=( clondb1 clondb2 clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 clondaq1 clondaq2 clondaq3 clondaq4 clondaq5 clondaq6 clondaq7)
 for xx in "${disallowedHosts[@]}"
 do
   if [ "$host" == "$xx" ] || [ "$host" == "$xx.jlab.org" ]
   then
-    echo Not Allowed to run cs-studio on $xx.
+    echo Not Allowed to run clascss on $xx.
     exit
   fi
 done
 
-#export JAVA_HOME=/usr/lib/jvm/java-1.8.0-oracle
+# rebuilding CS-Studio for openjdk 11+ seems to be a no-go. would be better
+# to convert to Phoebus.  Meanwhile, we're tied to Oracle's JVM 8:
 export JAVA_HOME=/usr/clas12/third-party-libs/jdk/1.8.0_31
 export PATH=$JAVA_HOME/bin:$PATH
-
-# path hold generated workspaces
-tmp_path=/tmp/CSS-Workspaces
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 share=$DIR/../css_share
 
+# something in the workspace generated on RHEL7 doesn't play nice on RHEL8,
+# so instead we generated a new workspace on RHEL8 and use that:
+grep -i ootpa /etc/redhat-release >& /dev/null
+if [ $? -eq 0 ]
+then
+    workspace=$share/common/workspace-RHEL8
+else
+    workspace=$share/common/workspace
+fi
+
 plugin_profile=$share/common/prefs/plugin_customization.ini
 #plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
-workspace=$share/common/workspace
-#-RHEL8
 
-# generate a temporary css workspace:
-#   Note: needs rw from all groups onliners, clas, etc.
+# Generate a new workspaces by copying the version-controlled one:
+# FIXME:  it would be nice to move this out of /tmp to avoid autodeletion
+# on a running instance, but we'd still want some automatic cleanup
+# Note: needs rw from all groups onliners, clas, etc.
+tmp_path=/tmp/CSS-Workspaces
 if [[ ! -e $tmp_path ]]; then
     mkdir -p $tmp_path -m 777
 fi
@@ -42,22 +54,51 @@ cp -rf $workspace/*    $wsp >& /dev/null
 cp -rf $workspace/.*   $wsp >& /dev/null
 cp -rf $plugin_profile $wsp
 
-# we want to run *everything* from the wsp workspace:
-#echo css -data $wsp \
+# At some point I must have thought we needed a delay, probably for the
+# copying of the generated workspace before reading it.  That doesn't
+# seem to be the case in 2023, maybe due to fileserver upgrades:
+#sleep 1
+
+#css -data $wsp \
 #    -pluginCustomization $wsp/plugin_customization.ini \
 #    -share_link $share=/CLAS12_Share \
 #    -nosplash
 
+# Instead of using the "css" wrapper above, I pulled out the raw java
+# command-line it actually executes, just to be able to set the heap
+# size at runtimie (which occurs in two places, probably one is redundant):
 
-####################################################################
-# pulled out the whole command that "css" actually executes,
-# to be able to set heap size without recompiling css
-
-#m=-Xmx1024m
-#m=-Xmx2048m
-m=-Xmx3072m
-
-sleep 1
-
-java -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar -os linux -ws gtk -arch x86_64 -launcher /usr/clas12/css/4.1.1/linux-x86_64/clas12-css/css -name Css --launcher.library /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.200.v20150204-1316/eclipse_1607.so -startup /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar --launcher.overrideVmargs -exitdata f0000 -data $wsp -pluginCustomization $wsp/plugin_customization.ini -share_link $share=/CLAS12_Share -vm /usr/lib/jvm/java-1.8.0-oracle/bin/java -vmargs -Dosgi.requiredJavaVersion=1.8 -Dorg.osgi.framework.bundle.parent=ext -Dosgi.framework.extensions=org.eclipse.fx.osgi $m -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.defaultlog=fatal -Dpython.cachedir.skip=true -Declipse.p2.unsignedPolicy=allow -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
+java \
+    -Xms3072m \
+    -Dosgi.requiredJavaVersion=1.8 \
+    -Dorg.osgi.framework.bundle.parent=ext \
+    -Dosgi.framework.extensions=org.eclipse.fx.osgi \
+    -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog \
+    -Dorg.apache.commons.logging.simplelog.defaultlog=fatal \
+    -Dpython.cachedir.skip=true \
+    -Declipse.p2.unsignedPolicy=allow \
+    -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar \
+    -os linux \
+    -ws gtk \
+    -arch x86_64 \
+    -launcher /usr/clas12/css/4.1.1/linux-x86_64/clas12-css/css \
+    -name Css \
+    --launcher.library /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.200.v20150204-1316/eclipse_1607.so \
+    -startup /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar \
+    --launcher.overrideVmargs \
+    -exitdata f0000 \
+    -data $wsp \
+    -pluginCustomization $wsp/plugin_customization.ini \
+    -share_link $share=/CLAS12_Share \
+    -vm /usr/lib/jvm/java-1.8.0-oracle/bin/java \
+    -vmargs \
+    -Dosgi.requiredJavaVersion=1.8 \
+    -Dorg.osgi.framework.bundle.parent=ext \
+    -Dosgi.framework.extensions=org.eclipse.fx.osgi \
+    -Xms3072m \
+    -Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog \
+    -Dorg.apache.commons.logging.simplelog.defaultlog=fatal \
+    -Dpython.cachedir.skip=true \
+    -Declipse.p2.unsignedPolicy=allow \
+    -jar /usr/clas12/css/4.1.1/linux-x86_64/clas12-css//plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar
 

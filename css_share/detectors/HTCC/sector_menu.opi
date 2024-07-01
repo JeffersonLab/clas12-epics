@@ -71,26 +71,18 @@
       <color name="Header_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/HTCC/htcc_hv_channels.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Sector #$(SECTOR) - Controls</description>
-      </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>/CLAS12_Share/detectors/HTCC/scripts/htcc_hv_off.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV_SEC$(S):OFF</pv_name>
+        <value></value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
         <description>Sector #$(SECTOR) - All OFF</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>/CLAS12_Share/detectors/HTCC/scripts/htcc_hv_on.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_HTCC_HV_SEC$(S):ON</pv_name>
+        <value></value>
+        <timeout>10</timeout>
+        <confirm_message>Really turn HTCC Sector $(Sector) HV on?</confirm_message>
         <description>Sector #$(SECTOR) - All ON</description>
       </action>
     </actions>

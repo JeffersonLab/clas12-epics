@@ -21,6 +21,21 @@ dbLoadRecords("${AUTOSAVE}/asApp/Db/save_restoreStatus.db", "P=${IOC}:")
 
 dbLoadTemplate("db/htcc-iseg.substitutions")
 
+dbLoadTemplate("db/htccOnOff.substitutions")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=1")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=2")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=3")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=4")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=5")
+dbLoadRecords("db/iseg_HTCC_isOnOffComm.db","SEC=6")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC1")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC2")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC3")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC4")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC5")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV_SEC6")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_HTCC_HV")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

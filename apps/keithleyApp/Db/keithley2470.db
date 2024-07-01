@@ -1,0 +1,32 @@
+
+record(bo,"$(P)$(R=)beep") {
+    field(DTYP,"stream")
+    field(OUT,"@keithley2470.proto beep $(PORT)")
+}
+
+record(ai,"$(P)$(R=)imon") {
+    field(SCAN,".1 second")
+    field(DTYP,"stream")
+    field(INP,"@keithley2470.proto getFloat(:MEAS:CURR) $(PORT)")
+    field(EGU,"A")
+    field(FLNK,"$(P)$(R=)imon:wf.PROC")
+}
+record(ai,"$(P)$(R=)vmon") {
+    field(SCAN,"10 second")
+    field(DTYP,"stream")
+    field(INP,"@keithley2470.proto getFloat(:MEAS:VOLT) $(PORT)")
+    field(EGU,"V")
+    field(FLNK,"$(P)$(R=)vmon:wf.PROC")
+}
+record(compress,"$(P)$(R=)imon:wf") {
+    field(ALG,"Circular Buffer")
+    field(INP,"$(P)$(R=)imon PP")
+    field(NSAM,"36000")
+}
+record(compress,"$(P)$(R=)vmon:wf") {
+    field(ALG,"Circular Buffer")
+    field(INP,"$(P)$(R=)vmon PP")
+    field(NSAM,"36000")
+}
+
+

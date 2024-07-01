@@ -81,6 +81,7 @@ record(ai,"$(HV):outputMeasTermVR") {
 	field(PREC,"6")
 	field(EGU,"V")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
+    alias("$(HV):vmon")
 }
 record(ai,"$(HV):outputVoltageFallRateR") {
 	field(DESC,"output voltage decreasing slew rate")
@@ -96,6 +97,7 @@ record(ai,"$(HV):outputVoltageR") {
 	field(INP,"@$(HVHOST) public %{W}outputVoltage.$(HVCH) Float: 100")
 	field(PREC,"2")
 	field(EGU,"V")
+    alias("$(HV):vsetrbk")
 }
 record(ai,"$(HV):outputVoltageRiseRateR") {
 	field(DESC,"output voltage increasing slew rate")
@@ -133,6 +135,7 @@ record(ao,"$(HV):outputCurrent") {
 	field(PREC,"5")
 	field(EGU,"uA")
 	field(HOPR,"5")
+    alias("$(HV):iset")
 }
 record(ao,"$(HV):outputCurrentC") {
 	field(DTYP,"Snmp")
@@ -166,6 +169,7 @@ record(ao,"$(HV):outputVoltage") {
 	field(PREC,"2")
 	field(EGU,"V")
 	field(HOPR,"100")
+    alias("$(HV):vset")
 }
 record(ao,"$(HV):outputVoltageFallRate") {
 	field(DESC,"output voltage decreasing slew rate")
@@ -174,6 +178,7 @@ record(ao,"$(HV):outputVoltageFallRate") {
 	field(PREC,"6")
 	field(EGU,"V/s")
 	field(HOPR,"8")
+    alias("$(HV):rdn")
 }
 record(ao,"$(HV):outputVoltageRiseRate") {
 	field(DESC,"output voltage increasing slew rate")
@@ -182,6 +187,7 @@ record(ao,"$(HV):outputVoltageRiseRate") {
 	field(PREC,"6")
 	field(EGU,"V/s")
 	field(HOPR,"8")
+    alias("$(HV):rup")
 }
 record(bi,"$(HV):outAdjusting") {
 	field(DESC,"Fine adjustment is working")
@@ -381,6 +387,7 @@ record(calc,"$(HV):outputCurrentR") {
 	field(INPA,"$(HV):outputCurrentRC NPP NMS")
 	field(EGU,"uA")
 	field(PREC,"5")
+    alias("$(HV):isetrbk")
 }
 record(calc,"$(HV):outputCurrent_calc") {
 	field(FLNK,"$(HV):outputCurrentC.PROC")
@@ -403,6 +410,7 @@ record(calc,"$(HV):outputMeasCurrent") {
 #	field(HSV,"MINOR")
 #	field(LSV,"MINOR")
     info(autosaveFields_pass1,"HOPR HIHI HIGH LOLO LOW HHSV HSV LLSV LSV")
+    alias("$(HV):imon")
 }
 record(calc,"$(HV):outputMeasCurrentAlm") {
 	field(DESC,"Interlock alarm current")
@@ -524,6 +532,7 @@ record(longout,"$(HV):outputTripTimeMaxCurrent") {
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HVHOST) guru %{W}outputTripTimeMaxCurrent.$(HVCH) INTEGER: 8 i")
 	field(EGU,"ms")
+    alias("$(HV):trip")
 }
 record(longout,"$(HV):outputUserConfig") {
 	field(DESC,"output channel behavior")
@@ -570,10 +579,11 @@ record(mbbo,"$(HV):outSwitch") {
 	field(TWST,"EMER_RESET")
 	field(THST,"EMER_OFF")
 	field(TEST,"CLEAR")
+    alias("$(HV):pwonoff")
 }
-record(stringin,"$(HV)") {
-	field(DTYP,"Soft Channel")
-}
+#record(stringin,"$(HV)") {
+#	field(DTYP,"Soft Channel")
+#}
 record(stringin,"$(HV):outputName") {
 #field(SCAN,"10 second")
     field(PINI,"1")
@@ -715,17 +725,25 @@ record(mbbi,"$(HV):badstat:mbbi") {
 
 
 # select most significant good status bit:
-record(calcout,"$(HV):stat:calc") {
+record(calc,"$(HV):stat:calc") {
     field(SCAN,"1 second")
     field(INPA,"$(HV):outOn")
     field(INPB,"$(HV):outRampUp")
     field(INPC,"$(HV):outRampDown")
     field(INPD,"$(HV):badstat:mbbi")
     field(CALC,"D>0?D+3:(B>0?2:(C>0?3:(A>0?1:0)))")
+    field(FLNK,"$(HV):stat:calc2.PROC")
+}
+record(calcout,"$(HV):stat:calc2") {
+    field(SCAN,"Passive")
+    field(INPA,"$(HV):stat:calc")
+    field(INPB,"$(HV):outputMeasCurrentC.SEVR")
+    field(CALC,"B>0?11:A")
     field(DOPT,"Use CALC")
     field(OOPT,"Every Time")
     field(OUT,"$(HV):stat PP")
 }
+
 record(mbbi,"$(HV):stat") {
     field(SCAN,"Passive")
     field(ZRVL,"0")
@@ -750,6 +768,7 @@ record(mbbi,"$(HV):stat") {
     field(EISV,"MAJOR")
     field(NISV,"MAJOR")
     field(TESV,"MAJOR")
+    field(ELSV,"MAJOR")
     field(ZRST,"Off")
     field(ONST,"On")
     field(TWST,"RUp")
@@ -761,5 +780,7 @@ record(mbbi,"$(HV):stat") {
     field(EIST,"EmergOff")
     field(NIST,"MaxPower")
     field(TEST,"MaxTermV")
+    field(ELST,"Comms")
+    alias("$(HV)")
 }
 

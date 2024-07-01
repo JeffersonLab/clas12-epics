@@ -1,0 +1,49 @@
+
+# Just to convert a $CLOCK in seconds to HH:MM:SS
+
+record(calc,"$(P)$(R=)hours") {
+    field(INPA,"$(CLOCK) CPP")
+    field(CALC,"FLOOR(A/60/60)")
+    field(FLNK,"$(P)$(R=)minutes.PROC")
+}
+record(calc,"$(P)$(R=)minutes") {
+    field(INPA,"$(P)$(R=)clock")
+    field(INPB,"$(P)$(R=)hours")
+    field(CALC,"FLOOR(A/60)-60*B")
+    field(FLNK,"$(P)$(R=)seconds.PROC")
+}
+record(calc,"$(P)$(R=)seconds") {
+    field(INPA,"$(P)$(R=)clock")
+    field(INPB,"$(P)$(R=)hours")
+    field(INPC,"$(P)$(R=)minutes")
+    field(CALC,"A-B*60*60-C*60")
+    field(FLNK,"$(P)$(R=)hours:s.PROC")
+}
+record(scalcout,"$(P)$(R=)hours:s") {
+    field(INPA,"$(P)$(R=)hours")
+    field(CALC,"PRINTF('%.2d',A)")
+    field(FLNK,"$(P)$(R=)minutes:s.PROC")
+}
+record(scalcout,"$(P)$(R=)minutes:s") {
+    field(INPA,"$(P)$(R=)minutes")
+    field(CALC,"PRINTF('%.2d',A)")
+    field(FLNK,"$(P)$(R=)seconds:s.PROC")
+}
+record(scalcout,"$(P)$(R=)seconds:s") {
+    field(INPA,"$(P)$(R=)seconds")
+    field(CALC,"PRINTF('%.2d',A)")
+    field(FLNK,"$(P)$(R=)humanclock:s.PROC")
+}
+record(scalcout,"$(P)$(R=)humanclock:s") {
+    field(INAA,"$(P)$(R=)hours:s.SVAL")
+    field(INBB,"$(P)$(R=)minutes:s.SVAL")
+    field(INCC,"$(P)$(R=)seconds:s.SVAL")
+    field(CALC,"AA+':'+BB+':'+CC")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
+    field(OUT,"$(P)$(R=)humanclock PP")
+}
+
+record(stringin,"$(P)$(R=)humanclock") {
+}
+

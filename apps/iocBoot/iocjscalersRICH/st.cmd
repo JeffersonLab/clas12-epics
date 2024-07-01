@@ -51,6 +51,10 @@ dbLoadRecords("db/richIntlk.template","P=B_DET_RICH2_INTLK,R=:temp:fpga:,TESTVAL
 
 dbLoadRecords("db/jscalers_RICH_ColorScale.db")
 
+dbLoadRecords("db/rich-recovery.db")
+dbLoadRecords("db/timer.db","P=B_RICH,R=:recovery")
+dbLoadRecords("db/clock-human.db","P=B_RICH,R=:recovery:,CLOCK=B_RICH:recovery:clock")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -69,8 +73,14 @@ seq waveform, "P=B_DET_RICH2_SCALERS_,R=PMTS:"
 ##< rich-setDesc.cmd
 
 # disable one LV channel:
-#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","134")
-#dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","134")
-#dbpf("B_DET_RICH_SCALERS:alarm.LSV","NO_ALARM")
+dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","137")
+dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","137")
+dbpf("B_DET_RICH2_SCALERS:alarm.LSV","NO_ALARM")
+dbpf("B_HW_SVT3:scalers:nFibers.LOLO","137")
+
+dbpf("B_RICH:recovery:clock.HIGH","86400")
+dbpf("B_RICH:recovery:clock.HSV","NO_ALARM")
+dbpf("B_RICH:recovery:clock.DESC","Seconds since last full recovery")
+dbpf("B_RICH:recovery:clock:go.PROC","1")
 
 dbl > pv.list

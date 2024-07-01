@@ -1,0 +1,35 @@
+#
+# FIXME: merge these into mcc_fsd.db
+# currently separate to avoid rebooting iocmcc
+#
+
+record(calc, "B_FSD_UPSTREAM:alarm")
+{
+    field(SCAN,"1 second")
+    field(INPA,"B_FSD_UPSTREAM.STAT")
+    field(INPB,"HLB:bta_bm_type")
+    field(CALC,"B=0 ? A : 0")
+    field(HIGH,"1")
+    field(HSV, "MAJOR")
+    info(autosaveFields_pass0,"HIGH HSV")
+}
+record(calc, "B_FSD_MIDSTREAM:alarm")
+{
+    field(SCAN,"1 second")
+    field(INPA,"B_FSD_MIDSTREAM.STAT")
+    field(INPB,"HLB:bta_bm_type")
+    field(CALC,"B=0 ? A : 0")
+    field(HIGH,"1")
+    field(HSV, "MAJOR")
+    info(autosaveFields_pass0,"HIGH HSV")
+}
+record(calc, "B_FSD_DOWNSTREAM:alarm")
+{
+    field(SCAN,"1 second")
+    field(INPA,"B_FSD_DOWNSTREAM.STAT")
+    field(INPB,"HLB:bta_bm_type")
+    field(CALC,"B=0 ? A : 0")
+    field(HIGH,"1")
+    field(HSV, "MAJOR")
+    info(autosaveFields_pass0,"HIGH HSV")
+}

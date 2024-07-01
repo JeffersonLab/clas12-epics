@@ -148,6 +148,22 @@ static long read_ai(struct aiRecord *pai)
     }
     else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 
   }
+  // raw counts:
+  else if (command==FADCCNTRAW ||
+           command==GTDCCNTRAW || command==GTRGCNTRAW ||
+           command==TDCCNTRAW  || command==TRGCNTRAW) {
+    ret=IocGetWaveformLength(chassis, slot, channel, &len);
+    if (ret==0) {
+        if (len > (command & 0xF)-3) {
+            values = (double *) malloc(sizeof(double)*len);
+            IocReadWaveformRaw(chassis, slot, channel, len, values);
+            pai->rval = values[(command & 0xF)-3];
+            free(values);
+        }
+        else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM);
+    }
+    else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM);
+  }
   // SSP # fibers:
   else if (command==SSPNSFIB || command==SSPNDFIB) {
       values = (double*) malloc(sizeof(double)*2);
@@ -166,12 +182,20 @@ static long read_ai(struct aiRecord *pai)
            command==SSPVOLT3 || 
            command==SSPVOLT4 || 
            command==SSPVOLT5 || 
-           command==SSPVOLT6) {
+           command==SSPVOLT6 ||
+           command==SSPUPTIME ||
+           command==SSPSEUCNT ||
+           command==SSPSTAT) {
       ret=IocGetWaveformLengthSSPData(chassis, slot, channel, &len);
-      if (len > (command & 0xF) - 5) {
+      //printf("read_ai:  aGOT:  %u %u/%u/%u/%x\n",len,chassis,slot,channel,command);
+      if (len > (command & 0xF) - 5 || (command==0x40 && len>=12)) {
           values = (double*) malloc(sizeof(double)*len);
           IocReadWaveformSSPData(chassis,slot,channel,len,values);
-          pai->rval = values[(command & 0xF) - 5];
+          if ( command == SSPSTAT )
+              pai->rval = values[11];
+          else
+              pai->rval = values[(command & 0xF) - 5];
+          //printf("%x %d %d %d\n",command,command&0xf,(command&0xf)-5,pai->rval);
           free(values);
       }
       else recGblSetSevr(pai,READ_ALARM,INVALID_ALARM); 

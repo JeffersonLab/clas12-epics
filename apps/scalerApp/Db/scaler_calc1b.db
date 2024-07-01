@@ -20,7 +20,15 @@ record(ai,"beam_stop_atten") {
 # RGM 4H:
 #    field(VAL,"14.8788")
 # RGC:
-    field(VAL,"9.1508")
+#    field(VAL,"9.1508")
+# RGD:
+#    field(VAL,"5.79985")
+# RGK, 3-pass, empty target:
+#    field(VAL,"14.2513")
+# RGK, 5-pass, empty target:
+#    field(VAL,"10.88115")
+# RGE, 5-pass, Pb+LD2 target:
+    field(VAL,"4.809")
 ##########################
     field(PINI,"1")
     field(PREC,"5")
@@ -29,19 +37,87 @@ record(ai,"beam_stop_atten") {
 record(calc,"scaler_calc1b") {
     field(INPA,"scaler_calc1 CPP")
     field(INPB,"beam_stop_at_beam CP")
-    field(INPC,"beam_stop_atten CPP")
+    field(INPC,"beam_stop_atten_rge")
     field(CALC,"ABS(B)>0.1 ? A*C : A")
     field(PREC,"3")
 }
 
-record(sel,"beam_stop_atten_hps") {
-    field(INPA,"36.5568")
-    field(INPB,"32.8605")
-    field(INPC,"27.3308")
-    field(INPD,"32.8605")
-    field(INPE,"32.8605")
-    field(INPF,"32.8605")
+record(sel,"beam_stop_atten_rge") {
+    field(SCAN,"2 second")
     field(SELM,"Specified")
-    field(NVL,"hps:target:type CPP")
+    field(NVL,"HLB:TARGET:MBBI:cryo")
+    field(INPA,"beam_stop_atten_rge_empty") # Empty
+    field(INPB,"beam_stop_atten_rge_lh2")   # LH2
+    field(INPC,"beam_stop_atten_rge_ld2")   # LD2
+    field(INPD,"beam_stop_atten_rge_ld2")   # L4He
+    field(INPE,"beam_stop_atten_rge_ld2")   # L3He
+    field(INPF,"beam_stop_atten_rge_empty") # Not Ready
 }
+record(sel,"beam_stop_atten_rge_empty") {
+    field(SCAN,"2 second")
+    field(SELM,"Specified")
+    field(NVL,"CCTVAL_DT_PMD301:CENTERED")
+    field(INPA,"8.1134")  # Wire
+    field(INPB,"6.9571")  # C (*unmeasured)
+    field(INPC,"6.4176")  # Al (*)
+    field(INPD,"5.333")   # Cu (*)
+    field(INPE,"5.333")   # Sn (*)
+    field(INPF,"4.92555") # Pb
+    field(INPG,"8.000")   # Empty (*)
+    field(INPH,"8.000")   # Unknown
+}
+record(sel,"beam_stop_atten_rge_lh2") {
+    field(SCAN,"2 second")
+    field(SELM,"Specified")
+    field(NVL,"CCTVAL_DT_PMD301:CENTERED")
+    field(INPA,"6.9571")  # Wire (*unmeasured)
+    field(INPB,"6.9571")  # C (*)
+    field(INPC,"6.4176")  # Al (*)
+    field(INPD,"5.333")   # Cu (*)
+    field(INPE,"5.08415") # Sn (*)
+    field(INPF,"4.809")   # Pb (*)
+    field(INPG,"8.000")   # Empty (*)
+    field(INPH,"8.000")   # Unknown (*)
+}
+record(sel,"beam_stop_atten_rge_ld2") {
+    field(SCAN,"2 second")
+    field(SELM,"Specified")
+    field(NVL,"CCTVAL_DT_PMD301:CENTERED")
+    field(INPA,"6.9571")  # Wire (*unmeasured)
+    field(INPB,"6.9571")  # C
+    field(INPC,"6.4176")  # Al
+    field(INPD,"5.333")   # Cu
+    field(INPE,"5.08415") # Sn
+    field(INPF,"4.809")   # Pb
+    field(INPG,"8.000")   # Empty (*)
+    field(INPH,"8.000")   # Unknown
+}
+
+#record(sel,"beam_stop_atten_rgd") {
+#    field(SCAN,"2 second")
+#    field(SELM,"Specified")
+#    field(NVL,"clas12:target:type")
+#    field(INPA,"8.0421")  #Empty
+#    field(INPB,"0")       #LH2
+#    field(INPC,"0")       #LD2
+#    field(INPD,"0")       #L4He
+#    field(INPE,"0")       #L3He
+#    field(INPF,"8.0421")  #Empty
+#    field(INPG,"5.77985") #CuSn
+#    field(INPH,"5.77985") #CxC
+#    field(INPI,"1.0")
+#    field(INPJ,"1.0")
+#    field(INPK,"1.0")
+#}
+
+#record(sel,"beam_stop_atten_hps") {
+#    field(INPA,"36.5568")
+#    field(INPB,"32.8605")
+#    field(INPC,"27.3308")
+#    field(INPD,"32.8605")
+#    field(INPE,"32.8605")
+#    field(INPF,"32.8605")
+#    field(SELM,"Specified")
+#    field(NVL,"hps:target:type CPP")
+#}
 

@@ -1,0 +1,16 @@
+record(longout,"$(P)$(R=)arm:count") {
+    field(DTYP,"stream")
+    field(OUT,"@keithley6485.proto putInt(ARM:COUN) $(PORT)")
+}
+record(ai,"$(P)$(R=)imon") {
+    field(SCAN,"1 second")
+    field(DTYP,"stream")
+    field(INP,"@keithley6485.proto getFirst(READ?) $(PORT)")
+    field(EGU,"A")
+    field(FLNK,"$(P)$(R=)imon:wf.PROC")
+}
+record(compress,"$(P)$(R=)imon:wf") {
+    field(ALG,"Circular Buffer")
+    field(INP,"$(P)$(R=)imon PP")
+    field(NSAM,"36000")
+}

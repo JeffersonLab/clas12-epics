@@ -1,44 +1,25 @@
-#!../../bin/linux-x86/plc2epics
-
+#!../../bin/linux-x86_64/mmGas
 < envPaths
+epicsEnvSet("IOC","iocplcTest")
+cd "${TOP}"
 
-# This is a prefix for all PVs on this IOC in case we want a second instance
-#epicsEnvSet("PREF","HPS_SVT:PLC")
-epicsEnvSet("PREF","TEST:PLC")
+dbLoadDatabase("dbd/mmGas.dbd")
+mmGas_registerRecordDeviceDriver(pdbbase)
 
-cd ${TOP}
+# bufferdewar-plc:
+drvAsynIPPortConfigure("TCP505","129.57.160.84:505",0,0,1)
+modbusInterposeConfig("TCP505",0,5000,0)
 
-## Register all support components
-dbLoadDatabase "dbd/plc2epics.dbd"
-plc2epics_registerRecordDeviceDriver pdbbase
+#asynSetTraceMask("TCP505",0,9)
+#asynSetTraceIOMask("TCP505",0,4)
 
-# Initialize EtherIP driver, define PLCs
-EIP_buffer_limit(450)
-drvEtherIP_init()
-#drvEtherIP_define_PLC("${PREF}", "hpsplc", 0)
-drvEtherIP_define_PLC("${PREF}", "129.57.36.159", 0)
+drvModbusAsynConfigure("R505", "TCP505", 0, 3,  0, 33, 0, 1000, "Siemens")
+drvModbusAsynConfigure("W505", "TCP505", 0, 6,  32, 1, 0, 1000, "Siemens")
+drvModbusAsynConfigure("W505A","TCP505", 0,16,  0, 33, 0, 0,    "Siemens")
 
-## Load record instances
-#dbLoadRecords("db/iocAdminSoft.db","IOC=iocsvtPlc")
-#dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
-#dbLoadRecords("db/HPS_SVT_Interlock_v5_PLCin.db","IOC=${PREF}:i,PLCID=${PREF}")
-#dbLoadRecords("db/HPS_SVT_Interlock_v5_PLCout.db","IOC=${PREF}:o,PLCID=${PREF}")
-dbLoadRecords("db/TestLogic_v2_PLCarr.db","IOC=${PREF}:i,PLCID=${PREF}")
-dbLoadRecords("db/TestLogic_v2_PLCin.db","IOC=${PREF}:i,PLCID=${PREF}")
-dbLoadRecords("db/TestLogic_v2_PLCout.db","IOC=${PREF}:o,PLCID=${PREF}")
+#dbLoadTemplate("db/mmgas_bmt.substitutions")
 
-
-cd ${TOP}/iocBoot/${IOC}
-
-## autosave setup
-#< save_restore.cmd
+cd "${TOP}/iocBoot/${IOC}"
 
 iocInit
 
-# autosave startup
-#create_monitor_set("HPS_SVT_Interlocks.req", 30, "PREF=${PREF}")
-
-# Handle autosave 'commands' contained in loaded databases.
-#makeAutosaveFiles()
-#create_monitor_set("info_positions.req", 5, "P=xxx:")
-#create_monitor_set("info_settings.req", 30, "P=xxx:")

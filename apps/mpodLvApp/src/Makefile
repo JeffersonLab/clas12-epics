@@ -21,7 +21,7 @@ mpodLv_DBD += caPutLog.dbd
 # mpodLv_registerRecordDeviceDriver.cpp derives from mpodLv.dbd
 mpodLv_SRCS += mpodLv_registerRecordDeviceDriver.cpp
 mpodLv_SRCS += MpodStatusParser.c
-mpodLv_SRCS += bonus_hv_watchdog.st
+#mpodLv_SRCS += bonus_hv_watchdog.st
 
 # Build the main IOC entry point where needed
 mpodLv_SRCS_DEFAULT += mpodLvMain.cpp
@@ -31,10 +31,12 @@ mpodLv_SRCS_vxWorks += -nil-
 mpodLv_LIBS += $(EPICS_BASE_IOC_LIBS)
 mpodLv_LIBS += autosave
 mpodLv_LIBS += devIocStats
-mpodLv_LIBS += devSnmp
+mpodLv_LIBS += netsnmp devSnmp
 mpodLv_LIBS += caPutLog
 mpodLv_LIBS += calc
 mpodLv_LIBS += seq
+
+netsnmp_DIR += $(NETSNMP)/lib
 
 include $(TOP)/configure/RULES
 

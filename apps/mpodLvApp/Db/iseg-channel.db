@@ -455,10 +455,11 @@ record(fanout,"$(HV):outStatusfan1") {
 record(longin,"$(HV):outSupervisionR") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
 	field(SCAN,"Passive")
-#field(SCAN,"10 second")
+    field(SCAN,"5 second")
     field(PINI,"1")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 50")
+    alias("$(HV):sup_behavior:fbk")
 }
 record(longin,"$(HV):outputGroupR") {
 	field(DESC,"Group num assigned to each channel")
@@ -520,6 +521,7 @@ record(longout,"$(HV):outSupervision") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HVHOST) guru %{W}outputSupervisionBehavior.$(HVCH) INTEGER: 80 i")
+    alias("$(HV):sup_behavior")
 }
 record(longout,"$(HV):outputGroup") {
 	field(DTYP,"Soft Channel")
@@ -779,5 +781,340 @@ record(mbbi,"$(HV):stat") {
     field(TEST,"MaxTermV")
     field(ELST,"Comms")
     alias("$(HV)")
+}
+
+#######################################################################
+#######################################################################
+#######################################################################
+
+#
+# Breakout outputSupervisionBehavior inputs into separate mbbis:
+# (couldn't figure it out with only mbbi's MASK+NOBT+SHFT)
+# 
+record(calcout, "$(HV):sup_behavior:min_sense_v:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 0 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:min_sense_v:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:max_sense_v:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 2 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:max_sense_v:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:max_term_v:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 4 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:max_term_v:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:max_i:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 6 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:max_i:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:max_temp:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 8 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:max_temp:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:max_power:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 10 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:max_power:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:inhibit:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 12 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:inhibit:fbk PP")
+}
+record(calcout, "$(HV):sup_behavior:timeout:fbk:calc")
+{
+    field(INPA, "$(HV):sup_behavior CP")
+    field(CALC, "( A >> 14 ) & 3")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+    field(OUT,  "$(HV):sup_behavior:timeout:fbk PP")
+}
+record(mbbi, "$(HV):sup_behavior:min_sense_v:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:max_sense_v:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:max_term_v:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:max_i:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:max_temp:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:max_power:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:timeout:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+record(mbbi, "$(HV):sup_behavior:inhibit:fbk")
+{
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+}
+
+
+##
+## Breakout outputSupervisionBehavior outputs, to preserve 
+## valid bit combinations and work nice with CS-Studio widgets. 
+##
+record(mbbo, "$(HV):sup_behavior:min_sense_v")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:max_sense_v")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:max_term_v")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:max_i")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:max_temp")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:max_power")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:inhibit")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(mbbo, "$(HV):sup_behavior:timeout")
+{
+    field(VAL, 1)
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(ZRST,"Ignore")
+    field(ONST,"Ramp Down")
+    field(TWST,"Emergency Off")
+    field(THST,"Emergency Off - Board")
+#    info(autosaveFields_pass0,"VAL")
+}
+record(calcout, "$(HV):sup_behavior:min_sense_v:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:min_sense_v CP")
+    field(CALC, "( A & ~(0x3<<0) ) | (B<<0)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:max_sense_v:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:max_sense_v CP")
+    field(CALC, "( A & ~(0x3<<2) ) | (B<<2)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:max_term_v:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:max_term_v CP")
+    field(CALC, "( A & ~(0x3<<4) ) | (B<<4)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:max_i:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:max_i CP")
+    field(CALC, "( A & ~(0x3<<6) ) | (B<<6)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:max_temp:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:max_temp CP")
+    field(CALC, "( A & ~(0x3<<8) ) | (B<<8)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:max_power:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:max_power CP")
+    field(CALC, "( A & ~(0x3<<10) ) | (B<<10)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:inhibit:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:inhibit CP")
+    field(CALC, "( A & ~(0x3<<12) ) | (B<<12)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
+}
+record(calcout, "$(HV):sup_behavior:timeout:calc") {
+    field(OUT,  "$(HV):sup_behavior PP")
+    field(INPA, "$(HV):sup_behavior:fbk")
+    field(INPB, "$(HV):sup_behavior:timeout CP")
+    field(CALC, "( A & ~(0x3<<14) ) | (B<<14)")
+    field(DOPT, "Use CALC")
+    field(OOPT, "Every Time")
 }
 

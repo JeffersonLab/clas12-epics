@@ -134,21 +134,19 @@ record(ao,"$(HV):outputCurrent") {
 	field(DOL,"4")
 	field(PREC,"5")
 	field(EGU,"uA")
-	field(HOPR,"5")
     alias("$(HV):iset")
 }
-record(calc,"$(HV):outputCurrent_calc") {
-	field(FLNK,"$(HV):outputCurrentC.PROC")
+record(calcout,"$(HV):outputCurrent_calc") {
+	field(OUT,"$(HV):outputCurrentC PP")
 	field(CALC,"A*1.e-6")
-	field(INPA,"$(HV):outputCurrent NPP NMS")
-	field(EGU,"uA")
-	field(PREC,"5")
+	field(INPA,"$(HV):outputCurrent")
+	field(EGU,"A")
+    field(OOPT,"Every Time")
+    field(DOPT,"Use CALC")
 }
 record(ao,"$(HV):outputCurrentC") {
 	field(DTYP,"Snmp")
 	field(OUT,"@$(HVHOST) guru %{W}outputCurrent.$(HVCH) Float: 100 F")
-	field(DOL,"$(HV):outputCurrent_calc NPP NMS")
-	field(OMSL,"closed_loop")
 	field(PREC,"5")
 	field(EGU,"A")
 }

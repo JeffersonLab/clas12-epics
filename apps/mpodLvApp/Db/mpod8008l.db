@@ -51,33 +51,6 @@ record(longin, "$(PORT):switch:fbk")
   alias("$(DETALIAS):switch:fbk")
 }
 
-record(longin, "$(PORT):stat")
-{
-  field(DESC, "Channel Status")
-  field(DTYP, "Snmp")
-  field(SCAN, "$(SCAN)")
-  field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
-  alias("$(DETALIAS):stat")
-}
-
-record(mbbiDirect,"$(PORT):stat2")
-{
-    field(DESC,"Channel Status")
-    field(SCAN,"Passive")
-    field(DTYP,"Soft Channel")
-    field(INP,"$(PORT):stat CPP")
-    alias("$(DETALIAS):stat2")
-}
-
-record(stringin, "$(PORT):stat_string")
-{
-  field(DESC, "Channel Status in String")
-  field(DTYP, "Snmp")
-  field(SCAN, "$(SCAN)")
-  field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
-  alias("$(DETALIAS):stat_string")
-}
-
 record(ai, "$(PORT):i_rd")
 {
   field(DESC, "Current Readback")
@@ -460,9 +433,29 @@ record(longout,"$(PORT):output_user_config") {
   alias("$(DETALIAS):output_user_config")
 }
 
+
+record(longin, "$(PORT):stat")
+{
+  field(DESC, "Channel Status")
+  field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
+  alias("$(DETALIAS):stat")
+}
+
+record(stringin, "$(PORT):stat_string")
+{
+  field(DESC, "Channel Status in String")
+  field(DTYP, "Snmp")
+  field(SCAN, "$(SCAN)")
+  field(INP,  "@$(HOST) guru %(WO)Status.u$(CH) BITS: 100")
+  alias("$(DETALIAS):stat_string")
+}
+
 record(aSub,"$(PORT):parse:stat")
 {
 	field( DESC, "HW status string parser")
+    alias("$(DETALIAS):parse:stat")
 	field( SCAN, "Passive")
 	field( INAM, "MpodStatusParserInit")
 	field( SNAM, "MpodStatusParserProcess")
@@ -491,27 +484,81 @@ record(aSub,"$(PORT):parse:stat")
 	field( FTVC, "STRING")
 	field( NOVC, "1")
 	field( NEVC, "1")
+	# Output into mbbi record
+	field( OUTD, "$(PORT):parsed:status2 PP MS")
+	field( FTVD, "STRING")
+	field( NOVD, "1")
+	field( NEVD, "1")
 }
 record( stringin, "$(PORT):parsed:stat_string")
 {
 	field( DESC, "HW status parsed string")
 	field( SCAN, "Passive")
-        alias("$(DETALIAS):parsed:stat_string")
+    alias("$(DETALIAS):parsed:stat_string")
 }
+
+# FIXME: this one should go away:
 record( mbbiDirect, "$(PORT):parsed:status")
 {
 	field( DESC, "HW status parsed result")
 	field( DTYP, "Raw Soft Channel")
 	field( SCAN, "Passive")
-        alias("$(DETALIAS):parsed:status")
+    alias("$(DETALIAS):parsed:status")
 }
 record( mbbi, "$(PORT):parsed:status2")
 {
 	field( DESC, "HW status parsed result")
 	field( DTYP, "Soft Channel")
-        field( INP,  "$(PORT):parsed:status CPP")
 	field( SCAN, "Passive")
-        alias("$(DETALIAS):parsed:status2")
+    field( ZRVL, "0")
+    field( ONVL, "1")
+    field( TWVL, "2")
+    field( THVL, "3")
+    field( FRVL, "4")
+    field( FVVL, "5")
+    field( SXVL, "6")
+    field( SVVL, "7")
+    field( EIVL, "8")
+    field( NIVL, "9")
+    field( TEVL, "10")
+    field( ELVL, "11")
+    field( TVVL, "12")
+    field( TTVL, "13")
+    field( FTVL, "14")
+    field( FFVL, "15")
+    field( ZRST, "OFF")
+    field( ONST, "ON")
+    field( TWST, "CC")
+    field( THST, "CV")
+    field( FRST, "ADJ")
+    field( FVST, "RUP")
+    field( SXST, "RDN")
+    field( SVST, "ExtIn")
+    field( EIST, "SVMin")
+    field( NIST, "SVMax")
+    field( TEST, "TVMax")
+    field( ELST, "IMax")
+    field( TVST, "TMax")
+    field( TTST, "Error")
+    field( FTST, "EmergOff")
+    field( FFST, "KillEn")
+    field(ZRSV,  "NO_ALARM")
+    field(ONSV,  "NO_ALARM")
+    field(TWSV,  "MAJOR")
+    field(THSV,  "MAJOR")
+    field(FRSV,  "MINOR")
+    field(FVSV,  "MINOR")
+    field(SXSV,  "MINOR")
+    field(SVSV,  "MAJOR")
+    field(EISV,  "MAJOR")
+    field(NISV,  "MAJOR")
+    field(TESV,  "MAJOR")
+    field(ELSV,  "MAJOR")
+    field(TVSV,  "MAJOR")
+    field(TTSV,  "MAJOR")
+    field(FTSV,  "MAJOR")
+    field(FFSV,  "MAJOR")
+    alias("$(DETALIAS):parsed:status2")
 }
 record( bi, "$(PORT):parsed:stat")
 {
@@ -521,7 +568,7 @@ record( bi, "$(PORT):parsed:stat")
 	field( ONAM, "NO_ALARM")
 	field( ZSV, "MAJOR")
 	field( OSV, "NO_ALARM")
-        alias("$(DETALIAS):parsed:stat")
+    alias("$(DETALIAS):parsed:stat")
 }
 
 

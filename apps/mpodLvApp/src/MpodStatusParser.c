@@ -134,8 +134,6 @@ static long MpodStatusParserProcess(aSubRecord *precord)
     	outbi[0] = 0; // Not good
     }
 
-    printf("A:  %u\n",result);
-
     // VALC goes to a string record:
     if      (result&1<<19) precord->valc="ILimit";
     else if (result&1<<18) precord->valc="IOB";
@@ -150,20 +148,16 @@ static long MpodStatusParserProcess(aSubRecord *precord)
     else if (result&1<<3)  precord->valc="SVMax";
     else if (result&1<<2)  precord->valc="SVMin";
     else if (result&1<<1)  precord->valc="ExtIn";
-   
     else if (result&1<<12) precord->valc="RDN";
     else if (result&1<<11) precord->valc="RUP";
     else if (result&1<<15) precord->valc="ADJ";
     else if (result&1<<16) precord->valc="CV";
     else if (result&1<<10) precord->valc="CC";
-
     else if (result&1<<0) precord->valc="ON";
     else precord->valc="OFF";
 
-    printf("B:  %u\n",result);
-    printf("C:  %s\n",(char*)precord->valc);
-
-    // VALD goes to an mbbi (limit to 16 states):
+    // VALD goes to an mbbi (limit to 16 states by 
+    // renaming some to generic "Error"):
     if      (result&1<<19) precord->vald="Error";
     else if (result&1<<18) precord->vald="Error";
     else if (result&1<<17) precord->vald="Error";
@@ -177,17 +171,14 @@ static long MpodStatusParserProcess(aSubRecord *precord)
     else if (result&1<<3)  precord->vald="SVMax";
     else if (result&1<<2)  precord->vald="SVMin";
     else if (result&1<<1)  precord->vald="ExtIn";
-   
     else if (result&1<<12) precord->vald="RDN";
     else if (result&1<<11) precord->vald="RUP";
     else if (result&1<<15) precord->vald="ADJ";
     else if (result&1<<16) precord->vald="CV";
     else if (result&1<<10) precord->vald="CC";
-
     else if (result&1<<0) precord->vald="ON";
     else precord->vald="OFF";
     
-    printf("C:  %s\n",(char*)precord->vald);
 //    printf("Record %s called MpodStatusParserProcess(%s) before the end\n", precord->name, precord->inpa.value.constantStr);
     return 0;
 }

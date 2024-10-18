@@ -20,12 +20,16 @@ mpodLv_registerRecordDeviceDriver pdbbase
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
-devSnmpSetParam(DebugLevel,10)
-
+#devSnmpSetParam(DebugLevel,10)
 #MpodStatusParserDebug=1
 
-dbLoadTemplate("db/mmtblv.substitutions")
-dbLoadTemplate("db/atof.substitutions")
+dbLoadTemplate("db/atof-hvlv.substitutions")
+
+dbLoadTemplate("db/mmtb-lv.substitutions")
+
+#dbLoadTemplate("db/ahdc-lv.substitutions")
+
+#dbLoadTemplate("db/ahdc-intlk.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 

@@ -24,11 +24,12 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 #MpodStatusParserDebug=1
 
 dbLoadTemplate("db/atof-hvlv.substitutions")
+dbLoadRecords("db/atof-hvlv-seq.db","S=ON,VAL=1")
+dbLoadRecords("db/atof-hvlv-seq.db","S=OFF,VAL=0")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF_HV")
 
 dbLoadTemplate("db/mmtb-lv.substitutions")
-
 #dbLoadTemplate("db/ahdc-lv.substitutions")
-
 #dbLoadTemplate("db/ahdc-intlk.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"

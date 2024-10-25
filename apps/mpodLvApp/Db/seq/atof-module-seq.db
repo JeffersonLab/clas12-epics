@@ -1,0 +1,224 @@
+####################################################
+
+record(seq,"B_DET_ATOF_M$(M):$(S)") {
+    field(LNK1,"B_DET_ATOF_HV_M$(M)_B:switch PP")
+    field(LNK2,"B_DET_ATOF_HV_M$(M)_W:switch PP")
+    field(LNK3,"B_DET_ATOF_LV_M$(M)_2V:switch PP")
+    field(LNK4,"B_DET_ATOF_LV_M$(M)_4V:switch PP")
+    field(DOL1,"$(VAL)")
+    field(DOL2,"$(VAL)")
+    field(DOL3,"$(VAL)")
+    field(DOL4,"$(VAL)")
+}
+record(seq,"B_DET_ATOF:$(S)") {
+    field(LNK1,"B_DET_ATOF_HV_MA:$(S) PP")
+    field(LNK2,"B_DET_ATOF_HV_MB:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+}
+record(seq,"B_DET_ATOF_MA:$(S)") {
+    field(LNK1,"B_DET_ATOF_HV_M0:$(S) PP")
+    field(LNK2,"B_DET_ATOF_HV_M1:$(S) PP")
+    field(LNK3,"B_DET_ATOF_HV_M2:$(S) PP")
+    field(LNK4,"B_DET_ATOF_HV_M3:$(S) PP")
+    field(LNK5,"B_DET_ATOF_HV_M4:$(S) PP")
+    field(LNK6,"B_DET_ATOF_HV_M5:$(S) PP")
+    field(LNK7,"B_DET_ATOF_HV_M6:$(S) PP")
+    field(LNK8,"B_DET_ATOF_HV_M7:$(S) PP")
+    field(LNK9,"B_DET_ATOF_HV_M8:$(S) PP")
+    field(LNKA,"B_DET_ATOF_HV_M9:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+    field(DOL7,"1")
+    field(DOL8,"1")
+    field(DOL9,"1")
+    field(DOLA,"1")
+}
+record(seq,"B_DET_ATOF_MB:$(S)") {
+    field(LNK1,"B_DET_ATOF_HV_M10:$(S) PP")
+    field(LNK2,"B_DET_ATOF_HV_M11:$(S) PP")
+    field(LNK3,"B_DET_ATOF_HV_M12:$(S) PP")
+    field(LNK4,"B_DET_ATOF_HV_M13:$(S) PP")
+    field(LNK5,"B_DET_ATOF_HV_M14:$(S) PP")
+    field(LNK6,"B_DET_ATOF_HV_M15:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_M$(M):isOn") {
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat CP")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat CP")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:stat CP")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:stat CP")
+    field(CALC,"A=1&&B=1&&C=1&&D=1")
+}
+record(calc,"B_DET_ATOF_M$(M):isOff") {
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat CP")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat CP")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:stat CP")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:stat CP")
+    field(CALC,"A=0&&B=0&&C=0&&D=0")
+}
+record(calc,"B_DET_ATOF_M$(M):isComm") {
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.STAT CP")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.STAT CP")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:stat.STAT CP")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:stat.STAT CP")
+    field(CALC,"A#1&&B#1&&C#1&&D#1")
+}
+record(calc,"B_DET_ATOF_M$(M):isError") {
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.SEVR CP")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.SEVR CP")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:stat.SEVR CP")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:stat.SEVR CP")
+    field(CALC,"A>1||B>1||C>1||D>1")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isOn") {
+    field(INPA,"B_DET_ATOF_HV_M0:isOn CP")
+    field(INPB,"B_DET_ATOF_HV_M1:isOn CP")
+    field(INPC,"B_DET_ATOF_HV_M2:isOn CP")
+    field(INPD,"B_DET_ATOF_HV_M3:isOn CP")
+    field(INPE,"B_DET_ATOF_HV_M4:isOn CP")
+    field(INPF,"B_DET_ATOF_HV_M5:isOn CP")
+    field(INPG,"B_DET_ATOF_HV_M6:isOn CP")
+    field(INPH,"B_DET_ATOF_HV_M7:isOn CP")
+    field(INPI,"B_DET_ATOF_HV_M8:isOn CP")
+    field(INPJ,"B_DET_ATOF_HV_M9:isOn CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF_MB:isOn") {
+    field(INPA,"B_DET_ATOF_HV_M10:isOn CP")
+    field(INPB,"B_DET_ATOF_HV_M11:isOn CP")
+    field(INPC,"B_DET_ATOF_HV_M12:isOn CP")
+    field(INPD,"B_DET_ATOF_HV_M13:isOn CP")
+    field(INPE,"B_DET_ATOF_HV_M14:isOn CP")
+    field(INPF,"B_DET_ATOF_HV_M15:isOn CP")
+    field(INPG,"B_DET_ATOF_HV_M16:isOn CP")
+    field(INPH,"B_DET_ATOF_HV_M17:isOn CP")
+    field(INPI,"B_DET_ATOF_HV_M18:isOn CP")
+    field(INPJ,"B_DET_ATOF_HV_M19:isOn CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF:isOn") {
+    field(INPA,"B_DET_ATOF_HV_MA:isOn CP")
+    field(INPB,"B_DET_ATOF_HV_MB:isOn CP")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isOff") {
+    field(INPA,"B_DET_ATOF_HV_M0:isOff CP")
+    field(INPB,"B_DET_ATOF_HV_M1:isOff CP")
+    field(INPC,"B_DET_ATOF_HV_M2:isOff CP")
+    field(INPD,"B_DET_ATOF_HV_M3:isOff CP")
+    field(INPE,"B_DET_ATOF_HV_M4:isOff CP")
+    field(INPF,"B_DET_ATOF_HV_M5:isOff CP")
+    field(INPG,"B_DET_ATOF_HV_M6:isOff CP")
+    field(INPH,"B_DET_ATOF_HV_M7:isOff CP")
+    field(INPI,"B_DET_ATOF_HV_M8:isOff CP")
+    field(INPJ,"B_DET_ATOF_HV_M9:isOff CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF_MB:isOff") {
+    field(INPA,"B_DET_ATOF_HV_M10:isOff CP")
+    field(INPB,"B_DET_ATOF_HV_M11:isOff CP")
+    field(INPC,"B_DET_ATOF_HV_M12:isOff CP")
+    field(INPD,"B_DET_ATOF_HV_M13:isOff CP")
+    field(INPE,"B_DET_ATOF_HV_M14:isOff CP")
+    field(INPF,"B_DET_ATOF_HV_M15:isOff CP")
+    field(INPG,"B_DET_ATOF_HV_M16:isOff CP")
+    field(INPH,"B_DET_ATOF_HV_M17:isOff CP")
+    field(INPI,"B_DET_ATOF_HV_M18:isOff CP")
+    field(INPJ,"B_DET_ATOF_HV_M19:isOff CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF:isOff") {
+    field(INPA,"B_DET_ATOF_HV_MA:isOff CP")
+    field(INPB,"B_DET_ATOF_HV_MB:isOff CP")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isError") {
+    field(INPA,"B_DET_ATOF_HV_M0:isError CP")
+    field(INPB,"B_DET_ATOF_HV_M1:isError CP")
+    field(INPC,"B_DET_ATOF_HV_M2:isError CP")
+    field(INPD,"B_DET_ATOF_HV_M3:isError CP")
+    field(INPE,"B_DET_ATOF_HV_M4:isError CP")
+    field(INPF,"B_DET_ATOF_HV_M5:isError CP")
+    field(INPG,"B_DET_ATOF_HV_M6:isError CP")
+    field(INPH,"B_DET_ATOF_HV_M7:isError CP")
+    field(INPI,"B_DET_ATOF_HV_M8:isError CP")
+    field(INPJ,"B_DET_ATOF_HV_M9:isError CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J>0")
+}
+record(calc,"B_DET_ATOF_MB:isError") {
+    field(INPA,"B_DET_ATOF_HV_M10:isError CP")
+    field(INPB,"B_DET_ATOF_HV_M11:isError CP")
+    field(INPC,"B_DET_ATOF_HV_M12:isError CP")
+    field(INPD,"B_DET_ATOF_HV_M13:isError CP")
+    field(INPE,"B_DET_ATOF_HV_M14:isError CP")
+    field(INPF,"B_DET_ATOF_HV_M15:isError CP")
+    field(INPG,"B_DET_ATOF_HV_M16:isError CP")
+    field(INPH,"B_DET_ATOF_HV_M17:isError CP")
+    field(INPI,"B_DET_ATOF_HV_M18:isError CP")
+    field(INPJ,"B_DET_ATOF_HV_M19:isError CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J>0")
+}
+record(calc,"B_DET_ATOF:isError") {
+    field(INPA,"B_DET_ATOF_HV_MA:isError CP")
+    field(INPB,"B_DET_ATOF_HV_MB:isError CP")
+    field(CALC,"A+B>0")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isComm") {
+    field(INPA,"B_DET_ATOF_HV_M0:isComm CP")
+    field(INPB,"B_DET_ATOF_HV_M1:isComm CP")
+    field(INPC,"B_DET_ATOF_HV_M2:isComm CP")
+    field(INPD,"B_DET_ATOF_HV_M3:isComm CP")
+    field(INPE,"B_DET_ATOF_HV_M4:isComm CP")
+    field(INPF,"B_DET_ATOF_HV_M5:isComm CP")
+    field(INPG,"B_DET_ATOF_HV_M6:isComm CP")
+    field(INPH,"B_DET_ATOF_HV_M7:isComm CP")
+    field(INPI,"B_DET_ATOF_HV_M8:isComm CP")
+    field(INPJ,"B_DET_ATOF_HV_M9:isComm CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF_MB:isComm") {
+    field(INPA,"B_DET_ATOF_HV_M10:isComm CP")
+    field(INPB,"B_DET_ATOF_HV_M11:isComm CP")
+    field(INPC,"B_DET_ATOF_HV_M12:isComm CP")
+    field(INPD,"B_DET_ATOF_HV_M13:isComm CP")
+    field(INPE,"B_DET_ATOF_HV_M14:isComm CP")
+    field(INPF,"B_DET_ATOF_HV_M15:isComm CP")
+    field(INPG,"B_DET_ATOF_HV_M16:isComm CP")
+    field(INPH,"B_DET_ATOF_HV_M17:isComm CP")
+    field(INPI,"B_DET_ATOF_HV_M18:isComm CP")
+    field(INPJ,"B_DET_ATOF_HV_M19:isComm CP")
+    field(CALC,"A+B+C+D+E+F+G+H+I+J==10")
+}
+record(calc,"B_DET_ATOF:isComm") {
+    field(INPA,"B_DET_ATOF_HV_MA:isComm CP")
+    field(INPB,"B_DET_ATOF_HV_MB:isComm CP")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+

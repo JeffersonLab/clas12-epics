@@ -71,8 +71,7 @@ record(ai,"$(HV):outputMeasCurrentC") {
 }
 record(ai,"$(HV):outputMeasSenseV") {
 	field(DESC,"Measured output voltage")
-#field(SCAN,"Passive")
-    field(SCAN,"10 second")
+    field(SCAN,"1 second")
 	field(DTYP,"Snmp")
 	field(FLNK,"$(HV):outputMeasSenseVAlm.PROC")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementSenseVoltage.$(HVCH) Float: 100")
@@ -506,7 +505,6 @@ record(fanout,"$(HV):outStatusfan1") {
 }
 record(longin,"$(HV):outSupervisionR") {
 	field(DESC,"Bitfield Fail Behavior - see .db file")
-	field(SCAN,"Passive")
     field(SCAN,"5 second")
     field(PINI,"1")
 	field(DTYP,"Snmp")
@@ -516,7 +514,6 @@ record(longin,"$(HV):outSupervisionR") {
 }
 record(longin,"$(HV):outputGroupR") {
 	field(DESC,"Group num assigned to each channel")
-#	field(SCAN,"10 second")
 	field(SCAN,"Passive")
     field(PINI,"1")
 	field(DTYP,"Snmp")
@@ -526,14 +523,13 @@ record(longin,"$(HV):outputGroupR") {
 record(longin,"$(HV):outputIndex") {
 	field(DESC,"Unique number for module")
     field(PINI,"1")
-#field(SCAN,"10 second")
 	field(SCAN,"Passive")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputIndex.$(HVCH) ( 30")
     alias("$(DETALIAS):outputIndex")
 }
 record(longin,"$(HV):outputMeasTemp") {
-	field(SCAN,"10 second")
+	field(SCAN,"1 second")
 	field(DTYP,"Snmp")
 	field(INP,"@$(HVHOST) public %{W}outputMeasurementTemperature.$(HVCH) INTEGER: 50")
     alias("$(DETALIAS):outputMeasTemp")

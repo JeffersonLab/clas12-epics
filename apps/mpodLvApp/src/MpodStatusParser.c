@@ -153,8 +153,8 @@ static long MpodStatusParserProcess(aSubRecord *precord)
     else if (result&1<<15) precord->valc="ADJ";
     else if (result&1<<16) precord->valc="CV";
     else if (result&1<<10) precord->valc="CC";
-    else if (result&1<<0) precord->valc="ON";
-    else precord->valc="OFF";
+    else if (result&1<<0) precord->valc="On";
+    else precord->valc="Off";
 
     // VALD goes to an mbbi (limit to 16 states by 
     // renaming some to generic "Error"):
@@ -176,8 +176,8 @@ static long MpodStatusParserProcess(aSubRecord *precord)
     else if (result&1<<15) precord->vald="ADJ";
     else if (result&1<<16) precord->vald="CV";
     else if (result&1<<10) precord->vald="CC";
-    else if (result&1<<0) precord->vald="ON";
-    else precord->vald="OFF";
+    else if (result&1<<0) precord->vald="On";
+    else precord->vald="Off";
     
 //    printf("Record %s called MpodStatusParserProcess(%s) before the end\n", precord->name, precord->inpa.value.constantStr);
     return 0;

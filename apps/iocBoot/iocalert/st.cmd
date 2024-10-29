@@ -7,7 +7,7 @@
 epicsEnvSet("MIBDIRS","$(DEVSNMP)/mibs:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
 
-# just to decrease string size in record definitions:
+# just to decrease string size in SNMP record definitions:
 epicsEnvSet("MIB","WIENER-CRATE-MIB::")
 epicsEnvSet("W","WIENER-CRATE-MIB::")
 epicsEnvSet("WO","WIENER-CRATE-MIB::output")
@@ -23,13 +23,19 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 #devSnmpSetParam(DebugLevel,10)
 #MpodStatusParserDebug=1
 
+# ATOF:
 dbLoadTemplate("db/atof-hvlv.substitutions")
 dbLoadTemplate("db/atof-seq.substitutions")
 dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
 
+# AHDC:
 dbLoadTemplate("db/mmtb-lv.substitutions")
 #dbLoadTemplate("db/ahdc-lv.substitutions")
 #dbLoadTemplate("db/ahdc-intlk.substitutions")
+dbLoadRecords("db/gas_cRIO_AHDC.db")
+
+# TGT:
+#dbLoadRecords("db/gas_cRIO_ALERT_TGT.db")
 
 cd "${TOP}/iocBoot/${IOC}"
 

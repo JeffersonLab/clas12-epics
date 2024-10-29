@@ -1,0 +1,274 @@
+####################################################
+
+record(seq,"B_DET_ATOF_M$(M):$(S)") {
+    field(LNK1,"B_DET_ATOF_HV_M$(M)_B:outSwitch PP")
+    field(LNK2,"B_DET_ATOF_HV_M$(M)_W:outSwitch PP")
+    field(LNK3,"B_DET_ATOF_LV_M$(M)_2V:switch PP")
+    field(LNK4,"B_DET_ATOF_LV_M$(M)_4V:switch PP")
+    field(DOL1,"$(VAL)")
+    field(DOL2,"$(VAL)")
+    field(DOL3,"$(VAL)")
+    field(DOL4,"$(VAL)")
+    field(DLY1,"0")
+    field(DLY2,"0")
+    field(DLY3,"0")
+    field(DLY4,"0")
+}
+record(seq,"B_DET_ATOF_M$(M):cycle") {
+    field(LNK1,"B_DET_ATOF_M$(M):OFF PP")
+    field(LNK2,"B_DET_ATOF_M$(M):ON PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DLY1,"0")
+    field(DLY2,"2")
+}
+record(seq,"B_DET_ATOF:$(S)") {
+    field(LNK1,"B_DET_ATOF_MA:$(S) PP")
+    field(LNK2,"B_DET_ATOF_MB:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DLY1,"0")
+    field(DLY2,"0")
+}
+record(seq,"B_DET_ATOF:cycle") {
+    field(LNK1,"B_DET_ATOF_MA:cycle PP")
+    field(LNK2,"B_DET_ATOF_MB:cycle PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DLY1,"0")
+    field(DLY2,"0")
+}
+record(seq,"B_DET_ATOF_MA:cycle") {
+    field(LNK1,"B_DET_ATOF_M0:cycle PP")
+    field(LNK2,"B_DET_ATOF_M1:cycle PP")
+    field(LNK3,"B_DET_ATOF_M2:cycle PP")
+    field(LNK4,"B_DET_ATOF_M3:cycle PP")
+    field(LNK5,"B_DET_ATOF_M4:cycle PP")
+    field(LNK6,"B_DET_ATOF_M5:cycle PP")
+    field(LNK7,"B_DET_ATOF_M6:cycle PP")
+    field(LNK8,"B_DET_ATOF_M7:cycle PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+    field(DOL7,"1")
+    field(DOL8,"1")
+}
+record(seq,"B_DET_ATOF_MB:cycle") {
+    field(LNK1,"B_DET_ATOF_M8:cycle PP")
+    field(LNK2,"B_DET_ATOF_M9:cycle PP")
+    field(LNK3,"B_DET_ATOF_M10:cycle PP")
+    field(LNK4,"B_DET_ATOF_M11:cycle PP")
+    field(LNK5,"B_DET_ATOF_M12:cycle PP")
+    field(LNK6,"B_DET_ATOF_M13:cycle PP")
+    field(LNK7,"B_DET_ATOF_M14:cycle PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+    field(DOL7,"1")
+}
+record(seq,"B_DET_ATOF_MA:$(S)") {
+    field(LNK1,"B_DET_ATOF_M0:$(S) PP")
+    field(LNK2,"B_DET_ATOF_M1:$(S) PP")
+    field(LNK3,"B_DET_ATOF_M2:$(S) PP")
+    field(LNK4,"B_DET_ATOF_M3:$(S) PP")
+    field(LNK5,"B_DET_ATOF_M4:$(S) PP")
+    field(LNK6,"B_DET_ATOF_M5:$(S) PP")
+    field(LNK7,"B_DET_ATOF_M6:$(S) PP")
+    field(LNK8,"B_DET_ATOF_M7:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+    field(DOL7,"1")
+    field(DOL8,"1")
+}
+record(seq,"B_DET_ATOF_MB:$(S)") {
+    field(LNK1,"B_DET_ATOF_M8:$(S) PP")
+    field(LNK2,"B_DET_ATOF_M9:$(S) PP")
+    field(LNK3,"B_DET_ATOF_M10:$(S) PP")
+    field(LNK4,"B_DET_ATOF_M11:$(S) PP")
+    field(LNK5,"B_DET_ATOF_M12:$(S) PP")
+    field(LNK6,"B_DET_ATOF_M13:$(S) PP")
+    field(LNK7,"B_DET_ATOF_M14:$(S) PP")
+    field(DOL1,"1")
+    field(DOL2,"1")
+    field(DOL3,"1")
+    field(DOL4,"1")
+    field(DOL5,"1")
+    field(DOL6,"1")
+    field(DOL7,"1")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_M$(M):isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:parsed:status2")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:parsed:status2")
+    field(CALC,"A=1&&B=1&&C=1&&D=1")
+}
+record(calc,"B_DET_ATOF_M$(M):isOff") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:parsed:status2")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:parsed:status2")
+    field(CALC,"A=0&&B=0&&C=0&&D=0")
+}
+record(calc,"B_DET_ATOF_M$(M):isComm") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.STAT")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.STAT")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:parsed:status2.STAT")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:parsed:status2.STAT")
+    field(CALC,"A#1&&B#1&&C#1&&D#1")
+}
+record(calc,"B_DET_ATOF_M$(M):isError") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.SEVR")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.SEVR")
+    field(INPC,"B_DET_ATOF_LV_M$(M)_2V:parsed:status2.SEVR")
+    field(INPD,"B_DET_ATOF_LV_M$(M)_4V:parsed:status2.SEVR")
+    field(CALC,"A>1||B>1||C>1||D>1")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M0:isOn")
+    field(INPB,"B_DET_ATOF_M1:isOn")
+    field(INPC,"B_DET_ATOF_M2:isOn")
+    field(INPD,"B_DET_ATOF_M3:isOn")
+    field(INPE,"B_DET_ATOF_M4:isOn")
+    field(INPF,"B_DET_ATOF_M5:isOn")
+    field(INPG,"B_DET_ATOF_M6:isOn")
+    field(INPH,"B_DET_ATOF_M7:isOn")
+    field(CALC,"A+B+C+D+E+F+G+H==8")
+}
+record(calc,"B_DET_ATOF_MB:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M8:isOn")
+    field(INPB,"B_DET_ATOF_M9:isOn")
+    field(INPC,"B_DET_ATOF_M10:isOn")
+    field(INPD,"B_DET_ATOF_M11:isOn")
+    field(INPE,"B_DET_ATOF_M12:isOn")
+    field(INPF,"B_DET_ATOF_M13:isOn")
+    field(INPG,"B_DET_ATOF_M14:isOn")
+    field(CALC,"A+B+C+D+E+F+G==7")
+}
+record(calc,"B_DET_ATOF:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_MA:isOn")
+    field(INPB,"B_DET_ATOF_MB:isOn")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isOff") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M0:isOff")
+    field(INPB,"B_DET_ATOF_M1:isOff")
+    field(INPC,"B_DET_ATOF_M2:isOff")
+    field(INPD,"B_DET_ATOF_M3:isOff")
+    field(INPE,"B_DET_ATOF_M4:isOff")
+    field(INPF,"B_DET_ATOF_M5:isOff")
+    field(INPG,"B_DET_ATOF_M6:isOff")
+    field(INPH,"B_DET_ATOF_M7:isOff")
+    field(CALC,"A+B+C+D+E+F+G+H==8")
+}
+record(calc,"B_DET_ATOF_MB:isOff") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M8:isOff")
+    field(INPB,"B_DET_ATOF_M9:isOff")
+    field(INPC,"B_DET_ATOF_M10:isOff")
+    field(INPD,"B_DET_ATOF_M11:isOff")
+    field(INPE,"B_DET_ATOF_M12:isOff")
+    field(INPF,"B_DET_ATOF_M13:isOff")
+    field(INPG,"B_DET_ATOF_M14:isOff")
+    field(CALC,"A+B+C+D+E+F+G==7")
+}
+record(calc,"B_DET_ATOF:isOff") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_MA:isOff")
+    field(INPB,"B_DET_ATOF_MB:isOff")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isError") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M0:isError")
+    field(INPB,"B_DET_ATOF_M1:isError")
+    field(INPC,"B_DET_ATOF_M2:isError")
+    field(INPD,"B_DET_ATOF_M3:isError")
+    field(INPE,"B_DET_ATOF_M4:isError")
+    field(INPF,"B_DET_ATOF_M5:isError")
+    field(INPG,"B_DET_ATOF_M6:isError")
+    field(INPH,"B_DET_ATOF_M7:isError")
+    field(CALC,"A+B+C+D+E+F+G+H>0")
+}
+record(calc,"B_DET_ATOF_MB:isError") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M8:isError")
+    field(INPB,"B_DET_ATOF_M9:isError")
+    field(INPC,"B_DET_ATOF_M10:isError")
+    field(INPD,"B_DET_ATOF_M11:isError")
+    field(INPE,"B_DET_ATOF_M12:isError")
+    field(INPF,"B_DET_ATOF_M13:isError")
+    field(INPG,"B_DET_ATOF_M14:isError")
+    field(CALC,"A+B+C+D+E+F+G>0")
+}
+record(calc,"B_DET_ATOF:isError") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_MA:isError")
+    field(INPB,"B_DET_ATOF_MB:isError")
+    field(CALC,"A+B>0")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_MA:isComm") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M0:isComm")
+    field(INPB,"B_DET_ATOF_M1:isComm")
+    field(INPC,"B_DET_ATOF_M2:isComm")
+    field(INPD,"B_DET_ATOF_M3:isComm")
+    field(INPE,"B_DET_ATOF_M4:isComm")
+    field(INPF,"B_DET_ATOF_M5:isComm")
+    field(INPG,"B_DET_ATOF_M6:isComm")
+    field(INPH,"B_DET_ATOF_M7:isComm")
+    field(CALC,"A+B+C+D+E+F+G+H==8")
+}
+record(calc,"B_DET_ATOF_MB:isComm") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_M8:isComm")
+    field(INPB,"B_DET_ATOF_M9:isComm")
+    field(INPC,"B_DET_ATOF_M10:isComm")
+    field(INPD,"B_DET_ATOF_M11:isComm")
+    field(INPE,"B_DET_ATOF_M12:isComm")
+    field(INPF,"B_DET_ATOF_M13:isComm")
+    field(INPG,"B_DET_ATOF_M14:isComm")
+    field(CALC,"A+B+C+D+E+F+G==7")
+}
+record(calc,"B_DET_ATOF:isComm") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_MA:isComm")
+    field(INPB,"B_DET_ATOF_MB:isComm")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+

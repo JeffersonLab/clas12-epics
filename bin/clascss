@@ -9,7 +9,9 @@
 #
 
 # we don't want users running java ever on these machines:
-disallowedHosts=( clondb1 clondb2 clondb3 clondb4 clonioc1 clonioc2 clonioc3 clonioc4 clonioc5 clonioc6 clonioc7 clonioc8 clonioc9 clondaq1 clondaq2 clondaq3 clondaq4 clondaq5 clondaq6 clondaq7)
+disallowedHosts=( clondb1 clondb2 clondb3 clondb4 \
+    clonioc1 clonioc2 clonioc3 clonioc4 clonioc5 clonioc6 clonioc7 clonioc8 clonioc9 \
+    clondaq1 clondaq2 clondaq3 clondaq4 clondaq5 clondaq6 clondaq7)
 host=`hostname`
 for xx in "${disallowedHosts[@]}"
 do
@@ -20,54 +22,44 @@ do
   fi
 done
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+share=$DIR/../css_share
+plugin_profile=$share/common/prefs/plugin_customization.ini
+
 # rebuilding CS-Studio for openjdk 11+ seems to be a no-go. would be better
 # to convert to Phoebus.  Meanwhile, we're tied to Oracle's JVM 8:
 export JAVA_HOME=/usr/clas12/third-party-libs/jdk/1.8.0_31
 export PATH=$JAVA_HOME/bin:$PATH
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-share=$DIR/../css_share
-
-# something in the workspace generated on RHEL7 doesn't play nice on RHEL8,
-# so instead we generated a new workspace on RHEL8 and use that:
-grep -i ootpa /etc/redhat-release >& /dev/null
-if [ $? -eq 0 ]
+# choose a different workspace per operating system:
+if grep -i -q ootpa /etc/redhat-release
 then
     workspace=$share/common/workspace-RHEL8
+elif grep -i -q -e Plow -e Alma /etc/redhat-release
+then
+    workspace=$share/common/workspace-el9
 else
     workspace=$share/common/workspace
 fi
 
-plugin_profile=$share/common/prefs/plugin_customization.ini
-#plugin_profile=$share/common/prefs/plugin_customization_noedit.ini
-
-# Generate a new workspaces by copying the version-controlled one:
-# FIXME:  it would be nice to move this out of /tmp to avoid autodeletion
-# on a running instance, but we'd still want some automatic cleanup
-# Note: needs rw from all groups onliners, clas, etc.
-tmp_path=/tmp/CSS-Workspaces
-if [[ ! -e $tmp_path ]]; then
-    mkdir -p $tmp_path -m 777
-fi
+# generate the new workspace:
+tmp_path=$HOME/.clascss
+[ ! -e $tmp_path ] && mkdir -p $tmp_path -m 777
 wsp=`mktemp -d -p $tmp_path`
-cp -rf $workspace/*    $wsp >& /dev/null
-cp -rf $workspace/.*   $wsp >& /dev/null
+trap 'sleep 0.3 && rm -rf $wsp' EXIT
+rm -rf $wsp && cp -rf $workspace $wsp
 cp -rf $plugin_profile $wsp
 
-# At some point I must have thought we needed a delay, probably for the
-# copying of the generated workspace before reading it.  That doesn't
-# seem to be the case in 2023, maybe due to fileserver upgrades:
-#sleep 1
+sleep 0.3
 
+# Method #1:
 #css -data $wsp \
 #    -pluginCustomization $wsp/plugin_customization.ini \
 #    -share_link $share=/CLAS12_Share \
 #    -nosplash
 
-# Instead of using the "css" wrapper above, I pulled out the raw java
-# command-line it actually executes, just to be able to set the heap
-# size at runtimie (which occurs in two places, probably one is redundant):
-
+# Method #2:
+# the resulting java command for full control:
 java \
     -Xms3072m \
     -Dosgi.requiredJavaVersion=1.8 \

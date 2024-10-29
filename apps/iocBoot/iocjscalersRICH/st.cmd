@@ -76,7 +76,7 @@ seq waveform, "P=B_DET_RICH2_SCALERS_,R=PMTS:"
 dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.INPC","137")
 dbpf("B_DET_RICH2_SSP:data:nFibers:alarm.C","137")
 dbpf("B_DET_RICH2_SCALERS:alarm.LSV","NO_ALARM")
-dbpf("B_HW_SVT3:scalers:nFibers.LOLO","137")
+dbpf("B_HW_SVT3:scalers:nFibers.LOLO","136")
 
 dbpf("B_RICH:recovery:clock.HIGH","86400")
 dbpf("B_RICH:recovery:clock.HSV","NO_ALARM")

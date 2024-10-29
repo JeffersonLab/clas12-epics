@@ -10,6 +10,7 @@ var argh  = widget.getMacroValue("ARGH");
 var crate = widget.getMacroValue("CRATE");
 var slot  = widget.getMacroValue("SLOT");
 var nchan = widget.getMacroValue("NCHAN");
+var dualRange = widget.getMacroValue("DR");
 
 //if (slot<10) slot="0"+slot;
 
@@ -22,9 +23,10 @@ for (var chan=0; chan<nchan; chan++)
   else           { pvprefix = "B_HW_" + crate + "_Sl" + slot + "_Ch" + chan; }
 
   var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-  lc.setPropertyValue("opi_file","caenhv_channel.opi");
-  //try   { lc.setPropertyValue("resize_behaviour",1); }
-  //catch (err) { lc.setPropertyValue("auto_size",true); }
+  if (dualRange == 1) 
+      lc.setPropertyValue("opi_file","caenhv_channel-nA.opi");
+  else
+      lc.setPropertyValue("opi_file","caenhv_channel.opi");
   lc.setPropertyValue("auto_size",true);
   lc.setPropertyValue("zoom_to_fit",false);
   lc.setPropertyValue("border_style",0);

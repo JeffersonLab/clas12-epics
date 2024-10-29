@@ -21,13 +21,9 @@ mpodLv_registerRecordDeviceDriver pdbbase
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
-devSnmpSetParam(DebugLevel,10)
+#devSnmpSetParam(DebugLevel,10)
 
 #MpodStatusParserDebug=1
-
-# EEL125:
-dbLoadRecords("db/mpod-crate.db","HOST=mmtblv")
-dbLoadTemplate("db/mmtblv.substitutions")
 
 dbLoadRecords("db/mpod-crate.db","HOST=mvtlv")
 dbLoadTemplate("db/mvtlv.substitutions")

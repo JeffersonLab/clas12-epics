@@ -72,7 +72,7 @@ def cycle(pvonoff, pvstat, timeout=10):
 
 def lv_cycle(rich, channels):
   for c in channels:
-      pvonoff = 'B_DET_%s_LV_GRP%.2d:pwonoff'%(rich,c)
+      pvonoff = 'B_DET_%s_LV_GRP%.2d:switch'%(rich,c)
       pvstat = 'B_DET_%s_LV_GRP%.2d:stat'%(rich,c)
       if not cycle(pvonoff, pvstat):
           return False

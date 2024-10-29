@@ -1,0 +1,51 @@
+#!../../bin/linux-x86_64/mmfeu
+
+## You may have to change mmfeu to something else
+## everywhere it appears in this file
+
+< envPaths
+epicsEnvSet("IOC","iocmmFeuAHDC")
+
+cd "${TOP}"
+
+epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
+epicsEnvSet("EPICS_CA_MAX_ARRAY_BYTES", "600000")
+
+epicsEnvSet("EPICS_CA_AUTO_ADDR_LIST","NO")
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.160.79 129.57.163.255")
+epicsEnvSet("EPICS_CAS_BEACON_ADDR_LIST","129.57.163.255")
+
+## Register all support components
+dbLoadDatabase "dbd/mmfeu.dbd"
+mmfeu_registerRecordDeviceDriver pdbbase
+
+## Configure devices
+drvAsynIPPortConfigure("L1","sedipcu182:15000",0,0,0)
+
+## Comment these for verbose output - for debugging purposes.
+#asynSetTraceMask("L1", 0, 4)
+#asynSetTraceIOMask("L1", 0, 6)
+#asynSetTraceIOTruncateSize("L1", 0, 1000)
+
+## Load record instances
+dbLoadRecords("db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadRecords("db/save_restoreStatus.db", "P=${IOC}:")
+
+dbLoadRecords("db/mmfeu.db","P=B_DET_AHDC_FEU,R=:asyn,PORT=L1,CR_LOW=2,CR_HI=4");
+
+dbLoadTemplate("db/mmfeucrateAHDC.substitutions")
+dbLoadTemplate("db/mmfeuslotAHDC.substitutions")
+#dbLoadTemplate("db/mmfeusumsAHDC.substitutions")
+
+cd "${TOP}/iocBoot/${IOC}"
+
+< save_restore.cmd
+
+iocInit
+
+makeAutosaveFiles()
+create_monitor_set("info_positions.req", 5, "P=${IOC}:")
+create_monitor_set("info_settings.req", 30, "P=${IOC}:")
+
+dbl > pv.list
+

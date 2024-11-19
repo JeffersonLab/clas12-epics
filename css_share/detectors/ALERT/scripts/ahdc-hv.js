@@ -7,8 +7,8 @@ var prefix = "B_DET_AHDC_HV_";
 function makeWidget(pv, n)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice-nA.opi"); }
-    else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel-nA.opi"); }
+    if (novice>0) { lc.setPropertyValue("opi_file","../../apps/caenHvApp/caenhv_channel_novice-nA.opi"); }
+    else          { lc.setPropertyValue("opi_file","../../apps/caenHvApp/caenhv_channel-nA.opi"); }
     lc.setPropertyValue("auto_size",true);
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);

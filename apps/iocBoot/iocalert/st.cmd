@@ -2,6 +2,10 @@
 
 < envPaths
 
+# Determine IP address:
+system 'nslookup lvatof | awk "/^Address: / {print\"epicsEnvSet(lvatof,\"\$2\")\"}" > env-ip.cmd'
+< env-ip.cmd
+
 epicsEnvSet("MIBDIRS","$(DEVSNMP)/mibs:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
 
@@ -18,9 +22,9 @@ mpodLv_registerRecordDeviceDriver pdbbase
 #devSnmpSetParam(DebugLevel,10)
 #MpodStatusParserDebug=1
 
-# Determine IP address:
-system 'nslookup lvatof | awk "/^Address: / {print\"epicsEnvSet(lvatof,\"\$2\")\"}" > ip.iocsh'
-< ip.iocsh
+# Standard IOC stuff:
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 # ATOF:
 dbLoadTemplate("db/atof-hvlv.substitutions")
@@ -32,11 +36,8 @@ dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
 dbLoadRecords("db/gas_cRIO_AHDC.db")
 dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_ALERT_,DLY=60")
 
-# Note, AHDC HV and LV are in separate IOCs (ioccaenhv_HVMVT and iocmvtlv)
-
-# Standard IOC stuff:
-dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
-dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
+# Note, AHDC is sharing hardware with MVT, in separate IOCs:
+# ioccaenhv_HVMVT, iocmvtlv, iocmmfeuMVT
 
 cd "${TOP}/iocBoot/${IOC}"
 

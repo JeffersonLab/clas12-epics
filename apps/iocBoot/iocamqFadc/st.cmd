@@ -14,10 +14,6 @@ dbLoadTemplate("db/amq-adc-HTCC.substitutions")
 dbLoadTemplate("db/amq-adc-LTCC.substitutions")
 dbLoadTemplate("db/amq-adc-CND.substitutions")
 
-dbLoadTemplate("db/amq-atof.substitutions")
-dbLoadRecords("db/amq-atof-aliases.db")
-dbLoadRecords("db/amq-atof-scalers.db")
-
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
@@ -42,6 +38,4 @@ dbLoadRecords("amq-adc-CND.alias")
 StartMQ()
 
 dbl > pv.list
-
-seq atof
 

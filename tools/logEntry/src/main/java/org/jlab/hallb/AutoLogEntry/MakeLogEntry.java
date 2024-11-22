@@ -16,7 +16,7 @@ import javax.imageio.*;
 import javax.swing.text.*;
 import javax.swing.border.*;
 
-import org.jlab.elog.LogEntry;
+import org.jlab.jlog.LogEntry;
 
 public class MakeLogEntry
 {

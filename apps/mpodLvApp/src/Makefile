@@ -36,6 +36,7 @@ mpodLv_LIBS += devSnmp
 mpodLv_LIBS += caPutLog
 mpodLv_LIBS += calc
 mpodLv_LIBS += seq
+mpodLv_LIBS += waveformApp
 
 include $(TOP)/configure/RULES
 

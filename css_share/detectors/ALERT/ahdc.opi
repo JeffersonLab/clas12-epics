@@ -94,7 +94,7 @@ $(pv_value)</tooltip>
       <height_scalable>true</height_scalable>
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
-    <visible>false</visible>
+    <visible>true</visible>
     <pv_name></pv_name>
     <border_color>
       <color name="MEDM_COLOR_4" red="187" green="187" blue="187" />
@@ -114,56 +114,58 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>../../apps/synApps/devIocStats/ioc_stats_soft.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>0</replace>
-        <description>IOC Stats</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>../../apps/mpodLvApp/mpod-crate.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <HOST>lvatof</HOST>
-          <ioc>iocalert</ioc>
-          <TITLE>ATOF MPOD Crate</TITLE>
-        </macros>
-        <replace>0</replace>
-        <description>ATOF - MPOD Crate</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>atof-lv.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <HOST>lvatof</HOST>
-          <ioc>iocalert</ioc>
-          <TITLE>lvatof MPOD Crate</TITLE>
-        </macros>
-        <replace>2</replace>
-        <description>ATOF - LV Boards</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>atof-hv.opi</path>
+        <path>ahdc-hv-novice.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>ATOF - HV Boards</description>
+        <description>High Voltage</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>ahdc-lv.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Low Voltage</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>ahdc-intlk.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Interlocks</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>ahdc-feu.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Front End Units</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>ahdc-gas.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Gas System</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>B_DET_ATOF:OFF</pv_name>
+        <pv_name>B_DET_AHDC_HV:OFF</pv_name>
         <value>1</value>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
-        <description>Turn All Off</description>
+        <description>Turn All HV Off</description>
       </action>
       <action type="WRITE_PV">
-        <pv_name>B_DET_ATOF:ON</pv_name>
+        <pv_name>B_DET_AHDC_HV:ON</pv_name>
         <value>1</value>
         <timeout>10</timeout>
-        <confirm_message>Really Turn all ATOF HV/LV ON?</confirm_message>
-        <description>Turn All On</description>
+        <confirm_message>Really Turn all AHDC HV ON?</confirm_message>
+        <description>Turn All HV On</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>burt-gui</command>
@@ -875,7 +877,7 @@ $(pv_value)</tooltip>
     <background_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>631</width>
+    <width>667</width>
     <x>6</x>
     <name>High Voltage</name>
     <y>48</y>
@@ -894,10 +896,10 @@ $(pv_value)</tooltip>
       <tooltip>$(trace_0_y_pv)
 $(trace_0_y_pv_value)</tooltip>
       <trace_0_concatenate_data>false</trace_0_concatenate_data>
-      <trace_0_trace_type>3</trace_0_trace_type>
+      <trace_0_trace_type>0</trace_0_trace_type>
       <border_width>1</border_width>
       <trace_1_x_axis_index>0</trace_1_x_axis_index>
-      <border_style>1</border_style>
+      <border_style>0</border_style>
       <axis_0_grid_color>
         <color red="60" green="60" blue="60" />
       </axis_0_grid_color>
@@ -953,7 +955,7 @@ $(trace_0_y_pv_value)</tooltip>
       <axis_0_dash_grid_line>false</axis_0_dash_grid_line>
       <trace_0_point_style>0</trace_0_point_style>
       <trace_1_point_style>0</trace_1_point_style>
-      <trace_0_line_width>5</trace_0_line_width>
+      <trace_0_line_width>1</trace_0_line_width>
       <axis_2_y_axis>true</axis_2_y_axis>
       <axis_0_time_format>0</axis_0_time_format>
       <trace_count>2</trace_count>
@@ -979,7 +981,7 @@ $(trace_0_y_pv_value)</tooltip>
       </axis_1_grid_color>
       <actions hook="false" hook_all="false" />
       <axis_2_axis_color>
-        <color name="MEDM_COLOR_40" red="164" green="170" blue="255" />
+        <color red="142" green="226" blue="137" />
       </axis_2_axis_color>
       <axis_0_log_scale>false</axis_0_log_scale>
       <trace_0_x_pv_value />
@@ -990,7 +992,7 @@ $(trace_0_y_pv_value)</tooltip>
       <trace_0_update_delay>100</trace_0_update_delay>
       <trace_1_concatenate_data>false</trace_1_concatenate_data>
       <trace_1_trace_color>
-        <color name="MEDM_COLOR_40" red="164" green="170" blue="255" />
+        <color name="MEDM_COLOR_60" red="115" green="255" blue="107" />
       </trace_1_trace_color>
       <pv_name>B_DET_AHDC_HV:imon:wf</pv_name>
       <axis_2_log_scale>false</axis_2_log_scale>
@@ -1012,7 +1014,7 @@ $(trace_0_y_pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
       </axis_2_title_font>
       <trace_0_y_pv>$(pv_name)</trace_0_y_pv>
-      <trace_0_plot_mode>1</trace_0_plot_mode>
+      <trace_0_plot_mode>0</trace_0_plot_mode>
       <enabled>true</enabled>
       <trace_0_x_pv></trace_0_x_pv>
       <axis_1_scale_font>
@@ -1024,7 +1026,7 @@ $(trace_0_y_pv_value)</tooltip>
       <border_alarm_sensitive>true</border_alarm_sensitive>
       <axis_2_maximum>2000.0</axis_2_maximum>
       <show_plot_area_border>false</show_plot_area_border>
-      <width>601</width>
+      <width>631</width>
       <trace_1_x_pv_value />
       <axis_1_minimum>0.0</axis_1_minimum>
       <title_font>
@@ -1242,7 +1244,7 @@ $(pv_value)</tooltip>
     <background_color>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
-    <width>321</width>
+    <width>279</width>
     <x>256</x>
     <name>Interlocks</name>
     <y>234</y>
@@ -1282,7 +1284,7 @@ $(pv_value)</tooltip>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
       <visible>true</visible>
-      <pv_name>B_DET_AHDC_INTLK:status.STAT</pv_name>
+      <pv_name>B_DET_AHDC_INTLK:status.SEVR</pv_name>
       <vertical_alignment>1</vertical_alignment>
       <border_color>
         <color name="MEDM_COLOR_10" red="105" green="105" blue="105" />
@@ -1295,7 +1297,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color name="Read_Background" red="77" green="77" blue="77" />
       </background_color>
-      <width>67</width>
+      <width>73</width>
       <x>60</x>
       <name>Text Update_2</name>
       <y>10</y>
@@ -1347,7 +1349,7 @@ $(pv_value)</tooltip>
       <background_color>
         <color name="Read_Background" red="77" green="77" blue="77" />
       </background_color>
-      <width>67</width>
+      <width>25</width>
       <x>216</x>
       <name>Text Update_1</name>
       <y>10</y>

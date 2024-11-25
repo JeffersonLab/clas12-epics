@@ -279,23 +279,12 @@ $(pv_value)</tooltip>
     </foreground_color>
     <actions hook="false" hook_all="false">
       <action type="OPEN_DISPLAY">
-        <path>../../apps/synApps/devIocStats/ioc_stats_soft.opi</path>
+        <path>atof-hv.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
-        <replace>0</replace>
-        <description>IOC Stats</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>../../apps/mpodLvApp/mpod-crate.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-          <HOST>lvatof</HOST>
-          <ioc>iocalert</ioc>
-          <TITLE>ATOF MPOD Crate</TITLE>
-        </macros>
-        <replace>0</replace>
-        <description>ATOF - MPOD Crate</description>
+        <replace>2</replace>
+        <description>High Voltage</description>
       </action>
       <action type="OPEN_DISPLAY">
         <path>atof-lv.opi</path>
@@ -306,15 +295,15 @@ $(pv_value)</tooltip>
           <TITLE>lvatof MPOD Crate</TITLE>
         </macros>
         <replace>2</replace>
-        <description>ATOF - LV Boards</description>
+        <description>Low Voltage</description>
       </action>
       <action type="OPEN_DISPLAY">
-        <path>atof-hv.opi</path>
+        <path>atof-feu.opi</path>
         <macros>
           <include_parent_macros>true</include_parent_macros>
         </macros>
         <replace>2</replace>
-        <description>ATOF - HV Boards</description>
+        <description>Front End Units</description>
       </action>
       <action type="WRITE_PV">
         <pv_name>B_DET_ATOF:OFF</pv_name>
@@ -329,6 +318,25 @@ $(pv_value)</tooltip>
         <timeout>10</timeout>
         <confirm_message>Really Turn all ATOF HV/LV ON?</confirm_message>
         <description>Turn All On</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/mpodLvApp/mpod-crate.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+          <HOST>lvatof</HOST>
+          <ioc>iocalert</ioc>
+          <TITLE>ATOF MPOD Crate</TITLE>
+        </macros>
+        <replace>0</replace>
+        <description>MPOD Crate</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>../../apps/synApps/devIocStats/ioc_stats_soft.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>0</replace>
+        <description>IOC Stats</description>
       </action>
       <action type="EXECUTE_CMD">
         <command>burt-gui</command>

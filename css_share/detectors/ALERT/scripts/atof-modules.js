@@ -9,5 +9,4 @@ for (var module=0; module<15; module++) {
     lc.setPropertyValue("background_color","Header_Background");
     lc.addMacro("M",module);
     widget.addChildToBottom(lc);
-
 }

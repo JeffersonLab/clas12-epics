@@ -2,8 +2,6 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 
 var novice = PVUtil.getDouble(pvs[0]);
 
-var prefix = "B_DET_AHDC_HV_";
-
 function makeWidget(pv, n)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
@@ -17,7 +15,6 @@ function makeWidget(pv, n)
     lc.addMacro("P",pv);
     widget.addChildToBottom(lc);
 }
-
 
 var n=1;
 for (var s=1; s<=9; ++s) {

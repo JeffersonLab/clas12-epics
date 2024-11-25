@@ -54,5 +54,8 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
+# During ALERT, only one active crate:
+dbpf("B_DET_MVT_FEU:NActiveCrates.LOW","0")
+
 dbl > pv.list
 

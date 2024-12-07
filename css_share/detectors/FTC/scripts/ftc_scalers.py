@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time,sys,os,argparse,atexit
 from epics import pv
 from ROOT import TH2D,TH2I,gStyle,gPad,TPaveText,TCanvas
@@ -387,8 +387,8 @@ class ECalChannel:
 
   def dump(self):
     for key in self.vals.keys():
-      print '%15s'%(key+'='+str(self.vals[key])),
-    print
+      print('%15s'%(key+'='+str(self.vals[key])),)
+    print()
 
 class ECalChannelCollection:
 

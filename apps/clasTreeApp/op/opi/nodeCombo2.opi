@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<display typeId="org.csstudio.opibuilder.Display" version="1.0.0">
+  <show_close_button>true</show_close_button>
+  <rules />
+  <wuid>2da4dada:138bb0b2666:-7ff6</wuid>
+  <show_grid>true</show_grid>
+  <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
+  <scripts />
+  <height>32</height>
+  <macros>
+    <include_parent_macros>true</include_parent_macros>
+  </macros>
+  <boy_version>4.0.103.201508281950</boy_version>
+  <show_edit_range>true</show_edit_range>
+  <widget_type>Display</widget_type>
+  <auto_scale_widgets>
+    <auto_scale_widgets>false</auto_scale_widgets>
+    <min_width>-1</min_width>
+    <min_height>-1</min_height>
+  </auto_scale_widgets>
+  <background_color>
+    <color name="OPI_Background" red="50" green="50" blue="50" />
+  </background_color>
+  <width>120</width>
+  <x>-1</x>
+  <name>Display</name>
+  <grid_space>1</grid_space>
+  <show_ruler>true</show_ruler>
+  <y>-1</y>
+  <snap_to_geometry>true</snap_to_geometry>
+  <foreground_color>
+    <color red="192" green="192" blue="192" />
+  </foreground_color>
+  <actions hook="false" hook_all="false" />
+  <widget typeId="org.csstudio.opibuilder.widgets.combo" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip></tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>850bb9c:151ed501514:-7808</wuid>
+    <pv_value />
+    <scripts>
+      <path pathString="EmbeddedPy" checkConnect="true" sfe="false" seoe="false">
+        <scriptName>UdateMenu</scriptName>
+        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+import nodeLoader
+from java.util import Arrays
+
+nodeLoader.readTree()                                    #Read in the node tree
+
+n = int(widget.getMacroValue("N"))               #Get N,B and NODE
+topnode=widget.getMacroValue("TOP")
+node = PVUtil.getString(pvArray[0])
+esel = "none"
+
+if not node in nodeLoader.NodeIndex:             # check node defined, or try parent, or force to top node
+	if node.find("_"):
+		parent = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+		ConsoleUtil.writeInfo("Update: parent="+parent)
+		if parent in nodeLoader.NodeIndex:
+			esel=node.split("_")[len(node.split("_"))-1]
+			node=parent
+		else:
+		        node=topnode
+	else:
+		node=topnode
+
+nlist=node.split("_")                                         #make a list of the parts of node   nlist = (B,SYS,HV,ECAL,SEC1,....)
+
+#widget.setPropertyValue("enabled","false")       #disable until other decision made
+widget.setPropertyValue("visible","false")       #disable until other decision made
+widget.setPropertyValue("background_color","OPI_Background")   
+
+if n<=len(nlist):                                                  # if this level is included in the node
+        parent=topnode
+        if n>1:
+                for e in range(1,n):
+                        parent+="_"+nlist[e]
+        #ConsoleUtil.writeInfo("Update:"+str(n)+", parent="+parent)
+                        
+        pindex =  int(nodeLoader.NodeIndex[parent])                    #get its parent index
+        if len(nodeLoader.SubNodeNames[pindex])>2:                   #if there are siblings
+                #ConsoleUtil.writeInfo("Update: sibilng list="+nodeLoader.SubNodeNames[pindex])
+                widget.setPropertyValue("visible","true")                 #enable it
+                #widget.setPropertyValue("enabled","true")                 #enable it
+                widget.setPropertyValue("background_color","Write_Background") 
+                siblings = nodeLoader.SubNodeNames[pindex].rstrip("'").lstrip("'").split(",")
+                siblings.sort()                                                                 #make a sorted list of them
+                widget.setPropertyValue("items",Arrays.asList(siblings) )   #set the choice list
+                if n<len(nlist):                                            #if not the last one
+                        pvArray[1].setValue(nlist[n])                       #set the selected value
+                else:
+			pvArray[1].setValue("select..")
+
+]]></scriptText>
+        <pv trig="true">loc://$(LCID)_NODE</pv>
+        <pv trig="false">loc://$(LCID)_MOUT_$(N)</pv>
+      </path>
+      <path pathString="EmbeddedPy" checkConnect="true" sfe="true" seoe="false">
+        <scriptName>UpdateNode</scriptName>
+        <scriptText><![CDATA[from org.csstudio.opibuilder.scriptUtil import PVUtil,WidgetUtil,ConsoleUtil
+import nodeLoader
+
+n = int(widget.getMacroValue("N"))               #Get N,TOP and NODE and MOUT_$(N)
+topnode=widget.getMacroValue("TOP")
+node = PVUtil.getString(pvArray[0])
+sel = PVUtil.getString(pvArray[1])
+
+nodeLoader.readTree()                                    #Read in the node tree
+
+if not node in nodeLoader.NodeIndex:             # check node defined, or try parent, or force to top node
+	if node.find("_"):
+		parent = node.split("_"+node.split("_")[len(node.split("_"))-1])[0]
+		ConsoleUtil.writeInfo("Update: parent="+parent)
+		if parent in nodeLoader.NodeIndex:
+			esel=node.split("_")[len(node.split("_"))-1]
+			node=parent
+		else:
+		        node=topnode
+	else:
+		node=topnode
+
+nlist=node.split("_")                                          #make a list of the parts of node
+
+#ConsoleUtil.writeInfo("Action:"+str(n)+",  mode= "+node+",  sel= "+sel)
+if not sel == 'select..':
+	if n>=len(nlist) or ((n<len(nlist)) and (not sel==nlist[n])):        
+		newnode=topnode
+       		if n>=1:
+      			for e in range(1,n):
+                    		newnode+="_"+nlist[e]
+                newnode+="_"+sel
+     		pvArray[0].setValue(newnode)       
+]]></scriptText>
+        <pv trig="false">loc://$(LCID)_NODE</pv>
+        <pv trig="true">loc://$(LCID)_MOUT_$(N)</pv>
+      </path>
+    </scripts>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>29</height>
+    <border_width>0</border_width>
+    <scale_options>
+      <width_scalable>false</width_scalable>
+      <height_scalable>false</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <items_from_pv>false</items_from_pv>
+    <visible>true</visible>
+    <pv_name>loc://$(LCID)_MOUT_$(N)</pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Choice Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Write_Background" red="250" green="250" blue="205" />
+    </background_color>
+    <width>118</width>
+    <x>2</x>
+    <name>Combo</name>
+    <y>1</y>
+    <foreground_color>
+      <color name="OPI_Background" red="50" green="50" blue="50" />
+    </foreground_color>
+    <actions hook="true" hook_all="false" />
+    <items>
+      <s>Choice 1</s>
+      <s>Choice 2</s>
+      <s>Choice 3</s>
+    </items>
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.polyline" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <line_width>1</line_width>
+    <horizontal_fill>true</horizontal_fill>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <arrows>0</arrows>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-4e556fb6:1521bba9215:3ce8</wuid>
+    <transparent>false</transparent>
+    <points>
+      <point x="10" y="12" />
+      <point x="87" y="12" />
+      <point x="87" y="12" />
+      <point x="87" y="12" />
+    </points>
+    <fill_arrow>true</fill_arrow>
+    <pv_value />
+    <alpha>255</alpha>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>1</height>
+    <border_width>0</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>true</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <anti_alias>true</anti_alias>
+    <line_style>0</line_style>
+    <arrow_length>20</arrow_length>
+    <widget_type>Polyline</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color name="Write_Background" red="250" green="250" blue="205" />
+    </background_color>
+    <width>78</width>
+    <x>10</x>
+    <name>Polyline</name>
+    <y>12</y>
+    <fill_level>0.0</fill_level>
+    <foreground_color>
+      <color red="255" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Cantarell" height="11" style="0">Default</opifont.name>
+    </font>
+  </widget>
+</display>

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Lists PVs that are NOT currently being archived.
 #
@@ -84,14 +84,14 @@ else:
 
                 else:
                     p = subprocess.check_output(["archive", pv])
-                    if "not archived" in p:
+                    if "not archived" in str(p):
                         not_archived.append(pv)
                     else:
                         is_archived.append(pv)
 
 for pv in clipvs:
     p = subprocess.check_output(["archive", pv])
-    if "not archived" in p:
+    if "not archived" in str(p):
         not_archived.append(pv)
     else:
         is_archived.append(pv)

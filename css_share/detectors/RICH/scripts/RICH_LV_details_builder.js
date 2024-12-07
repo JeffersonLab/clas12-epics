@@ -19,8 +19,8 @@ for (var iprefix=0; iprefix<2; iprefix++)
     var pv = prefix+chan;
 
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-    if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/LV/caenhv_channel_novice-lv.opi"); }
-    else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/LV/caenhv_channel-lv.opi"); }
+    if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/mpodLvApp/mpod8008l_channel_novice2.opi"); }
+    else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/mpodLvApp/mpod8008l_channel_expert.opi"); }
     //try   { lc.setPropertyValue("resize_behaviour",1); }
     //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);

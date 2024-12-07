@@ -17,6 +17,7 @@ mpodLv_DBD += asSupport.dbd
 mpodLv_DBD += devIocStats.dbd
 mpodLv_DBD += mpodLvInclude.dbd
 mpodLv_DBD += caPutLog.dbd
+mpodLv_DBD += sCalcoutRecord.dbd
 
 # mpodLv_registerRecordDeviceDriver.cpp derives from mpodLv.dbd
 mpodLv_SRCS += mpodLv_registerRecordDeviceDriver.cpp
@@ -35,6 +36,7 @@ mpodLv_LIBS += netsnmp devSnmp
 mpodLv_LIBS += caPutLog
 mpodLv_LIBS += calc
 mpodLv_LIBS += seq
+mpodLv_LIBS += waveformApp
 
 netsnmp_DIR += $(NETSNMP)/lib
 

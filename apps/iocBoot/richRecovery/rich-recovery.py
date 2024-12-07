@@ -72,14 +72,14 @@ def cycle(pvonoff, pvstat, timeout=10):
 
 def lv_cycle(rich, channels):
   for c in channels:
-      pvonoff = 'B_DET_%s_LV_GRP%.2d:pwonoff'%(rich,c)
+      pvonoff = 'B_DET_%s_LV_GRP%.2d:switch'%(rich,c)
       pvstat = 'B_DET_%s_LV_GRP%.2d:stat'%(rich,c)
       if not cycle(pvonoff, pvstat):
           return False
   return True
 
 def caen_ioc_reboot():
-    comms = epics.caget('B_DET_RICH_ALL_LV:isComm',timeout=2)
+    comms = epics.caget('B_DET_RICH_ALL_HV:isComm',timeout=2)
     if comms != 1:
         set_status(1,'Reestablishing CAEN comms ...')
         stdout = subprocess.check_output(['softioc_console','-R','ioccaenhv_HVRICH'],stderr=subprocess.STDOUT)
@@ -147,6 +147,9 @@ def clear_alarms():
             return False
     if epics.caput('B_HW_HVRICH2:ClearAlarm', 1, timeout=2) is None:
         if epics.caput('B_HW_HVRICH2:ClearAlarm', 1, timeout=2) is None:
+            return False
+    if epics.caput('lvrich1:clear', 1, timeout=2) is None:
+        if epics.caput('lvrich1:clear', 1, timeout=2) is None:
             return False
     return True
 

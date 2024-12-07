@@ -99,6 +99,8 @@ dbLoadRecords("db/amqRocBusy-alarm.db","ROC=mmft1,HIHI=50")
 dbLoadTemplate("db/amqTriggerNames.substitutions")
 dbLoadTemplate("db/amqTriggerFlags.substitutions")
 
+dbLoadRecords("db/amq-alert-busy-aliases.db")
+        
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -115,5 +117,8 @@ StartMQ()
 seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
 seq stage2bits
 seq sums
+
+dbpf("B_DAQ:ROCS_BUSY:clondaq11.DESC","clondaq11")
+dbpf("B_DAQ:ROCS_BUSY:alert1.DESC","alert1")
 
 dbl > pv.list

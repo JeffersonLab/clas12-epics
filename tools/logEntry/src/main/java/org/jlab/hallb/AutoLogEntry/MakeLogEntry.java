@@ -16,13 +16,13 @@ import javax.imageio.*;
 import javax.swing.text.*;
 import javax.swing.border.*;
 
-import org.jlab.elog.LogEntry;
+import org.jlab.jlog.LogEntry;
 
 public class MakeLogEntry
 {
   String LOGBOOKNAME="HBLOG";
 
-  String[] LOGBOOKS = {"HBLOG","HBRUN","HBCND","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","HBDAQ","HBTRIGGER","BBEAM","HBBAND","HBRTPC","TARGETLOG","ELOG","TLOG"};
+  String[] LOGBOOKS = {"HBLOG","HBRUN","HBCND","HBDC","HBECAL","HBMVT","HBSVT","HBTOF","HBSOLENOID","HBTORUS","HBCONTROLS","FT","HTCC","LTCC","RICH","HBDAQ","HBTRIGGER","BBEAM","HBBAND","HBRTPC","TARGETLOG","HBURWELL","HBALERT","ELOG","TLOG"};
 
   final String RUNDBTABLE="daq_"+System.getenv("USER");
   final String RUNDBUSER=System.getenv("EXPID");

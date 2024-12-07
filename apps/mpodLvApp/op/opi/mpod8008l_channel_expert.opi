@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>false</auto_zoom_to_fit_all>
   <scripts />
-  <height>600</height>
+  <height>24</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
     <P>B_HW_LVFTAG_Sl0_Ch0</P>
@@ -167,7 +167,7 @@ $(pv_value)</tooltip>
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>67</width>
-    <x>226</x>
+    <x>293</x>
     <name>Text Update_1</name>
     <y>0</y>
     <foreground_color>
@@ -219,7 +219,7 @@ $(pv_value)</tooltip>
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>67</width>
-    <x>293</x>
+    <x>360</x>
     <name>Text Update_2</name>
     <y>0</y>
     <foreground_color>
@@ -504,7 +504,7 @@ $(pv_value)</tooltip>
       <color red="191" green="191" blue="191" />
     </background_color>
     <width>40</width>
-    <x>801</x>
+    <x>899</x>
     <y>0</y>
     <maximum>1.7976931348623157E308</maximum>
     <foreground_color>
@@ -556,7 +556,7 @@ $(pv_value)</tooltip>
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>40</width>
-    <x>761</x>
+    <x>859</x>
     <name>Text Update_8</name>
     <y>0</y>
     <foreground_color>
@@ -608,7 +608,7 @@ $(pv_value)</tooltip>
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>40</width>
-    <x>841</x>
+    <x>939</x>
     <name>Text Update_9</name>
     <y>0</y>
     <foreground_color>
@@ -665,7 +665,7 @@ $(pv_value)</tooltip>
       <color red="191" green="191" blue="191" />
     </background_color>
     <width>40</width>
-    <x>881</x>
+    <x>979</x>
     <y>0</y>
     <maximum>1.7976931348623157E308</maximum>
     <foreground_color>
@@ -871,16 +871,15 @@ else if(pv0=="CC" || pv0=="CV")
         widget.setPropertyValue("background_color","Attention");
 else if(pv0=="ADJ")
         widget.setPropertyValue("background_color","Attention");
-else if(pv0=="ON")
+else if(pv0=="On")
         widget.setPropertyValue("background_color","On");
-else if(pv0=="OFF")
+else if(pv0=="Off")
         widget.setPropertyValue("background_color","Off");
 else
         widget.setPropertyValue("background_color","Major");
-if (pv0=="ON")
+
+if (pv0=="On")
 widget.setPropertyValue("foreground_color","Write_Foreground");
-else
-widget.setPropertyValue("foreground_color","Read_Foreground");
 
 ]]></scriptText>
         <pv trig="true">$(pv_name)</pv>
@@ -910,11 +909,11 @@ widget.setPropertyValue("foreground_color","Read_Foreground");
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>67</width>
-    <x>360</x>
+    <x>227</x>
     <name>Text Update_12</name>
     <y>0</y>
     <foreground_color>
-      <color name="Header_Foreground" red="255" green="255" blue="255" />
+      <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
     <font>
@@ -955,9 +954,9 @@ $(pv_value)</tooltip>
       <color red="240" green="240" blue="240" />
     </background_color>
     <width>40</width>
-    <x>921</x>
+    <x>1085</x>
     <name>Action Button</name>
-    <y>1</y>
+    <y>0</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -1017,7 +1016,7 @@ $(pv_value)</tooltip>
       <color name="Header_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>50</width>
-    <x>960</x>
+    <x>760</x>
     <name>Text Update_13</name>
     <y>0</y>
     <foreground_color>
@@ -1074,7 +1073,7 @@ $(pv_value)</tooltip>
       <color red="191" green="191" blue="191" />
     </background_color>
     <width>50</width>
-    <x>1010</x>
+    <x>810</x>
     <y>0</y>
     <maximum>1.7976931348623157E308</maximum>
     <foreground_color>
@@ -1083,6 +1082,223 @@ $(pv_value)</tooltip>
     <minimum>-1.7976931348623157E308</minimum>
     <font>
       <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextUpdate" version="1.0.0">
+    <border_style>1</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>2</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>33b17371:1926c5c3a1f:-7b89</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>GROUP</text>
+    <rotation_angle>0.0</rotation_angle>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <show_units>false</show_units>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P):group</pv_name>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="150" green="150" blue="150" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Update</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <wrap_words>false</wrap_words>
+    <format_type>0</format_type>
+    <background_color>
+      <color name="Header_Background" red="50" green="50" blue="50" />
+    </background_color>
+    <width>32</width>
+    <x>1019</x>
+    <name>Text Update_14</name>
+    <y>0</y>
+    <foreground_color>
+      <color name="Header_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.TextInput" version="2.0.0">
+    <alarm_pulsing>false</alarm_pulsing>
+    <precision>2</precision>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <horizontal_alignment>1</horizontal_alignment>
+    <rules />
+    <pv_value />
+    <auto_size>false</auto_size>
+    <text>GROUP</text>
+    <rotation_angle>0.0</rotation_angle>
+    <show_units>false</show_units>
+    <height>20</height>
+    <multiline_input>false</multiline_input>
+    <border_width>4</border_width>
+    <visible>true</visible>
+    <pv_name>$(P):gset</pv_name>
+    <selector_type>0</selector_type>
+    <border_color>
+      <color red="150" green="150" blue="150" />
+    </border_color>
+    <precision_from_pv>true</precision_from_pv>
+    <widget_type>Text Input</widget_type>
+    <confirm_message></confirm_message>
+    <name>Text Input_6</name>
+    <style>0</style>
+    <actions hook="false" hook_all="false" />
+    <border_style>3</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <enabled>true</enabled>
+    <wuid>33b17371:1926c5c3a1f:-7b88</wuid>
+    <transparent>false</transparent>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <format_type>0</format_type>
+    <limits_from_pv>false</limits_from_pv>
+    <background_color>
+      <color red="191" green="191" blue="191" />
+    </background_color>
+    <width>32</width>
+    <x>1051</x>
+    <y>0</y>
+    <maximum>1.7976931348623157E308</maximum>
+    <foreground_color>
+      <color name="Text_ForeGround" red="0" green="0" blue="0" />
+    </foreground_color>
+    <minimum>-1.7976931348623157E308</minimum>
+    <font>
+      <opifont.name fontName="Sans" height="8" style="0">Fine Print</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.bytemonitor" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <effect_3d>false</effect_3d>
+    <enabled>true</enabled>
+    <wuid>33b17371:1926c5c3a1f:-768e</wuid>
+    <on_color>
+      <color red="0" green="255" blue="0" />
+    </on_color>
+    <horizontal>true</horizontal>
+    <pv_value />
+    <numBits>7</numBits>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P):output_user_config:fbk</pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <bitReverse>false</bitReverse>
+    <label />
+    <widget_type>Byte Monitor</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <square_led>false</square_led>
+    <startBit>0</startBit>
+    <width>107</width>
+    <x>1124</x>
+    <name>Byte Monitor</name>
+    <y>2</y>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.bytemonitor" version="1.0.0">
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <effect_3d>false</effect_3d>
+    <enabled>true</enabled>
+    <wuid>33b17371:1926c5c3a1f:-7684</wuid>
+    <on_color>
+      <color name="Warning" red="255" green="255" blue="0" />
+    </on_color>
+    <horizontal>true</horizontal>
+    <pv_value />
+    <numBits>16</numBits>
+    <scripts />
+    <border_alarm_sensitive>true</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name>$(P):sup_behavior:fbk</pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <bitReverse>false</bitReverse>
+    <label />
+    <widget_type>Byte Monitor</widget_type>
+    <off_color>
+      <color red="0" green="100" blue="0" />
+    </off_color>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <square_led>false</square_led>
+    <startBit>0</startBit>
+    <width>213</width>
+    <x>1230</x>
+    <name>Byte Monitor_1</name>
+    <y>2</y>
+    <foreground_color>
+      <color red="192" green="192" blue="192" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
   </widget>
 </display>

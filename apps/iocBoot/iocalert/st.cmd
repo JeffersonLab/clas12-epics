@@ -2,8 +2,6 @@
 
 < envPaths
 
-< lvCrateAddresses.env
-
 epicsEnvSet("MIBDIRS","$(DEVSNMP)/mibs:/usr/share/snmp/mibs")
 epicsEnvSet("MIBS","ALL")
 
@@ -17,25 +15,29 @@ cd "${TOP}"
 dbLoadDatabase "dbd/mpodLv.dbd"
 mpodLv_registerRecordDeviceDriver pdbbase
 
+#devSnmpSetParam(DebugLevel,10)
+#MpodStatusParserDebug=1
+
+# Standard IOC stuff:
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
-#devSnmpSetParam(DebugLevel,10)
-#MpodStatusParserDebug=1
+# Determine IP address:
+system 'nslookup lvatof | awk "/^Address: / {print\"epicsEnvSet(lvatof,\"\$2\")\"}" > ${TOP}/iocBoot/${IOC}/ip.cmd'
+< ${TOP}/iocBoot/${IOC}/ip.cmd
 
 # ATOF:
 dbLoadTemplate("db/atof-hvlv.substitutions")
 dbLoadTemplate("db/atof-seq.substitutions")
 dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
 
-# AHDC:
-dbLoadTemplate("db/mmtb-lv.substitutions")
-#dbLoadTemplate("db/ahdc-lv.substitutions")
-#dbLoadTemplate("db/ahdc-intlk.substitutions")
-dbLoadRecords("db/gas_cRIO_AHDC.db")
-
-# TGT:
+# GAS:
 #dbLoadRecords("db/gas_cRIO_ALERT_TGT.db")
+dbLoadRecords("db/gas_cRIO_AHDC.db")
+dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_ALERT_,DLY=60")
+
+# Note, AHDC is sharing hardware with MVT, in separate IOCs:
+# ioccaenhv_HVMVT, iocmvtlv, iocmmfeuMVT
 
 cd "${TOP}/iocBoot/${IOC}"
 

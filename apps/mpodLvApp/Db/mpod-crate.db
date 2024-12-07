@@ -156,6 +156,10 @@ record(longout,"$(HOST):clearEvent") {
 	field(OUT,"@$(HOST) guru %{W}groupsSwitch.0 INTEGER: 50 i")
     field(ASG,"ALLWRITE")
 }
+record(seq,"$(HOST):clear") {
+    field(LNK1,"$(HOST):clearEvent PP")
+    field(DO1,"10")
+}
 record(longout,"$(HOST):sysHardwareReset") {
 	field(DESC,"Triggered Reset Watchdog or ResetLine")
 	field(DTYP,"Snmp")

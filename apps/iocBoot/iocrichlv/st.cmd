@@ -17,10 +17,10 @@ cd "${TOP}"
 dbLoadDatabase "dbd/mpodLv.dbd"
 mpodLv_registerRecordDeviceDriver pdbbase
 
-#dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
 #dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
-#devSnmpSetParam(DebugLevel,10)
+devSnmpSetParam(DebugLevel,10)
 #MpodStatusParserDebug=1
 
 dbLoadTemplate("db/richlv.substitutions")

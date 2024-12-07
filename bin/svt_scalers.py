@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time,sys,os,argparse,atexit
 from epics import pv
 from ROOT import TH2D,TH2I,gStyle,gPad,TPaveText,TCanvas

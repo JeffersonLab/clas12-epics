@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Convert CSV to XML for BEAST configuration
 #
@@ -72,26 +72,26 @@ else:
             arg += "*.[cC][sS][vV]"
             csvFiles = glob.glob(arg)
         else:
-            print "Warning: " + arg + " not found"
+            print("Warning: " + arg + " not found")
 
 if len(csvFiles) == 0:
-    print "No files to be processed"
+    print("No files to be processed")
     exit(0)
 
 csvFiles.sort(key=str.lower)
 
 for csvFile in csvFiles:
     if os.stat(csvFile).st_size == 0:
-        print "Warning: empty file, skipping " + csvFile
+        print("Warning: empty file, skipping " + csvFile)
         continue
 
-    print "Processing BEAST file " + csvFile
+    print("Processing BEAST file " + csvFile)
     xmlFile = csvFile[:-4] + '.xml'
     csvData = csv.reader(open(csvFile))
     try:
         xmlData = open(xmlFile, 'w')
     except IOError:
-        print "Write permission denied: " + xmlFile
+        print("Write permission denied: " + xmlFile)
         exit(1)
 
     rowNum = 0
@@ -112,7 +112,7 @@ for csvFile in csvFiles:
         elif rowNum == 1:
             tags = row
             if tags[0].lower() != "pv":
-                print "Error: 'pv' must be the first column, found '" + tags[0] + "' instead"
+                print("Error: 'pv' must be the first column, found '" + tags[0] + "' instead")
                 exit(1)
         # parse pv rows
         elif rowNum > 1:
@@ -137,7 +137,7 @@ for csvFile in csvFiles:
                     while j < len(tags):
                         # search until not a sub-element
                         if tags[j] == sub0_name:
-                            print "dup"
+                            print("dup")
                             break
                         elem = tags[j].split()
                         if elem[0] == sub0_name:

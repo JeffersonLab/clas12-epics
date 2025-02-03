@@ -34,6 +34,7 @@ dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
 # GAS:
 dbLoadRecords("db/gas_cRIO_BONUS.db")
 dbLoadRecords("db/gas_cRIO_AHDC.db")
+dbLoadRecords("db/gas_cRIO_ALERT_alias.db")
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_,R=CRIO_BONUS_,DLY=60")
 
 # Note, AHDC is sharing hardware with MVT, in separate IOCs:

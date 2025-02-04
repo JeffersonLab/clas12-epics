@@ -9,6 +9,7 @@ var REGION = widget.getMacroValue("REGION");
 var SLAYER = widget.getMacroValue("SLAYER");
 var SFG    = widget.getMacroValue("SFG");
 
+var DARK = widget.getMacroValue("DARK");
 
 var NSECTORS=6;
 var NREGIONS=3;
@@ -32,24 +33,20 @@ for (var isec=1; isec<=NSECTORS; isec++) {
         var sfg=TSFG[isfg];
         for (var iwire=0; iwire<WSFG[sfg].length; iwire++) {
           var wires=WSFG[sfg][iwire];
-
             var suffix = "_SEC"+isec+"_R"+ireg+"_SL"+slay+"_"+sfg+wires;
-            //java.lang.System.err.println(suffix);
-
             var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
-            lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice-dark.opi");
-            
-            //if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
-            //else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
-            //try   { lc.setPropertyValue("resize_behaviour",1); }
-            //catch (err) { lc.setPropertyValue("auto_size",true); }
-            //    lc.setPropertyValue("resize_behavior",2);
+            if (DARK != "1") 
+                lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice-dark.opi");
+            else
+                lc.setPropertyValue("opi_file","/CLAS12_Share/alarms/alarm_aiao_row_slim.opi");
             lc.setPropertyValue("auto_size",true);
             lc.setPropertyValue("zoom_to_fit",false);
             lc.setPropertyValue("border_style",0);
             lc.setPropertyValue("background_color","Header_Background");
             lc.addMacro("C",ichan);
             lc.addMacro("P",PREFIX+suffix);
+            lc.addMacro("PV",PREFIX+suffix+":idark");
+            lc.addMacro("LABEL",suffix);
             widget.addChildToBottom(lc);
             ichan++;
         } 

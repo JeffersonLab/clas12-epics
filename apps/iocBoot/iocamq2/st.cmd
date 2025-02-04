@@ -25,6 +25,7 @@ dbLoadTemplate("db/amqDaqErrorStrings.substitutions")
 dbLoadRecords("db/amqDaqErrorStrings-alarm.db")
 
 dbLoadRecords("db/amq-alert-rate-aliases.db")
+dbLoadRecords("db/amq-alert-err-aliases.db")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -41,6 +42,8 @@ dbpf("B_DAQ:EB6:stats:03.EGU","MB/s")
 
 dbpf("B_DAQ:STA:clondaq11:dataRate.DESC","clondaq11")
 dbpf("B_DAQ:STA:alert1:dataRate.DESC","alert1")
+dbpf("B_DAQ:err:clondaq11.DESC","clondaq11")
+dbpf("B_DAQ:err:alert1.DESC","alert1")
 
 seq waveform, "P=B_DAQ:,R=STA:dataRate:wf"
 

@@ -17,7 +17,7 @@ option +s;
 #define USE_BRIANS_QUADS
 
 // use 2020 Dynapower quadrupole power supply: 
-//#define DYNAB2020
+#define DYNAB2020
 
 #include "automoller.h"
 

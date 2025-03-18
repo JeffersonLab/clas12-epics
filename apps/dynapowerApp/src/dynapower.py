@@ -20,7 +20,7 @@ class DynapowerPV():
 
 class DynapowerMessage():
 
-    terminator = r'\x00' * 15
+    terminator = r'\x00' * 12
 
     regex = b'^\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)\r\n (\d+)'
 

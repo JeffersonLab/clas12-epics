@@ -45,7 +45,7 @@ var keepers=[0,1,2,3,4,5,6];
         //    }
         //}
         if (enabled==0) {
-        java.lang.System.out.println("Not enabled "+chan);
+//        java.lang.System.out.println("Not enabled "+chan);
         continue;
         }
     }

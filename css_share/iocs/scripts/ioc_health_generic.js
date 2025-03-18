@@ -4,7 +4,7 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 // It can also be a comma-separated list of file names.
 //
 // If a line doesn't start with "ioc", insert a blank gap instead.  Additional
-// columns are options (the only currently valid one is "noautosave");
+// columns are options (see below).
 
 var fileNames=widget.getMacroValue("F").split(",");
 
@@ -36,8 +36,6 @@ function insertIoc(iocName,opiFile)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
     lc.setPropertyValue("opi_file",opiFile);
-    //try   { lc.setPropertyValue("resize_behaviour",1); }
-    //catch (err) { lc.setPropertyValue("auto_size",true); }
     lc.setPropertyValue("auto_size",true);
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);
@@ -70,6 +68,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
 
         var iocName=lines[ii];
         var autosave=true;
+        var dual=false;
         var vxworks=false;
 
         columns=lines[ii].split(" ");
@@ -77,6 +76,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
             iocName=columns[0];
             for (var kk=1; kk<columns.length; kk++) {
                 if (columns[kk].equals("noautosave")) autosave=false;
+                else if (columns[kk].equals("dual")) dual=true;
                 else if (columns[kk].equals("vxworks")) vxworks=true;
             }
         }
@@ -86,6 +86,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
         else opiFile += "_vxworks";
         if (!vxworks && jj%2) opiFile += "_light";
         if (autosave) opiFile += "_autosave";
+        if (dual) opiFile += "_dual";
         opiFile += ".opi";
 
         insertIoc(iocName,opiFile);

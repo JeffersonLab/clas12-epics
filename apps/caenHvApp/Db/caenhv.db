@@ -18,26 +18,25 @@ record(stringout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):Alias")
 
 record(bigsub, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch)") 
 {
+   field(SCAN,"1 second")
+   field(SNAM,"ScanChannel")
    field(PRIO,"LOW")
    field(DESC,"$(Det)_HV_$(Element)")
    field(INAM,"InitChannel")
    field(INPA,"$(Cr)")
    field(INPB,"$(Sl)")
    field(INPC,"$(Ch)")
-field(LSV,"MINOR")
-field(HSV,"MINOR")
-field(LLSV,"MAJOR")
-field(HHSV,"MAJOR")
-field(HIGH,"10")
-field(LOW,"-10")
-field(HIHI, "10000")
-field(LOLO,"-10000")
-   field(PREC,"1")
-   field(SNAM,"ScanChannel")
-   field(SCAN,"2 second")
+   field(LSV,"MINOR")
+   field(HSV,"MINOR")
+   field(LLSV,"MAJOR")
+   field(HHSV,"MAJOR")
+   field(HIGH,"10")
+   field(LOW,"-10")
+   field(HIHI, "10000")
+   field(LOLO,"-10000")
    alias("B_DET_$(Det)_$(Sys)_$(Element)")
    alias("B_SYS_$(Sys)_$(Det)_$(Element)")
-info(autosaveFields_pass0,"HSV LSV HIGH LOW DESC")
+   info(autosaveFields_pass0,"HSV LSV HIGH LOW DESC")
 }
 
 
@@ -89,8 +88,36 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
    field(EGU,"uA")
    alias("B_DET_$(Det)_$(Sys)_$(Element):imon")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):imon")
+   field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idarkcalc.PROC")
    info(autosaveFields_pass0,"HSV LSV HHSV LLSV HIGH LOW HIHI LOLO")
-}   
+}
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idarkcalc")
+{
+   field(SCAN, "Passive")
+   field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
+   field(INPB, "IPM2C21A")
+   field(CALC, "B=0")
+   field(OCAL, "A")
+   field(OOPT, "When Non-zero")
+   field(DOPT, "Use OCAL")
+   field(DISV, "0")
+   field(DISA, "$(dark=0)")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):idarkcalc")
+   field(OUT,  "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark PP")
+}
+record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark")
+{  field(VAL, "0")
+   field(PINI, "1")
+   field(DESC, "Dark Current")
+   field(EGU,"uA")
+   field(PREC,"2")
+   field(HIGH,"2")
+   field(HIHI,"3")
+   field(HSV,"MINOR")
+   field(HHSV,"MAJOR")
+   alias("B_DET_$(Det)_$(Sys)_$(Element):idark")
+   info(autosaveFields_pass1,"HSV HHSV HIGH HIHI")
+}
 
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):triprbk")
 {
@@ -175,6 +202,8 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
    field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).T CPP NMS")
    field(OMSL,"closed_loop")
    field(PREC,"2")
+   field(HIGH,"1")
+   field(HSV,"MAJOR")
    alias("B_DET_$(Det)_$(Sys)_$(Element):comms")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):comms")
 }   
@@ -311,32 +340,26 @@ record(ai,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):type")
 }
 
 
-# :hwstatmaxbitcalc
-#
 # This record just picks out the most significant non-zero bit
 # of the :stat hardware status.  This is appropriate since CAEN
 # ordered their SYX527 status bits such that most significant bit
-# is the most significant status (error).
-#
-# Note, CAEN leaves bit 12 unused.  If we do the same, we run out
-# of mbbi bits (16).  So, if :stat>=2^12, downshift by one bit.
-#
-record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc")
+# is the most significant status (error).  Note, CAEN leaves bit
+# 12 unused.  If we do the same, we run out of mbbi bits (16).
+# So, if :stat>=2^12, downshift by one bit.
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwcstat")
 {
     field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
     field(CALC,"A=0?0:floor(log(A)/log(2))+1-(A<8192?0:1)")
-    alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbitcalc")
+    alias("B_DET_$(Det)_$(Sys)_$(Element):hwcstat")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstat")
 }
 
-# :hwstatmaxbit
-#
 # This record just provides a mapping from CAEN status bits to
-# their corresponding string values and severities, using only
-# the most significant bit from statmaxbitcalc.  Note the shift
-# explained above for stat>=2^12.
-record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
+# their corresponding string values and severities.  Note the
+# shift explained above for stat>=2^12.
+record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstat")
 {
-    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbitcalc CPP")
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwcstat")
     field(ZRVL,"0")
     field(ONVL,"1")
     field(TWVL,"2")
@@ -361,7 +384,7 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(FVST,"OVV")
     field(SXST,"UNV")
     field(SVST,"ExTrip")
-    field(EIST,"MAXV")
+    field(EIST,"MaxV")
     field(NIST,"ExDis")
     field(TEST,"InTrip")
     field(ELST,"Calib")
@@ -385,26 +408,110 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstatmaxbit")
     field(TTSV,"MAJOR")
     field(FTSV,"MAJOR")
     field(FFSV,"MAJOR")
-    alias("B_DET_$(Det)_$(Sys)_$(Element):hwstatmaxbit")   
 }
-
-# This is the final status summary record.  Precendence order is:
-# 1. Communications error
-# 2. Hardware errors
-# 3. Mismatch between measured/demand on/off 
-# 4. Mismatch measured/demand voltage
-#record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statcalc")
-#{
-#    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms CPP")
-#    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):statmaxbit CPP")
-#    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon CPP")
-#    field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk CPP")
-#    field(INPE,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat CPP")
-#    field(INPF,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff CPP")
-#    field(HIHI,9999)
-#    field(HIGH,10)
-#    field(LOW,-10)
-#    field(LOLO,-9999)
-#    alias("B_DET_$(Det)_$(Sys)_$(Element):statcalc")   
-#}
-
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff:wf")
+{
+    field(SCAN,"1 second")
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff")
+    field(NSAM,"30")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff:wf:lo.PROC")
+}
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff:wf:lo")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff:wf")
+    field(ALG,"N to 1 Low Value")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwstat.PROC")
+}
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwstat")
+{
+    field(DESC,"Power switch mismatch status")
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff")
+    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwonoff:wf:lo")
+    field(CALC,"A=0 ? (B && C) : 0")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf.PROC")
+}
+record(waveform, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
+    field(FTVL,"DOUBLE")
+    field(NELM,"60")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:lo.PROC")
+}
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:lo")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf")
+    field(ALG,"N to 1 Low Value")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:hi.PROC")
+}
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:hi")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf")
+    field(ALG,"N to 1 High Value")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):istat.PROC")
+}
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):istat")
+{
+    field(DESC,"Current fluctuation status")
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:lo")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon:wf:hi")
+    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
+    field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
+    field(CALC,"( A=B && A>0 && D>0 ) ? C=1 : 0")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstat.PROC")
+}
+record(calc, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstat")
+{
+    field(DESC,"Communications status")
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):comms")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):istat")
+    field(CALC,"MAX(A,B)")
+    field(HIGH,"1")
+    field(HSV,"MAJOR")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vstat.PROC")
+}
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vstat")
+{
+    field(DESC,"Voltage tolerance status")
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):stat")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
+    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vset")
+    field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vsetrbk")
+    field(CALC,"A=1 ? ABS(B-C) : 0")
+    field(HIHI,"20")
+    field(HIGH,"10")
+    field(HHSV,"MAJOR")
+    field(HSV,"MINOR")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstatus.PROC")
+}
+record(calc,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstatus")
+{
+    field(DESC,"Final status calculation")
+    field(INPA,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstat")
+    field(INPB,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):hwstat.SEVR")
+    field(INPC,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):pwstat")
+    field(INPD,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vstat.SEVR")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):status")
+    field(CALC,"A?5:(B>1?4:(B=1?3:(C?2:(D?1:0))))")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):status.PROC")
+}
+record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):status")
+{
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):cstatus")
+    field(ZRST,"Ok")
+    field(ONST,"Regulation Error")
+    field(TWST,"Switch Mismatch")
+    field(THST,"Ramping")
+    field(FRST,"Hardware Error")
+    field(FVST,"Comms Error")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"MINOR")
+    field(TWSV,"MAJOR")
+    field(THSV,"MINOR")
+    field(FRSV,"MAJOR")
+    field(FVSV,"MAJOR")
+}

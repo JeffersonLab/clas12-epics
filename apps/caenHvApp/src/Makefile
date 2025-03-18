@@ -1,18 +1,12 @@
 TOP=../..
 
 include $(TOP)/configure/CONFIG
-#----------------------------------------
-#  ADD MACRO DEFINITIONS AFTER THIS LINE
-#=============================
 
 #=============================
-# Build the IOC application
 
 PROD_IOC_Linux = ioccaen
-# ecalHV.dbd will be created and installed
 DBD += ioccaen.dbd
 
-# <name>_registerRecordDeviceDriver.cpp will be created from <name>.dbd
 ioccaen_SRCS += ioccaen_registerRecordDeviceDriver.cpp
 ioccaen_SRCS += bigsub.c
 ioccaen_SRCS += devCAEN.c
@@ -21,7 +15,6 @@ ioccaen_SRCS += dchv_waveforms-S345.st
 ioccaen_SRCS_DEFAULT += ioccaenMain.cpp
 ioccaen_SRCS_vxWorks += -nil-
 
-# CAEN_HV/include
 USR_INCLUDES += -I$(TOP)/include
 
 ioccaen_LIBS += calc
@@ -52,23 +45,6 @@ dim_DIR   += $(DIM_LIB)
 USR_INCLUDES += $(SMIXX_INCLUDE)
 USR_INCLUDES += $(DIM_INCLUDE)
 
-
-#TARGETS += mkHVEpics ../HV_allnames.txt 
-
 #===========================
 include $(TOP)/configure/RULES
 
-#----------------------------------------
-#  ADD RULES AFTER THIS LINE
-
-mkHVEpics:	mkHVEpics.C
-	g++ -o $@ $^
-
-../HV_allnames.txt:	mkHVEpics ../HVswaps.txt ../../Db/caenhv.db
-	echo "Generating HV names, substitutions and iocs. See mkHVEpics.log and HV_allnames.txt"
-#	./mkHVEpics crates > ../mkHVEpics.log 
-#	./mkHVEpics groups >> ../mkHVEpics.log
-#	./mkHVEpics all >> ../mkHVEpics.log
-	./mkHVEpics crates
-	./mkHVEpics groups
-	./mkHVEpics all

@@ -32,9 +32,10 @@ dbLoadTemplate("db/atof-seq.substitutions")
 dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
 
 # GAS:
-#dbLoadRecords("db/gas_cRIO_ALERT_TGT.db")
+dbLoadRecords("db/gas_cRIO_BONUS.db")
 dbLoadRecords("db/gas_cRIO_AHDC.db")
-dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_ALERT_,DLY=60")
+dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_,R=CRIO_BONUS_,DLY=60")
+dbLoadRecords("db/gas_cRIO_ALERT_alias.db")
 
 # Note, AHDC is sharing hardware with MVT, in separate IOCs:
 # ioccaenhv_HVMVT, iocmvtlv, iocmmfeuMVT

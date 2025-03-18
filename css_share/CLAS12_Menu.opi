@@ -417,7 +417,7 @@ $(pv_value)</tooltip>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>DC HV Dark Current Alarms</description>
+          <description>DC Dark Current Summary</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>detectors/FMT/FMT.opi</path>
@@ -995,6 +995,14 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>AHDC</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/ALERT/gas.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Gas</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -1489,12 +1497,6 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>DAQ Status - All</description>
         </action>
-        <action type="EXECUTE_CMD">
-          <command>daqvnc.py connect</command>
-          <command_directory>$(user.home)</command_directory>
-          <wait_time>10</wait_time>
-          <description>Connect to DAQ VNC</description>
-        </action>
         <action type="OPEN_DISPLAY">
           <path>apps/amqApp/daqStatus.opi</path>
           <macros>
@@ -1896,7 +1898,7 @@ $(pv_value)</tooltip>
           <description>Polarization</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>apps/dynapowerApp/dynabc.opi</path>
+          <path>apps/dynapowerApp/dynapower-hybrid.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>

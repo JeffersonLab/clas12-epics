@@ -6,10 +6,8 @@ import sys
 if not sys.stdin.isatty():
     sys.argv.extend(sys.stdin.read().strip().split())
 
-output_dir = '/usr/clas12/release/pro/epics/apps/beast'
-
 import argparse
-cli = argparse.ArgumentParser(description='Generate BEAST XML for one level in the alarm tree.',epilog='Note, macros can be specified as a suffix on the OPI, e.g.:  -r \'/CLAS12_Share/test.opi &quot;NAME=VALUE&quot;\'')
+cli = argparse.ArgumentParser(description='Generate BEAST XML for one level in the alarm tree.')
 cli.add_argument('-t', help='directory in tree, e.g., /HallB/Beamline/', required=True)
 cli.add_argument('-d', help='description', required=True)
 cli.add_argument('-g', help='guidance', required=True)
@@ -20,7 +18,7 @@ cli.add_argument('-D', help='delay (seconds)', default=0, type=int)
 cli.add_argument('-e', help='email address', default=None)
 cli.add_argument('-n', help='person', default=None)
 cli.add_argument('-o', help='output', default=False, action='store_true')
-cli.add_argument('pv', nargs='*', help='PV names')
+cli.add_argument('pv', nargs='+', help='PV names')
 args = cli.parse_args()
 
 args.t = args.t.strip(' /').split('/')
@@ -47,10 +45,9 @@ s.append(f'''            <guidance>
             </guidance>''')
 
 for pv in args.pv:
-    macro = list(args.m)
+    macros = list(args.m)
     if args.M:
-        macro += [f'{args.M}={pv}']
-    macro = ' &quot;%s&quot;' % ','.join(macro)
+        macros.append(f'{args.M}={pv}')
     s.append(f'''            <pv name="{pv}">
                 <description>{args.d}</description>
                 <latching>true</latching>
@@ -58,6 +55,9 @@ for pv in args.pv:
                 <delay>{args.D}</delay>
                 <count>0</count>''')
     if args.r is not None:
+        macro = ''
+        if len(macros)>0:
+            macro = ' &quot;%s&quot;' % ','.join(macros)
         s.append(f'''                <display>
                     <title>Open Related Display</title>
                     <details>{args.r}{macro}</details>
@@ -72,6 +72,6 @@ s.append('</config>')
 print('\n'.join(s))
 
 if args.o:
-    with open(output_dir+'/'+'-'.join(args.t),'w') as f:
+    with open('%s.xml'%('-'.join(args.t)),'w') as f:
         f.write('\n'.join(s))
 

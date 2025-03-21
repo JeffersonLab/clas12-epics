@@ -144,6 +144,33 @@ record(calc,"B_DET_ATOF_M$(M):isError") {
 
 ####################################################
 
+record(calc,"B_DET_ATOF_HV_M$(M):isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat")
+    field(CALC,"A=1&&B=1")
+}
+record(calc,"B_DET_ATOF_HV_M$(M):isOff") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat")
+    field(CALC,"A=0&&B=0")
+}
+record(calc,"B_DET_ATOF_HV_M$(M):isComm") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.STAT")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.STAT")
+    field(CALC,"A#1&&B#1")
+}
+record(calc,"B_DET_ATOF_HV_M$(M):isError") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M$(M)_B:stat.SEVR")
+    field(INPB,"B_DET_ATOF_HV_M$(M)_W:stat.SEVR")
+    field(CALC,"A>1||B>1")
+}
+
+####################################################
+
 record(calc,"B_DET_ATOF_MA:isOn") {
     field(SCAN,"1 second")
     field(INPA,"B_DET_ATOF_M0:isOn")
@@ -171,6 +198,38 @@ record(calc,"B_DET_ATOF:isOn") {
     field(SCAN,"1 second")
     field(INPA,"B_DET_ATOF_MA:isOn")
     field(INPB,"B_DET_ATOF_MB:isOn")
+    field(CALC,"A+B=2")
+}
+
+####################################################
+
+record(calc,"B_DET_ATOF_HV_MA:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M0:isOn")
+    field(INPB,"B_DET_ATOF_HV_M1:isOn")
+    field(INPC,"B_DET_ATOF_HV_M2:isOn")
+    field(INPD,"B_DET_ATOF_HV_M3:isOn")
+    field(INPE,"B_DET_ATOF_HV_M4:isOn")
+    field(INPF,"B_DET_ATOF_HV_M5:isOn")
+    field(INPG,"B_DET_ATOF_HV_M6:isOn")
+    field(INPH,"B_DET_ATOF_HV_M7:isOn")
+    field(CALC,"A+B+C+D+E+F+G+H==8")
+}
+record(calc,"B_DET_ATOF_HV_MB:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_M8:isOn")
+    field(INPB,"B_DET_ATOF_HV_M9:isOn")
+    field(INPC,"B_DET_ATOF_HV_M10:isOn")
+    field(INPD,"B_DET_ATOF_HV_M11:isOn")
+    field(INPE,"B_DET_ATOF_HV_M12:isOn")
+    field(INPF,"B_DET_ATOF_HV_M13:isOn")
+    field(INPG,"B_DET_ATOF_HV_M14:isOn")
+    field(CALC,"A+B+C+D+E+F+G==7")
+}
+record(calc,"B_DET_ATOF_HV:isOn") {
+    field(SCAN,"1 second")
+    field(INPA,"B_DET_ATOF_HV_MA:isOn")
+    field(INPB,"B_DET_ATOF_HV_MB:isOn")
     field(CALC,"A+B=2")
 }
 

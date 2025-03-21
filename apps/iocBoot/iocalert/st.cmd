@@ -30,6 +30,7 @@ system 'nslookup lvatof | awk "/^Address: / {print\"epicsEnvSet(lvatof,\"\$2\")\
 dbLoadTemplate("db/atof-hvlv.substitutions")
 dbLoadTemplate("db/atof-seq.substitutions")
 dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_ATOF_HV")
 
 # GAS:
 dbLoadRecords("db/gas_cRIO_BONUS.db")

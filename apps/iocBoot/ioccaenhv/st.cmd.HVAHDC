@@ -11,7 +11,7 @@ dbLoadDatabase("dbd/ioccaen.dbd")
 ioccaen_registerRecordDeviceDriver(pdbbase)
 
 Init_CAEN()
-Start_CAEN(0, "129.57.160.")
+Start_CAEN(0, "129.57.161.3")
 
 ## Load record instances
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
@@ -22,7 +22,7 @@ dbLoadRecords("db/caenchassis.db","CrName=HVAHDC,CScode=#C0")
 dbLoadRecords("db/waveformApp.db","P=B_DET_AHDC_,R=HV:imon:,  NELM=27,FTVL=FLOAT,PERIOD=5, FNAME=ahdc-hv-imon-wf.txt")
 dbLoadRecords("db/waveformApp.db","P=B_DET_AHDC_,R=HV:vmon:,  NELM=27,FTVL=FLOAT,PERIOD=5, FNAME=ahdc-hv-vmon-wf.txt")
 
-dbLoadTemplate("db/HVAHDC_AHDC.substitutions")
+dbLoadTemplate("db/AHDC.substitutions")
 dbLoadTemplate("db/ahdc-hv-globals.substitutions")
 dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_AHDC_HV")
 

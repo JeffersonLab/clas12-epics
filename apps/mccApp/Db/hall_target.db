@@ -2,19 +2,27 @@
 # MBBI-based (not enough for RG-E) #####################
 ########################################################
 
+record(calc,"$(P)$(R=)CALC:RGL") {
+  field(SCAN,"2 second")
+  field(INPA,"B_HW_CRIO_ALERT_HEARTBEAT_STAT")
+  field(INPB,"B_ALERT_TG_PT110")
+  field(INPC,"B_ALERT_TG_MFC104_Gas")
+  field(INPD,"10.0")
+  field(CALC,"A#1 ? 10 : (B<D ? 3 : C)")
+  field(FLNK,"$(P)$(R=)CALC.PROC")
+}
+
 record(calcout,"$(P)$(R=)CALC")
 {
-  field(PINI,1)
-  field(INPA,"moller_target_empty CPP")
-  field(INPB,"harp_2H01.RBV CPP")
-  field(INPC,"harp_tagger.RBV CPP")
-  field(INPD,"harp_2c21.RBV CPP")
-  field(INPE,"B_ALERT_TG_MFC104_Gas CPP")
+  field(INPA,"moller_target_empty")
+  field(INPB,"harp_2H01.RBV")
+  field(INPC,"harp_tagger.RBV")
+  field(INPD,"harp_2c21.RBV")
+  field(INPE,"$(P)$(R=)CALC:RGL")
   field(CALC,"A#1?9:((B>0.1||C>0.1||D>0.1)?8:E)")
   field(OOPT,"Every Time")
   field(DOPT,"Use CALC")
   field(OUT,"$(P)$(R=)STAT PP")
-  info(autosaveFields_pass0,"VAL")
 }
 record(mbbi,"$(P)$(R=)STAT")
 {
@@ -30,11 +38,11 @@ record(mbbi,"$(P)$(R=)STAT")
     field(ZRST,"H2")
     field(ONST,"D2")
     field(TWST,"4He")
-    field(THST,"N2")
-    field(EIST, "Harp Wire")
-    field(NIST, "Moller")
-    field(TEST, "Not Ready")
-    field(FLNK, "$(P)$(R=)STRINGOUT.PROC")
+    field(THST,"Empty (less than 10 psig)")
+    field(EIST,"Harp Wire")
+    field(NIST,"Moller")
+    field(TEST,"Not Ready")
+    field(FLNK,"$(P)$(R=)STRINGOUT.PROC")
 }
 record(stringout,"$(P)$(R=)STRINGOUT")
 {

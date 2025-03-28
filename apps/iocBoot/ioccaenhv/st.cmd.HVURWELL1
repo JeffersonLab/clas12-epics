@@ -1,0 +1,25 @@
+#!../../bin/linux-x86/ioccaen
+
+< envPaths
+epicsEnvSet("IOC","ioccaenhv_HVURWELL1")
+
+cd ${TOP}
+
+dbLoadDatabase("dbd/ioccaen.dbd")
+ioccaen_registerRecordDeviceDriver(pdbbase)
+Init_CAEN()
+
+Start_CAEN(16, "129.57.161.14")
+
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadTemplate("db/HVURWELL1_SPARES.substitutions")
+
+dbLoadRecords("db/caenchassis.db","CrName=HVURWELL1,CScode=#C16")
+
+cd ${TOP}/iocBoot/${IOC}
+
+asSetFilename("../acf/caenhv.acf")
+
+iocInit()
+
+dbl > HVURWELL1-pv.list

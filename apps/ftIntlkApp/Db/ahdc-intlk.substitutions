@@ -20,10 +20,15 @@ pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
 { B_DET_AHDC_INTLK_Sl2: TmpSdA_deg  B_DET_AHDC_FEU_Sl2:TmpSdA_deg.SEVR  -99999 2 B_DET_AHDC_LV:switch 0 0 "Turn one LV OFF if FEU TmpSdA HIHI"}
 
 # Gas Fault -> LV+HV OFF
-#{ B_DET_AHDC_INTLK_ GasFlt B_DET_AHDC_GAS_FLT  -99999 1 B_DET_AHDC_HV:OFF 1 0 "Turn All AHDC HV OFF if gas fault"}
+{ B_DET_AHDC_INTLK_ GasPressFlt B_DET_AHDC_GAS_Press_Fault  -99999 1 B_DET_AHDC_HV:OFF 1 0 "Turn All AHDC HV OFF if gas pressure fault"}
+{ B_DET_AHDC_INTLK_ GasHiPressFlt B_DET_AHDC_GAS_Hi_Press_Fault  -99999 1 B_DET_AHDC_HV:OFF 1 0 "Turn All AHDC HV OFF if gas high pressure fault"}
+{ B_DET_AHDC_INTLK_ GasLoPressFlt B_DET_AHDC_GAS_Lo_Press_Fault  -99999 1 B_DET_AHDC_HV:OFF 1 0 "Turn All AHDC HV OFF if gas low pressure fault"}
 
 # No Solenoid -> HV OFF
-#{ B_DET_BMT_INTLK_ Solenoid B_SOL:MPS:I_ZFCT 1000 99999999 B_DET_AHDC_HV:OFF 1 2 "Turn AHDC HV OFF if low solenoid current" }
+{ B_DET_AHDC_INTLK_ Solenoid B_SOL:MPS:I_ZFCT 1000 99999999 B_DET_AHDC_HV:OFF 1 2 "Turn AHDC HV OFF if low solenoid current" }
+
+# LV Current -> LV OFF
+{ B_DET_AHDC_INTLK_ LV B_DET_AHDC_LV:i_rd -99999 B_DET_AHDC_LV:i_rd.HIHI B_DET_AHDC_LV:switch 0 2 "Turn LV OFF if LV current HIHI"}
 
 }
 

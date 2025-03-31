@@ -39,7 +39,7 @@ dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_,R=CRIO_BONUS_,DLY=60")
 dbLoadRecords("db/gas_cRIO_ALERT_alias.db")
 
 # Note, AHDC is sharing hardware with MVT, in separate IOCs:
-# ioccaenhv_HVMVT, iocmvtlv, iocmmfeuMVT
+# iocmvtlv, iocmmfeuMVT
 
 cd "${TOP}/iocBoot/${IOC}"
 

@@ -25,5 +25,8 @@ pattern { P R PV LOW HIGH CTRL CTRLVAL PREC DESC }
 # No Solenoid -> HV OFF
 { B_DET_AHDC_INTLK_ Solenoid B_SOL:MPS:I_ZFCT 1000 99999999 B_DET_AHDC_HV:OFF 1 2 "Turn AHDC HV OFF if low solenoid current" }
 
+# LV Current -> LV OFF
+{ B_DET_AHDC_INTLK_ LV B_DET_AHDC_LV:i_rd -99999 B_DET_AHDC_LV:i_rd.HIHI B_DET_AHDC_LV:switch 0 2 "Turn LV OFF if LV current HIHI"}
+
 }
 

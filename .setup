@@ -22,13 +22,13 @@ set REDHATFILE = /etc/redhat-release
 if ( -e $REDHATFILE ) then
   set rhel_vers = `awk '{print substr($7,0,1)}' /etc/redhat-release`
   set cent_vers = `awk '{print substr($3,0,1)}' /etc/redhat-release`
-  if ( $rhel_vers == "5" ) then
+  if ( "$rhel_vers" == "5" ) then
     setenv EPICS_VER R3.14.12.3
     set RHEL_VER = "_RHEL5"
-  else if ( $cent_vers == "5" ) then
-    setenv EPICS_VER R3.14.12.3
+  else if ( "$cent_vers" == "5" ) then
+    setenv EPICS_VER R3.14.12.5
     set RHEL_VER = "_RHEL5"
-  else if ( $rhel_vers == "6" ) then
+  else if ( "$rhel_vers" == "6" ) then
     setenv EPICS_VER R3.14.12.5
     set RHEL_VER = "_RHEL6"
   else
@@ -44,18 +44,17 @@ setenv EPICS_BASE /usr/clas12/${EPICS_VER}/base$RHEL_VER
 setenv EPICS_EXTENSIONS /usr/clas12/${EPICS_VER}/extensions$RHEL_VER
 
 # sergey: added /usr/local/share/snmp/mibs, it exist on VME controllers and /usr/share/snmp/mibs exist on RHELs
-setenv MIBDIRS /usr/clas12/$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
+setenv MIBDIRS /usr/clas12/$EPICS_VER/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs:$EPICS/tools/tripplite
 setenv MIBS ALL
 
 # set EPICS host architecture
 setenv OSTYPE `uname`
 setenv MACHINE `uname -m`
-if ( ($OSTYPE == "Linux") && ($MACHINE == "i686" || $MACHINE == "x86") ) then
+if ( ("$OSTYPE" == "Linux") && ("$MACHINE" == "i686" || "$MACHINE" == "x86") ) then
   setenv EPICS_HOST_ARCH linux-x86
 else
   setenv EPICS_HOST_ARCH linux-x86_64
 endif
-
 
 ## caget/caput/etc, medm/striptool/etc...
 set -f path=("${EPICS_BASE}/bin/${EPICS_HOST_ARCH}" $path:q)
@@ -95,8 +94,7 @@ setenv PYTHONPATH "${PYTHONPATH}:${ROOTSYS}/lib"
 
 setenv EPICS_SCRIPTS "${script_dir}"
 
-# This sometimes hangs and can NOT be in the .setup (do it in the repeer executable instead):
-#source ${EPICS}/tools/reeper/thisreeper.csh
+set -f path=(/usr/clas12/offline/bin $path:q)
 
 ## CS-Studio
 setenv DIIRT_HOME ${EPICS}/css_share/common/prefs/diirt

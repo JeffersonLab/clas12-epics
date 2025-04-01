@@ -10,8 +10,6 @@ else
     export EPICS=${CLAS}/epics
 fi
 
-export ROOTSYS=/apps/root/5.34.21
-
 ## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
 REDHATFILE=/etc/redhat-release
 EPICS_VER=R3.14.12.5
@@ -54,42 +52,35 @@ then
   fi
 fi
 
-if ! [ -d "$ROOTSYS" ]
-then
-  source /apps/root/5.34.21/bin/thisroot.sh
-fi
-
 export EPICS_HOST_ARCH
 export EPICS_SCRIPTS=${EPICS}/apps/scripts
 export EPICS_CA_AUTO_ADDR_LIST=no
-#export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255 129.57.231.255 129.57.86.35"
 export EPICS_CA_ADDR_LIST="129.57.255.12 129.57.163.255 129.57.231.255"
 
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${ROOTSYS}/lib
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/clas12/third-party-libs/net-snmp-5.8.dev/x86_64/lib
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${EPICS_BASE}/lib/${EPICS_HOST_ARCH}
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${EPICS_EXTENSIONS}/lib/${EPICS_HOST_ARCH}
 
 export LD_LIBRARY_PATH
 
-#export PERL5LIB=${PERL5LIB}:/usr/clas12/third-party-libs/Pezca-1.3/lib/perl5/x86_64-linux-thread-multi
-
 PYTHONPATH=${PYTHONPATH}:${EPICS_SCRIPTS}
 PYTHONPATH=${PYTHONPATH}:${EPICS}/css_share/common/scripts
 PYTHONPATH=${PYTHONPATH}:/usr/clas12/third-party-libs/pyepics-RHEL7
-PYTHONPATH=${PYTHONPATH}:${ROOTSYS}/lib
 export PYTHONPATH
 
-PATH=${PATH}:${ROOTSYS}/bin
+export JAVA_HOME=/usr/clas12/offline/jdk/21.0.2
+PATH=${JAVA_HOME}/bin:${PATH}
+
 PATH=${PATH}:${EPICS_BASE}/bin/${EPICS_HOST_ARCH}
 PATH=${PATH}:${EPICS_EXTENSIONS}/bin/${EPICS_HOST_ARCH}
 PATH=${PATH}:${EPICS}/bin
 PATH=${PATH}:/usr/clas12/css/pro/${EPICS_HOST_ARCH}/bin
 PATH=${PATH}:/usr/csite/certified/bin
 PATH=${PATH}:${EPICS_SCRIPTS}
+PATH=${PATH}:/usr/clas12/offline/bin
 export PATH
 
-export MIBDIRS=/usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs
+export MIBDIRS=/usr/clas12/${EPICS_VER}/modules/snmp-nscl-1-0-RC9/mibs:/usr/share/snmp/mibs:/usr/local/share/snmp/mibs:$EPICS/tools/tripplite
 export MIBS=ALL
 
 #export DIIRT_HOME=${EPICS}/css_share/common/prefs/diirt

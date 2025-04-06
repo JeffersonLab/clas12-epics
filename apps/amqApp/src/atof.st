@@ -1,6 +1,6 @@
 program atof
 
-float wf[780]; assign wf to "B_DET_ATOF_TDC:c";
+float wf[720]; assign wf to "B_DET_ATOF_TDC:c";
 float wf0[52]; assign wf0 to "B_DET_ATOF_TDC_M0:c";
 float wf1[52]; assign wf1 to "B_DET_ATOF_TDC_M1:c";
 float wf2[52]; assign wf2 to "B_DET_ATOF_TDC_M2:c";
@@ -19,8 +19,7 @@ float wf14[52]; assign wf14 to "B_DET_ATOF_TDC_M14:c";
 int j;
 string stmp;
 
-ss atof {
-
+ss atof { 
     state start {
         when () {
         } state run
@@ -49,22 +48,22 @@ ss atof {
             pvGet(wf12);
             pvGet(wf13);
             pvGet(wf14);
-            for (j=0; j<52; ++j) {
-                wf[52*0+j] = wf0[j];
-                wf[52*1+j] = wf1[j];
-                wf[52*2+j] = wf2[j];
-                wf[52*3+j] = wf3[j];
-                wf[52*4+j] = wf4[j];
-                wf[52*5+j] = wf5[j];
-                wf[52*6+j] = wf6[j];
-                wf[52*7+j] = wf7[j];
-                wf[52*8+j] = wf8[j];
-                wf[52*9+j] = wf9[j];
-                wf[52*10+j] = wf10[j];
-                wf[52*11+j] = wf11[j];
-                wf[52*12+j] = wf12[j];
-                wf[52*13+j] = wf13[j];
-                wf[52*14+j] = wf14[j];
+            for (j=0; j<48; ++j) {
+                wf[48*0+j] = wf0[j];
+                wf[48*1+j] = wf1[j];
+                wf[48*2+j] = wf2[j];
+                wf[48*3+j] = wf3[j];
+                wf[48*4+j] = wf4[j];
+                wf[48*5+j] = wf5[j];
+                wf[48*6+j] = wf6[j];
+                wf[48*7+j] = wf7[j];
+                wf[48*8+j] = wf8[j];
+                wf[48*9+j] = wf9[j];
+                wf[48*10+j] = wf10[j];
+                wf[48*11+j] = wf11[j];
+                wf[48*12+j] = wf12[j];
+                wf[48*13+j] = wf13[j];
+                wf[48*14+j] = wf14[j];
             }
             pvPut(wf);
         } state run

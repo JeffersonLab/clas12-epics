@@ -41,9 +41,14 @@ dbpf("B_DAQ:EB6:stats:02.EGU","MB")
 dbpf("B_DAQ:EB6:stats:03.EGU","MB/s")
 
 dbpf("B_DAQ:STA:clondaq11:dataRate.DESC","clondaq11")
+dbpf("B_DAQ:STA:clondaq12:dataRate.DESC","clondaq12")
 dbpf("B_DAQ:STA:alert1:dataRate.DESC","alert1")
 dbpf("B_DAQ:err:clondaq11.DESC","clondaq11")
+dbpf("B_DAQ:err:clondaq12.DESC","clondaq12")
 dbpf("B_DAQ:err:alert1.DESC","alert1")
+dbpf("B_DAQ:ROCS_BUSY:mvt3.DESC","alert1")
+dbpf("B_DAQ:ROCS_BUSY:clondaq11","clondaq11")
+dbpf("B_DAQ:ROCS_BUSY:clondaq12","clondaq12")
 
 seq waveform, "P=B_DAQ:,R=STA:dataRate:wf"
 

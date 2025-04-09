@@ -608,7 +608,8 @@ void Fitter::SubmitToLogbook() {
         CAPUT();
     }
 
-    system(Form("/site/ace/certified/apps/bin/logentry %s -t \" Scan of %s \" -a %s -b \"%s\" ",
+    //system(Form("/site/ace/certified/apps/bin/logentry %s -t \" Scan of %s \" -a %s -b \"%s\" ",
+    system(Form("/usr/csite/certified/bin/logentry %s -t \" Scan of %s \" -a %s -b \"%s\" ",
             logbook_list.c_str(), harp_name.c_str(), dump_img_name.c_str(), log_text_filename.c_str()));
 
     // When Log entry is done, let's delete the temporary file containing the log comments, in irder

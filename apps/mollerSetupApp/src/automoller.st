@@ -147,8 +147,8 @@ float hv_slm_vsetrbk; assign hv_slm_vsetrbk to "B_DET_BLINE_HV_SLM:vsetrbk"; mon
 float hv_slm_vset;    assign hv_slm_vset    to "B_DET_BLINE_HV_SLM:vset";    monitor hv_slm_vset;
 float hv_slm_stat;    assign hv_slm_stat    to "B_DET_BLINE_HV_SLM:stat";    monitor hv_slm_stat;
 float hv_dc_off;      assign hv_dc_off      to "{SIMDET}B_DET_DC_HV:OFF";
-float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_HV:OFF";
-float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
+//float hv_svt_off;     assign hv_svt_off     to "{SIMDET}B_SVT_HV:OFF";
+//float hv_bmt_off;     assign hv_bmt_off     to "{SIMDET}B_DET_BMT_HV:safe";
 float hv_ftc_off;     assign hv_ftc_off     to "{SIMDET}B_DET_FTC_HV:OFF";
 float hv_fth_off;     assign hv_fth_off     to "{SIMDET}B_DET_FTH_HV:OFF";
 float hv_ftt_off;     assign hv_ftt_off     to "{SIMDET}B_DET_FTT_HV:OFF";
@@ -161,8 +161,8 @@ int hv_ltcc_off;      assign hv_ltcc_off    to "{SIMDET}B_DET_LTCC_HV:OFF";
 int hv_ecal_off;      assign hv_ecal_off    to "{SIMDET}B_DET_ECAL_HV:OFF";
 int hv_pcal_off;      assign hv_pcal_off    to "{SIMDET}B_DET_PCAL_HV:OFF";
 int hv_ftof_off;      assign hv_ftof_off    to "{SIMDET}B_DET_FTOF_HV:OFF";
-int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT_HV:isOff";          monitor hv_svt_stat;
-int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:safe:stat";  monitor hv_bmt_stat;
+//int hv_svt_stat;      assign hv_svt_stat    to "{SIMDET}B_SVT_HV:isOff";          monitor hv_svt_stat;
+//int hv_bmt_stat;      assign hv_bmt_stat    to "{SIMDET}B_DET_BMT_HV:safe:stat";  monitor hv_bmt_stat;
 int hv_dc_stat;       assign hv_dc_stat     to "{SIMDET}B_DET_DC_HV:isOff";       monitor hv_dc_stat;
 int hv_left_onoff;    assign hv_left_onoff  to "B_DET_BLINE_HV_MollerLeft:pwonoff";
 int hv_right_onoff;   assign hv_right_onoff to "B_DET_BLINE_HV_MollerRight:pwonoff";
@@ -437,18 +437,18 @@ ss automoller {
         entry {
             MESSAGE(Turning HV Off. May Generate Alarms ...);
             epicsThreadSleep(1);
-            if (hv_svt_stat!=1) {
-                MESSAGE(Turning SVT HV Off ...);
-                hv_svt_off=1;
-                pvPut(hv_svt_off);
-                epicsThreadSleep(1);
-            }
-            if (hv_bmt_stat!=1) {
-                MESSAGE(Setting BMT HV Safe ...);
-                hv_bmt_off=1;
-                pvPut(hv_bmt_off);
-                epicsThreadSleep(1);
-            }
+            //if (hv_svt_stat!=1) {
+            //    MESSAGE(Turning SVT HV Off ...);
+            //    hv_svt_off=1;
+            //    pvPut(hv_svt_off);
+            //    epicsThreadSleep(1);
+            //}
+            //if (hv_bmt_stat!=1) {
+            //    MESSAGE(Setting BMT HV Safe ...);
+            //    hv_bmt_off=1;
+            //    pvPut(hv_bmt_off);
+            //    epicsThreadSleep(1);
+            //}
             if (hv_dc_stat!=1) {
                 MESSAGE(Turning DC HV Off ...);
                 hv_dc_off=1;
@@ -484,28 +484,29 @@ ss automoller {
         }
 
         when (delay(5) &&
-			  hv_dc_stat==1 &&
-			  hv_svt_stat==1 &&
-			  hv_bmt_stat==1) {} state setSlm
+			  hv_dc_stat==1) {} state setSlm
+              //&&
+			  //hv_svt_stat==1 &&
+			  //hv_bmt_stat==1) {} state setSlm
         when (delay(90)) {
             if (hv_dc_stat!=1) {
 				status=DC_ALARM;
                 MESSAGE(ERROR on DC HV Off.  Aborted Moller Run.);
             }
-            else if (hv_svt_stat!=1) {
-				status=SVT_ALARM;
-                MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
-            }
-            else if (hv_bmt_stat!=1) {
-				status=MVT_ALARM;
-                MESSAGE(ERROR on BMT HV Safe.  Aborted Moller Run.);
-            }
+            //else if (hv_svt_stat!=1) {
+			//	status=SVT_ALARM;
+            //    MESSAGE(ERROR on SVT HV Off.  Aborted Moller Run.);
+            //}
+            //else if (hv_bmt_stat!=1) {
+			//	status=MVT_ALARM;
+            //    MESSAGE(ERROR on BMT HV Safe.  Aborted Moller Run.);
+            //}
 			pvPut(status);
         } state listen
         
         when (delay(30) && hv_dc_stat!=1)  {} state hvOff
-        when (delay(30) && hv_bmt_stat!=1) {} state hvOff
-        when (delay(60) && hv_svt_stat!=1) {} state hvOff
+        //when (delay(30) && hv_bmt_stat!=1) {} state hvOff
+        //when (delay(60) && hv_svt_stat!=1) {} state hvOff
     }
 
     state setSlm {

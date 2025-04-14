@@ -27,6 +27,9 @@ dbLoadRecords("db/amqDaqErrorStrings-alarm.db")
 dbLoadRecords("db/amq-alert-rate-aliases.db")
 dbLoadRecords("db/amq-alert-err-aliases.db")
 
+dbLoadTemplate("db/amq-adc-URWELL.substitutions")
+dbLoadRecords("amq-adc-URWELL.alias")
+
 cd ${TOP}/iocBoot/${IOC}
 
 #< save_restore.cmd

@@ -13,7 +13,6 @@ dbLoadTemplate("db/amq-adc-CTOF.substitutions")
 dbLoadTemplate("db/amq-adc-HTCC.substitutions")
 dbLoadTemplate("db/amq-adc-LTCC.substitutions")
 dbLoadTemplate("db/amq-adc-CND.substitutions")
-dbLoadTemplate("db/amq-adc-URWELL.substitutions")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
@@ -35,7 +34,6 @@ dbLoadRecords("amq-adc-CTOF.alias")
 dbLoadRecords("amq-adc-HTCC.alias")
 dbLoadRecords("amq-adc-LTCC.alias")
 dbLoadRecords("amq-adc-CND.alias")
-dbLoadRecords("amq-adc-URWELL.alias")
 
 StartMQ()
 

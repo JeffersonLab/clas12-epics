@@ -19,6 +19,9 @@ option +s;
 // use 2020 Dynapower quadrupole power supply: 
 #define DYNAB2020
 
+// do not require tagger magnet to be on:
+//#define IGNORE_TAGGER
+
 #include "automoller.h"
 
 #define MESSAGE(MSG) \
@@ -394,7 +397,11 @@ ss automoller {
             pvPut(filedisable);
             epicsThreadSleep(1);
 		}
+#ifdef IGNORE_TAGGER
+        when () {} state insertCollimator
+#else
         when () {} state checkTagger
+#endif
     }
 
     state checkTagger {

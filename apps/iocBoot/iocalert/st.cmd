@@ -38,6 +38,8 @@ dbLoadRecords("db/gas_cRIO_AHDC.db")
 dbLoadRecords("db/cRIO_heartbeat_bi.db","P=B_HW_,R=CRIO_BONUS_,DLY=60")
 dbLoadRecords("db/gas_cRIO_ALERT_alias.db")
 
+dbLoadRecords("db/waveformApp.db","P=B_DET_ATOF_HV,R=:vmon:,NELM=30,FTVL=FLOAT,PERIOD=5,FNAME=atof-vmon.txt")
+
 # Note, AHDC is sharing hardware with MVT, in separate IOCs:
 # iocmvtlv, iocmmfeuMVT
 
@@ -54,4 +56,6 @@ create_monitor_set("info_positions.req", 5, "P=${IOC}:")
 create_monitor_set("info_settings.req", 30, "P=${IOC}:")
 
 dbl > pv.list
+
+seq waveform, "P=B_DET_ATOF_HV,R=:vmon:"
 

@@ -95,7 +95,6 @@ ss waveform {
       sprintf(msg,"Opening file:  %s",filename);
       printf("%s - %s\n",stub,msg);
       pvPut(msg);
-      //printf("%s - Opening file:  %s\n",stub,filename);
 #ifdef VXWORKS
       inFile = open(filename,O_RDONLY);
 #else
@@ -108,15 +107,8 @@ ss waveform {
       }
       else {
         while ((fscanf(inFile,"%s",stmp))==1) {
-          if (wfLen >= wfRecLen) {
-            sprintf(msg,"#PVs > NELM.  Truncating.");
-            pvPut(msg);
-            printf("%s - %s\n",stub,msg);
-            isTruncated=1;
-            break;
-          }
-          else if (wfLen >= MAXLEN) {
-            sprintf(msg,"#PVs > MAXLEN.  Truncating.");
+          if (wfLen >= wfRecLen || wfLen >= MAXLEN) {
+            sprintf(msg,"#PVs > NELM/MAXLEN.  Truncating.");
             pvPut(msg);
             printf("%s - %s\n",stub,msg);
             isTruncated=1;

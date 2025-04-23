@@ -2771,15 +2771,13 @@ $(pv_value)</tooltip>
         <confirm_message>Really Turn All ATOF HV ON?</confirm_message>
         <description>ATOF ON</description>
       </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path></path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-
-opiName=widget.getMacroValue("OPI");
-
-ScriptUtil.openOPI(widget,opiName,2,null);]]></scriptText>
-        <embedded>true</embedded>
-        <description>Open ATOF HV Controls</description>
+      <action type="OPEN_DISPLAY">
+        <path>../../detectors/ALERT/atof-modules.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Open ATOF Controls</description>
       </action>
     </actions>
     <font>

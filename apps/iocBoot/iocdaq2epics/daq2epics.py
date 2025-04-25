@@ -3,7 +3,7 @@
 # hack to get stuff from DAQ into EPICS
 #
 
-import epics,time,datetime,subprocess,os,re
+import math,epics,time,datetime,subprocess,os,re
 
 os.environ['MYSQL_HOST']='clondb1'
 os.environ['EXPID']='clasrun'
@@ -13,7 +13,16 @@ os.environ['SESSION']='clasprod'
 os.environ['LD_LIBRARY_PATH']='/apps/gcc/8.3.0/lib:/apps/gcc/8.3.0/lib64:/usr/lib:/usr/local/lib'
 os.environ['PATH']='/usr/clas12/release/1.4.0/coda/Linux_x86_64/bin/:'+os.environ['PATH']
 
-#'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
+def get_fcup_prescale():
+    t = epics.pv.PV('B_DAQ:trigger_file').get()
+    with open('/usr/clas12/release/1.4.0/parms/trigger/%s.trg'%t) as f:
+        for line in f.readlines():
+            line = line.strip().split()
+            if len(line) == 3 and line[0] == 'TS_FP_PRESCALE':
+                if line[1] == '8' and int(line[2]) != 0:
+                    return str(1.0 / (math.pow(2,int(line[2])-1) + 1))
+    return 1
+
 CFG={
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
@@ -21,9 +30,12 @@ CFG={
 'B_DAQ:trigger_file': {'ini':'UDF','cmd':['daq_config']},
 'B_DAQ:disk_free:clondaq7': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq7','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
 'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
-'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
+'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+'B_DAQ:fcup:prescale': {'ini':0, 'skip':10, 'cmd':get_fcup_prescale}
 }
+
 #'B_DAQ:disk_free:logs    ': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}
+#'B_DAQ:livetime':     {'ini':-1,   'cmd':['tcpClient','trig1','tsBusy']},
 
 # These are proven unreliable, so useless:
 #'B_DAQ:run_nfiles':   {'ini':-1,   'cmd':['run_nfiles']},
@@ -59,11 +71,14 @@ while True:
         continue
 
       # run the command, collect its output:
-      try:
-        xx=subprocess.check_output(CFG[pvName]['cmd'],env=os.environ).strip()
-      except TimeoutExpired:
-        print(now+' : Timeout on '+pvName)
-        continue
+      if callable(CFG[pvName]['cmd']):
+          xx = CFG[pvName]['cmd']()
+      else:
+          try:
+            xx=subprocess.check_output(CFG[pvName]['cmd'],env=os.environ).strip()
+          except TimeoutExpired:
+            print(now+' : Timeout on '+pvName)
+            continue
       yy=xx
 
       #print(pvName,CFG[pvName]['cmd'],yy)

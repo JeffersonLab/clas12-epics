@@ -8,7 +8,6 @@ cd ${TOP}
 dbLoadDatabase "dbd/mcc.dbd"
 mcc_registerRecordDeviceDriver pdbbase
 
-#dbLoadRecords("db/tsBusy.db")
 dbLoadRecords("db/daq2epics.db","P=B_DAQ")
 
 dbLoadRecords("db/liveRollAvg.db","P=B_DAQ:livetime,I=B_DAQ:livetime,N=15,SCAN=2")

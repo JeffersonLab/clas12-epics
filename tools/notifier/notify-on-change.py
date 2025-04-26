@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 dryrun = False
-verbose = False
 pv = 'IGL1I00OD16_16'
 title = 'Half-Wave plate changed'
 log_book = 'CLAS12CALIB'
 log_author = 'baltzell'
+log_tag = 'Moller'
 email_sender = 'hallb-hwp@jlab.org'
 email_recipients = ['baltzell@jlab.org']
 url = f'\n\nHWP in Mya:\nhttps://epicsweb.jlab.org/wave/?myaDeployment=&myaLimit=100000&windowMinutes=30&title=&fullscreen=false&layoutMode=1&viewerMode=1&pv={pv}'
@@ -27,9 +27,8 @@ def report():
     lock.release()
 
 def submit_log(msg):
-    cmd = ['logentry','-g','Autolog','-g','Moller','-l',log_book,'-t',title,'-b','-','-e',log_author]
-    if verbose:
-        print(' '.join(cmd))
+    cmd = ['logentry','-g','Autolog','-g',log_tag,'-l',log_book,'-t',title,'-b','-','-e',log_author]
+    print(' '.join(cmd))
     if not dryrun:
        import subprocess
        print(subprocess.check_output(cmd, input=msg, universal_newlines=True))
@@ -40,8 +39,7 @@ def send_email(body):
     t['Subject'] = title
     t['From'] = email_sender
     t['To'] = ', '.join(email_recipients)
-    if verbose:
-        print(t)
+    print(t)
     if not dryrun:
         import smtplib
         s = smtplib.SMTP('localhost')

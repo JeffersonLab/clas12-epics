@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+ignore_disconnects = True
 dryrun = False
 pv = 'IGL1I00OD16_16'
 title = 'Half-Wave plate changed'
@@ -49,9 +50,14 @@ def send_email(body):
 def changed(**kws):
     import datetime
     t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
+    v = kws['value']
     lock.acquire()
     if changed.n > 0:
-        changes.append((t,kws['value']))
+        if len(changes) == 0 or not ignore_disconnects:
+            changes.append( (t,v) )
+        elif v != changes[len(changes)-1][1]:
+            if t != changes[len(changes)-1][0]:
+                changes.append( (t,v) )
     lock.release()
     changed.n += 1
 

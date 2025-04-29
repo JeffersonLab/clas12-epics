@@ -1,34 +1,37 @@
 #!/usr/bin/env python3
 
-ignore_disconnects = True
 dryrun = False
-pv = 'IGL1I00OD16_16'
 title = 'Half-Wave plate changed'
-log_book = 'CLAS12CALIB'
-log_author = 'baltzell'
-log_tag = 'Moller'
+pv = 'IGL1I00OD16_16'
+log_books = ['CLAS12CALIB']
+log_tags = ['Autolog','Moller']
 email_sender = 'hallb-hwp@jlab.org'
 email_recipients = ['baltzell@jlab.org']
-url = f'\n\nHWP in Mya:\nhttps://epicsweb.jlab.org/wave/?myaDeployment=&myaLimit=100000&windowMinutes=30&title=&fullscreen=false&layoutMode=1&viewerMode=1&pv={pv}'
-url += '\n\nHWP in RCDB:\nhttps://clasweb.jlab.org/rcdb'
+urls = ['HWP in RCDB:\nhttps://clasweb.jlab.org/rcdb']
+urls.append(f'HWP in Mya:\nhttps://epicsweb.jlab.org/wave/?myaDeployment=&myaLimit=100000&windowMinutes=30&title=&fullscreen=false&layoutMode=1&viewerMode=1&pv={pv}')
 
 import threading
-lock = threading.Lock()
-changes = []
+_lock = threading.Lock()
+_changes = []
 
 def report():
-    lock.acquire()
-    if len(changes) > 0:
+    _lock.acquire()
+    # the first reading is just initialization, ignore it:
+    if len(_changes) > 1:
         msg = 'HWP changes in the past 24 hours:\n'
-        msg += '\n'.join([f'{i}.  {t} -- HWP --> {v}' for i,(t,v) in enumerate(changes)])
-        msg += f'{url}\n'
+        msg += '\n'.join([f'{i}.  {t} -- HWP --> {v}' for i,(t,v) in enumerate(_changes[1:])])
+        msg += '\n\n'+'\n\n'.join(urls)
         send_email(msg)
         submit_log(msg)
-    changes.clear()
-    lock.release()
+    # but keep it for next time:
+    for i in range(len(_changes)-1,0,-1):
+        _changes.pop(i)
+    _lock.release()
 
 def submit_log(msg):
-    cmd = ['logentry','-g','Autolog','-g',log_tag,'-l',log_book,'-t',title,'-b','-','-e',log_author]
+    cmd = ['logentry','-t',title,'-b','-']
+    for g in log_tags: cmd.extend(['-g',g])
+    for l in log_books: cmd.extend(['-l',l])
     print(' '.join(cmd))
     if not dryrun:
        import subprocess
@@ -51,17 +54,14 @@ def changed(**kws):
     import datetime
     t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
     v = kws['value']
-    lock.acquire()
-    if changed.n > 0:
-        if len(changes) == 0 or not ignore_disconnects:
-            changes.append( (t,v) )
-        elif v != changes[len(changes)-1][1]:
-            if t != changes[len(changes)-1][0]:
-                changes.append( (t,v) )
-    lock.release()
-    changed.n += 1
-
-changed.n = 0
+    _lock.acquire()
+    # the first is initialization, always keep it:
+    if len(_changes) == 0:
+        _changes.append( (t,v) )
+    # otherwise require a value change:
+    elif v != _changes[len(_changes)-1][1]:
+        _changes.append( (t,v) )
+    _lock.release()
 
 def launch():
     # monitor the EPICS PV:

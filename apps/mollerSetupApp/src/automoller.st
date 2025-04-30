@@ -832,69 +832,7 @@ ss automoller {
 			pvPut(status);
 			epicsThreadSleep(1);
         }
-        when (delay(1)) {} state quadsRampDown
-    }
-
-    state quadsRampDown {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            quadB_iset = 0;
-            quadC_iset = 0;
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(5) && quadB_imon < 50 && quadC_imon < 50) {
-        } state quadsOff
-
-        when (delay(30)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-
-        when (delay(5)) {
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-        } state quadsRampDown
-
-    }
-
-    state quadsOff {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            quadB_off = 1;
-            quadC_off = 1;
-            pvPut(quadB_off);
-            pvPut(quadC_off);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
-        } state helmholtzOff
-
-        when (delay(30)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR turning off Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-        
-        when (delay(5)) {
-            if (quadB_isOn!=0)  pvPut(quadB_off);
-            if (quadC_isOn!=0)  pvPut(quadC_off);
-            epicsThreadSleep(2);
-        } state quadsOff
-
+        when (delay(1)) {} state helmholtzOff
     }
 
     state helmholtzOff {
@@ -964,8 +902,71 @@ ss automoller {
         
         when (delay(10) && tgt_moving==0 && tgt_empty==1) {
             MESSAGE(Non-Moller Configuration Restored.);
-        } state listen
+        } state quadsRampDown
     }
+    
+    state quadsRampDown {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            quadB_iset = 0;
+            quadC_iset = 0;
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(1);
+        }
+
+        when (delay(5) && quadB_imon < 50 && quadC_imon < 50) {
+        } state quadsOff
+
+        when (delay(30)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+
+        when (delay(5)) {
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(2);
+        } state quadsRampDown
+
+    }
+
+    state quadsOff {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            quadB_off = 1;
+            quadC_off = 1;
+            pvPut(quadB_off);
+            pvPut(quadC_off);
+            epicsThreadSleep(1);
+        }
+
+        when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
+        } state listen
+
+        when (delay(30)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR turning off Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+        
+        when (delay(5)) {
+            if (quadB_isOn!=0)  pvPut(quadB_off);
+            if (quadC_isOn!=0)  pvPut(quadC_off);
+            epicsThreadSleep(2);
+        } state quadsOff
+
+    }
+
 }
 
 

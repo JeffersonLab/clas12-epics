@@ -310,7 +310,17 @@ ss automoller {
         entry {
             pvGet(logusers);
             pvGet(moller_accumulate);
+            for (itmp=0; itmp<5; ++itmp) {
+                if (0 != pvGet(beamEnergy, SYNC, 1)) {
+                    beamEnergy = 0;
+                    epicsThreadSleep(itmp+1);
+                }
+            }
         }
+
+        when (beamEnergy < 1000 || beamEnergy > 12000) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
+        } state listen
 
         when (moller_accumulate!=STOPDAQ) {
             TMPMESSAGE(Must stop DAQ before Logbook Entry.)
@@ -323,7 +333,6 @@ ss automoller {
         when () {
             MESSAGE(Generating Logbook Entry ...);
             pvGet(filename);
-            pvGet(beamEnergy);
             pvGet(halfwaveplate);
             pvGet(polarization);
             pvGet(epolarization);
@@ -576,7 +585,12 @@ ss automoller {
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
 #ifdef USE_BRIANS_QUADS
-                pvGet(beamEnergy);
+                for (itmp=0; itmp<5; ++itmp) {
+                    if (0 != pvGet(beamEnergy, SYNC, 1)) {
+                        beamEnergy = 0;
+                        epicsThreadSleep(itmp+1);
+                    }
+                }
                 quad_icfg = calcQuadCurrent(beamEnergy/1000);
 #else
                 pvGet(beamPasses);
@@ -607,6 +621,10 @@ ss automoller {
             }
         }
         
+        when (beamEnergy < 1000 || beamEnergy > 12000) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
+        } state listen
+
         when (itmp!=0) {
             MESSAGE(ERROR on #Passes for Quad Current.);
         } state listen

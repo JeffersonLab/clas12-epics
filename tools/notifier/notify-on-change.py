@@ -13,9 +13,15 @@ urls.append(f'HWP in Mya:\nhttps://epicsweb.jlab.org/wave/?myaDeployment=&myaLim
 import threading
 _lock = threading.Lock()
 _changes = []
+_disconnects = []
 
 def report():
     _lock.acquire()
+    if len(_disconnects) > 0:
+        msg = 'HWP disconnects in the past 24 hours:\n'
+        msg += '\n'.join([f'{i}.  {t}' for i,t in enumerate(_disconnects)])
+        msg += '\n\n'+'\n\n'.join(urls)
+        send_email(msg)
     # the first reading is just initialization, ignore it:
     if len(_changes) > 1:
         msg = 'HWP changes in the past 24 hours:\n'
@@ -23,9 +29,10 @@ def report():
         msg += '\n\n'+'\n\n'.join(urls)
         send_email(msg)
         submit_log(msg)
-    # but keep it for next time:
+    # keep the first, initialization reading for next time:
     for i in range(len(_changes)-1,0,-1):
         _changes.pop(i)
+    _disconnects.clear()
     _lock.release()
 
 def submit_log(msg):
@@ -52,15 +59,19 @@ def send_email(body):
 
 def changed(**kws):
     import datetime
+    now = datetime.datetime.now()
     t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
     v = kws['value']
     _lock.acquire()
     # the first is initialization, always keep it:
     if len(_changes) == 0:
-        _changes.append( (t,v) )
+        _changes.append((t,v))
     # otherwise require a value change:
     elif v != _changes[len(_changes)-1][1]:
-        _changes.append( (t,v) )
+        _changes.append((t,v))
+    # else it's a disconnect:
+    else:
+        _disconnects.append(now)
     _lock.release()
 
 def launch():

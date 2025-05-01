@@ -315,6 +315,7 @@ ss automoller {
                     beamEnergy = 0;
                     epicsThreadSleep(itmp+1);
                 }
+                else break;
             }
         }
 
@@ -581,7 +582,6 @@ ss automoller {
         entry {
             pvGet(quad_icfg);
             pvGet(quad_icfg_auto);
-            itmp=0;
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
 #ifdef USE_BRIANS_QUADS
@@ -590,9 +590,11 @@ ss automoller {
                         beamEnergy = 0;
                         epicsThreadSleep(itmp+1);
                     }
+                    else break;
                 }
                 quad_icfg = calcQuadCurrent(beamEnergy/1000);
 #else
+                itmp=0;
                 pvGet(beamPasses);
                 if (beamPasses==1) {
                     pvGet(quad_icfg_1pass);

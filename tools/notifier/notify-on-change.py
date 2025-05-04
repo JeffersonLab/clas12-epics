@@ -19,13 +19,13 @@ def report():
     _lock.acquire()
     if len(_disconnects) > 0:
         msg = 'HWP disconnects in the past 24 hours:\n'
-        msg += '\n'.join([f'{i}.  {t}' for i,t in enumerate(_disconnects)])
+        msg += '\n'.join([f'{i+1}.  {t}' for i,t in enumerate(_disconnects)])
         msg += '\n\n'+'\n\n'.join(urls)
         send_email(msg)
     # the first reading is just initialization, ignore it:
     if len(_changes) > 1:
         msg = 'HWP changes in the past 24 hours:\n'
-        msg += '\n'.join([f'{i}.  {t} -- HWP --> {v}' for i,(t,v) in enumerate(_changes[1:])])
+        msg += '\n'.join([f'{i+1}.  {t} -- HWP --> {v}' for i,(t,v) in enumerate(_changes[1:])])
         msg += '\n\n'+'\n\n'.join(urls)
         send_email(msg)
         submit_log(msg)
@@ -63,15 +63,17 @@ def changed(**kws):
     t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
     v = kws['value']
     _lock.acquire()
-    # the first is initialization, always keep it:
+    # the first is initialization, always keep it (and ignore it later):
     if len(_changes) == 0:
         _changes.append((t,v))
-    # otherwise require a value change:
+    # else check for a value change:
     elif v != _changes[len(_changes)-1][1]:
         _changes.append((t,v))
+        print(f'Change #{len(_changes)-1}:  {t} --> {v}')
     # else it's a disconnect:
     else:
         _disconnects.append(now)
+        print(f'Disconnect #{len(_disconnects)}:  {now}')
     _lock.release()
 
 def launch():

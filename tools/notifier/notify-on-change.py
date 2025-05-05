@@ -29,9 +29,9 @@ def report():
         msg += '\n\n'+'\n\n'.join(urls)
         send_email(msg)
         submit_log(msg)
-    # keep the first, initialization reading for next time:
-    for i in range(len(_changes)-1,0,-1):
-        _changes.pop(i)
+    # keep only the last reading, as initialization for next time:
+    while len(_changes) > 1:
+        _changes.pop(0)
     _disconnects.clear()
     _lock.release()
 

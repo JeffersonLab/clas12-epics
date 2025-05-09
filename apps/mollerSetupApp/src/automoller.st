@@ -82,8 +82,8 @@ float quad_icfg_5pass; assign quad_icfg_5pass to "{P}cfg:quad:iset:5pass";
 float tagger_irbk; assign tagger_irbk to "{SIMTAG}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
-float beamEnergy; assign beamEnergy to "MBSY2C_energy";
-int   beamPasses; assign beamPasses to "MMSHLBPASS";
+float beam_energy; assign beam_energy to "MBSY2C_energy";
+int   beam_passes; assign beam_passes to "MMSHLBPASS";
 
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
@@ -311,15 +311,15 @@ ss automoller {
             pvGet(logusers);
             pvGet(moller_accumulate);
             for (itmp=0; itmp<5; ++itmp) {
-                if (0 != pvGet(beamEnergy, SYNC, 1)) {
-                    beamEnergy = 0;
+                if (0 != pvGet(beam_energy, SYNC, 1)) {
+                    beam_energy = 0;
                     epicsThreadSleep(itmp+1);
                 }
                 else break;
             }
         }
 
-        when (beamEnergy < 1000 || beamEnergy > 12000) {
+        when (beam_energy < 1000 || beam_energy > 12000) {
             TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
         } state listen
 
@@ -345,7 +345,7 @@ ss automoller {
             pvGet(vwienangle);
             pvGet(hwienangle);
             epicsThreadSleep(4);
-            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beam_energy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
             epicsThreadSleep(2);
             MESSAGE(Check Logbook for New Entry!);
             sprintf(logcomments,"None");
@@ -439,33 +439,33 @@ ss automoller {
                 MESSAGE(Calculating Quadrupole Current ...);
 #ifdef USE_BRIANS_QUADS
                 for (itmp=0; itmp<5; ++itmp) {
-                    if (0 != pvGet(beamEnergy, SYNC, 1)) {
-                        beamEnergy = 0;
+                    if (0 != pvGet(beam_energy, SYNC, 1)) {
+                        beam_energy = 0;
                         epicsThreadSleep(itmp+1);
                     }
                     else break;
                 }
-                quad_icfg = calcQuadCurrent(beamEnergy/1000);
+                quad_icfg = calcQuadCurrent(beam_energy/1000);
 #else
                 itmp=0;
-                pvGet(beamPasses);
-                if (beamPasses==1) {
+                pvGet(beam_passes);
+                if (beam_passes==1) {
                     pvGet(quad_icfg_1pass);
                     quad_icfg = quad_icfg_1pass;
                 }
-                else if (beamPasses==2) {
+                else if (beam_passes==2) {
                     pvGet(quad_icfg_2pass);
                     quad_icfg = quad_icfg_2pass;
                 }
-                else if (beamPasses==3) {
+                else if (beam_passes==3) {
                     pvGet(quad_icfg_3pass);
                     quad_icfg = quad_icfg_3pass;
                 }
-                else if (beamPasses==4) {
+                else if (beam_passes==4) {
                     pvGet(quad_icfg_4pass);
                     quad_icfg = quad_icfg_4pass;
                 }
-                else if (beamPasses==5) {
+                else if (beam_passes==5) {
                     pvGet(quad_icfg_5pass);
                     quad_icfg = quad_icfg_5pass;
                 }
@@ -476,7 +476,7 @@ ss automoller {
             }
         }
         
-        when (beamEnergy < 1000 || beamEnergy > 12000) {
+        when (beam_energy < 1000 || beam_energy > 12000) {
             TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
         } state listen
 

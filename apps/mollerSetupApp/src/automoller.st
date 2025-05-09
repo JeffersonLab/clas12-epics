@@ -82,8 +82,8 @@ float quad_icfg_5pass; assign quad_icfg_5pass to "{P}cfg:quad:iset:5pass";
 float tagger_irbk; assign tagger_irbk to "{SIMTAG}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
-float beam_energy; assign beam_energy to "MBSY2C_energy";
-int   beam_passes; assign beam_passes to "MMSHLBPASS";
+float beam_energy; assign beam_energy to "MBSY2C_energy"; monitor beam_energy;
+int   beam_passes; assign beam_passes to "MMSHLBPASS"; monitor beam_passes;
 
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
@@ -310,16 +310,10 @@ ss automoller {
         entry {
             pvGet(logusers);
             pvGet(moller_accumulate);
-            for (itmp=0; itmp<5; ++itmp) {
-                if (0 != pvGet(beam_energy, SYNC, 1)) {
-                    beam_energy = 0;
-                    epicsThreadSleep(itmp+1);
-                }
-                else break;
-            }
         }
 
         when (beam_energy < 1000 || beam_energy > 12000) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
             TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
         } state listen
 
@@ -438,13 +432,6 @@ ss automoller {
             if (quad_icfg_auto) {
                 MESSAGE(Calculating Quadrupole Current ...);
 #ifdef USE_BRIANS_QUADS
-                for (itmp=0; itmp<5; ++itmp) {
-                    if (0 != pvGet(beam_energy, SYNC, 1)) {
-                        beam_energy = 0;
-                        epicsThreadSleep(itmp+1);
-                    }
-                    else break;
-                }
                 quad_icfg = calcQuadCurrent(beam_energy/1000);
 #else
                 itmp=0;
@@ -477,6 +464,12 @@ ss automoller {
         }
         
         when (beam_energy < 1000 || beam_energy > 12000) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
+            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
+        } state listen
+
+        when (quad_icfg < 100 || quad_icfg > 3200) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
             TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
         } state listen
 

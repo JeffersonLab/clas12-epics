@@ -312,11 +312,6 @@ ss automoller {
             pvGet(moller_accumulate);
         }
 
-        when (beam_energy < 1000 || beam_energy > 12000) {
-            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
-            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
-        } state listen
-
         when (moller_accumulate!=STOPDAQ) {
             TMPMESSAGE(Must stop DAQ before Logbook Entry.)
         } state listen
@@ -411,7 +406,6 @@ ss automoller {
     state checkTagger {
         entry {
             MESSAGE(Checking Tagger ...);
-            epicsThreadSleep(1);
         }
         when (tagger_irbk < TAGGER_TOLERANCE) {
             MESSAGE(ERROR:  Tagger is Off.  Aborted Moller Run.);
@@ -504,7 +498,6 @@ ss automoller {
             quadC_on = 1;
             pvPut(quadB_on);
             pvPut(quadC_on);
-            epicsThreadSleep(1);
         }
 
         when (delay(30)) {
@@ -514,7 +507,7 @@ ss automoller {
             pvPut(msg);
         } state listen
         
-        when (delay(5) && quadB_isOn==1 && quadC_isOn==1) {
+        when (delay(2) && quadB_isOn==1 && quadC_isOn==1) {
         } state quadsRampUp
 
         when (delay(5)) {
@@ -659,7 +652,6 @@ ss automoller {
             pvPut(hv_htcc_off);
             pvPut(hv_ltcc_off);
             MESSAGE(Confirming HV Off ...);
-            epicsThreadSleep(5);
         }
 
         when (delay(5) &&
@@ -896,7 +888,6 @@ ss automoller {
         when (delay(5)) {
         } state retractTarget
     }
-
     
     state retractTarget {
         entry {
@@ -912,7 +903,6 @@ ss automoller {
         } state listen
         
         when (delay(10) && tgt_moving==0 && tgt_empty==1) {
-            MESSAGE(Non-Moller Configuration Restored.);
         } state quadsRampDown
     }
     
@@ -922,6 +912,7 @@ ss automoller {
         option -t;
 
         entry {
+            MESSAGE(Ramping down Quadrupoles ...);
             quadB_iset = 0;
             quadC_iset = 0;
             pvPut(quadB_iset);
@@ -929,20 +920,20 @@ ss automoller {
             epicsThreadSleep(1);
         }
 
-        when (delay(5) && quadB_imon < 50 && quadC_imon < 50) {
-        } state quadsOff
-
-        when (delay(30)) {
+        when (delay(40)) {
 			status=QUAD_ALARM;
 			pvPut(status);
             MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
             pvPut(msg);
         } state listen
 
-        when (delay(5)) {
+        when (delay(10) && quadB_imon < 50 && quadC_imon < 50) {
+        } state quadsOff
+
+        when (delay(15)) {
             pvPut(quadB_iset);
             pvPut(quadC_iset);
-            epicsThreadSleep(2);
+            epicsThreadSleep(10);
         } state quadsRampDown
 
     }
@@ -953,14 +944,15 @@ ss automoller {
         option -t;
 
         entry {
+            MESSAGE(Turning off Quadrupoles ...);
             quadB_off = 1;
             quadC_off = 1;
             pvPut(quadB_off);
             pvPut(quadC_off);
-            epicsThreadSleep(1);
         }
 
         when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
+            MESSAGE(Non-Moller Configuration Restored.);
         } state listen
 
         when (delay(30)) {

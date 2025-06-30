@@ -21,7 +21,7 @@ def get_fcup_prescale():
             if len(line) == 3 and line[0] == 'TS_FP_PRESCALE':
                 if line[1] == '8' and int(line[2]) != 0:
                     return str(1.0 / (math.pow(2,int(line[2])-1) + 1))
-    return 1
+    return str(1)
 
 CFG={
 'B_DAQ:run_status':   {'ini':'UDF','cmd':['run_status']},

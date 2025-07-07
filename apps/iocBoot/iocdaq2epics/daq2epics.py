@@ -17,10 +17,12 @@ def get_fcup_prescale():
     t = epics.pv.PV('B_DAQ:trigger_file').get()
     with open('/usr/clas12/release/1.4.0/parms/trigger/%s.trg'%t) as f:
         for line in f.readlines():
+            if line.startswith('#'):
+                continue
             line = line.strip().split()
             if len(line) == 3 and line[0] == 'TS_FP_PRESCALE':
                 if line[1] == '8' and int(line[2]) != 0:
-                    return str(1.0 / (math.pow(2,int(line[2])-1) + 1))
+                    return '%.8f'% (1.0 / (math.pow(2,int(line[2])-1) + 1))
     return str(1)
 
 CFG={

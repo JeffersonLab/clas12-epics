@@ -121,6 +121,9 @@ seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
 seq stage2bits
 seq sums
 
+seq trigbitclean "INP=B_DAQ:TSGTP:rates:raw, OUT=B_DAQ:TSGTP:rates, PRE=B_DAQ:TSGTP:prescales")
+seq trigbitclean "INP=B_DAQ:TSFP:rates:raw,  OUT=B_DAQ:TSFP:rates,  PRE=B_DAQ:TSFP:prescales")
+
 dbpf("B_DAQ:ROCS_BUSY:clondaq11.DESC","clondaq11")
 dbpf("B_DAQ:ROCS_BUSY:alert1.DESC","alert1")
 

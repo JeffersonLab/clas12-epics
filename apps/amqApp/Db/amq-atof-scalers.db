@@ -1,4 +1,18 @@
 record(waveform, "B_DET_ATOF_TDC:c") {
-    field(NELM, "780")
+    field(NELM, "720")
     field(FTVL, "DOUBLE")
+}
+record(compress, "B_DET_ATOF_TDC:seu:max:cp") {
+    field(SCAN, "10 second")
+    field(ALG, "N to 1 High Value")
+    field(INP, "B_DET_ATOF_TDC:seu:wf")
+    field(NSAM, "1")
+    field(N, "15")
+    field(FLNK,"B_DET_ATOF_TDC:seu:max.PROC")
+}
+record(ai, "B_DET_ATOF_TDC:seu:max") {
+    field(INP,"B_DET_ATOF_TDC:seu:max:cp")
+    field(HIHI, "20000")
+    field(HHSV, "MINOR")
+    info(autosaveFields_pass0,"HIGH HIHI HSV HHSV")
 }

@@ -82,8 +82,8 @@ float quad_icfg_5pass; assign quad_icfg_5pass to "{P}cfg:quad:iset:5pass";
 float tagger_irbk; assign tagger_irbk to "{SIMTAG}TMIRBCK";  monitor tagger_irbk;
 
 // Beam Energy:
-float beamEnergy; assign beamEnergy to "MBSY2C_energy";
-int   beamPasses; assign beamPasses to "MMSHLBPASS";
+float beam_energy; assign beam_energy to "MBSY2C_energy"; monitor beam_energy;
+int   beam_passes; assign beam_passes to "MMSHLBPASS"; monitor beam_passes;
 
 // Half-Wave Plate:
 int halfwaveplate; assign halfwaveplate to "IGL1I00DI24_24M";
@@ -323,7 +323,6 @@ ss automoller {
         when () {
             MESSAGE(Generating Logbook Entry ...);
             pvGet(filename);
-            pvGet(beamEnergy);
             pvGet(halfwaveplate);
             pvGet(polarization);
             pvGet(epolarization);
@@ -335,7 +334,7 @@ ss automoller {
             pvGet(vwienangle);
             pvGet(hwienangle);
             epicsThreadSleep(4);
-            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beamEnergy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
+            makeLogEntry(filename,polarization,epolarization,slmbca,slmebca,beam_energy,hv_slm_vsetrbk,quadB_imon,quadC_imon,helm_imon,tgt_cfg,halfwaveplate,logcomments,logusers,runno,coda_runno,runStartTime,runEndTime,vwienangle,hwienangle);
             epicsThreadSleep(2);
             MESSAGE(Check Logbook for New Entry!);
             sprintf(logcomments,"None");
@@ -398,7 +397,7 @@ ss automoller {
             epicsThreadSleep(1);
 		}
 #ifdef IGNORE_TAGGER
-        when () {} state insertCollimator
+        when () {} state quadsCalc
 #else
         when () {} state checkTagger
 #endif
@@ -407,14 +406,180 @@ ss automoller {
     state checkTagger {
         entry {
             MESSAGE(Checking Tagger ...);
-            epicsThreadSleep(1);
         }
         when (tagger_irbk < TAGGER_TOLERANCE) {
             MESSAGE(ERROR:  Tagger is Off.  Aborted Moller Run.);
             status=NOT_CONFIGURED;
 	        pvPut(status);
         } state listen
-        when () {} state insertCollimator
+        when () {} state quadsCalc
+    }
+
+    state quadsCalc {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            pvGet(quad_icfg);
+            pvGet(quad_icfg_auto);
+            if (quad_icfg_auto) {
+                MESSAGE(Calculating Quadrupole Current ...);
+#ifdef USE_BRIANS_QUADS
+                quad_icfg = calcQuadCurrent(beam_energy/1000);
+#else
+                itmp=0;
+                pvGet(beam_passes);
+                if (beam_passes==1) {
+                    pvGet(quad_icfg_1pass);
+                    quad_icfg = quad_icfg_1pass;
+                }
+                else if (beam_passes==2) {
+                    pvGet(quad_icfg_2pass);
+                    quad_icfg = quad_icfg_2pass;
+                }
+                else if (beam_passes==3) {
+                    pvGet(quad_icfg_3pass);
+                    quad_icfg = quad_icfg_3pass;
+                }
+                else if (beam_passes==4) {
+                    pvGet(quad_icfg_4pass);
+                    quad_icfg = quad_icfg_4pass;
+                }
+                else if (beam_passes==5) {
+                    pvGet(quad_icfg_5pass);
+                    quad_icfg = quad_icfg_5pass;
+                }
+                else {
+                    itmp=1;
+                }
+#endif
+            }
+        }
+        
+        when (beam_energy < 1000 || beam_energy > 12000) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
+            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
+        } state listen
+
+        when (quad_icfg < 100 || quad_icfg > 3200) {
+            TMPMESSAGE(Error retrieving MBSY2C_energy ...)
+            TMPMESSAGE(Error retrieving MBSY2C_energy.  Try again.)
+        } state listen
+
+        when (itmp!=0) {
+            MESSAGE(ERROR on #Passes for Quad Current.);
+        } state listen
+
+        when (quad_icfg>3300) {
+            MESSAGE(ERROR on Quad Current above 3300 A.);
+        } state listen
+
+        when () {
+            pvPut(quad_icfg);
+            MESSAGE(Turning ON Quadrupoles ...);
+        } state quadsOn
+    }
+
+    state quadsOn {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            // reset:
+            quadB_reset = 1;
+            quadC_reset = 1;
+            pvPut(quadB_reset);
+            pvPut(quadC_reset);
+            epicsThreadSleep(1);
+            // on:
+            quadB_on = 1;
+            quadC_on = 1;
+            pvPut(quadB_on);
+            pvPut(quadC_on);
+        }
+
+        when (delay(30)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR turning on Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+        
+        when (delay(2) && quadB_isOn==1 && quadC_isOn==1) {
+        } state quadsRampUp
+
+        when (delay(5)) {
+            if (quadB_isOn==0)  pvPut(quadB_on);
+            if (quadC_isOn==0)  pvPut(quadC_on);
+            epicsThreadSleep(2);
+        } state quadsOn
+
+    }
+
+    state quadsRampUp {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            quadB_iset = quad_icfg;
+            quadC_iset = quad_icfg;
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(1);
+        }
+
+        when (delay(40)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR energizing Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+        
+        when (delay(5) &&
+              equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
+              equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
+        } state helmholtzOn
+
+        when (delay(5)) {
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(2);
+        } state quadsRampUp
+    }
+
+    state helmholtzOn {
+        
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            MESSAGE(Energizing Helmholtz Coils ...);
+            pvGet(helm_icfg);
+            pvGet(helm_polcfg);
+            helm_iset = helm_icfg*(2*helm_polcfg-1);
+            helm_on=1;
+            pvPut(helm_on);
+            pvPut(helm_iset);
+            epicsThreadSleep(1);
+        }
+        
+        when (delay(3) && equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
+        } state insertCollimator
+
+        when (delay(25)) {
+			status=HELM_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR energizing Helmholtz.  Aborted Moller Run.);
+        } state listen
+        
+        when (delay(15)) {
+            pvPut(helm_on);
+            pvPut(helm_iset);
+            epicsThreadSleep(7);
+        } state helmholtzOn
     }
 
     state insertCollimator {
@@ -487,7 +652,6 @@ ss automoller {
             pvPut(hv_htcc_off);
             pvPut(hv_ltcc_off);
             MESSAGE(Confirming HV Off ...);
-            epicsThreadSleep(5);
         }
 
         when (delay(5) &&
@@ -560,168 +724,7 @@ ss automoller {
         }
 
         when (delay(5)) {
-        } state quadsCalc
-    }
-
-
-    state quadsCalc {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            pvGet(quad_icfg);
-            pvGet(quad_icfg_auto);
-            itmp=0;
-            if (quad_icfg_auto) {
-                MESSAGE(Calculating Quadrupole Current ...);
-#ifdef USE_BRIANS_QUADS
-                pvGet(beamEnergy);
-                quad_icfg = calcQuadCurrent(beamEnergy/1000);
-#else
-                pvGet(beamPasses);
-                if (beamPasses==1) {
-                    pvGet(quad_icfg_1pass);
-                    quad_icfg = quad_icfg_1pass;
-                }
-                else if (beamPasses==2) {
-                    pvGet(quad_icfg_2pass);
-                    quad_icfg = quad_icfg_2pass;
-                }
-                else if (beamPasses==3) {
-                    pvGet(quad_icfg_3pass);
-                    quad_icfg = quad_icfg_3pass;
-                }
-                else if (beamPasses==4) {
-                    pvGet(quad_icfg_4pass);
-                    quad_icfg = quad_icfg_4pass;
-                }
-                else if (beamPasses==5) {
-                    pvGet(quad_icfg_5pass);
-                    quad_icfg = quad_icfg_5pass;
-                }
-                else {
-                    itmp=1;
-                }
-#endif
-            }
-        }
-        
-        when (itmp!=0) {
-            MESSAGE(ERROR on #Passes for Quad Current.);
-        } state listen
-
-        when (quad_icfg>3300) {
-            MESSAGE(ERROR on Quad Current above 3300 A.);
-        } state listen
-
-        when () {
-            pvPut(quad_icfg);
-            MESSAGE(Turning ON Quadrupoles ...);
-        } state quadsOn
-    }
-
-    state quadsOn {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            // reset:
-            quadB_reset = 1;
-            quadC_reset = 1;
-            pvPut(quadB_reset);
-            pvPut(quadC_reset);
-            epicsThreadSleep(1);
-            // on:
-            quadB_on = 1;
-            quadC_on = 1;
-            pvPut(quadB_on);
-            pvPut(quadC_on);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(30)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR turning on Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-        
-        when (delay(5) && quadB_isOn==1 && quadC_isOn==1) {
-        } state quadsRampUp
-
-        when (delay(5)) {
-            if (quadB_isOn==0)  pvPut(quadB_on);
-            if (quadC_isOn==0)  pvPut(quadC_on);
-            epicsThreadSleep(2);
-        } state quadsOn
-
-    }
-
-    state quadsRampUp {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            quadB_iset = quad_icfg;
-            quadC_iset = quad_icfg;
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(40)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR energizing Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-        
-        when (delay(5) &&
-              equals(quadB_imon,quadB_iset,QUAD_TOLERANCE) &&
-              equals(quadC_imon,quadC_iset,QUAD_TOLERANCE) ) {
-        } state helmholtzOn
-
-        when (delay(5)) {
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-        } state quadsRampUp
-        
-    }
-
-    state helmholtzOn {
-        
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            MESSAGE(Energizing Helmholtz Coils ...);
-            pvGet(helm_icfg);
-            pvGet(helm_polcfg);
-            helm_iset = helm_icfg*(2*helm_polcfg-1);
-            helm_on=1;
-            pvPut(helm_on);
-            pvPut(helm_iset);
-            epicsThreadSleep(1);
-        }
-        
-        when (delay(3) && equals(helm_imon,helm_iset,HELM_TOLERANCE)) {
         } state insertTarget
-
-        when (delay(25)) {
-			status=HELM_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR energizing Helmholtz.  Aborted Moller Run.);
-        } state listen
-        
-        when (delay(15)) {
-            pvPut(helm_on);
-            pvPut(helm_iset);
-            epicsThreadSleep(7);
-        } state helmholtzOn
     }
 
     state insertTarget {
@@ -832,69 +835,7 @@ ss automoller {
 			pvPut(status);
 			epicsThreadSleep(1);
         }
-        when (delay(1)) {} state quadsRampDown
-    }
-
-    state quadsRampDown {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            quadB_iset = 0;
-            quadC_iset = 0;
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(5) && quadB_imon < 50 && quadC_imon < 50) {
-        } state quadsOff
-
-        when (delay(30)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-
-        when (delay(5)) {
-            pvPut(quadB_iset);
-            pvPut(quadC_iset);
-            epicsThreadSleep(2);
-        } state quadsRampDown
-
-    }
-
-    state quadsOff {
-
-        // only reset timer if previous state was different:
-        option -t;
-
-        entry {
-            quadB_off = 1;
-            quadC_off = 1;
-            pvPut(quadB_off);
-            pvPut(quadC_off);
-            epicsThreadSleep(1);
-        }
-
-        when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
-        } state helmholtzOff
-
-        when (delay(30)) {
-			status=QUAD_ALARM;
-			pvPut(status);
-            MESSAGE(ERROR turning off Quads.  Aborted Moller Run.);
-            pvPut(msg);
-        } state listen
-        
-        when (delay(5)) {
-            if (quadB_isOn!=0)  pvPut(quadB_off);
-            if (quadC_isOn!=0)  pvPut(quadC_off);
-            epicsThreadSleep(2);
-        } state quadsOff
-
+        when (delay(1)) {} state helmholtzOff
     }
 
     state helmholtzOff {
@@ -947,7 +888,6 @@ ss automoller {
         when (delay(5)) {
         } state retractTarget
     }
-
     
     state retractTarget {
         entry {
@@ -963,9 +903,73 @@ ss automoller {
         } state listen
         
         when (delay(10) && tgt_moving==0 && tgt_empty==1) {
+        } state quadsRampDown
+    }
+    
+    state quadsRampDown {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            MESSAGE(Ramping down Quadrupoles ...);
+            quadB_iset = 0;
+            quadC_iset = 0;
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(1);
+        }
+
+        when (delay(40)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR denergizing Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+
+        when (delay(10) && quadB_imon < 50 && quadC_imon < 50) {
+        } state quadsOff
+
+        when (delay(15)) {
+            pvPut(quadB_iset);
+            pvPut(quadC_iset);
+            epicsThreadSleep(10);
+        } state quadsRampDown
+
+    }
+
+    state quadsOff {
+
+        // only reset timer if previous state was different:
+        option -t;
+
+        entry {
+            MESSAGE(Turning off Quadrupoles ...);
+            quadB_off = 1;
+            quadC_off = 1;
+            pvPut(quadB_off);
+            pvPut(quadC_off);
+        }
+
+        when (delay(5) && quadB_isOn==0 && quadC_isOn==0) {
             MESSAGE(Non-Moller Configuration Restored.);
         } state listen
+
+        when (delay(30)) {
+			status=QUAD_ALARM;
+			pvPut(status);
+            MESSAGE(ERROR turning off Quads.  Aborted Moller Run.);
+            pvPut(msg);
+        } state listen
+        
+        when (delay(5)) {
+            if (quadB_isOn!=0)  pvPut(quadB_off);
+            if (quadC_isOn!=0)  pvPut(quadC_off);
+            epicsThreadSleep(2);
+        } state quadsOff
+
     }
+
 }
 
 

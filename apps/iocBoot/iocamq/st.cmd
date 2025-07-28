@@ -13,8 +13,6 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 ConnectMQ("tcp://clon00:61616","clasrun.clasprod.daq.HallB_DAQ")
 
-## Load record instances
-
 #The RAWMESG key means don't parse for JSON, but writes the whole message into
 #a waveform PV up to NELM characters. TYPE must be CHAR.
 #Eg. dbLoadRecords("db/amqStringArray.db","P=B,K=RAWMSG,N=200")
@@ -36,13 +34,16 @@ ConnectMQ("tcp://clon00:61616","clasrun.clasprod.daq.HallB_DAQ")
 #N = No of elements in the array, if required
 
 #dbLoadRecords("db/amqStringArray.db","P=B_DAQ:RAWMSG,K=RAWMSG,N=1000,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
-dbLoadRecords("db/amqInt.db","P=B_DAQ:LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqDouble.db","P=B_DAQ:EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqIntArray.db","P=B_DAQ:TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqStringArray.db","P=B_DAQ:NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
-dbLoadRecords("db/amqHistogram.db","P=B_DAQ:TestHist,K=TestHist,N=100,NE=101,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
-dbLoadRecords("db/amqIntArray.db","P=B_DAQ:FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+#dbLoadRecords("db/amqInt.db","P=B_DAQ:LiveTime,K=LiveTime,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+#dbLoadRecords("db/amqDouble.db","P=B_DAQ:EventRate,K=EventRate,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+#dbLoadRecords("db/amqIntArray.db","P=B_DAQ:TestScalers,K=TestScalers,N=20,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+#dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:TestVals,K=TestVals,N=20,TH=5,THH=10,HSV=MINOR,HHSV=MAJOR")
+#dbLoadRecords("db/amqStringArray.db","P=B_DAQ:NameAddress,K=NameAddress,N=100,TH=0,THH=0,HSV=NO_ALARM,HHSV=NO_ALARM")
+#dbLoadRecords("db/amqHistogram.db","P=B_DAQ:TestHist,K=TestHist,N=100,NE=101,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
+#dbLoadRecords("db/amqIntArray.db","P=B_DAQ:FTScalers,K=FTScalers,N=100,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+
+############################################################################################################
+############################################################################################################
 
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:trig2vtp_VTPGT_TRIGGERBITS,K=trig2vtp_VTPGT_TRIGGERBITS,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
@@ -100,7 +101,9 @@ dbLoadTemplate("db/amqTriggerNames.substitutions")
 dbLoadTemplate("db/amqTriggerFlags.substitutions")
 
 dbLoadRecords("db/amq-alert-busy-aliases.db")
-        
+
+dbLoadRecords("db/amq-prescaler.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd
@@ -117,6 +120,9 @@ StartMQ()
 seq waveform, "P=B_DAQ:,R=trig2vtp_VTPGT_TRIGGERBITS_P"
 seq stage2bits
 seq sums
+
+seq trigbitclean "INP=B_DAQ:TSGTP:rates:raw, OUT=B_DAQ:TSGTP:rates, PRE=B_DAQ:TSGTP:prescales")
+seq trigbitclean "INP=B_DAQ:TSFP:rates:raw,  OUT=B_DAQ:TSFP:rates,  PRE=B_DAQ:TSFP:prescales")
 
 dbpf("B_DAQ:ROCS_BUSY:clondaq11.DESC","clondaq11")
 dbpf("B_DAQ:ROCS_BUSY:alert1.DESC","alert1")

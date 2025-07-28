@@ -10,6 +10,9 @@ dbLoadTemplate("db/amq-atof.substitutions")
 dbLoadRecords("db/amq-atof-aliases.db")
 dbLoadRecords("db/amq-atof-scalers.db")
 
+dbLoadRecords("db/waveformApp.db","P=B_DET_ATOF_TDC,R=:seu:,NELM=15,FTVL=FLOAT,PERIOD=5,FNAME=atof-seu.txt")
+dbLoadRecords("db/waveformApp.db","P=B_DET_ATOF_TDC,R=:hbeat:,NELM=15,FTVL=FLOAT,PERIOD=5,FNAME=atof-hbeat.txt")
+
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
@@ -28,4 +31,7 @@ StartMQ()
 dbl > pv.list
 
 seq atof
+
+seq waveform, "P=B_DET_ATOF_TDC,R=:seu:"
+seq waveform, "P=B_DET_ATOF_TDC,R=:hbeat:"
 

@@ -1,39 +1,46 @@
 
-alias("B_DAQ:trig1ts_TRIGGERBITS", "B_DAQ:TSGTP:rates:raw")
-alias("B_DAQ:trig1ts_PRESCALES", "B_DAQ:TSGTP:prescales")
-alias("B_DAQ:trig1tsfp_TRIGGERBITS", "B_DAQ:TSFP:rates:raw")
-alias("B_DAQ:trig1tsfp_PRESCALES", "B_DAQ:TSFP:prescales")
+alias("B_DAQ:trig1ts_TRIGGERBITS",  "B_DAQ:TSGTP:rates:raw")
+alias("B_DAQ:trig1ts_PRESCALES",    "B_DAQ:TSGTP:prescales")
+alias("B_DAQ:trig1tsfp_TRIGGERBITS","B_DAQ:TSFP:rates:raw")
+alias("B_DAQ:trig1tsfp_PRESCALES",  "B_DAQ:TSFP:prescales")
 
-record(acalcout, "B_DAQ:TSGTP:rates") {
+record(waveform, "B_DAQ:TSGTP:rates") {
+    field(FTVL, "FLOAT")
     field(NELM, "32")
-    field(INAA, "B_DAQ:trig1ts_TRIGGERBITS CPP")
-    field(INBB, "B_DAQ:trig1ts_PRESCALES CPP")
-    field(CALC, "AA/BB")
-    field(FLNK, "B_DAQ:TSGTP:sum.PROC")
+    field(FLNK, "B_DAQ:TSGTP:rates:sum.PROC")
+    field(EGU,  "Hz")
 }
-record(acalcout, "B_DAQ:TSFP:rates") {
+record(acalcout, "B_DAQ:TSGTP:rates:sum") {
     field(NELM, "32")
-    field(INAA, "B_DAQ:trig1tsfp_TRIGGERBITS CPP")
-    field(INBB, "B_DAQ:trig1tsfp_PRESCALES CPP")
-    field(CALC, "AA/BB")
-    field(FLNK, "B_DAQ:TSFP:sum.PROC")
-}
-record(acalcout, "B_DAQ:TSGTP:sum") {
     field(INAA, "B_DAQ:TSGTP:rates")
     field(CALC, "SUM(AA)")
-    field(FLNK, "B_DAQ:TSGTP:sum:raw.PROC")
+    field(FLNK, "B_DAQ:TSGTP:rates:sum:raw.PROC")
+    field(EGU,  "Hz")
 }
-record(acalcout, "B_DAQ:TSFP:sum") {
-    field(INAA, "B_DAQ:TSFP:rates")
-    field(CALC, "SUM(AA)")
-    field(FLNK, "B_DAQ:TSFP:sum:raw.PROC")
-}
-record(acalcout, "B_DAQ:TSGTP:sum:raw") {
+record(acalcout, "B_DAQ:TSGTP:rates:sum:raw") {
+    field(NELM, "32")
     field(INAA, "B_DAQ:TSGTP:rates:raw")
     field(CALC, "SUM(AA)")
+    field(EGU,  "Hz")
 }
-record(acalcout, "B_DAQ:TSFP:sum:raw") {
+
+record(waveform, "B_DAQ:TSFP:rates") {
+    field(FTVL, "FLOAT")
+    field(NELM, "32")
+    field(FLNK, "B_DAQ:TSFP:rates:sum.PROC")
+    field(EGU,  "Hz")
+}
+record(acalcout, "B_DAQ:TSFP:rates:sum") {
+    field(NELM, "32")
+    field(INAA, "B_DAQ:TSFP:rates")
+    field(CALC, "SUM(AA)")
+    field(FLNK, "B_DAQ:TSFP:rates:sum:raw.PROC")
+    field(EGU,  "Hz")
+}
+record(acalcout, "B_DAQ:TSFP:rates:sum:raw") {
+    field(NELM, "32")
     field(INAA, "B_DAQ:TSFP:rates:raw")
     field(CALC, "SUM(AA)")
+    field(EGU,  "Hz")
 }
 

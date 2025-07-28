@@ -57,6 +57,7 @@ DB += amqTriggerNames.substitutions
 DB += amqTriggerFlags.substitutions
 DB += amqStringAlarm.db
 DB += amqWeather.db
+DB += amq-prescaler.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

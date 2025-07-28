@@ -101,7 +101,9 @@ dbLoadTemplate("db/amqTriggerNames.substitutions")
 dbLoadTemplate("db/amqTriggerFlags.substitutions")
 
 dbLoadRecords("db/amq-alert-busy-aliases.db")
-        
+
+dbLoadRecords("db/amq-prescaler.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < save_restore.cmd

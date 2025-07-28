@@ -35,7 +35,7 @@ amq_SRCS += devamqAi.c devamqWaveform.c
 amq_SRCS += stage2bits.st
 amq_SRCS += sums.st
 amq_SRCS += atof.st
-
+amq_SRCS += trigbitclean.st
 # Build the main IOC entry point on workstation OSs.
 amq_SRCS_DEFAULT += amqMain.cpp
 #amq_SRCS_vxWorks += -nil-

@@ -14,6 +14,8 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 dbLoadRecords("db/waveformApp.db","P=HB:monitoring:ai:,R=,FNAME=./waveform.txt,PERIOD=10,NELM=87,FTVL=DOUBLE")
 dbLoadTemplate("db/hydra.substitutions")
 
+dbLoadRecords("db/alarm-system-test.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < ../save_restore.cmd

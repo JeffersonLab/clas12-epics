@@ -19,6 +19,16 @@
 #    field(INP,  "@$(PLCID) Torus_MPS.Man_Response")
 #}
 
+record(ai, "$(P)$(R)Tbank_V") {
+    field(DTYP, "EtherIP")
+    field(SCAN, "1 second")
+    field(INP,  "@$(PLCID) Tbank_V")
+    field(EGU,  "V")
+    field(PREC, "1")
+    field(DESC, "Transistor Bank Vce")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+
 record(waveform, "$(P)$(R)ADCScales") {
     field(DESC, "ADC scale factor array")
     field(DTYP, "EtherIP")

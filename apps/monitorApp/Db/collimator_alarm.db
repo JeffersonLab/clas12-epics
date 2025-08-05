@@ -12,8 +12,18 @@ record(calc,"B_COLLIMATOR-TAGGER:alarm")
   field(INPC,"collimator_at_a")
   field(INPD,"collimator_at_b")
   field(INPE,"collimator_at_c")
-#  field(CALC,"(A<10&&(D=1||(B#1&&C#1&&E#1)))?1:0")
   field(CALC,"A<10?(D=1?1:0):(D#0||B=1||C=1||E=1?0:-1)")
+  field(HIHI,"1")
+  field(HHSV,"MAJOR")
+}
+
+record(calc,"B_QUAD-TAGGER:alarm")
+{
+  field(SCAN,"1 second")
+  field(INPA,"TMIRBCK")
+  field(INPB,"DYNAB:i:rbk")
+  field(INPC,"hallb_sf_xy560_0_18")
+  field(CALC,"A<10 && (B>10 || C>10)")
   field(HIHI,"1")
   field(HHSV,"MAJOR")
 }

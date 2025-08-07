@@ -16,6 +16,8 @@ dbLoadTemplate("db/hydra.substitutions")
 
 dbLoadRecords("db/alarm-system-test.db")
 
+dbLoadRecords("db/quad_alarm.db")
+
 cd ${TOP}/iocBoot/${IOC}
 
 < ../save_restore.cmd

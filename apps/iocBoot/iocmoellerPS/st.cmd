@@ -28,6 +28,9 @@ dbLoadRecords("db/SCE410.db", "P=B_MOLLER_,R=HELMHOLTZ_,PORT=SER1,ADDR=1")
 dbLoadRecords("db/asynRecord.db","P=DYNAB,R=:ASYN,PORT=SER2,ADDR=1,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/dynapower-2022-soft.db","P=DYNAB:,PORT=SER2")
 
+# make the old one look a little bit like the new one:
+dbLoadRecords("db/dynapower-clone.db")
+
 cd "${TOP}/iocBoot/${IOC}"
 
 ## autosave setup

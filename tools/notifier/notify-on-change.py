@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 dryrun = False
+debug = False
 title = 'Half-Wave plate changed'
 pv = 'IGL1I00OD16_16'
 log_books = ['CLAS12CALIB']
@@ -16,6 +17,7 @@ _changes = []
 _disconnects = []
 
 def report():
+    if debug: print(_changes)
     _lock.acquire()
     if len(_disconnects) > 0:
         msg = 'HWP disconnects in the past 24 hours:\n'
@@ -62,11 +64,11 @@ def changed(**kws):
     t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
     v = kws['value']
     _lock.acquire()
-    # the first is initialization, always keep it (and ignore it later):
+    # the first "change" is always initialization, keep it and ignore it later:
     if len(_changes) == 0:
         _changes.append((t,v))
     # else check for a value change:
-    elif v != _changes[len(_changes)-1][1]:
+    elif v != _changes[-1][1]:
         _changes.append((t,v))
         print(f'Change #{len(_changes)-1}:  {t} --> {v}')
     # else it's a disconnect:
@@ -81,8 +83,10 @@ def launch():
     epics.pv.PV(pv).add_callback(callback=changed)
     # schedule a daily report:
     import schedule
-    #schedule.every(5).seconds.do(report)
-    schedule.every().day.at("08:00").do(report)
+    if debug:
+        schedule.every(5).seconds.do(report)
+    else:
+        schedule.every().day.at("08:00").do(report)
     # keep alive:
     import time
     while True:

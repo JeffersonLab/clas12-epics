@@ -6,6 +6,7 @@ title = 'Half-Wave plate changed'
 pv = 'IGL1I00OD16_16'
 log_books = ['CLAS12CALIB']
 log_tags = ['Autolog','Moller']
+log_users = ['baltzell']
 email_sender = 'hallb-hwp@jlab.org'
 email_recipients = ['baltzell@jlab.org']
 urls = ['HWP in RCDB:\nhttps://clasweb.jlab.org/rcdb']
@@ -37,7 +38,7 @@ def report():
     _lock.release()
 
 def submit_log(msg):
-    cmd = ['logentry','-t',title,'-b','-']
+    cmd = ['logentry','-t',title,'-e',','.join(log_users),'-b','-']
     for g in log_tags: cmd.extend(['-g',g])
     for l in log_books: cmd.extend(['-l',l])
     print(' '.join(cmd))

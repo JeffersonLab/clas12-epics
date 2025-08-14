@@ -21,13 +21,12 @@ def report():
         msg = 'HWP disconnects in the past 24 hours:\n'
         msg += '\n'.join([f'{i+1}.  {t}' for i,t in enumerate(_disconnects)])
         msg += '\n\n'+'\n\n'.join(urls)
-        #send_email(msg)
+        send_email(msg)
     # the first reading is just initialization, ignore it:
     if len(_changes) > 1:
         msg = 'HWP changes in the past 24 hours:\n'
         msg += '\n'.join([f'{i+1}.  {t} -- HWP --> {v}' for i,(t,v) in enumerate(_changes[1:])])
         msg += '\n\n'+'\n\n'.join(urls)
-        send_email(msg)
         submit_log(msg)
     # keep only the last reading, as initialization for next time:
     while len(_changes) > 1:

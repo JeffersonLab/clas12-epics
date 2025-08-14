@@ -98,6 +98,8 @@ iocInit "../resource.def"
 ## Added these three line. to start counting after restarting IOC
 dbpf "scaler_c.CNT","1"
 dbpf "scaler_c_mode.VAL","1"
+dbpf "scaler_d.CNT","1"
+dbpf "scaler_d_mode.VAL","1"
 dbpf "display_c_mode.VAL","Hertz"
 dbpf "display_d_mode.VAL","Hertz"
 

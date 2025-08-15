@@ -24,7 +24,7 @@
   <background_color>
     <color red="38" green="38" blue="38" />
   </background_color>
-  <width>920</width>
+  <width>725</width>
   <x>-1</x>
   <name>DC HV</name>
   <grid_space>5</grid_space>
@@ -34,16 +34,7 @@
   <foreground_color>
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
-  <actions hook="false" hook_all="false">
-    <action type="OPEN_DISPLAY">
-      <path>HVDC.opi</path>
-      <macros>
-        <include_parent_macros>true</include_parent_macros>
-      </macros>
-      <replace>1</replace>
-      <description>Reopen Screen</description>
-    </action>
-  </actions>
+  <actions hook="false" hook_all="false" />
   <widget typeId="org.csstudio.opibuilder.widgets.Rectangle" version="1.0.0">
     <border_style>14</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -1527,8 +1518,8 @@ $(pv_value)</tooltip>
     <background_color>
       <color red="110" green="155" blue="200" />
     </background_color>
-    <width>511</width>
-    <x>98</x>
+    <width>451</width>
+    <x>146</x>
     <name>Label_51</name>
     <y>12</y>
     <foreground_color>
@@ -1846,164 +1837,6 @@ $(pv_value)</tooltip>
       <color red="192" green="192" blue="192" />
     </foreground_color>
     <actions hook="false" hook_all="false" />
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>5dff6964:15381f14d6e:40a8</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <label>Controls</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>88</width>
-    <x>644</x>
-    <name>Menu Button</name>
-    <y>9</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="EXECUTE_CMD">
-        <command>burt-gui</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>1</wait_time>
-        <description>Save/Restore</description>
-      </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>scripts/dchv_off.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>Turn All OFF</description>
-      </action>
-      <action type="EXECUTE_JAVASCRIPT">
-        <path>scripts/dchv_on.js</path>
-        <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-]]></scriptText>
-        <embedded>false</embedded>
-        <description>Turn All ON</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>4a676627:1586850093b:-61b5</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>20</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <label>Monitoring</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>88</width>
-    <x>644</x>
-    <name>Menu Button_1</name>
-    <y>34</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>dchvwf/dchvwf.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Voltage / Current Plots</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>HVDC_sums_all.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Current Sums - All Regions</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/DC/HVDC_sums_R1.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Current Sums - Region 1</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/DC/HVDC_sums_R2.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Current Sums - Region 2</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>/CLAS12_Share/detectors/DC/HVDC_sums_R3.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Current Sums - Region 3</description>
-      </action>
-      <action type="OPEN_DISPLAY">
-        <path>HVDC_strip.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description>Current Sums - Strip Charts</description>
-      </action>
-    </actions>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
     </font>
@@ -2848,11 +2681,10 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>-3de0a100:17a72f82a5b:-69da</wuid>
     <pv_value />
-    <text>   Reset
-Interlocks</text>
+    <text>Clear Trips</text>
     <scripts />
     <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>44</height>
+    <height>24</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2870,10 +2702,10 @@ Interlocks</text>
     <background_color>
       <color red="240" green="240" blue="240" />
     </background_color>
-    <width>82</width>
-    <x>744</x>
+    <width>109</width>
+    <x>629</x>
     <name>Action Button</name>
-    <y>9</y>
+    <y>19</y>
     <style>0</style>
     <foreground_color>
       <color red="0" green="0" blue="0" />
@@ -2892,6 +2724,109 @@ Interlocks</text>
         <timeout>10</timeout>
         <confirm_message></confirm_message>
         <description></description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_HW_HVDC3:ClearAlarm</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_HW_HVDC4:ClearAlarm</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+    <border_style>6</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <actions_from_pv>false</actions_from_pv>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>-45f71d30:198a3b0f3ee:-7107</wuid>
+    <transparent>false</transparent>
+    <pv_value />
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>20</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <pv_name></pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <label>Menu</label>
+    <widget_type>Menu Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>88</width>
+    <x>31</x>
+    <name>Menu Button_3</name>
+    <y>21</y>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>B_DET_DC_HV:OFF</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message></confirm_message>
+        <description>Turn DC HV Off</description>
+      </action>
+      <action type="WRITE_PV">
+        <pv_name>B_DET_DC_HV:ON</pv_name>
+        <value>1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really Turn DC High Voltage ON?</confirm_message>
+        <description>Turn DC HV On</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>dchvwf/dchvwf.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Voltage / Current Plots</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>sums/HVDC_sums_all.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Sums</description>
+      </action>
+      <action type="OPEN_DISPLAY">
+        <path>HVDC_strip.opi</path>
+        <macros>
+          <include_parent_macros>true</include_parent_macros>
+        </macros>
+        <replace>2</replace>
+        <description>Current Sum Strip Charts</description>
+      </action>
+      <action type="EXECUTE_CMD">
+        <command>burt-gui</command>
+        <command_directory>$(user.home)</command_directory>
+        <wait_time>10</wait_time>
+        <description>Save/Restore</description>
       </action>
     </actions>
     <font>

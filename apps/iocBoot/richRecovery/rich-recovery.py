@@ -181,6 +181,8 @@ def roc_reboot_and_wait_for_ssh(hostname='rich4'):
     return False
 
 def rich_init(hostname='rich4',command='ssprich_getnumtiles'):
+    stdout = subprocess.check_output(['ssh',hostname,'rich_init'],stderr=subprocess.STDOUT)
+    print(stdout)
     stdout = subprocess.check_output(['ssh',hostname,command],stderr=subprocess.STDOUT)
     print(stdout)
     try:

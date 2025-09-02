@@ -68,7 +68,7 @@ class Notify():
         self.disconnects.clear()
         self.lock.release()
 
-    def changed(self,**kws):
+    def changed(self, **kws):
         import datetime
         now = datetime.datetime.now()
         t = datetime.datetime.utcfromtimestamp(kws['timestamp']-4*60*60)
@@ -87,7 +87,7 @@ class Notify():
             print(f'Disconnect #{len(self.disconnects)}:  {now}')
         self.lock.release()
 
-    def submit_log(self):
+    def submit_log(self, msg):
         if len(self.cfg.log_books) > 0:
             cmd = ['logentry','-t',self.title,'-b','-']
             for u in self.log_users: cmd.extend(['-e',u])
@@ -98,7 +98,7 @@ class Notify():
                import subprocess
                print(subprocess.check_output(cmd, input=msg, universal_newlines=True))
 
-    def send_email(self,body):
+    def send_email(self, body):
         if len(self.cfg.email_recipients) > 0:
             from email.mime.text import MIMEText
             t = MIMEText(body)
@@ -115,8 +115,8 @@ class Notify():
 ########################################################################
 ########################################################################
 
-_hwp  = Config(title='test', pv='IGL1I00OD16_16', email_recipients=['baltzell@jlab.org'], debug=False)
-_ebeam = Config(title='test', pv='MBSY2C_energy', email_recipients=['baltzell@jlab.org'], debug=False)
+_hwp  = Config(title='test99', pv='IGL1I00OD16_16', email_recipients=['baltzell@jlab.org'], debug=False)
+_ebeam = Config(title='test99', pv='MBSY2C_energy', email_recipients=['baltzell@jlab.org'], debug=False)
 
 def test():
     print(_hwp)

@@ -20,11 +20,10 @@ dbLoadRecords("db/mcc_fsd.db")
 dbLoadRecords("db/mcc_fsd_alarm.db")
 
 dbLoadRecords("db/hall_target.db","P=HLB:TARGET:")
-#dbLoadRecords("db/hall_target.db-bak")
 
 dbLoadTemplate("db/alarm_bpm.substitutions")
 
-# these must be run as user=clasioc:
+# these must be run as user=clasioc and host=clonioc#:
 dbLoadTemplate("db/hallb_ia.substitutions")
 
 dbLoadRecords("db/mcc_fsdGlobal.db","P=B_FSD")

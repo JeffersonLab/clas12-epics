@@ -31,15 +31,7 @@
   <foreground_color>
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
-  <actions hook="false" hook_all="true">
-    <action type="EXECUTE_JAVASCRIPT">
-      <path></path>
-      <scriptText><![CDATA[importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
-ScriptUtil.openOPI(widget,"clas12.opi",1,null);]]></scriptText>
-      <embedded>true</embedded>
-      <description></description>
-    </action>
-  </actions>
+  <actions hook="false" hook_all="true" />
   <widget typeId="org.csstudio.opibuilder.widgets.arc" version="1.0.0">
     <border_style>0</border_style>
     <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -5596,7 +5588,13 @@ $(pv_value)</tooltip>
             <color name="Major" red="255" green="0" blue="0" />
           </value>
         </exp>
+        <exp bool_exp="pv1!=0">
+          <value>
+            <color red="203" green="151" blue="151" />
+          </value>
+        </exp>
         <pv trig="true">B_FSD_MASK_ALARM</pv>
+        <pv trig="true">ISD2H001G</pv>
       </rule>
       <rule name="Text Color" prop_id="border_color" out_exp="false">
         <exp bool_exp="pv0&gt;0">
@@ -19791,7 +19789,7 @@ $(pv_value)</tooltip>
       <text>Right
 </text>
       <scripts />
-      <height>19</height>
+      <height>38</height>
       <border_width>1</border_width>
       <scale_options>
         <width_scalable>true</width_scalable>

@@ -78,7 +78,6 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):vmon")
    alias("B_DET_$(Det)_$(Sys)_$(Element):vmon")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):vmon")
 }   
-
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
 {
    field(DESC,"#GR")
@@ -89,23 +88,6 @@ record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
    alias("B_DET_$(Det)_$(Sys)_$(Element):imon")
    alias("B_SYS_$(Sys)_$(Det)_$(Element):imon")
    info(autosaveFields_pass0,"HSV LSV HHSV LLSV HIGH LOW HIHI LOLO")
-}
-record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idarkcalc")
-{
-   field(SCAN, "1 second")
-   field(INPA, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon")
-   field(INPB, "B_HW_$(CrName):bpm")
-   field(INPC, "B_HW_$(CrName):fcup")
-   field(INPD, "B_HW_$(CrName):bpm:dark")
-   field(INPE, "B_HW_$(CrName):fcup:dark")
-   field(CALC, "B<=D && C<=E")
-   field(OCAL, "A")
-   field(OOPT, "When Non-zero")
-   field(DOPT, "Use OCAL")
-   field(DISV, "0")
-   field(DISA, "$(dark=0)")
-   alias("B_DET_$(Det)_$(Sys)_$(Element):idarkcalc")
-   field(OUT,  "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark PP")
 }
 record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark")
 {  field(VAL, "0")
@@ -120,7 +102,6 @@ record(ai, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark")
    alias("B_DET_$(Det)_$(Sys)_$(Element):idark")
    info(autosaveFields_pass0,"HSV HHSV HIGH HIHI")
 }
-
 record(ao, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):triprbk")
 {
    field(DOL, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch).P CPP NMS")
@@ -519,37 +500,56 @@ record(mbbi,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):status")
     field(FVSV,"MAJOR")
 }
 
+####################################
+
+# bpm limit for dark current:
 record(ai, "B_HW_$(CrName):bpm:dark") {
-    field(VAL,"1e-5")
-    info(autosaveFields_pass0,"VAL")
+    field(VAL, "0")
 }
-record(ai, "B_HW_$(CrName):fcup:dark") {
-    field(VAL,"1e-5")
-    info(autosaveFields_pass0,"VAL")
-}
+# previous 35 seconds of BPM current readings:
 record(compress, "B_HW_$(CrName):bpm:wf") {
     field(SCAN,"1 second")
     field(ALG,"Circular Buffer")
-    field(NSAM,"30")
+    field(NSAM,"35")
     field(INP,"IPM2C21A")
     field(FLNK,"B_HW_$(CrName):bpm.PROC")
 }
-record(compress, "B_HW_$(CrName):fcup:wf") {
-    field(SCAN,"1 second")
-    field(ALG,"Circular Buffer")
-    field(NSAM,"30")
-    field(INP,"scaler_calc1b")
-    field(FLNK,"B_HW_$(CrName):fcup.PROC")
-}
+# the largest of those BPM readings:
 record(compress, "B_HW_$(CrName):bpm") {
     field(ALG,"N to 1 High Value")
     field(NSAM,"1")
-    field(N,"30")
+    field(N,"35")
     field(INP,"B_HW_$(CrName):bpm:wf")
 }
-record(compress, "B_HW_$(CrName):fcup") {
-    field(ALG,"N to 1 High Value")
-    field(NSAM,"1")
-    field(N,"30")
-    field(INP,"B_HW_$(CrName):fcup:wf")
+# previous 5 seconds of DC current readings:
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:wf") {
+    field(SCAN,"1 second")
+    field(ALG,"Circular Buffer")
+    field(NSAM,"5")
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):imon CP")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:few.PROC")
 }
+# the DC current reading from a few seconds ago:
+record(compress, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:few") {
+    field(ALG,"Average")
+    field(NSAM,"1")
+    field(N,"1")
+    field(INP,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:wf")
+    field(FLNK,"B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:calc.PROC")
+}
+# decide whether to update the dark current:
+record(calcout, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:calc")
+{
+   field(INPA, "B_HW_$(CrName):bpm CP")
+   field(INPB, "B_HW_$(CrName):bpm:dark CP")
+   field(INPC, "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark:few CP")
+   field(CALC, "A < B")
+   field(OCAL, "C")
+   field(OOPT, "When Non-zero")
+   field(DOPT, "Use OCAL")
+   field(DISV, "0")
+   field(DISA, "$(dark=0)")
+   field(OUT,  "B_HW_$(CrName)_Sl$(Sl)_Ch$(Ch):idark PP")
+}
+####################################
+

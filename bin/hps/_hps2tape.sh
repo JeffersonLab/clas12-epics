@@ -1,1 +1,0 @@
-/home/hpsrun/scripts/_hps2tape.sh

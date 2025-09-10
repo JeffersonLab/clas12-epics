@@ -1,1 +1,0 @@
-../css_share/detectors/RICH/scripts/rich-lvcycle.sh

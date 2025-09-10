@@ -1,39 +1,103 @@
 
-record(calc, "collimator_at_home") {
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-	field(CALC, "ABS(A-0.0)<0.1?1:0")
-}
-record(calc, "collimator_at_a") {
-    field(DESC, "20mm Collimator Position")
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-	field(CALC, "ABS(A-2.580)<0.01?1:0")
-}
-record(calc, "collimator_at_b") {
-    field(DESC, "Blank Collimator Position")
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-#field(CALC, "ABS(A-7.1280)<0.01?1:0")
-#field(CALC, "ABS(A-7.008)<0.01?1:0")
-	field(CALC, "ABS(A-7.0837)<0.01?1:0")
-}
-record(calc, "collimator_at_c") {
-    field(DESC,"12.8 mm Collimator Position")
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-#field(CALC, "ABS(A-11.2308)<0.01?1:0")
-#field(CALC, "ABS(A-11.1108)<0.01?1:0")
-	field(CALC, "ABS(A-11.1848)<0.01?1:0")
+record(mbbi,"collimator:stat") {
+    field(INP,"collimator:calc")
+    field(ZRST,"Empty")
+    field(ONST,"Blank")
+    field(TWST,"20 mm")
+    field(THST,"12.8 mm")
+    field(FRST,"Moving")
+    field(FVST,"Unknown")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(FVVL,"5")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"MINOR")
+    field(FVSV,"MAJOR")
 }
 
+record(ai,"collimator:empty:val") {field(VAL,"0.0")}
+
+record(ai,"collimator:blank:val") {field(VAL,"7.0837")}
+
+record(ai,"collimator:20mm:val")  {field(VAL,"2.580")}
+
+record(ai,"collimator:12mm:val")  {field(VAL,"11.1848")}
+
+record(ao,"collimator:empty:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"collimator:empty:val")
+    field(OUT,"collimator.VAL PP")
+}
+record(ao,"collimator:blank:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"collimator:blank:val")
+    field(OUT,"collimator.VAL PP")
+}
+record(ao,"collimator:20mm:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"collimator:20mm:val")
+    field(OUT,"collimator.VAL PP")
+}
+record(ao,"collimator:12mm:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"collimator:12mm:val")
+    field(OUT,"collimator.VAL PP")
+}
+
+record(calc,"collimator:calc") {
+    field(SCAN,".5 second")
+    field(INPA,"collimator_at_a")
+    field(INPB,"collimator_at_b")
+    field(INPC,"collimator_at_c")
+    field(INPF,"collimator_at_home")
+    field(INPG,"collimator.MOVN")
+    field(CALC,"G?4:(F?0:(A?2:(B?1:(C?3:5))))")
+    field(FLNK,"collimator:stat.PROC")
+}
+
+record(calc, "collimator_at_home") {
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(INPB, "collimator:empty:val")
+    field(CALC, "ABS(A-B)<0.1?1:0")
+    field(DESC, "Home")
+}
+record(calc, "collimator_at_a") {
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(INPB, "collimator:20mm:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "20 mm")
+}
+record(calc, "collimator_at_b") {
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(INPB, "collimator:blank:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "Blank")
+}
+record(calc, "collimator_at_c") {
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(INPB, "collimator:12mm:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC,"12.8 mm")
+}
 record(calc, "collimator_at_d") {
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-	field(CALC, "ABS(A-11.160)<0.01?1:0")
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(CALC, "ABS(A-11.160)<0.01?1:0")
+    field(DESC,"Unknown")
 }
 record(calc, "collimator_at_e") {
-	field(INPA, "collimator.RBV")
-	field(SCAN, ".2 second")
-	field(CALC, "ABS(A-3.425)<0.01?1:0")
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(CALC, "ABS(A-3.425)<0.01?1:0")
+    field(DESC,"Unknown")
 }

@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>true</auto_zoom_to_fit_all>
   <scripts />
-  <height>1100</height>
+  <height>1060</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -32,64 +32,6 @@
     <color name="GRID" red="90" green="90" blue="90" />
   </foreground_color>
   <actions hook="false" hook_all="false" />
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>13b0c1d8:198579e27dd:-7dee</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color name="GRID" red="90" green="90" blue="90" />
-    </border_color>
-    <label>Alarms</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="Button" red="240" green="240" blue="240" />
-    </background_color>
-    <width>110</width>
-    <x>29</x>
-    <name>DC_1</name>
-    <y>91</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="EXECUTE_CMD">
-        <command>clascss-alarm &gt;&amp; /dev/null</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Open Alarm Handler</description>
-      </action>
-      <action type="WRITE_PV">
-        <pv_name>b:alarm:system:test</pv_name>
-        <value>1</value>
-        <timeout>10</timeout>
-        <confirm_message>Do you really want to generate a test alarm?  This will latch in the alarm handler and make noises in the counting house!</confirm_message>
-        <description>Generate Test Alarm</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
     <border_style>13</border_style>
     <tooltip></tooltip>
@@ -99,7 +41,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>345</height>
+    <height>353</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -118,9 +60,9 @@ $(pv_value)</tooltip>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>161</width>
-    <x>8</x>
+    <x>3</x>
     <name>Detectors</name>
-    <y>154</y>
+    <y>601</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -130,6 +72,67 @@ $(pv_value)</tooltip>
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>1bdd1a:19914e99208:-61b2</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>HyCal</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>HyCal</name>
+      <y>279</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/hycal-temps.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Temperatures</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/transporter.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Transporter</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
       <border_style>6</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -165,7 +168,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>BAND</name>
-      <y>240</y>
+      <y>255</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -177,220 +180,6 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>BAND HV</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-2c0b3d7b:15913a3c670:-61cb</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>CND</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>CND</name>
-      <y>192</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/CND/CNDHV.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>CND HV</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-1c32a971:15101a0267d:-6241</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>CTOF</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>CTOF</name>
-      <y>216</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/CTOF/ctof_hv.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>CTOF HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/CTOF/ctof_scalers.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <S>c</S>
-            <TYPE>Counts</TYPE>
-            <DTYPE>cTdc</DTYPE>
-            <DDTYPE>TDC</DDTYPE>
-          </macros>
-          <replace>2</replace>
-          <description>CTOF Scalers - Geographic</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>/CLAS12_Share/detectors/scalers/jscaler_ctof.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <S>c</S>
-            <TYPE>FADC</TYPE>
-            <NAME>Counts</NAME>
-          </macros>
-          <replace>2</replace>
-          <description>CTOF Scalers - Expert</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-4b759146:152f9e60eab:-2a4e</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>CVT</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>CVT</name>
-      <y>168</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/SVT/svtOverview.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>SVT Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/MVT/MVT.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>MVT Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/FMT/FMT.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>FMT Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/cRioApp/mmGasMixing/mmGasMixing.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>MM Gas Mixing System</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/MVT/mm-weather.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>BMT Weather</description>
         </action>
       </actions>
       <font>
@@ -432,7 +221,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>DC</name>
-      <y>0</y>
+      <y>15</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -499,6 +288,220 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
+      <wuid>-2c0b3d7b:15913a3c670:-61cb</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>CND</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>CND</name>
+      <y>207</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/CND/CNDHV.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>CND HV</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-4b759146:152f9e60eab:-2a4e</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>CVT</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>CVT</name>
+      <y>183</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/SVT/svtOverview.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>SVT Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/MVT/MVT.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>MVT Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/FMT/FMT.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>FMT Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/cRioApp/mmGasMixing/mmGasMixing.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>MM Gas Mixing System</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/MVT/mm-weather.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>BMT Weather</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-1c32a971:15101a0267d:-6241</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>CTOF</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>CTOF</name>
+      <y>231</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/CTOF/ctof_hv.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>CTOF HV</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/CTOF/ctof_scalers.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <S>c</S>
+            <TYPE>Counts</TYPE>
+            <DTYPE>cTdc</DTYPE>
+            <DDTYPE>TDC</DDTYPE>
+          </macros>
+          <replace>2</replace>
+          <description>CTOF Scalers - Geographic</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>/CLAS12_Share/detectors/scalers/jscaler_ctof.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <S>c</S>
+            <TYPE>FADC</TYPE>
+            <NAME>Counts</NAME>
+          </macros>
+          <replace>2</replace>
+          <description>CTOF Scalers - Expert</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
       <wuid>-1c32a971:15101a0267d:-623d</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -525,7 +528,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>ECAL</name>
-      <y>24</y>
+      <y>39</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -596,7 +599,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>FT</name>
-      <y>144</y>
+      <y>159</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -677,7 +680,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>FTOF</name>
-      <y>48</y>
+      <y>63</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -739,7 +742,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>HTCC</name>
-      <y>72</y>
+      <y>87</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -845,7 +848,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>LTCC</name>
-      <y>96</y>
+      <y>111</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -923,7 +926,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>RICH</name>
-      <y>120</y>
+      <y>135</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1010,7 +1013,7 @@ $(pv_value)</tooltip>
         <height_scalable>true</height_scalable>
         <keep_wh_ratio>false</keep_wh_ratio>
       </scale_options>
-      <visible>true</visible>
+      <visible>false</visible>
       <pv_name></pv_name>
       <border_color>
         <color name="GRID" red="90" green="90" blue="90" />
@@ -1024,7 +1027,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>ALERT</name>
-      <y>264</y>
+      <y>279</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -1058,91 +1061,6 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-131564d4:16f678abb66:-7f0e</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>false</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>RTPC</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>RTPC</name>
-      <y>288</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>detectors/BONUS/bonus.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>RTPC Overview</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/BONUS/mpod-novice.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>RTPC HV</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/BONUS/rtpc-gas.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>RTPC Drift Gas</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/BONUS/bonus-target.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>RTPC Target Gas</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/BONUS/bonus-intlks.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>RTPC Interlocks</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.gridLayout" version="1.0.0">
       <fill_grids>false</fill_grids>
       <number_of_columns>1</number_of_columns>
@@ -1160,7 +1078,7 @@ $(pv_value)</tooltip>
     <enabled>true</enabled>
     <wuid>3fec40b5:15102310507:-7e88</wuid>
     <auto_size>false</auto_size>
-    <image_file>common/images/clas12_negative.svg</image_file>
+    <image_file>common/images/prad.png</image_file>
     <scripts />
     <height>71</height>
     <border_width>1</border_width>
@@ -1234,7 +1152,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>350</height>
+    <height>348</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -1253,9 +1171,9 @@ $(pv_value)</tooltip>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>160</width>
-    <x>9</x>
+    <x>4</x>
     <name>Subsystems</name>
-    <y>498</y>
+    <y>254</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -1265,6 +1183,63 @@ $(pv_value)</tooltip>
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-3a2a9588:15f834b4aeb:-7fdb</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Accelerator</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>3</x>
+      <name>Accelerator</name>
+      <y>306</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="EXECUTE_CMD">
+          <command>google-chrome.sh https://epicsweb.jlab.org</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>WMenu - epicsweb.jlab.org</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>jtabs_launcher.sh</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>JMenu</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
       <border_style>6</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -1856,109 +1831,6 @@ $(pv_value)</tooltip>
 $(pv_value)</tooltip>
       <rules />
       <enabled>true</enabled>
-      <wuid>63feedca:155b1a3533d:-7fdd</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>Moeller</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>Moeller</name>
-      <y>101</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>apps/mollerSetupApp/automoller.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Moller Run</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/asymApp/asym_ia.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Asym IA</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/asymApp/asym_full.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Asym All</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/asymApp/polarization.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Polarization</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/dynapowerApp/dynapower-hybrid.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Quadrupoles</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/SCE410App/SCE410.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-            <P>B_MOLLER_HELMHOLTZ_</P>
-            <NAME>Moeller Helmholtz PS</NAME>
-          </macros>
-          <replace>2</replace>
-          <description>Helmholtz</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>apps/moeller_targetApp/moeller_target.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Target Motor</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
       <wuid>-4b759146:152f9e60eab:-2e8c</wuid>
       <transparent>false</transparent>
       <pv_value />
@@ -1985,11 +1857,19 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Motors</name>
-      <y>131</y>
+      <y>101</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/transporter.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HyCal Transporter</description>
+        </action>
         <action type="OPEN_DISPLAY">
           <path>apps/harp_genericApp/harp_scans.opi</path>
           <macros>
@@ -2062,7 +1942,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Scalers</name>
-      <y>155</y>
+      <y>125</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2240,7 +2120,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Solenoid</name>
-      <y>203</y>
+      <y>149</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2389,7 +2269,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Torus</name>
-      <y>179</y>
+      <y>173</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2556,7 +2436,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Weather</name>
-      <y>275</y>
+      <y>197</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2582,6 +2462,109 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
     </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>63feedca:155b1a3533d:-7fdd</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>false</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Moeller</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>Moeller</name>
+      <y>275</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>apps/mollerSetupApp/automoller.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Moller Run</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/asymApp/asym_ia.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Asym IA</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/asymApp/asym_full.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Asym All</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/asymApp/polarization.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Polarization</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/dynapowerApp/dynapower-hybrid.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Quadrupoles</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/SCE410App/SCE410.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+            <P>B_MOLLER_HELMHOLTZ_</P>
+            <NAME>Moeller Helmholtz PS</NAME>
+          </macros>
+          <replace>2</replace>
+          <description>Helmholtz</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/moeller_targetApp/moeller_target.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Target Motor</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.gridLayout" version="1.0.0">
       <fill_grids>false</fill_grids>
       <number_of_columns>1</number_of_columns>
@@ -2600,7 +2583,7 @@ $(pv_value)</tooltip>
     <transparent>true</transparent>
     <lock_children>false</lock_children>
     <scripts />
-    <height>133</height>
+    <height>166</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -2619,9 +2602,9 @@ $(pv_value)</tooltip>
       <color name="OPI_Background" red="50" green="50" blue="50" />
     </background_color>
     <width>160</width>
-    <x>9</x>
+    <x>4</x>
     <name>Tools</name>
-    <y>843</y>
+    <y>89</y>
     <foreground_color>
       <color red="237" green="212" blue="0" />
     </foreground_color>
@@ -2631,6 +2614,64 @@ $(pv_value)</tooltip>
     <font>
       <opifont.name fontName="Sans" height="12" style="1">Header 3</opifont.name>
     </font>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>13b0c1d8:198579e27dd:-7dee</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>30</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Alarms</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>Alarms</name>
+      <y>15</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="EXECUTE_CMD">
+          <command>clascss-alarm &gt;&amp; /dev/null</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Open Alarm Handler</description>
+        </action>
+        <action type="WRITE_PV">
+          <pv_name>b:alarm:system:test</pv_name>
+          <value>1</value>
+          <timeout>10</timeout>
+          <confirm_message>Do you really want to generate a test alarm?  This will latch in the alarm handler and make noises in the counting house!</confirm_message>
+          <description>Generate Test Alarm</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
     <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
       <border_style>6</border_style>
       <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
@@ -2666,7 +2707,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Strip Charts</name>
-      <y>5</y>
+      <y>75</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
@@ -2742,7 +2783,7 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>0</x>
       <name>Action Button_1</name>
-      <y>42</y>
+      <y>44</y>
       <style>0</style>
       <foreground_color>
         <color red="0" green="0" blue="0" />
@@ -2793,9 +2834,9 @@ $(pv_value)</tooltip>
         <color red="240" green="240" blue="240" />
       </background_color>
       <width>115</width>
-      <x>7</x>
+      <x>0</x>
       <name>Action Button_1</name>
-      <y>71</y>
+      <y>104</y>
       <style>0</style>
       <foreground_color>
         <color red="0" green="0" blue="0" />
@@ -2820,197 +2861,5 @@ $(pv_value)</tooltip>
       <widget_type>Grid Layout</widget_type>
       <name>Grid Layout</name>
     </widget>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>6923f1be:1584950518a:-3612</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>false</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color red="0" green="128" blue="255" />
-    </border_color>
-    <label>Page Experts</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color red="240" green="240" blue="240" />
-    </background_color>
-    <width>110</width>
-    <x>29</x>
-    <name>Menu Button</name>
-    <y>105</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl run_coordinator</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Run Coordinator</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl pdl</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Physics Division Liason</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl beamline_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Beamline</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl engineering</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Engineering</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl slowcont_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>Slow Controls</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl bonus_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>BONuS</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl mm_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>CVT</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl daq</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>DAQ</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl engineering</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>DC</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl ecal_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>ECAL</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl ft_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>FT</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl htcc_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>HTCC</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl ltcc_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>LTCC</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl rich_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>RICH</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>notify_expert.pl tof_expert</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>TOF</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
-  </widget>
-  <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-    <border_style>6</border_style>
-    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-    <actions_from_pv>false</actions_from_pv>
-    <alarm_pulsing>false</alarm_pulsing>
-    <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-    <rules />
-    <enabled>true</enabled>
-    <wuid>-3a2a9588:15f834b4aeb:-7fdb</wuid>
-    <transparent>false</transparent>
-    <pv_value />
-    <scripts />
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <height>25</height>
-    <border_width>1</border_width>
-    <scale_options>
-      <width_scalable>true</width_scalable>
-      <height_scalable>true</height_scalable>
-      <keep_wh_ratio>false</keep_wh_ratio>
-    </scale_options>
-    <visible>true</visible>
-    <pv_name></pv_name>
-    <border_color>
-      <color name="GRID" red="90" green="90" blue="90" />
-    </border_color>
-    <label>Accelerator</label>
-    <widget_type>Menu Button</widget_type>
-    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-    <background_color>
-      <color name="Button" red="240" green="240" blue="240" />
-    </background_color>
-    <width>110</width>
-    <x>29</x>
-    <name>DC</name>
-    <y>122</y>
-    <foreground_color>
-      <color red="0" green="0" blue="0" />
-    </foreground_color>
-    <actions hook="false" hook_all="false">
-      <action type="EXECUTE_CMD">
-        <command>google-chrome.sh https://epicsweb.jlab.org</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>WMenu - epicsweb.jlab.org</description>
-      </action>
-      <action type="EXECUTE_CMD">
-        <command>jtabs_launcher.sh</command>
-        <command_directory>$(user.home)</command_directory>
-        <wait_time>10</wait_time>
-        <description>JMenu</description>
-      </action>
-    </actions>
-    <font>
-      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-    </font>
   </widget>
 </display>

@@ -1077,10 +1077,10 @@ $(pv_value)</tooltip>
     <crop_left>0</crop_left>
     <enabled>true</enabled>
     <wuid>3fec40b5:15102310507:-7e88</wuid>
-    <auto_size>false</auto_size>
+    <auto_size>true</auto_size>
     <image_file>common/images/prad.png</image_file>
     <scripts />
-    <height>71</height>
+    <height>56</height>
     <border_width>1</border_width>
     <scale_options>
       <width_scalable>true</width_scalable>
@@ -1110,22 +1110,14 @@ $(pv_value)</tooltip>
         <col>1.0</col>
       </row>
     </permutation_matrix>
-    <width>127</width>
+    <width>120</width>
     <x>20</x>
     <name>Image_1</name>
-    <y>7</y>
+    <y>15</y>
     <foreground_color>
       <color red="192" green="192" blue="192" />
     </foreground_color>
     <actions hook="false" hook_all="false">
-      <action type="OPEN_DISPLAY">
-        <path>CLAS12_Menu_sash.opi</path>
-        <macros>
-          <include_parent_macros>true</include_parent_macros>
-        </macros>
-        <replace>2</replace>
-        <description></description>
-      </action>
       <action type="OPEN_DISPLAY">
         <path>beamline/clas12-wide.opi</path>
         <macros>
@@ -1137,7 +1129,7 @@ $(pv_value)</tooltip>
     </actions>
     <crop_top>0</crop_top>
     <crop_right>0</crop_right>
-    <stretch_to_fit>true</stretch_to_fit>
+    <stretch_to_fit>false</stretch_to_fit>
     <flip_vertical>false</flip_vertical>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -1551,6 +1543,67 @@ $(pv_value)</tooltip>
           </macros>
           <replace>2</replace>
           <description>Helicity-Latched Triggers</description>
+        </action>
+      </actions>
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
+      <border_style>6</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <actions_from_pv>false</actions_from_pv>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <enabled>true</enabled>
+      <wuid>-4cffc683:159e783adf5:-6565</wuid>
+      <transparent>false</transparent>
+      <pv_value />
+      <scripts />
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <height>25</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>true</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name></pv_name>
+      <border_color>
+        <color name="GRID" red="90" green="90" blue="90" />
+      </border_color>
+      <label>Environment</label>
+      <widget_type>Menu Button</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color name="Button" red="240" green="240" blue="240" />
+      </background_color>
+      <width>115</width>
+      <x>0</x>
+      <name>Weather</name>
+      <y>197</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false">
+        <action type="OPEN_DISPLAY">
+          <path>apps/sensorProbeApp/hallWeather.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Hall Weather</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/HPS/freezer.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>HPS Freezer - EEL 124</description>
         </action>
       </actions>
       <font>
@@ -2395,67 +2448,6 @@ $(pv_value)</tooltip>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
           <description>Analyzer</description>
-        </action>
-      </actions>
-      <font>
-        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
-      </font>
-    </widget>
-    <widget typeId="org.csstudio.opibuilder.widgets.MenuButton" version="1.0.0">
-      <border_style>6</border_style>
-      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
-      <actions_from_pv>false</actions_from_pv>
-      <alarm_pulsing>false</alarm_pulsing>
-      <tooltip>$(pv_name)
-$(pv_value)</tooltip>
-      <rules />
-      <enabled>true</enabled>
-      <wuid>-4cffc683:159e783adf5:-6565</wuid>
-      <transparent>false</transparent>
-      <pv_value />
-      <scripts />
-      <border_alarm_sensitive>false</border_alarm_sensitive>
-      <height>25</height>
-      <border_width>1</border_width>
-      <scale_options>
-        <width_scalable>true</width_scalable>
-        <height_scalable>true</height_scalable>
-        <keep_wh_ratio>false</keep_wh_ratio>
-      </scale_options>
-      <visible>true</visible>
-      <pv_name></pv_name>
-      <border_color>
-        <color name="GRID" red="90" green="90" blue="90" />
-      </border_color>
-      <label>Environment</label>
-      <widget_type>Menu Button</widget_type>
-      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
-      <background_color>
-        <color name="Button" red="240" green="240" blue="240" />
-      </background_color>
-      <width>115</width>
-      <x>0</x>
-      <name>Weather</name>
-      <y>197</y>
-      <foreground_color>
-        <color red="0" green="0" blue="0" />
-      </foreground_color>
-      <actions hook="false" hook_all="false">
-        <action type="OPEN_DISPLAY">
-          <path>apps/sensorProbeApp/hallWeather.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>Hall Weather</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/HPS/freezer.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>HPS Freezer - EEL 124</description>
         </action>
       </actions>
       <font>

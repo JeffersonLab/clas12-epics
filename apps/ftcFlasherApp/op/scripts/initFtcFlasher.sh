@@ -3,7 +3,7 @@
 
 #look at the Manual, and $EPICS/apps/iocBoot/iocFlasher/flasher.db to see channels.
 
-scriptdir="${EPICS_SCRIPTS}"
+scriptdir="${TOP}/iocBoot/${IOC}"
 Prefix="B_DET_FTC_FLASHER"
 
 ##This lot for the TOP module

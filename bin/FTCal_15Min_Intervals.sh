@@ -1,0 +1,1 @@
+/usr/clas12/release/pro/epics/apps/ftcFlasherApp/op/scripts/FTCal_15Min_Intervals.sh

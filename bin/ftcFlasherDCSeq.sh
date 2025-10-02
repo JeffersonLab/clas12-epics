@@ -1,0 +1,1 @@
+/usr/clas12/release/pro/epics/apps/ftcFlasherApp/op/scripts/ftcFlasherDCSeq.sh

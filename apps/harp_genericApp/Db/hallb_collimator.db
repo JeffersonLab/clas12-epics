@@ -5,26 +5,30 @@ record(mbbi,"collimator:stat") {
     field(ONST,"Blank")
     field(TWST,"20 mm")
     field(THST,"12.8 mm")
-    field(FRST,"Moving")
-    field(FVST,"Unknown")
+    field(FRST,"6.4 mm")
+    field(FVST,"Moving")
+    field(SXST,"Unknown")
     field(ZRVL,"0")
     field(ONVL,"1")
     field(TWVL,"2")
     field(THVL,"3")
     field(FRVL,"4")
     field(FVVL,"5")
+    field(SXVL,"6")
     field(ZRSV,"NO_ALARM")
     field(ONSV,"NO_ALARM")
     field(TWSV,"NO_ALARM")
     field(THSV,"NO_ALARM")
-    field(FRSV,"MINOR")
-    field(FVSV,"MAJOR")
+    field(FRSV,"NO_ALARM")
+    field(FVSV,"MINOR")
+    field(SXSV,"MAJOR")
 }
 
 record(ai,"collimator:empty:val") {field(VAL,"0.0")}
 record(ai,"collimator:blank:val") {field(VAL,"7.0837")}
 record(ai,"collimator:20mm:val")  {field(VAL,"2.576")}
 record(ai,"collimator:12mm:val")  {field(VAL,"10.765")}
+record(ai,"collimator:6mm:val")   {field(VAL,"6.665")}
 
 record(ao,"collimator:empty:go") {
     field(OMSL,"closed_loop")
@@ -46,16 +50,10 @@ record(ao,"collimator:12mm:go") {
     field(DOL,"collimator:12mm:val")
     field(OUT,"collimator.VAL PP")
 }
-
-record(calc,"collimator:calc") {
-    field(SCAN,".5 second")
-    field(INPA,"collimator_at_a")
-    field(INPB,"collimator_at_b")
-    field(INPC,"collimator_at_c")
-    field(INPF,"collimator_at_home")
-    field(INPG,"collimator.MOVN")
-    field(CALC,"G?4:(F?0:(A?2:(B?1:(C?3:5))))")
-    field(FLNK,"collimator:stat.PROC")
+record(ao,"collimator:6mm:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"collimator:6mm:val")
+    field(OUT,"collimator.VAL PP")
 }
 
 record(calc, "collimator_at_home") {
@@ -84,5 +82,25 @@ record(calc, "collimator_at_c") {
     field(INPA, "collimator.RBV")
     field(INPB, "collimator:12mm:val")
     field(CALC, "ABS(A-B)<0.01?1:0")
-    field(DESC,"12.8 mm")
+    field(DESC, "12.8 mm")
 }
+record(calc, "collimator_at_d") {
+    field(SCAN, ".2 second")
+    field(INPA, "collimator.RBV")
+    field(INPB, "collimator:6mm:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "6.4 mm")
+}
+
+record(calc,"collimator:calc") {
+    field(SCAN,".5 second")
+    field(INPA,"collimator_at_a")
+    field(INPB,"collimator_at_b")
+    field(INPC,"collimator_at_c")
+    field(INPD,"collimator_at_d")
+    field(INPF,"collimator_at_home")
+    field(INPG,"collimator.MOVN")
+    field(CALC,"G?5:(F?0:(A?2:(B?1:(C?3:(D?4:6)))))")
+    field(FLNK,"collimator:stat.PROC")
+}
+

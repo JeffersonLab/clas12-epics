@@ -85,6 +85,7 @@ int NCFEDOWNERR[MAX_HVPS];
 
 static int  nA1520param = 16;
 static int  nA1535param = 16;
+static int  nA1932param = 12;
 static int  nA7030param = 16;
 static int  nA2518Aparam = 18;
 static int  nA2518AparamV2 = 17;
@@ -95,6 +96,9 @@ static int  nA2551param = 14;
 static char A1535param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","POn","TripInt","TripExt","PDwn"};
+static char A1932param[MAX_PARAM][MAX_CAEN_NAME] = {
+                "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","SVMax",
+                "VMon","IMon","Status","Pw","PDwn"};
 static char A1520param[MAX_PARAM][MAX_CAEN_NAME] = {
                 "V0Set","I0Set","V1Set","I1Set","RUp","RDWn","Trip","SVMax",
                 "VMon","IMon","Status","Pw","PwEn","TripInt","TripExt","Tdrift"};
@@ -659,7 +663,8 @@ sy1527GetMap(unsigned int id)
             !strcmp(Measure[id].board[i].modelname,"A7435N") ||
             !strcmp(Measure[id].board[i].modelname,"A7435P") ||
             !strcmp(Measure[id].board[i].modelname,"A1821H") ||
-            !strcmp(Measure[id].board[i].modelname,"A1821"))
+            !strcmp(Measure[id].board[i].modelname,"A1821") || 
+            !strcmp(Measure[id].board[i].modelname,"AXYZ"))
         {
           //printf("---> found board %s\n",Measure[id].board[i].modelname);
           Measure[id].board[i].nparams = nA1535param;
@@ -721,6 +726,33 @@ sy1527GetMap(unsigned int id)
           {
             strcpy(Measure[id].board[i].parnames[j],A1520param[j]);
             strcpy(Demand[id].board[i].parnames[j],A1520param[j]);
+
+            strcpy(ParName,Measure[id].board[i].parnames[j]);
+            ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);
+            if(ret != CAENHV_OK)
+            {
+              printf("CAENHVGetChParamProp error: %s (num. %d) ParName=>%s<\n",
+                  CAENHVGetError(name),ret,ParName);
+              Measure[id].board[i].nchannels = 0;
+              Demand[id].board[i].nchannels = 0;
+              return(CAENHV_SYSERR);
+            }
+            else
+            {
+              Measure[id].board[i].partypes[j] = tipo;
+              Demand[id].board[i].partypes[j] = tipo;
+            }
+          }
+        }
+        else if( !strcmp(Measure[id].board[i].modelname,"A1932"))
+        {
+          //printf("---> found board %s\n",Measure[id].board[i].modelname);
+          Measure[id].board[i].nparams = nA1932param;
+          Demand[id].board[i].nparams = nA1932param;
+          for(j=0; j<Measure[id].board[i].nparams; j++)
+          {
+            strcpy(Measure[id].board[i].parnames[j],A1932param[j]);
+            strcpy(Demand[id].board[i].parnames[j],A1932param[j]);
 
             strcpy(ParName,Measure[id].board[i].parnames[j]);
             ret=CAENHVGetChParamProp(name,i,ChList[0],ParName,"Type",&tipo);

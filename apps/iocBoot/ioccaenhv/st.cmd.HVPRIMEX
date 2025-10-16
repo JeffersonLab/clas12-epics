@@ -1,0 +1,32 @@
+#!../../bin/linux-x86/ioccaen
+
+< envPaths
+epicsEnvSet("IOC","ioccaenhv_HVPRIMEX")
+
+cd ${TOP}
+
+dbLoadDatabase("dbd/ioccaen.dbd")
+ioccaen_registerRecordDeviceDriver(pdbbase)
+Init_CAEN()
+
+Start_CAEN(1, "129.57.160.67")
+Start_CAEN(2, "129.57.160.68")
+Start_CAEN(3, "129.57.160.69")
+Start_CAEN(4, "129.57.160.70")
+Start_CAEN(5, "129.57.160.71")
+
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
+
+dbLoadRecords("db/caenchassis.db","CrName=PRIMEXHV1,CScode=#C1")
+dbLoadRecords("db/caenchassis.db","CrName=PRIMEXHV2,CScode=#C2")
+dbLoadRecords("db/caenchassis.db","CrName=PRIMEXHV3,CScode=#C3")
+dbLoadRecords("db/caenchassis.db","CrName=PRIMEXHV4,CScode=#C4")
+dbLoadRecords("db/caenchassis.db","CrName=PRIMEXHV5,CScode=#C5")
+
+cd ${TOP}/iocBoot/${IOC}
+
+asSetFilename("../acf/caenhv.acf")
+
+iocInit()
+
+dbl > HVPRIMEX-pv.list

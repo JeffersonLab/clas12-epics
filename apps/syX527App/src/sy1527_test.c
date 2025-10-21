@@ -11,22 +11,19 @@
 
 int main(int argc,char** argv)
 {
-  int i, id = 0, board = 0, channel = 2;
-  char ip_address[100]="129.57.160.71";
-  float u, uset, uget;
-  unsigned int l, lget, active, onoff, alarm, itmp;
-  char parname[MAX_CAEN_NAME];
-  strcpy(parname, "IMon(0)");
-
-  if (argc>2) {
-      board = atoi(argv[1]);
-      channel = atoi(argv[2]);
+  int id=0, board=2;
+  char ip[100]="129.15.160.71";
+  
+  if (argc > 1) {
+      strncpy(ip, argv[1], sizeof(ip)-1);
+      ip[sizeof(ip)-1] = '\0';
   }
+  if (argc > 2) board = atoi(argv[2]);
 
-  printf(">>>> ip_address= %s\n",ip_address);
+  printf(">>>> ip_address= %s\n",ip);
 
   printf("\n>>>> sy1527PrintParams:\n");
-  sy1527Start(id, ip_address);
+  sy1527Start(id, ip);
 
   printf("\n>>>> sy1527PrintParams:\n");
   sy1527PrintParams(id);
@@ -58,9 +55,24 @@ int main(int argc,char** argv)
   sy1527PrintBoardProps(id,14);
   sy1527PrintBoardProps(id,15);
 
-  printf("\n\n");
+  printf("\n\n>>>> sy1527GetBoard:\n");
+  printf("%d\n",sy1527GetBoard(id, board));
 
   return(0);
+}
+
+void yes(int argc, char** argv) {
+ 
+  int i, id = 0, board = 0, channel = 2;
+  float u, uset, uget;
+  unsigned int l, lget, active, onoff, alarm, itmp;
+  char parname[MAX_CAEN_NAME];
+  strcpy(parname, "IMon(0)");
+  
+  if (argc>2) {
+      board = atoi(argv[1]);
+      channel = atoi(argv[2]);
+  }
 
   sy1527BoardClearAlarm(id,0);
 

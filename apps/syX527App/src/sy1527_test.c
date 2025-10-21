@@ -23,23 +23,24 @@ int main(int argc,char** argv)
       channel = atoi(argv[2]);
   }
 
-  printf("\n\n=============== CAEN mainframe SY1527/SY4527 test ===============\n");
-  printf("===== ip_address= %s =====\n\n\n",ip_address);
+  printf(">>>> ip_address= %s\n",ip_address);
 
+  printf("\n>>>> sy1527PrintParams:\n");
   sy1527Start(id, ip_address);
 
-  printf("\n\n======= sy1527PrintParams =======\n");
+  printf("\n>>>> sy1527PrintParams:\n");
   sy1527PrintParams(id);
 
+  printf("\n>>>> sy1527PrintMap:\n");
   sy1527PrintMap(id);
 
-  printf("\n\n======= sy1527PrintSysProps =======\n");
+  printf("\n>>>> sy1527PrintSysProps:\n");
   sy1527PrintSysProps(id);
 
-  printf("\n\n======= sy1527PrintExecCommList =======\n");
+  printf("\n>>>> sy1527PrintExecCommList:\n");
   sy1527PrintExecCommList(id);
  
-  printf("\n\n======= sy1527PrintBoardProps =======\n");
+  printf("\n>>>> sy1527PrintBoardProps:\n");
   sy1527PrintBoardProps(id,0);
   sy1527PrintBoardProps(id,1);
   sy1527PrintBoardProps(id,2);
@@ -56,6 +57,8 @@ int main(int argc,char** argv)
   sy1527PrintBoardProps(id,13);
   sy1527PrintBoardProps(id,14);
   sy1527PrintBoardProps(id,15);
+
+  printf("\n\n");
 
   return(0);
 

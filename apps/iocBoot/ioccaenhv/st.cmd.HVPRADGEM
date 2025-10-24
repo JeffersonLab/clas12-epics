@@ -1,0 +1,25 @@
+#!../../bin/linux-x86/ioccaen
+
+< envPaths
+epicsEnvSet("IOC","ioccaenhv_HVPRADGEM")
+
+cd ${TOP}
+
+dbLoadDatabase("dbd/ioccaen.dbd")
+ioccaen_registerRecordDeviceDriver(pdbbase)
+Init_CAEN()
+
+Start_CAEN(12, "129.57.86.239")
+
+dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
+dbLoadTemplate("db/HVPRADGEM.substitutions")
+
+dbLoadRecords("db/caenchassis.db","CrName=HVPRADGEM,CScode=#C12")
+
+cd ${TOP}/iocBoot/${IOC}
+
+asSetFilename("../acf/caenhv.acf")
+
+iocInit()
+
+dbl > HVPRADGEM-pv.list

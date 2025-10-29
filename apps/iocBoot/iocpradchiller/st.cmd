@@ -33,29 +33,29 @@ drvModbusAsynConfigure("RI9","ETH", 4, 4, 900,  100, 0, 2000, "DeltaT")  # read 
 drvModbusAsynConfigure("RI5","ETH", 4, 4, 500,  100, 0, 2000, "DeltaT")  # read input registers
 
 # coils:
-dbLoadRecords("db/modbus-bi.db","PORT=CI,,R=bms:onoff:rbk,P=hycal:chiller:")
-dbLoadRecords("db/modbus-bo.db","PORT=CO,,R=bms:onoff,    P=hycal:chiller:")
+dbLoadRecords("db/modbus-bi.db","PORT=CI,OFFSET=0,R=bms:onoff:rbk,P=hycal:chiller:")
+dbLoadRecords("db/modbus-bo.db","PORT=CO,OFFSET=0,R=bms:onoff,    P=hycal:chiller:")
 
 # holding registers:
-dbLoadRecords("db/modbus-ao.db","PORT=HO1,OFFSET=0,,R=bms:temp:set,    EGU=F,P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=HI0,OFFSET=1,,R=bms:temp:set:rbk,EGU=F,P=hycal:chiller:")
+dbLoadRecords("db/modbus-ao.db","PORT=HO1,OFFSET=0,R=bms:temp:set,    EGU=F,P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=HI0,OFFSET=1,R=bms:temp:set:rbk,EGU=F,P=hycal:chiller:")
 
 # input registers:
-dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=0, ,R=temp:set:rbk, EGU=F,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=30,,R=temp:act,     EGU=F,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=82,,R=temp:out,     EGU=F,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=94,,R=flow,         EGU=lpm,P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=12,,R=temp:dewpoint,EGU=F,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=14,,R=temp:ambient, EGU=C,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=16,,R=temp:in,      EGU=F,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=10,,R=cool:demand,  EGU=%,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=26,,R=tank:level,   EGU=%,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=0, R=temp:set:rbk, EGU=F,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=30,R=temp:act,     EGU=F,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=82,R=temp:out,     EGU=F,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI0,OFFSET=94,R=flow,         EGU=lpm,P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=12,R=temp:dewpoint,EGU=F,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=14,R=temp:ambient, EGU=C,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=16,R=temp:in,      EGU=F,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=10,R=cool:demand,  EGU=%,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-ai.db","PORT=RI9,OFFSET=26,R=tank:level,   EGU=%,  P=hycal:chiller:")
 
 # discrete inputs:
-dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=80,,R=onoff, P=hycal:chiller:")
-dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=70,,R=pump,  P=hycal:chiller:")
-dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=28,,R=bypass,P=hycal:chiller:")
-dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=3, ,R=alarm,ZNAM=Ok,ONAM=Alarm,P=hycal:chiller:")
+dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=80,R=onoff, P=hycal:chiller:")
+dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=70,R=pump,  P=hycal:chiller:")
+dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=28,R=bypass,P=hycal:chiller:")
+dbLoadRecords("db/modbus-bi.db","PORT=DI,OFFSET=3, R=alarm,ZNAM=Ok,ONAM=Alarm,P=hycal:chiller:")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db", "IOC=$(IOC)")
 dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")

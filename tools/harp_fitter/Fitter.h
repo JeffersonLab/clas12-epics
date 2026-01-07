@@ -43,7 +43,7 @@ class Fitter {
     TGCheckButton *but_to_TLOG;
     //TGMainFrame *fMain_log;
     TGTransientFrame *fMain_log;
-    TGTransientFrame *f_Main_FitPars;
+    TGTransientFrame *f_Main_FitPars = nullptr;
     bool fit_2c21;
     bool fit_tagger;
     bool fit_2H02A;

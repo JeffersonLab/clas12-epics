@@ -679,7 +679,9 @@ void Fitter::popupMSG(std::string a) {
 }
 
 void Fitter::Set_Fit_Pars() {
-    if (!f_Main_FitPars) {
+
+  
+  if (!(f_Main_FitPars) ) {
         //f_Main_FitPars = new TGTransientFrame(gClient->GetRoot(), p_wind, 100, 100, kVerticalFrame);
         f_Main_FitPars = new TGTransientFrame(gClient->GetRoot(), p_wind, 100, 100);
         f_Main_FitPars->Connect("CloseWindow()", "Fitter", this, "CloseFitRanges()");
@@ -696,7 +698,6 @@ void Fitter::Set_Fit_Pars() {
         f_1st_peak_Fit_Range->AddFrame(lbl_1st_peak_Fit_Range_max);
         First_peak_range_max = new TGNumberEntry(f_1st_peak_Fit_Range, max_1st_hist, 10);
         f_1st_peak_Fit_Range->AddFrame(First_peak_range_max, new TGLayoutHints(kLHintsCenterX, 2, 2, 2, 2));
-
 
         TGHorizontalFrame *f_2nd_peak_Fit_Range = new TGHorizontalFrame(f_Main_FitPars, 70, 4, kHorizontalFrame);
         TGLabel *lbl_2nd_peak_Fit_Range_min = new TGLabel(f_2nd_peak_Fit_Range, "2nd Peak Fit Range:        min");
@@ -719,7 +720,6 @@ void Fitter::Set_Fit_Pars() {
         f_3rd_peak_Fit_Range->AddFrame(lbl_3rd_peak_Fit_Range_max);
         Third_peak_range_max = new TGNumberEntry(f_3rd_peak_Fit_Range, max_3rd_hist, 10);
         f_3rd_peak_Fit_Range->AddFrame(Third_peak_range_max, new TGLayoutHints(kLHintsCenterX, 2, 2, 2, 2));
-
 
         f_Main_FitPars->AddFrame(f_1st_peak_Fit_Range, new TGLayoutHints(kLHintsTop, 2, 2, 2, 2));
         f_Main_FitPars->AddFrame(f_2nd_peak_Fit_Range, new TGLayoutHints(kLHintsTop, 2, 2, 2, 2));
@@ -744,7 +744,8 @@ void Fitter::Set_Fit_Pars() {
         // Map main frame 
         f_Main_FitPars->MapWindow();
     } else {
-        f_Main_FitPars->RaiseWindow();
+
+      f_Main_FitPars->RaiseWindow();
     }
 }
 
@@ -785,8 +786,8 @@ bool Fitter::Search_2c21_peaks(TGraph *gr) {
 
     sp1->Search(h_gr, 15., "", 0.09);
 
-    float *peak_val_tmp = sp1->GetPositionY();
-    float *pos_tmp = sp1->GetPositionX();
+    Double_t *peak_val_tmp = sp1->GetPositionY();
+    Double_t *pos_tmp = sp1->GetPositionX();
     int n_peaks = sp1->GetNPeaks();
 
     if (n_peaks != 2) {
@@ -882,7 +883,6 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
         h_gr = (TH1D*) Graph2Hist(gr, 10.); // 10 is because 2H02A has motor position in cm, it should be converted into mm
     }
 
-
     h_gr->SetTitle("; motor pos (mm)");
     h_gr->Sumw2();
     int N_hist_bins = h_gr->GetNbinsX();
@@ -891,8 +891,8 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 
     sp1->Search(h_gr, 15., "", 0.09);
 
-    float *peak_val_tmp = sp1->GetPositionY();
-    float *pos_tmp = sp1->GetPositionX();
+    Double_t *peak_val_tmp = sp1->GetPositionY();
+    Double_t *pos_tmp = sp1->GetPositionX();
     int n_peaks = sp1->GetNPeaks();
 
     if (n_peaks != 3) {
@@ -913,6 +913,7 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
     }
+    
 
     int n_for_average = 5;
     double bgr_average;
@@ -991,7 +992,7 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 
         return true;
 
-        delete h_gr_tmp;
+        delete h_gr_tmp; // Fix me, this will never be executed
     } else {
         return false;
     }
@@ -1529,16 +1530,11 @@ TH1D* Fitter::Graph2Hist(TGraph * gr, double scale) {
 
     gr->GetPoint(0, x_low, y_low);
     gr->GetPoint(n_points - 1, x_high, y_high);
-
-    delete h_gr_tmp;
     h_gr_tmp = new TH1D("h_gr", "", n_points, x_varbins_);
-    //TH1D *h_gr = new TH1D("h_gr", "", n_points , x_varbins_ );
-
-    //cout<<"xlow is "<<x_low<<"    x_high is "<<x_high<<endl;
 
     h_gr_tmp->FillN(n_points, x_axis2, y_axis);
+    h_gr_tmp->Sumw2(false); // New addition, with Root Version 6.XX, it doesn't treat uncertainties as sqrt(N) unless we explictely ask for Sumw2(false)
     h_gr_tmp->SetStats(0);
-
 
     h_gr_tmp->SetLabelSize(0.055, "X");
     h_gr_tmp->SetLabelSize(0.055, "Y");

@@ -999,7 +999,7 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 
 }
 
-bool Fitter::Fit_2c21(TGraph *gr, string counter_name) {
+void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
 
@@ -1112,13 +1112,11 @@ bool Fitter::Fit_2c21(TGraph *gr, string counter_name) {
         lat1->DrawLatex(0.05, 0.96, Form("%s", file_name.c_str()));
 
         //lat1->DrawLatex(0.02, 0.97, Form("%s/%s", all_harp_dir.c_str(), glob_filename.c_str()));
-
-        return true;
     }
 
 }
 
-bool Fitter::Fit_tagger(TGraph *gr, string counter_name) {
+void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
 
@@ -1200,7 +1198,7 @@ bool Fitter::Fit_tagger(TGraph *gr, string counter_name) {
         c1->cd(1)->SetLogy();
 
         if (preview_mode) {
-            h_1st_peak->Draw();
+            h_1st_peak->Draw("p e");
             f_1st_peak->SetRange(range_1st_peak[0], range_1st_peak[1]);
             f_1st_peak->Draw("Same");
         } else {
@@ -1311,12 +1309,11 @@ bool Fitter::Fit_tagger(TGraph *gr, string counter_name) {
 
         // ============= Now Let's Save the file for the Log Entry ===============
 
-        return true;
     }
 
 }
 
-bool Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
+void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
 
@@ -1475,8 +1472,6 @@ bool Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
         // 	}
 
         // ============= Now Let's Save the file for the Log Entry ===============
-
-        return true;
     }
 
 }

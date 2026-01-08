@@ -137,9 +137,9 @@ class Fitter {
     void CloseFitRanges();
     void CloseApp();
     void SubmitToLogbook();
-    bool Fit_2c21(TGraph *, std::string );
-    bool Fit_tagger(TGraph *, std::string );
-    bool Fit_2H02A(TGraph *, std::string );
+    void Fit_2c21(TGraph *, std::string );
+    void Fit_tagger(TGraph *, std::string );
+    void Fit_2H02A(TGraph *, std::string );
     //  bool Fit_2H00A(TGraph *, std::string );
     bool Search_2c21_peaks(TGraph *);
     bool Search_three_peaks(TGraph *);

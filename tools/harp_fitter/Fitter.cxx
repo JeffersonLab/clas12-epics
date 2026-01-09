@@ -50,125 +50,13 @@ const double Fitter::Y_Offset_2H01 = 20.97;
 double* Calc_abalpha(double, double, double);
 double Arnes_Corr(double, double);
 
-Fitter::Fitter(const TGWindow *p, UInt_t w, UInt_t h, string fname) {
+Fitter::Fitter(const TGWindow *p, UInt_t w, UInt_t h, string fname): p_wind(p) {
 
+  InitVarables();
 
-    p_wind = p;
-    fMain_log = NULL;
-    // Initialize Counter Names=============
-    counter_names_[0] = "FCup";
-    counter_names_[1] = "Upstream Left";
-    counter_names_[2] = "Upstream Right";
-    counter_names_[3] = "Tagger Left";
-    counter_names_[4] = "Tagger Right";
-    counter_names_[5] = "Tagger Top";
-    counter_names_[6] = "Downstream Left";
-    counter_names_[7] = "Downstream Right";
-    counter_names_[8] = "Downstream Top";
-    counter_names_[9] = "Downstream Bottom";
-    counter_names_[10] = "Mid Stream Left";
-    counter_names_[11] = "Mid Stream Right";
-    counter_names_[12] = "Mid Stream Top";
-    counter_names_[13] = "Mid Stream Bottom";
-    counter_names_[14] = "Empty";
+  BuildGUIFrame( p, w, h );
 
-    // For now counter names are commented, but I guess the reight way is for it to read from some database
-    // counter_names_[10] = "HPS Left";
-    // counter_names_[11] = "HPS Right";
-    // counter_names_[12] = "HPS T";
-    // counter_names_[13] = "HPS SC";
-    // counter_names_[14] = "Empty";
-    //===========================================
-
-    //====================== Allocate a memory for the TTimeStamp for the scan time ====================
-    tstmp_scan_time = new TTimeStamp();
-    scan_time_in_sec = 0;
-
-    //========= Allocate Momory for Fit Parameters =======
-
-    pars_bgr_1st_peak = new double[3];
-    pars_A_1st_peak = new double[3];
-    pars_mean_1st_peak = new double[3];
-    pars_sigm_1st_peak = new double[3];
-    range_1st_peak = new double[2];
-    pars_bgr_2nd_peak = new double[3];
-    pars_A_2nd_peak = new double[3];
-    pars_mean_2nd_peak = new double[3];
-    pars_sigm_2nd_peak = new double[3];
-    range_2nd_peak = new double[2];
-    pars_bgr_3rd_peak = new double[3];
-    pars_A_3rd_peak = new double[3];
-    pars_mean_3rd_peak = new double[3];
-    pars_sigm_3rd_peak = new double[3];
-    range_3rd_peak = new double[2];
-    f_1st_peak = new TF1("f_1st_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
-    f_1st_peak->SetNpx(2500);
-    f_2nd_peak = new TF1("f_2nd_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
-    f_2nd_peak->SetNpx(2500);
-    f_3rd_peak = new TF1("f_3rd_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
-    f_3rd_peak->SetNpx(2500);
-
-    preview_mode = false;
-
-    // Create a main frame
-    fMain = new TGMainFrame(p, w, h, kHorizontalFrame);
-    fMain->Connect("CloseWindow()", "Fitter", this, "CloseApp()");
-    // Create canvas widget 
-    fEcanvas = new TRootEmbeddedCanvas("Ecanvas", fMain, 700, 900);
-
-    TGVerticalFrame *vframe = new TGVerticalFrame(fMain, 200, 40);
-    TGTextButton *open_file = new TGTextButton(vframe, "&Choose a File");
-    open_file->Connect("Clicked()", "Fitter", this, "OpenFile()");
-    vframe->AddFrame(open_file, new TGLayoutHints(kLHintsCenterX, 5, 5, 3, 4));
-
-    TGTextButton *data_view = new TGTextButton(vframe, "&View Data from All counters");
-    data_view->Connect("Clicked()", "Fitter", this, "Draw_All_Counters()");
-    vframe->AddFrame(data_view, new TGLayoutHints(kLHintsCenterX, 5, 5, 3, 4));
-
-    counters_box = new TGComboBox(vframe, "Choose a counter to Fit");
-    counters_box->SetSize(TGDimension(140, 20));
-    counters_box->SetEditable(false);
-    for (int i = 0; i < n_counters - 1; i++) {
-        counters_box->AddEntry(counter_names_[i].c_str(), i);
-    }
-
-    vframe->AddFrame(counters_box, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    TGTextButton *fit_data = new TGTextButton(vframe, "&Fit Data");
-    fit_data->Connect("Clicked()", "Fitter", this, "FitData( =false, false )");
-    vframe->AddFrame(fit_data, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    TGTextButton *fit_pars = new TGTextButton(vframe, "Set Fit Ranges");
-    fit_pars->Connect("Clicked()", "Fitter", this, "Set_Fit_Pars()");
-    vframe->AddFrame(fit_pars, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    TGTextButton *to_log = new TGTextButton(vframe, "Submit to Logbook");
-    to_log->Connect("Clicked()", "Fitter", this, "GetComments()");
-    vframe->AddFrame(to_log, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    //  TGTextButton *b_to_MYA = new TGTextButton(vframe, "&Send parameters to MYA");
-    //  b_to_MYA->Connect("Clicked()", "Fitter", this, "CAPUT()");
-    //vframe->AddFrame(b_to_MYA, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
-
-    TGTextButton *exit = new TGTextButton(vframe, "&Exit", "gApplication->Terminate(0)");
-    vframe->AddFrame(exit, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    status_label = new TGLabel(vframe, "");
-    status_label->SetTextJustify(kTextLeft | kTextCenterY);
-    vframe->AddFrame(status_label, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
-
-    fMain->AddFrame(vframe, new TGLayoutHints(kLHintsTop, 2, 2, 2, 2));
-    fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY,
-            2, 2, 2, 2));
-    fMain->SetWindowName("Fitter Window");
-    // Map all subwindows of main frame 
-    fMain->MapSubwindows();
-    // Initialize the layout algorithm 
-    fMain->Resize(fMain->GetDefaultSize());
-    // Map main frame 
-    fMain->MapWindow();
-
-    InitData(all_harps_dir + "/" + fname);
+  InitData(all_harps_dir + "/" + fname);
 }
 
 Fitter::~Fitter() { // Clean up used widgets: frames, buttons, layouthints
@@ -176,6 +64,8 @@ Fitter::~Fitter() { // Clean up used widgets: frames, buttons, layouthints
     delete fMain;
 }
 
+// This function is called in the constructor, and also each time
+// a new harp scan text file is opened
 void Fitter::InitData(string fname) {
     cout << "Initializing Data File " << fname << endl;
     file_name = fname;
@@ -280,6 +170,125 @@ void Fitter::InitData(string fname) {
     scan_time_in_sec = tstmp_scan_time->GetSec();
 
     ParseDataFile(fname);
+}
+
+void Fitter::InitVarables(){
+  
+  fMain_log = NULL;
+  // Initialize Counter Names=============
+  counter_names_[0] = "FCup";
+  counter_names_[1] = "Upstream Left";
+  counter_names_[2] = "Upstream Right";
+  counter_names_[3] = "Tagger Left";
+  counter_names_[4] = "Tagger Right";
+  counter_names_[5] = "Tagger Top";
+  counter_names_[6] = "Downstream Left";
+  counter_names_[7] = "Downstream Right";
+  counter_names_[8] = "Downstream Top";
+  counter_names_[9] = "Downstream Bottom";
+  counter_names_[10] = "Mid Stream Left";
+  counter_names_[11] = "Mid Stream Right";
+  counter_names_[12] = "Mid Stream Top";
+  counter_names_[13] = "Mid Stream Bottom";
+  counter_names_[14] = "Empty";
+
+  // For now counter names are commented, but I guess the reight way is for it to read from some database
+  // counter_names_[10] = "HPS Left";
+  // counter_names_[11] = "HPS Right";
+  // counter_names_[12] = "HPS T";
+  // counter_names_[13] = "HPS SC";
+  // counter_names_[14] = "Empty";
+  //===========================================
+
+  //====================== Allocate a memory for the TTimeStamp for the scan time ====================
+  tstmp_scan_time = new TTimeStamp();
+  scan_time_in_sec = 0;
+
+  //========= Allocate Momory for Fit Parameters =======
+
+  pars_bgr_1st_peak = new double[3];
+  pars_A_1st_peak = new double[3];
+  pars_mean_1st_peak = new double[3];
+  pars_sigm_1st_peak = new double[3];
+  range_1st_peak = new double[2];
+  pars_bgr_2nd_peak = new double[3];
+  pars_A_2nd_peak = new double[3];
+  pars_mean_2nd_peak = new double[3];
+  pars_sigm_2nd_peak = new double[3];
+  range_2nd_peak = new double[2];
+  pars_bgr_3rd_peak = new double[3];
+  pars_A_3rd_peak = new double[3];
+  pars_mean_3rd_peak = new double[3];
+  pars_sigm_3rd_peak = new double[3];
+  range_3rd_peak = new double[2];
+  f_1st_peak = new TF1("f_1st_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
+  f_1st_peak->SetNpx(2500);
+  f_2nd_peak = new TF1("f_2nd_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
+  f_2nd_peak->SetNpx(2500);
+  f_3rd_peak = new TF1("f_3rd_peak", "[0]*TMath::Gaus(x, [1], [2]) + [3]");
+  f_3rd_peak->SetNpx(2500);
+
+  preview_mode = false;
+}
+
+void Fitter::BuildGUIFrame( const TGWindow *p, UInt_t w, UInt_t h ){
+      // Create a main frame
+    fMain = new TGMainFrame(p, w, h, kHorizontalFrame);
+    fMain->Connect("CloseWindow()", "Fitter", this, "CloseApp()");
+    // Create canvas widget 
+    fEcanvas = new TRootEmbeddedCanvas("Ecanvas", fMain, 700, 900);
+
+    TGVerticalFrame *vframe = new TGVerticalFrame(fMain, 200, 40);
+    TGTextButton *open_file = new TGTextButton(vframe, "&Choose a File");
+    open_file->Connect("Clicked()", "Fitter", this, "OpenFile()");
+    vframe->AddFrame(open_file, new TGLayoutHints(kLHintsCenterX, 5, 5, 3, 4));
+
+    TGTextButton *data_view = new TGTextButton(vframe, "&View Data from All counters");
+    data_view->Connect("Clicked()", "Fitter", this, "Draw_All_Counters()");
+    vframe->AddFrame(data_view, new TGLayoutHints(kLHintsCenterX, 5, 5, 3, 4));
+
+    counters_box = new TGComboBox(vframe, "Choose a counter to Fit");
+    counters_box->SetSize(TGDimension(140, 20));
+    counters_box->SetEditable(false);
+    for (int i = 0; i < n_counters - 1; i++) {
+        counters_box->AddEntry(counter_names_[i].c_str(), i);
+    }
+
+    vframe->AddFrame(counters_box, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    TGTextButton *fit_data = new TGTextButton(vframe, "&Fit Data");
+    fit_data->Connect("Clicked()", "Fitter", this, "FitData( =false, false )");
+    vframe->AddFrame(fit_data, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    TGTextButton *fit_pars = new TGTextButton(vframe, "Set Fit Ranges");
+    fit_pars->Connect("Clicked()", "Fitter", this, "Set_Fit_Pars()");
+    vframe->AddFrame(fit_pars, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    TGTextButton *to_log = new TGTextButton(vframe, "Submit to Logbook");
+    to_log->Connect("Clicked()", "Fitter", this, "GetComments()");
+    vframe->AddFrame(to_log, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    //  TGTextButton *b_to_MYA = new TGTextButton(vframe, "&Send parameters to MYA");
+    //  b_to_MYA->Connect("Clicked()", "Fitter", this, "CAPUT()");
+    //vframe->AddFrame(b_to_MYA, new TGLayoutHints(kLHintsCenterX,1,1,1,1));
+
+    TGTextButton *exit = new TGTextButton(vframe, "&Exit", "gApplication->Terminate(0)");
+    vframe->AddFrame(exit, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    status_label = new TGLabel(vframe, "");
+    status_label->SetTextJustify(kTextLeft | kTextCenterY);
+    vframe->AddFrame(status_label, new TGLayoutHints(kLHintsCenterX, 1, 1, 1, 1));
+
+    fMain->AddFrame(vframe, new TGLayoutHints(kLHintsTop, 2, 2, 2, 2));
+    fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY,
+            2, 2, 2, 2));
+    fMain->SetWindowName("Fitter Window");
+    // Map all subwindows of main frame 
+    fMain->MapSubwindows();
+    // Initialize the layout algorithm 
+    fMain->Resize(fMain->GetDefaultSize());
+    // Map main frame 
+    fMain->MapWindow();
 }
 
 void Fitter::ParseDataFile(std::string fname) {

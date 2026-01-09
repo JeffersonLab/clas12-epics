@@ -30,6 +30,8 @@ class Fitter {
     static const double sqrt2;
 
     void InitData( std::string );
+    void InitVarables();
+    void BuildGUIFrame(const TGWindow *p, UInt_t w, UInt_t h);
     TGraph *gr_[n_counters];
     std::string counter_names_[n_counters];
     std::string file_name;

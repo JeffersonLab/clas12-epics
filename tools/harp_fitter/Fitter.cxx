@@ -80,7 +80,7 @@ void Fitter::InitData(string fname) {
         fit_2c21 = true;
         harp_name = "harp_2c21";
         scale_Xaxis = 1.;
-        min_1st_hist = 16.;
+        min_1st_hist = 14.;
         max_1st_hist = 20.;
         min_2nd_hist = 36.;
         max_2nd_hist = 41.;
@@ -232,7 +232,7 @@ void Fitter::InitVarables(){
 }
 
 void Fitter::BuildGUIFrame( const TGWindow *p, UInt_t w, UInt_t h ){
-      // Create a main frame
+  // Create a main frame
     fMain = new TGMainFrame(p, w, h, kHorizontalFrame);
     fMain->Connect("CloseWindow()", "Fitter", this, "CloseApp()");
     // Create canvas widget 
@@ -289,6 +289,58 @@ void Fitter::BuildGUIFrame( const TGWindow *p, UInt_t w, UInt_t h ){
     fMain->Resize(fMain->GetDefaultSize());
     // Map main frame 
     fMain->MapWindow();
+}
+
+void Fitter::Format2PeakHistograms(){
+
+  h_1st_peak->SetMarkerStyle(20);
+  h_1st_peak->SetLineWidth(2);
+  h_1st_peak->SetLabelSize(0.08, "Y");
+  h_1st_peak->SetLabelSize(0.08, "X");
+  h_1st_peak->SetTitleSize(0.08, "X");
+  h_1st_peak->SetTitleOffset(0.9, "X");
+  h_1st_peak->SetDrawOption("E");
+  h_1st_peak->Sumw2();
+  
+  h_2nd_peak->SetMarkerStyle(20);
+  h_2nd_peak->SetLineWidth(2);
+  h_2nd_peak->SetLabelSize(0.08, "Y");
+  h_2nd_peak->SetLabelSize(0.08, "X");
+  h_2nd_peak->SetTitleSize(0.08, "X");
+  h_2nd_peak->SetTitleOffset(0.95, "X");
+  h_2nd_peak->SetDrawOption("E");
+  h_2nd_peak->Sumw2();
+}
+
+
+void Fitter::Format3PeakHistograms(){
+
+  h_1st_peak->SetMarkerStyle(20);
+  h_1st_peak->SetLineWidth(2);
+  h_1st_peak->SetLabelSize(0.08, "Y");
+  h_1st_peak->SetLabelSize(0.08, "X");
+  h_1st_peak->SetTitleSize(0.08, "X");
+  h_1st_peak->SetTitleOffset(0.9, "X");
+  h_1st_peak->SetDrawOption("E");
+  h_1st_peak->Sumw2();
+  
+  h_2nd_peak->SetMarkerStyle(20);
+  h_2nd_peak->SetLineWidth(2);
+  h_2nd_peak->SetLabelSize(0.08, "Y");
+  h_2nd_peak->SetLabelSize(0.08, "X");
+  h_2nd_peak->SetTitleSize(0.08, "X");
+  h_2nd_peak->SetTitleOffset(0.95, "X");
+  h_2nd_peak->SetDrawOption("E");
+  h_2nd_peak->Sumw2();
+
+  h_3rd_peak->SetMarkerStyle(20);
+  h_3rd_peak->SetLineWidth(2);
+  h_3rd_peak->SetLabelSize(0.08, "Y");
+  h_3rd_peak->SetLabelSize(0.08, "X");
+  h_3rd_peak->SetTitleSize(0.08, "X");
+  h_3rd_peak->SetTitleOffset(0.95, "X");
+  h_3rd_peak->SetDrawOption("E");
+  h_3rd_peak->Sumw2();
 }
 
 void Fitter::ParseDataFile(std::string fname) {
@@ -531,7 +583,9 @@ void Fitter::FitData(bool manual_fit, bool preview) {
             //gr_[counter_ind]->Draw("AP");
 
             TH1D *h_non_Fitted = Graph2Hist(gr_[counter_ind], scale_Xaxis);
-            h_non_Fitted->Draw();
+	    h_non_Fitted->SetMarkerStyle(20);
+	    h_non_Fitted->SetLineWidth(2);
+            h_non_Fitted->Draw("E");
             h_non_Fitted->GetYaxis()->SetTitleOffset(1.5);
             h_non_Fitted->SetTitle(Form("; Motor pos (mm); Rates on %s", counter_names_[counter_ind].c_str()));
 
@@ -873,9 +927,10 @@ bool Fitter::Search_2c21_peaks(TGraph *gr) {
         range_2nd_peak[0] = mean_x - 3.5;
         range_2nd_peak[1] = mean_x + 3.5;
 
+        delete h_gr_tmp;
+	
         return true;
 
-        delete h_gr_tmp;
     } else {
         return false;
     }
@@ -1011,18 +1066,19 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
-
+    lat1->SetTextSize(0.06);
+    
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt2))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; Wire X coordinate [mm]");
-    h_1st_peak->Sumw2();
 
     h_2nd_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt2))->Clone("h_2nd_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_2nd_peak->SetTitle("; Wire Y coordinate [mm]");
-    h_2nd_peak->Sumw2();
 
+    Format2PeakHistograms();
+    
     h_1st_peak->SetAxisRange(range_1st_peak[0] / sqrt2, range_1st_peak[1] / sqrt2, "X");
     f_1st_peak->SetParLimits(0, pars_A_1st_peak[1], pars_A_1st_peak[2]);
     f_1st_peak->SetParLimits(1, pars_mean_1st_peak[1] / sqrt2, pars_mean_1st_peak[2] / sqrt2);
@@ -1051,6 +1107,8 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
         double peak_val_[n_peaks];
 
         c1->cd(1)->SetLogy();
+	c1->cd(1)->SetBottomMargin(0.15);
+	c1->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw();
@@ -1077,6 +1135,8 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
 
 
         c1->cd(2)->SetLogy();
+	c1->cd(2)->SetBottomMargin(0.15);
+	c1->cd(2)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_2nd_peak->Draw();
@@ -1128,24 +1188,22 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
 void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
-
+    lat1->SetTextSize(0.06);
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 1.))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; 45^{#circ} wire coordinate [mm]");
-    h_1st_peak->Sumw2();
 
     h_2nd_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt(2.)))->Clone("h_2nd_peak"); // 1 No need to convert to mm, motor position of tagger harp is already in mm
     h_2nd_peak->SetTitle("; Wire Y [mm]");
-    h_2nd_peak->Sumw2();
-    h_3rd_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt2))->Clone("h_3rd_peak");
-    ; // 1 No need to convert to mm, motor position of tagger harp is already in mm
-    h_3rd_peak->SetTitle("; Wire X [mm]");
-    h_3rd_peak->Sumw2();
-    //h_2nd_peak = (TH1D*)h_1st_peak->Clone("h_2nd_peak");
-    //h_3rd_peak = (TH1D*)h_1st_peak->Clone("h_3nd_peak");
 
+    h_3rd_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt2))->Clone("h_3rd_peak");
+
+    h_3rd_peak->SetTitle("; Wire X [mm]");
+
+    Format3PeakHistograms();
+    
     h_1st_peak->SetAxisRange(range_1st_peak[0], range_1st_peak[1], "X");
     f_1st_peak->SetParLimits(0, pars_A_1st_peak[1], pars_A_1st_peak[2]);
     f_1st_peak->SetParLimits(1, pars_mean_1st_peak[1], pars_mean_1st_peak[2]);
@@ -1167,29 +1225,6 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     f_3rd_peak->SetParLimits(3, pars_bgr_3rd_peak[1], pars_bgr_3rd_peak[2]);
     f_3rd_peak->SetParameters(pars_A_3rd_peak[0], pars_mean_3rd_peak[0] / sqrt2, pars_sigm_3rd_peak[0] / sqrt2, pars_bgr_3rd_peak[0]);
 
-
-    // h_1st_peak->SetAxisRange(range_1st_peak[0], range_1st_peak[1], "X");
-    // f_1st_peak->SetParLimits(0, pars_A_1st_peak[1], pars_A_1st_peak[2]);
-    // f_1st_peak->SetParLimits(1, pars_mean_1st_peak[1], pars_mean_1st_peak[2]);
-    // f_1st_peak->SetParLimits(2, pars_sigm_1st_peak[1], pars_sigm_1st_peak[2]);
-    // f_1st_peak->SetParLimits(3, pars_bgr_1st_peak[1], pars_bgr_1st_peak[2]);
-    // f_1st_peak->SetParameters(pars_A_1st_peak[0], pars_mean_1st_peak[0], pars_sigm_1st_peak[0], pars_bgr_1st_peak[0]);
-
-    // h_2nd_peak->SetAxisRange(range_2nd_peak[0], range_2nd_peak[1], "X");
-    // f_2nd_peak->SetParLimits(0, pars_A_2nd_peak[1], pars_A_2nd_peak[2]);
-    // f_2nd_peak->SetParLimits(1, pars_mean_2nd_peak[1], pars_mean_2nd_peak[2]);
-    // f_2nd_peak->SetParLimits(2, pars_sigm_2nd_peak[1], pars_sigm_2nd_peak[2]);
-    // f_2nd_peak->SetParLimits(3, pars_bgr_2nd_peak[1], pars_bgr_2nd_peak[2]);
-    // f_2nd_peak->SetParameters(pars_A_2nd_peak[0], pars_mean_2nd_peak[0], pars_sigm_2nd_peak[0], pars_bgr_2nd_peak[0]);
-
-    // h_3rd_peak->SetAxisRange(range_3rd_peak[0], range_3rd_peak[1], "X");
-    // f_3rd_peak->SetParLimits(0, pars_A_3rd_peak[1], pars_A_3rd_peak[2]);
-    // f_3rd_peak->SetParLimits(1, pars_mean_3rd_peak[1], pars_mean_3rd_peak[2]);
-    // f_3rd_peak->SetParLimits(2, pars_sigm_3rd_peak[1], pars_sigm_3rd_peak[2]);
-    // f_3rd_peak->SetParLimits(3, pars_bgr_3rd_peak[1], pars_bgr_3rd_peak[2]);
-    // f_3rd_peak->SetParameters(pars_A_3rd_peak[0], pars_mean_3rd_peak[0], pars_sigm_3rd_peak[0], pars_bgr_3rd_peak[0]);
-
-
     int n_peaks = 3;
 
     cout << "Npeaks = " << n_peaks << endl;
@@ -1205,6 +1240,8 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
         double peak_val_[n_peaks];
 
         c1->cd(1)->SetLogy();
+	c1->cd(1)->SetBottomMargin(0.15);
+	c1->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw("p e");
@@ -1229,7 +1266,8 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
 
 
         c1->cd(2)->SetLogy();
-
+	c1->cd(2)->SetBottomMargin(0.15);
+	c1->cd(2)->SetRightMargin(0.01);
         if (preview_mode) {
             h_2nd_peak->Draw();
             f_2nd_peak->SetRange(range_2nd_peak[0], range_2nd_peak[1]);
@@ -1261,7 +1299,8 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
 
 
         c1->cd(3)->SetLogy();
-
+	c1->cd(3)->SetBottomMargin(0.15);
+	c1->cd(3)->SetRightMargin(0.01);
         if (preview_mode) {
             h_3rd_peak->Draw();
             f_3rd_peak->SetRange(range_3rd_peak[0], range_3rd_peak[1]);
@@ -1325,26 +1364,24 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
 void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
-
+    lat1->SetTextSize(0.06);
+    
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 10. / sqrt2))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; Wire X [mm]");
-    h_1st_peak->Sumw2();
+
 
     h_2nd_peak = (TH1D*) (Graph2Hist(gr, 10. / sqrt2))->Clone("h_2nd_peak"); // 1 No need to convert to mm, motor position of tagger harp is already in mm
     h_2nd_peak->SetTitle("; Wire Y [mm]");
-    h_2nd_peak->Sumw2();
+
 
     h_3rd_peak = (TH1D*) (Graph2Hist(gr, 10.))->Clone("h_3rd_peak");
-    ; // 1 No need to convert to mm, motor position of tagger harp is already in mm
     h_3rd_peak->SetTitle("; 45^{#circ} wire coordinate [mm]");
-    h_3rd_peak->Sumw2();
 
-    // h_2nd_peak = (TH1D*)h_1st_peak->Clone("h_2nd_peak");
-    // h_3rd_peak = (TH1D*)h_1st_peak->Clone("h_3nd_peak");
-
+    Format3PeakHistograms();
+    
     h_1st_peak->SetAxisRange(range_1st_peak[0] / sqrt2, range_1st_peak[1] / sqrt2, "X");
     f_1st_peak->SetParLimits(0, pars_A_1st_peak[1], pars_A_1st_peak[2]);
     f_1st_peak->SetParLimits(1, pars_mean_1st_peak[1] / sqrt2, pars_mean_1st_peak[2] / sqrt2);
@@ -1382,6 +1419,8 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
         double peak_val_[n_peaks];
 
         c1->cd(1)->SetLogy();
+	c1->cd(1)->SetBottomMargin(0.15);
+	c1->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw();
@@ -1408,6 +1447,8 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
 
 
         c1->cd(2)->SetLogy();
+	c1->cd(2)->SetBottomMargin(0.15);
+	c1->cd(2)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_2nd_peak->Draw();
@@ -1434,6 +1475,8 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
 
 
         c1->cd(3)->SetLogy();
+	c1->cd(3)->SetBottomMargin(0.15);
+	c1->cd(3)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_3rd_peak->Draw();

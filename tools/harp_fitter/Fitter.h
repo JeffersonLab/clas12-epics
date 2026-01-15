@@ -32,6 +32,10 @@ class Fitter {
     void InitData( std::string );
     void InitVarables();
     void BuildGUIFrame(const TGWindow *p, UInt_t w, UInt_t h);
+    void Format3PeakHistograms();
+    void Format2PeakHistograms();
+	
+
     TGraph *gr_[n_counters];
     std::string counter_names_[n_counters];
     std::string file_name;

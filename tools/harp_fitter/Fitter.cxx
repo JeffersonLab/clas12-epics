@@ -847,29 +847,50 @@ bool Fitter::Search_2c21_peaks(TGraph *gr) {
 
     TSpectrum *sp1 = new TSpectrum();
 
-    sp1->Search(h_gr, 15., "", 0.09);
+    sp1->Search(h_gr, 0.7, "", 0.09);
 
     Double_t *peak_val_tmp = sp1->GetPositionY();
     Double_t *pos_tmp = sp1->GetPositionX();
     int n_peaks = sp1->GetNPeaks();
 
     if (n_peaks != 2) {
-        sp1->Search(h_gr, 15., "", 0.1);
+        sp1->Search(h_gr, 0.7, "", 0.1);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
     }
     if (n_peaks != 2) {
-        sp1->Search(h_gr, 15., "", 0.08);
+        sp1->Search(h_gr, 0.7, "", 0.08);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
     }
     if (n_peaks != 2) {
-        sp1->Search(h_gr, 15., "", 0.06);
+        sp1->Search(h_gr, 0.7, "", 0.06);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
+
+	// At this point if it still doesn't find peaks correctly,
+	// We will Rebin the histogram, which might help
+	 if(n_peaks !=2){
+
+	   int n_ReGroup = 4;
+	   
+	   std::unique_ptr<TH1D> h_tmpRebin(static_cast<TH1D*>(h_gr->Rebin(n_ReGroup, "Rebinned_h_gr")));
+	   sp1->Search(h_tmpRebin.get(), 0.7, "", 0.3);
+	   n_peaks = sp1->GetNPeaks();
+	   cout<<"**** After reGrouping, n_peaks is "<<n_peaks<<endl;
+	   if(n_peaks == 2){
+	    peak_val_tmp = sp1->GetPositionY();
+	     for(auto ii = 0; ii < n_peaks; ii++){
+	       peak_val_tmp[ii] = peak_val_tmp[ii]/double(n_ReGroup);
+	     }
+	    
+	     pos_tmp = sp1->GetPositionX();
+	   }
+	 }
+	
     }
 
     int n_for_average = 5;
@@ -953,29 +974,55 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 
     TSpectrum *sp1 = new TSpectrum();
 
-    sp1->Search(h_gr, 15., "", 0.09);
+    sp1->Search(h_gr, 0.7, "", 0.09);
 
     Double_t *peak_val_tmp = sp1->GetPositionY();
     Double_t *pos_tmp = sp1->GetPositionX();
     int n_peaks = sp1->GetNPeaks();
 
     if (n_peaks != 3) {
-        sp1->Search(h_gr, 15., "", 0.1);
+        sp1->Search(h_gr, 0.7, "", 0.1);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
     }
     if (n_peaks != 3) {
-        sp1->Search(h_gr, 15., "", 0.08);
+        sp1->Search(h_gr, 0.7, "", 0.08);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
     }
     if (n_peaks != 3) {
-        sp1->Search(h_gr, 15., "", 0.06);
+        sp1->Search(h_gr, 0.7, "", 0.06);
         peak_val_tmp = sp1->GetPositionY();
         pos_tmp = sp1->GetPositionX();
         n_peaks = sp1->GetNPeaks();
+    }if (n_peaks != 3) {
+        sp1->Search(h_gr, 0.7, "", 0.3);
+        peak_val_tmp = sp1->GetPositionY();
+        pos_tmp = sp1->GetPositionX();
+        n_peaks = sp1->GetNPeaks();
+
+	// At this point if it still doesn't find peaks correctly,
+	// We will Rebin the histogram, which might help
+	 if(n_peaks !=3){
+
+	   int n_ReGroup = 4;
+	   
+	   std::unique_ptr<TH1D> h_tmpRebin(static_cast<TH1D*>(h_gr->Rebin(n_ReGroup, "Rebinned_h_gr")));
+	   sp1->Search(h_tmpRebin.get(), 0.7, "", 0.3);
+	   n_peaks = sp1->GetNPeaks();
+	   cout<<"**** After reGrouping, n_peaks is "<<n_peaks<<endl;
+	   if(n_peaks == 3){
+	    peak_val_tmp = sp1->GetPositionY();
+	     for(auto ii = 0; ii < n_peaks; ii++){
+	       peak_val_tmp[ii] = peak_val_tmp[ii]/double(n_ReGroup);
+	     }
+	    
+	     pos_tmp = sp1->GetPositionX();
+	   }
+	 }
+
     }
     
 

@@ -1253,6 +1253,7 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
     lat1->SetTextSize(0.06);
+    lat1->SetTextFont(42);
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
@@ -1449,6 +1450,7 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
     lat1->SetNDC();
     lat1->SetTextSize(0.06);
+    lat1->SetTextFont(42);
     
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();

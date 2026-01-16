@@ -236,7 +236,7 @@ void Fitter::BuildGUIFrame( const TGWindow *p, UInt_t w, UInt_t h ){
     fMain = new TGMainFrame(p, w, h, kHorizontalFrame);
     fMain->Connect("CloseWindow()", "Fitter", this, "CloseApp()");
     // Create canvas widget 
-    fEcanvas = new TRootEmbeddedCanvas("Ecanvas", fMain, 700, 900);
+    fEcanvas = new TRootEmbeddedCanvas("Ecanvas", fMain, 1400, 1200);
 
     TGVerticalFrame *vframe = new TGVerticalFrame(fMain, 200, 40);
     TGTextButton *open_file = new TGTextButton(vframe, "&Choose a File");
@@ -1112,12 +1112,18 @@ bool Fitter::Search_three_peaks(TGraph *gr) {
 
 void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
     TLatex *lat1 = new TLatex();
+    lat1->SetTextFont(42);
     lat1->SetNDC();
     lat1->SetTextSize(0.06);
     
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
+    TPad *pad_histos = new TPad("pad_histos", "Histograms", 0., 0., 0.7, 0.95);
+    TPad *pad_Text = new TPad("pad_Text", "Pad for texts", 0.7, 0., 1., 0.95);
+    pad_histos->Draw();
+    pad_Text->Draw();
+    
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 1. / sqrt2))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; Wire X coordinate [mm]");
 
@@ -1144,8 +1150,9 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
     cout << "Npeaks = " << n_peaks << endl;
 
     if (n_peaks == 2) {
-        c1->Clear();
-        c1->Divide(1, n_peaks);
+      pad_histos->Divide(1, n_peaks);
+        // c1->Clear();
+        // c1->Divide(1, n_peaks);
 
         string wire_names_[2] = {"x", "y"};
         double mean_[n_peaks];
@@ -1153,9 +1160,12 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
         double bgr_[n_peaks];
         double peak_val_[n_peaks];
 
-        c1->cd(1)->SetLogy();
-	c1->cd(1)->SetBottomMargin(0.15);
-	c1->cd(1)->SetRightMargin(0.01);
+	pad_histos->cd(1)->SetLogy();
+	pad_histos->cd(1)->SetBottomMargin(0.15);
+	pad_histos->cd(1)->SetRightMargin(0.01);
+        // c1->cd(1)->SetLogy();
+	// c1->cd(1)->SetBottomMargin(0.15);
+	// c1->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw();
@@ -1174,17 +1184,23 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
             peak_val_[0] = f_1st_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("Harp: 2c21   Counter: %s %s profile", counter_name.c_str(), wire_names_[0].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[0]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[0]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[0]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.91, Form("#mu = %1.4f mm", mean_[0]));
+            lat1->DrawLatex(0.05, 0.88, Form("#sigma = %1.4f mm", sigm_[0]));
+            lat1->DrawLatex(0.05, 0.85, Form("peak_val = %1.0f", peak_val_[0]));
+            lat1->DrawLatex(0.05, 0.82, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
         }
 
 
-        c1->cd(2)->SetLogy();
-	c1->cd(2)->SetBottomMargin(0.15);
-	c1->cd(2)->SetRightMargin(0.01);
+        // c1->cd(2)->SetLogy();
+	// c1->cd(2)->SetBottomMargin(0.15);
+	// c1->cd(2)->SetRightMargin(0.01);
+	pad_histos->cd(2)->SetLogy();
+	pad_histos->cd(2)->SetBottomMargin(0.15);
+	pad_histos->cd(2)->SetRightMargin(0.01);
 
+
+	
         if (preview_mode) {
             h_2nd_peak->Draw();
             f_2nd_peak->SetRange(range_2nd_peak[0], range_2nd_peak[1]);
@@ -1202,10 +1218,11 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
             peak_val_[1] = f_2nd_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("Harp: 2c21   Counter: %s %s profile", counter_name.c_str(), wire_names_[1].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[1]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[1]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[1]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.41, Form("#mu = %1.4f mm", mean_[1]));
+            lat1->DrawLatex(0.05, 0.38, Form("#sigma = %1.4f mm", sigm_[1]));
+            lat1->DrawLatex(0.05, 0.35, Form("peak_val = %1.0f", peak_val_[1]));
+            lat1->DrawLatex(0.05, 0.32, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));
         }
 
         //f_GPol0_[i]->DrawCopy("Same");
@@ -1222,9 +1239,9 @@ void Fitter::Fit_2c21(TGraph *gr, string counter_name) {
         // 	    }
 
         c1->Update();
-        c1->cd(1);
+        c1->cd();
         //     lat1->SetTextSize(0.03);
-        lat1->SetTextSize(0.04);
+        lat1->SetTextSize(0.02);
         lat1->DrawLatex(0.05, 0.96, Form("%s", file_name.c_str()));
 
         //lat1->DrawLatex(0.02, 0.97, Form("%s/%s", all_harp_dir.c_str(), glob_filename.c_str()));
@@ -1239,6 +1256,11 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
 
+    TPad *pad_histos = new TPad("pad_histos", "Histograms", 0., 0., 0.7, 0.95);
+    TPad *pad_Text = new TPad("pad_Text", "Pad for texts", 0.7, 0., 1., 0.95);
+    pad_histos->Draw();
+    pad_Text->Draw();
+    
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 1.))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; 45^{#circ} wire coordinate [mm]");
 
@@ -1277,18 +1299,22 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
     cout << "Npeaks = " << n_peaks << endl;
 
     if (n_peaks == 3) {
-        c1->Clear();
-        c1->Divide(1, n_peaks);
-
+        // c1->Clear();
+        // c1->Divide(1, n_peaks);
+	 pad_histos->Divide(1, n_peaks);
+	
         string wire_names_[3] = {"45", "y", "x"};
         double mean_[n_peaks];
         double sigm_[n_peaks];
         double bgr_[n_peaks];
         double peak_val_[n_peaks];
 
-        c1->cd(1)->SetLogy();
-	c1->cd(1)->SetBottomMargin(0.15);
-	c1->cd(1)->SetRightMargin(0.01);
+        // c1->cd(1)->SetLogy();
+	// c1->cd(1)->SetBottomMargin(0.15);
+	// c1->cd(1)->SetRightMargin(0.01);
+	pad_histos->cd(1)->SetLogy();
+	pad_histos->cd(1)->SetBottomMargin(0.15);
+	pad_histos->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw("p e");
@@ -1305,16 +1331,21 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
             peak_val_[0] = f_1st_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("Harp: tagger   Counter: %s %s profile", counter_name.c_str(), wire_names_[0].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[0]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[0]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[0]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.95, Form("#mu = %1.4f mm", mean_[0]));
+            lat1->DrawLatex(0.05, 0.92, Form("#sigma = %1.4f mm", sigm_[0]));
+            lat1->DrawLatex(0.05, 0.89, Form("peak_val = %1.0f", peak_val_[0]));
+            lat1->DrawLatex(0.05, 0.86, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
         }
 
 
-        c1->cd(2)->SetLogy();
-	c1->cd(2)->SetBottomMargin(0.15);
-	c1->cd(2)->SetRightMargin(0.01);
+        // c1->cd(2)->SetLogy();
+	// c1->cd(2)->SetBottomMargin(0.15);
+	// c1->cd(2)->SetRightMargin(0.01);
+	pad_histos->cd(2)->SetLogy();
+	pad_histos->cd(2)->SetBottomMargin(0.15);
+	pad_histos->cd(2)->SetRightMargin(0.01);
+
         if (preview_mode) {
             h_2nd_peak->Draw();
             f_2nd_peak->SetRange(range_2nd_peak[0], range_2nd_peak[1]);
@@ -1336,18 +1367,21 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
             peak_val_[1] = f_2nd_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("Harp: tagger   Counter: %s %s profile", counter_name.c_str(), wire_names_[1].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[1]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[1]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[1]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));
-            
-
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.61, Form("#mu = %1.4f mm", mean_[1]));
+            lat1->DrawLatex(0.05, 0.58, Form("#sigma = %1.4f mm", sigm_[1]));
+            lat1->DrawLatex(0.05, 0.55, Form("peak_val = %1.0f", peak_val_[1]));
+            lat1->DrawLatex(0.05, 0.52, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));            
         }
 
 
-        c1->cd(3)->SetLogy();
-	c1->cd(3)->SetBottomMargin(0.15);
-	c1->cd(3)->SetRightMargin(0.01);
+        // c1->cd(3)->SetLogy();
+	// c1->cd(3)->SetBottomMargin(0.15);
+	// c1->cd(3)->SetRightMargin(0.01);
+	pad_histos->cd(3)->SetLogy();
+	pad_histos->cd(3)->SetBottomMargin(0.15);
+	pad_histos->cd(3)->SetRightMargin(0.01);
+
         if (preview_mode) {
             h_3rd_peak->Draw();
             f_3rd_peak->SetRange(range_3rd_peak[0], range_3rd_peak[1]);
@@ -1366,17 +1400,18 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
             peak_val_[2] = f_3rd_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("Harp: tagger   Counter: %s %s profile", counter_name.c_str(), wire_names_[2].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[2]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[2]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[2]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[2] / peak_val_[2]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.28, Form("#mu = %1.4f mm", mean_[2]));
+            lat1->DrawLatex(0.05, 0.25, Form("#sigma = %1.4f mm", sigm_[2]));
+            lat1->DrawLatex(0.05, 0.22, Form("peak_val = %1.0f", peak_val_[2]));
+            lat1->DrawLatex(0.05, 0.19, Form("bgr/peak = %1.1e", bgr_[2] / peak_val_[2]));
             
             // ==== Let's go to the 2nd canvas again to draw BPM differences
-            c1->cd(2);
-            lat1->DrawLatex(0.6, 0.85, Form("BPM 2C24 Diff X = %1.3f mm", X_Offset_2C24 - mean_[2] - avg_2C24_X));
-            lat1->DrawLatex(0.6, 0.8,  Form("BPM 2C24 Diff Y = %1.3f mm", Y_Offset_2C24 - mean_[1] - avg_2C24_Y));
-            lat1->DrawLatex(0.6, 0.75, Form("2C24 X_AVG = %1.3f mm", avg_2C24_X));
-            lat1->DrawLatex(0.6, 0.7,  Form("2C24 Y_AVG = %1.3f mm", avg_2C24_Y));            
+            //c1->cd(2);
+            lat1->DrawLatex(0.05, 0.48, Form("BPM 2C24 Diff X = %1.3f mm", X_Offset_2C24 - mean_[2] - avg_2C24_X));
+            lat1->DrawLatex(0.05, 0.45,  Form("BPM 2C24 Diff Y = %1.3f mm", Y_Offset_2C24 - mean_[1] - avg_2C24_Y));
+            lat1->DrawLatex(0.05, 0.42, Form("2C24 X_AVG = %1.3f mm", avg_2C24_X));
+            lat1->DrawLatex(0.05, 0.39,  Form("2C24 Y_AVG = %1.3f mm", avg_2C24_Y));            
         }
 
         double *alpha_a_b = Calc_abalpha(sigm_[0], sigm_[2] * TMath::Sqrt(2.), sigm_[1] * TMath::Sqrt(2.));
@@ -1385,14 +1420,16 @@ void Fitter::Fit_tagger(TGraph *gr, string counter_name) {
         aa = alpha_a_b[1];
         bb = alpha_a_b[2];
 
-        c1->cd(1);
-        lat1->DrawLatex(0.7, 0.85, Form("#alpha = %1.2f deg", alpha));
-        lat1->DrawLatex(0.7, 0.8, Form("a = %1.2f", aa));
-        lat1->DrawLatex(0.7, 0.75, Form("b = %1.2f", bb));
-        lat1->SetTextSize(0.05);
+        //c1->cd(1);
+	pad_Text->cd();
+        lat1->DrawLatex(0.05, 0.82, Form("#alpha = %1.2f deg", alpha));
+        lat1->DrawLatex(0.05, 0.79, Form("a = %1.2f", aa));
+        lat1->DrawLatex(0.05, 0.76, Form("b = %1.2f", bb));
+	c1->cd();
+        lat1->SetTextSize(0.02);
         lat1->DrawLatex(0.1, 0.96, Form("%s", file_name.c_str()));
 
-        c1->cd();
+        //c1->cd();
         c1->Update();
 
         //       if( counter_name == "tagger_right" )
@@ -1415,6 +1452,11 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
     
     TCanvas *c1 = fEcanvas->GetCanvas();
     c1->Clear();
+    
+    TPad *pad_histos = new TPad("pad_histos", "Histograms", 0., 0., 0.7, 0.95);
+    TPad *pad_Text = new TPad("pad_Text", "Pad for texts", 0.7, 0., 1., 0.95);
+    pad_histos->Draw();
+    pad_Text->Draw();
 
     h_1st_peak = (TH1D*) (Graph2Hist(gr, 10. / sqrt2))->Clone("h_1st_peak"); // 1 No need to convert to mm, motor position of 2c21 is already in mm
     h_1st_peak->SetTitle("; Wire X [mm]");
@@ -1456,18 +1498,21 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
 
     if (n_peaks == 3) {
 
-        c1->Clear();
-        c1->Divide(1, n_peaks);
-
+        // c1->Clear();
+        // c1->Divide(1, n_peaks);
+        pad_histos->Divide(1, n_peaks);
         string wire_names_[3] = {"x", "y", "45"};
         double mean_[n_peaks];
         double sigm_[n_peaks];
         double bgr_[n_peaks];
         double peak_val_[n_peaks];
 
-        c1->cd(1)->SetLogy();
-	c1->cd(1)->SetBottomMargin(0.15);
-	c1->cd(1)->SetRightMargin(0.01);
+        // c1->cd(1)->SetLogy();
+	// c1->cd(1)->SetBottomMargin(0.15);
+	// c1->cd(1)->SetRightMargin(0.01);
+	pad_histos->cd(1)->SetLogy();
+	pad_histos->cd(1)->SetBottomMargin(0.15);
+	pad_histos->cd(1)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_1st_peak->Draw();
@@ -1486,16 +1531,25 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
             peak_val_[0] = f_1st_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("%s   Counter: %s %s profile", harp_name.c_str(), counter_name.c_str(), wire_names_[0].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[0]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[0]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[0]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
+	    pad_Text->cd();
+	    lat1->DrawLatex(0.05, 0.95, Form("#mu = %1.4f mm", mean_[0]));
+            lat1->DrawLatex(0.05, 0.92, Form("#sigma = %1.4f mm", sigm_[0]));
+            lat1->DrawLatex(0.05, 0.89, Form("peak_val = %1.0f", peak_val_[0]));
+            lat1->DrawLatex(0.05, 0.86, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
+
+            // lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[0]));
+            // lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[0]));
+            // lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[0]));
+            // lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[0] / peak_val_[0]));
         }
 
 
-        c1->cd(2)->SetLogy();
-	c1->cd(2)->SetBottomMargin(0.15);
-	c1->cd(2)->SetRightMargin(0.01);
+        // c1->cd(2)->SetLogy();
+	// c1->cd(2)->SetBottomMargin(0.15);
+	// c1->cd(2)->SetRightMargin(0.01);
+	pad_histos->cd(2)->SetLogy();
+	pad_histos->cd(2)->SetBottomMargin(0.15);
+	pad_histos->cd(2)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_2nd_peak->Draw();
@@ -1514,16 +1568,26 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
             peak_val_[1] = f_2nd_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("%s  Counter: %s %s profile", harp_name.c_str(), counter_name.c_str(), wire_names_[1].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[1]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[1]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[1]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.61, Form("#mu = %1.4f mm", mean_[1]));
+            lat1->DrawLatex(0.05, 0.58, Form("#sigma = %1.4f mm", sigm_[1]));
+            lat1->DrawLatex(0.05, 0.55, Form("peak_val = %1.0f", peak_val_[1]));
+            lat1->DrawLatex(0.05, 0.52, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));            
+
+            // lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[1]));
+            // lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[1]));
+            // lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[1]));
+            // lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[1] / peak_val_[1]));
         }
 
 
-        c1->cd(3)->SetLogy();
-	c1->cd(3)->SetBottomMargin(0.15);
-	c1->cd(3)->SetRightMargin(0.01);
+	pad_histos->cd(3)->SetLogy();
+	pad_histos->cd(3)->SetBottomMargin(0.15);
+	pad_histos->cd(3)->SetRightMargin(0.01);
+
+        // c1->cd(3)->SetLogy();
+	// c1->cd(3)->SetBottomMargin(0.15);
+	// c1->cd(3)->SetRightMargin(0.01);
 
         if (preview_mode) {
             h_3rd_peak->Draw();
@@ -1540,10 +1604,16 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
             peak_val_[2] = f_3rd_peak->GetParameter(0);
 
             lat1->DrawLatex(0.15, 0.91, Form("%s  Counter: %s %s profile", harp_name.c_str(), counter_name.c_str(), wire_names_[2].c_str()));
-            lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[2]));
-            lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[2]));
-            lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[2]));
-            lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[2] / peak_val_[2]));
+	    pad_Text->cd();
+            lat1->DrawLatex(0.05, 0.28, Form("#mu = %1.4f mm", mean_[2]));
+            lat1->DrawLatex(0.05, 0.25, Form("#sigma = %1.4f mm", sigm_[2]));
+            lat1->DrawLatex(0.05, 0.22, Form("peak_val = %1.0f", peak_val_[2]));
+            lat1->DrawLatex(0.05, 0.19, Form("bgr/peak = %1.1e", bgr_[2] / peak_val_[2]));
+
+            // lat1->DrawLatex(0.12, 0.85, Form("#mu = %1.4f mm", mean_[2]));
+            // lat1->DrawLatex(0.12, 0.80, Form("#sigma = %1.4f mm", sigm_[2]));
+            // lat1->DrawLatex(0.12, 0.75, Form("peak_val = %1.0f", peak_val_[2]));
+            // lat1->DrawLatex(0.12, 0.70, Form("bgr/peak = %1.1e", bgr_[2] / peak_val_[2]));
         }
 
 
@@ -1553,14 +1623,22 @@ void Fitter::Fit_2H02A(TGraph *gr, string counter_name) {
         aa = alpha_a_b[1];
         bb = alpha_a_b[2];
 
-        c1->cd(1);
-        lat1->DrawLatex(0.7, 0.85, Form("#alpha = %1.2f deg", alpha));
-        lat1->DrawLatex(0.7, 0.8, Form("a = %1.2f", aa));
-        lat1->DrawLatex(0.7, 0.75, Form("b = %1.2f", bb));
-        lat1->SetTextSize(0.05);
+        //c1->cd(1);
+	pad_Text->cd();
+        lat1->DrawLatex(0.05, 0.82, Form("#alpha = %1.2f deg", alpha));
+        lat1->DrawLatex(0.05, 0.79, Form("a = %1.2f", aa));
+        lat1->DrawLatex(0.05, 0.76, Form("b = %1.2f", bb));
+	c1->cd();
+        lat1->SetTextSize(0.02);
         lat1->DrawLatex(0.1, 0.96, Form("%s", file_name.c_str()));
 
-        c1->cd();
+        // lat1->DrawLatex(0.7, 0.85, Form("#alpha = %1.2f deg", alpha));
+        // lat1->DrawLatex(0.7, 0.8, Form("a = %1.2f", aa));
+        // lat1->DrawLatex(0.7, 0.75, Form("b = %1.2f", bb));
+        // lat1->SetTextSize(0.05);
+        // lat1->DrawLatex(0.1, 0.96, Form("%s", file_name.c_str()));
+
+        // c1->cd();
         c1->Update();
 
         //       if( counter_name == "tagger_right" )

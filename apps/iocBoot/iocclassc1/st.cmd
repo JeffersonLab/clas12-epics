@@ -19,7 +19,7 @@ cd top
 dbLoadDatabase("dbd/classc1.dbd")
 classc1_registerRecordDeviceDriver(pdbbase)
 
-epicsEnvSet( "EPICS_CA_ADDR_LIST", "129.57.255.4")
+epicsEnvSet( "EPICS_CA_ADDR_LIST", "129.57.235.12")
 
 ## Struck Scalers
 #drvSIS3801Config("Port name",

@@ -36,6 +36,8 @@ dbLoadTemplate("db/mmgas_fmt.substitutions")
 
 cd "${TOP}/iocBoot/${IOC}"
 
+dbLoadRecords("mmgas_fmt-prad.alias")
+
 ## autosave setup
 < save_restore.cmd
 

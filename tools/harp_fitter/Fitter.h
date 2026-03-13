@@ -30,6 +30,12 @@ class Fitter {
     static const double sqrt2;
 
     void InitData( std::string );
+    void InitVarables();
+    void BuildGUIFrame(const TGWindow *p, UInt_t w, UInt_t h);
+    void Format3PeakHistograms();
+    void Format2PeakHistograms();
+	
+
     TGraph *gr_[n_counters];
     std::string counter_names_[n_counters];
     std::string file_name;
@@ -43,7 +49,7 @@ class Fitter {
     TGCheckButton *but_to_TLOG;
     //TGMainFrame *fMain_log;
     TGTransientFrame *fMain_log;
-    TGTransientFrame *f_Main_FitPars;
+    TGTransientFrame *f_Main_FitPars = nullptr;
     bool fit_2c21;
     bool fit_tagger;
     bool fit_2H02A;
@@ -137,9 +143,9 @@ class Fitter {
     void CloseFitRanges();
     void CloseApp();
     void SubmitToLogbook();
-    bool Fit_2c21(TGraph *, std::string );
-    bool Fit_tagger(TGraph *, std::string );
-    bool Fit_2H02A(TGraph *, std::string );
+    void Fit_2c21(TGraph *, std::string );
+    void Fit_tagger(TGraph *, std::string );
+    void Fit_2H02A(TGraph *, std::string );
     //  bool Fit_2H00A(TGraph *, std::string );
     bool Search_2c21_peaks(TGraph *);
     bool Search_three_peaks(TGraph *);

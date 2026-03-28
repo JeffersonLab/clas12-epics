@@ -24,6 +24,7 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 # Determine IP address:
 system 'nslookup lvpradgem0 | awk "/^Address: / {print\"epicsEnvSet(lvpradgem0,\"\$2\")\"}" > ${TOP}/iocBoot/${IOC}/ip.cmd'
+
 < ${TOP}/iocBoot/${IOC}/ip.cmd
 
 dbLoadTemplate("db/pradgems-lv.substitutions")

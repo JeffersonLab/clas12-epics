@@ -41,5 +41,5 @@ with open(configFile,'r') as f:
 if device is None:
   sys.exit('ERROR:  Could not find device %s_reset in tsconnect config file %s'%(args.mainframe,configFile))
 
-print subprocess.check_output(['ssh','clon00','sudo',exe,opt,'/dev/tty'+device])
+print(subprocess.check_output(['ssh','clon00','sudo',exe,opt,'/dev/tty'+device]))
 

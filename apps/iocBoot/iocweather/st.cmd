@@ -11,6 +11,7 @@ epicsEnvSet("MIBS","ALL")
 epicsEnvSet("AKCP1","129.57.160.80")
 epicsEnvSet("AKCP2","129.57.160.153")
 epicsEnvSet("AKCP3","129.57.160.154")
+epicsEnvSet("AKCP4","129.57.160.230")
 epicsEnvSet("AKCP5","129.57.160.161")
 
 # to reduce record's INP length:

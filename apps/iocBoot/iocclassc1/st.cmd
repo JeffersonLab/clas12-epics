@@ -35,34 +35,31 @@ dbLoadRecords("db/scaler_e.db")
 #     (5)motor task polling rate (min=1Hz,max=60Hz)
 omsSetup(3, 0x8000, 180, 5, 10)
 
-dbLoadRecords("db/motor.db","motor_name=harp_2c21, card=0, slot=2, srev=2000, urev=2.54, direction=Neg, velo=5.0, accl=0.1")
-dbLoadRecords("db/scan.db","motor_name=harp_2c21, start_at=25, end_at=55.0, start_speed=5.0, scan_speed=0.5, acq_time=0.1")
-
+# First Card:
+dbLoadRecords("db/motor.db","motor_name=harp_2H01, card=0, slot=0, srev=2000, urev=0.508, direction=Pos, velo=0.5, accl=0.01")
+dbLoadRecords("db/scan.db","motor_name=harp_2H01, start_at=3.0, end_at=10.5, start_speed=0.5, scan_speed=0.04, acq_time=0.1")
 dbLoadRecords("db/motor.db","motor_name=harp_tagger, card=0, slot=1, srev=2000, urev=2.54, direction=Neg, velo=0.5, accl=0.01")
 dbLoadRecords("db/scan.db","motor_name=harp_tagger, start_at=10, end_at=55.0, start_speed=5.0, scan_speed=0.5, acq_time=0.07")
-dbLoadRecords("db/radiators.db")
-
+dbLoadRecords("db/motor.db","motor_name=harp_2c21, card=0, slot=2, srev=2000, urev=2.54, direction=Neg, velo=5.0, accl=0.1")
+dbLoadRecords("db/scan.db","motor_name=harp_2c21, start_at=25, end_at=55.0, start_speed=5.0, scan_speed=0.5, acq_time=0.1")
 dbLoadRecords("db/motor.db","motor_name=collimator,card=0,slot=3,srev=2000,urev=0.2,direction=Pos,velo=0.2,accl=0.5")
 dbLoadRecords("db/hallb_collimator.db")
 
-dbLoadRecords("db/motor.db","motor_name=harp_2H01, card=0, slot=0, srev=2000, urev=0.508, direction=Pos, velo=0.5, accl=0.01")
-dbLoadRecords("db/scan.db","motor_name=harp_2H01, start_at=3.0, end_at=10.5, start_speed=0.5, scan_speed=0.04, acq_time=0.1")
-
-# copied from 2H01:
-dbLoadRecords("db/motor.db","motor_name=harp_2H00A, card=1, slot=2, srev=2000, urev=0.508, direction=Pos, velo=0.5, accl=0.01")
-dbLoadRecords("db/scan.db","motor_name=harp_2H00A, start_at=3.0, end_at=10.5, start_speed=0.5, scan_speed=0.04, acq_time=0.1")
-
-#KBB add Moller Motor 20160623
+# Second Card:
 #dbLoadRecords("db/motor.db","motor_name=m_target, card=1, slot=0, srev=2000, urev=2.54, direction=Neg, velo=0.5, accl=0.01")
 #dbLoadTemplate("db/moeller_target.substitutions")
 dbLoadRecords("db/moeller_target.db")
+dbLoadRecords("db/motor.db","motor_name=harp_2H00A, card=1, slot=3, srev=2000, urev=0.1016, direction=Neg, velo=0.5, accl=0.01")
+dbLoadRecords("db/scan.db","motor_name=harp_2H00A, start_at=3.0, end_at=10.5, start_speed=0.5, scan_speed=0.04, acq_time=0.1")
 
-# PRAD/X17:
-dbLoadRecords("db/motor.db", "motor_name=prad:colli, card=1, slot=1, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000, urev=360, direction=Pos, velo=5, accl=0.1")
+# PRAD Collimator and Radiator:
+dbLoadRecords("db/motor.db", "motor_name=prad:colli, card=1, slot=1, srev=2000, urev=0.1016, direction=Pos, velo=3, accl=0.01")
+
+# PRAD Vetoes:
+dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
 
 # PRAD/X17 motor positions:
 dbLoadRecords("db/pradcolli.db","P=prad:colli:,MOTOR=prad:colli")
@@ -112,10 +109,16 @@ seq &harp_scan_generic, "name=h_tagger_scan, motor_name=harp_tagger"
 seq &reset_motor, "name=h_2H01_reset, motor_name=harp_2H01"
 seq &harp_scan_generic, "name=h_2H01_scan, motor_name=harp_2H01"
 
-seq &reset_motor, "name=h_collimator_reset, motor_name=collimator"
-#seq &harp_scan_generic, "name=h_collimator_scan, motor_name=collimator"
+seq &reset_motor, "name=h_2H00A_reset, motor_name=harp_2H00A"
+seq &harp_scan_generic, "name=h_2H00A_scan, motor_name=harp_2H00A"
 
-seq &reset_motor, "name=rgm_target_reset, motor_name=rgm_target"
+seq &reset_motor, "name=h_collimator_reset, motor_name=collimator"
+
+seq &reset_motor, "name=prad:colli:reset, motor_name=prad:colli"
+seq &reset_motor, "name=prad:veto1:reset, motor_name=prad:veto1"
+seq &reset_motor, "name=prad:veto2:reset, motor_name=prad:veto2"
+seq &reset_motor, "name=prad:veto3:reset, motor_name=prad:veto3"
+seq &reset_motor, "name=prad:veto4:reset, motor_name=prad:veto4"
 
 #seq &moeller_target
 

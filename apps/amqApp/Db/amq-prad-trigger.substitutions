@@ -1,0 +1,16 @@
+
+file "db/amqDoubleArray.db" {
+pattern { P K N TH THH HSV HHSV }
+{ B_DAQ:trig0ts_TRIGGERBITS        TRIG0_TSGTPSLOT21          32 0 30 NO_ALARM MAJOR }
+{ B_DAQ:trig0tsfp_TRIGGERBITS      TRIG0_TSFPSLOT21           32 0 30 NO_ALARM MAJOR }
+{ B_DAQ:trig0tsfp_PRESCALES        TRIG0_TSFPPRESCALESSLOT21  32 0 30 NO_ALARM MAJOR }
+{ B_DAQ:trig0ts_PRESCALES          TRIG0_TSGTPPRESCALESSLOT21 32 0 30 NO_ALARM MAJOR }
+}
+
+file "db/array-to-scalar-32.template" {
+pattern { P R S INP FTVL }
+{ B_DAQ:trig0ts_TRIGGERBITS:       "" "" B_DAQ:trig0ts_TRIGGERBITS      FLOAT }
+{ B_DAQ:trig0tsfp_TRIGGERBITS:     "" "" B_DAQ:trig0tsfp_TRIGGERBITS    FLOAT }
+{ B_DAQ:trig0tsfp_PRESCALES:       "" "" B_DAQ:trig0tsfp_PRESCALES      FLOAT }
+{ B_DAQ:trig0ts_PRESCALES:         "" "" B_DAQ:trig0ts_PRESCALES        FLOAT }
+}

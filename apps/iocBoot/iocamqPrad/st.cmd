@@ -4,13 +4,10 @@ cd ${TOP}
 dbLoadDatabase "dbd/amq.dbd"
 amq_registerRecordDeviceDriver pdbbase
 
-ConnectMQ("tcp://clon00:61616","clasrun.clasprod.scalers.fadc")
+ConnectMQ("tcp://clon00:61616","clasrun.clasprod.daq.HallB_DAQ")
 
-dbLoadTemplate("db/amq-hycal.substitutions")
-dbLoadRecords("db/amq-hycal-aliases.db")
-
-dbLoadRecords("db/waveformApp.db","P=B_HW_HYCAL_FADC,R=:c:,NELM=2016,FTVL=FLOAT,PERIOD=2,FNAME=hw-wf.txt")
-dbLoadRecords("db/waveformApp.db","P=B_DET_HYCAL_FADC,R=:c:,NELM=1156,FTVL=FLOAT,PERIOD=2,FNAME=pb-wf.txt")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:PRAD:triggers,K=SSPPRAD_SLOT9_TRIGGERBITS,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
+dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:PRAD:prescales,K=SSPPRAD_SLOT9_PRESCALES,N=32,TH=0,THH=30,HSV=NO_ALARM,HHSV=MAJOR")
 
 dbLoadRecords("$(DEVIOCSTATS)/db/iocAdminSoft.db","IOC=$(IOC)")
 
@@ -21,7 +18,4 @@ iocInit
 StartMQ()
 
 dbl > pv.list
-
-seq waveform, "P=B_HW_HYCAL_FADC,R=:c:"
-seq waveform, "P=B_DET_HYCAL_FADC,R=:c:"
 

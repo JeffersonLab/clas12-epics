@@ -5,6 +5,7 @@ record(ai,"$(P)2um:val")   {field(VAL,"24.035")}
 record(ai,"$(P)4um:val")   {field(VAL,"25.544")}
 record(ai,"$(P)50um:val")  {field(VAL,"27.053")}
 record(ai,"$(P)empty:val") {field(VAL,"28.561")}
+record(ai,"$(P)home:val")  {field(VAL,"0")}
 
 record(mbbi,"$(P)stat") {
     field(INP,"$(P)calc")
@@ -35,7 +36,7 @@ record(mbbi,"$(P)stat") {
 }
 
 record(calc,"$(P)calc") {
-    field(SCAN,".5 second")
+    field(SCAN,"1 second")
     field(INPA,"$(P)at:1um:a")
     field(INPB,"$(P)at:1um:b")
     field(INPC,"$(P)at:2um")
@@ -43,7 +44,8 @@ record(calc,"$(P)calc") {
     field(INPE,"$(P)at:50um")
     field(INPF,"$(P)at:empty")
     field(INPG,"$(MOTOR).MOVN")
-    field(CALC,"G?6:A?0:B?1:C?2:D?3:E?4:F?5:7")
+    field(INPH,"$(P)at:home")
+    field(CALC,"G?6:A?0:B?1:C?2:D?3:E?4:F?5:H?5:7")
     field(FLNK,"$(P)stat.PROC")
 }
 
@@ -77,7 +79,19 @@ record(ao,"$(P)empty:go") {
     field(DOL,"$(P)empty:val")
     field(OUT,"$(MOTOR).VAL PP")
 }
+record(ao,"$(P)home:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)home:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
 
+record(calc, "$(P)at:home") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)home:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "Home/Empty")
+}
 record(calc, "$(P)at:1um:b") {
     field(SCAN, "1 second")
     field(INPA, "$(MOTOR).RBV")

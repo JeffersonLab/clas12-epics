@@ -1,6 +1,7 @@
 #!../../bin/linux-x86/modbus
 
 < envPaths
+epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}/proto")
 
 cd ${TOP}
 
@@ -8,11 +9,15 @@ dbLoadDatabase "dbd/modbus.dbd"
 modbus_registerRecordDeviceDriver pdbbase
 
 drvAsynIPPortConfigure("ETH","hallb-moxa8:4001",0,0,0)
+drvAsynIPPortConfigure("SER", "hallb-moxa8:4002")
 
 #asynSetTraceMask("ETH",-1,0x09)
 #asynSetTraceIOMask("ETH",-1,0x02)
 
 dbLoadRecords("db/asynRecord.db","PORT=ETH,ADDR=1,IMAX=2000,OMAX=2000,P=hycal:chiller:,R=asyn")
+dbLoadRecords("db/asynRecord.db","PORT=SER,ADDR=1,IMAX=2000,OMAX=2000,P=hycal:n2chiller:,R=asyn")
+
+dbLoadRecords("db/anova.db","P=hycal:,R=n2chiller:,PORT=SER")
 
 # modbusInterposeConfig(portName, linkType, timeoutMsec, writeDelayMsec)
 #   linkType = 0/1/2 = TCPIP/RTU/ASCII

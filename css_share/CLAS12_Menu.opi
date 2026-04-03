@@ -1017,22 +1017,28 @@ $(pv_value)</tooltip>
       <width>115</width>
       <x>3</x>
       <name>Accelerator</name>
-      <y>282</y>
+      <y>260</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="EXECUTE_CMD">
-          <command>google-chrome.sh https://epicsweb.jlab.org</command>
+          <command>xdg-open https://epicsweb.jlab.org</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
-          <description>WMenu - epicsweb.jlab.org</description>
+          <description>WMenu (web)</description>
         </action>
         <action type="EXECUTE_CMD">
-          <command>jtabs_launcher.sh</command>
+          <command>ssh hbops@hlbl00 jmenuRun</command>
           <command_directory>$(user.home)</command_directory>
           <wait_time>10</wait_time>
           <description>JMenu</description>
+        </action>
+        <action type="EXECUTE_CMD">
+          <command>xdg-open https://epicsweb.jlab.org/wedm/screen?edl=/cs/opshome/edm/wall/Status_W_Accel.edl</command>
+          <command_directory>$(user.home)</command_directory>
+          <wait_time>10</wait_time>
+          <description>Wall Screen (web)</description>
         </action>
       </actions>
       <font>
@@ -1330,6 +1336,14 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
+          <path>apps/amqApp/trigger-table-prad.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>PRAD Trigger</description>
+        </action>
+        <action type="OPEN_DISPLAY">
           <path>apps/amqApp/daqStatus-all.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
@@ -1352,7 +1366,7 @@ $(pv_value)</tooltip>
             <NOVICE>1</NOVICE>
           </macros>
           <replace>2</replace>
-          <description>Trigger</description>
+          <description>CLAS12 Trigger</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/amqApp/trigFT.opi</path>
@@ -2266,9 +2280,9 @@ $(pv_value)</tooltip>
         <color name="Button" red="240" green="240" blue="240" />
       </background_color>
       <width>115</width>
-      <x>0</x>
+      <x>3</x>
       <name>Moeller</name>
-      <y>251</y>
+      <y>211</y>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>

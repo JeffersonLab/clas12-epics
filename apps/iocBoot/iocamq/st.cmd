@@ -85,7 +85,7 @@ dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:SSPGTC_FTCLUSTER_RATE,K=SSPGTC_FTC
 dbLoadRecords("db/amqDoubleArray.db","P=B_DAQ:SSPGTC_TRIGGERBIT_RATE,K=SSPGTC_TRIGGERBIT_RATE,N=4,TH=10,THH=20,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqSplitFT.db")
 
-dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:ROCS_BUSY,K=ROCS_BUSY,N=72,TH=30,THH=60,HSV=MINOR,HHSV=MAJOR")
+dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:ROCS_BUSY,K=ROCS_BUSY,N=80,TH=30,THH=60,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqRocsBusy.db")
 
 dbLoadRecords("db/stage2bits-wf.db")

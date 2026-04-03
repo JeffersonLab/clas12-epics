@@ -8,6 +8,8 @@ cd ${TOP}
 dbLoadDatabase("dbd/ioccaen.dbd")
 ioccaen_registerRecordDeviceDriver(pdbbase)
 
+dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db","IOC=${IOC}")
+
 dbLoadRecords("db/crio-hycal-temps.db")
 dbLoadRecords("db/crio-hycal-filter.db")
 dbLoadRecords("db/prad-target.db")

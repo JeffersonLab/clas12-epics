@@ -38,7 +38,7 @@ int inFile
 #define MAXLEN  100000
 float wfIn[MAXLEN];     assign wfIn to {};
 
-#define NPVSTATIC 8
+#define NPVSTATIC 9
 float wfOut[MAXLEN];    assign wfOut    to "{P}{R}wf";
 float wfDelay;          assign wfDelay  to "{P}{R}period";
 string wfNames[MAXLEN]; assign wfNames  to "{P}{R}wfnames";
@@ -47,6 +47,7 @@ string filename;        assign filename to "{P}{R}filename";
 int wfLen;              assign wfLen    to "{P}{R}wflen";
 int wfRecLen;           assign wfRecLen to "{P}{R}wf.NELM";
 int doSleep;            assign doSleep  to "{P}{R}sleep";
+int zero;               assign zero     to "{P}{R}zero";
 
 monitor wfDelay;
 monitor doSleep;
@@ -114,7 +115,13 @@ ss waveform {
             isTruncated=1;
             break;
           }
-          pvAssign(wfIn[wfLen],stmp);
+          if (stmp[0] == '#') {
+              pvAssign(wfIn[wfLen],"{P}{R}zero");
+              nPVs -= 1;
+          }
+          else {
+              pvAssign(wfIn[wfLen],stmp);
+          }
           pvMonitor(wfIn[wfLen]);
           sprintf(wfNames[wfLen],"%s",stmp);
           wfLen++;

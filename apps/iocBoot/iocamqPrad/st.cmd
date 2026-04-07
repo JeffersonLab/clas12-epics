@@ -36,11 +36,11 @@ dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:prescaled:05,RATE=B_DAQ_PRAD:trigg
 dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:prescaled:06,RATE=B_DAQ_PRAD:trigger:06,PRESCALE=B_DAQ_PRAD:prescale:06")
 dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:prescaled:07,RATE=B_DAQ_PRAD:trigger:07,PRESCALE=B_DAQ_PRAD:prescale:07")
 
-dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:23,RATE=B_DAQ_PRAD:trig0tsfp:trigger:23,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:23,FORMULA=B")
-dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:24,RATE=B_DAQ_PRAD:trig0tsfp:trigger:24,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:24,FORMULA=B")
-dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:25,RATE=B_DAQ_PRAD:trig0tsfp:trigger:25,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:25,FORMULA=B")
-dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:26,RATE=B_DAQ_PRAD:trig0tsfp:trigger:26,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:26,FORMULA=B")
-dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:27,RATE=B_DAQ_PRAD:trig0tsfp:trigger:27,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:27,FORMULA=B")
+dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:23,RATE=B_DAQ_PRAD:trig0tsfp:trigger:23,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:23,EQN=A/B")
+dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:24,RATE=B_DAQ_PRAD:trig0tsfp:trigger:24,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:24,EQN=A/B")
+dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:25,RATE=B_DAQ_PRAD:trig0tsfp:trigger:25,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:25,EQN=A/B")
+dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:26,RATE=B_DAQ_PRAD:trig0tsfp:trigger:26,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:26,EQN=A/B")
+dbLoadRecords("db/prescaler.db","P=B_DAQ_PRAD:trig0tsfp:prescaled:27,RATE=B_DAQ_PRAD:trig0tsfp:trigger:27,PRESCALE=B_DAQ_PRAD:trig0tsfp:prescale:27,EQN=A/B")
 
 cd ${TOP}/iocBoot/${IOC}
 
@@ -51,7 +51,7 @@ StartMQ()
 dbl > pv.list
 
 dbpf("B_DAQ_PRAD:trig0tsfp:trigger:23.DESC","Fadc OR")
-dbpf("B_DAQ_PRAD:trig0tsfp:trigger:24.DESC","SLM")
+dbpf("B_DAQ_PRAD:trig0tsfp:trigger:24.DESC","LMS")
 dbpf("B_DAQ_PRAD:trig0tsfp:trigger:25.DESC","Alpha")
 dbpf("B_DAQ_PRAD:trig0tsfp:trigger:26.DESC","FC")
 dbpf("B_DAQ_PRAD:trig0tsfp:trigger:27.DESC","Master OR")

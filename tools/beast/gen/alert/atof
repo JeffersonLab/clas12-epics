@@ -1,0 +1,43 @@
+#!/bin/bash
+
+pvs=()
+path='/HallB/ATOF/HV'
+desc='ATOF HV/Bias Alarm'
+guid='An ATOF HV channel is in alarm state.  Tripping may be recoverable by power cycling the channel.  If the problem persists, contact the on-call ALERT expert.'
+opi='/CLAS12_Share/apps/mpodLvApp/beast-popup-iseg.opi'
+for m in $(seq 0 14)
+do
+    for t in B W
+    do
+        pvs+=("B_DET_ATOF_HV_M${m}_${t}")
+    done
+done
+./beastgen -D 3 -t $path -d "$desc" -g "$guid" -r $opi -M P -m "T=ATOF HV"   ${pvs[*]} >& hv.xml
+
+pvs=()
+path='/HallB/ATOF/LV'
+desc='ATOF LV Alarm'
+guid='An ATOF LV channel is in alarm state.  Contact the on-call ALERT expert and make an HBLOG entry.'
+opi='/CLAS12_Share/apps/mpodLvApp/beast-popup-mpod.opi'
+for m in $(seq 0 14)
+do
+    for t in 2V 4V
+    do
+        pvs+=("B_DET_ATOF_LV_M${m}_${t}")
+    done
+done
+./beastgen -D 3 -t $path -d "$desc" -g "$guid" -r $opi -M P -m "T=ATOF LV"   ${pvs[*]} >& lv.xml
+
+./beastgen -t /HallB/ATOF -d "ATOF MPOD Crate Alarm"  -g "Make a HBLOG entry and contact the ALERT on-call expert." \
+    -m 'HOST=lvatof,ioc=iocalert,TITLE=ATOF MPOD Crate' -r /CLAS12_Share/apps/mpodLvApp/mpod-crate.opi \
+    lvatof:mainInhibit lvatof:fantrayFail lvatof:sensorFail lvatof:vmeSysfail >& crate.xml
+
+pvs=()
+for m in $(seq 0 14)
+do
+    pvs+=("B_DET_ATOF_TDC_M${m}:tfpga")
+    pvs+=("B_DET_ATOF_TDC_M${m}:t1")
+done
+./beastgen -t /HallB/ATOF/FEU -d "ATOF FEU PETIROC Temperature" -g "Make an HBLOG entry and contact the ALERT expert on-call." \
+    -M sig -r /CLAS12_Share/alarms/aiaocalc_alarm_set.opi ${pvs[*]} >& feu.xml
+

@@ -13,6 +13,8 @@
 #include "tdc1190.h"
 
 #define NCHANS 4
+#define COMPLETE 0xF
+
 #define MAXHITSPERCHAN 0x80000
 
 int caen1190_init();

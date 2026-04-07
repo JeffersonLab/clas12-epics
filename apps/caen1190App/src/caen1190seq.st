@@ -55,6 +55,7 @@ int prescale;          assign prescale to    "{P}:prescale";
 int ticsperbin;        assign ticsperbin to  "{P}:ticsperbin";
 short pulser_enab;     assign pulser_enab to "{P}:pulser:enable";
 float pulser_freq;     assign pulser_freq to "{P}:pulser:freq";
+float rf_frequency;    assign rf_frequency to "{P}:rf:freq";
 short enables[NCHANS]; assign enables to     {};
 
 // output PVs:
@@ -95,9 +96,9 @@ int rmsrebin;             assign rmsrebin      to "{P}:rms:rebin";
 // local variables:
 string stmp;
 unsigned int completions;
-double ftmp,ftmp2,favg;
+double ftmp,ftmp2,ftmp3,favg;
 float real[FIFO],imag[FIFO];
-int ii,jj,kk,ll,itmp,nbins,imax,imax2,ndwellpower[NCHANS];
+int ii,jj,kk,ll,itmp,itmp2,nbins,imax,imax2,ndwellpower[NCHANS];
 int ipowermaxes[NCHANS][NMAXES],ipowerslowmaxes[NCHANS][NMAXES];
 int ipowermaxessum[NMAXES],ipowerslowmaxessum[NMAXES];
 unsigned int tdcs[NCHANS][FIFO],len[NCHANS],null_fifo[FIFO];
@@ -293,7 +294,20 @@ ss caen1190seq {
                     ftmp = (float)1./pulser_freq/1E3*1E6;
                     // pulser period (bins):
                     for (jj=0; jj<nbins; jj++) {
-%%                      histos[ii][jj] += 1000*sin(2*PI/(ftmp/MAXMICRO)*jj/nbins);
+                        // pure sin wave with the pulser frequency:
+%%                      ftmp2 = 0.01*sin(2*PI/(ftmp/MAXMICRO)*jj/nbins);
+%%                      // an exponentional decay, "noise":
+%%                      if (((float)jj)/nbins*MAXMICRO < 0.008) {
+%%                          ftmp3 = 0;
+%%                      }
+%%                      else {
+%%                          ftmp3 = exp(-100*(float)jj/nbins);
+%%                          //ftmp3 *= log((float)jj/nbins);
+%%                      }
+%%                      // emulate what we currently see, RF only visible at small times:
+%%                      ftmp2 *= pow(ftmp3,100);
+%%                      histos[ii][jj] = ftmp2 + ftmp3;
+%%                      //histos[ii][jj] = 1000+1000*sin(2*PI/(ftmp/MAXMICRO)*jj/nbins);
 %%                      //+7000*cos(7*2*PI/(ftmp/MAXMICRO)*jj/nbins-0.5);;
                     }
                 }
@@ -306,7 +320,7 @@ ss caen1190seq {
             for (ii=0; ii<NCHANS; ii++) {
 
                 if (enables[ii]==0) continue;
-                
+
                 // overlay fake data (1st channel only):
                 if (pulser_enab && ii==0) {
                     ftmp = (float)1./pulser_freq/1E3*1E6;
@@ -316,9 +330,11 @@ ss caen1190seq {
                     }
                     complete |= 1;
                 }
-               
+
                 // ignore if not a complete window read for this channel:
-                else if ( (complete & (1<<ii)) == 0) continue;
+                else if ( (complete & (1<<ii)) == 0) {
+                    continue;
+                }
 
                 // do fourier transform:
                 fft_float(FIFO,0,&tdcs[ii][0],null_fifo,real,imag);
@@ -336,7 +352,7 @@ ss caen1190seq {
                 // keep track of #reads for later averaging:
                 ndwellpower[ii]++;
             }
-			
+
             pvPut(errors);
             pvPut(complete);
 
@@ -355,12 +371,15 @@ ss caen1190seq {
 
         // do averaging, update pvs: 
 		entry {
+            
+            pvGet(rf_frequency);
+
 			for (ii=0; ii<NCHANS; ii++) {
 
                 if (enables[ii]==0) continue;
 
 				rates[ii] /= dwell;
-               
+
                 // find maximum frequencies:
                 ftmp  = 0;
                 ftmp2 = 0;
@@ -384,7 +403,7 @@ ss caen1190seq {
                         ftmp = dwellpower[ii][jj];
                         imax = jj;
                     }
-                    if (faxis[jj]>10 && faxis[jj]<1E4) {
+                    if (faxis[jj]>30 && faxis[jj]<1E4) {
                         if (dwellpower[ii][jj] > ftmp2) {
                             ftmp2 = dwellpower[ii][jj];
                             imax2 = jj;
@@ -404,7 +423,7 @@ ss caen1190seq {
                     }
 
                     for (kk=0; kk<NMAXES; kk++) {
-                        if (faxis[jj]>10 && faxis[jj]<1E4) {
+                        if (faxis[jj]>30 && faxis[jj]<1E4) {
                             if (dwellpower[ii][jj] > powerslowmaxes[ii][kk]) {
                                 for (ll=NMAXES-1; ll>kk; ll--) {
                                     powerslowmaxes[ii][ll]  = powerslowmaxes[ii][ll-1];
@@ -423,7 +442,11 @@ ss caen1190seq {
                 dwellpowerslowmax[ii] = imax2/(MAXMICRO/1E6)/1000;
                 
                 ftmp = 0;
-                itmp = get_freq_bin(249.502E6+1);
+
+//                itmp = get_freq_bin(249.502E6+1);
+
+                itmp = get_freq_bin(rf_frequency);
+
                 for (jj=itmp-1; jj<=itmp+1; jj++) {
                     ftmp += dwellpower[ii][jj];
                 }
@@ -462,7 +485,7 @@ ss caen1190seq {
                     ftmp = dwellpowersum[jj];
                     imax = jj;
                 }
-                if (faxis[jj]>10 && faxis[jj]<1E4) {
+                if (faxis[jj]>30 && faxis[jj]<1E4) {
                     if (dwellpowersum[jj] > ftmp2) {
                         ftmp2 = dwellpowersum[jj];
                         imax2 = jj;
@@ -480,7 +503,7 @@ ss caen1190seq {
                     }
                 }
                 for (kk=0; kk<NMAXES; kk++) {
-                    if (faxis[jj]>10 && faxis[jj]<1E4) {
+                    if (faxis[jj]>30 && faxis[jj]<1E4) {
                         if (dwellpowersum[jj] > powerslowmaxessum[kk]) {
                             for (ll=NMAXES-1; ll>kk; ll--) {
                                 powerslowmaxessum[ll]  = powerslowmaxessum[ll-1];
@@ -553,10 +576,12 @@ ss caen1190seq {
             rms = 0;
             ftmp = 0;
             itmp = get_freq_bin(rmscutofffreq)/rmsrebin;
+            itmp2 = get_freq_bin(40)/rmsrebin;
             nbins = 0;
             if (itmp>1 && itmp<HALF_FIFO) {
                 for (jj=0; jj<HALF_FIFO; jj++) {
                     kk = jj/rmsrebin;
+                    if (kk < itmp2) continue;
                     if (kk >= itmp) break;
                     rmspower[kk] += dwellpowersum[jj];
                     ftmp += dwellpowersum[jj];

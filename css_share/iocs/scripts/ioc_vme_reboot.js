@@ -8,7 +8,7 @@ if (host.startsWith("ioc")) host=iocName.slice(3)
 
 if (GUIUtil.openConfirmDialog("Really Reboot "+iocName+" ?"))
 {
-  cmd = "ssh clasrun@clon10 remote_reboot.tcl "+host;
+  cmd = "ssh clasrun@clon00 remote_reboot.tcl "+host;
   ScriptUtil.executeSystemCommand(cmd,0);
 }
 

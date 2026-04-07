@@ -1,0 +1,38 @@
+
+record(waveform,"$(P)$(R=)$(BIT):name") {
+  field(DTYP, "AMQR")
+  field(INP,  "$(INP)$(BIT)_SHORTNAME")
+  field(NELM, "128")
+  field(FTVL, "CHAR")
+  field(DESC, "Trigger Names")
+  field(FLNK, "$(P)$(R=)$(BIT):name:out PP")
+}
+
+record(waveform, "$(P)$(R=)$(BIT):desc") {
+  field(DTYP, "AMQR")
+  field(INP,  "$(INP)$(BIT)_LONGNAME")
+  field(NELM, "256")
+  field(FTVL, "CHAR")
+  field(FLNK, "$(P)$(R=)$(BIT):desc:out PP")
+  field(DESC, "Trigger Descriptions")
+}
+
+
+# copy to partner .DESC field for display convenience:
+record(scalcout, "$(P)$(R=)$(BIT):desc:out") {
+  field(INAA, "$(P)$(R=)$(BIT):desc")
+  field(CALC, "AA")
+  field(OUT,  "$(P)$(R=)$(BIT):name.DESC PP")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+}
+
+# copy to partner .DESC field for display convenience:
+record(scalcout, "$(P)$(R=)$(BIT):name:out") {
+  field(INAA, "$(P)$(R=)$(BIT):name")
+  field(CALC, "AA")
+  field(OUT,  "$(P)$(R=)$(BIT):desc.DESC PP")
+  field(OOPT, "Every Time")
+  field(DOPT, "Use CALC")
+}
+

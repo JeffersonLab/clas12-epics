@@ -4,16 +4,13 @@ option +c;
 #define NFIFO 32768
 #define NCHAN 25
 #define LOCAL_DEPTH 64     	
+#define CLOCK 10e6
 
 //#define FULLDEBUG
 //#define CHANNELACCESS
 //#define DOSLMPEDESTAL
 
 #define DATAFILE
-
-// minimum SLM rate (Hz) for including in asymmetry
-//#define SLMMINIMUM (20.*240.)
-#define SLMMINIMUM 0
 
 %%extern int getbits(unsigned , int, int);
 %%extern int get_idx_skip( unsigned idx );
@@ -26,8 +23,10 @@ option +c;
 string seq_status;
 assign seq_status to "asym_seq_status";
 
-long current_cut;
-assign current_cut to "HB:Q_THRESHOLD";
+float slm_min_rate; assign slm_min_rate to "HB:SLM_THRESHOLD"; monitor slm_min_rate;
+float fcup_min_rate; assign fcup_min_rate to "HB:FCUP_THRESHOLD"; monitor fcup_min_rate;
+
+long current_cut; assign current_cut to "HB:Q_THRESHOLD";
 
 int coinc_minus_cnts; assign coinc_minus_cnts to "sum_minus_5";
 int coinc_plus_cnts;  assign coinc_plus_cnts to "sum_plus_5";
@@ -63,21 +62,27 @@ unsigned int slm_index=3;
 unsigned int slm_fifo[NFIFO];
 assign slm_fifo to "asym_3";
 
+unsigned int fcup_index=3;
+unsigned int fcup_fifo[NFIFO];
+assign fcup_fifo to "asym_7";
+
+double slm_offset;assign slm_offset to "slm_offset";
+double slm_slope; assign slm_slope to "slm_slope";
+double fcup_offset;assign fcup_offset to "fcup_offset";
+double fcup_slope; assign fcup_slope to "fcup_slope";
+
 // provide defaults in case of no channel access:
 
 unsigned int hls_rptg_scheme=4; // 8 windows is HELDELAYd=4
 //unsigned int hls_rptg_scheme=0; // 0 windows is HELDELAYd=0
 
-//double hls_stbl_time=33330;
-//double hls_setl_time=500;
-//double hls_flip_freq=29.5596;
+double hls_stbl_time=33330;
+double hls_setl_time=500;
+double hls_flip_freq=29.5596;
 
-double hls_stbl_time=8243.35;
-double hls_setl_time=90;
-double hls_flip_freq=120;
-
-double slm_offset=595;
-double slm_slope=15968;
+//double hls_stbl_time=8243.35;
+//double hls_setl_time=90;
+//double hls_flip_freq=120;
 
 #ifdef CHANNELACCESS
 
@@ -94,31 +99,15 @@ assign hls_setl_time to "HELTSETTLEd";
 // Rate of possible helicty flips
 assign hls_flip_freq to "HELFREQ";
 
-assign slm_offset to "slm_offset";
-assign slm_slope to "slm_slope";
-
 #endif
 
-double asym_acqg_time;
-assign asym_acqg_time to "asym_acqg_time";
-monitor asym_acqg_time;
-
-double beam_sync_pairs;
-assign beam_sync_pairs to "beam_sync_pairs";
-
-double asym_fifo_depth;
-assign asym_fifo_depth to "asym_fifo_depth";
-
-double unix_stamp;
-assign unix_stamp to "iocclassc6:GTIM_TIME";
-
-double asym_fdbk_stamp;
-assign asym_fdbk_stamp to "HB:Q_STAMP"; 
-
+double asym_acqg_time; assign asym_acqg_time to "asym_acqg_time"; monitor asym_acqg_time;
+double beam_sync_pairs; assign beam_sync_pairs to "beam_sync_pairs";
+double asym_fifo_depth; assign asym_fifo_depth to "asym_fifo_depth";
+double unix_stamp; assign unix_stamp to "iocclassc6:GTIM_TIME";
+double asym_fdbk_stamp; assign asym_fdbk_stamp to "HB:Q_STAMP"; 
 
 #ifdef DATAFILE
-/////////////////////////////////////////////
-// THIS IS FOR RECORDING A DATA FILE:
 string fname; assign fname to "asym_filename";
 int filedisable; assign filedisable to "asym_file_disable";
 int fd;
@@ -134,7 +123,6 @@ monitor filedisable;
 evflag ev_daqReadFifo;  sync asym_fdbk_stamp   to ev_daqReadFifo;
 evflag ev_daqReset;     sync moller_reset      to ev_daqReset;
 evflag ev_daqStartStop; sync moller_accumulate to ev_daqStartStop;
-/////////////////////////////////////////////
 #endif
 
 int asym_calc_enable[16];
@@ -416,6 +404,10 @@ ss asym_calc {
 #ifdef CHANNELACCESS
             pvGet(slm_slope);   
             pvGet(slm_offset);
+            pvGet(fcup_slope);   
+            pvGet(fcup_offset);
+            pvGet(slm_min_rate);
+            pvGet(fcup_min_rate);
 #endif
             pvGet(slm_fifo);   
             pvGet(clock_fifo);   
@@ -510,10 +502,15 @@ ss asym_calc {
          
 #ifdef DOSLMPEDESTAL
                            // pedestal-subtraction for SLM:
-                           if (i_chan==slm_index) {
+                           if (i_chan == slm_index) {
                                raw_value = clock_fifo[pairs[i_pair]+i];
                                value = getbits(raw_value,23,24);
-                               sum[helicity_bit] -= slm_offset*value/1e7;
+                               sum[helicity_bit] -= slm_offset*(float)value/clock;
+                           }
+                           if (i_chan == fcup_index) {
+                               raw_value = clock_fifo[pairs[i_pair]+i];
+                               value = getbits(raw_value,23,24);
+                               sum[helicity_bit] -= fcup_offset*(float)value/clock;
                            }
 #endif
 
@@ -607,74 +604,73 @@ int find_pair(int index) {
      int sync[LOCAL_DEPTH];
      int clock[LOCAL_DEPTH];
      int slm[LOCAL_DEPTH];
+     int fcup[LOCAL_DEPTH];
      int hls[LOCAL_DEPTH];
      int i1;
      int local_index;
      int next_pair;
      int beam_on;
      float min_slm_count;
+     float seconds1,seconds2;
 
      next_pair = -1;
      local_index = index;
 
      while( ( ( local_index + n_dly_cycle*2 ) < ( nfifo_used - LOCAL_DEPTH ) ) && 
              (next_pair == -1) ) {
+
          for (i1 = 0; i1 < LOCAL_DEPTH; i1++) {
              sync[i1]  = getbits(clock_fifo[local_index+i1],31,1);  /* sync bit */
              hls[i1]   = getbits(clock_fifo[local_index+i1+n_dly_cycle*2],30,1);  /* helicity bit */
              clock[i1] = getbits(clock_fifo[local_index+i1],23,24);  /* 10MHz clock counts */
              slm[i1]   = getbits(slm_fifo[local_index+i1],23,24);  /* slm counts */
+             fcup[i1]  = getbits(fcup_fifo[local_index+i1],23,24);  /* slm counts */
          }
 
          beam_on = 1;
 
-         if (SLMMINIMUM>0) {
-             min_slm_count = (float)SLMMINIMUM /  hls_flip_freq ; 
-             for (i1=1; i1<LOCAL_DEPTH; i1=i1+2) {
-                 if (slm[i1] < min_slm_count ) {  
-                     beam_on = 0;     
-                 } 
+         if (slm_min_rate>0 || fcup_min_rate>0) {
+
+             i1 = clock[0] > clock[1] ? 0 : 1;
+             seconds1 = clock[i1] / CLOCK;
+             seconds2 = clock[i1+2] / CLOCK;
+
+             if (slm_min_rate>0) {
+                 printf("SLM:    SLM=%d  CLOCK=%d  SECONDS=%f  RATE=%fHz",slm[i1],clock[i1],seconds1,slm[i1]/seconds1);
+                 if (slm[i1]/seconds1 < slm_min_rate) {
+                     beam_on = 0;
+                 }
+                 else if (slm[i1+2]/seconds2 < slm_min_rate) {
+                     beam_on = 0;
+                 }
              }
+             if (fcup_min_rate>0) {
+                 printf("FCUP:    SLM=%d  CLOCK=%d  SECONDS=%f  RATE=%fHz",fcup[i1],clock[i1],seconds1,fcup[i1]/seconds1);
+                 if (fcup[i1]/seconds1 < fcup_min_rate) {
+                     beam_on = 0;
+                 }
+                 else if (fcup[i1+2]/seconds2 < fcup_min_rate) {
+                     beam_on = 0;
+                 }
+             }
+
          }
 
-         //printf(" s: "); for ( i1 = 0; i1 < LOCAL_DEPTH; i1++ ) printf(" %8d ", sync[i1] ) ; printf("\n");
-         //printf(" h: "); for ( i1 = 0; i1 < LOCAL_DEPTH; i1++ ) printf(" %8d ", hls[i1] );   printf("\n");
-         //printf(" c: "); for ( i1 = 0; i1 < LOCAL_DEPTH; i1++ ) printf(" %8d ", clock[i1] ); printf("\n");
-         //printf(" m: "); for ( i1 = 0; i1 < LOCAL_DEPTH; i1++ ) printf(" %8d ", slm[i1] );   printf("\n");
+         if ( beam_on == 1 && 
 
-         if ( 1 && 
+             // NOTE:  this is quartet-specific
+             ( ( hls[1] == hls[2] && hls[0] == hls[3] )   ||
+               ( hls[0] == hls[1] && hls[2] == hls[3] ) ) &&
+                 hls[1] != hls[3] && 
 
-                 ( ( hls[1]  == hls[2]   && 
-                     hls[0]  == hls[3] ) ||
-                   ( hls[0]  == hls[1]   && 
-                     hls[2]  == hls[3] ) ) &&
-                 hls[1] != hls[3]    && 
-
-                 /*
-                    sync[0] == sync[1]  &&
-                    sync[2] == sync[3]  &&
-                    */
-                 /*
-                    sync[0] == sync[3]  &&
-                    sync[1] == sync[2]  &&
-
-                    ( ( hls[1]  == hls[2]   && 
-                    hls[3]  == hls[4] ) ||
-                    ( hls[0]  == hls[1]   && 
-                    hls[2]  == hls[3] ) ) &&   
-                    hls[1] != hls[3]    && 
-                    sync[1] != sync[3]  && 
-                    */
-
-             /* These cuts are here because time interval can vary at ~ 0.1% level */
+             // These cuts are here because time interval can vary at ~ 0.1% level
              abs( clock[1] - clock[3] ) < ( 0.005 * abs( clock[1] + clock[3] ) ) && 
-             abs( clock[0] - clock[2] ) < ( 0.005 * abs( clock[0] + clock[2] ) ) && 
-
-                 beam_on == 1)  {
-                     next_pair = local_index;
-                 } else {
-                     local_index++;
-                 }
+             abs( clock[0] - clock[2] ) < ( 0.005 * abs( clock[0] + clock[2] ) ) )
+         {
+             next_pair = local_index;
+         } else {
+             local_index++;
+         }
 
      }
      if (next_pair == -1) next_pair = NFIFO;

@@ -9,13 +9,13 @@ set sourced=($_)
 # If $CLAS is set from .cshrc or by sourcing top-level .setup, use it.
 # Otherwise, define $EPICS relative to this .setup file.  $curdir is 
 # used so this file can be sourced from anywhere and still work.  
-if ($?CLAS) then
-    setenv EPICS $CLAS/epics
-else 
-    set curdir=`/usr/bin/readlink -f $sourced[2]`
-    set curdir=`/usr/bin/dirname $curdir`
-    setenv EPICS $curdir
-endif
+#if ($?CLAS) then
+#    setenv EPICS $CLAS/epics
+#else 
+#set curdir=`/usr/bin/readlink -f $sourced[2]`
+#set curdir=`/usr/bin/dirname $curdir`
+    setenv EPICS /usr/clas12/release/pro/epics
+#endif
 
 ## Overrides for RHEL5/6, only solves base (ex. caget, caput, etc)
 set REDHATFILE = /etc/redhat-release
@@ -70,7 +70,7 @@ if ( ! $?LD_LIBRARY_PATH ) setenv LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${EPICS_BASE}/lib/${EPICS_HOST_ARCH}:${EPICS_EXTENSIONS}/lib/${EPICS_HOST_ARCH}:/usr/clas12/third-party-libs/net-snmp-5.8.dev/x86_64/lib"
 
 setenv EPICS_CA_AUTO_ADDR_LIST no
-setenv EPICS_CA_ADDR_LIST "129.57.255.12 129.57.255.6 129.57.163.255 129.57.231.255"
+setenv EPICS_CA_ADDR_LIST "129.57.235.12 129.57.163.255 129.57.231.255"
 
 ## Pezca
 if ( ! $?PERL5LIB ) setenv PERL5LIB

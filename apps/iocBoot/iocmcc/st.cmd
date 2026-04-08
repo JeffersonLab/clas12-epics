@@ -1,7 +1,7 @@
 #!../../bin/linux-x86_64/mcc
 
 < envPaths
-epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.255.12 129.57.163.255")
+epicsEnvSet("EPICS_CA_ADDR_LIST","129.57.235.12 129.57.163.255")
 
 cd ${TOP}
 

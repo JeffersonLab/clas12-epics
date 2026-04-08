@@ -14,19 +14,24 @@ DBD += modbus.dbd
 
 # modbus.dbd will be made up from these files:
 modbus_DBD += base.dbd
+modbus_DBD += caPutLog.dbd
+modbus_DBD += devIocStats.dbd
 modbus_DBD += drvAsynIPPort.dbd
 modbus_DBD += modbusSupport.dbd
 modbus_DBD += asSupport.dbd
-modbus_DBD += devIocStats.dbd
+modbus_DBD += stream.dbd
 modbus_DBD += asyn.dbd
-modbus_DBD += caPutLog.dbd
+modbus_DBD += calc.dbd
+modbus_DBD += sCalcoutRecord.dbd
 
 # Add all the support libraries needed by this IOC
 modbus_LIBS += autosave
 modbus_LIBS += devIocStats
-modbus_LIBS += modbus
-modbus_LIBS += asyn
 modbus_LIBS += caPutLog
+modbus_LIBS += modbus
+modbus_LIBS += stream
+modbus_LIBS += asyn
+modbus_LIBS += calc
 
 # modbus_registerRecordDeviceDriver.cpp derives from modbus.dbd
 modbus_SRCS += modbus_registerRecordDeviceDriver.cpp

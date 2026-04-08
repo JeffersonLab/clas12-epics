@@ -7,7 +7,8 @@ importPackage(Packages.org.csstudio.opibuilder.scriptUtil);
 // columns are options (the only currently valid one is "noautosave");
 
 var fileNames=widget.getMacroValue("F").split(",");
-var alarms=widget.getMacroValue("A")
+var alarms=widget.getMacroValue("A");
+var detector=widget.getMacroValue("DET");
 
 function insertLine(width)
 {
@@ -39,7 +40,7 @@ function insertGap(size,text)
     line.setPropertyValue("auto_size",true);
     widget.addChildToBottom(line);
 }
-function insertIoc(iocName,opiFile)
+function insertIoc(pvName,opiFile)
 {
     var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
     lc.setPropertyValue("opi_file",opiFile);
@@ -49,11 +50,16 @@ function insertIoc(iocName,opiFile)
     lc.setPropertyValue("zoom_to_fit",false);
     lc.setPropertyValue("border_style",0);
     lc.setPropertyValue("background_color","Header_Background");
-    lc.addMacro("P",iocName);
-    name=iocName.replace("B_DET_MVT_GAS_","");
+    name = pvName.replace("B_DET_MVT_GAS_","");
+    pvName = pvName.replace("_MVT_","_"+detector+"_");
+    if (detector == "PRADGEM") {
+      if (name.contains("MIX2")) return;
+    }
+    lc.addMacro("P",pvName);
     lc.addMacro("N",name);
     widget.addChildToBottom(lc);
 }
+insertLine(5);
 
 for (var iFile=0; iFile<fileNames.length; iFile++) {
 
@@ -63,13 +69,13 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     for (var ii=0,jj=0; ii<lines.length; ii++)
     {
         if (lines[ii].startsWith("#") || lines[ii].equals("") ) {
-    insertGap(1,"");
-    insertLine(1);
+    //insertGap(0,"");
+    insertLine(0);
             var label=lines[ii].slice(1);
             if (label.length>0) {
-    insertGap(1,"");
-              insertGap(10,label);
-    insertGap(1,"");
+    //insertGap(0,"");
+              insertGap(0,label);
+    //insertGap(0,"");
             }
             continue;
         }
@@ -89,7 +95,7 @@ for (var iFile=0; iFile<fileNames.length; iFile++) {
     }
 }
 
-insertGap(7,"");
+//insertGap(7,"");
 insertLine(5);
 
 

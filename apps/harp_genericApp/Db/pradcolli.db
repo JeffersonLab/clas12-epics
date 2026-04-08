@@ -1,0 +1,144 @@
+
+record(ai,"$(P)empty:val")   {field(VAL,"0")}
+record(ai,"$(P)12mm:val")    {field(VAL, "5.540")}
+record(ai,"$(P)6mm:val")     {field(VAL, "8.708")}
+record(ai,"$(P)empty:a:val") {field(VAL,"15.095")}
+record(ai,"$(P)empty:b:val") {field(VAL,"16.560")}
+record(ai,"$(P)05um:a:val")  {field(VAL,"18.025")}
+record(ai,"$(P)05um:b:val")  {field(VAL,"19.490")}
+
+record(mbbi,"$(P)stat") {
+    field(INP,"$(P)calc:state")
+    field(ZRST,"12.7 mm")
+    field(ONST,"6.35 mm")
+    field(TWST,"Empty #1")
+    field(THST,"Empty #2")
+    field(FRST,"0.5 um Ni #1")
+    field(FVST,"0.5 um Ni #2")
+    field(SXST,"Moving")
+    field(SVST,"Unknown")
+    field(EIST,"Empty")
+    field(ZRVL,"0")
+    field(ONVL,"1")
+    field(TWVL,"2")
+    field(THVL,"3")
+    field(FRVL,"4")
+    field(FVVL,"5")
+    field(SXVL,"6")
+    field(SVVL,"7")
+    field(EIVL,"8")
+    field(ZRSV,"NO_ALARM")
+    field(ONSV,"NO_ALARM")
+    field(TWSV,"NO_ALARM")
+    field(THSV,"NO_ALARM")
+    field(FRSV,"NO_ALARM")
+    field(FVSV,"NO_ALARM")
+    field(SXSV,"MINOR")
+    field(SVSV,"MAJOR")
+    field(EISV,"NO_ALARM")
+}
+
+record(calc,"$(P)calc:positions") {
+    field(SCAN,"1 second")
+    field(INPA,"$(P)at:12mm")
+    field(INPB,"$(P)at:6mm")
+    field(INPC,"$(P)at:empty:a")
+    field(INPD,"$(P)at:empty:b")
+    field(INPE,"$(P)at:05um:a")
+    field(INPF,"$(P)at:05um:b")
+    field(INPG,"$(P)at:empty")
+    field(CALC,"A?0:B?1:C?2:D?3:E?4:F?5:G?8:7")
+    field(FLNK,"$(P)calc:state.PROC")
+}
+record(calc,"$(P)calc:state") {
+    field(INPA,"$(P)calc:positions")
+    field(INPB,"$(MOTOR).MOVN")
+    field(CALC,"B?6:A")
+    field(FLNK,"$(P)stat.PROC")
+}
+
+record(ao,"$(P)empty:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)empty:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)empty:a:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)empty:a:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)empty:b:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)empty:b:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)12mm:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)12mm:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)6mm:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)6mm:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)05um:a:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)05um:a:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+record(ao,"$(P)05um:b:go") {
+    field(OMSL,"closed_loop")
+    field(DOL,"$(P)05um:b:val")
+    field(OUT,"$(MOTOR).VAL PP")
+}
+
+record(calc, "$(P)at:empty") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(CALC, "ABS(A-0)<0.01?1:0")
+    field(DESC, "Empty")
+}
+record(calc, "$(P)at:6mm") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)6mm:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "6.35 mm collimator")
+}
+record(calc, "$(P)at:12mm") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)12mm:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "12.7 mm collimator")
+}
+record(calc, "$(P)at:empty:a") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)empty:a:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "Empty #1")
+}
+record(calc, "$(P)at:empty:b") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)empty:b:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "Empty #2")
+}
+record(calc, "$(P)at:05um:a") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)05um:a:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "5 um Ni #1")
+}
+record(calc, "$(P)at:05um:b") {
+    field(SCAN, "1 second")
+    field(INPA, "$(MOTOR).RBV")
+    field(INPB, "$(P)05um:b:val")
+    field(CALC, "ABS(A-B)<0.01?1:0")
+    field(DESC, "5 um Ni #2")
+}
+

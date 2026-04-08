@@ -19,11 +19,11 @@
     <min_height>-1</min_height>
   </auto_scale_widgets>
   <background_color>
-    <color name="OPI_Background" red="50" green="50" blue="50" />
+    <color name="GRID" red="90" green="90" blue="90" />
   </background_color>
   <width>438</width>
   <x>10</x>
-  <name>my_motor_expert</name>
+  <name>$(TITLE)</name>
   <grid_space>5</grid_space>
   <show_ruler>true</show_ruler>
   <y>10</y>
@@ -4051,9 +4051,9 @@ $(pv_value)</tooltip>
       <color red="255" green="255" blue="255" />
     </background_color>
     <width>73</width>
-    <x>340</x>
+    <x>349</x>
     <name>Label</name>
-    <y>25</y>
+    <y>51</y>
     <foreground_color>
       <color name="Read_Foreground" red="255" green="255" blue="255" />
     </foreground_color>
@@ -5344,8 +5344,8 @@ $(pv_value)</tooltip>
       <color red="200" green="200" blue="200" />
     </background_color>
     <width>90</width>
-    <x>345</x>
-    <y>0</y>
+    <x>92</x>
+    <y>367</y>
     <maximum>1.7976931348623157E308</maximum>
     <foreground_color>
       <color name="Text_ForeGround" red="0" green="0" blue="0" />
@@ -5498,6 +5498,100 @@ $(pv_value)</tooltip>
     </foreground_color>
     <font>
       <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.ActionButton" version="2.0.0">
+    <toggle_button>false</toggle_button>
+    <border_style>0</border_style>
+    <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+    <alarm_pulsing>false</alarm_pulsing>
+    <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+    <push_action_index>0</push_action_index>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>6205681a:19d01f84f47:-7c3b</wuid>
+    <pv_value />
+    <text>Home</text>
+    <scripts />
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <height>24</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <image></image>
+    <visible>true</visible>
+    <pv_name>$(motor_name)</pv_name>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Action Button</widget_type>
+    <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+    <background_color>
+      <color red="240" green="240" blue="240" />
+    </background_color>
+    <width>90</width>
+    <x>339</x>
+    <name>Action Button_6</name>
+    <y>13</y>
+    <style>0</style>
+    <foreground_color>
+      <color red="0" green="0" blue="0" />
+    </foreground_color>
+    <actions hook="false" hook_all="false">
+      <action type="WRITE_PV">
+        <pv_name>$(pv_name)</pv_name>
+        <value>-0.1</value>
+        <timeout>10</timeout>
+        <confirm_message>Really send the $(motor_name) motor home?</confirm_message>
+        <description></description>
+      </action>
+    </actions>
+    <font>
+      <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+    </font>
+  </widget>
+  <widget typeId="org.csstudio.opibuilder.widgets.Label" version="1.0.0">
+    <border_style>0</border_style>
+    <tooltip></tooltip>
+    <horizontal_alignment>0</horizontal_alignment>
+    <rules />
+    <enabled>true</enabled>
+    <wuid>6205681a:19d01f84f47:-7863</wuid>
+    <transparent>true</transparent>
+    <auto_size>false</auto_size>
+    <text>EGU</text>
+    <scripts />
+    <height>18</height>
+    <border_width>1</border_width>
+    <scale_options>
+      <width_scalable>true</width_scalable>
+      <height_scalable>true</height_scalable>
+      <keep_wh_ratio>false</keep_wh_ratio>
+    </scale_options>
+    <visible>true</visible>
+    <vertical_alignment>1</vertical_alignment>
+    <border_color>
+      <color red="0" green="128" blue="255" />
+    </border_color>
+    <widget_type>Label</widget_type>
+    <wrap_words>false</wrap_words>
+    <background_color>
+      <color red="255" green="255" blue="255" />
+    </background_color>
+    <width>31</width>
+    <x>60</x>
+    <name>Label_47</name>
+    <y>370</y>
+    <foreground_color>
+      <color name="Read_Foreground" red="255" green="255" blue="255" />
+    </foreground_color>
+    <actions hook="false" hook_all="false" />
+    <font>
+      <fontdata fontName="Cantarell" height="11" style="0" />
     </font>
   </widget>
 </display>

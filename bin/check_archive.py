@@ -53,22 +53,22 @@ else:
             arg += "*.txt"
             files = glob.glob(arg)
         else:
-            print "Warning: " + arg + " not found, assuming it's a pv"
+            print("Warning: " + arg + " not found, assuming it's a pv")
             clipvs.append(arg)
 
 if len(files) == 0:
-    print "No files to be processed"
+    print("No files to be processed")
 
 else:
-    print "Processing files:"
+    print("Processing files:")
     files.sort(key=str.lower)
 
     for file in files:
         if os.stat(file).st_size == 0:
-            print "Warning: empty file, skipping " + file
+            print("Warning: empty file, skipping " + file)
             continue
 
-        print "  " + file
+        print("  " + file)
         pvlist = open(file, 'r')
         for pv in pvlist:
             pv = pv.split(' ', 1)[0]
@@ -98,30 +98,30 @@ for pv in clipvs:
 
 if printDisconnected:
     if len(is_disconnected) == 0:
-        print "All PVs are connected"
+        print("All PVs are connected")
         exit(0)
     else:
-        print "PVs are disconnected:"
-        print '\n'.join(is_disconnected)
+        print("PVs are disconnected:")
+        print('\n'.join(is_disconnected))
         exit(1)
 
 elif printMissing:
     if len(not_archived) == 0:
-        print "All PVs are archived"
+        print("All PVs are archived")
         exit(0)
     else:
-        print "PVs not archived:"
+        print("PVs not archived:")
         not_archived.sort()
-        print '\n'.join(not_archived)
+        print('\n'.join(not_archived))
         exit(1)
 else:
     if len(is_archived) == 0:
-        print "No PVs are archived"
+        print("No PVs are archived")
         exit(0)
     else:
-        print "PVs are archived:"
+        print("PVs are archived:")
         is_archived.sort()
-        print '\n'.join(is_archived)
+        print('\n'.join(is_archived))
         exit(1)
 
 

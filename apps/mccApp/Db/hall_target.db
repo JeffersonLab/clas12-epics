@@ -1,48 +1,83 @@
-########################################################
-# MBBI-based (not enough for RG-E) #####################
-########################################################
 
-record(calc,"$(P)$(R=)CALC:RGL") {
+# RG-O, PRAD/X-17
+#
+# 
+# 1. 0.5 um Ni (radiator)
+# 2. 1 um Ta (2H00 harp)
+# 3. 2 um Ta (2H00 harp)
+# 4. 4 um Ta (2H00 harp)
+# 5. 50 um C (2H00 harp)
+# 6. Cell, Al, C, out
+#
+#
+
+record(calc,"$(P)$(R=)CALC:PRADTGT") {
   field(SCAN,"2 second")
-  field(INPA,"B_HW_CRIO_ALERT_HEARTBEAT_STAT")
-  field(INPB,"B_ALERT_TG_PT110")
-  field(INPC,"B_ALERT_TG_MFC104_Gas")
-  field(INPD,"10.0")
-  field(CALC,"A#1 ? 10 : (B<D ? 3 : C)")
-  field(FLNK,"$(P)$(R=)CALC.PROC")
+  field(INPA,"TGT:PRad:HEARTBEAT")
+  field(INPB,"TGT:PRad:Cell_P")
+  field(INPC,"10.0")
+  field(CALC,"0")
+  #field(CALC,"A#1?10:B>C?7:6")
+  field(FLNK,"$(P)$(R=)CALC:HARPS.PROC")
 }
-
-record(calcout,"$(P)$(R=)CALC")
-{
+record(calc,"$(P)$(R=)CALC:HARPS") {
+  field(INPA,"harp_2H01.RBV")
+  field(INPB,"harp_tagger.RBV")
+  field(INPC,"harp_2c21.RBV")
+  field(CALC,"(A>0.1||B>0.1||C>0.1)?8:0")
+  field(FLNK,"$(P)$(R=)CALC:X17TGT.PROC")
+}
+record(calc,"$(P)$(R=)CALC:X17TGT") {
+  field(INPA,"harp_2H00A.MOVN")
+  field(INPB,"harp_2H00A.RBV")
+  field(INPC,"x17:target:stat")
+  field(CALC,"A#0?10:B<0.1?0:C=0?2:C>5?10:C==5?0:C+1")
+  field(FLNK,"$(P)$(R=)CALC:COLLIRAD.PROC")
+}
+record(calc,"$(P)$(R=)CALC:COLLIRAD") {
+  field(INPA,"prad:colli.MOVN")
+  field(INPB,"prad:colli:stat")
+  field(CALC,"A#0?10:(B==4|B==5)?1:0")
+  field(FLNK,"$(P)$(R=)CALC:RGO.PROC")
+}
+record(calcout,"$(P)$(R=)CALC:RGO") {
   field(INPA,"moller_target_empty")
-  field(INPB,"harp_2H01.RBV")
-  field(INPC,"harp_tagger.RBV")
-  field(INPD,"harp_2c21.RBV")
-  field(INPE,"$(P)$(R=)CALC:RGL")
-  field(CALC,"A#1?9:((B>0.1||C>0.1||D>0.1)?8:E)")
+  field(INPB,"$(P)$(R=)CALC:HARPS")
+  field(INPC,"$(P)$(R=)CALC:COLLIRAD")
+  field(INPD,"$(P)$(R=)CALC:PRADTGT")
+  field(INPE,"$(P)$(R=)CALC:X17TGT")
+  field(CALC,"A#1?9:B#0?B:C#0?C:D#0?D:E#0?E:0")
   field(OOPT,"Every Time")
   field(DOPT,"Use CALC")
   field(OUT,"$(P)$(R=)STAT PP")
 }
 record(mbbi,"$(P)$(R=)STAT")
 {
-    alias("clas12:target:type")
+    field(ZRST,"Empty")
+    field(ONST,"0.5 um Ni")
+    field(TWST,"1 um Ta")
+    field(THST,"2 um Ta")
+    field(FRST,"4 um Ta")
+    field(FVST,"50 um C")
+    field(SXST,"Empty Cell")
+    field(SVST,"H2")
+    field(EIST,"Harp Wire")
+    field(NIST,"Moller")
+    field(TEST,"Not Ready")
     field(ZRVL,0)
     field(ONVL,1)
     field(TWVL,2)
     field(THVL,3)
+    field(FRVL,4)
+    field(FVVL,5)
+    field(SXVL,6)
+    field(SVVL,7)
     field(EIVL,8)
     field(NIVL,9)
     field(TEVL,10)
     field(TESV,"MAJOR")
-    field(ZRST,"H2")
-    field(ONST,"D2")
-    field(TWST,"4He")
-    field(THST,"Empty (< 10 psig)")
-    field(EIST,"Harp Wire")
-    field(NIST,"Moller")
-    field(TEST,"Not Ready")
     field(FLNK,"$(P)$(R=)STRINGOUT.PROC")
+    alias("clas12:target:type")
 }
 record(stringout,"$(P)$(R=)STRINGOUT")
 {
@@ -51,6 +86,59 @@ record(stringout,"$(P)$(R=)STRINGOUT")
   field(OUT,"HALL_B_TARGET PP")
 }
 
+########################################################
+# MBBI-based (not enough for RG-E) #####################
+########################################################
+#
+#record(calc,"$(P)$(R=)CALC:RGL") {
+#  field(SCAN,"2 second")
+#  field(INPA,"B_HW_CRIO_ALERT_HEARTBEAT_STAT")
+#  field(INPB,"B_ALERT_TG_PT110")
+#  field(INPC,"B_ALERT_TG_MFC104_Gas")
+#  field(INPD,"10.0")
+#  field(CALC,"A#1 ? 10 : (B<D ? 3 : C)")
+#  field(FLNK,"$(P)$(R=)CALC.PROC")
+#}
+#
+#record(calcout,"$(P)$(R=)CALC")
+#{
+#  field(INPA,"moller_target_empty")
+#  field(INPB,"harp_2H01.RBV")
+#  field(INPC,"harp_tagger.RBV")
+#  field(INPD,"harp_2c21.RBV")
+#  field(INPE,"$(P)$(R=)CALC:RGL")
+#  field(CALC,"A#1?9:((B>0.1||C>0.1||D>0.1)?8:E)")
+#  field(OOPT,"Every Time")
+#  field(DOPT,"Use CALC")
+#  field(OUT,"$(P)$(R=)STAT PP")
+#}
+#record(mbbi,"$(P)$(R=)STAT")
+#{
+#    alias("clas12:target:type")
+#    field(ZRVL,0)
+#    field(ONVL,1)
+#    field(TWVL,2)
+#    field(THVL,3)
+#    field(EIVL,8)
+#    field(NIVL,9)
+#    field(TEVL,10)
+#    field(TESV,"MAJOR")
+#    field(ZRST,"H2")
+#    field(ONST,"D2")
+#    field(TWST,"4He")
+#    field(THST,"Empty (< 10 psig)")
+#    field(EIST,"Harp Wire")
+#    field(NIST,"Moller")
+#    field(TEST,"Not Ready")
+#    field(FLNK,"$(P)$(R=)STRINGOUT.PROC")
+#}
+#record(stringout,"$(P)$(R=)STRINGOUT")
+#{
+#  field(OMSL,"closed_loop")
+#  field(DOL,"$(P)$(R=)STAT")
+#  field(OUT,"HALL_B_TARGET PP")
+#}
+#
 #######################################################
 # Chilean RG-E target ################################
 ######################################################

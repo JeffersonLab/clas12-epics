@@ -30,10 +30,10 @@ CFG={
 'B_DAQ:run_config':   {'ini':'UDF','cmd':['run_config']},
 'B_DAQ:run_number':   {'ini':0,    'cmd':['run_number'],'max':1e9},
 'B_DAQ:trigger_file': {'ini':'UDF','cmd':['daq_config']},
-'B_DAQ:disk_free:clondaq7': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq7','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
-'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
-'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
-'B_DAQ:fcup:prescale': {'ini':0, 'skip':10, 'cmd':get_fcup_prescale}
+#'B_DAQ:disk_free:clondaq7': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq7','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+#'B_DAQ:disk_free:clondaq6': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq6','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+#'B_DAQ:disk_free:clondaq5': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['ssh','clondaq5','df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']},
+#'B_DAQ:fcup:prescale': {'ini':0, 'skip':10, 'cmd':get_fcup_prescale}
 }
 
 #'B_DAQ:disk_free:logs    ': {'ini':0, 'skip':60, 'scale':1e-9, 'cmd':['df','/data','|','grep','-v','Filesystem','|','awk','\'{print$4}\'']}

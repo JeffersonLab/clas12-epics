@@ -1,0 +1,70 @@
+#!/bin/bash
+
+pvs=()
+path='/HallB/AHDC/HV'
+desc='AHDC High Voltage Alarm'
+guid='An AHDC HV channel is in alarm state.  Tripping may be recoverable by power cycling the channel.  If the problem persists, contact the on-call ALERT expert.'
+opi='/CLAS12_Share/apps/caenHvApp/beast-popup-nA.opi'
+for s in $(seq 9)
+do
+    for w in $(seq 3)
+    do
+        pvs+=("B_DET_AHDC_HV_S${s}-${w}")
+    done
+done
+./beastgen -t $path -D 3 -d "$desc" -g "$guid" -r "$opi" -M P ${pvs[*]} >& hv.xml
+
+desc='AHDC LV Alarm'
+path='/HallB/AHDC/LV'
+guid='AHDC LV is in alarm state.  Contact the on-call ALERT expert and make a HBLOG entry.'
+opi='/CLAS12_Share/detectors/ALERT/ahdc-lv.opi'
+./beastgen -t $path -D 3 -d "$desc" -g "$guid" -r $opi B_DET_AHDC_LV:parsed:status2 >& lv.xml
+
+./beastgen -t /HallB/AHDC/LV -d 'AHDC LV Crate Fail Alarm' -D 3 -r $opi -g 'Make a HBLOG entry and contact the on-call ALERT expert.' \
+    mvtlv:mainInhibit mvtlv:sensorFail mvtlv:fantrayFail mvtlv:inputFail mvtlv:outputFail mvtlv:vmeSysfail >& crate.xml
+
+
+pvs=()
+path='/HallB/AHDC/FEU'
+desc='AHDC Front End Unit Alarm'
+guid='An AHDC front-end unit is in alarm state.  Make a HBLOG entry and contact the on-call ALERT expert.'
+for s in 1 2
+do
+    for t in Current_A XTmpV6_deg MTmpInt_deg TmpSdX_deg TmpSdA_deg
+    do
+        pvs+=("B_DET_AHDC_FEU_Sl${s}:${t}")
+    done
+done
+./beastgen -t $path -D 3 -d "$desc" -g "$guid" -r "/CLAS12_Share/detectors/ALERT/ahdc-feu.opi" ${pvs[*]} >& feu.xml
+
+pvs=()
+path='/HallB/AHDC/Interlock'
+desc='AHDC Interlock Alarm'
+guid='An AHDC interlock is in alarm state.  Contact the on-call ALERT expert and make a HBLOG entry.'
+opi='/CLAS12_Share/detectors/ALERT/ahdc-intlk.opi'
+for s in 1 2
+do
+    for t in Current_A XTmpV6_deg MTmpInt_deg TmpSdX_deg TmpSdA_deg
+    do
+        pvs+=("B_DET_AHDC_INTLK_Sl${s}:${t}:status")
+    done
+done
+./beastgen -t $path -D 3 -d "$desc" -g "$guid" -r "$opi" ${pvs[*]} >& intlk.xml
+
+
+pvs=()
+path='/HallB/AHDC/Gas'
+desc='ADHC Gas Alarm'
+guid='An AHDC Gas parameter is in alarm state.  Contact the on-call ALERT expert and make a HBLOG entry.'
+opi='/CLAS12_Share/detectors/ALERT/gas.opi'
+./beastgen -t $path -D 10 -d "$desc" -g "$guid" -r "$opi" \
+    B_DET_AHDC_GAS_Exh_PT314_Press B_DET_AHDC_GAS_Exh_PT312_Press B_DET_AHDC_GAS_Sup_PT309_Press \
+    B_DET_AHDC_GAS_MFC316_Flow B_DET_AHDC_GAS_MFC308_Flow B_DET_AHDC_GAS_MFC309_Flow \
+    B_DET_AHDC_GAS_Press_Fault B_DET_AHDC_GAS_Hi_Press_Fault B_DET_AHDC_GAS_Lo_Press_Fault  \
+        >& gas.xml
+
+#for x in ${pvs[*]}
+#do
+#    caget $x || exit
+#done
+

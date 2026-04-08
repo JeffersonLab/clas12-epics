@@ -1,0 +1,150 @@
+# PRad-II Target Y-axis Status
+#
+# Computes: $(P):stat  — mbbi, human-readable target state
+#
+# P  — PV prefix, e.g. "TGT:PRad:"
+# Resulting stat PV: TGT:PRad:tgt:stat
+#
+# State encoding (integer value fed into mbbi):
+#   0  Gas_FullTgt   — Y at cell, Cell_EV open,   Chamber_EV closed
+#   1  Gas_EmptyTgt  — Y at cell, Cell_EV closed,  Chamber_EV open
+#   2  Aluminum      — Y at Al position
+#   3  Carbon        — Y at C position
+#   4  Out           — Y at Out position
+#   5  Moving        — Y motor in motion (TGT:PRad:Y_Status == 1)
+#   6  Undefined     — none of the above matched
+#
+# Alarm severities: NO_ALARM for all physics states, MINOR for Moving,
+#                   MAJOR for Undefined.
+#
+# TGT:PRad:Y_Status is assumed 1 when the motor is in motion.
+# If Y_Status=1 means "at position" (done), invert the logic in
+# tgt:calc:state below (change "B?5:A" to "!B?5:A").
+#
+# Position tolerance is stored in $(P):ytol (steps, default +/- 500).
+# Update this value after beam tuning if nominal Y positions change.
+# The nominal positions themselves are read from the existing
+# LabVIEW PVs TGT:PRad:Target_Cell/Al/C/Out.
+
+# Position tolerance constant (steps)
+record(ao, "$(P):ytol") {
+    field(VAL,  "500")
+    field(DESC, "Y at-position tolerance (steps)")
+}
+
+# ---------------------------------------------------------------------------
+# At-position checks
+# Each record outputs 1 if Mtr_Y_Pos is within ytol of the nominal, else 0.
+# ---------------------------------------------------------------------------
+record(calc, "$(P):at:cell") {
+    field(SCAN, "1 second")
+    field(INPA, "TGT:PRad:Mtr_Y_Pos")
+    field(INPB, "TGT:PRad:Target_Cell")
+    field(INPC, "$(P):ytol")
+    field(CALC, "ABS(A-B)<=C?1:0")
+    field(DESC, "Y at H2 cell position")
+}
+
+record(calc, "$(P):at:al") {
+    field(SCAN, "1 second")
+    field(INPA, "TGT:PRad:Mtr_Y_Pos")
+    field(INPB, "TGT:PRad:Target_Al")
+    field(INPC, "$(P):ytol")
+    field(CALC, "ABS(A-B)<=C?1:0")
+    field(DESC, "Y at aluminum position")
+}
+
+record(calc, "$(P):at:carbon") {
+    field(SCAN, "1 second")
+    field(INPA, "TGT:PRad:Mtr_Y_Pos")
+    field(INPB, "TGT:PRad:Target_C")
+    field(INPC, "$(P):ytol")
+    field(CALC, "ABS(A-B)<=C?1:0")
+    field(DESC, "Y at carbon position")
+}
+
+record(calc, "$(P):at:out") {
+    field(SCAN, "1 second")
+    field(INPA, "TGT:PRad:Mtr_Y_Pos")
+    field(INPB, "TGT:PRad:Target_Out")
+    field(INPC, "$(P):ytol")
+    field(CALC, "ABS(A-B)<=C?1:0")
+    field(DESC, "Y at out position")
+}
+
+# ---------------------------------------------------------------------------
+# Raw position encoding (valve states not yet considered)
+# Priority: cell first, then Al, then C, then Out, else Undefined.
+# cell→0, al→2, carbon→3, out→4, undefined→6
+# (0/1 reserved for gas full/MT; 5 reserved for Moving)
+# Triggers the downstream gas-state and moving-state calcs via FLNK chain.
+# ---------------------------------------------------------------------------
+record(calc, "$(P):calc:positions") {
+    field(SCAN, "1 second")
+    field(INPA, "$(P):at:cell")
+    field(INPB, "$(P):at:al")
+    field(INPC, "$(P):at:carbon")
+    field(INPD, "$(P):at:out")
+    field(CALC, "A?0:B?2:C?3:D?4:6")
+    field(FLNK, "$(P):calc:gas_state.PROC")
+}
+
+# ---------------------------------------------------------------------------
+# Gas full target/empty target
+# Only active when Y is at the cell position (raw code == 0).
+# Checks EV1 (Cell_EV) and EV2 (Chamber_EV) to distinguish:
+#   Gas_FullTgt  (0): Cell_EV open,  Chamber_EV closed
+#   Gas_EmptyTgt (1): Cell_EV closed, Chamber_EV open
+#   Undefined    (6): both open, both closed, or any other combo
+# ---------------------------------------------------------------------------
+record(calc, "$(P):calc:gas_state") {
+    field(INPA, "$(P):calc:positions")
+    field(INPB, "TGT:PRad:Cell_EV")
+    field(INPC, "TGT:PRad:Chamber_EV")
+    field(CALC, "A==0?(B&&!C?0:(!B&&C?1:6)):A")
+    field(FLNK, "$(P):calc:state.PROC")
+}
+
+
+# ---------------------------------------------------------------------------
+# Moving state overlay
+# If Y_Status is 1 (motor in motion), report Moving (5) regardless of
+# position or valve state.  Otherwise pass through the gas_state result.
+# ---------------------------------------------------------------------------
+record(calc, "$(P):calc:state") {
+    field(INPA, "$(P):calc:gas_state")
+    field(INPB, "TGT:PRad:Y_Status")
+    field(CALC, "B?5:A")
+    field(FLNK, "$(P):stat.PROC")
+}
+
+
+# ---------------------------------------------------------------------------
+# Target status — main output PV
+# mbbi maps the integer state code to something MCC can read/put in RCDB
+# ---------------------------------------------------------------------------
+record(mbbi, "$(P):stat") {
+    field(INP,  "$(P):calc:state")
+    field(DESC, "PRad-II target status")
+    field(ZRST, "H2")
+    field(ONST, "Empty")
+    field(TWST, "Al")
+    field(THST, "C")
+    field(FRST, "Out")
+    field(FVST, "Moving")
+    field(SXST, "Undefined")
+    field(ZRVL, "0")
+    field(ONVL, "1")
+    field(TWVL, "2")
+    field(THVL, "3")
+    field(FRVL, "4")
+    field(FVVL, "5")
+    field(SXVL, "6")
+    field(ZRSV, "NO_ALARM")
+    field(ONSV, "NO_ALARM")
+    field(TWSV, "NO_ALARM")
+    field(THSV, "NO_ALARM")
+    field(FRSV, "NO_ALARM")
+    field(FVSV, "MINOR")
+    field(SXSV, "MAJOR")
+}

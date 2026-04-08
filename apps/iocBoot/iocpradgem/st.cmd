@@ -24,10 +24,19 @@ dbLoadRecords("db/save_restoreStatus.db","P=${IOC}:")
 
 # Determine IP address:
 system 'nslookup lvpradgem0 | awk "/^Address: / {print\"epicsEnvSet(lvpradgem0,\"\$2\")\"}" > ${TOP}/iocBoot/${IOC}/ip.cmd'
-
 < ${TOP}/iocBoot/${IOC}/ip.cmd
 
-dbLoadTemplate("db/pradgems-lv.substitutions")
+dbLoadTemplate("db/prad-gems.substitutions")
+dbLoadRecords("db/prad-gems-seq.db","M=0,L=0,S=OFF,VAL=0")
+dbLoadRecords("db/prad-gems-seq.db","M=0,L=1,S=OFF,VAL=0")
+dbLoadRecords("db/prad-gems-seq.db","M=1,L=0,S=OFF,VAL=0")
+dbLoadRecords("db/prad-gems-seq.db","M=1,L=1,S=OFF,VAL=0")
+dbLoadRecords("db/prad-gems-seq.db","M=0,L=0,S=ON,VAL=1")
+dbLoadRecords("db/prad-gems-seq.db","M=0,L=1,S=ON,VAL=1")
+dbLoadRecords("db/prad-gems-seq.db","M=1,L=0,S=ON,VAL=1")
+dbLoadRecords("db/prad-gems-seq.db","M=1,L=1,S=ON,VAL=1")
+
+# GEM Gas software interlocks
 
 cd "${TOP}/iocBoot/${IOC}"
 

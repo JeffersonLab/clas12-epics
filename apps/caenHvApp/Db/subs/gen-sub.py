@@ -31,23 +31,22 @@ commands['svmax'] = 0x0D
 commands['enable'] = 0x01
 
 def reader():
-    for line in open('prad.txt','r').readlines():
+    for line in open('HyCal_HVAssignment_Map.txt','r').readlines():
         cols = line.strip().split()
         if not line.startswith('#') and len(cols) > 2:
             d = collections.OrderedDict()
-            crate = int(cols[0][-1])
-            slot = int(cols[1])
-            channel = int(cols[2])
-            d['CrName'] = 'PRIMEXHV'+cols[0][-1]
+            crate = int(cols[1][-1])
+            slot = int(cols[2])
+            channel = int(cols[3])
+            d['CrName'] = 'PRIMEXHV'+cols[1][-1]
             d['CrType'] = '1527'
             d['Sys'] = 'HV'
             d['Det'] = 'HYCAL'
             d['Cr'] = '%0.2d'%crate
             d['Sl'] = '%0.2d'%slot
             d['Ch'] = '%0.2d'%channel
-            d['Element'] = cols[3]
+            d['Element'] = cols[0]
             d['CScode'] = '#C0x%x' % (crate + (slot<<8))
-            channel = int(cols[2])
             for c in commands.keys():
                 d[c] = 'S0x%x' %(channel+256*commands[c])
             d['CrId'] = crate

@@ -27,6 +27,7 @@ system 'nslookup lvpradgem0 | awk "/^Address: / {print\"epicsEnvSet(lvpradgem0,\
 < ${TOP}/iocBoot/${IOC}/ip.cmd
 
 dbLoadTemplate("db/prad-gems.substitutions")
+
 dbLoadRecords("db/prad-gems-seq.db","M=0,L=0,S=OFF,VAL=0")
 dbLoadRecords("db/prad-gems-seq.db","M=0,L=1,S=OFF,VAL=0")
 dbLoadRecords("db/prad-gems-seq.db","M=1,L=0,S=OFF,VAL=0")
@@ -36,7 +37,8 @@ dbLoadRecords("db/prad-gems-seq.db","M=0,L=1,S=ON,VAL=1")
 dbLoadRecords("db/prad-gems-seq.db","M=1,L=0,S=ON,VAL=1")
 dbLoadRecords("db/prad-gems-seq.db","M=1,L=1,S=ON,VAL=1")
 
-# GEM Gas software interlocks
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_PRADGEM_HV")
+dbLoadRecords("db/caenhv_genericStat.db","P=B_DET_PRADGEM_LV")
 
 cd "${TOP}/iocBoot/${IOC}"
 

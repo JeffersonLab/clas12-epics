@@ -26,17 +26,8 @@ int main(int argc, char **argv)
   }
 
   const char* device=argv[2];
-  char ctmp[64];
-  strncpy(ctmp,device,8);
-  if (strcmp(ctmp,"/dev/tty")!=0) {
-      fprintf(stderr,usage);
-      fprintf(stderr,"device must start with /dev/tty.\n");
-      exit(1);
-  }
-
   const int fd = open(device,O_RDWR | O_NOCTTY);
   const int flag = TIOCM_DTR;
-  //int flag = TIOCM_RTS;
   ioctl(fd,TIOCMBIS,&flag);
   if (hard) usleep(hardReset);
   else      usleep(softReset);

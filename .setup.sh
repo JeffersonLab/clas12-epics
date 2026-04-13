@@ -42,11 +42,11 @@ export EPICS_EXTENSIONS=/usr/clas12/${EPICS_VER}/extensions${RHEL_VER}
 
 # set EPICS host architecture
 export OSTYPE=`uname`
-export MACHINE=`uname -m`
+m=`uname -m`
 EPICS_HOST_ARCH=linux-x86_64
 if [ "$OSTYPE" == "Linux" ]
 then 
-  if [ "$MACHINE" == "i686" ] || [ "$MACHINE" == "x86" ]
+  if [ "$m" == "i686" ] || [ "$m" == "x86" ]
   then
     EPICS_HOST_ARCH=linux-x86
   fi

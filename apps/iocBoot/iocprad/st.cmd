@@ -16,7 +16,7 @@ dbLoadRecords("db/crio-hycal-filter.db")
 dbLoadRecords("db/prad-target.db")
 dbLoadRecords("db/prad-target-status.db","P=TGT:PRad")
 
-dbLoadRecords("db/cRIO_heartbeat.db","P=B_HW_,R=CRIO_PRAD_,DLY=60")
+dbLoadRecords("db/heartbeatCalc.db","P=TGT:PRad:LabVIEW_,R=")
 
 cd ${TOP}/iocBoot/${IOC}
 

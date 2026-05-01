@@ -6,7 +6,7 @@
   <show_grid>false</show_grid>
   <auto_zoom_to_fit_all>true</auto_zoom_to_fit_all>
   <scripts />
-  <height>1060</height>
+  <height>1100</height>
   <macros>
     <include_parent_macros>true</include_parent_macros>
   </macros>
@@ -1243,12 +1243,20 @@ $(pv_value)</tooltip>
           <description>Hall B Collimator, Viewers, Blocker</description>
         </action>
         <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/vetoes.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>PRAD Vetoes</description>
+        </action>
+        <action type="OPEN_DISPLAY">
           <path>apps/harp_genericApp/prad-collimator.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>Tagger Radiator / PRAD Collimator </description>
+          <description>PRAD Collimator / Radiator</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/harp_genericApp/x17-target.opi</path>
@@ -1344,20 +1352,20 @@ $(pv_value)</tooltip>
           <description>PRAD Trigger</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>apps/amqApp/daqStatus-all.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>DAQ - Full</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>apps/amqApp/daqStatus-web.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
           <description>DAQ - Overview</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>apps/amqApp/daqStatus-all.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>DAQ - Full (CLAS12)</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/amqApp/trigger-table.opi</path>
@@ -1723,7 +1731,7 @@ $(pv_value)</tooltip>
           <description>IOC Health</description>
         </action>
         <action type="OPEN_DISPLAY">
-          <path>iocs/ioc_hbeat_all.opi</path>
+          <path>iocs/ioc_hbeats_prad.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
@@ -2924,6 +2932,14 @@ $(pv_value)</tooltip>
           <replace>2</replace>
           <description>N2 Chiller</description>
         </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/hycal-alarms.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Temperature Alarms</description>
+        </action>
       </actions>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
@@ -2970,28 +2986,20 @@ $(pv_value)</tooltip>
       </foreground_color>
       <actions hook="false" hook_all="false">
         <action type="OPEN_DISPLAY">
-          <path>detectors/PRAD/gem-lv-novice.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>GEM Low Voltage</description>
-        </action>
-        <action type="OPEN_DISPLAY">
-          <path>detectors/PRAD/gem-hv-novice.opi</path>
-          <macros>
-            <include_parent_macros>true</include_parent_macros>
-          </macros>
-          <replace>2</replace>
-          <description>GEM High Voltage</description>
-        </action>
-        <action type="OPEN_DISPLAY">
           <path>detectors/PRAD/gem-hv-iseg.opi</path>
           <macros>
             <include_parent_macros>true</include_parent_macros>
           </macros>
           <replace>2</replace>
-          <description>GEM High Voltage - iSeg</description>
+          <description>High Voltage</description>
+        </action>
+        <action type="OPEN_DISPLAY">
+          <path>detectors/PRAD/gem-lv-novice.opi</path>
+          <macros>
+            <include_parent_macros>true</include_parent_macros>
+          </macros>
+          <replace>2</replace>
+          <description>Low Voltage</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/mmGasApp/mmgas_plc+intlks.opi</path>
@@ -3000,7 +3008,7 @@ $(pv_value)</tooltip>
             <DET>PRADGEM</DET>
           </macros>
           <replace>2</replace>
-          <description>GEM Gas PLC</description>
+          <description>Gas PLC</description>
         </action>
         <action type="OPEN_DISPLAY">
           <path>apps/cRioApp/mmGasMixing/mmGasMixing.opi</path>
@@ -3010,7 +3018,7 @@ $(pv_value)</tooltip>
             <TITLE>PRAD GEM Gas Mixing System</TITLE>
           </macros>
           <replace>2</replace>
-          <description>GEM Gas Mixing System</description>
+          <description>Gas Mixing System</description>
         </action>
       </actions>
       <font>

@@ -49,8 +49,8 @@ setenv MIBS ALL
 
 # set EPICS host architecture
 setenv OSTYPE `uname`
-setenv MACHINE `uname -m`
-if ( ("$OSTYPE" == "Linux") && ("$MACHINE" == "i686" || "$MACHINE" == "x86") ) then
+set m=`uname -m`
+if ( ("$OSTYPE" == "Linux") && ("$m" == "i686" || "$m" == "x86") ) then
   setenv EPICS_HOST_ARCH linux-x86
 else
   setenv EPICS_HOST_ARCH linux-x86_64

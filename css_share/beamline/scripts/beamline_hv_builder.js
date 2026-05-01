@@ -48,16 +48,13 @@ mkGap();
         var lc = WidgetUtil.createWidgetModel("org.csstudio.opibuilder.widgets.linkingContainer");
         if (novice>0) { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel_novice.opi"); }
         else          { lc.setPropertyValue("opi_file","/CLAS12_Share/apps/caenHvApp/caenhv_channel.opi"); }
-        //try   { lc.setPropertyValue("resize_behaviour",1); }
-        //catch (err) { lc.setPropertyValue("auto_size",true); }
         lc.setPropertyValue("auto_size",true);
         lc.setPropertyValue("zoom_to_fit",false);
         lc.setPropertyValue("border_style",0);
         lc.setPropertyValue("background_color","Header_Background");
         lc.addMacro("C",ii);
         lc.addMacro("P",pv);
-        if (ss[ii].indexOf("Midstream")==0 || ss[ii]=="BOM") 
-          lc.addMacro("TYPE","527");
+        //if (ss[ii].indexOf("Midstream")==0 || ss[ii]=="BOM") lc.addMacro("TYPE","527");
         widget.addChildToBottom(lc);
 
         if (ss[ii]=="UpstreamRight" ||

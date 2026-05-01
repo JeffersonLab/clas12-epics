@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+import sys
+for s in [int(sys.argv[1])]:#range(1,7):
+  for r in [int(sys.argv[2])]:#range(1,4):
+    for l in [2*r-1,2*r]:
+      pvs = []
+      first = 1
+      for last in [8,16,24,32,48,64,80,112]:
+        w = '%.2d-%.2d' % (first,last)
+        first = last+1
+        pvs.append(f'B_DET_DC_HV_SEC{s}_R{r}_SL{l}_S{w}:idark')
+        pvs.append(f'B_DET_DC_HV_SEC{s}_R{r}_SL{l}_F{w}:idark')
+#        pvs.append(f'/HallB/DC/HV/Dark/S{s}/R{r}/SL{l} B_DET_DC_HV_SEC{s}_R{r}_SL{l}_S{w}:idark')
+#        pvs.append(f'/HallB/DC/HV/Dark/S{s}/R{r}/SL{l} B_DET_DC_HV_SEC{s}_R{r}_SL{l}_F{w}:idark')
+      for w in ['01-32','33-112']:
+        pvs.append(f'B_DET_DC_HV_SEC{s}_R{r}_SL{l}_G{w}:idark')
+#        pvs.append(f'/HallB/DC/HV/Dark/S{s}/R{r}/SL{l} B_DET_DC_HV_SEC{s}_R{r}_SL{l}_G{w}:idark')
+      cmd = [ './beastgen',
+              '-t',f'/HallB/DC/HV/Dark/SEC{s}/R{r}/SL{l}',
+              '-d','"DC Dark Current"',
+              '-g','"High dark current detected in DC.  Contact the DC expert on-call and make a HBLOG logbook entry"',
+              '-r','/CLAS12_Share/alarms/aiaocalc_alarm_set.opi',
+              '-M','sig',
+              '-D','10','-o']
+      cmd.extend(pvs)
+      print(' '.join(cmd))
+
+

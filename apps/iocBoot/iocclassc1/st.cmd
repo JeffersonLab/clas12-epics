@@ -49,17 +49,17 @@ dbLoadRecords("db/hallb_collimator.db")
 #dbLoadRecords("db/motor.db","motor_name=m_target, card=1, slot=0, srev=2000, urev=2.54, direction=Neg, velo=0.5, accl=0.01")
 #dbLoadTemplate("db/moeller_target.substitutions")
 dbLoadRecords("db/moeller_target.db")
-dbLoadRecords("db/motor.db","motor_name=harp_2H00A, card=1, slot=3, srev=2000, urev=0.1016, direction=Neg, velo=0.4,accl=0.01")
-dbLoadRecords("db/scan.db","motor_name=harp_2H00A, start_at=3.0, end_at=10.5, start_speed=0.5, scan_speed=0.04, acq_time=0.1")
+dbLoadRecords("db/motor.db","motor_name=harp_2H00A, card=1, slot=3, srev=2000, urev=0.1016, direction=Neg, velo=0.2,accl=0.01")
+dbLoadRecords("db/scan.db","motor_name=harp_2H00A, start_at=7, end_at=12, start_speed=0.2, scan_speed=0.04, acq_time=0.1")
 
 # PRAD Collimator and Radiator:
 dbLoadRecords("db/motor.db", "motor_name=prad:colli,card=1,slot=1,srev=2000,urev=0.1016,direction=Pos,velo=0.25,accl=0.01")
 
 # PRAD Vetoes:
-dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000, urev=2.54, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000, urev=0.00974, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000, urev=0.00974, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000, urev=0.00974, direction=Neg, velo=6, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000, urev=0.00974, direction=Neg, velo=6, accl=0.01")
 
 # PRAD/X17 motor positions:
 dbLoadRecords("db/pradcolli.db","P=prad:colli:,MOTOR=prad:colli")

@@ -6,7 +6,8 @@ float xavg; assign xavg "B_DET_HYCAL_FADC:c:xavg";
 float yavg; assign yavg "B_DET_HYCAL_FADC:c:yavg";
 int i;
 float x,y,sum;
-
+float dx=2.077;
+float dy=2.075;
 ss hycal { 
     state start {
         when () {
@@ -34,6 +35,8 @@ ss hycal {
             }
             xavg /= sum;
             yavg /= sum;
+            xavg *= dx;
+            yavg *= dy;
             pvPut(xavg);
             pvPut(yavg);
         } state run

@@ -38,6 +38,8 @@ for (var ii=i1; ii<=i2; ii++) {
     var columns = lines[ii].split(" ");
     var rocName = columns[columns.length-1];
     //if (!rocName.includes("-") && !rocName.includes("svt3"))
-    insertRoc(rocName,ii);
+    if (!rocName.contains("notuse")) {
+        insertRoc(rocName,ii);
+    }
 }
 

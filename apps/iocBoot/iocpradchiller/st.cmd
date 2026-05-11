@@ -79,5 +79,7 @@ makeAutosaveFiles()
 create_monitor_set("info_positions.req","","")
 create_monitor_set("info_settings.req","","")
 
+dbpf("hycal:chiller:alarm.OSV","MAJOR")
+
 dbl > pv.list
 

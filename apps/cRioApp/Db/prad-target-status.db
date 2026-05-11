@@ -13,6 +13,7 @@
 #   4  Out           — Y at Out position
 #   5  Moving        — Y motor in motion (TGT:PRad:Y_Status == 1)
 #   6  Undefined     — none of the above matched
+#   7  EmptyEmpty    — Y at cell, Cell_EV closed,  Chamber_EV closed (MTMT)
 #
 # Alarm severities: NO_ALARM for all physics states, MINOR for Moving,
 #                   MAJOR for Undefined.
@@ -90,18 +91,19 @@ record(calc, "$(P):calc:positions") {
 }
 
 # ---------------------------------------------------------------------------
-# Gas full target/empty target
+# Gas full target/empty target/empty-empty
 # Only active when Y is at the cell position (raw code == 0).
 # Checks EV1 (Cell_EV) and EV2 (Chamber_EV) to distinguish:
-#   Gas_FullTgt  (0): Cell_EV open,  Chamber_EV closed
-#   Gas_EmptyTgt (1): Cell_EV closed, Chamber_EV open
-#   Undefined    (6): both open, both closed, or any other combo
+#   Gas_FullTgt  (0): Cell_EV open,   Chamber_EV closed
+#   Gas_EmptyTgt (1): Cell_EV closed,  Chamber_EV open
+#   EmptyEmpty   (7): Cell_EV closed,  Chamber_EV closed (MTMT)
+#   Undefined    (6): both open, or any other combo
 # ---------------------------------------------------------------------------
 record(calc, "$(P):calc:gas_state") {
     field(INPA, "$(P):calc:positions")
     field(INPB, "TGT:PRad:Cell_EV")
     field(INPC, "TGT:PRad:Chamber_EV")
-    field(CALC, "A==0?(B&&!C?0:(!B&&C?1:6)):A")
+    field(CALC, "A==0?(B&&!C?0:(!B&&C?1:(!B&&!C?7:6))):A")
     field(FLNK, "$(P):calc:state.PROC")
 }
 
@@ -133,6 +135,7 @@ record(mbbi, "$(P):stat") {
     field(FRST, "Out")
     field(FVST, "Moving")
     field(SXST, "Undefined")
+    field(SVST, "MTMT")
     field(ZRVL, "0")
     field(ONVL, "1")
     field(TWVL, "2")
@@ -140,6 +143,7 @@ record(mbbi, "$(P):stat") {
     field(FRVL, "4")
     field(FVVL, "5")
     field(SXVL, "6")
+    field(SVVL, "7")
     field(ZRSV, "NO_ALARM")
     field(ONSV, "NO_ALARM")
     field(TWSV, "NO_ALARM")
@@ -147,4 +151,5 @@ record(mbbi, "$(P):stat") {
     field(FRSV, "NO_ALARM")
     field(FVSV, "MINOR")
     field(SXSV, "MAJOR")
+    field(SVSV, "NO_ALARM")
 }

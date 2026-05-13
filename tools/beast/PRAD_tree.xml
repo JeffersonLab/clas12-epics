@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
-     Alarm configuration snapshot Thu Apr 30 15:44:10 EDT 2026
+     Alarm configuration snapshot Wed May 13 13:27:48 EDT 2026
      URL : jdbc:mysql://localhost/ALARM
      Root: PRAD
   -->
@@ -595,7 +595,7 @@
                 <count>0</count>
                 <guidance>
                     <title>Guidance</title>
-                    <details>This alarm means the PRAD target LabView controls are not updating EPICS, and all target PVs are likely stall.  Contact the on-call PRAD target expert.</details>
+                    <details>This alarm means the PRAD target LabView controls are not updating EPICS, and all target PVs are likely stale.  Contact the on-call PRAD target expert.</details>
                 </guidance>
             </pv>
         </component>
@@ -799,49 +799,6 @@
         </pv>
     </component>
     <component name="DAQ">
-        <component name="Trigger">
-            <pv name="B_DAQ_VTPGT:TrigBit:1-6:alarm">
-                <description>B_DAQ_VTPGT:TrigBit:1-6:alarm</description>
-                <annunciating>true</annunciating>
-                <delay>30.0</delay>
-                <count>0</count>
-                <guidance>
-                    <title>Guidance</title>
-                    <details>The rates for one of trigger bits 1-6 is much lower than the others.  If this is a production run and the problem persists, this is a problem and needs to be resolved.  You can try ending and restarting the run.  If the problem persists, contact the DAQ expert.</details>
-                </guidance>
-            </pv>
-            <pv name="B_DAQ_VTPGT:TrigBit:normAlarm">
-                <description>B_DAQ_VTPGT:TrigBit:normAlarm</description>
-                <annunciating>true</annunciating>
-                <delay>30.0</delay>
-                <count>0</count>
-                <guidance>
-                    <title>Guidance</title>
-                    <details>One of the trigger bits greater than 6 has abnormally low normalized rates (and should be highlighted in red on the trigger table).  If problem persists, you can try ending and restarting the run to resolve it.  If problem still persists, contact DAQ expert.</details>
-                </guidance>
-            </pv>
-            <pv name="B_DAQ:livetime:alarm">
-                <description>B_DAQ:livetime:alarm</description>
-                <annunciating>true</annunciating>
-                <delay>30.0</delay>
-                <count>0</count>
-                <guidance>
-                    <title>Guidance</title>
-                    <details>DAQ livetime is low or fluctuating.  Check ROC statuses, consider ending and restarting the run if problem persists.  If you cannot resolve the problem, contact DAQ expert.</details>
-                </guidance>
-            </pv>
-            <pv name="B_DAQ:ROCS_BUSY:mmft1:alarm">
-                <description>B_DAQ:ROCS_BUSY:mmft1:alarm</description>
-                <latching>true</latching>
-                <annunciating>true</annunciating>
-                <delay>30.0</delay>
-                <count>0</count>
-                <guidance>
-                    <title>Guidance</title>
-                    <details>This alarm means the mmft1 ROC has large busy/deadtime.  If alarm persists, recovery requires the following procedure:  (1) Stop the DAQ run.  (2) Power-cycle the Low Voltage of the Forward Tagger Tracker, FTT-&gt;LV-&gt;OFF and ON.  (3) Reboot the mmft1 ROC via `roc_reboot mmft1`.  (4) Follow standard procedures to restore the DAQ on the run wiki.  Note, if that fails to recover from the problem, contact the Forward Tagger Expert.</details>
-                </guidance>
-            </pv>
-        </component>
         <pv name="B_DAQ:EB:events">
             <description>B_DAQ:EB:events</description>
             <latching>true</latching>
@@ -865,6 +822,13 @@
                 <title>Open ROC Error Display</title>
                 <details>/CLAS12_Share/apps/amqApp/rocError-all.opi</details>
             </display>
+        </pv>
+        <pv name="B_DAQ:PRAD:livetime:alarm">
+            <description>B_DAQ:PRAD:livetime:alarm</description>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <delay>20.0</delay>
+            <count>0</count>
         </pv>
     </component>
     <component name="Comms">
@@ -1006,6 +970,20 @@
                 <description>B_HW_CRIO_PRAD_HEARTBEAT_STAT</description>
                 <latching>true</latching>
                 <annunciating>true</annunciating>
+            </pv>
+            <pv name="hycal:chiller:tank:level">
+                <description>hycal:chiller:tank:level</description>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <delay>30.0</delay>
+                <count>0</count>
+            </pv>
+            <pv name="hycal:chiller:flow">
+                <description>hycal:chiller:flow</description>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <delay>30.0</delay>
+                <count>0</count>
             </pv>
         </component>
     </component>

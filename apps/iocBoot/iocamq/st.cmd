@@ -87,6 +87,7 @@ dbLoadRecords("db/amqSplitFT.db")
 
 dbLoadRecords("db/amqFloatArray.db","P=B_DAQ:ROCS_BUSY,K=ROCS_BUSY,N=80,TH=30,THH=60,HSV=MINOR,HHSV=MAJOR")
 dbLoadRecords("db/amqRocsBusy.db")
+dbLoadRecords("db/amq-prad-busy-aliases.db")
 
 dbLoadRecords("db/stage2bits-wf.db")
 
@@ -126,3 +127,14 @@ dbpf("B_DAQ:ROCS_BUSY:clondaq11.DESC","clondaq11")
 dbpf("B_DAQ:ROCS_BUSY:alert1.DESC","alert1")
 
 dbl > pv.list
+
+dbpf("B_DAQ:ROCS_BUSY:1.DESC","adchycal2")
+dbpf("B_DAQ:ROCS_BUSY:3.DESC","adchycal4")
+dbpf("B_DAQ:ROCS_BUSY:4.DESC","adchycal5")
+dbpf("B_DAQ:ROCS_BUSY:6.DESC","adchycal7")
+dbpf("B_DAQ:ROCS_BUSY:8.DESC","gem1")
+dbpf("B_DAQ:ROCS_BUSY:9.DESC","gem2")
+dbpf("B_DAQ:ROCS_BUSY:10.DESC","adchycal3")
+dbpf("B_DAQ:ROCS_BUSY:12.DESC","scaler11")
+dbpf("B_DAQ:ROCS_BUSY:13.DESC","adchycal6")
+dbpf("B_DAQ:ROCS_BUSY:15.DESC","adchycal1")

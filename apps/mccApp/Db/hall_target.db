@@ -14,7 +14,7 @@
 record(calc,"$(P)$(R=)CALC:PRADTGT") {
   field(SCAN,"2 second")
   field(INPA,"TGT:PRad:stat")
-  field(CALC,"A=1?6:A=4?0:A=0?7:A=5||A=6?10:A+9")
+  field(CALC,"A=1?6:A=4?0:A=0?7:A=5||A=6?10:A=7?6:A+9")
   field(FLNK,"$(P)$(R=)CALC:HARPS.PROC")
 }
 record(calc,"$(P)$(R=)CALC:HARPS") {
@@ -47,6 +47,24 @@ record(calcout,"$(P)$(R=)CALC:RGO") {
   field(OOPT,"Every Time")
   field(DOPT,"Use CALC")
   field(OUT,"$(P)$(R=)STAT PP")
+  field(FLNK,"$(P)$(R=)CALC:PRADTGT2.PROC")
+}
+record(calc,"$(P)$(R=)CALC:PRADTGT2") {
+  field(SCAN,"2 second")
+  field(INPA,"TGT:PRad:stat")
+  field(CALC,"A=1?6:A=4?0:A=0?7:A=5||A=6?10:A=7?13:A+9")
+  field(FLNK,"$(P)$(R=)CALC:RGO2.PROC")
+}
+record(calcout,"$(P)$(R=)CALC:RGO2") {
+  field(INPA,"moller_target_empty")
+  field(INPB,"$(P)$(R=)CALC:HARPS")
+  field(INPC,"$(P)$(R=)CALC:COLLIRAD")
+  field(INPD,"$(P)$(R=)CALC:PRADTGT2")
+  field(INPE,"$(P)$(R=)CALC:X17TGT")
+  field(CALC,"A#1?9:B#0?B:C#0?C:D#0?D:E#0?E:0")
+  field(OOPT,"Every Time")
+  field(DOPT,"Use CALC")
+  field(OUT,"clas12:target:type PP")
 }
 record(mbbi,"$(P)$(R=)STAT")
 {
@@ -62,7 +80,7 @@ record(mbbi,"$(P)$(R=)STAT")
     field(NIST,"Moller")
     field(TEST,"Not Ready")
     field(ELST,"Al")
-    field(TVST,"C")
+    field(TVST,"1 um C")
     field(ZRVL,0)
     field(ONVL,1)
     field(TWVL,2)
@@ -78,8 +96,41 @@ record(mbbi,"$(P)$(R=)STAT")
     field(TVVL,12)
     field(TESV,"MAJOR")
     field(FLNK,"$(P)$(R=)STRINGOUT.PROC")
-    alias("clas12:target:type")
+#    alias("clas12:target:type")
 }
+
+record(mbbi,"clas12:target:type") {
+    field(ZRST,"Empty")
+    field(ONST,"0.5 um Ni")
+    field(TWST,"1 um Ta")
+    field(THST,"2 um Ta")
+    field(FRST,"4 um Ta")
+    field(FVST,"50 um C")
+    field(SXST,"Empty Cell")
+    field(SVST,"H2")
+    field(EIST,"Harp Wire")
+    field(NIST,"Moller")
+    field(TEST,"Not Ready")
+    field(ELST,"Al")
+    field(TVST,"1 um C")
+    field(TTST,"Empty Cell & Chamber")
+    field(ZRVL,0)
+    field(ONVL,1)
+    field(TWVL,2)
+    field(THVL,3)
+    field(FRVL,4)
+    field(FVVL,5)
+    field(SXVL,6)
+    field(SVVL,7)
+    field(EIVL,8)
+    field(NIVL,9)
+    field(TEVL,10)
+    field(ELVL,11)
+    field(TVVL,12)
+    field(TTVL,13)
+    field(TESV,"MAJOR")
+}
+
 record(stringout,"$(P)$(R=)STRINGOUT")
 {
   field(OMSL,"closed_loop")

@@ -30,11 +30,11 @@ asynOctetSetInputEos("SER3",0,"\n")
 
 dbLoadRecords("${DEVIOCSTATS}/db/iocAdminSoft.db", "IOC=${IOC}")
 
-dbLoadRecords("db/asynRecord.db","P=B_uRWell,R=:ASYN,PORT=SER1,ADDR=1,IMAX=2000,OMAX=2000")
+#dbLoadRecords("db/asynRecord.db","P=B_uRWell,R=:ASYN,PORT=SER1,ADDR=1,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/asynRecord.db","P=B_uRWell,R=:ASYN2,PORT=SER2,ADDR=1,IMAX=2000,OMAX=2000")
 dbLoadRecords("db/asynRecord.db","P=B_uRWell,R=:ASYN3,PORT=SER3,ADDR=1,IMAX=2000,OMAX=2000")
 
-dbLoadRecords("db/keithley2470.db","P=B_uRWell,R=:,PORT=SER1,ADDR=1")
+#dbLoadRecords("db/keithley2470.db","P=B_uRWell,R=:,PORT=SER1,ADDR=1")
 dbLoadRecords("db/keithley6485.db","P=B_uRWell,R=:2:,PORT=SER2,ADDR=1")
 dbLoadRecords("db/keithley6487.db","P=B_uRWell,R=:3:,PORT=SER3,ADDR=1")
 

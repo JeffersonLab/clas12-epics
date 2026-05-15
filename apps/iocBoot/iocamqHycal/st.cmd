@@ -22,4 +22,5 @@ StartMQ()
 dbl > pv.list
 
 seq waveform, "P=B_DET_HYCAL_FADC,R=:c:"
+seq hycal
 

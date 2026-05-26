@@ -30,6 +30,11 @@ dbpf("B_DAQ:PRAD:livetime:rms.HSV","MINOR")
 dbpf("B_DAQ:PRAD:livetime:mean.LOW","75")
 dbpf("B_DAQ:PRAD:livetime:mean.LSV","MINOR")
 
-dbpf("B_IPM2C21A:rms.HIGH","2")
 dbpf("B_IPM2C21A:mean.LOW","1")
+
+# CLAS12:
+dbpf("B_IPM2C21A:rms.HIGH","0.02")
+
+# PRAD:
+dbpf("B_IPM2C21A:rms.HIGH","0.05")
 

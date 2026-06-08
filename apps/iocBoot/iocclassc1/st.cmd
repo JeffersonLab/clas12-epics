@@ -56,10 +56,10 @@ dbLoadRecords("db/scan.db","motor_name=harp_2H00A, start_at=7, end_at=12, start_
 dbLoadRecords("db/motor.db", "motor_name=prad:colli,card=1,slot=1,srev=2000,urev=0.1016,direction=Pos,velo=0.25,accl=0.01")
 
 # PRAD Vetoes:
-dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000, urev=0.00974, direction=Neg, velo=0.05, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000, urev=0.00974, direction=Neg, velo=0.05, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000, urev=0.00974, direction=Neg, velo=0.05, accl=0.01")
-dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000, urev=0.00974, direction=Neg, velo=0.05, accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto1, card=2, slot=0, srev=2000,urev=0.00974,direction=Neg,velo=0.05,accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto2, card=2, slot=1, srev=2000,urev=0.00974,direction=Neg,velo=0.05,accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto3, card=2, slot=2, srev=2000,urev=0.00974,direction=Neg,velo=0.05,accl=0.01")
+dbLoadRecords("db/motor.db", "motor_name=prad:veto4, card=2, slot=3, srev=2000,urev=0.00974,direction=Neg,velo=0.05,accl=0.01")
 
 # PRAD/X17 motor positions:
 dbLoadRecords("db/pradcolli.db","P=prad:colli:,MOTOR=prad:colli")
@@ -125,4 +125,9 @@ seq &reset_motor, "name=prad:veto4:reset, motor_name=prad:veto4"
 # for alarms:
 dbpf "iocclassc1:FD_FREE.LOLO", "7"
 dbpf "iocclassc1:FD_FREE.LOW", "9"
+
+dbpf "prad:veto1.HLM", "2.73"
+dbpf "prad:veto2.HLM", "2.7"
+dbpf "prad:veto3.HLM", "2.68"
+dbpf "prad:veto4.HLM", "2.72"
 

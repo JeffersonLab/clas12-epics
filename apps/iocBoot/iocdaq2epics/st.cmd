@@ -25,7 +25,7 @@ dbpf("B_DAQ:livetime:rms.HSV","MINOR")
 dbpf("B_DAQ:livetime:mean.LOW","75")
 dbpf("B_DAQ:livetime:mean.LSV","MINOR")
 
-dbpf("B_DAQ:PRAD:livetime:rms.HIGH","1.0")
+dbpf("B_DAQ:PRAD:livetime:rms.HIGH","5.0")
 dbpf("B_DAQ:PRAD:livetime:rms.HSV","MINOR")
 dbpf("B_DAQ:PRAD:livetime:mean.LOW","75")
 dbpf("B_DAQ:PRAD:livetime:mean.LSV","MINOR")

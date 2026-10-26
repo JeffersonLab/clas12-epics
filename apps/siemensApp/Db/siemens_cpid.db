@@ -1,0 +1,217 @@
+record(stringout, "$(P)$(R=)NAME") {
+    field(DESC, "Name of controlled value")
+    field(OMSL, "supervisory")
+    field(VAL, "itov7out")
+    field(OUT, "$(P)$(R=)ICVAL.INP CA")
+    info(autosaveFields_pass0, "VAL")
+}
+record(ai, "$(P)$(R=)ICVAL") {
+    field(SCAN, "1 second")
+    field(INP, "")
+    field(FLNK, "$(P)$(R=)OCVAL PP")
+}
+record(ao, "$(P)$(R=)OCVAL") {
+    field(OMSL, "closed_loop")
+    field(DOL, "$(P)$(R=)ICVAL")
+    field(OUT, "$(P)$(R=)CVAL PP")
+}
+record(ao, "$(P)$(R=)CVAL") {
+    field(DESC, "controlled value")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(CVAL) float")
+}
+
+record(ai, "$(P)$(R=)OVAL") {
+    field(DESC, "output value")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(OVAL) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+    info(autosaveFields_pass0, "HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}
+record(ao, "$(P)$(R=)OVAL:SET") {
+    field(DESC, "output value")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(OVAL) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)MIN") {
+    field(DESC, "min output value")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(MIN) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)MIN:SET") {
+    field(DESC, "min output value")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(MIN) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)MAX") {
+    field(DESC, "max output value")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(MAX) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)MAX:SET") {
+    field(DESC, "max output value")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(MAX) float")
+    field(EGU,  "%")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+#record(ai, "$(P)$(R=)DMIN") {
+#    field(DESC, "min output change")
+#    field(DTYP, "s7nodave")
+#    field(INP,  "@$(PLCID) $(DMIN=)")
+#    field(EGU,  "%")
+#    field(PREC, "2")
+#    field(SCAN, "I/O Intr")
+#}
+#record(ao, "$(P)$(R=)DMIN:SET") {
+#    field(DESC, "min output change")
+#    field(DTYP, "s7nodave")
+#    field(OUT,  "@$(PLCID) $(DMIN=) float")
+#    field(EGU,  "%")
+#    field(PREC, "2")
+#    field(SCAN, "Passive")
+#}
+#record(ai, "$(P)$(R=)DMAX") {
+#    field(DESC, "max output change")
+#    field(DTYP, "s7nodave")
+#    field(INP,  "@$(PLCID) $(DMAX=) float")
+#    field(EGU,  "%")
+#    field(PREC, "2")
+#    field(SCAN, "I/O Intr")
+#}
+#record(ao, "$(P)$(R=)DMAX:SET") {
+#    field(DESC, "max output change")
+#    field(DTYP, "s7nodave")
+#    field(OUT,  "@$(PLCID) $(DMAX=)")
+#    field(EGU,  "%")
+#    field(PREC, "2")
+#    field(SCAN, "Passive")
+#}
+record(ai, "$(P)$(R=)VAL") {
+    field(DESC, "PID Setpoint")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(VAL) float")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)VAL:SET") {
+    field(DESC, "PID Setpoint")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(VAL) float")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)KP") {
+    field(DESC, "proportional gain")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(KP) float")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)KP:SET") {
+    field(DESC, "proportional gain")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(KP) float")
+    field(PREC, "5")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)KI") {
+    field(DESC, "integral gain")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(KI) float")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)KI:SET") {
+    field(DESC, "integral gain")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(KI) float")
+    field(PREC, "5")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)KD") {
+    field(DESC, "differential gain")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(KD) float")
+    field(PREC, "5")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)KD:SET") {
+    field(DESC, "differential gain")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(KD) float")
+    field(PREC, "5")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)MDT") {
+    field(DESC, "PID sample time")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(MDT) float")
+    field(PREC, "2")
+    field(EGU,  "s")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)MDT:SET") {
+    field(DESC, "PID sample time")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(MDT) float")
+    field(PREC, "2")
+    field(EGU,  "s")
+    field(SCAN, "Passive")
+}
+record(bi, "$(P)$(R=)MMOD") {
+    field(DESC, "manual mode request")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(MMOD)")
+    field(ZNAM, "NORMAL")
+    field(ONAM, "MANUAL")
+    field(ZSV,  "NO_ALARM")
+    field(OSV,  "MAJOR")
+    field(SCAN, "I/O Intr")
+}
+record(bo, "$(P)$(R=)MMOD:SET") {
+    field(DESC, "manual mode request")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(MMOD)")
+    field(ZNAM, "NORMAL")
+    field(ONAM, "MANUAL")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)MVAL") {
+    field(DESC, "manual output")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(MVAL) float")
+    field(PREC, "2")
+    field(SCAN, "I/O Intr")
+}
+record(ao, "$(P)$(R=)MVAL:SET") {
+    field(DESC, "manual output")
+    field(DTYP, "s7nodave")
+    field(OUT,  "@$(PLCID) $(MVAL) float")
+    field(PREC, "2")
+    field(SCAN, "Passive")
+}
+record(ai, "$(P)$(R=)ORBV") {
+    field(DESC, "Siemens PID")
+    field(DTYP, "s7nodave")
+    field(INP,  "@$(PLCID) $(ORBV) float")
+    field(PREC, "2")
+    field(EGU,  "%")
+    field(SCAN, "I/O Intr")
+    info(autosaveFields_pass0, "DESC HIGH HIHI LOW LOLO HSV HHSV LSV LLSV")
+}

@@ -14497,7 +14497,7 @@ $(pv_value)</tooltip>
       <tooltip>$(pv_name)</tooltip>
       <x_axis_show_minor_ticks>false</x_axis_show_minor_ticks>
       <horizon_profile_x_pv_name></horizon_profile_x_pv_name>
-      <height>203</height>
+      <height>210</height>
       <border_width>1</border_width>
       <graph_area_width>217</graph_area_width>
       <y_axis_scale_font>
@@ -14525,7 +14525,7 @@ $(pv_value)</tooltip>
         <opifont.name fontName="Sans" height="10" style="1">Default Bold</opifont.name>
       </y_axis_title_font>
       <border_alarm_sensitive>false</border_alarm_sensitive>
-      <graph_area_height>194</graph_area_height>
+      <graph_area_height>201</graph_area_height>
       <x_axis_visible>false</x_axis_visible>
       <vertical_profile_x_pv_name></vertical_profile_x_pv_name>
       <pixel_info_pv_name></pixel_info_pv_name>
@@ -14538,7 +14538,7 @@ $(pv_value)</tooltip>
       <x_axis_axis_title>X Axis</x_axis_axis_title>
       <width>229</width>
       <x>0</x>
-      <y>0</y>
+      <y>-7</y>
       <maximum>255.0</maximum>
       <data_height>640</data_height>
       <minimum>0.0</minimum>
@@ -14550,7 +14550,17 @@ $(pv_value)</tooltip>
       <font>
         <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
       </font>
-      <rules />
+      <rules>
+        <rule name="Visibility" prop_id="visible" out_exp="false">
+          <exp bool_exp="pv0 == 0">
+            <value>false</value>
+          </exp>
+          <exp bool_exp="true">
+            <value>true</value>
+          </exp>
+          <pv trig="true">loc://fcup:viewer:enable</pv>
+        </rule>
+      </rules>
       <horizon_profile_y_pv_value />
       <roi_count>0</roi_count>
       <pv_value />
@@ -14586,6 +14596,53 @@ $(pv_value)</tooltip>
       <foreground_color>
         <color red="0" green="0" blue="0" />
       </foreground_color>
+    </widget>
+    <widget typeId="org.csstudio.opibuilder.widgets.checkbox" version="1.0.0">
+      <border_style>0</border_style>
+      <forecolor_alarm_sensitive>false</forecolor_alarm_sensitive>
+      <alarm_pulsing>false</alarm_pulsing>
+      <tooltip>$(pv_name)
+$(pv_value)</tooltip>
+      <rules />
+      <bit>0</bit>
+      <enabled>true</enabled>
+      <wuid>-427ad192:19fca0db46a:-77eb</wuid>
+      <selected_color>
+        <color red="77" green="77" blue="77" />
+      </selected_color>
+      <pv_value />
+      <auto_size>false</auto_size>
+      <scripts />
+      <border_alarm_sensitive>true</border_alarm_sensitive>
+      <height>19</height>
+      <border_width>1</border_width>
+      <scale_options>
+        <width_scalable>true</width_scalable>
+        <height_scalable>false</height_scalable>
+        <keep_wh_ratio>false</keep_wh_ratio>
+      </scale_options>
+      <visible>true</visible>
+      <pv_name>loc://fcup:viewer:enable(0)</pv_name>
+      <border_color>
+        <color red="0" green="128" blue="255" />
+      </border_color>
+      <label></label>
+      <widget_type>Check Box</widget_type>
+      <backcolor_alarm_sensitive>false</backcolor_alarm_sensitive>
+      <background_color>
+        <color red="240" green="240" blue="240" />
+      </background_color>
+      <width>23</width>
+      <x>200</x>
+      <name>Check Box</name>
+      <y>0</y>
+      <foreground_color>
+        <color red="0" green="0" blue="0" />
+      </foreground_color>
+      <actions hook="false" hook_all="false" />
+      <font>
+        <opifont.name fontName="Sans" height="10" style="0">Default</opifont.name>
+      </font>
     </widget>
   </widget>
   <widget typeId="org.csstudio.opibuilder.widgets.groupingContainer" version="1.0.0">
@@ -17846,7 +17903,7 @@ $(pv_value)</tooltip>
       <multiline_input>false</multiline_input>
       <border_width>1</border_width>
       <visible>true</visible>
-      <pv_name>loc://hycal:scalers:max(10000)</pv_name>
+      <pv_name>loc://hycal:scalers:max(1000000)</pv_name>
       <selector_type>0</selector_type>
       <border_color>
         <color red="0" green="128" blue="255" />

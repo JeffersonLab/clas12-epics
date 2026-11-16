@@ -13,6 +13,7 @@ epicsEnvSet("AKCP2","129.57.160.153")
 epicsEnvSet("AKCP3","129.57.160.154")
 epicsEnvSet("AKCP4","129.57.160.230")
 epicsEnvSet("AKCP5","129.57.160.161")
+epicsEnvSet("AKCP6","129.57.160.250")
 
 # to reduce record's INP length:
 epicsEnvSet("MIB","SPAGENT-MIB::sensorProbe")
@@ -29,7 +30,9 @@ devSnmpSetParam(DebugLevel,99999)
 devSnmpSetSnmpVersion("${AKCP1}",SNMP_VERSION_1)
 devSnmpSetSnmpVersion("${AKCP2}",SNMP_VERSION_1)
 devSnmpSetSnmpVersion("${AKCP3}",SNMP_VERSION_1)
+devSnmpSetSnmpVersion("${AKCP4}",SNMP_VERSION_1)
 devSnmpSetSnmpVersion("${AKCP5}",SNMP_VERSION_1)
+devSnmpSetSnmpVersion("${AKCP6}",SNMP_VERSION_1)
 
 dbLoadTemplate("db/hallWeather.substitutions")
 dbLoadRecords("db/weather_cRIO.db")
